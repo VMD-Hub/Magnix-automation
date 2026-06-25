@@ -40,6 +40,18 @@ node scripts/swing-kpi-read.mjs --real-gate
 node scripts/swing-log.mjs list
 ```
 
+## CRO — ritual thứ 2 (Satellite / VN100)
+
+```bash
+node scripts/swing-cro.mjs ritual
+node scripts/swing-cro.mjs add --symbol FPT --verdict CHO_THEM --rr 1.4 --trigger WATCH --notes "defensive beta"
+node scripts/swing-cro.mjs rank
+node scripts/swing-cro.mjs promote --symbol FPT
+node scripts/swing-cro.mjs list --tier SATELLITE
+```
+
+Doc: [SWING-CRO.md](./SWING-CRO.md) · Tab Sheet: `Universe_Scan`
+
 ## Watchlist T2 (limit chưa khớp)
 
 ```bash

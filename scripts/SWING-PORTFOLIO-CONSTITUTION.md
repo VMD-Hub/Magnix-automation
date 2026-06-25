@@ -30,7 +30,7 @@
 | P1-9 | Không trùng mã OPEN | — |
 | P1-10 | `--exec` + contract đủ | exit 2 |
 | P1-11 | STOP MONTH | net ≤ −3% → 0 OPEN mới |
-| P1-12 | Universe | VN100; ngoài watchlist → `/trade` + lý do |
+| P1-12 | Universe | VN100; ngoài Core → **SWING-CRO.md** `add` + `promote` |
 
 **DEFENSIVE** (`--regime defensive`): size max **20%** (P1-7 override).
 

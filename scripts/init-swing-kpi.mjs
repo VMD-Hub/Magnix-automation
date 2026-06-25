@@ -17,6 +17,11 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'url';
 import { DEFAULT_HYPOTHESES, SHADOW_HEADERS, THEORY_LOG_HEADERS } from './lib/swing-shadow-schema.mjs';
+import {
+  UNIVERSE_SCAN_HEADERS,
+  defaultSeedRows as croSeedRows,
+  objectToScanRow,
+} from './lib/swing-cro-sheet.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.join(__dirname, '..');
@@ -33,6 +38,7 @@ const DEDICATED_TABS = [
   'Monthly_PAPER',
   'Monthly_REAL',
   'Watchlist',
+  'Universe_Scan',
   'README',
   'Links',
   'Backup_kpi_tracker',
@@ -50,6 +56,7 @@ const MAGNIX_TABS = [
   'Swing_Monthly_PAPER',
   'Swing_Monthly_REAL',
   'Swing_Watchlist',
+  'Swing_Universe_Scan',
   'Swing_README',
   'Swing_Links',
   'Swing_Backup_kpi_tracker',
@@ -310,7 +317,8 @@ function buildTabData(sheetUrl, month, monthlyRows, kpiRows, dedicated) {
     ['real_nav_start_vnd', '', 'Phase 2'],
     ['target_pct_month', 3, 'Target %/tháng'],
     ['target_stretch_pct', 5, 'Stretch'],
-    ['watchlist', 'ACB,HPG,MWG', 'Watchlist'],
+    ['watchlist', 'ACB,HPG,MWG', 'Core Watchlist'],
+    ['cro_satellite_max', 2, 'Max Satellite trên Watchlist'],
     ['fees_pct_default', 0.7, 'Phí round-trip'],
     ['max_size_pct', 35, 'Size max %'],
     ['stop_month_pct', -3, 'Stop tháng'],
@@ -380,6 +388,11 @@ function buildTabData(sheetUrl, month, monthlyRows, kpiRows, dedicated) {
     ['MWG', 'CHỜ', '76.000-77.500', '<74.500', '82.000-85.000', 'Size ≤25% · T3 probe', '', 'T2/T3', ''],
   ];
 
+  const universeScanRows = [
+    UNIVERSE_SCAN_HEADERS,
+    ...croSeedRows().map((r) => objectToScanRow(r)),
+  ];
+
   const dashboardRows = [
     ['Swing KPI — Phase 1 PAPER ONLY', ''],
     [
@@ -436,6 +449,7 @@ function buildTabData(sheetUrl, month, monthlyRows, kpiRows, dedicated) {
     [`${dedicated ? 'Monthly_PAPER' : 'Swing_Monthly_PAPER'}!A1`]: monthlyPaper,
     [`${dedicated ? 'Monthly_REAL' : 'Swing_Monthly_REAL'}!A1`]: monthlyHeaders,
     [`${dedicated ? 'Watchlist' : 'Swing_Watchlist'}!A1`]: watchlistRows,
+    [`${dedicated ? 'Universe_Scan' : 'Swing_Universe_Scan'}!A1`]: universeScanRows,
     [`${dedicated ? 'Dashboard' : 'Swing_Dashboard'}!A1`]: dashboardRows,
     [`${dedicated ? 'README' : 'Swing_README'}!A1`]: readmeRows,
     [`${backupKpi}!A1`]: kpiRows.length ? kpiRows : parseCsvFile(path.join(LOCAL_KPI_DIR, 'kpi-tracker.csv')),

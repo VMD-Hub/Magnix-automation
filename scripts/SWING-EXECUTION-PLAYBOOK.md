@@ -188,7 +188,9 @@ EXIT (khai báo lúc OPEN):
 | **HPG** | 23,0–23,5 | < 22,3 | 25,5–26,5 | **T2 passive** @ đáy vùng; T1 nếu breakout+volume | 30–35% |
 | **MWG** | 76–77,5 | < 74,5 | 82–85 | **T2** hoặc **T3 probe** (beta cao) | **≤25%** |
 
-Mã ngoài watchlist → `/trade` + lý do trong notes + gate danh mục stricter (size ≤25%).
+Mã ngoài watchlist → `/trade` + `swing-cro add` + `promote` · size ≤25% lần đầu.
+
+**CRO:** [SWING-CRO.md](./SWING-CRO.md) · `node scripts/swing-cro.mjs ritual`
 
 ---
 

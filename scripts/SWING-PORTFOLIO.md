@@ -5,7 +5,8 @@
 
 Mục tiêu: **danh mục tối ưu = đủ lãi mục tiêu + kiểm soát rủi ro + dữ liệu sạch cho KPI/real-gate** — không phải “full margin mọi mã”.
 
-**Hiến pháp (Tier 0–4):** [SWING-PORTFOLIO-CONSTITUTION.md](./SWING-PORTFOLIO-CONSTITUTION.md)
+**Hiến pháp (Tier 0–4):** [SWING-PORTFOLIO-CONSTITUTION.md](./SWING-PORTFOLIO-CONSTITUTION.md)  
+**CRO (Core + Satellite):** [SWING-CRO.md](./SWING-CRO.md)
 
 ---
 
@@ -89,6 +90,7 @@ Agent đọc KPI tháng + exposure → gán mode:
 | R5 | Giữ **≥ 40% cash** khi chưa có 2 setup SẴN SÀNG | Linh hoạt DCA / T2 |
 | R6 | Target operating **+3%/tháng** (~15M) trước stretch 5% | Pace bền vững |
 | R7 | Mỗi thứ 6: `/swing` + `validate` + cập nhật Watchlist | Đồng bộ limit treo T2 |
+| R9 | Thứ 2: **`swing-cro ritual`** + scan VN100 → Satellite | Không bỏ lỡ mã ngoài Core |
 | R8 | Ladder T4 khi target xa **> 8%** từ entry | Chốt một phần giảm give-back |
 
 ---
