@@ -10,7 +10,9 @@ import {
 } from './swing-sheet.mjs';
 import { bucketForSymbol } from './swing-portfolio.mjs';
 
-export const CORE_SYMBOLS = ['ACB', 'HPG', 'MWG'];
+export const CORE_SYMBOLS = ['ACB', 'HPG', 'MWG']; /** Bootstrap paper — không phải universe cố định; xem SWING-RESEARCH-CONTRACT.md */
+export const LIVE_SOURCES = new Set(['vnstock', 'tcbs']);
+export const TEMPLATE_SOURCES = new Set(['scan_template', 'core', 'portfolio_snapshot', 'manual', '/trade']);
 export const MAX_SATELLITE_ON_WATCHLIST = 2;
 export const MAX_SCAN_ACTIVE = 12;
 
@@ -62,8 +64,31 @@ export function isoWeekKey(dateStr = todayGmt7()) {
   return `${year}-W${String(week).padStart(2, '0')}`;
 }
 
-export function tierForSymbol(symbol) {
-  return CORE_SYMBOLS.includes(String(symbol || '').toUpperCase()) ? 'CORE' : 'SATELLITE';
+export function isLiveMarketSource(source) {
+  const s = String(source || '').toLowerCase();
+  for (const p of LIVE_SOURCES) {
+    if (s.startsWith(`${p}:`)) return true;
+  }
+  return false;
+}
+
+export function parseLiveSource(source) {
+  const m = String(source || '').match(/^(vnstock|tcbs):(\d{4}-\d{2}-\d{2})/i);
+  if (!m) return null;
+  return { provider: m[1].toLowerCase(), session_date: m[2] };
+}
+
+export function formatLiveSource(provider, sessionDate) {
+  const p = String(provider || '').toLowerCase();
+  if (!LIVE_SOURCES.has(p)) throw new Error('data-source phải là vnstock hoặc tcbs');
+  const d = String(sessionDate || todayGmt7()).trim();
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(d)) throw new Error('session-date phải yyyy-mm-dd');
+  return `${p}:${d}`;
+}
+export function tierForSymbol(symbol, watchlistSymbols = null) {
+  const sym = String(symbol || '').toUpperCase();
+  if (watchlistSymbols?.has(sym)) return 'CORE';
+  return CORE_SYMBOLS.includes(sym) ? 'CORE' : 'SATELLITE';
 }
 
 export function num(v) {
@@ -104,6 +129,7 @@ export function computeCroScore(row, ctx = {}) {
 
 export function suggestAction(row, score) {
   if (row.tier === 'CORE') return 'CORE';
+  if (row.tier === 'SATELLITE' && !isLiveMarketSource(row.source)) return 'NEED_RESEARCH';
   const s = score ?? computeCroScore(row);
   const trig = String(row.trigger_status || '').toUpperCase();
   if (s < 35 || String(row.verdict || '').toUpperCase().includes('PASS')) return 'PASS';
@@ -159,6 +185,10 @@ export async function fetchUniverseScan(spreadsheetId, token) {
 export async function writeUniverseScanTable(spreadsheetId, token, tab, rows) {
   const end = scanColEnd();
   const values = [UNIVERSE_SCAN_HEADERS, ...rows.map((r) => objectToScanRow(r))];
+  const clearThrough = Math.max(values.length + 5, 20);
+  while (values.length < clearThrough) {
+    values.push(UNIVERSE_SCAN_HEADERS.map(() => ''));
+  }
   const range = encodeURIComponent(`${tab}!A1:${end}${values.length}`);
   await sheetsApi(token, 'PUT', spreadsheetId, `values/${range}?valueInputOption=USER_ENTERED`, {
     values,
@@ -182,6 +212,7 @@ export function rankScanRows(rows, ctx = {}) {
 
 export function defaultSeedRows(week = isoWeekKey()) {
   const today = todayGmt7();
+  /** Chỉ snapshot vị thế paper — KHÔNG phải ranking thuật toán. Satellite = trống cho đến scan live. */
   return [
     {
       rank: 1,
@@ -189,17 +220,17 @@ export function defaultSeedRows(week = isoWeekKey()) {
       tier: 'CORE',
       bucket: 'bank',
       verdict: 'VAO_DUOC',
-      cro_score: 85,
-      rr_planned: 1.9,
+      cro_score: '',
+      rr_planned: '',
       trigger_status: 'SAN_SANG',
       action: 'CORE',
       scan_week: week,
       last_scan: today,
-      entry_zone: '22.2-22.6',
-      stop: '<21.850',
-      target: '23.6-24.0',
-      notes: 'OPEN T1 bootstrap',
-      source: 'core',
+      entry_zone: '',
+      stop: '',
+      target: '',
+      notes: 'portfolio_snapshot — sync từ Watchlist/OPEN',
+      source: 'portfolio_snapshot',
     },
     {
       rank: 2,
@@ -207,17 +238,17 @@ export function defaultSeedRows(week = isoWeekKey()) {
       tier: 'CORE',
       bucket: 'cyclical',
       verdict: 'CHO_THEM',
-      cro_score: 72,
-      rr_planned: 1.6,
+      cro_score: '',
+      rr_planned: '',
       trigger_status: 'WATCH',
       action: 'CORE',
       scan_week: week,
       last_scan: today,
-      entry_zone: '23.0-23.5',
-      stop: '<22.300',
-      target: '25.5-26.5',
-      notes: 'LIMIT_TREO 23200 T2',
-      source: 'core',
+      entry_zone: '',
+      stop: '',
+      target: '',
+      notes: 'portfolio_snapshot — LIMIT_TREO trên Watchlist',
+      source: 'portfolio_snapshot',
     },
     {
       rank: 3,
@@ -225,55 +256,54 @@ export function defaultSeedRows(week = isoWeekKey()) {
       tier: 'CORE',
       bucket: 'retail',
       verdict: 'CHO_THEM',
-      cro_score: 58,
-      rr_planned: 1.4,
+      cro_score: '',
+      rr_planned: '',
       trigger_status: 'NOT_READY',
       action: 'CORE',
       scan_week: week,
       last_scan: today,
-      entry_zone: '76-77.5',
-      stop: '<74.500',
-      target: '82-85',
-      notes: 'T3 probe size <=25%',
-      source: 'core',
-    },
-    {
-      rank: 4,
-      symbol: 'FPT',
-      tier: 'SATELLITE',
-      bucket: 'other',
-      verdict: 'CHO_THEM',
-      cro_score: 52,
-      rr_planned: 1.35,
-      trigger_status: 'WATCH',
-      action: 'HOLD',
-      scan_week: week,
-      last_scan: today,
       entry_zone: '',
       stop: '',
       target: '',
-      notes: 'Defensive beta — scan /trade trước promote',
-      source: 'scan_template',
-    },
-    {
-      rank: 5,
-      symbol: 'TCB',
-      tier: 'SATELLITE',
-      bucket: 'bank',
-      verdict: 'PASS',
-      cro_score: 28,
-      rr_planned: 1.1,
-      trigger_status: 'NOT_READY',
-      action: 'PASS',
-      scan_week: week,
-      last_scan: today,
-      entry_zone: '',
-      stop: '',
-      target: '',
-      notes: 'Trùng bucket ACB OPEN — không ưu tiên',
-      source: 'scan_template',
+      notes: 'portfolio_snapshot — theo dõi, chưa setup',
+      source: 'portfolio_snapshot',
     },
   ];
+}
+
+/** Đồng bộ Core từ Watchlist — không invent Satellite */
+export function buildCoreRowsFromWatchlist(watchlistRows, week = isoWeekKey()) {
+  const today = todayGmt7();
+  return watchlistRows.map((w) => ({
+    symbol: String(w.symbol || '').toUpperCase(),
+    tier: 'CORE',
+    bucket: bucketForSymbol(w.symbol),
+    verdict: String(w.status || '').toUpperCase() === 'OPEN' ? 'VAO_DUOC' : 'CHO_THEM',
+    cro_score: '',
+    rr_planned: '',
+    trigger_status:
+      String(w.status || '').toUpperCase() === 'OPEN'
+        ? 'SAN_SANG'
+        : String(w.status || '').toUpperCase() === 'LIMIT_TREO'
+          ? 'WATCH'
+          : 'NOT_READY',
+    action: 'CORE',
+    scan_week: week,
+    last_scan: today,
+    entry_zone: w.entry_zone || '',
+    stop: w.stop || '',
+    target: w.target || '',
+    notes: `Watchlist · ${w.status || ''} · ${w.exec_du_kien || ''}`.trim(),
+    source: 'portfolio_snapshot',
+  }));
+}
+
+export function purgeNonLiveSatellites(rows) {
+  return rows.filter((r) => r.tier !== 'SATELLITE' || isLiveMarketSource(r.source));
+}
+
+export function countLiveSatellites(rows) {
+  return rows.filter((r) => r.tier === 'SATELLITE' && isLiveMarketSource(r.source)).length;
 }
 
 export async function ensureUniverseScanTab(spreadsheetId, token) {

@@ -35,7 +35,8 @@
 
 - Playbook: `scripts/SWING-EXECUTION-PLAYBOOK.md` · Constitution: `scripts/SWING-PORTFOLIO-CONSTITUTION.md`
 - T2 chưa khớp: `swing-watchlist.mjs treo` — không `Trades_PAPER` cho đến `filled` + `open --filled true`
-- CRO tuần: `swing-cro.mjs ritual` — Core + Satellite Universe_Scan
+- CRO tuần: `swing-cro.mjs ritual` — Satellite chỉ sau `/trade` + `--data-source vnstock|tcbs`
+- Research contract: `scripts/SWING-RESEARCH-CONTRACT.md` — 5 mã seed **không** phải universe đo lường
 - **OPEN:** đủ trường + `--exec` + gate (2 OPEN, 60% NAV, risk ≤1.25% NAV, MWG 25%)
 - Trước OPEN mới: `swing-log.mjs portfolio` · Sau log: `validate`
 - Shadow/Theory: `SWING-THEORY-RESEARCH.md` · `SWING-SHADOW-SCHEMA.md` — không ảnh hưởng KPI real-gate

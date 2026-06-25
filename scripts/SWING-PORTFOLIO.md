@@ -5,6 +5,9 @@
 
 Mục tiêu: **danh mục tối ưu = đủ lãi mục tiêu + kiểm soát rủi ro + dữ liệu sạch cho KPI/real-gate** — không phải “full margin mọi mã”.
 
+**Chuẩn đo KPI** đo **kỷ luật lệnh** (win rate, R:R, stop, rule) — **không** đo danh sách mã cố định.  
+**Nghiên cứu thị trường:** [SWING-RESEARCH-CONTRACT.md](./SWING-RESEARCH-CONTRACT.md) · nguồn **VNStock / TCBS** bắt buộc cho Satellite.
+
 **Hiến pháp (Tier 0–4):** [SWING-PORTFOLIO-CONSTITUTION.md](./SWING-PORTFOLIO-CONSTITUTION.md)  
 **CRO (Core + Satellite):** [SWING-CRO.md](./SWING-CRO.md)
 

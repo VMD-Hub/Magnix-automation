@@ -1,126 +1,87 @@
 # Swing CRO — Bộ não quân sư (Chief Risk Officer)
 
-> **Không thay `/trade`** (phân tích mã) · **bổ sung** chiến lược danh mục + không bỏ lỡ VN100  
-> Gate: [SWING-PORTFOLIO.md](./SWING-PORTFOLIO.md) · Execution: [SWING-EXECUTION-PLAYBOOK.md](./SWING-EXECUTION-PLAYBOOK.md)
+> **Đọc trước:** [SWING-RESEARCH-CONTRACT.md](./SWING-RESEARCH-CONTRACT.md)  
+> **5 mã trên Sheet không phải giới hạn universe** — cũng **không phải chuẩn đo KPI**.  
+> Satellite chỉ tồn tại sau **/trade + giá live VNStock/TCBS**.
 
-## Hai tầng universe
+Gate: [SWING-PORTFOLIO.md](./SWING-PORTFOLIO.md) · Execution: [SWING-EXECUTION-PLAYBOOK.md](./SWING-EXECUTION-PLAYBOOK.md)
 
-```
-┌─────────────────────────────────────────────────────────┐
-│  Tầng A — CORE (3 mã)     ACB · HPG · MWG               │
-│  80% quyết định · bias T1/T2/T3 sẵn · tab Watchlist     │
-├─────────────────────────────────────────────────────────┤
-│  Tầng B — SATELLITE       VN100 (quét hàng tuần)        │
-│  tab Universe_Scan · promote → Watchlist CHỜ (max 2)    │
-├─────────────────────────────────────────────────────────┤
-│  Tầng C — CASH            40–75% NAV · vị thế chủ động  │
-└─────────────────────────────────────────────────────────┘
-```
+## Hai việc tách bạch
 
-**Luật:** Mã Satellite **không bị cấm** — cần `/trade` + `cro_score` + promote + size ≤25% lần đầu.
+| | Chuẩn đo (KPI / real-gate) | CRO (nghiên cứu tuần) |
+|---|---------------------------|------------------------|
+| Hỏi | Bạn trade có kỷ luật không? | Thị trường đang cho setup nào? |
+| Dữ liệu | Lệnh OPEN/CLOSE đã ghi | **VNStock / TCBS phiên hiện tại** |
+| Cố định 5 mã? | **Không** | **Không** |
+
+**Watchlist** = sổ tay vị thế paper (ảnh chụp danh mục bạn theo dõi).  
+**Universe_Scan** = kết quả **khám phá** tuần — động, có `source=tcbs:yyyy-mm-dd`.
 
 ---
 
-## Tab Universe_Scan (Google Sheet)
+## Ba tầng vận hành
+
+```
+CORE (Watchlist)     — mã đang theo dõi / đang giữ (từ portfolio paper)
+SATELLITE (Scan)     — ứng viên tuần, chỉ sau /trade + vnstock|tcbs
+CASH                 — buffer 40%+ NAV
+```
+
+`cro_score` **không phải** khuyến nghị đầu tư — chỉ xếp thứ tự **sau** phân tích live.
+
+---
+
+## Tab Universe_Scan
 
 | Cột | Ý nghĩa |
 |-----|---------|
-| rank | Thứ tự CRO sau `rank` |
-| symbol | Mã CP |
-| tier | CORE \| SATELLITE |
-| bucket | bank · cyclical · retail · other |
-| verdict | VAO_DUOC · CHO_THEM · PASS (từ `/trade`) |
-| cro_score | 0–100 heuristic (mode BEHIND −8) |
-| rr_planned | R:R kế hoạch |
-| trigger_status | NOT_READY · WATCH · SAN_SANG |
-| action | HOLD · PROMOTE · TREO · PASS · CORE |
-| scan_week | ISO tuần (2026-W26) |
-| last_scan | Ngày quét |
-| entry_zone / stop / target | Từ `/trade` |
-| notes | Thesis 1 dòng |
-| source | /trade · CTCK · manual |
+| source | `portfolio_snapshot` (Core) · **`vnstock:date` / `tcbs:date`** (Satellite) |
+| action | CORE · HOLD · PROMOTE · NEED_RESEARCH · PASS |
 
-Setup lần đầu:
+Setup:
 
 ```bash
 node scripts/swing-cro.mjs init-tab
+node scripts/swing-cro.mjs research-reset   # Core từ Watchlist · xóa Satellite giả
 ```
 
 ---
 
-## Ritual scan hàng tuần (thứ 2)
+## Ritual thứ 2 — thị trường trước, mã sau
 
 ```bash
-node scripts/swing-cro.mjs ritual    # briefing: mode, core, satellite, mệnh lệnh
+node scripts/swing-cro.mjs ritual
 ```
 
-| Bước | Việc | Lệnh |
-|------|------|------|
-| 1 | Đọc mode danh mục | `swing-log portfolio` |
-| 2 | Scan 5–10 mã VN100 (CTCK + chart) | `/trade MÃ` từng ứng viên |
-| 3 | Ghi Satellite mới | `swing-cro add --symbol FPT --verdict CHO_THEM --rr 1.4 --trigger WATCH --notes "..."` |
-| 4 | Xếp hạng lại | `swing-cro rank` |
-| 5 | Promote tối đa **2** Satellite | `swing-cro promote --symbol FPT` |
-| 6 | Loại mã yếu | `swing-cro pass --symbol TCB` |
-| 7 | Đồng bộ Watchlist | `swing-watchlist review` |
-| 8 | Kiểm tra sổ | `swing-log validate` |
+1. Quét **VN100 / ngành** trên TCBS hoặc VNStock  
+2. `/trade MÃ` — DATE_LOCK, giá phiên thật  
+3. `swing-cro add --data-source tcbs --session-date 2026-06-25 ...`  
+4. `rank` → `promote` (max 2 Satellite)  
+5. `swing-log` chỉ khi gate pass  
 
-**Thứ 6:** `ritual` ngắn + `swing-kpi-read.mjs` — không bắt buộc scan đầy đủ.
+**Ritual chưa đủ** nếu tuần đó **0 Satellite** có `vnstock:|tcbs:`.
 
 ---
 
-## cro_score (heuristic)
-
-| Thành phần | Điểm |
-|------------|------|
-| Verdict VÀO / CHỜ | +38 / +22 |
-| R:R ≥ 1.5 | +22 |
-| Trigger SAN_SANG | +24 |
-| Bucket chưa có OPEN | +8 |
-| Mode BEHIND | −8 |
-
-**action tự đề xuất:**
-
-| Score | Trigger | Action |
-|-------|---------|--------|
-| CORE | — | CORE (Watchlist cố định) |
-| ≥70 + SAN_SANG | Satellite | TREO |
-| ≥55 | Satellite | PROMOTE |
-| <35 hoặc PASS | Satellite | PASS |
-
----
-
-## Promote Satellite → Watchlist
+## Lệnh Satellite (bắt buộc nguồn live)
 
 ```bash
-node scripts/swing-cro.mjs promote --symbol FPT
+node scripts/swing-cro.mjs add --symbol VNM \
+  --data-source tcbs --session-date 2026-06-25 \
+  --verdict CHO_THEM --rr 1.5 --trigger WATCH \
+  --zone "52-54" --stop "49" --target "58" \
+  --notes "/trade DATE_LOCK 2026-06-25"
 ```
 
-- Tối đa **2 mã Satellite** trên Watchlist (ngoài ACB/HPG/MWG)
-- Status = **CHỜ** · exec mặc định T2 passive
-- Trước OPEN: `/trade` DATE_LOCK · gate danh mục · size ≤25%
+Promote từ chối nếu thiếu `tcbs:|vnstock:`.
 
 ---
 
-## Mệnh lệnh theo PORTFOLIO MODE
+## Agent — không được
 
-| Mode | CRO |
-|------|-----|
-| **ON TRACK** | Core ưu tiên · tối đa 2 OPEN/tuần · Satellite chỉ khi score ≥55 |
-| **BEHIND** | 1 OPEN/tuần · size −25% · không promote Satellite trừ score ≥70 |
-| **STOP** | Không OPEN · chỉ ritual theo dõi |
-
----
-
-## Ví dụ tuần hiện tại (template)
-
-| Mã | Tier | CRO action |
-|----|------|------------|
-| ACB | CORE | Giữ OPEN |
-| HPG | CORE | LIMIT_TREO 23.200 |
-| MWG | CORE | CHỜ T3 |
-| FPT | SATELLITE | HOLD → promote nếu /trade tốt |
-| TCB | SATELLITE | PASS (trùng bucket bank) |
+- Lặp phân tích 5 mã seed khi user hỏi chiến lược tuần  
+- Báo cáo verdict không có ngày phiên + nguồn giá  
+- Gọi template FPT/TCB là “đề xuất thuật toán”  
 
 ---
 
@@ -128,11 +89,7 @@ node scripts/swing-cro.mjs promote --symbol FPT
 
 | Lệnh | Script |
 |------|--------|
-| Ritual tuần | `swing-cro.mjs ritual` |
-| Thêm ứng viên | `swing-cro.mjs add` |
-| Xếp hạng | `swing-cro.mjs rank` |
-| Đưa vào Watchlist | `swing-cro.mjs promote` |
-| Core + T2 | `swing-watchlist.mjs` |
-| OPEN/CLOSE | `swing-log.mjs` |
-
-**Cursor:** agent chạy `ritual` đầu tuần khi user hỏi chiến lược / chọn mã.
+| Ritual | `swing-cro.mjs ritual` |
+| Reset nghiên cứu | `swing-cro.mjs research-reset` |
+| Thêm ứng viên live | `swing-cro.mjs add --data-source ...` |
+| Watchlist / OPEN | `swing-watchlist` · `swing-log` |

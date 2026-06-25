@@ -21,12 +21,17 @@ import {
 } from './lib/swing-sheet.mjs';
 import { bucketForSymbol, openRowsFrom, portfolioSummary } from './lib/swing-portfolio.mjs';
 import {
+  buildCoreRowsFromWatchlist,
   computeCroScore,
+  countLiveSatellites,
   defaultSeedRows,
   ensureUniverseScanTab,
   fetchUniverseScan,
+  formatLiveSource,
   isoWeekKey,
+  isLiveMarketSource,
   MAX_SATELLITE_ON_WATCHLIST,
+  purgeNonLiveSatellites,
   rankScanRows,
   suggestAction,
   tierForSymbol,
@@ -86,21 +91,26 @@ async function cmdRitual() {
   const week = isoWeekKey();
   const ctx = croCtx(open, kpi);
   const satellites = rankScanRows(scan, ctx)
-    .filter((r) => r.tier === 'SATELLITE' && r.action !== 'PASS')
-    .slice(0, 5);
+    .filter((r) => r.tier === 'SATELLITE' && r.action !== 'PASS' && r.action !== 'NEED_RESEARCH');
+  const liveN = countLiveSatellites(scan);
 
   console.log(`# CRO Ritual · ${todayGmt7()} · ${week}`);
-  console.log(`> Mode danh mục: **${kpi.status}** · Net tháng ${kpi.net_month_pct}% · OPEN ${open.length}/2\n`);
+  console.log('> **Chuẩn đo KPI ≠ danh sách mã** — xem SWING-RESEARCH-CONTRACT.md\n');
+  console.log(`> Mode: **${kpi.status}** · Net ${kpi.net_month_pct}% · OPEN ${open.length}/2`);
+  console.log(`> Satellite có nguồn live (vnstock/tcbs): **${liveN}** — ritual đủ khi ≥1 sau scan tuần\n`);
 
   console.log('## 1. Core (Watchlist)');
   for (const w of watch) {
     console.log(`- **${w.symbol}** ${w.status} · ${w.exec_du_kien || '—'} · ${w.limit_treo ? `limit ${w.limit_treo}` : w.trigger || ''}`);
   }
 
-  console.log('\n## 2. Satellite top (Universe_Scan)');
-  if (!satellites.length) console.log('- (trống — chạy `add` sau /trade VN100)');
-  for (const s of satellites) {
-    console.log(`- **${s.symbol}** score ${s.cro_score} · ${s.verdict} · ${s.trigger_status} → **${s.action}**`);
+  console.log('\n## 2. Satellite (chỉ mã đã /trade + vnstock|tcbs)');
+  if (liveN === 0) {
+    console.log('- **Chưa có** — bắt buộc: quét VN100 trên TCBS/VNStock → `/trade` → `swing-cro add --data-source tcbs`');
+  }
+  for (const s of satellites.slice(0, 5)) {
+    const live = isLiveMarketSource(s.source) ? s.source : 'THIẾU NGUỒN';
+    console.log(`- **${s.symbol}** score ${s.cro_score} · ${live} → **${s.action}**`);
   }
 
   console.log('\n## 3. Mệnh lệnh tuần (theo mode)');
@@ -113,12 +123,13 @@ async function cmdRitual() {
   }
   console.log(`- Cash buffer: **${summary.cashPct}%** · Notional OPEN **${summary.investedPct}%**`);
 
-  console.log('\n## 4. Checklist ritual (thứ 2)');
-  console.log('1. Scan VN100 (5–10 mã) → `/trade` hoặc CTCK');
-  console.log('2. `swing-cro add` cho ứng viên mới');
-  console.log('3. `swing-cro rank`');
-  console.log('4. Promote tối đa 2 Satellite → `swing-cro promote`');
-  console.log('5. `swing-watchlist review` · `swing-log portfolio` · `validate`');
+  console.log('\n## 4. Checklist ritual (thứ 2) — **thị trường trước, mã sau**');
+  console.log('1. Quét VN100 / ngành trên **TCBS hoặc VNStock** (không dùng bảng 5 mã seed)');
+  console.log('2. `/trade MÃ` DATE_LOCK pass từng ứng viên');
+  console.log('3. `swing-cro add --data-source tcbs|vnstock --session-date ...`');
+  console.log('4. `swing-cro rank`');
+  console.log('5. Promote tối đa 2 Satellite → `swing-cro promote`');
+  console.log('6. `swing-watchlist review` · `swing-log portfolio` · `validate`');
 
   console.log('\n## 5. Lệnh');
   console.log('```');
@@ -133,13 +144,29 @@ async function cmdAdd(opts) {
   const spreadsheetId = swingSheetId();
   const token = await getSheetsToken();
   const { tab, rows } = await fetchUniverseScan(spreadsheetId, token);
+  const { rows: wl } = await fetchWatchlist(spreadsheetId, token);
+  const wlSet = new Set(wl.map((r) => r.symbol));
   const { open, kpi } = await loadPortfolio();
   const ctx = croCtx(open, kpi);
   const week = isoWeekKey();
   const today = todayGmt7();
+  const tier = tierForSymbol(sym, wlSet);
+  let source = opts.source || '';
+  if (tier === 'SATELLITE') {
+    const ds = opts['data-source'] || opts.dataSource;
+    const session = opts['session-date'] || opts.date || today;
+    if (!ds) {
+      throw new Error(
+        'Satellite bắt buộc --data-source vnstock|tcbs + --session-date (sau /trade live). Xem SWING-RESEARCH-CONTRACT.md'
+      );
+    }
+    source = formatLiveSource(ds, session);
+  } else if (!source) {
+    source = 'portfolio_snapshot';
+  }
   const base = {
     symbol: sym,
-    tier: tierForSymbol(sym),
+    tier,
     bucket: opts.bucket || bucketForSymbol(sym),
     verdict: opts.verdict || 'CHO_THEM',
     rr_planned: opts.rr || opts['rr-planned'] || '',
@@ -150,7 +177,7 @@ async function cmdAdd(opts) {
     stop: opts.stop || '',
     target: opts.target || '',
     notes: opts.notes || '',
-    source: opts.source || '/trade',
+    source,
   };
   base.cro_score = computeCroScore(base, ctx);
   base.action = suggestAction(base, base.cro_score);
@@ -202,6 +229,9 @@ async function cmdPromote(opts) {
   const { rows: scan } = await fetchUniverseScan(spreadsheetId, token);
   const row = scan.find((r) => r.symbol === sym);
   if (!row) throw new Error(`${sym} chưa có trong Universe_Scan — chạy add trước`);
+  if (!isLiveMarketSource(row.source)) {
+    throw new Error(`${sym} chưa có nguồn vnstock|tcbs — /trade live rồi add --data-source tcbs`);
+  }
   if (row.action === 'PASS') throw new Error(`${sym} đang PASS — không promote`);
 
   const satOnWl = await countSatelliteOnWatchlist(token, spreadsheetId);
@@ -239,6 +269,24 @@ async function cmdPromote(opts) {
   console.log('  Tiếp: /trade DATE_LOCK → treo hoặc open theo playbook · size Satellite ≤25% lần đầu');
 }
 
+async function cmdResearchReset() {
+  const spreadsheetId = swingSheetId();
+  const token = await getSheetsToken();
+  const { tab, rows } = await fetchUniverseScan(spreadsheetId, token);
+  const { rows: wl } = await fetchWatchlist(spreadsheetId, token);
+  const { open, kpi } = await loadPortfolio();
+  const core = buildCoreRowsFromWatchlist(wl);
+  const keptSat = purgeNonLiveSatellites(rows).filter((r) => r.tier === 'SATELLITE');
+  const merged = rankScanRows([...core, ...keptSat], croCtx(open, kpi));
+  await writeUniverseScanTable(spreadsheetId, token, tab, merged);
+  console.log(`✓ research-reset · Core ${core.length} từ Watchlist · Satellite live ${keptSat.length}`);
+  console.log('  Đã xóa Satellite template / không có nguồn tcbs|vnstock');
+}
+
+async function cmdSyncCore() {
+  await cmdResearchReset();
+}
+
 async function cmdPass(opts) {
   if (!opts.symbol) throw new Error('pass cần --symbol');
   const sym = String(opts.symbol).toUpperCase();
@@ -265,7 +313,8 @@ function printHelp() {
 
   ritual              Briefing tuần (Core + Satellite + mệnh lệnh)
   list [--tier CORE|SATELLITE]
-  add --symbol ... [--verdict] [--rr] [--trigger WATCH|SAN_SANG|NOT_READY] [--notes]
+  add --symbol ... --data-source vnstock|tcbs --session-date yyyy-mm-dd [--verdict] [--rr] ...
+  research-reset        Core từ Watchlist · xóa Satellite không live
   rank                Tính lại cro_score + thứ hạng
   promote --symbol    Satellite → Watchlist CHỜ (max 2)
   pass --symbol       Loại khỏi ưu tiên tuần
@@ -287,6 +336,7 @@ async function main() {
   else if (cmd === 'rank') await cmdRank();
   else if (cmd === 'promote') await cmdPromote(opts);
   else if (cmd === 'pass') await cmdPass(opts);
+  else if (cmd === 'research-reset' || cmd === 'sync-core') await cmdResearchReset();
   else if (cmd === 'init-tab') await cmdInitTab();
   else throw new Error(`Lệnh không hỗ trợ: ${cmd}`);
 }
