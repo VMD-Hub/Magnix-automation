@@ -53,6 +53,10 @@ import {
 } from './lib/swing-portfolio.mjs';
 import { REGIMES } from './lib/swing-shadow-schema.mjs';
 import { syncShadowTrades } from './lib/swing-shadow-sync.mjs';
+import {
+  assertPassiveFillAllowed,
+  syncWatchlistAfterOpen,
+} from './lib/swing-watchlist-sheet.mjs';
 
 async function autoShadowSync(tradeId) {
   try {
@@ -101,6 +105,12 @@ async function cmdOpen(opts) {
   const stop = num(opts.stop);
   const target = num(opts.target);
   const size = num(opts.size);
+  const execStyle = String(check.exec?.exec || opts.exec || '').toLowerCase();
+  const t2Check = await assertPassiveFillAllowed(symbol, {
+    filled: opts.filled === 'true' || opts.filled === true,
+    execStyle,
+  });
+  if (!t2Check.ok) throw new ValidationError('OPEN — T2 chưa khớp', t2Check);
   if (size > 35) throw new Error('size_pct max 35% (paper-phase)');
   if (String(opts.symbol || '').toUpperCase() === 'MWG' && size > 25) {
     throw new Error('MWG size_pct max 25% (SWING-PORTFOLIO.md)');
@@ -188,6 +198,11 @@ async function cmdOpen(opts) {
   printWarnings(gate.warnings);
 
   await appendTradeRow(spreadsheetId, token, tab, objectToRow(record));
+  try {
+    await syncWatchlistAfterOpen(symbol);
+  } catch (e) {
+    console.warn('⚠ Watchlist sync skip:', e.message);
+  }
   const { rows: all } = await fetchTradesPaper(spreadsheetId, token);
   const csvPath = syncCsv(all);
 

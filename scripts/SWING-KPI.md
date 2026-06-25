@@ -28,15 +28,27 @@ node scripts/swing-log.mjs close --id PAPER-20260625-01 --exit 21850 \
 node scripts/swing-log.mjs patch --id PAPER-20260625-01 --vni 1878 --emotion calm --rule Y \
   --notes "pullback vùng 22.4"
 
-# 5. Quét + danh mục
+# 5. Quét + danh mục + watchlist T2
 node scripts/swing-log.mjs portfolio
 node scripts/swing-log.mjs validate
+node scripts/swing-watchlist.mjs list
+node scripts/swing-watchlist.mjs validate
 
 # 6. Review
 node scripts/swing-kpi-read.mjs
 node scripts/swing-kpi-read.mjs --real-gate
 node scripts/swing-log.mjs list
 ```
+
+## Watchlist T2 (limit chưa khớp)
+
+```bash
+node scripts/swing-watchlist.mjs treo --symbol HPG --limit 23200 --trigger "Retest ho tro" --exec passive
+node scripts/swing-watchlist.mjs filled --symbol HPG   # sau khi khớp TCBS
+node scripts/swing-watchlist.mjs review                # thứ 6
+```
+
+Passive/probe `open` khi Watchlist `LIMIT_TREO` → bắt buộc `--filled true`.
 
 ## Sync
 

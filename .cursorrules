@@ -34,6 +34,7 @@
 ## 5. Swing Paper Trading — Data contract (PAPER)
 
 - Playbook: `scripts/SWING-EXECUTION-PLAYBOOK.md` · Constitution: `scripts/SWING-PORTFOLIO-CONSTITUTION.md`
+- T2 chưa khớp: `swing-watchlist.mjs treo` — không `Trades_PAPER` cho đến `filled` + `open --filled true`
 - **OPEN:** đủ trường + `--exec` + gate (2 OPEN, 60% NAV, risk ≤1.25% NAV, MWG 25%)
 - Trước OPEN mới: `swing-log.mjs portfolio` · Sau log: `validate`
 - Shadow/Theory: `SWING-THEORY-RESEARCH.md` · `SWING-SHADOW-SCHEMA.md` — không ảnh hưởng KPI real-gate

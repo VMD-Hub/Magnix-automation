@@ -24,8 +24,9 @@
 |--------|------|----------|
 | Giá limit TCBS | `--limit` | = `--entry` |
 | Khớp giả định | `--fill` full\|partial | full |
+| T2 đã khớp | `--filled true` | chỉ khi `--exec passive\|probe` và Watchlist từng `LIMIT_TREO` |
 | Phiên | `--session` continuous\|ATO\|ATC | continuous |
-| Thoát kế hoạch | `--exit-plan` single\|ladder | single |
+| Thoát kế hoạch | `--exit-plan` single\|ladder | single (khuyến nghị mạnh — validate chỉ warn nếu thiếu) |
 | Rải chốt lời | `--ladder` | nếu ladder, vd. `50%@23300,50%@23600` |
 
 **Tự tính khi ghi:** `qty`, `notional_vnd`, `rr_planned`, `month`, `trade_id`, tags trong `notes`

@@ -86,6 +86,8 @@ hypothesis:H-REG-01 | shadow:spot_1x,margin_1.25x_bull
 
 Tab **Watchlist**: `status=LIMIT_TREO` · `limit_treo` · `exec_du_kien` — **không** `Trades_PAPER` cho đến khi khớp.
 
+CLI: `node scripts/swing-watchlist.mjs treo|filled|list|validate`
+
 ---
 
 ## Liên kết script

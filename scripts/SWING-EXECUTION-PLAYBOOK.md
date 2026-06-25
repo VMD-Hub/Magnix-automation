@@ -84,12 +84,21 @@ Cập nhật tab **Watchlist** (Google Sheet):
 | exec_du_kien | T2 passive |
 | ghi_chu | Chờ retest hỗ trợ |
 
-**Không** tạo dòng `Trades_PAPER` cho đến khi khớp → lúc đó `swing-log open --exec passive`.
+**Không** tạo dòng `Trades_PAPER` cho đến khi khớp → lúc đó `swing-log open --exec passive --filled true`.
 
 ```bash
+# 1. Treo limit (Sheet Watchlist only)
+node scripts/swing-watchlist.mjs treo --symbol HPG --limit 23200 \
+  --zone "23.0-23.5" --stop "<22.300" --target "25.500-26.500" \
+  --trigger "Retest ho tro" --exec passive
+
+# 2. User xác nhận đã khớp trên TCBS
+node scripts/swing-watchlist.mjs filled --symbol HPG
+
+# 3. OPEN paper
 node scripts/swing-log.mjs open --symbol HPG --entry 23200 --stop 22800 --target 25500 --size 30 \
   --notes "retest ho tro 23.2" --emotion calm --rule Y --vni 1870 \
-  --exec passive --limit 23200 --fill full --session continuous --exit-plan single
+  --exec passive --limit 23200 --fill full --session continuous --exit-plan single --filled true
 ```
 
 ---
@@ -201,7 +210,7 @@ Mã ngoài watchlist → `/trade` + lý do trong notes + gate danh mục stricte
 ## Checklist agent (mỗi lệnh)
 
 - [ ] `/trade` DATE_LOCK pass
-- [ ] Trigger SẴN SÀNG (T1/T3) hoặc T2 Watchlist
+- [ ] Trigger SẴN SÀNG (T1/T3) hoặc T2: `swing-watchlist treo` → `filled` → `open --filled true`
 - [ ] Chọn T1/T2/T3 + T4 exit-plan — **nêu user**
 - [ ] **Gate danh mục** pass ([SWING-PORTFOLIO.md](./SWING-PORTFOLIO.md))
 - [ ] `swing-log list` — exposure hiện tại
