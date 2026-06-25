@@ -1,0 +1,39 @@
+{
+  "drive_root_folder_id": "1iBjsrXLYmHfOHMQaAfLmZGug2kN0314D",
+  "video_root_folder_id": "1GXwEOiqO8ldrH7jJh6HDkwIyMtHr3gnf",
+  "video_root_folder_name": "Magnix_Videos",
+  "folders": {
+    "trade_project": {
+      "id": "1hr8fs1ocZZ72JAcm1k5QDTVxsCg2q7Pv",
+      "name": "Trade_Project",
+      "webViewLink": "https://drive.google.com/drive/folders/1hr8fs1ocZZ72JAcm1k5QDTVxsCg2q7Pv",
+      "note": "Swing paper KPI, trade journal, backup CSV"
+    },
+    "ready_for_review": {
+      "id": "1Po-s54cgin2IgvJ8RYUyOxPidXQC3V_8",
+      "name": "ready_for_review",
+      "webViewLink": null,
+      "note": "MP4 sau Creatomate, chờ L3 xem"
+    },
+    "approved": {
+      "id": "1EMl6s4TO1Jg8J0F79UM6vTOH34LQmYBv",
+      "name": "approved",
+      "webViewLink": null,
+      "note": "Đã duyệt, sẵn đăng"
+    },
+    "published": {
+      "id": "1xmPPF2p8bpfox1iniJQqu7WrWoE703U_",
+      "name": "published",
+      "webViewLink": null,
+      "note": "Đã đăng + có metrics"
+    }
+  },
+  "retention_days": {
+    "ready_for_review": 30,
+    "published": 180
+  },
+  "naming_pattern": "{segment-slug}-{platform}-{topic-slug}-{YYYYMMDD}.mp4",
+  "updated_at": "2026-06-25T04:09:44.392Z",
+  "swing_kpi_sheet_id": "1rgjLhL6FPz3fWRzoIL4WV0LcdknegD7bQWhPLIhM5Lc",
+  "swing_kpi_sheet_url": "https://docs.google.com/spreadsheets/d/1rgjLhL6FPz3fWRzoIL4WV0LcdknegD7bQWhPLIhM5Lc/edit"
+}

@@ -1,0 +1,13 @@
+---
+description: Bắt buộc đọc kiến trúc Magnix trước khi viết code
+alwaysApply: true
+---
+
+# Kiến trúc Magnix — Bắt buộc
+
+Trước khi viết hoặc sửa code trong dự án **magnix-automation**:
+
+1. Đọc `ARCHITECTURE_MAGNIX.md` ở root dự án.
+2. Tuân thủ `.cursorrules` — dự án độc lập, không import Lifestyle monorepo.
+3. Workflow n8n: JSON trong `n8n-workflows/`, cập nhật registry.
+4. Không commit secret, UID thô có PII, hoặc token inline trong JSON workflow.

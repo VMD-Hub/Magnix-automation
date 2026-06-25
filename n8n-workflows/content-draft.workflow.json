@@ -1,0 +1,641 @@
+{
+  "name": "Magnix Agent 3 — Lead Magnet Draft (queue → content_drafts)",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## Agent 3 — Lead Magnet\n- **09:00 VN** · max **5**/lần\n- Input: `content_queue` score≥70 classified\n- Output: tab `content_drafts`\n- **L3:** duyệt `status=approved` trên Sheet trước publish",
+        "height": 180,
+        "width": 400
+      },
+      "id": "a300note",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -480,
+        160
+      ]
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 9 * * *"
+            }
+          ]
+        }
+      },
+      "id": "a301sched",
+      "name": "Schedule Daily Draft",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "a302manual",
+      "name": "When clicking 'Execute workflow'",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "https://sheets.googleapis.com/v4/spreadsheets/1fYB4h_BTiKXa9O3lBah-tQonWpQOQMG2aSkSfPs6yU4/values/content_queue!A%3AO",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleApi",
+        "options": {}
+      },
+      "id": "a303fetch",
+      "name": "Fetch content_queue",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        240,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const MIN_SCORE = 70;\nconst BATCH = 5;\n\nconst ALLOW_SEGMENTS = new Set([\n  'noxh_income', 'valuation', 'sme_credit', 'general_inbound',\n]);\n\nfunction parseMeta(raw) {\n  if (!raw) return {};\n  try {\n    return typeof raw === 'string' ? JSON.parse(raw) : raw;\n  } catch {\n    return {};\n  }\n}\n\nconst res = $input.first().json;\nconst rows = Array.isArray(res.values) ? res.values : [];\nif (rows.length < 2) {\n  return [{ json: { empty: true, message: 'content_queue trống' } }];\n}\n\nconst headers = rows[0].map((x) => String(x ?? '').trim().toLowerCase());\nconst out = [];\n\nfor (let i = 1; i < rows.length; i++) {\n  const cells = rows[i];\n  if (!cells?.some((c) => String(c ?? '').trim())) continue;\n\n  const row = { sheet_row: i + 1 };\n  headers.forEach((key, j) => {\n    if (key) row[key] = cells[j] ?? '';\n  });\n\n  const segment = String(row.segment || '').trim().toLowerCase();\n  const score = Number(row.score || 0);\n  const status = String(row.status || '').trim().toLowerCase();\n  const meta = parseMeta(row.meta);\n\n  if (meta.draft_created === true) continue;\n  if (!ALLOW_SEGMENTS.has(segment)) continue;\n  if (score < MIN_SCORE) continue;\n  if (status !== 'classified' && row.claude_verdict !== 'qualified') continue;\n\n  const text = String(row.text || '').trim();\n  if (text.length < 20) continue;\n\n  out.push({ json: row });\n  if (out.length >= BATCH) break;\n}\n\nif (!out.length) {\n  return [{ json: { empty: true, message: 'Không còn candidate draft (score≥70, classified, chưa draft)' } }];\n}\n\nreturn out;"
+      },
+      "id": "a304filter",
+      "name": "Parse Filter Draft Candidates",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        480,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "c1",
+              "leftValue": "={{ $json.empty }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "notEquals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "a305if",
+      "name": "IF Has Candidates",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        720,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $getWorkflowStaticData('global');\ndata.a3_stats = { draft_ok: 0, draft_fail: 0, l0_fail: 0, parse_fail: 0 };\nreturn $input.all();"
+      },
+      "id": "a305reset",
+      "name": "Reset Run Stats",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        960,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "batchSize": 1,
+        "options": {}
+      },
+      "id": "a306loop",
+      "name": "Loop Draft Candidates",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        1200,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const row = $('Loop Draft Candidates').item?.json || $input.first().json;\n\nconst system = `Growth Copywriter Magnix — Value-First Hook.\n[/matrix] [/artifacts] [/deconstruct]\nChỉ trả JSON hợp lệ, không markdown bọc ngoài:\n{\"title\":\"\",\"hook_line\":\"\",\"segment\":\"\",\"artifact_markdown\":\"\",\"source_refs\":[],\"cta_opt_in\":\"\",\"disclaimer\":\"\",\"export_hint\":\"pdf|excel|both\"}\n- hook_line ≤25 từ\n- artifact_markdown: ≥1 bảng Markdown so sánh\n- Không cam kết lãi suất cụ thể, không hứa duyệt vay`;\n\nconst segment = String(row.segment || 'general_inbound');\nconst pain = String(row.text || '').slice(0, 2000);\nconst assetMap = {\n  noxh_income: 'checklist_ho_so_noxh',\n  valuation: 'checklist_tham_dinh',\n  sme_credit: 'checklist_vay_dn',\n  general_inbound: 'checklist_mua_nha',\n};\nconst userPayload = JSON.stringify({\n  segment,\n  pain,\n  asset_type: assetMap[segment] || 'checklist',\n  angle: 'pain_from_social_listen',\n  reference_url_or_text: String(row.post_url || '').slice(0, 500),\n  requires_legal_qa: ['noxh_income', 'valuation', 'sme_credit'].includes(segment),\n  interest_key: row.interest_key || '',\n  source_normalized_key: row.normalized_key,\n});\n\ntry {\n  if ($env.DEEPSEEK_API_KEY) {\n    const res = await this.helpers.httpRequest({\n      method: 'POST',\n      url: $env.DEEPSEEK_API_URL || 'https://api.deepseek.com/chat/completions',\n      headers: {\n        Authorization: `Bearer ${$env.DEEPSEEK_API_KEY}`,\n        'Content-Type': 'application/json',\n      },\n      body: {\n        model: $env.DEEPSEEK_MODEL || 'deepseek-chat',\n        temperature: 0.4,\n        max_tokens: 4096,\n        response_format: { type: 'json_object' },\n        messages: [\n          { role: 'system', content: system },\n          { role: 'user', content: userPayload },\n        ],\n      },\n      json: true,\n    });\n    return [{ json: res }];\n  }\n\n  if ($env.ANTHROPIC_API_KEY) {\n    const model = $env.ANTHROPIC_DRAFT_MODEL || 'claude-sonnet-4-6';\n    const res = await this.helpers.httpRequest({\n      method: 'POST',\n      url: 'https://api.anthropic.com/v1/messages',\n      headers: {\n        'x-api-key': $env.ANTHROPIC_API_KEY,\n        'anthropic-version': '2023-06-01',\n        'Content-Type': 'application/json',\n      },\n      body: {\n        model,\n        max_tokens: 4096,\n        temperature: 0.4,\n        system,\n        messages: [{ role: 'user', content: userPayload }],\n      },\n      json: true,\n    });\n    return [{ json: res }];\n  }\n\n  throw new Error('Thiếu DEEPSEEK_API_KEY hoặc ANTHROPIC_API_KEY');\n} catch (e) {\n  return [{ json: { error: true, message: e.message } }];\n}"
+      },
+      "id": "a307llm",
+      "name": "LLM Lead Magnet",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1440,
+        240
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "c1",
+              "leftValue": "={{ $json.error }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "notEquals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "a308ifllm",
+      "name": "IF LLM OK",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1680,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "function extractJsonString(raw) {\n  if (raw == null) throw new Error('EMPTY_LLM_OUTPUT');\n  const s = typeof raw === 'string' ? raw : JSON.stringify(raw);\n  const fenced = s.match(/```(?:json)?\\s*([\\s\\S]*?)```/i);\n  return (fenced ? fenced[1] : s).trim();\n}\n\nconst res = $input.first().json;\nconst raw =\n  res.choices?.[0]?.message?.content ??\n  res.content?.[0]?.text ??\n  res.message?.content ??\n  res;\n\ntry {\n  const parsed = JSON.parse(extractJsonString(raw));\n  const required = ['title', 'hook_line', 'segment', 'artifact_markdown', 'cta_opt_in'];\n  for (const k of required) {\n    if (!parsed[k] || !String(parsed[k]).trim()) throw new Error(`MISSING_${k.toUpperCase()}`);\n  }\n  if (!Array.isArray(parsed.source_refs)) parsed.source_refs = [];\n  return [{\n    json: {\n      ok: true,\n      draft: {\n        title: String(parsed.title).slice(0, 500),\n        hook_line: String(parsed.hook_line).slice(0, 500),\n        segment: String(parsed.segment),\n        artifact_markdown: String(parsed.artifact_markdown).slice(0, 45000),\n        source_refs: parsed.source_refs.map(String).slice(0, 10),\n        cta_opt_in: String(parsed.cta_opt_in).slice(0, 1000),\n        disclaimer: String(parsed.disclaimer || '').slice(0, 2000),\n        export_hint: String(parsed.export_hint || 'pdf'),\n      },\n    },\n  }];\n} catch (e) {\n  return [{ json: { ok: false, parse_error: e.message, raw_preview: String(raw).slice(0, 200) } }];\n}"
+      },
+      "id": "a309parse",
+      "name": "Parse Lead Magnet JSON",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1920,
+        160
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "c1",
+              "leftValue": "={{ $json.ok }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "a310ifparse",
+      "name": "IF Parse OK",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        2160,
+        160
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const FORBIDDEN = [\n  /cam kết.*duyệt/i,\n  /lãi suất\\s*\\d+([.,]\\d+)?\\s*%/i,\n  /đảm bảo.*(vay|duyệt)/i,\n  /100%\\s*(thành công|duyệt)/i,\n];\n\nconst item = $input.first().json;\nif (!item.ok || !item.draft) {\n  return [{ json: { ...item, l0_pass: false } }];\n}\n\nconst text = [\n  item.draft.title,\n  item.draft.hook_line,\n  item.draft.artifact_markdown,\n  item.draft.cta_opt_in,\n  item.draft.disclaimer,\n].join('\\n');\n\nconst hits = FORBIDDEN.filter((re) => re.test(text)).map((re) => re.source);\nif (hits.length) {\n  return [{\n    json: {\n      ok: false,\n      l0_pass: false,\n      l0_hits: hits,\n      error: 'L0_FORBIDDEN',\n    },\n  }];\n}\n\nreturn [{ json: { ...item, l0_pass: true, l0_hits: [] } }];"
+      },
+      "id": "a311l0",
+      "name": "L0 Forbidden Check",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2400,
+        80
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "c1",
+              "leftValue": "={{ $json.l0_pass }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "a312ifl0",
+      "name": "IF L0 Pass",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        2640,
+        80
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const source = $('Loop Draft Candidates').item?.json || {};\nconst item = $input.first().json;\n\nif (!item.ok || !item.draft) {\n  return [{ json: { ok: false, error: 'MERGE_SKIP', sheet_row: source.sheet_row } }];\n}\n\nconst d = item.draft;\nconst meta = JSON.stringify({\n  source_refs: d.source_refs,\n  l0_hits: item.l0_hits || [],\n  agent: 'agent-3',\n  source_post_url: source.post_url,\n  created_at: new Date().toISOString(),\n}).slice(0, 50000);\n\nreturn [{\n  json: {\n    ok: true,\n    source_normalized_key: source.normalized_key,\n    queue_sheet_row: source.sheet_row,\n    append_row: [\n      String(source.normalized_key || ''),\n      String(source.post_id || ''),\n      String(d.segment || source.segment || ''),\n      d.title,\n      d.hook_line,\n      d.artifact_markdown,\n      d.cta_opt_in,\n      d.disclaimer,\n      d.export_hint,\n      'draft',\n      'L0',\n      new Date().toISOString(),\n      'agent3_lead_magnet',\n      meta,\n    ],\n    queue_meta_patch: {\n      draft_created: true,\n      draft_status: 'draft',\n      draft_title: d.title,\n      draft_at: new Date().toISOString(),\n    },\n  },\n}];"
+      },
+      "id": "a313merge",
+      "name": "Merge Draft Row",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2880,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const SHEET_ID = '1fYB4h_BTiKXa9O3lBah-tQonWpQOQMG2aSkSfPs6yU4';\nconst TAB = 'content_drafts';\n\nconst item = $input.first().json;\nif (!item.ok || !item.append_row) {\n  return [{ json: { ok: false, error: 'SKIP_APPEND' } }];\n}\n\nawait this.helpers.httpRequestWithAuthentication.call(this, 'googleApi', {\n  method: 'POST',\n  url: `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent(`${TAB}!A:N`)}:append?valueInputOption=USER_ENTERED&insertDataOption=INSERT_ROWS`,\n  body: { values: [item.append_row] },\n  json: true,\n});\n\nconst data = $getWorkflowStaticData('global');\nif (!data.a3_stats) data.a3_stats = { draft_ok: 0, draft_fail: 0, l0_fail: 0 };\ndata.a3_stats.draft_ok += 1;\n\nreturn [{ json: { ok: true, storage: 'content_drafts', normalized_key: item.source_normalized_key } }];"
+      },
+      "id": "a314append",
+      "name": "Sheet Append content_drafts",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3120,
+        0
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const SHEET_ID = '1fYB4h_BTiKXa9O3lBah-tQonWpQOQMG2aSkSfPs6yU4';\nconst TAB = 'content_queue';\n\nconst merge = $('Merge Draft Row').item?.json || $input.first().json;\nif (!merge.queue_sheet_row || !merge.queue_meta_patch) {\n  return [{ json: { ok: false, skip: true } }];\n}\n\nconst row = merge.queue_sheet_row;\nlet existing = {};\ntry {\n  const getRes = await this.helpers.httpRequestWithAuthentication.call(this, 'googleApi', {\n    method: 'GET',\n    url: `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent(`${TAB}!O${row}`)}`,\n    json: true,\n  });\n  const cell = getRes.values?.[0]?.[0];\n  if (cell) existing = JSON.parse(cell);\n} catch {\n  existing = {};\n}\n\nconst meta = JSON.stringify({ ...existing, ...merge.queue_meta_patch }).slice(0, 50000);\n\nawait this.helpers.httpRequestWithAuthentication.call(this, 'googleApi', {\n  method: 'PUT',\n  url: `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent(`${TAB}!O${row}`)}?valueInputOption=USER_ENTERED`,\n  body: { values: [[meta]] },\n  json: true,\n});\n\nreturn [{ json: { ok: true, queue_row_updated: row } }];"
+      },
+      "id": "a315mark",
+      "name": "Mark Queue Drafted",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3360,
+        0
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $getWorkflowStaticData('global');\nif (!data.a3_stats) data.a3_stats = {};\ndata.a3_stats.l0_fail = (data.a3_stats.l0_fail || 0) + 1;\nreturn $input.all();"
+      },
+      "id": "a316l0fail",
+      "name": "Track L0 Fail",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2880,
+        160
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $getWorkflowStaticData('global');\nif (!data.a3_stats) data.a3_stats = {};\ndata.a3_stats.parse_fail = (data.a3_stats.parse_fail || 0) + 1;\nreturn $input.all();"
+      },
+      "id": "a317parsefail",
+      "name": "Track Parse Fail",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2400,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $getWorkflowStaticData('global');\nconst stats = data.a3_stats || {};\nreturn [{ json: {\n  ok: true,\n  workflow: 'content-draft',\n  stats,\n  batch_size: 5,\n  hint: (stats.draft_ok || 0) === 0 ? 'Không draft mới — hết candidate hoặc lỗi LLM/L0' : null,\n  finished_at: new Date().toISOString(),\n}}];"
+      },
+      "id": "a318summary",
+      "name": "Build Summary",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3600,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{ json: { ok: true, empty: true, message: 'No draft candidates' } }];"
+      },
+      "id": "a319empty",
+      "name": "No Candidates Summary",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        720,
+        420
+      ]
+    }
+  ],
+  "connections": {
+    "Schedule Daily Draft": {
+      "main": [
+        [
+          {
+            "node": "Fetch content_queue",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking 'Execute workflow'": {
+      "main": [
+        [
+          {
+            "node": "Fetch content_queue",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch content_queue": {
+      "main": [
+        [
+          {
+            "node": "Parse Filter Draft Candidates",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Filter Draft Candidates": {
+      "main": [
+        [
+          {
+            "node": "IF Has Candidates",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF Has Candidates": {
+      "main": [
+        [
+          {
+            "node": "Reset Run Stats",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "No Candidates Summary",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Reset Run Stats": {
+      "main": [
+        [
+          {
+            "node": "Loop Draft Candidates",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Draft Candidates": {
+      "main": [
+        [
+          {
+            "node": "Build Summary",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "LLM Lead Magnet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "LLM Lead Magnet": {
+      "main": [
+        [
+          {
+            "node": "IF LLM OK",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF LLM OK": {
+      "main": [
+        [
+          {
+            "node": "Parse Lead Magnet JSON",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Loop Draft Candidates",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Lead Magnet JSON": {
+      "main": [
+        [
+          {
+            "node": "IF Parse OK",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF Parse OK": {
+      "main": [
+        [
+          {
+            "node": "L0 Forbidden Check",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Track Parse Fail",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "L0 Forbidden Check": {
+      "main": [
+        [
+          {
+            "node": "IF L0 Pass",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF L0 Pass": {
+      "main": [
+        [
+          {
+            "node": "Merge Draft Row",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Track L0 Fail",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge Draft Row": {
+      "main": [
+        [
+          {
+            "node": "Sheet Append content_drafts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sheet Append content_drafts": {
+      "main": [
+        [
+          {
+            "node": "Mark Queue Drafted",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mark Queue Drafted": {
+      "main": [
+        [
+          {
+            "node": "Loop Draft Candidates",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Track L0 Fail": {
+      "main": [
+        [
+          {
+            "node": "Loop Draft Candidates",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Track Parse Fail": {
+      "main": [
+        [
+          {
+            "node": "Loop Draft Candidates",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "No Candidates Summary": {
+      "main": [
+        [
+          {
+            "node": "Build Summary",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [
+    {
+      "name": "magnix"
+    },
+    {
+      "name": "agent-3"
+    },
+    {
+      "name": "content-draft"
+    }
+  ],
+  "meta": {
+    "templateCredsSetupCompleted": false
+  }
+}

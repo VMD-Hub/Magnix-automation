@@ -1,0 +1,12 @@
+---
+description: Quy ước prompt AI cho sản xuất nội dung Inbound
+globs: ai-agents-prompts/**
+alwaysApply: false
+---
+
+# AI Agent Prompts — Magnix
+
+- Tên file: `{channel}__{purpose}.md` (vd: `fb__inbound-post-draft.md`)
+- Cấu trúc tối thiểu: **Mục tiêu**, **System**, **User template** (placeholder `{{var}}`), **Output schema**
+- Không chứa API key; biến môi trường ghi trong comment `# env: OPENAI_API_KEY`
+- Version prompt: frontmatter `version: 1` hoặc suffix `_v2` trong tên file

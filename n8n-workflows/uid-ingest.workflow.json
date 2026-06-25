@@ -1,0 +1,476 @@
+{
+  "name": "Magnix Mạch 1 — UID Ingest",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "magnix/uid-ingest",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "a1webhook001",
+      "name": "Webhook uid-ingest",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        300
+      ],
+      "webhookId": "magnix-uid-ingest"
+    },
+    {
+      "parameters": {
+        "jsCode": "const EXPECTED = $env.MAGNIX_WEBHOOK_TOKEN || '';\nconst headers = $input.first().json.headers || {};\nconst auth = headers.authorization || headers.Authorization || '';\nif (EXPECTED && auth !== `Bearer ${EXPECTED}`) {\n  throw new Error('Unauthorized: invalid MAGNIX_WEBHOOK_TOKEN');\n}\n\nconst raw = $input.first().json;\nconst body = raw.body && typeof raw.body === 'object' ? raw.body : raw;\n\nconst uid = String(body.uid || '').trim();\nconst uid_source = String(body.uid_source || 'unknown').trim();\nif (!uid) {\n  throw new Error('Validation: uid is required');\n}\n\nconst text = String(body.text ?? body.message ?? '').trim();\nconst meta = body.meta && typeof body.meta === 'object' ? body.meta : {};\nconst consent_basis = body.consent_basis || meta.consent_basis || null;\n\nconst normalized_key = `${uid_source}:${uid}`;\nconst captured_at = body.captured_at || new Date().toISOString();\n\nreturn [{\n  json: {\n    uid,\n    uid_source,\n    normalized_key,\n    captured_at,\n    text,\n    meta,\n    consent_basis,\n    status: 'raw',\n  },\n}];"
+      },
+      "id": "a2enrich001",
+      "name": "Auth & Enrich Skeleton",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        240,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const RULES = [\n  { segment: 'noxh_income', score: 80, interest_key: 'thu_nhap_noxh', patterns: [/thu nhập|lương|vay ngân hàng|noxh|nhà ở xã hội/i] },\n  { segment: 'valuation', score: 70, interest_key: 'dinh_gia_tham_dinh', patterns: [/định giá|thẩm định|chứng thư/i] },\n  { segment: 'sme_credit', score: 75, interest_key: 'room_tin_dung_sme', patterns: [/room tín dụng|doanh nghiệp|\\bsme\\b/i] },\n  { segment: 'general_inbound', score: 55, interest_key: 'quan_tam_bds', patterns: [/giá|\\bcăn\\b|m²|m2|block|dự án/i] },\n];\n\nfunction classifyText(text) {\n  const t = (text || '').normalize('NFC').toLowerCase();\n  let best = { segment: 'unclassified', score: 0, interest_key: 'unknown', matched: [] };\n  for (const rule of RULES) {\n    for (const re of rule.patterns) {\n      if (re.test(t)) {\n        if (rule.score > best.score) {\n          best = {\n            segment: rule.segment,\n            score: rule.score,\n            interest_key: rule.interest_key,\n            matched: [re.source],\n          };\n        }\n        break;\n      }\n    }\n  }\n  return best;\n}\n\nconst items = $input.all();\nreturn items.map((item) => {\n  const text = item.json.text ?? '';\n  const result = classifyText(text);\n  const needs_llm =\n    (result.segment === 'unclassified' && text.length > 0) ||\n    (result.score >= 40 && result.score <= 59);\n  return {\n    json: {\n      ...item.json,\n      ...result,\n      needs_llm,\n    },\n  };\n});"
+      },
+      "id": "a3classify01",
+      "name": "Classify Fast",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        480,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "c1",
+              "leftValue": "={{ $json.needs_llm }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "a4ifllm001",
+      "name": "IF Needs LLM",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        720,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const j = $input.first().json;\nreturn [{\n  json: {\n    ok: true,\n    classify: {\n      segment: j.segment,\n      score: j.score,\n      interest_key: j.interest_key || j.segment,\n    },\n    classify_method: 'regex',\n  },\n}];"
+      },
+      "id": "a5regex001",
+      "name": "Wrap Regex Classify",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        960,
+        480
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.DEEPSEEK_API_URL || \"https://api.deepseek.com/chat/completions\" }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $env.DEEPSEEK_API_KEY }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({\n  model: $env.DEEPSEEK_MODEL || 'deepseek-chat',\n  temperature: 0.2,\n  response_format: { type: 'json_object' },\n  messages: [\n    { role: 'system', content: \"Bạn là bộ phận phân loại Magnix. [/focus] [/silent] [/ooda] nội bộ. Chỉ trả JSON: {\\\"segment\\\":\\\"\\\",\\\"score\\\":0,\\\"interest_key\\\":\\\"\\\"}. segment ∈ noxh_income|valuation|sme_credit|general_inbound|unclassified. Không markdown.\" },\n    { role: 'user', content: JSON.stringify({\n      uid: $('Auth & Enrich Skeleton').first().json.uid,\n      uid_source: $('Auth & Enrich Skeleton').first().json.uid_source,\n      text: $('Auth & Enrich Skeleton').first().json.text,\n      meta: $('Auth & Enrich Skeleton').first().json.meta,\n    }) },\n  ],\n}) }}",
+        "options": {
+          "timeout": 30000
+        }
+      },
+      "id": "a6llm00001",
+      "name": "HTTP LLM Classify",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        960,
+        120
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const SEGMENTS = new Set([\n  'noxh_income', 'valuation', 'sme_credit', 'general_inbound', 'unclassified',\n]);\n\nfunction extractJsonString(raw) {\n  if (raw == null) throw new Error('EMPTY_LLM_OUTPUT');\n  const s = typeof raw === 'string' ? raw : JSON.stringify(raw);\n  const fenced = s.match(/```(?:json)?\\s*([\\s\\S]*?)```/i);\n  return (fenced ? fenced[1] : s).trim();\n}\n\nfunction parseLlmJson(raw) {\n  const parsed = JSON.parse(extractJsonString(raw));\n  if (parsed == null || typeof parsed !== 'object' || Array.isArray(parsed)) {\n    throw new Error('JSON_NOT_OBJECT');\n  }\n  return parsed;\n}\n\nfunction validateClassify(obj) {\n  if (!SEGMENTS.has(obj.segment)) throw new Error('INVALID_SEGMENT');\n  const score = Number(obj.score);\n  if (!Number.isFinite(score) || score < 0 || score > 100) throw new Error('INVALID_SCORE');\n  if (typeof obj.interest_key !== 'string' || !obj.interest_key) {\n    throw new Error('INVALID_INTEREST_KEY');\n  }\n  return { segment: obj.segment, score, interest_key: obj.interest_key };\n}\n\nconst res = $input.first().json;\nconst raw =\n  res.choices?.[0]?.message?.content ??\n  res.message?.content ??\n  res.text ??\n  res.output ??\n  res;\n\ntry {\n  const parsed = parseLlmJson(raw);\n  const classify = validateClassify(parsed);\n  return [{ json: { ok: true, classify, classify_method: 'llm', parse_error: null } }];\n} catch (e) {\n  return [{\n    json: {\n      ok: false,\n      classify: null,\n      classify_method: 'llm',\n      parse_error: e.message,\n      raw_preview: String(raw).slice(0, 200),\n    },\n  }];\n}"
+      },
+      "id": "a7parse001",
+      "name": "Parse LLM JSON",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1200,
+        120
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "c2",
+              "leftValue": "={{ $json.ok }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "a8ifparse1",
+      "name": "IF Parse OK",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1440,
+        120
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const skeleton = $('Auth & Enrich Skeleton').first().json;\nconst parse = $input.first().json;\n\nreturn [{\n  json: {\n    ok: false,\n    error: parse.parse_error || 'PARSE_JSON',\n    message: parse.parse_error || 'LLM output parse failed',\n    retryable: false,\n    uid: skeleton.uid,\n    uid_source: skeleton.uid_source,\n    normalized_key: skeleton.normalized_key,\n    captured_at: skeleton.captured_at,\n    status: 'failed',\n    classify_method: 'llm',\n    parse_error: parse.parse_error,\n    raw_preview: parse.raw_preview,\n  },\n}];"
+      },
+      "id": "a9dead0001",
+      "name": "Dead Letter Parse Fail",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1680,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const skeleton = $('Auth & Enrich Skeleton').first().json;\nconst item = $input.first().json;\n\nif (!item.ok || !item.classify) {\n  throw new Error('Merge skipped: classify not ok');\n}\n\nconst { segment, score, interest_key } = item.classify;\nconst method = item.classify_method || 'regex';\n\nconst FORBIDDEN = [\n  /cam kết.*duyệt/i,\n  /lãi suất\\s*\\d+([.,]\\d+)?\\s*%/i,\n];\n\nconst text = skeleton.text || '';\nconst l0_hits = FORBIDDEN.filter((re) => re.test(text)).map((re) => re.source);\n\nlet status = 'classified';\nif (score < 60) status = 'review';\nif (l0_hits.length > 0) status = 'review';\n\nconst record = {\n  uid: skeleton.uid,\n  uid_source: skeleton.uid_source,\n  normalized_key: skeleton.normalized_key,\n  captured_at: skeleton.captured_at,\n  text,\n  segment,\n  score,\n  interest_key,\n  tags: [segment],\n  meta: skeleton.meta ?? {},\n  classify_method: method,\n  consent_basis: skeleton.consent_basis ?? null,\n  status,\n  l0_forbidden_hits: l0_hits,\n};\n\nreturn [{ json: { ok: true, data: record } }];"
+      },
+      "id": "a10merge01",
+      "name": "Merge UID Record",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1680,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const item = $input.first().json;\nconst record = item.data && typeof item.data === 'object' ? item.data : item;\n\nif (!record.normalized_key) {\n  return [{ json: { drive_skip: true, reason: 'no normalized_key' } }];\n}\n\nconst folderId = $env.GOOGLE_DRIVE_ARCHIVE_FOLDER_ID || '';\nif (!folderId || $env.MAGNIX_DRIVE_BACKUP === 'false') {\n  return [{ json: { drive_skip: true, reason: 'backup disabled or no folder id' } }];\n}\n\nconst safeName = String(record.normalized_key).replace(/[^a-zA-Z0-9._-]/g, '_');\nconst fileName = `${safeName}.jsonl`;\nconst content = `${JSON.stringify(record)}\\n`;\nconst binaryData = Buffer.from(content, 'utf8').toString('base64');\n\nreturn [{\n  json: {\n    fileName,\n    normalized_key: record.normalized_key,\n    drive_folder_id: folderId,\n  },\n  binary: {\n    data: {\n      data: binaryData,\n      mimeType: 'application/x-ndjson',\n      fileName,\n    },\n  },\n}];"
+      },
+      "id": "a15driveprep",
+      "name": "Prepare Drive Backup",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1920,
+        480
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "upload",
+        "name": "={{ $json.fileName }}",
+        "driveId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "My Drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "={{ $env.GOOGLE_DRIVE_ARCHIVE_FOLDER_ID }}"
+        },
+        "options": {}
+      },
+      "id": "a16driveup",
+      "name": "Drive Backup Upload",
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        2160,
+        480
+      ],
+      "onError": "continueRegularOutput",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "CONFIGURE_AFTER_IMPORT",
+          "name": "Google Drive Magnix"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const SHEET_ID = $env.GOOGLE_SHEET_DATABASE_ID || '1fYB4h_BTiKXa9O3lBah-tQonWpQOQMG2aSkSfPs6yU4';\nconst TAB = $env.GOOGLE_SHEET_UID_TAB || 'uid_leads';\n\nconst HEADERS = [\n  'uid',\n  'uid_source',\n  'normalized_key',\n  'captured_at',\n  'text',\n  'segment',\n  'score',\n  'interest_key',\n  'tags',\n  'meta',\n  'classify_method',\n  'consent_basis',\n  'status',\n];\n\nfunction toRow(record) {\n  return [\n    String(record.uid ?? ''),\n    String(record.uid_source ?? ''),\n    String(record.normalized_key ?? ''),\n    String(record.captured_at ?? ''),\n    String(record.text ?? '').slice(0, 50000),\n    String(record.segment ?? 'unclassified'),\n    Number(record.score ?? 0),\n    String(record.interest_key ?? ''),\n    Array.isArray(record.tags) ? record.tags.join(',') : String(record.tags ?? ''),\n    (typeof record.meta === 'string' ? record.meta : JSON.stringify(record.meta ?? {})).slice(0, 50000),\n    String(record.classify_method ?? ''),\n    String(record.consent_basis ?? ''),\n    String(record.status ?? 'raw'),\n  ];\n}\n\nasync function sheetRequest(opts) {\n  return this.helpers.httpRequestWithAuthentication.call(this, 'googleApi', {\n    json: true,\n    ...opts,\n  });\n}\n\nconst base = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}`;\nconst readRange = `${TAB}!A:M`;\n\nlet existingByKey = new Map();\nlet nextAppendRow = 2;\n\ntry {\n  const getRes = await sheetRequest.call(this, {\n    method: 'GET',\n    url: `${base}/values/${encodeURIComponent(readRange)}`,\n  });\n  const rows = getRes.values || [];\n\n  if (!rows.length) {\n    await sheetRequest.call(this, {\n      method: 'PUT',\n      url: `${base}/values/${encodeURIComponent(`${TAB}!A1:M1`)}?valueInputOption=USER_ENTERED`,\n      body: { values: [HEADERS] },\n    });\n  } else {\n    const headerRow = rows[0].map((h) => String(h ?? '').trim().toLowerCase());\n    const nkIdx = headerRow.indexOf('normalized_key');\n    const keyCol = nkIdx >= 0 ? nkIdx : 2;\n    for (let i = 1; i < rows.length; i += 1) {\n      const nk = String(rows[i][keyCol] ?? '').trim();\n      if (nk) existingByKey.set(nk, i + 1);\n    }\n    nextAppendRow = rows.length + 1;\n  }\n} catch (e) {\n  throw new Error(`Sheet read failed (${TAB}): ${e.message}. Tạo tab uid_leads theo ARCHITECTURE_MAGNIX.md §3.1`);\n}\n\nconst results = [];\n\nfor (const item of $input.all()) {\n  if (!item.json.ok || !item.json.record) {\n    results.push({ json: { ok: false, error: 'SKIP_SHEET', message: item.json.error || item.json.message } });\n    continue;\n  }\n\n  const record = item.json.record;\n  const nk = String(record.normalized_key || '').trim();\n  if (!nk) {\n    results.push({ json: { ok: false, error: 'MISSING_NORMALIZED_KEY', record } });\n    continue;\n  }\n\n  const rowValues = toRow(record);\n  const existingRow = existingByKey.get(nk);\n\n  try {\n    if (existingRow) {\n      await sheetRequest.call(this, {\n        method: 'PUT',\n        url: `${base}/values/${encodeURIComponent(`${TAB}!A${existingRow}:M${existingRow}`)}?valueInputOption=USER_ENTERED`,\n        body: { values: [rowValues] },\n      });\n      results.push({ json: { ok: true, storage: 'sheet_uid_leads', sheet_row: existingRow, action: 'update', normalized_key: nk, record } });\n    } else {\n      await sheetRequest.call(this, {\n        method: 'POST',\n        url: `${base}/values/${encodeURIComponent(`${TAB}!A:M`)}:append?valueInputOption=USER_ENTERED&insertDataOption=INSERT_ROWS`,\n        body: { values: [rowValues] },\n      });\n      existingByKey.set(nk, nextAppendRow);\n      results.push({ json: { ok: true, storage: 'sheet_uid_leads', sheet_row: nextAppendRow, action: 'create', normalized_key: nk, record } });\n      nextAppendRow += 1;\n    }\n  } catch (e) {\n    results.push({ json: { ok: false, error: 'SHEET_UPSERT_FAILED', message: e.message, normalized_key: nk, record } });\n  }\n}\n\nreturn results;"
+      },
+      "id": "a11sheetup1",
+      "name": "Sheet Upsert uid_leads",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1920,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const sheet = $input.first().json;\nreturn [{\n  json: {\n    ok: sheet.ok === true,\n    storage: 'google_sheet_primary',\n    sheet_action: sheet.action,\n    sheet_row: sheet.sheet_row,\n    record: sheet.record,\n    error: sheet.ok ? undefined : sheet.error,\n    message: sheet.ok ? undefined : sheet.message,\n  },\n}];"
+      },
+      "id": "a13wrapresp",
+      "name": "Build Webhook Response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2160,
+        200
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify($json) }}",
+        "options": {}
+      },
+      "id": "a14respond1",
+      "name": "Respond to Webhook",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        2400,
+        200
+      ]
+    }
+  ],
+  "connections": {
+    "Webhook uid-ingest": {
+      "main": [
+        [
+          {
+            "node": "Auth & Enrich Skeleton",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Auth & Enrich Skeleton": {
+      "main": [
+        [
+          {
+            "node": "Classify Fast",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Classify Fast": {
+      "main": [
+        [
+          {
+            "node": "IF Needs LLM",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF Needs LLM": {
+      "main": [
+        [
+          {
+            "node": "HTTP LLM Classify",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wrap Regex Classify",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP LLM Classify": {
+      "main": [
+        [
+          {
+            "node": "Parse LLM JSON",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse LLM JSON": {
+      "main": [
+        [
+          {
+            "node": "IF Parse OK",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF Parse OK": {
+      "main": [
+        [
+          {
+            "node": "Merge UID Record",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Dead Letter Parse Fail",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wrap Regex Classify": {
+      "main": [
+        [
+          {
+            "node": "Merge UID Record",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge UID Record": {
+      "main": [
+        [
+          {
+            "node": "Sheet Upsert uid_leads",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Prepare Drive Backup",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Dead Letter Parse Fail": {
+      "main": [
+        [
+          {
+            "node": "Sheet Upsert uid_leads",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Prepare Drive Backup",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Drive Backup": {
+      "main": [
+        [
+          {
+            "node": "Drive Backup Upload",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sheet Upsert uid_leads": {
+      "main": [
+        [
+          {
+            "node": "Build Webhook Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Webhook Response": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [
+    {
+      "name": "magnix"
+    },
+    {
+      "name": "circuit-1"
+    },
+    {
+      "name": "google-sheet-primary"
+    }
+  ],
+  "meta": {
+    "templateCredsSetupCompleted": false
+  }
+}

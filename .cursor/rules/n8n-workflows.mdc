@@ -1,0 +1,15 @@
+---
+description: Quy ước export và chỉnh sửa workflow n8n Magnix
+globs: n8n-workflows/**
+alwaysApply: false
+---
+
+# n8n Workflows — Magnix
+
+- Tên file: `{domain}-{action}.workflow.json`
+- Format JSON 2 spaces; không nhúng secret — dùng `$env` hoặc n8n Credentials.
+- Mỗi workflow mới: thêm dòng vào `n8n-workflows/WORKFLOW_REGISTRY.md`.
+- Webhook path thống nhất: `/webhook/magnix/{slug}`.
+- **Mọi LLM node** phải có Code node parse ngay sau (`.cursor/JSON_PARSE_LAYER.md`).
+- Ghi cột **QA tier** (L0–L3) trong `WORKFLOW_REGISTRY.md`.
+- Sau export: kiểm tra node Code không log PII ra execution log.

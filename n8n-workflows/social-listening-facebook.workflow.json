@@ -1,0 +1,1073 @@
+{
+  "name": "Magnix Agent 1 — Social Listening Facebook (weekly)",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## Agent 1 Facebook — 1×/tuần\n- **Thứ 4 07:00 VN** (tách khỏi TikTok thứ 2)\n- `platform=fb_page` hoặc `fb_group` trong project_config\n- Apify: `apify/facebook-posts-scraper`\n- Dedupe + channel_state giống TikTok workflow",
+        "height": 220,
+        "width": 440
+      },
+      "id": "fb00note",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -560,
+        160
+      ]
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 7 * * 3"
+            }
+          ]
+        }
+      },
+      "id": "fb01sched",
+      "name": "Schedule Weekly Facebook",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "fb02manual",
+      "name": "When clicking 'Execute workflow'",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        420
+      ]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "https://sheets.googleapis.com/v4/spreadsheets/1fYB4h_BTiKXa9O3lBah-tQonWpQOQMG2aSkSfPs6yU4/values/project_config!A%3AZ",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleApi",
+        "options": {}
+      },
+      "id": "fb03fetch",
+      "name": "Fetch project_config",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        240,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const res = $input.first().json;\nconst rows = Array.isArray(res.values) ? res.values : [];\n\nif (!rows.length) {\n  return [{ json: { empty: true, message: 'project_config tab empty' } }];\n}\n\nconst headers = rows[0].map((h) => String(h ?? '').trim().toLowerCase());\nconst out = [];\n\nfor (let i = 1; i < rows.length; i++) {\n  const cells = rows[i];\n  if (!cells || !cells.some((c) => String(c ?? '').trim())) continue;\n\n  const row = {};\n  headers.forEach((key, j) => {\n    if (key) row[key] = cells[j] ?? '';\n  });\n\n  if (row.profile_url && !row.url) row.url = row.profile_url;\n  if (row.urls && !row.url) row.url = row.urls;\n\n  out.push({ json: row });\n}\n\nif (!out.length) {\n  return [{ json: { empty: true, message: 'No data rows in project_config' } }];\n}\n\nreturn out;"
+      },
+      "id": "fb03parse",
+      "name": "Parse project_config rows",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        480,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const results = [];\n\nfor (const item of $input.all()) {\n  const row = item.json;\n  const active = String(row.active ?? 'true').trim().toLowerCase();\n  if (active === 'false' || active === '0' || active === 'no') continue;\n\n  const platform = String(row.platform || 'tiktok').trim().toLowerCase();\n  const urlField = row.url || row.urls || row.profile_url || '';\n  const urls = String(urlField)\n    .split(/[\\n,;]+/)\n    .map((u) => u.trim())\n    .filter(Boolean);\n\n  for (const post_url of urls) {\n    results.push({\n      json: {\n        post_url,\n        platform,\n        config_segment_hint: String(row.segment || '').trim(),\n        notes: String(row.notes || '').slice(0, 500),\n      },\n    });\n  }\n}\n\nif (!results.length) {\n  return [{ json: { empty: true, message: 'No active URLs in project_config' } }];\n}\n\nreturn results;"
+      },
+      "id": "fb04split",
+      "name": "Split URLs from Config",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        720,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const ALLOW = new Set('fb_page,fb_group'.split(',').map((s) => s.trim().toLowerCase()).filter(Boolean));\n\nconst ALIASES = {\n  facebook: 'fb_page',\n  fb: 'fb_page',\n  page: 'fb_page',\n  group: 'fb_group',\n  fb_group: 'fb_group',\n  fb_page: 'fb_page',\n  tiktok: 'tiktok',\n  tt: 'tiktok',\n};\n\nfunction normPlatform(raw) {\n  const key = String(raw || 'tiktok').trim().toLowerCase();\n  return ALIASES[key] || key;\n}\n\nconst out = [];\nfor (const item of $input.all()) {\n  if (item.json.empty) {\n    return [{ json: item.json }];\n  }\n  const platform = normPlatform(item.json.platform);\n  if (!ALLOW.has(platform)) continue;\n  out.push({\n    json: {\n      ...item.json,\n      platform,\n    },\n  });\n}\n\nif (!out.length) {\n  return [{\n    json: {\n      empty: true,\n      message: `No active URLs for platforms: ${[...ALLOW].join(', ')}`,\n    },\n  }];\n}\n\nreturn out;"
+      },
+      "id": "fb04pf",
+      "name": "Filter Platform",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        960,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const INTERVAL_DAYS = 7;\n\nfunction handleFromUrl(url, platform) {\n  const u = String(url || '').trim();\n  if (platform === 'tiktok') {\n    const m = u.match(/@([^/?#]+)/);\n    return (m?.[1] || u).toLowerCase();\n  }\n  if (platform === 'fb_page' || platform === 'fb_group') {\n    try {\n      const path = new URL(u).pathname.replace(/^\\//, '').split('/')[0];\n      return path.toLowerCase();\n    } catch {\n      return u.toLowerCase();\n    }\n  }\n  return u.toLowerCase();\n}\n\nconst isManual = $execution?.mode === 'manual';\nconst data = $getWorkflowStaticData('global');\nconst state = data.channel_state || {};\nconst now = Date.now();\nconst ms = INTERVAL_DAYS * 24 * 60 * 60 * 1000;\n\nconst out = [];\nlet skipped = 0;\n\nfor (const item of $input.all()) {\n  if (item.json.empty) return [item];\n\n  const platform = String(item.json.platform || 'tiktok');\n  const handle = handleFromUrl(item.json.post_url, platform);\n  const prev = state[handle];\n\n  if (!isManual && prev?.last_scraped_at) {\n    const t = Date.parse(prev.last_scraped_at);\n    if (Number.isFinite(t) && now - t < ms) {\n      skipped += 1;\n      continue;\n    }\n  }\n\n  out.push({\n    json: {\n      ...item.json,\n      channel_handle: handle,\n    },\n  });\n}\n\nif (!out.length) {\n  return [{\n    json: {\n      empty: true,\n      message: `All channels skipped (scraped within ${INTERVAL_DAYS} days). Manual run bypasses this.`,\n      skipped,\n    },\n  }];\n}\n\nreturn out;"
+      },
+      "id": "fb04due",
+      "name": "Filter Due Channels",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1200,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "c-empty",
+              "leftValue": "={{ $json.empty }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "notEquals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "fb05ifurls",
+      "name": "IF Has URLs",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1440,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "https://sheets.googleapis.com/v4/spreadsheets/1fYB4h_BTiKXa9O3lBah-tQonWpQOQMG2aSkSfPs6yU4/values/scrape_index!A%3AF",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleApi",
+        "options": {}
+      },
+      "id": "fb05idx",
+      "name": "Fetch scrape_index",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1680,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const res = $input.first().json;\nconst rows = Array.isArray(res.values) ? res.values : [];\nconst keys = {};\n\nfor (let i = 1; i < rows.length; i++) {\n  const nk = String(rows[i][0] ?? '').trim();\n  if (nk) keys[nk] = true;\n  const pid = String(rows[i][1] ?? '').trim();\n  if (pid) keys[pid] = true;\n}\n\nconst data = $getWorkflowStaticData('global');\ndata.dedupe_keys = keys;\n\nreturn [{\n  json: {\n    ok: true,\n    dedupe_count: Object.keys(keys).length,\n    tab: 'scrape_index',\n  },\n}];"
+      },
+      "id": "fb05idxp",
+      "name": "Parse scrape_index",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1920,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "https://sheets.googleapis.com/v4/spreadsheets/1fYB4h_BTiKXa9O3lBah-tQonWpQOQMG2aSkSfPs6yU4/values/channel_state!A%3AD",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleApi",
+        "options": {}
+      },
+      "id": "fb05ch",
+      "name": "Fetch channel_state",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2160,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const res = $input.first().json;\nconst rows = Array.isArray(res.values) ? res.values : [];\nconst byHandle = {};\n\nfor (let i = 1; i < rows.length; i++) {\n  const handle = String(rows[i][0] ?? '').trim().toLowerCase();\n  if (!handle) continue;\n  const at = String(rows[i][1] ?? '').trim();\n  const pid = String(rows[i][2] ?? '').trim();\n  const prev = byHandle[handle];\n  if (!prev?.last_scraped_at) {\n    byHandle[handle] = { last_scraped_at: at, last_post_id: pid };\n    continue;\n  }\n  const prevT = Date.parse(prev.last_scraped_at);\n  const rowT = Date.parse(at);\n  if (Number.isFinite(rowT) && (!Number.isFinite(prevT) || rowT >= prevT)) {\n    byHandle[handle] = { last_scraped_at: at, last_post_id: pid };\n  }\n}\n\nconst data = $getWorkflowStaticData('global');\ndata.channel_state = byHandle;\n\nreturn [{\n  json: {\n    ok: true,\n    channel_count: Object.keys(byHandle).length,\n    tab: 'channel_state',\n  },\n}];"
+      },
+      "id": "fb05chp",
+      "name": "Parse channel_state",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2400,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $getWorkflowStaticData('global');\ndata.sl_stats = { sheet_ok: 0, sheet_fail: 0, qualified: 0, apify_empty: 0, not_qualified: 0, skipped_duplicate: 0, skipped_channel: 0 };\nreturn $input.all();"
+      },
+      "id": "fb05reset",
+      "name": "Reset Run Stats",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2640,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "batchSize": 1,
+        "options": {}
+      },
+      "id": "fb06loop",
+      "name": "Loop Over URLs",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        2880,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.APIFY_FB_RUN_URL || \"https://api.apify.com/v2/acts/apify~facebook-posts-scraper/run-sync-get-dataset-items\" }}",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "token",
+              "value": "={{ $env.APIFY_TOKEN }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({\n  startUrls: [{ url: String($json.post_url || '').trim() }],\n  resultsLimit: 5,\n}) }}",
+        "options": {
+          "timeout": 120000
+        }
+      },
+      "id": "fb07apify",
+      "name": "Apify Scrape",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        3120,
+        240
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "if ($itemIndex > 0) {\n  return [];\n}\n\nconst split = $('Loop Over URLs').item?.json || {};\nconst wrapItems = $('Wrap Apify Response').all().length\n  ? $('Wrap Apify Response').all()\n  : $('Wrap FB Response').all();\nconst wrap = wrapItems[0]?.json || {};\n\nconst handle = split.channel_handle || '';\nif (!handle) {\n  return [{ json: { ok: false, skip_channel_state: true } }];\n}\n\nconst last_post_id = String(wrap.post_id || '').trim();\n\nreturn [{\n  json: {\n    ok: true,\n    channel_body: {\n      values: [[\n        handle,\n        new Date().toISOString(),\n        last_post_id,\n        String(split.platform || ''),\n      ]],\n    },\n    channel_handle: handle,\n  },\n}];"
+      },
+      "id": "fb07bchrow",
+      "name": "Prepare channel_state row",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3360,
+        320
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://sheets.googleapis.com/v4/spreadsheets/1fYB4h_BTiKXa9O3lBah-tQonWpQOQMG2aSkSfPs6yU4/values/channel_state!A%3AD:append?valueInputOption=USER_ENTERED&insertDataOption=INSERT_ROWS",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json.channel_body) }}",
+        "options": {}
+      },
+      "id": "fb07bch",
+      "name": "Append channel_state",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        3600,
+        320
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const config = $('Loop Over URLs').item?.json || $('Split URLs from Config').item?.json || {};\nconst apifyRaw = $input.first().json;\nconst items = Array.isArray(apifyRaw) ? apifyRaw : [apifyRaw];\nconst results = [];\n\nfor (const post of items) {\n  if (!post || typeof post !== 'object') continue;\n  if (post.error) continue;\n\n  const post_id = String(post.postId || post.post_id || post.id || '').trim();\n  const text = String(\n    post.text || post.message || post.caption || post.content || ''\n  ).slice(0, 50000);\n\n  const post_url = String(\n    post.url || post.facebookUrl || post.link || config.post_url || ''\n  );\n\n  if (!post_id && !text) continue;\n\n  results.push({\n    json: {\n      post_id: post_id || post_url.split('/').filter(Boolean).pop() || 'unknown',\n      post_url,\n      platform: config.platform || 'fb_page',\n      author_id: String(post.pageName || post.user?.name || post.author || ''),\n      text,\n      apify_item: post,\n      config_notes: config.notes || '',\n      engagement: {\n        likes: Number(post.likes ?? post.likesCount ?? 0),\n        comments: Number(post.comments ?? post.commentsCount ?? 0),\n        shares: Number(post.shares ?? post.sharesCount ?? 0),\n      },\n    },\n  });\n}\n\nif (!results.length) {\n  return [{\n    json: {\n      ok: false,\n      error: 'APIFY_EMPTY',\n      post_url: config.post_url,\n      hint: 'Facebook page/group trống hoặc Apify lỗi',\n    },\n  }];\n}\n\nreturn results;"
+      },
+      "id": "fb08wrap",
+      "name": "Wrap FB Response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3360,
+        160
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "function safeKey(platform, postId) {\n  const p = String(platform || 'unknown').replace(/[^a-z0-9_]/gi, '_');\n  const id = String(postId || 'unknown').replace(/[^a-zA-Z0-9._-]/g, '_');\n  return `apify:${p}:${id}`;\n}\n\nconst data = $getWorkflowStaticData('global');\nconst keys = data.dedupe_keys || {};\n\nconst out = [];\nlet skipped = 0;\n\nfor (const item of $input.all()) {\n  const j = item.json;\n  if (j.error === 'APIFY_EMPTY') {\n    out.push(item);\n    continue;\n  }\n  const pid = String(j.post_id || '').trim();\n  if (!pid) continue;\n\n  const nk = safeKey(j.platform, pid);\n  if (keys[nk] || keys[pid]) {\n    skipped += 1;\n    continue;\n  }\n  out.push({ json: { ...j, normalized_key_preview: nk } });\n}\n\nif (!out.length) {\n  return [{\n    json: {\n      ok: false,\n      error: 'APIFY_ALL_DUPLICATE',\n      skipped,\n      message: 'Tất cả post đã có trong scrape_index — bỏ qua Claude',\n    },\n  }];\n}\n\nreturn out;"
+      },
+      "id": "fb08dedupe",
+      "name": "Filter New Posts",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3600,
+        160
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $getWorkflowStaticData('global');\nif (!data.sl_stats) {\n  data.sl_stats = { sheet_ok: 0, sheet_fail: 0, qualified: 0, apify_empty: 0, not_qualified: 0 };\n}\n\nfor (const item of $input.all()) {\n  const j = item.json;\n  if (j.error === 'APIFY_EMPTY' || j.error === 'APIFY_NO_RESULTS') {\n    data.sl_stats.apify_empty += 1;\n  }\n}\n\nreturn $input.all();"
+      },
+      "id": "fb08track",
+      "name": "Track Apify Stats",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3840,
+        160
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "c-postid",
+              "leftValue": "={{ $json.post_id }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "fb08ifposts",
+      "name": "IF Apify Has Posts",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        4080,
+        160
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.anthropic.com/v1/messages",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "x-api-key",
+              "value": "={{ $env.ANTHROPIC_API_KEY }}"
+            },
+            {
+              "name": "anthropic-version",
+              "value": "2023-06-01"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({\n  model: 'claude-sonnet-4-6',\n  max_tokens: 4096,\n  temperature: 0.2,\n  system: \"Bạn là **Magnix Pain Intake Analyst** — chuyên gia phân tích hội thoại nhóm BĐS/tài chính VN (NOXH, vay, pháp lý, thẩm định).\\n\\n**[/silent]** — suy luận nội bộ; output **chỉ JSON hợp lệ**, không markdown bọc ngoài.\\n\\n## Nhiệm vụ\\n\\nĐọc `text` scrape (+ metadata platform) và **trả lời đủ 12 câu hỏi intake** trong schema output.\\n\\n## 12 câu hỏi bắt buộc (map vào JSON)\\n\\n1. `surface_topic` — Chủ đề bề mặt (1 câu)?\\n2. `explicit_questions` — Khách đang hỏi gì? (liệt kê câu hỏi rõ ràng)\\n3. `implicit_fears` — Sợ gì / lo gì (ngầm)?\\n4. `misconceptions` — Hiểu lầm phổ biến trong thread?\\n5. `journey_stage` — awareness | consideration | decision\\n6. `segment_hint` — noxh_income | valuation | sme_credit | general_inbound | unclassified\\n7. `evidence_quotes` — ≤3 trích dẫn ngắn từ text (verbatim, ≤120 ký tự/câu)\\n8. `single_insight_clip` — Có đủ **một insight = một clip** không? (boolean)\\n9. `hook_candidate` — Hook dạng câu hỏi/pattern interrupt (≤15 từ)\\n10. `cta_keyword_hint` — CHECKLIST | DTI | NOXH | SAVE | … (soft opt-in)\\n11. `compliance_flags` — Rủi ro: promised_rate, guaranteed_approval, hard_sell (array, có thể rỗng)\\n12. `verdict` + `reject_reason` — qualified | maybe | reject\\n\\n## Verdict\\n\\n- **qualified**: pain rõ, có câu hỏi/góc inbound, segment BĐS/tài chính VN\\n- **maybe**: liên quan mơ hồ hoặc thiếu context\\n- **reject**: spam, meme, ngoài ngách, không giá trị inbound\\n\\n## Score (0–100)\\n\\n- 80–100: pain cụ thể + câu hỏi rõ + heat cao\\n- 60–79: pain OK, cần thêm context\\n- &lt;60: reject hoặc maybe\\n\\n## Compliance\\n\\n- Ghi nhận rủi ro trong `compliance_flags`; **không** tự sửa thành lời hứa lãi suất/duyệt vay.\",\n  messages: [{\n    role: 'user',\n    content: JSON.stringify({\n      platform: $('Wrap FB Response').item.json.platform,\n      post_url: $('Wrap FB Response').item.json.post_url,\n      text: $('Wrap FB Response').item.json.text,\n      author_id: $('Wrap FB Response').item.json.author_id,\n      engagement: $('Wrap FB Response').item.json.engagement,\n    }),\n  }],\n}) }}",
+        "options": {
+          "timeout": 60000
+        }
+      },
+      "id": "fb09claude",
+      "name": "Claude Pain Intake",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        4320,
+        80
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const VERDICTS = new Set(['qualified', 'maybe', 'reject']);\nconst SEGMENTS = new Set([\n  'noxh_income', 'valuation', 'sme_credit', 'general_inbound', 'unclassified',\n]);\nconst STAGES = new Set(['awareness', 'consideration', 'decision']);\nconst HEAT = new Set(['low', 'medium', 'high']);\n\nfunction extractJsonString(raw) {\n  if (raw == null) throw new Error('EMPTY_LLM_OUTPUT');\n  const s = typeof raw === 'string' ? raw : JSON.stringify(raw);\n  const fenced = s.match(/```(?:json)?\\s*([\\s\\S]*?)```/i);\n  let t = (fenced ? fenced[1] : s).trim();\n  const start = t.indexOf('{');\n  const end = t.lastIndexOf('}');\n  if (start >= 0 && end > start) t = t.slice(start, end + 1);\n  return t;\n}\n\nfunction getLlmText(input) {\n  const j = input.json || input;\n  return j.content?.[0]?.text || j.message?.content || j.text || j.output || j;\n}\n\nfunction upstreamPost() {\n  return (\n    $('Filter New Posts').item?.json ||\n    $('Wrap Apify Response').item?.json ||\n    $('Wrap FB Response').item?.json ||\n    {}\n  );\n}\n\nconst upstream = upstreamPost();\nconst raw = getLlmText($input.first());\n\ntry {\n  const parsed = JSON.parse(extractJsonString(raw));\n  const verdict = String(parsed.verdict || 'reject').toLowerCase();\n  if (!VERDICTS.has(verdict)) throw new Error('INVALID_VERDICT');\n\n  const score = Number(parsed.score ?? 0);\n  if (!Number.isFinite(score) || score < 0 || score > 100) throw new Error('INVALID_SCORE');\n\n  const conv = parsed.conversation || {};\n  const signals = parsed.content_signals || {};\n  const segmentHint = String(signals.segment_hint || 'unclassified').toLowerCase();\n\n  const intake_v1 = {\n    intake_version: Number(parsed.intake_version || 1),\n    verdict,\n    score,\n    reject_reason: parsed.reject_reason ? String(parsed.reject_reason).slice(0, 1000) : null,\n    summary: String(parsed.summary || '').slice(0, 2000),\n    conversation: {\n      surface_topic: String(conv.surface_topic || '').slice(0, 500),\n      explicit_questions: Array.isArray(conv.explicit_questions)\n        ? conv.explicit_questions.map((q) => String(q).slice(0, 300)).slice(0, 8)\n        : [],\n      implicit_fears: Array.isArray(conv.implicit_fears)\n        ? conv.implicit_fears.map((x) => String(x).slice(0, 200)).slice(0, 6)\n        : [],\n      misconceptions: Array.isArray(conv.misconceptions)\n        ? conv.misconceptions.map((x) => String(x).slice(0, 200)).slice(0, 6)\n        : [],\n      journey_stage: STAGES.has(String(conv.journey_stage || '').toLowerCase())\n        ? String(conv.journey_stage).toLowerCase()\n        : 'consideration',\n      audience_voice: String(conv.audience_voice || '').slice(0, 300),\n    },\n    content_signals: {\n      pain_intensity: Math.min(100, Math.max(0, Number(signals.pain_intensity || score) || 0)),\n      discussion_heat: HEAT.has(String(signals.discussion_heat || '').toLowerCase())\n        ? String(signals.discussion_heat).toLowerCase()\n        : 'medium',\n      inbound_potential: String(signals.inbound_potential || 'low').slice(0, 40),\n      segment_hint: SEGMENTS.has(segmentHint) ? segmentHint : 'unclassified',\n      evidence_quotes: Array.isArray(signals.evidence_quotes)\n        ? signals.evidence_quotes.map((q) => String(q).slice(0, 120)).slice(0, 3)\n        : [],\n      single_insight_clip: signals.single_insight_clip !== false,\n      hook_candidate: String(signals.hook_candidate || '').slice(0, 120),\n      cta_keyword_hint: String(signals.cta_keyword_hint || 'CHECKLIST').slice(0, 40),\n    },\n    compliance_flags: Array.isArray(parsed.compliance_flags)\n      ? parsed.compliance_flags.map(String).slice(0, 8)\n      : [],\n  };\n\n  return [{\n    json: {\n      ok: true,\n      ...upstream,\n      intake_v1,\n      claude: {\n        verdict,\n        score,\n        summary: intake_v1.summary,\n        reject_reason: intake_v1.reject_reason,\n        intake_v1,\n      },\n    },\n  }];\n} catch (e) {\n  return [{\n    json: {\n      ok: false,\n      parse_error: e.message,\n      ...upstream,\n      claude: {\n        verdict: 'reject',\n        score: 0,\n        summary: '',\n        reject_reason: 'parse_failed',\n        intake_v1: null,\n      },\n    },\n  }];\n}"
+      },
+      "id": "fb10parse",
+      "name": "Parse Claude JSON",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        4560,
+        80
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $getWorkflowStaticData('global');\nif (!data.sl_stats) {\n  data.sl_stats = { sheet_ok: 0, sheet_fail: 0, qualified: 0, apify_empty: 0, not_qualified: 0 };\n}\n\nfor (const item of $input.all()) {\n  const j = item.json;\n  if (j.ok && j.claude?.verdict === 'qualified') {\n    data.sl_stats.qualified += 1;\n  } else if (j.ok) {\n    data.sl_stats.not_qualified += 1;\n  }\n}\n\nreturn $input.all();"
+      },
+      "id": "fb10track",
+      "name": "Track Claude Stats",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        4800,
+        80
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "c-ok",
+              "leftValue": "={{ $json.ok }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "c-verdict",
+              "leftValue": "={{ $json.claude.verdict }}",
+              "rightValue": "qualified",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "fb11ifqual",
+      "name": "IF Qualified",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        5040,
+        80
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "function safeKey(platform, postId) {\n  const p = String(platform || 'unknown').replace(/[^a-z0-9_]/gi, '_');\n  const id = String(postId || 'unknown').replace(/[^a-zA-Z0-9._-]/g, '_');\n  return `apify:${p}:${id}`;\n}\n\nconst item = $input.first().json;\nif (!item.ok) {\n  return [{ json: { ok: false, error: 'SKIP_NORMALIZE', message: item.parse_error || 'upstream_fail' } }];\n}\n\nconst platform = String(item.platform || 'unknown').trim().toLowerCase();\nconst post_id = String(item.post_id || '').trim();\nif (!post_id) {\n  return [{ json: { ok: false, error: 'MISSING_POST_ID' } }];\n}\n\nconst verdict = item.claude?.verdict || 'reject';\nconst score = Number(item.claude?.score ?? item.intake_v1?.score ?? 0);\nconst captured_at = new Date().toISOString();\nconst intake = item.intake_v1 || item.claude?.intake_v1 || null;\n\nconst status =\n  verdict === 'qualified' ? 'qualified' : verdict === 'maybe' ? 'raw' : 'rejected';\n\nconst segmentHint = intake?.content_signals?.segment_hint;\nconst tags = ['unclassified', platform];\nif (segmentHint && segmentHint !== 'unclassified') tags.push(segmentHint);\n\nconst record = {\n  normalized_key: safeKey(platform, post_id),\n  post_id,\n  platform,\n  post_url: String(item.post_url || ''),\n  author_id: String(item.author_id || ''),\n  text: String(item.text || '').slice(0, 50000),\n  segment: 'unclassified',\n  score,\n  claude_verdict: verdict,\n  interest_key: intake?.content_signals?.cta_keyword_hint\n    ? String(intake.content_signals.cta_keyword_hint).toLowerCase().replace(/[^a-z0-9_]/g, '_').slice(0, 80)\n    : 'unknown',\n  status,\n  captured_at,\n  source: 'apify_social_listen',\n  tags,\n  meta: {\n    intake_v1: intake,\n    intake_at: intake ? captured_at : null,\n    claude: item.claude,\n    apify_preview: {\n      post_id,\n      post_url: item.post_url,\n      text_len: (item.text || '').length,\n      engagement: item.engagement || null,\n    },\n    config_notes: item.config_notes || '',\n  },\n};\n\nreturn [{ json: { ok: true, record } }];"
+      },
+      "id": "fb12norm",
+      "name": "Normalize Content Record",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        5280,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const item = $input.first().json;\nif (!item.ok || !item.record) {\n  return [{ json: { ok: false, error: item.error || 'SKIP_SHEET', message: item.message } }];\n}\n\nconst r = item.record;\nconst tags = Array.isArray(r.tags) ? r.tags.join(',') : String(r.tags ?? '');\nconst meta = typeof r.meta === 'string' ? r.meta : JSON.stringify(r.meta ?? {}).slice(0, 50000);\n\nreturn [{\n  json: {\n    ok: true,\n    normalized_key: String(r.normalized_key ?? ''),\n    post_id: String(r.post_id ?? ''),\n    platform: String(r.platform ?? ''),\n    post_url: String(r.post_url ?? ''),\n    author_id: String(r.author_id ?? ''),\n    text: String(r.text ?? '').slice(0, 50000),\n    segment: String(r.segment ?? 'unclassified'),\n    score: Number(r.score ?? 0),\n    claude_verdict: String(r.claude_verdict ?? ''),\n    interest_key: String(r.interest_key ?? 'unknown'),\n    status: String(r.status ?? 'raw'),\n    captured_at: String(r.captured_at ?? ''),\n    source: String(r.source ?? 'apify_social_listen'),\n    tags,\n    meta,\n  },\n}];"
+      },
+      "id": "fb12flat",
+      "name": "Flatten Sheet Row",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        5520,
+        -80
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const SHEET_ID = '1fYB4h_BTiKXa9O3lBah-tQonWpQOQMG2aSkSfPs6yU4';\nconst TAB = 'content_queue';\n\nconst HEADERS = [\n  'normalized_key',\n  'post_id',\n  'platform',\n  'post_url',\n  'author_id',\n  'text',\n  'segment',\n  'score',\n  'claude_verdict',\n  'interest_key',\n  'status',\n  'captured_at',\n  'source',\n  'tags',\n  'meta',\n];\n\nfunction toRow(record) {\n  const tags = Array.isArray(record.tags) ? record.tags.join(',') : String(record.tags ?? '');\n  const meta =\n    typeof record.meta === 'string' ? record.meta : JSON.stringify(record.meta ?? {}).slice(0, 50000);\n  return [\n    String(record.normalized_key ?? ''),\n    String(record.post_id ?? ''),\n    String(record.platform ?? ''),\n    String(record.post_url ?? ''),\n    String(record.author_id ?? ''),\n    String(record.text ?? '').slice(0, 50000),\n    String(record.segment ?? 'unclassified'),\n    Number(record.score ?? 0),\n    String(record.claude_verdict ?? ''),\n    String(record.interest_key ?? 'unknown'),\n    String(record.status ?? 'raw'),\n    String(record.captured_at ?? ''),\n    String(record.source ?? 'apify_social_listen'),\n    tags,\n    meta,\n  ];\n}\n\nasync function sheetRequest(opts) {\n  return this.helpers.httpRequestWithAuthentication.call(this, 'googleApi', {\n    json: true,\n    ...opts,\n  });\n}\n\nconst base = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}`;\nconst readRange = `${TAB}!A:O`;\n\nlet existingByKey = new Map();\nlet nextAppendRow = 2;\n\ntry {\n  const getRes = await sheetRequest.call(this, {\n    method: 'GET',\n    url: `${base}/values/${encodeURIComponent(readRange)}`,\n  });\n  const rows = getRes.values || [];\n\n  if (!rows.length) {\n    await sheetRequest.call(this, {\n      method: 'PUT',\n      url: `${base}/values/${encodeURIComponent(`${TAB}!A1:O1`)}?valueInputOption=USER_ENTERED`,\n      body: { values: [HEADERS] },\n    });\n  } else {\n    const headerRow = rows[0].map((h) => String(h ?? '').trim().toLowerCase());\n    const nkIdx = headerRow.indexOf('normalized_key');\n    const keyCol = nkIdx >= 0 ? nkIdx : 0;\n    for (let i = 1; i < rows.length; i++) {\n      const nk = String(rows[i][keyCol] ?? '').trim();\n      if (nk) existingByKey.set(nk, i + 1);\n    }\n    nextAppendRow = rows.length + 1;\n  }\n} catch (e) {\n  throw new Error(\n    `Sheet read failed (${TAB}): ${e.message}. Tạo tab trước — xem SHEET_CONTENT_QUEUE_SETUP.md`\n  );\n}\n\nconst results = [];\n\nfor (const item of $input.all()) {\n  if (!item.json.ok || !item.json.record) {\n    results.push({ json: { ok: false, error: 'SKIP_SHEET', message: item.json.error } });\n    continue;\n  }\n\n  const record = item.json.record;\n  const nk = record.normalized_key;\n  const rowValues = toRow(record);\n  const existingRow = existingByKey.get(nk);\n\n  try {\n    if (existingRow) {\n      const updateRange = `${TAB}!A${existingRow}:O${existingRow}`;\n      await sheetRequest.call(this, {\n        method: 'PUT',\n        url: `${base}/values/${encodeURIComponent(updateRange)}?valueInputOption=USER_ENTERED`,\n        body: { values: [rowValues] },\n      });\n      results.push({\n        json: {\n          ok: true,\n          storage: 'sheet_content_queue',\n          sheet_row: existingRow,\n          action: 'update',\n          normalized_key: nk,\n          record,\n        },\n      });\n    } else {\n      await sheetRequest.call(this, {\n        method: 'POST',\n        url: `${base}/values/${encodeURIComponent(`${TAB}!A:O`)}:append?valueInputOption=USER_ENTERED&insertDataOption=INSERT_ROWS`,\n        body: { values: [rowValues] },\n      });\n      existingByKey.set(nk, nextAppendRow);\n      results.push({\n        json: {\n          ok: true,\n          storage: 'sheet_content_queue',\n          sheet_row: nextAppendRow,\n          action: 'create',\n          normalized_key: nk,\n          record,\n        },\n      });\n      nextAppendRow += 1;\n    }\n  } catch (e) {\n    results.push({\n      json: { ok: false, error: 'SHEET_WRITE', message: e.message, normalized_key: nk },\n    });\n  }\n}\n\nreturn results;"
+      },
+      "id": "fb13sheet",
+      "name": "Sheet Upsert content_queue",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        5760,
+        -80
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $getWorkflowStaticData('global');\nif (!data.sl_stats) {\n  data.sl_stats = { sheet_ok: 0, sheet_fail: 0, qualified: 0, apify_empty: 0, not_qualified: 0 };\n}\n\nconst row = $input.first().json;\nconst nk = row.normalized_key || $('Prepare Sheet Append').item?.json?.normalized_key;\n\nif (nk) {\n  data.sl_stats.sheet_ok += 1;\n  return [{\n    json: {\n      ok: true,\n      storage: 'sheet_content_queue',\n      normalized_key: nk,\n      action: row.action || 'upsert',\n    },\n  }];\n}\n\ndata.sl_stats.sheet_fail += 1;\nreturn [{ json: { ok: false, error: 'SHEET_UPSERT', message: 'Google Sheets node returned no normalized_key' } }];"
+      },
+      "id": "fb13done",
+      "name": "Mark Sheet Done",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        6000,
+        -80
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const item = $input.first().json;\nconst record = $('Normalize Content Record').item?.json?.record;\nconst nk = item.normalized_key || record?.normalized_key;\nif (!nk || !record) {\n  return [{ json: { ok: false, skip_index: true } }];\n}\n\nconst eng = record.meta?.engagement || record.meta?.apify_preview || {};\n\nreturn [{\n  json: {\n    ok: true,\n    index_body: {\n      values: [[\n        nk,\n        String(record.post_id ?? ''),\n        String(record.platform ?? ''),\n        String(record.source ?? 'apify_social_listen'),\n        new Date().toISOString(),\n        JSON.stringify({ score: record.score, claude_verdict: record.claude_verdict }).slice(0, 500),\n      ]],\n    },\n    normalized_key: nk,\n  },\n}];"
+      },
+      "id": "fb13idxrow",
+      "name": "Prepare scrape_index row",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        6240,
+        -80
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://sheets.googleapis.com/v4/spreadsheets/1fYB4h_BTiKXa9O3lBah-tQonWpQOQMG2aSkSfPs6yU4/values/scrape_index!A%3AF:append?valueInputOption=USER_ENTERED&insertDataOption=INSERT_ROWS",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json.index_body) }}",
+        "options": {}
+      },
+      "id": "fb13idx",
+      "name": "Append scrape_index",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        6480,
+        -80
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const item = $input.first().json;\nconst record = item.record || item.json?.record;\n\nif (!record?.normalized_key) {\n  return [{ json: { drive_skip: true, reason: 'no record' } }];\n}\n\nconst folderId = '1iBjsrXLYmHfOHMQaAfLmZGug2kN0314D';\nif (!folderId) {\n  return [{ json: { drive_skip: true, reason: 'backup disabled' } }];\n}\n\nconst safeName = String(record.normalized_key).replace(/[^a-zA-Z0-9._-]/g, '_');\nconst fileName = `apify_raw/${safeName}.json`;\nconst content = JSON.stringify(record, null, 2);\nconst binaryData = Buffer.from(content, 'utf8').toString('base64');\n\nreturn [{\n  json: {\n    fileName,\n    normalized_key: record.normalized_key,\n    drive_folder_id: folderId,\n  },\n  binary: {\n    data: {\n      data: binaryData,\n      mimeType: 'application/json',\n      fileName: `${safeName}.json`,\n    },\n  },\n}];"
+      },
+      "id": "fb14driveprep",
+      "name": "Prepare Drive Backup",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        5520,
+        80
+      ]
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "operation": "upload",
+        "name": "={{ $json.fileName }}",
+        "driveId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "My Drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "1iBjsrXLYmHfOHMQaAfLmZGug2kN0314D"
+        },
+        "options": {}
+      },
+      "id": "fb15drive",
+      "name": "Drive Backup Upload",
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        5760,
+        80
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $getWorkflowStaticData('global');\nconst stats = data.sl_stats || {};\nlet hint = null;\nif ((stats.sheet_ok || 0) === 0 && (stats.apify_empty || 0) > 0) {\n  hint = 'Apify trả rỗng — kiểm tra token/URL hoặc kênh đã quét trong 7 ngày';\n} else if ((stats.sheet_ok || 0) === 0 && (stats.qualified || 0) === 0) {\n  hint = 'Không có bài qualified — duplicate/reject hoặc ngách ngoài BĐS';\n} else if ((stats.sheet_ok || 0) === 0 && (stats.qualified || 0) > 0) {\n  hint = 'Có qualified nhưng Sheet chưa ghi — gán googleApi trên Sheet Upsert';\n}\nreturn [{ json: {\n  ok: true,\n  workflow: 'social-listening-facebook',\n  sheet_upserted: stats.sheet_ok || 0,\n  stats,\n  hint,\n  finished_at: new Date().toISOString(),\n}}];"
+      },
+      "id": "fb16summary",
+      "name": "Build Summary",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        6720,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{ json: { ok: true, empty: true, message: 'No URLs due for fb_page/fb_group' } }];"
+      },
+      "id": "fb17empty",
+      "name": "No URLs Summary",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1440,
+        420
+      ]
+    }
+  ],
+  "connections": {
+    "Schedule Weekly Facebook": {
+      "main": [
+        [
+          {
+            "node": "Fetch project_config",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking 'Execute workflow'": {
+      "main": [
+        [
+          {
+            "node": "Fetch project_config",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch project_config": {
+      "main": [
+        [
+          {
+            "node": "Parse project_config rows",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse project_config rows": {
+      "main": [
+        [
+          {
+            "node": "Split URLs from Config",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split URLs from Config": {
+      "main": [
+        [
+          {
+            "node": "Filter Platform",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter Platform": {
+      "main": [
+        [
+          {
+            "node": "Filter Due Channels",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter Due Channels": {
+      "main": [
+        [
+          {
+            "node": "IF Has URLs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF Has URLs": {
+      "main": [
+        [
+          {
+            "node": "Fetch scrape_index",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "No URLs Summary",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch scrape_index": {
+      "main": [
+        [
+          {
+            "node": "Parse scrape_index",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse scrape_index": {
+      "main": [
+        [
+          {
+            "node": "Fetch channel_state",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch channel_state": {
+      "main": [
+        [
+          {
+            "node": "Parse channel_state",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse channel_state": {
+      "main": [
+        [
+          {
+            "node": "Reset Run Stats",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Reset Run Stats": {
+      "main": [
+        [
+          {
+            "node": "Loop Over URLs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over URLs": {
+      "main": [
+        [
+          {
+            "node": "Build Summary",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Apify Scrape",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Apify Scrape": {
+      "main": [
+        [
+          {
+            "node": "Wrap FB Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wrap FB Response": {
+      "main": [
+        [
+          {
+            "node": "Filter New Posts",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Prepare channel_state row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare channel_state row": {
+      "main": [
+        [
+          {
+            "node": "Append channel_state",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append channel_state": {
+      "main": [
+        [
+          {
+            "node": "Loop Over URLs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter New Posts": {
+      "main": [
+        [
+          {
+            "node": "Track Apify Stats",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Track Apify Stats": {
+      "main": [
+        [
+          {
+            "node": "IF Apify Has Posts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF Apify Has Posts": {
+      "main": [
+        [
+          {
+            "node": "Claude Pain Intake",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Loop Over URLs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Claude Pain Intake": {
+      "main": [
+        [
+          {
+            "node": "Parse Claude JSON",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Claude JSON": {
+      "main": [
+        [
+          {
+            "node": "Track Claude Stats",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Track Claude Stats": {
+      "main": [
+        [
+          {
+            "node": "IF Qualified",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF Qualified": {
+      "main": [
+        [
+          {
+            "node": "Normalize Content Record",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Loop Over URLs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalize Content Record": {
+      "main": [
+        [
+          {
+            "node": "Flatten Sheet Row",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Prepare Drive Backup",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Flatten Sheet Row": {
+      "main": [
+        [
+          {
+            "node": "Sheet Upsert content_queue",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sheet Upsert content_queue": {
+      "main": [
+        [
+          {
+            "node": "Mark Sheet Done",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mark Sheet Done": {
+      "main": [
+        [
+          {
+            "node": "Prepare scrape_index row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare scrape_index row": {
+      "main": [
+        [
+          {
+            "node": "Append scrape_index",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append scrape_index": {
+      "main": [
+        [
+          {
+            "node": "Loop Over URLs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Drive Backup": {
+      "main": [
+        [
+          {
+            "node": "Drive Backup Upload",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Drive Backup Upload": {
+      "main": [
+        [
+          {
+            "node": "Loop Over URLs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "No URLs Summary": {
+      "main": [
+        [
+          {
+            "node": "Build Summary",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [
+    {
+      "name": "magnix"
+    },
+    {
+      "name": "agent-1"
+    },
+    {
+      "name": "social-listening"
+    },
+    {
+      "name": "facebook"
+    }
+  ],
+  "meta": {
+    "templateCredsSetupCompleted": false
+  }
+}

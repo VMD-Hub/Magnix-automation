@@ -1,0 +1,14 @@
+{
+  "post_id": "tt-20260622-fail-01",
+  "segment": "general_inbound",
+  "metrics": {
+    "reach": 8200,
+    "completion_rate": 0.38,
+    "save_rate": 0.008,
+    "share_rate": 0.004,
+    "early_swipe_away_3s": 0.48,
+    "keyword_comments": 3,
+    "dm_opt_in": 1,
+    "warm_lead_rate": 0.12
+  }
+}

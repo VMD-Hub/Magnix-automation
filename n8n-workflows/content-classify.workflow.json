@@ -1,0 +1,668 @@
+{
+  "name": "Magnix Agent 2 — Content Classify (regex → LLM → Sheet)",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## Agent 2 — Content Classify\n- **08:00 VN** hàng ngày, tối đa **200 dòng/lần**\n- Regex trước → LLM nếu `needs_llm`\n- **googleApi** trên Fetch + Sheet Update Row\n- Env: `DEEPSEEK_API_KEY` (rẻ) hoặc `ANTHROPIC_API_KEY`",
+        "height": 200,
+        "width": 420
+      },
+      "id": "a200note",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -480,
+        160
+      ]
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 8 * * *"
+            }
+          ]
+        }
+      },
+      "id": "a201sched",
+      "name": "Schedule Daily Classify",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "a202manual",
+      "name": "When clicking 'Execute workflow'",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "https://sheets.googleapis.com/v4/spreadsheets/1fYB4h_BTiKXa9O3lBah-tQonWpQOQMG2aSkSfPs6yU4/values/content_queue!A%3AO",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleApi",
+        "options": {}
+      },
+      "id": "a203fetch",
+      "name": "Fetch content_queue",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        240,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const BATCH = 200;\n\nfunction parseMeta(raw) {\n  if (!raw) return {};\n  try {\n    return typeof raw === 'string' ? JSON.parse(raw) : raw;\n  } catch {\n    return {};\n  }\n}\n\nfunction isPending(row, headers) {\n  const h = {};\n  headers.forEach((key, i) => {\n    if (key) h[key] = String(row[i] ?? '').trim();\n  });\n\n  const segment = (h.segment || '').toLowerCase();\n  const status = (h.status || '').toLowerCase();\n  const meta = parseMeta(h.meta);\n\n  if (meta.classify_method === 'llm') return false;\n  if (status === 'classified' && segment && segment !== 'unclassified') return false;\n\n  const text = h.text || '';\n  if (!text.trim()) return false;\n\n  if (!segment || segment === 'unclassified') return true;\n  if (status === 'review') return true;\n  if (meta.needs_llm === true) return true;\n\n  return false;\n}\n\nconst res = $input.first().json;\nconst rows = Array.isArray(res.values) ? res.values : [];\n\nif (rows.length < 2) {\n  return [{ json: { empty: true, message: 'content_queue trống' } }];\n}\n\nconst headers = rows[0].map((x) => String(x ?? '').trim().toLowerCase());\nconst out = [];\n\nfor (let i = 1; i < rows.length; i++) {\n  const cells = rows[i];\n  if (!cells?.some((c) => String(c ?? '').trim())) continue;\n  if (!isPending(cells, headers)) continue;\n\n  const row = { sheet_row: i + 1 };\n  headers.forEach((key, j) => {\n    if (key) row[key] = cells[j] ?? '';\n  });\n  out.push({ json: row });\n  if (out.length >= BATCH) break;\n}\n\nif (!out.length) {\n  return [{ json: { empty: true, message: 'Không còn dòng pending classify' } }];\n}\n\nreturn out;"
+      },
+      "id": "a204filter",
+      "name": "Parse Filter Pending",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        480,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "c-empty",
+              "leftValue": "={{ $json.empty }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "notEquals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "a205ifrows",
+      "name": "IF Has Pending Rows",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        720,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $getWorkflowStaticData('global');\ndata.a2_stats = { sheet_ok: 0, sheet_fail: 0, llm: 0, regex: 0, parse_fail: 0 };\nreturn $input.all();"
+      },
+      "id": "a205reset",
+      "name": "Reset Run Stats",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        960,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "batchSize": 1,
+        "options": {}
+      },
+      "id": "a206loop",
+      "name": "Loop Pending Rows",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        1200,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const RULES = [\n  { segment: 'noxh_income', score: 80, interest_key: 'thu_nhap_noxh', patterns: [/thu nhập|lương|vay ngân hàng|vay mua nhà|noxh|nhà ở xã hội|nha o xa hoi|hồ sơ noxh|điều kiện mua noxh/i] },\n  { segment: 'valuation', score: 70, interest_key: 'dinh_gia_tham_dinh', patterns: [/định giá|thẩm định|chứng thư|dinh gia|tham dinh/i] },\n  { segment: 'sme_credit', score: 75, interest_key: 'room_tin_dung_sme', patterns: [/room tín dụng|room tin dung|doanh nghiệp|\\bsme\\b|vay doanh nghiệp/i] },\n  { segment: 'general_inbound', score: 55, interest_key: 'quan_tam_bds', patterns: [/giá|\\bcăn\\b|m²|m2|block|dự án|du an|bds|bất động sản|bat dong san|mua nhà|mua nha/i] },\n];\n\nfunction classifyText(text) {\n  const t = String(text || '').normalize('NFC').toLowerCase();\n  let best = { segment: 'unclassified', score: 0, interest_key: 'unknown', matched: [] };\n  for (const rule of RULES) {\n    for (const re of rule.patterns) {\n      if (re.test(t)) {\n        if (rule.score > best.score) {\n          best = { segment: rule.segment, score: rule.score, interest_key: rule.interest_key, matched: [re.source] };\n        }\n        break;\n      }\n    }\n  }\n  return best;\n}\n\nreturn $input.all().map((item) => {\n  const j = item.json;\n  const text = j.text ?? '';\n  const result = classifyText(text);\n  const needs_llm =\n    (result.segment === 'unclassified' && String(text).trim().length > 0) ||\n    (result.score >= 40 && result.score <= 59);\n\n  return {\n    json: {\n      ...j,\n      ...result,\n      needs_llm,\n    },\n  };\n});"
+      },
+      "id": "a207fast",
+      "name": "Classify Fast",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1440,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "c-llm",
+              "leftValue": "={{ $json.needs_llm }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "a208ifllm",
+      "name": "IF Needs LLM",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1680,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const row = $('Loop Pending Rows').item?.json || $input.first().json;\n\nconst system = `Bạn là bộ phận phân loại Magnix (BĐS/tài chính VN).\n[/focus] [/silent] Chỉ trả JSON hợp lệ, không markdown:\n{\"segment\":\"noxh_income|valuation|sme_credit|general_inbound|unclassified\",\"score\":0-100,\"interest_key\":\"snake_case\"}\nScore: 80+ pain rõ; 60-79 warm; 40-59 mơ hồ; <40 cold/spam`;\n\nlet metaObj = {};\ntry {\n  metaObj = row.meta ? JSON.parse(row.meta) : {};\n} catch {\n  metaObj = {};\n}\n\nconst userPayload = JSON.stringify({\n  post_id: row.post_id,\n  platform: row.platform,\n  text: String(row.text || '').slice(0, 4000),\n  meta: metaObj,\n});\n\ntry {\n  if ($env.DEEPSEEK_API_KEY) {\n    const res = await this.helpers.httpRequest({\n      method: 'POST',\n      url: $env.DEEPSEEK_API_URL || 'https://api.deepseek.com/chat/completions',\n      headers: {\n        Authorization: `Bearer ${$env.DEEPSEEK_API_KEY}`,\n        'Content-Type': 'application/json',\n      },\n      body: {\n        model: $env.DEEPSEEK_MODEL || 'deepseek-chat',\n        temperature: 0.2,\n        response_format: { type: 'json_object' },\n        messages: [\n          { role: 'system', content: system },\n          { role: 'user', content: userPayload },\n        ],\n      },\n      json: true,\n    });\n    return [{ json: res }];\n  }\n\n  if ($env.ANTHROPIC_API_KEY) {\n    const model = $env.ANTHROPIC_CLASSIFY_MODEL || 'claude-haiku-4-5-20251001';\n    const res = await this.helpers.httpRequest({\n      method: 'POST',\n      url: 'https://api.anthropic.com/v1/messages',\n      headers: {\n        'x-api-key': $env.ANTHROPIC_API_KEY,\n        'anthropic-version': '2023-06-01',\n        'Content-Type': 'application/json',\n      },\n      body: {\n        model,\n        max_tokens: 256,\n        temperature: 0.2,\n        system,\n        messages: [{ role: 'user', content: userPayload }],\n      },\n      json: true,\n    });\n    return [{ json: res }];\n  }\n\n  throw new Error('Thiếu DEEPSEEK_API_KEY hoặc ANTHROPIC_API_KEY');\n} catch (e) {\n  return [{ json: { error: true, message: e.message } }];\n}"
+      },
+      "id": "a209llm",
+      "name": "LLM Classify Request",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1920,
+        120
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "c-err",
+              "leftValue": "={{ $json.error }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "notEquals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "a209ifok",
+      "name": "IF LLM OK",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        2160,
+        120
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const SEGMENTS = new Set([\n  'noxh_income', 'valuation', 'sme_credit', 'general_inbound', 'unclassified',\n]);\n\nfunction extractJsonString(raw) {\n  if (raw == null) throw new Error('EMPTY_LLM_OUTPUT');\n  const s = typeof raw === 'string' ? raw : JSON.stringify(raw);\n  const fenced = s.match(/```(?:json)?\\s*([\\s\\S]*?)```/i);\n  return (fenced ? fenced[1] : s).trim();\n}\n\nfunction validateClassify(obj) {\n  if (!SEGMENTS.has(obj.segment)) throw new Error('INVALID_SEGMENT');\n  const score = Number(obj.score);\n  if (!Number.isFinite(score) || score < 0 || score > 100) throw new Error('INVALID_SCORE');\n  if (typeof obj.interest_key !== 'string' || !obj.interest_key) throw new Error('INVALID_INTEREST_KEY');\n  return { segment: obj.segment, score, interest_key: obj.interest_key };\n}\n\nconst res = $input.first().json;\nconst raw =\n  res.choices?.[0]?.message?.content ??\n  res.content?.[0]?.text ??\n  res.message?.content ??\n  res.text ??\n  res;\n\ntry {\n  const parsed = JSON.parse(extractJsonString(raw));\n  const classify = validateClassify(parsed);\n  return [{ json: { ok: true, classify, classify_method: 'llm', parse_error: null } }];\n} catch (e) {\n  return [{\n    json: {\n      ok: false,\n      classify: null,\n      classify_method: 'llm',\n      parse_error: e.message,\n      raw_preview: String(raw).slice(0, 200),\n    },\n  }];\n}"
+      },
+      "id": "a210parse",
+      "name": "Parse LLM JSON",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2400,
+        40
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "c-ok",
+              "leftValue": "={{ $json.ok }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "a211ifparse",
+      "name": "IF Parse OK",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        2640,
+        40
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const j = $input.first().json;\nreturn [{\n  json: {\n    ok: true,\n    classify: {\n      segment: j.segment,\n      score: j.score,\n      interest_key: j.interest_key || j.segment,\n    },\n    classify_method: 'regex',\n  },\n}];"
+      },
+      "id": "a212wrap",
+      "name": "Wrap Regex Classify",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1920,
+        360
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "function extractQuestion(text) {\r\n  const t = String(text || '').trim();\r\n  if (!t) return [];\r\n  const parts = t.split(/[?？]/).map((s) => s.trim()).filter(Boolean);\r\n  if (parts.length > 1) {\r\n    return parts.slice(0, -1).map((p) => `${p}?`.slice(0, 300)).slice(0, 3);\r\n  }\r\n  if (/[?？]/.test(t)) return [t.slice(0, 300)];\r\n  return [];\r\n}\r\n\r\nfunction buildIntakeStubFromRow(row) {\r\n  const text = String(row.text || '').trim();\r\n  const segment = String(row.segment || 'general_inbound').trim().toLowerCase();\r\n  const score = Number(row.score || 0);\r\n  const platform = String(row.platform || 'tiktok').trim().toLowerCase();\r\n  const questions = extractQuestion(text);\r\n  const summary = text.slice(0, 500);\r\n\r\n  return {\r\n    intake_version: 1,\r\n    verdict: score >= 70 ? 'qualified' : score >= 40 ? 'maybe' : 'reject',\r\n    score,\r\n    reject_reason: null,\r\n    summary,\r\n    conversation: {\r\n      surface_topic: summary.slice(0, 200),\r\n      explicit_questions: questions.length ? questions : [summary.slice(0, 120)],\r\n      implicit_fears: [],\r\n      misconceptions: [],\r\n      journey_stage: 'consideration',\r\n      audience_voice: text.slice(0, 300),\r\n    },\r\n    content_signals: {\r\n      pain_intensity: Math.min(100, Math.max(0, score)),\r\n      discussion_heat: score >= 75 ? 'high' : 'medium',\r\n      inbound_potential: score >= 70 ? 'medium' : 'low',\r\n      segment_hint: segment,\r\n      evidence_quotes: text ? [text.slice(0, 120)] : [],\r\n      single_insight_clip: true,\r\n      hook_candidate: text.slice(0, 80),\r\n      cta_keyword_hint: segment === 'noxh_income' ? 'NOXH' : 'CHECKLIST',\r\n    },\r\n    compliance_flags: [],\r\n    _stub: true,\r\n    _stub_source: String(row.intake_stub_source || row.source || 'classified_row'),\r\n    _stub_platform: platform,\r\n    _stub_normalized_key: String(row.normalized_key || ''),\r\n  };\r\n}\r\n\r\nfunction ensureIntakeV1(row, meta) {\r\n  if (meta?.intake_v1 && typeof meta.intake_v1 === 'object') {\r\n    return { meta, intake_v1: meta.intake_v1, stubbed: false };\r\n  }\r\n  const intake_v1 = buildIntakeStubFromRow(row);\r\n  const next = { ...meta, intake_v1, intake_stub_at: new Date().toISOString() };\r\n  return { meta: next, intake_v1, stubbed: true };\r\n}\n\nconst source = $('Loop Pending Rows').item?.json || $input.first().json;\nconst wrap = $input.first().json;\n\nif (!wrap.ok || !wrap.classify) {\n  return [{\n    json: {\n      ok: false,\n      error: 'MERGE_SKIP',\n      sheet_row: source.sheet_row,\n      parse_error: wrap.parse_error,\n    },\n  }];\n}\n\nconst { segment, score, interest_key } = wrap.classify;\nconst method = wrap.classify_method || 'llm';\n\nlet status = 'classified';\nlet claude_verdict = 'qualified';\n\nif (segment === 'unclassified' || score < 40) {\n  status = 'raw';\n  claude_verdict = 'reject';\n} else if (score < 60) {\n  status = 'review';\n  claude_verdict = 'maybe';\n} else if (score < 70) {\n  claude_verdict = 'maybe';\n}\n\nlet metaBase = {};\ntry {\n  if (source.meta) metaBase = typeof source.meta === 'string' ? JSON.parse(source.meta) : source.meta;\n} catch {\n  metaBase = {};\n}\n\nconst intakeRow = {\n  text: source.text,\n  segment,\n  score,\n  platform: source.platform,\n  normalized_key: source.normalized_key,\n  source: source.source,\n  intake_stub_source: 'agent2_classify',\n};\nconst ensured = ensureIntakeV1(intakeRow, metaBase);\nmetaBase = ensured.meta;\nif (ensured.stubbed) metaBase.intake_v1_from = 'stub_agent2';\nelse if (!metaBase.intake_v1_from) metaBase.intake_v1_from = 'agent1_or_prior';\n\nconst meta = JSON.stringify({\n  ...metaBase,\n  classify_method: method,\n  classified_at: new Date().toISOString(),\n  needs_llm: false,\n  agent: 'agent-2',\n}).slice(0, 50000);\n\nreturn [{\n  json: {\n    ok: true,\n    sheet_row: source.sheet_row,\n    normalized_key: source.normalized_key,\n    captured_at: source.captured_at,\n    source: source.source,\n    classify_method: method,\n    update: {\n      segment,\n      score,\n      interest_key,\n      status,\n      claude_verdict,\n      tags: segment !== 'unclassified' ? segment : 'unclassified',\n      meta,\n    },\n  },\n}];"
+      },
+      "id": "a213merge",
+      "name": "Merge Content Row",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2880,
+        200
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "c-merge",
+              "leftValue": "={{ $json.ok }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "a214ifmerge",
+      "name": "IF Merge OK",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        3120,
+        200
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const SHEET_ID = '1fYB4h_BTiKXa9O3lBah-tQonWpQOQMG2aSkSfPs6yU4';\nconst TAB = 'content_queue';\n\nconst item = $input.first().json;\nif (!item.ok || !item.sheet_row || !item.update) {\n  return [{ json: { ok: false, error: 'SKIP_SHEET_UPDATE', ...item } }];\n}\n\nconst u = item.update;\nconst rowValues = [\n  String(u.segment ?? ''),\n  Number(u.score ?? 0),\n  String(u.claude_verdict ?? ''),\n  String(u.interest_key ?? ''),\n  String(u.status ?? ''),\n  String(item.captured_at ?? $('Loop Pending Rows').item?.json?.captured_at ?? ''),\n  String(item.source ?? $('Loop Pending Rows').item?.json?.source ?? ''),\n  String(u.tags ?? ''),\n  String(u.meta ?? ''),\n];\n\nconst row = item.sheet_row;\nconst range = `${TAB}!G${row}:O${row}`;\n\nawait this.helpers.httpRequestWithAuthentication.call(this, 'googleApi', {\n  method: 'PUT',\n  url: `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent(range)}?valueInputOption=USER_ENTERED`,\n  body: { values: [rowValues] },\n  json: true,\n});\n\nconst data = $getWorkflowStaticData('global');\nif (!data.a2_stats) data.a2_stats = { sheet_ok: 0, sheet_fail: 0, llm: 0, regex: 0, parse_fail: 0 };\ndata.a2_stats.sheet_ok += 1;\nif (item.classify_method === 'llm') data.a2_stats.llm += 1;\nelse data.a2_stats.regex += 1;\n\nreturn [{\n  json: {\n    ok: true,\n    storage: 'sheet_content_queue',\n    sheet_row: row,\n    normalized_key: item.normalized_key,\n    segment: u.segment,\n    score: u.score,\n    classify_method: item.classify_method || u.classify_method,\n  },\n}];"
+      },
+      "id": "a215sheet",
+      "name": "Sheet Update Row",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3360,
+        120
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $getWorkflowStaticData('global');\nif (!data.a2_stats) data.a2_stats = { sheet_ok: 0, sheet_fail: 0, llm: 0, regex: 0, parse_fail: 0 };\ndata.a2_stats.parse_fail += 1;\n\nreturn [{ json: { ok: false, dead_letter: true, ...$input.first().json } }];"
+      },
+      "id": "a216fail",
+      "name": "Track Parse Fail",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2880,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $getWorkflowStaticData('global');\nconst stats = data.a2_stats || {};\nlet hint = null;\nif ((stats.sheet_ok || 0) === 0) {\n  hint = 'Không cập nhật dòng nào — hết pending hoặc lỗi credential googleApi trên Sheet Update Row';\n} else if ((stats.parse_fail || 0) > 0) {\n  hint = 'Có parse_fail — kiểm tra DEEPSEEK/ANTHROPIC key hoặc output LLM';\n}\nreturn [{ json: {\n  ok: true,\n  workflow: 'content-classify',\n  stats,\n  hint,\n  batch_size: 200,\n  finished_at: new Date().toISOString(),\n}}];"
+      },
+      "id": "a217summary",
+      "name": "Build Summary",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3600,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{ json: { ok: true, empty: true, message: 'No pending rows in content_queue' } }];"
+      },
+      "id": "a218empty",
+      "name": "No Pending Summary",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        720,
+        420
+      ]
+    }
+  ],
+  "connections": {
+    "Schedule Daily Classify": {
+      "main": [
+        [
+          {
+            "node": "Fetch content_queue",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking 'Execute workflow'": {
+      "main": [
+        [
+          {
+            "node": "Fetch content_queue",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch content_queue": {
+      "main": [
+        [
+          {
+            "node": "Parse Filter Pending",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Filter Pending": {
+      "main": [
+        [
+          {
+            "node": "IF Has Pending Rows",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF Has Pending Rows": {
+      "main": [
+        [
+          {
+            "node": "Reset Run Stats",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "No Pending Summary",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Reset Run Stats": {
+      "main": [
+        [
+          {
+            "node": "Loop Pending Rows",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Pending Rows": {
+      "main": [
+        [
+          {
+            "node": "Build Summary",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Classify Fast",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Classify Fast": {
+      "main": [
+        [
+          {
+            "node": "IF Needs LLM",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF Needs LLM": {
+      "main": [
+        [
+          {
+            "node": "LLM Classify Request",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wrap Regex Classify",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "LLM Classify Request": {
+      "main": [
+        [
+          {
+            "node": "IF LLM OK",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF LLM OK": {
+      "main": [
+        [
+          {
+            "node": "Parse LLM JSON",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Track Parse Fail",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse LLM JSON": {
+      "main": [
+        [
+          {
+            "node": "IF Parse OK",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF Parse OK": {
+      "main": [
+        [
+          {
+            "node": "Merge Content Row",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Track Parse Fail",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wrap Regex Classify": {
+      "main": [
+        [
+          {
+            "node": "Merge Content Row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge Content Row": {
+      "main": [
+        [
+          {
+            "node": "IF Merge OK",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF Merge OK": {
+      "main": [
+        [
+          {
+            "node": "Sheet Update Row",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Loop Pending Rows",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sheet Update Row": {
+      "main": [
+        [
+          {
+            "node": "Loop Pending Rows",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Track Parse Fail": {
+      "main": [
+        [
+          {
+            "node": "Loop Pending Rows",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "No Pending Summary": {
+      "main": [
+        [
+          {
+            "node": "Build Summary",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [
+    {
+      "name": "magnix"
+    },
+    {
+      "name": "agent-2"
+    },
+    {
+      "name": "content-classify"
+    }
+  ],
+  "meta": {
+    "templateCredsSetupCompleted": false
+  }
+}

@@ -1,0 +1,5 @@
+{
+  "classify_method": "llm",
+  "needs_llm": true,
+  "note": "score 40–59 hoặc unclassified có text → gọi LLM; expected segment general_inbound hoặc unclassified"
+}

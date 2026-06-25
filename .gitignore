@@ -1,0 +1,25 @@
+# Dependencies
+node_modules/
+
+# Secrets
+.env
+.env.*
+!.env.example
+credentials*.json
+n8n-workflows/credentials/
+*.pem
+
+# OS / editor
+.DS_Store
+Thumbs.db
+
+# Logs & temp
+*.log
+.tmp/
+dist/
+out/
+agent-tools-*
+
+# UID dumps (PII)
+**/uid-dumps/
+**/*-raw-uids.csv

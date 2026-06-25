@@ -1,0 +1,40 @@
+# ID DỰ ÁN: MAGNIX (SMART CONVERSION & INBOUND HOOK ENGINE)
+
+## 1. Triết lý Vận hành & Tư duy Hệ thống
+
+- MAGNIX là cỗ máy tạo lực hút tự động (Inbound), không phải công cụ phát tán tin rác (Spam).
+- Dữ liệu UID/Data thô từ các công cụ quét bên ngoài được nạp ngắt quãng theo chu kỳ vào Google Sheet dưới dạng quặng thô. Nhiệm vụ của hệ thống là phân loại và tinh luyện tệp dữ liệu này thành Khách hàng ấm (Inbound Lead).
+- Luôn ưu tiên chiến lược "Value-First Hook" (Trao giá trị trước): AI phải thiết kế các mồi nhử chất lượng cao (Checklist hồ sơ NOXH, File Excel tính dòng tiền vay bank, Giải pháp thẩm định giá độc lập) để kích thích khách hàng chủ động phản hồi (Opt-in), chuyển hóa họ thành lead sạch một cách tự nhiên.
+
+## 2. Tiêu chuẩn Kỹ thuật & Tự động hóa
+
+- Trục kết nối: n8n Webhook (VPS) + **Google Sheet store of record** + Google Drive archive (xem `.cursor/STORAGE_OPTIONS.md`).
+- **VPS = compute only** — không coi disk VPS là nơi lưu lead lâu dài.
+- **Store of record (đã chốt):** Google Sheet upsert/dedupe theo `normalized_key`.
+- **Archive (khuyến nghị):** Google Drive JSONL — sống sót khi tắt VPS; không thay Sheet cho dedupe hàng ngày.
+- Google Drive free: ~15 GB dùng chung (Drive/Gmail/Photos) — đủ backup text lead.
+- Mọi script JSON/API: `try-catch`, log `normalized_key` (không log PII đầy đủ).
+- API Keys qua env / n8n Credentials — không hardcode.
+
+## 3. Tiêu chuẩn Nội dung Chuyển đổi (Conversion Copywriting)
+
+- Nội dung bài viết nền tảng phải tuân thủ cấu trúc Q&A (Hỏi & Đáp trực diện) ở các thẻ tiêu đề (H2, H3) để tối ưu hóa hiển thị trên các bộ máy tìm kiếm bằng AI (Perplexity, Gemini, DeepSeek).
+- Nội dung phải gãy gọn, có chiều sâu pháp lý và số liệu thực tế (đặc biệt trong các mảng: Điều kiện thu nhập mua NOXH, Room tín dụng doanh nghiệp SMEs, Chứng thư định giá tài sản).
+- Kịch bản tin nhắn tiếp cận ban đầu (Outreach Script) phải đóng vai "Trợ lý mang giải pháp hữu ích", tuyệt đối không dùng ngôn ngữ chèo kéo bán hàng.
+
+## 4. Tư duy Agent (MCF)
+
+- MCF: `.cursor/AGENT_COGNITION.md` · Slash: `.cursor/SLASH_COMMANDS.md`
+- **Parse layer** bắt buộc sau LLM n8n: `.cursor/JSON_PARSE_LAYER.md`
+- **QA phân tầng** L0–L3: `.cursor/QA_TIERS.md` — không LLM-QA mọi output
+- Schema UID đầy đủ: `ARCHITECTURE_MAGNIX.md` §3.1 (LLM 3 field → Code merge)
+- Rule engine trước LLM; LLM + `/ooda` khi score 40–59
+- L2 `/devil` cho content NOXH/vay/định giá; L3 human approve trước publish
+
+## 5. Swing Paper Trading — Data contract (PAPER)
+
+- Playbook: `scripts/SWING-EXECUTION-PLAYBOOK.md` · Constitution: `scripts/SWING-PORTFOLIO-CONSTITUTION.md`
+- **OPEN:** đủ trường + `--exec` + gate (2 OPEN, 60% NAV, risk ≤1.25% NAV, MWG 25%)
+- Trước OPEN mới: `swing-log.mjs portfolio` · Sau log: `validate`
+- Shadow/Theory: `SWING-THEORY-RESEARCH.md` · `SWING-SHADOW-SCHEMA.md` — không ảnh hưởng KPI real-gate
+- Phase 1 **PAPER spot only** — margin/phái sinh mô phỏng trên `Trades_SHADOW`

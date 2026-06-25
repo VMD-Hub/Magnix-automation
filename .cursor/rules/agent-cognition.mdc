@@ -1,0 +1,28 @@
+---
+description: Vòng lặp tư duy Magnix (MCF) — INTAKE → VERIFY → PACKAGE
+alwaysApply: true
+---
+
+# Magnix Cognitive Functions (MCF)
+
+Chi tiết: `.cursor/AGENT_COGNITION.md` · Slash: `.cursor/SLASH_COMMANDS.md` · Parse: `.cursor/JSON_PARSE_LAYER.md` · QA: `.cursor/QA_TIERS.md`.
+
+## Core loop (bắt buộc)
+
+Mọi task không trivial: `INTAKE → ORIENT → ROUTE → PLAN → EXECUTE → SCORE(≥75) → VERIFY → PACKAGE`.
+
+## ROUTE nhanh
+
+- n8n / Google Sheet / Drive / webhook / UID / JSON → **magnix-growth-architect**
+- copy / lead magnet / outreach / Q&A / TikTok → **magnix-inbound-copywriter**
+- Cả hai → architect (contract) rồi copywriter (prompt)
+
+## VERIFY cứng
+
+- Không secret/PII inline
+- Growth: full schema §3.1, parse layer pass
+- Copy: QA L0–L3 — `/devil` L2 only; L3 trước publish
+
+## Output
+
+Deliverable theo template trong subagent — không wall of text. Suy luận dài giữ nội bộ; `REFINE` tối đa 1 lần.

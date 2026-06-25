@@ -1,0 +1,10 @@
+project_id,url,platform,active,segment,notes
+listen-kim-oanh-01,https://www.tiktok.com/@kimoanhland,tiktok,true,noxh_income,Kim Oanh Land chính thức — K-Home toàn quốc
+listen-khome-avenue-01,"https://www.tiktok.com/@khomeavenue,https://www.tiktok.com/@khome_avenue",tiktok,true,noxh_income,K-Home Avenue Đồng Nai — 2 account liên quan
+listen-sonnoxh-01,https://www.tiktok.com/@sonnoxh.offical,tiktok,true,noxh_income,SON NOXH (typo .offical trên TikTok)
+listen-trucngan-01,https://www.tiktok.com/@trucnganbdsnoxh,tiktok,true,noxh_income,Trúc Ngân BĐS NOXH
+listen-nhaoxahoi2026-01,https://www.tiktok.com/@nhaoxahoi2026,tiktok,true,noxh_income,Handle NOXH 2026 — tư vấn/hồ sơ
+listen-thoangtran-01,https://www.tiktok.com/@thoangtran73,tiktok,true,noxh_income,Creator NOXH/BĐS — bật sau khi test Apify
+listen-matmabds-01,https://www.tiktok.com/@matmabds,tiktok,true,general_inbound,BĐS tư vấn — kiểm tra ngách khi chạy
+listen-hungthuan-01,https://www.tiktok.com/@nhadathungthuan,tiktok,false,general_inbound,Hùng Thuận Nguyễn — BĐS chung (tắt mặc định tránh trùng quota)
+listen-broken-01,,tiktok,false,noxh_income,URL lỗi thiếu @username — bỏ qua hoặc sửa tay

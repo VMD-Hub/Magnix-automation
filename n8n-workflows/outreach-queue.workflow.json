@@ -1,0 +1,641 @@
+{
+  "name": "Magnix Agent 4 — Outreach Queue (drafts → outreach_queue)",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## Agent 4 — Outreach\n- **09:30 VN** · max **10**/lần\n- Input: `content_drafts` status=draft\n- Output: `outreach_queue`\n- **L3 bắt buộc:** `l3_approved=true` trước khi gửi Zalo",
+        "height": 180,
+        "width": 400
+      },
+      "id": "a400note",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -480,
+        160
+      ]
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "30 9 * * *"
+            }
+          ]
+        }
+      },
+      "id": "a401sched",
+      "name": "Schedule Daily Outreach",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "a402manual",
+      "name": "When clicking 'Execute workflow'",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "https://sheets.googleapis.com/v4/spreadsheets/1fYB4h_BTiKXa9O3lBah-tQonWpQOQMG2aSkSfPs6yU4/values/content_drafts!A%3AN",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleApi",
+        "options": {}
+      },
+      "id": "a403fetch",
+      "name": "Fetch content_drafts",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        240,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const BATCH = 10;\n\nfunction parseMeta(raw) {\n  if (!raw) return {};\n  try {\n    return typeof raw === 'string' ? JSON.parse(raw) : raw;\n  } catch {\n    return {};\n  }\n}\n\nconst res = $input.first().json;\nconst rows = Array.isArray(res.values) ? res.values : [];\nif (rows.length < 2) {\n  return [{ json: { empty: true, message: 'content_drafts trống' } }];\n}\n\nconst headers = rows[0].map((x) => String(x ?? '').trim().toLowerCase());\nconst out = [];\n\nfor (let i = 1; i < rows.length; i++) {\n  const cells = rows[i];\n  if (!cells?.some((c) => String(c ?? '').trim())) continue;\n\n  const row = { sheet_row: i + 1 };\n  headers.forEach((key, j) => {\n    if (key) row[key] = cells[j] ?? '';\n  });\n\n  const status = String(row.status || '').trim().toLowerCase();\n  const meta = parseMeta(row.meta);\n\n  if (meta.outreach_created === true) continue;\n  if (status !== 'draft' && status !== 'approved') continue;\n\n  const title = String(row.title || '').trim();\n  const hook = String(row.hook_line || '').trim();\n  if (!title || !hook) continue;\n\n  out.push({ json: row });\n  if (out.length >= BATCH) break;\n}\n\nif (!out.length) {\n  return [{ json: { empty: true, message: 'Không còn draft chờ outreach (status=draft, chưa outreach)' } }];\n}\n\nreturn out;"
+      },
+      "id": "a404filter",
+      "name": "Parse Filter Outreach Candidates",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        480,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "c1",
+              "leftValue": "={{ $json.empty }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "notEquals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "a405if",
+      "name": "IF Has Candidates",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        720,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $getWorkflowStaticData('global');\ndata.a4_stats = { outreach_ok: 0, l0_fail: 0, l1_fail: 0, parse_fail: 0 };\nreturn $input.all();"
+      },
+      "id": "a405reset",
+      "name": "Reset Run Stats",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        960,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "batchSize": 1,
+        "options": {}
+      },
+      "id": "a406loop",
+      "name": "Loop Outreach Candidates",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        1200,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const row = $('Loop Outreach Candidates').item?.json || $input.first().json;\n\nconst system = `Trợ lý Magnix — Value-First outreach. [/ghost] [/brief]\nChỉ trả JSON hợp lệ:\n{\"segment\":\"\",\"variant_a_cold\":\"\",\"variant_b_after_engagement\":\"\",\"variant_c_follow_up\":\"\",\"ghost_check_passed\":true,\"compliance_note\":\"\"}\n- variant_a_cold: ≤3 dòng, ≤280 ký tự\n- variant_b_after_engagement: ≤4 câu\n- Cấm: \"Trong kỷ nguyên số\", \"Hơn nữa\", \"Tóm lại\", \"cam kết\", \"Đừng bỏ lỡ\"`;\n\nconst userPayload = JSON.stringify({\n  segment: row.segment || 'general_inbound',\n  pain: String(row.hook_line || '').slice(0, 500),\n  lead_magnet_title: row.title,\n  context: 'cold',\n  channel: 'zalo',\n  source_normalized_key: row.source_normalized_key,\n});\n\ntry {\n  if ($env.DEEPSEEK_API_KEY) {\n    const res = await this.helpers.httpRequest({\n      method: 'POST',\n      url: $env.DEEPSEEK_API_URL || 'https://api.deepseek.com/chat/completions',\n      headers: {\n        Authorization: `Bearer ${$env.DEEPSEEK_API_KEY}`,\n        'Content-Type': 'application/json',\n      },\n      body: {\n        model: $env.DEEPSEEK_MODEL || 'deepseek-chat',\n        temperature: 0.5,\n        max_tokens: 1024,\n        response_format: { type: 'json_object' },\n        messages: [\n          { role: 'system', content: system },\n          { role: 'user', content: userPayload },\n        ],\n      },\n      json: true,\n    });\n    return [{ json: res }];\n  }\n\n  if ($env.ANTHROPIC_API_KEY) {\n    const model = $env.ANTHROPIC_DRAFT_MODEL || 'claude-sonnet-4-6';\n    const res = await this.helpers.httpRequest({\n      method: 'POST',\n      url: 'https://api.anthropic.com/v1/messages',\n      headers: {\n        'x-api-key': $env.ANTHROPIC_API_KEY,\n        'anthropic-version': '2023-06-01',\n        'Content-Type': 'application/json',\n      },\n      body: {\n        model,\n        max_tokens: 1024,\n        temperature: 0.5,\n        system,\n        messages: [{ role: 'user', content: userPayload }],\n      },\n      json: true,\n    });\n    return [{ json: res }];\n  }\n\n  throw new Error('Thiếu DEEPSEEK_API_KEY hoặc ANTHROPIC_API_KEY');\n} catch (e) {\n  return [{ json: { error: true, message: e.message } }];\n}"
+      },
+      "id": "a407llm",
+      "name": "LLM Outreach Script",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1440,
+        240
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "c1",
+              "leftValue": "={{ $json.error }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "notEquals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "a408ifllm",
+      "name": "IF LLM OK",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1680,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "function extractJsonString(raw) {\n  if (raw == null) throw new Error('EMPTY_LLM_OUTPUT');\n  const s = typeof raw === 'string' ? raw : JSON.stringify(raw);\n  const fenced = s.match(/```(?:json)?\\s*([\\s\\S]*?)```/i);\n  return (fenced ? fenced[1] : s).trim();\n}\n\nconst res = $input.first().json;\nconst raw =\n  res.choices?.[0]?.message?.content ??\n  res.content?.[0]?.text ??\n  res.message?.content ??\n  res;\n\ntry {\n  const parsed = JSON.parse(extractJsonString(raw));\n  const required = ['segment', 'variant_a_cold', 'variant_b_after_engagement', 'variant_c_follow_up'];\n  for (const k of required) {\n    if (!parsed[k] || !String(parsed[k]).trim()) throw new Error(`MISSING_${k.toUpperCase()}`);\n  }\n  return [{\n    json: {\n      ok: true,\n      outreach: {\n        segment: String(parsed.segment),\n        variant_a_cold: String(parsed.variant_a_cold).slice(0, 500),\n        variant_b_after_engagement: String(parsed.variant_b_after_engagement).slice(0, 1500),\n        variant_c_follow_up: String(parsed.variant_c_follow_up).slice(0, 1000),\n        ghost_check_passed: parsed.ghost_check_passed !== false,\n        compliance_note: String(parsed.compliance_note || '').slice(0, 500),\n      },\n    },\n  }];\n} catch (e) {\n  return [{ json: { ok: false, parse_error: e.message, raw_preview: String(raw).slice(0, 200) } }];\n}"
+      },
+      "id": "a409parse",
+      "name": "Parse Outreach JSON",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1920,
+        160
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "c1",
+              "leftValue": "={{ $json.ok }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "a410ifparse",
+      "name": "IF Parse OK",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        2160,
+        160
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const FORBIDDEN = [\n  /trong kỷ nguyên số/i,\n  /hơn nữa/i,\n  /tóm lại/i,\n  /cam kết/i,\n  /đừng bỏ lỡ/i,\n  /rất vui được/i,\n];\n\nconst item = $input.first().json;\nif (!item.ok || !item.outreach) {\n  return [{ json: { ...item, l0_pass: false, l1_pass: false } }];\n}\n\nconst o = item.outreach;\nconst text = [o.variant_a_cold, o.variant_b_after_engagement, o.variant_c_follow_up].join('\\n');\n\nconst l0_hits = FORBIDDEN.filter((re) => re.test(text)).map((re) => re.source);\nconst coldLines = o.variant_a_cold.split(/\\n/).filter((l) => l.trim()).length;\nconst l1_pass = coldLines <= 3 && o.variant_a_cold.length <= 320;\n\nif (l0_hits.length) {\n  return [{ json: { ok: false, l0_pass: false, l1_pass, l0_hits, error: 'L0_FORBIDDEN' } }];\n}\nif (!l1_pass) {\n  return [{ json: { ok: false, l0_pass: true, l1_pass: false, error: 'L1_LENGTH' } }];\n}\n\nreturn [{ json: { ...item, l0_pass: true, l1_pass: true, l0_hits: [] } }];"
+      },
+      "id": "a411l0l1",
+      "name": "L0 L1 Check",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2400,
+        80
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "c1",
+              "leftValue": "={{ $json.ok }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "a412ifqa",
+      "name": "IF QA Pass",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        2640,
+        80
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const source = $('Loop Outreach Candidates').item?.json || {};\nconst item = $input.first().json;\n\nif (!item.ok || !item.outreach) {\n  return [{ json: { ok: false, error: 'MERGE_SKIP', draft_sheet_row: source.sheet_row } }];\n}\n\nconst o = item.outreach;\nconst meta = JSON.stringify({\n  l0_hits: item.l0_hits || [],\n  ghost_check_passed: o.ghost_check_passed,\n  agent: 'agent-4',\n  draft_sheet_row: source.sheet_row,\n  created_at: new Date().toISOString(),\n}).slice(0, 50000);\n\nreturn [{\n  json: {\n    ok: true,\n    source_normalized_key: source.source_normalized_key,\n    draft_sheet_row: source.sheet_row,\n    append_row: [\n      String(source.source_normalized_key || ''),\n      String(source.title || ''),\n      String(o.segment || source.segment || ''),\n      o.variant_a_cold,\n      o.variant_b_after_engagement,\n      o.variant_c_follow_up,\n      o.ghost_check_passed ? 'true' : 'false',\n      o.compliance_note,\n      'draft',\n      'false',\n      new Date().toISOString(),\n      'agent4_outreach',\n      meta,\n    ],\n    draft_meta_patch: {\n      outreach_created: true,\n      outreach_status: 'draft',\n      outreach_at: new Date().toISOString(),\n    },\n  },\n}];"
+      },
+      "id": "a413merge",
+      "name": "Merge Outreach Row",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2880,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const SHEET_ID = '1fYB4h_BTiKXa9O3lBah-tQonWpQOQMG2aSkSfPs6yU4';\nconst TAB = 'outreach_queue';\n\nconst item = $input.first().json;\nif (!item.ok || !item.append_row) {\n  return [{ json: { ok: false, error: 'SKIP_APPEND' } }];\n}\n\nawait this.helpers.httpRequestWithAuthentication.call(this, 'googleApi', {\n  method: 'POST',\n  url: `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent(`${TAB}!A:M`)}:append?valueInputOption=USER_ENTERED&insertDataOption=INSERT_ROWS`,\n  body: { values: [item.append_row] },\n  json: true,\n});\n\nconst data = $getWorkflowStaticData('global');\nif (!data.a4_stats) data.a4_stats = { outreach_ok: 0, outreach_fail: 0 };\ndata.a4_stats.outreach_ok += 1;\n\nreturn [{ json: { ok: true, storage: 'outreach_queue', normalized_key: item.source_normalized_key } }];"
+      },
+      "id": "a414append",
+      "name": "Sheet Append outreach_queue",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3120,
+        0
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const SHEET_ID = '1fYB4h_BTiKXa9O3lBah-tQonWpQOQMG2aSkSfPs6yU4';\nconst TAB = 'content_drafts';\n\nconst merge = $('Merge Outreach Row').item?.json || $input.first().json;\nif (!merge.draft_sheet_row || !merge.draft_meta_patch) {\n  return [{ json: { ok: false, skip: true } }];\n}\n\nconst row = merge.draft_sheet_row;\nlet existing = {};\ntry {\n  const getRes = await this.helpers.httpRequestWithAuthentication.call(this, 'googleApi', {\n    method: 'GET',\n    url: `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent(`${TAB}!N${row}`)}`,\n    json: true,\n  });\n  const cell = getRes.values?.[0]?.[0];\n  if (cell) existing = JSON.parse(cell);\n} catch {\n  existing = {};\n}\n\nconst meta = JSON.stringify({ ...existing, ...merge.draft_meta_patch }).slice(0, 50000);\n\nawait this.helpers.httpRequestWithAuthentication.call(this, 'googleApi', {\n  method: 'PUT',\n  url: `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent(`${TAB}!N${row}`)}?valueInputOption=USER_ENTERED`,\n  body: { values: [[meta]] },\n  json: true,\n});\n\nreturn [{ json: { ok: true, draft_row_updated: row } }];"
+      },
+      "id": "a415mark",
+      "name": "Mark Draft Outreach",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3360,
+        0
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $getWorkflowStaticData('global');\nif (!data.a4_stats) data.a4_stats = {};\nconst j = $input.first().json;\nif (j.error === 'L1_LENGTH') data.a4_stats.l1_fail = (data.a4_stats.l1_fail || 0) + 1;\nelse data.a4_stats.l0_fail = (data.a4_stats.l0_fail || 0) + 1;\nreturn $input.all();"
+      },
+      "id": "a416qafail",
+      "name": "Track QA Fail",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2880,
+        160
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $getWorkflowStaticData('global');\nif (!data.a4_stats) data.a4_stats = {};\ndata.a4_stats.parse_fail = (data.a4_stats.parse_fail || 0) + 1;\nreturn $input.all();"
+      },
+      "id": "a418parsefail",
+      "name": "Track Parse Fail",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2400,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $getWorkflowStaticData('global');\nconst stats = data.a4_stats || {};\nreturn [{ json: {\n  ok: true,\n  workflow: 'outreach-queue',\n  stats,\n  batch_size: 10,\n  hint: (stats.outreach_ok || 0) === 0 ? 'Không outreach mới — hết draft hoặc L0/L1 fail' : 'Set l3_approved=true trên Sheet trước khi gửi',\n  finished_at: new Date().toISOString(),\n}}];"
+      },
+      "id": "a419summary",
+      "name": "Build Summary",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3600,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{ json: { ok: true, empty: true, message: 'No outreach candidates' } }];"
+      },
+      "id": "a420empty",
+      "name": "No Candidates Summary",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        720,
+        420
+      ]
+    }
+  ],
+  "connections": {
+    "Schedule Daily Outreach": {
+      "main": [
+        [
+          {
+            "node": "Fetch content_drafts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking 'Execute workflow'": {
+      "main": [
+        [
+          {
+            "node": "Fetch content_drafts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch content_drafts": {
+      "main": [
+        [
+          {
+            "node": "Parse Filter Outreach Candidates",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Filter Outreach Candidates": {
+      "main": [
+        [
+          {
+            "node": "IF Has Candidates",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF Has Candidates": {
+      "main": [
+        [
+          {
+            "node": "Reset Run Stats",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "No Candidates Summary",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Reset Run Stats": {
+      "main": [
+        [
+          {
+            "node": "Loop Outreach Candidates",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Outreach Candidates": {
+      "main": [
+        [
+          {
+            "node": "Build Summary",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "LLM Outreach Script",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "LLM Outreach Script": {
+      "main": [
+        [
+          {
+            "node": "IF LLM OK",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF LLM OK": {
+      "main": [
+        [
+          {
+            "node": "Parse Outreach JSON",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Loop Outreach Candidates",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Outreach JSON": {
+      "main": [
+        [
+          {
+            "node": "IF Parse OK",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF Parse OK": {
+      "main": [
+        [
+          {
+            "node": "L0 L1 Check",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Track Parse Fail",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "L0 L1 Check": {
+      "main": [
+        [
+          {
+            "node": "IF QA Pass",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF QA Pass": {
+      "main": [
+        [
+          {
+            "node": "Merge Outreach Row",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Track QA Fail",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Track QA Fail": {
+      "main": [
+        [
+          {
+            "node": "Loop Outreach Candidates",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge Outreach Row": {
+      "main": [
+        [
+          {
+            "node": "Sheet Append outreach_queue",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sheet Append outreach_queue": {
+      "main": [
+        [
+          {
+            "node": "Mark Draft Outreach",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mark Draft Outreach": {
+      "main": [
+        [
+          {
+            "node": "Loop Outreach Candidates",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Track Parse Fail": {
+      "main": [
+        [
+          {
+            "node": "Loop Outreach Candidates",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "No Candidates Summary": {
+      "main": [
+        [
+          {
+            "node": "Build Summary",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [
+    {
+      "name": "magnix"
+    },
+    {
+      "name": "agent-4"
+    },
+    {
+      "name": "outreach-queue"
+    }
+  ],
+  "meta": {
+    "templateCredsSetupCompleted": false
+  }
+}

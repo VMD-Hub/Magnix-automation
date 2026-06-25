@@ -1,0 +1,927 @@
+{
+  "name": "Magnix Agent 7 — Creatomate Video Render (video_drafts → MP4)",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## Agent 7 v2 — RenderScript từ beats\\n- **09:45 VN** · max **1**/lần\\n- Đọc `beats_json` → Pexels/scene → Creatomate RenderScript\\n- **Credentials:** googleApi + Header Auth Creatomate\\n- Cần `PEXELS_API_KEY` (B-roll per beat)",
+        "height": 200,
+        "width": 420
+      },
+      "id": "a700note",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -480,
+        160
+      ]
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "45 9 * * *"
+            }
+          ]
+        }
+      },
+      "id": "a701sched",
+      "name": "Schedule Daily Video Render",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "a702manual",
+      "name": "When clicking 'Execute workflow'",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "https://sheets.googleapis.com/v4/spreadsheets/1fYB4h_BTiKXa9O3lBah-tQonWpQOQMG2aSkSfPs6yU4/values/video_drafts!A%3AV",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleApi",
+        "options": {}
+      },
+      "id": "a703fetch",
+      "name": "Fetch video_drafts",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        240,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const VI_DIACRITIC = /[àáạảãâầấậẩẫăằắặẳẵèéẹẻẽêềếệểễìíịỉĩòóọỏõôồốộổỗơờớợởỡùúụủũưừứựửữỳýỵỷỹđ]/i;\n\nconst ROLE_STOCK_QUERY = {\n  hook: 'Vietnamese young couple phone apartment surprised',\n  tension: 'worried person mortgage paperwork desk close up',\n  value: 'Vietnam apartment living room interior family',\n  proof: 'calculator bank documents desk flat lay no people',\n  checklist: 'checklist document pen phone desk no people',\n  cta: 'Vietnam city skyline apartment sunset portrait',\n  brand_outro: 'Vietnam warm sunset apartment keys handover portrait',\n};\n\nfunction looksVietnamese(text) {\n  return VI_DIACRITIC.test(String(text || ''));\n}\n\nfunction sanitizeEnglishStockQuery(raw) {\n  return String(raw || '')\n    .replace(/[^\\x20-\\x7E]/g, ' ')\n    .replace(/\\s+/g, ' ')\n    .trim()\n    .slice(0, 80);\n}\n\nfunction isEnglishStockQuery(raw) {\n  const rawStr = String(raw || '').trim();\n  if (rawStr.length < 5) return false;\n  if (looksVietnamese(rawStr)) return false;\n\n  const q = sanitizeEnglishStockQuery(rawStr);\n  if (q.length < 5) return false;\n  if (q.length < rawStr.length * 0.85) return false;\n\n  const letters = q.match(/[a-zA-Z]/g) || [];\n  const alnum = q.replace(/\\s/g, '');\n  if (!alnum.length) return false;\n  return letters.length / alnum.length >= 0.65;\n}\n\nfunction parseBeatsJson(raw) {\n  if (!raw) return [];\n  try {\n    const beats = typeof raw === 'string' ? JSON.parse(raw) : raw;\n    return Array.isArray(beats) ? beats : [];\n  } catch {\n    return [];\n  }\n}\n\nfunction validateBeatsRenderSpec(beats) {\n  const errors = [];\n  if (!Array.isArray(beats) || beats.length < 4) {\n    return {\n      ok: false,\n      errors: [{ code: 'INSUFFICIENT_BEATS', hint: 'Cần ≥4 beats — re-run Agent 6 v3' }],\n      production_brief_version: null,\n    };\n  }\n\n  let versionHint = null;\n  for (let i = 0; i < beats.length; i += 1) {\n    const b = beats[i] || {};\n    const spec = b.visual_spec && typeof b.visual_spec === 'object' ? b.visual_spec : null;\n    const type = String(spec?.type || 'broll').toLowerCase();\n\n    if (!spec) {\n      errors.push({\n        beat_index: i,\n        role: b.role || null,\n        code: 'MISSING_VISUAL_SPEC',\n        hint: 'Beat thiếu visual_spec — Agent 6 phải production_brief_version: 3',\n      });\n      versionHint = versionHint || 'legacy';\n      continue;\n    }\n\n    if (type !== 'broll') continue;\n\n    const sq = String(spec.stock_query || '').trim();\n    if (!sq || sq.length < 5) {\n      errors.push({\n        beat_index: i,\n        role: b.role || null,\n        code: 'MISSING_STOCK_QUERY',\n        hint: 'visual_spec.stock_query bắt buộc (English, ≤80 chars)',\n      });\n      continue;\n    }\n    if (!isEnglishStockQuery(sq)) {\n      errors.push({\n        beat_index: i,\n        role: b.role || null,\n        code: 'STOCK_QUERY_NOT_ENGLISH',\n        stock_query_preview: sq.slice(0, 60),\n        hint: 'stock_query phải tiếng Anh — không dùng mô tả visual tiếng Việt',\n      });\n    }\n  }\n\n  return {\n    ok: errors.length === 0,\n    errors,\n    beat_count: beats.length,\n    production_brief_version: versionHint === 'legacy' ? '<3' : errors.length ? 'invalid' : '3',\n  };\n}\n\nfunction roleFallbackQuery(beat, segment) {\n  const role = String(beat?.role || 'value').toLowerCase();\n  const base = ROLE_STOCK_QUERY[role] || ROLE_STOCK_QUERY.value;\n  const segKey = String(segment || '').toLowerCase();\n  if (role === 'hook' && segKey === 'noxh_income') {\n    return 'Vietnam social housing young family apartment keys'.slice(0, 80);\n  }\n  if (role === 'hook' && segKey === 'sme_credit') {\n    return 'Vietnamese small business owner bank office'.slice(0, 80);\n  }\n  return base.slice(0, 80);\n}\n\nfunction resolvePexelsStockQuery(beat, segment) {\n  const spec = beat?.visual_spec || {};\n  const type = String(spec.type || 'broll').toLowerCase();\n  if (type !== 'broll') return null;\n\n  const sq = sanitizeEnglishStockQuery(spec.stock_query);\n  if (!isEnglishStockQuery(sq)) return null;\n\n  const lower = sq.toLowerCase();\n  const hasVn = lower.includes('vietnam') || lower.includes('vietnamese') || lower.includes('southeast asian');\n  const segKey = String(segment || '').toLowerCase();\n  const preferVn = segKey === 'noxh_income' || segKey === 'valuation' || segKey === 'sme_credit';\n  const noPeople = lower.includes('no people') || lower.includes('no person');\n\n  if (preferVn && !hasVn && !noPeople) {\n    return `Vietnamese ${sq}`.slice(0, 80);\n  }\n  return sq;\n}\n\nconst BATCH = 1;\n\nconst DONE_RENDER = new Set(['rendering', 'ready_for_review', 'published']);\n\nfunction parseMeta(raw) {\n  if (!raw) return {};\n  try {\n    return typeof raw === 'string' ? JSON.parse(raw) : raw;\n  } catch {\n    return {};\n  }\n}\n\nfunction truthyL3(v) {\n  if (v === true || v === 1) return true;\n  const s = String(v || '').trim().toLowerCase();\n  return s === 'true' || s === '1' || s === 'yes';\n}\n\nconst data = $getWorkflowStaticData('global');\nif (!data.a7_stats) data.a7_stats = {};\n\nconst res = $input.first().json;\nif (res?.error?.message || (res?.code && res.code >= 400)) {\n  data.a7_stats.fetch_error = String(res.error?.message || res.message || res.code).slice(0, 300);\n  return [{\n    json: {\n      empty: true,\n      message: 'Fetch video_drafts lỗi — gán credential googleApi trên node Fetch',\n      fetch_error: data.a7_stats.fetch_error,\n    },\n  }];\n}\n\nconst rows = Array.isArray(res.values) ? res.values : [];\nif (rows.length < 2) {\n  data.a7_stats.no_candidates = true;\n  data.a7_stats.candidate_count = 0;\n  return [{ json: { empty: true, message: 'video_drafts trống hoặc Fetch không trả values' } }];\n}\n\nconst headers = rows[0].map((x) => String(x || '').trim().toLowerCase());\nconst idx = (name) => headers.indexOf(name);\n\nconst col = {\n  key: idx('source_normalized_key'),\n  platform: idx('platform'),\n  segment: idx('segment'),\n  title: idx('title'),\n  hook: idx('hook_3s'),\n  spoken: idx('spoken_script'),\n  beats: idx('beats_json'),\n  onScreen: idx('on_screen_text'),\n  caption: idx('caption'),\n  cta: idx('cta_keyword'),\n  duration: idx('duration_sec'),\n  aspect: idx('aspect_ratio'),\n  status: idx('status'),\n  l3: idx('l3_approved'),\n  meta: idx('meta'),\n};\n\nconst candidates = [];\nconst nearMiss = [];\n\nfor (let r = 1; r < rows.length; r += 1) {\n  const row = rows[r];\n  if (!row?.some((c) => String(c || '').trim())) continue;\n\n  const status = String(row[col.status] || '').trim().toLowerCase();\n  const l3ok = truthyL3(row[col.l3]);\n  const meta = parseMeta(row[col.meta]);\n  const renderStatus = String(meta.render_status || '').trim().toLowerCase();\n  const title = String(row[col.title] || '').slice(0, 40);\n  const sheetRow = r + 1;\n\n  if (status !== 'approved') {\n    if (l3ok || status === 'ready_for_review' || meta.render_url) {\n      nearMiss.push({ row: sheetRow, reason: `status=${status || '(trống)'} (cần approved)`, title, render_url: meta.render_url || null });\n    }\n    continue;\n  }\n  if (!l3ok) {\n    nearMiss.push({ row: sheetRow, reason: 'l3_approved chưa tick', title });\n    continue;\n  }\n  if (DONE_RENDER.has(renderStatus)) {\n    nearMiss.push({ row: sheetRow, reason: `meta.render_status=${renderStatus} (đã render)`, title, render_url: meta.render_url || null });\n    continue;\n  }\n\n  candidates.push({\n    sheet_row: r + 1,\n    source_normalized_key: String(row[col.key] || ''),\n    platform: String(row[col.platform] || 'tiktok'),\n    segment: String(row[col.segment] || 'general_inbound'),\n    title: String(row[col.title] || ''),\n    hook_3s: String(row[col.hook] || ''),\n    spoken_script: String(row[col.spoken] || ''),\n    beats_json: String(row[col.beats] || '[]'),\n    on_screen_text: String(row[col.onScreen] || ''),\n    caption: String(row[col.caption] || ''),\n    cta_keyword: String(row[col.cta] || ''),\n    duration_sec: Number(row[col.duration] || 30) || 30,\n    aspect_ratio: String(row[col.aspect] || '9:16'),\n    meta,\n  });\n}\n\nconst eligible = [];\nfor (const c of candidates) {\n  const beats = parseBeatsJson(c.beats_json);\n  const spec = validateBeatsRenderSpec(beats);\n  if (spec.ok) {\n    eligible.push(c);\n    continue;\n  }\n  const first = spec.errors[0] || {};\n  nearMiss.push({\n    row: c.sheet_row,\n    reason: `beats v3 invalid: ${first.code || 'INVALID_RENDER_SPEC'}`,\n    title: String(c.title || '').slice(0, 40),\n    hint: first.hint || 'Re-run Agent 6 production_brief_version 3',\n  });\n}\n\ncandidates.length = 0;\ncandidates.push(...eligible);\n\ncandidates.sort((a, b) => a.sheet_row - b.sheet_row);\nconst batch = candidates.slice(0, BATCH);\n\ndata.a7_stats.candidate_count = candidates.length;\ndata.a7_stats.batch_count = batch.length;\n\nif (!batch.length) {\n  data.a7_stats.no_candidates = true;\n  data.a7_stats.near_miss = nearMiss.slice(0, 5);\n  if (nearMiss.length) {\n    const first = nearMiss[0];\n    const extra = first.hint ? ` — ${first.hint}` : '';\n    data.a7_stats.skip_hint = `Row ${first.row}: ${first.reason}${extra}${first.render_url ? ' — đã có render_url' : ''}`;\n  }\n  return [{\n    json: {\n      empty: true,\n      message: 'Không còn video_drafts approved + l3 + beats v3 (stock_query EN) chưa render',\n      pending_total: candidates.length,\n      near_miss: nearMiss.slice(0, 5),\n      skip_hint: data.a7_stats.skip_hint || null,\n    },\n  }];\n}\n\ndata.a7_stats.no_candidates = false;\nreturn batch.map((c) => ({ json: { ...c, empty: false } }));"
+      },
+      "id": "a704filter",
+      "name": "Parse Filter Approved",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        480,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "c1",
+              "leftValue": "={{ $json.sheet_row }}",
+              "rightValue": "",
+              "operator": {
+                "type": "number",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "a705if",
+      "name": "IF Has Candidates",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        720,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $getWorkflowStaticData('global');\ndata.a7_stats = { render_ok: 0, render_fail: 0, payload_fail: 0, sheet_fail: 0, no_candidates: false };\ndata.a7_poll = {};\nreturn $input.all();"
+      },
+      "id": "a706reset",
+      "name": "Reset Run Stats",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        960,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $getWorkflowStaticData('global');\nif (!data.a7_stats) data.a7_stats = {};\n\nconst blockEnv = String($env.N8N_BLOCK_ENV_ACCESS_IN_NODE ?? '');\nconst pexels = $env.PEXELS_API_KEY || '';\n\ndata.a7_env = {\n  render_engine: 'creatomate_renderscript_v2',\n  has_pexels_key: pexels.length > 8,\n  has_tts_url: String($env.MAGNIX_VIDEO_TTS_URL || '').length > 8,\n  has_webhook_token: String($env.MAGNIX_WEBHOOK_TOKEN || '').length > 8,\n  block_env_access: blockEnv,\n  env_blocked: blockEnv === 'true',\n  auth_note: 'Creatomate API key qua Header Auth credential trên HTTP POST',\n};\n\nif (!data.a7_env.has_tts_url || !data.a7_env.has_webhook_token) {\n  data.a7_stats.last_warning = 'Thiếu MAGNIX_VIDEO_TTS_URL hoặc MAGNIX_WEBHOOK_TOKEN — fallback Creatomate voice';\n}\n\nreturn $input.all();"
+      },
+      "id": "a706env",
+      "name": "Env Probe Creatomate",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1080,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "batchSize": 1,
+        "options": {}
+      },
+      "id": "a707loop",
+      "name": "Loop Render Candidates",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        1320,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "function normalizeVietnameseTtsText(raw) {\n  return String(raw || '')\n    .replace(/\\bNOXH\\b/gi, 'nhà ở xã hội')\n    .replace(/\\bCHECKLIST\\b/gi, 'cheklist')\n    .replace(/\\bSĐT\\b/gi, 'số điện thoại')\n    .replace(/\\bBĐS\\b/gi, 'bất động sản')\n    .replace(/\\bDTI\\b/gi, 'tỷ lệ trả nợ trên thu nhập')\n    .replace(/\\bSME\\b/gi, 'doanh nghiệp vừa và nhỏ')\n    .replace(/\\bCTA\\b/gi, 'lời kêu gọi hành động')\n    .replace(/\\bL3\\b/gi, 'duyệt thủ công')\n    .replace(/\\bZalo\\b/gi, 'Da-lo')\n    .replace(/[—–]/g, ', ')\n    .replace(/\\s*→\\s*/g, ', ')\n    .replace(/[\\u{1F300}-\\u{1FAFF}\\u{2600}-\\u{27BF}]/gu, '')\n    .replace(/\\s+/g, ' ')\n    .trim();\n}\n\nfunction estimateMp3DurationSec(bytes) {\n  const n = Number(bytes) || 0;\n  if (n < 200) return 0;\n  // mp3_44100_128 ≈ 16 KB/s\n  return Math.max(0.3, (n - 256) / 16000);\n}\n\nconst BODY_VOICE_SETTINGS = {\r\n  stability: 0.5,\r\n  similarity_boost: 0.78,\r\n  style: 0.12,\r\n  use_speaker_boost: true,\r\n  speed: 1.02,\r\n};\r\n\r\nconst HOOK_VOICE_SETTINGS = {\r\n  stability: 0.28,\r\n  similarity_boost: 0.65,\r\n  style: 0.45,\r\n  use_speaker_boost: true,\r\n  speed: 1.08,\r\n};\r\n\r\nconst BRAND_MOTIVATE_VOICE_SETTINGS = {\r\n  stability: 0.42,\r\n  similarity_boost: 0.72,\r\n  style: 0.38,\r\n  use_speaker_boost: true,\r\n  speed: 1.05,\r\n};\r\n\r\nconst BRAND_TAGLINE_VOICE_SETTINGS = {\r\n  stability: 0.55,\r\n  similarity_boost: 0.8,\r\n  style: 0.3,\r\n  use_speaker_boost: true,\r\n  speed: 0.96,\r\n};\r\n\r\nfunction prepareHookTtsSpoken(normalized) {\r\n  return prepareHookTtsSegments(normalized).join(' … ');\r\n}\r\n\r\nfunction prepareHookTtsSegments(normalized) {\r\n  const t = String(normalized || '').trim();\r\n  const incomeMatch = t.match(/^Thu nhập\\s+(.+?\\btriệu\\b)/i);\r\n\r\n  if (incomeMatch) {\r\n    const seg1 = `Thu nhập ${incomeMatch[1]}!`;\r\n    let seg2 = t.slice(incomeMatch[0].length).trim();\r\n    seg2 = seg2.replace(/^có đủ điều kiện\\b/i, 'Liệu có đủ điều kiện');\r\n    if (!/^Liệu\\b/i.test(seg2)) {\r\n      seg2 = seg2.replace(/^có\\b/i, 'Liệu có');\r\n    }\r\n    seg2 = seg2.replace(/\\s+không\\s*\\?$/i, ', khooông?');\r\n    if (!/\\?\\s*$/.test(seg2)) seg2 = `${seg2}?`;\r\n    return [seg1, seg2];\r\n  }\r\n\r\n  return [prepareHookTtsSpokenLegacy(t)];\r\n}\r\n\r\nfunction prepareHookTtsSpokenLegacy(normalized) {\r\n  return String(normalized || '')\r\n    .replace(/^Thu nhập\\s+/i, '')\r\n    .replace(/^(mười lăm triệu)/i, 'Mười lăm triệu một tháng…')\r\n    .replace(/\\bcó đủ điều kiện\\b/gi, 'có thật sự đủ')\r\n    .replace(/\\s+/g, ' ')\r\n    .trim();\r\n}\r\n\r\nfunction prepareBrandOutroTtsSegments(beat) {\r\n  const b = beat && typeof beat === 'object' ? beat : { spoken: beat };\r\n  const motivate = String(b.spoken_motivate || '').trim();\r\n  const tagline = String(b.spoken_tagline || '').trim();\r\n  if (motivate && tagline) {\r\n    const seg1 = `${motivate.replace(/[.…!?]+$/g, '').trim()}!`;\r\n    return [seg1, tagline];\r\n  }\r\n\r\n  const spoken = String(b.spoken || '').trim();\r\n  const tagIdx = spoken.indexOf('Hiện thực hóa');\r\n  if (tagIdx > 0) {\r\n    const seg1 = `${spoken.slice(0, tagIdx).trim().replace(/[.…!?]+$/g, '')}!`;\r\n    return [seg1, spoken.slice(tagIdx).trim()];\r\n  }\r\n  return spoken ? [spoken] : [];\r\n}\r\n\r\nfunction brandOutroSegmentVoiceSettings(segmentIndex) {\r\n  return segmentIndex === 1 ? BRAND_TAGLINE_VOICE_SETTINGS : BRAND_MOTIVATE_VOICE_SETTINGS;\r\n}\r\n\r\nfunction isHookBeat(role, beatIndex) {\r\n  const r = String(role || '').toLowerCase();\r\n  if (r === 'hook') return true;\r\n  if (r && r !== 'hook') return false;\r\n  return Number(beatIndex) === 0;\r\n}\r\n\r\nfunction isBrandOutroBeat(role) {\r\n  return String(role || '').toLowerCase() === 'brand_outro';\r\n}\r\n\r\nfunction resolveElevenLabsVoiceSettings(opts = {}) {\r\n  const { role, beat_index: beatIndex, disable_hook_preset: disableHook } = opts;\r\n  if (!disableHook && isHookBeat(role, beatIndex)) {\r\n    return { ...HOOK_VOICE_SETTINGS, preset: 'hook' };\r\n  }\r\n  if (isBrandOutroBeat(role)) {\r\n    return { ...BRAND_MOTIVATE_VOICE_SETTINGS, preset: 'brand_outro' };\r\n  }\r\n  return { ...BODY_VOICE_SETTINGS, preset: 'body' };\r\n}\r\n\r\n/* eslint-disable no-unused-vars -- stripped when inlined to n8n */\r\nif (typeof globalThis !== 'undefined') {\r\n  globalThis.BODY_VOICE_SETTINGS = BODY_VOICE_SETTINGS;\r\n  globalThis.HOOK_VOICE_SETTINGS = HOOK_VOICE_SETTINGS;\r\n  globalThis.BRAND_MOTIVATE_VOICE_SETTINGS = BRAND_MOTIVATE_VOICE_SETTINGS;\r\n  globalThis.BRAND_TAGLINE_VOICE_SETTINGS = BRAND_TAGLINE_VOICE_SETTINGS;\r\n  globalThis.isHookBeat = isHookBeat;\r\n  globalThis.isBrandOutroBeat = isBrandOutroBeat;\r\n  globalThis.resolveElevenLabsVoiceSettings = resolveElevenLabsVoiceSettings;\r\n  globalThis.prepareHookTtsSpoken = prepareHookTtsSpoken;\r\n  globalThis.prepareHookTtsSegments = prepareHookTtsSegments;\r\n  globalThis.prepareBrandOutroTtsSegments = prepareBrandOutroTtsSegments;\r\n  globalThis.brandOutroSegmentVoiceSettings = brandOutroSegmentVoiceSettings;\r\n}\n\nconst DEFAULT_VI_MODEL_ID = 'eleven_flash_v2_5';\nconst ACCEPTABLE_MODELS = new Set(['eleven_flash_v2_5', 'eleven_turbo_v2_5']);\n\nfunction isAcceptableTtsModel(modelId) {\n  return ACCEPTABLE_MODELS.has(String(modelId || '').trim());\n}\n\nfunction buildElevenLabsProviderString(voiceId, modelId) {\n  const m = modelId || DEFAULT_VI_MODEL_ID;\n  const v = String(voiceId || '').trim();\n  return `elevenlabs model_id=${m} voice_id=${v} stability=0.5`;\n}\n\nconst VI_DIACRITIC = /[àáạảãâầấậẩẫăằắặẳẵèéẹẻẽêềếệểễìíịỉĩòóọỏõôồốộổỗơờớợởỡùúụủũưừứựửữỳýỵỷỹđ]/i;\n\nconst ROLE_STOCK_QUERY = {\n  hook: 'Vietnamese young couple phone apartment surprised',\n  tension: 'worried person mortgage paperwork desk close up',\n  value: 'Vietnam apartment living room interior family',\n  proof: 'calculator bank documents desk flat lay no people',\n  checklist: 'checklist document pen phone desk no people',\n  cta: 'Vietnam city skyline apartment sunset portrait',\n  brand_outro: 'Vietnam warm sunset apartment keys handover portrait',\n};\n\nfunction looksVietnamese(text) {\n  return VI_DIACRITIC.test(String(text || ''));\n}\n\nfunction sanitizeEnglishStockQuery(raw) {\n  return String(raw || '')\n    .replace(/[^\\x20-\\x7E]/g, ' ')\n    .replace(/\\s+/g, ' ')\n    .trim()\n    .slice(0, 80);\n}\n\nfunction isEnglishStockQuery(raw) {\n  const rawStr = String(raw || '').trim();\n  if (rawStr.length < 5) return false;\n  if (looksVietnamese(rawStr)) return false;\n\n  const q = sanitizeEnglishStockQuery(rawStr);\n  if (q.length < 5) return false;\n  if (q.length < rawStr.length * 0.85) return false;\n\n  const letters = q.match(/[a-zA-Z]/g) || [];\n  const alnum = q.replace(/\\s/g, '');\n  if (!alnum.length) return false;\n  return letters.length / alnum.length >= 0.65;\n}\n\nfunction parseBeatsJson(raw) {\n  if (!raw) return [];\n  try {\n    const beats = typeof raw === 'string' ? JSON.parse(raw) : raw;\n    return Array.isArray(beats) ? beats : [];\n  } catch {\n    return [];\n  }\n}\n\nfunction validateBeatsRenderSpec(beats) {\n  const errors = [];\n  if (!Array.isArray(beats) || beats.length < 4) {\n    return {\n      ok: false,\n      errors: [{ code: 'INSUFFICIENT_BEATS', hint: 'Cần ≥4 beats — re-run Agent 6 v3' }],\n      production_brief_version: null,\n    };\n  }\n\n  let versionHint = null;\n  for (let i = 0; i < beats.length; i += 1) {\n    const b = beats[i] || {};\n    const spec = b.visual_spec && typeof b.visual_spec === 'object' ? b.visual_spec : null;\n    const type = String(spec?.type || 'broll').toLowerCase();\n\n    if (!spec) {\n      errors.push({\n        beat_index: i,\n        role: b.role || null,\n        code: 'MISSING_VISUAL_SPEC',\n        hint: 'Beat thiếu visual_spec — Agent 6 phải production_brief_version: 3',\n      });\n      versionHint = versionHint || 'legacy';\n      continue;\n    }\n\n    if (type !== 'broll') continue;\n\n    const sq = String(spec.stock_query || '').trim();\n    if (!sq || sq.length < 5) {\n      errors.push({\n        beat_index: i,\n        role: b.role || null,\n        code: 'MISSING_STOCK_QUERY',\n        hint: 'visual_spec.stock_query bắt buộc (English, ≤80 chars)',\n      });\n      continue;\n    }\n    if (!isEnglishStockQuery(sq)) {\n      errors.push({\n        beat_index: i,\n        role: b.role || null,\n        code: 'STOCK_QUERY_NOT_ENGLISH',\n        stock_query_preview: sq.slice(0, 60),\n        hint: 'stock_query phải tiếng Anh — không dùng mô tả visual tiếng Việt',\n      });\n    }\n  }\n\n  return {\n    ok: errors.length === 0,\n    errors,\n    beat_count: beats.length,\n    production_brief_version: versionHint === 'legacy' ? '<3' : errors.length ? 'invalid' : '3',\n  };\n}\n\nfunction roleFallbackQuery(beat, segment) {\n  const role = String(beat?.role || 'value').toLowerCase();\n  const base = ROLE_STOCK_QUERY[role] || ROLE_STOCK_QUERY.value;\n  const segKey = String(segment || '').toLowerCase();\n  if (role === 'hook' && segKey === 'noxh_income') {\n    return 'Vietnam social housing young family apartment keys'.slice(0, 80);\n  }\n  if (role === 'hook' && segKey === 'sme_credit') {\n    return 'Vietnamese small business owner bank office'.slice(0, 80);\n  }\n  return base.slice(0, 80);\n}\n\nfunction resolvePexelsStockQuery(beat, segment) {\n  const spec = beat?.visual_spec || {};\n  const type = String(spec.type || 'broll').toLowerCase();\n  if (type !== 'broll') return null;\n\n  const sq = sanitizeEnglishStockQuery(spec.stock_query);\n  if (!isEnglishStockQuery(sq)) return null;\n\n  const lower = sq.toLowerCase();\n  const hasVn = lower.includes('vietnam') || lower.includes('vietnamese') || lower.includes('southeast asian');\n  const segKey = String(segment || '').toLowerCase();\n  const preferVn = segKey === 'noxh_income' || segKey === 'valuation' || segKey === 'sme_credit';\n  const noPeople = lower.includes('no people') || lower.includes('no person');\n\n  if (preferVn && !hasVn && !noPeople) {\n    return `Vietnamese ${sq}`.slice(0, 80);\n  }\n  return sq;\n}\n\n/** Hook to hơn body — tránh cảm giác đều đều nhàm chán */\nconst HOOK_AUDIO_VOLUME = '130%';\nconst BODY_AUDIO_VOLUME = '96%';\nconst BRAND_AUDIO_VOLUME = '108%';\n/** Tiếng chuông ngắn — 1 lần đầu outro, volume thấp */\nconst MAGNIX_BELL_SFX_URL =\n  'https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3';\nconst BELL_SFX_VOLUME = '36%';\n\nfunction isBrandOutroBeat(beat) {\n  return String(beat?.role || '').toLowerCase() === 'brand_outro';\n}\n\nfunction hasBrandOutroInBeats(beats) {\n  return (beats || []).some((b) => isBrandOutroBeat(b));\n}\n\nfunction animationForIntent(intent, isHook) {\n  const base = {\n    time: 0,\n    duration: isHook ? 0.6 : 0.45,\n    easing: 'quadratic-out',\n    transition: true,\n  };\n  const key = String(intent || '').toLowerCase();\n  if (key === 'pattern_interrupt' || isHook) {\n    return [{ ...base, type: 'scale', start_scale: '115%', end_scale: '100%' }];\n  }\n  if (key === 'reframe') {\n    return [{ ...base, type: 'text-slide', scope: 'split-clip', split: 'line' }];\n  }\n  if (key === 'checklist_tease') {\n    return [{ ...base, type: 'fade', fade: true }];\n  }\n  if (key === 'cta_soft') {\n    return [{ time: 0.2, duration: 0.5, type: 'fade', fade: true }];\n  }\n  if (key === 'brand_close') {\n    return [{ time: 0, duration: 0.7, type: 'fade', fade: true }];\n  }\n  return [{ ...base, type: 'fade', fade: true }];\n}\n\nfunction segmentAccent(segment) {\n  const map = {\n    noxh_income: '#2ecc71',\n    valuation: '#3498db',\n    sme_credit: '#9b59b6',\n    general_inbound: '#e67e22',\n  };\n  return map[String(segment || '').toLowerCase()] || '#3498db';\n}\n\nfunction buildCreatomateSourceFromBeats(opts) {\n  const beats = Array.isArray(opts.beats) ? opts.beats : [];\n  const durationSec = Number(opts.duration_sec || 30);\n  const segment = opts.segment || 'general_inbound';\n  const title = String(opts.title || '').slice(0, 80);\n  const ctaKeyword = String(opts.cta_keyword || 'CHECKLIST').slice(0, 40);\n  const sceneMedia = Array.isArray(opts.sceneMedia) ? opts.sceneMedia : [];\n  const accent = segmentAccent(segment);\n\n  const width = 1080;\n  const height = 1920;\n  const rootElements = [];\n  let timelineCursor = 0;\n\n  for (let i = 0; i < beats.length; i += 1) {\n    const beat = beats[i] || {};\n    const plannedStart = Math.max(0, Number(beat.start_sec) || 0);\n    const plannedEnd = Number(beat.end_sec);\n    const plannedDur = Math.max(\n      0.8,\n      (Number.isFinite(plannedEnd) ? plannedEnd : plannedStart + 3) - plannedStart\n    );\n    const media = sceneMedia[i] || {};\n    const audioDur = Number(media.audioDurationSec) || 0;\n    const dur = Math.max(plannedDur, audioDur > 0 ? audioDur + 0.2 : 0);\n    const start = timelineCursor;\n    timelineCursor += dur;\n    const isBrandOutro = isBrandOutroBeat(beat);\n    const isHook = !isBrandOutro && (i === 0 || String(beat.role || '').toLowerCase() === 'hook');\n    const sceneEls = [];\n\n    if (media.videoUrl) {\n      sceneEls.push({\n        type: 'video',\n        source: media.videoUrl,\n        track: 1,\n        time: 0,\n        duration: dur,\n        width: '100%',\n        height: '100%',\n        x: '50%',\n        y: '50%',\n        fit: 'cover',\n      });\n    } else {\n      sceneEls.push({\n        type: 'shape',\n        shape: 'rectangle',\n        fill_color: beat.visual_spec?.fallback_color || '#0f172a',\n        width: '100%',\n        height: '100%',\n        track: 1,\n        time: 0,\n        duration: dur,\n      });\n    }\n\n    sceneEls.push({\n      type: 'shape',\n      shape: 'rectangle',\n      fill_color: isBrandOutro ? 'rgba(0,0,0,0.48)' : 'rgba(0,0,0,0.42)',\n      width: '100%',\n      height: '38%',\n      y: '82%',\n      x: '50%',\n      track: 2,\n      time: 0,\n      duration: dur,\n    });\n\n    if (isBrandOutro) {\n      const bellUrl = String(beat.visual_spec?.bell_sfx_url || MAGNIX_BELL_SFX_URL).trim();\n      if (bellUrl) {\n        sceneEls.push({\n          type: 'audio',\n          source: bellUrl,\n          track: 6,\n          time: 0,\n          duration: Math.min(1, dur * 0.18),\n          volume: BELL_SFX_VOLUME,\n        });\n      }\n    }\n\n    const onScreen = String(beat.on_screen || '').trim().slice(0, 100)\n      || String(beat.spoken || '').trim().slice(0, 80);\n    if (onScreen) {\n      sceneEls.push({\n        type: 'text',\n        text: onScreen,\n        track: 3,\n        time: 0,\n        duration: dur,\n        width: '92%',\n        height: '28%',\n        x: '50%',\n        y: '82%',\n        x_alignment: '50%',\n        y_alignment: '50%',\n        font_family: 'Inter',\n        font_weight: isBrandOutro ? '600' : '700',\n        font_size: isHook ? '7.5 vmin' : isBrandOutro ? '5.4 vmin' : '6 vmin',\n        line_height: '110%',\n        fill_color: '#ffffff',\n        stroke_color: '#000000',\n        stroke_width: '0.25 vmin',\n        animations: animationForIntent(beat.retention_intent, isHook),\n      });\n    }\n\n    if (isBrandOutro && String(beat.on_screen_tagline || '').trim()) {\n      const tagStart = Math.max(0, dur * 0.48);\n      sceneEls.push({\n        type: 'text',\n        text: String(beat.on_screen_tagline).trim().slice(0, 80),\n        track: 4,\n        time: tagStart,\n        duration: Math.max(0.8, dur - tagStart),\n        width: '90%',\n        x: '50%',\n        y: '88%',\n        x_alignment: '50%',\n        y_alignment: '50%',\n        font_family: 'Inter',\n        font_weight: '800',\n        font_size: '5.5 vmin',\n        fill_color: accent,\n        stroke_color: '#000000',\n        stroke_width: '0.2 vmin',\n        animations: [{ time: 0, duration: 0.5, type: 'fade', fade: true }],\n      });\n      sceneEls.push({\n        type: 'text',\n        text: 'Magnix',\n        track: 5,\n        time: tagStart + 0.2,\n        duration: Math.max(0.6, dur - tagStart - 0.2),\n        width: '40%',\n        x: '50%',\n        y: '94%',\n        x_alignment: '50%',\n        y_alignment: '50%',\n        font_family: 'Inter',\n        font_weight: '800',\n        font_size: '4 vmin',\n        fill_color: '#e2e8f0',\n        animations: [{ time: 0, duration: 0.45, type: 'fade', fade: true }],\n      });\n    }\n\n    if (isHook && title) {\n      sceneEls.push({\n        type: 'text',\n        text: title.slice(0, 60),\n        track: 4,\n        time: 0,\n        duration: Math.min(2.5, dur),\n        width: '88%',\n        x: '50%',\n        y: '12%',\n        x_alignment: '50%',\n        y_alignment: '50%',\n        font_family: 'Inter',\n        font_weight: '800',\n        font_size: '5 vmin',\n        fill_color: accent,\n        animations: [{ time: 0, duration: 0.4, type: 'fade', fade: true }],\n      });\n    }\n\n    const spoken = String(beat.spoken || '').trim();\n    if (media.audioUrl) {\n      sceneEls.push({\n        type: 'audio',\n        source: media.audioUrl,\n        track: 5,\n        time: 0,\n        volume: isHook ? HOOK_AUDIO_VOLUME : isBrandOutro ? BRAND_AUDIO_VOLUME : BODY_AUDIO_VOLUME,\n      });\n    } else if (spoken && opts.useCreatomateVoice !== false) {\n      sceneEls.push({\n        type: 'voice',\n        track: 5,\n        time: 0,\n        duration: dur,\n        text: spoken.slice(0, 800),\n        provider: opts.voiceProvider || 'google',\n        voice_id: opts.voiceId || undefined,\n      });\n    }\n\n    rootElements.push({\n      name: `Scene-${i + 1}-${String(beat.role || 'beat')}`,\n      type: 'composition',\n      track: 1,\n      time: start,\n      duration: dur,\n      elements: sceneEls,\n    });\n  }\n\n  const lastBeat = beats[beats.length - 1];\n  const totalDuration = Math.max(durationSec, timelineCursor + 1.5);\n  const ctaStart = Math.max(0, totalDuration - 2.5);\n  if (ctaKeyword && ctaStart < totalDuration && !hasBrandOutroInBeats(beats)) {\n    rootElements.push({\n      type: 'text',\n      track: 2,\n      time: ctaStart,\n      duration: Math.min(2.5, totalDuration - ctaStart),\n      text: `COMMENT \"${ctaKeyword}\" để nhận checklist`,\n      width: '90%',\n      x: '50%',\n      y: '92%',\n      x_alignment: '50%',\n      font_family: 'Inter',\n      font_weight: '700',\n      font_size: '5 vmin',\n      fill_color: accent,\n      animations: [{ time: 0, duration: 0.35, type: 'fade', fade: true }],\n    });\n  }\n\n  return {\n    output_format: 'mp4',\n    width,\n    height,\n    duration: totalDuration,\n    frame_rate: 30,\n    elements: rootElements,\n  };\n}\n\nconst row = $('Loop Render Candidates').item?.json || $input.first().json;\n\nfunction prepareBeatsForRender(beats) {\n  return beats.map((beat) => ({\n    ...beat,\n    spoken: normalizeVietnameseTtsText(beat?.spoken),\n    spoken_motivate: beat?.spoken_motivate\n      ? normalizeVietnameseTtsText(beat.spoken_motivate)\n      : undefined,\n    spoken_tagline: beat?.spoken_tagline\n      ? normalizeVietnameseTtsText(beat.spoken_tagline)\n      : undefined,\n  }));\n}\n\nasync function pexelsPortraitUrl(query) {\n  const key = $env.PEXELS_API_KEY;\n  if (!key) return null;\n  try {\n    const q = encodeURIComponent(query);\n    const res = await this.helpers.httpRequest({\n      method: 'GET',\n      url: `https://api.pexels.com/videos/search?query=${q}&orientation=portrait&size=medium&per_page=8`,\n      headers: { Authorization: key },\n      json: true,\n    });\n    const videos = res.videos || [];\n    for (const vid of videos) {\n      const files = (vid.video_files || []).filter((f) => f.link && f.height);\n      files.sort((a, b) => (b.height || 0) - (a.height || 0));\n      const pick = files.find((f) => f.height >= 720) || files[0];\n      if (pick?.link) return pick.link;\n    }\n  } catch (e) {\n    return { pexels_error: String(e.message || e).slice(0, 200) };\n  }\n  return null;\n}\n\nasync function fetchElevenLabsBatch(beats, jobId) {\n  const base = ($env.MAGNIX_VIDEO_TTS_URL || '').replace(/\\/$/, '');\n  const token = $env.MAGNIX_WEBHOOK_TOKEN || '';\n  if (!base || !token) return { skipped: true, reason: 'NO_TTS_URL_OR_TOKEN' };\n  if (String($env.CREATOMATE_DISABLE_VOICE || '') === 'true') {\n    return { skipped: true, reason: 'VOICE_DISABLED' };\n  }\n\n  try {\n    const payload = {\n      job_id: jobId,\n      beats: beats\n        .map((b, i) => ({\n          beat_index: i,\n          spoken: String(b.spoken || '').trim().slice(0, 800),\n          role: b.role || null,\n          spoken_motivate: b.spoken_motivate\n            ? String(b.spoken_motivate).trim().slice(0, 400)\n            : undefined,\n          spoken_tagline: b.spoken_tagline\n            ? String(b.spoken_tagline).trim().slice(0, 400)\n            : undefined,\n        }))\n        .filter((b) => b.spoken.length > 0),\n    };\n    const res = await this.helpers.httpRequest({\n      method: 'POST',\n      url: `${base}/magnix/video-tts/batch`,\n      headers: {\n        Authorization: `Bearer ${token}`,\n        'Content-Type': 'application/json',\n      },\n      body: payload,\n      json: true,\n      timeout: 180000,\n    });\n    return {\n      ...res,\n      requested_text_preview: payload.beats.map((b) => ({\n        beat_index: b.beat_index,\n        spoken: b.spoken,\n      })),\n    };\n  } catch (e) {\n    return { ok: false, tts_error: String(e.message || e).slice(0, 300) };\n  }\n}\n\nasync function synthesizeDirectElevenLabs(text, beatOpts = {}) {\n  const apiKey = $env.ELEVENLABS_API_KEY || '';\n  const voiceId = $env.ELEVENLABS_VOICE_ID || '';\n  const modelId = $env.ELEVENLABS_MODEL_ID || DEFAULT_VI_MODEL_ID;\n  const resolved = resolveElevenLabsVoiceSettings({\n    role: beatOpts.role,\n    beat_index: beatOpts.beat_index,\n    disable_hook_preset: beatOpts.disable_hook_preset,\n  });\n  const { preset, ...voice_settings } = resolved;\n\n  let spoken = String(text || '').trim().slice(0, 800);\n  if (!apiKey || !voiceId || !spoken) return null;\n\n  async function synthOne(segmentText, settings) {\n    const buf = await this.helpers.httpRequest({\n      method: 'POST',\n      url: `https://api.elevenlabs.io/v1/text-to-speech/${encodeURIComponent(voiceId)}?output_format=mp3_44100_128`,\n      headers: {\n        'xi-api-key': apiKey,\n        'Content-Type': 'application/json',\n        Accept: 'audio/mpeg',\n      },\n      body: {\n        text: String(segmentText || '').slice(0, 400),\n        model_id: modelId,\n        language_code: 'vi',\n        apply_text_normalization: 'on',\n        voice_settings: settings,\n      },\n      encoding: 'arraybuffer',\n      json: false,\n    });\n    const mp3 = Buffer.isBuffer(buf) ? buf : Buffer.from(buf || []);\n    return mp3.length >= 100 ? mp3 : null;\n  }\n\n  if (preset === 'hook') {\n    const segments = prepareHookTtsSegments(spoken);\n    if (segments.length > 1) {\n      const parts = [];\n      for (const seg of segments) {\n        const part = await synthOne.call(this, seg, voice_settings);\n        if (!part) return null;\n        parts.push(part);\n      }\n      const mp3 = Buffer.concat(parts);\n      return { mp3, modelId, bytes: mp3.length, preset, hook_delivery: 'split_pause_v3' };\n    }\n    spoken = segments[0].slice(0, 800);\n  }\n\n  if (preset === 'brand_outro') {\n    const segments = prepareBrandOutroTtsSegments({\n      spoken,\n      spoken_motivate: beatOpts.spoken_motivate,\n      spoken_tagline: beatOpts.spoken_tagline,\n    });\n    if (segments.length > 1) {\n      const parts = [];\n      for (let i = 0; i < segments.length; i += 1) {\n        const part = await synthOne.call(this, segments[i], brandOutroSegmentVoiceSettings(i));\n        if (!part) return null;\n        parts.push(part);\n      }\n      const mp3 = Buffer.concat(parts);\n      return { mp3, modelId, bytes: mp3.length, preset, hook_delivery: 'brand_split_v1' };\n    }\n  }\n\n  const mp3 = await synthOne.call(this, spoken, voice_settings);\n  if (!mp3) return null;\n  return { mp3, modelId, bytes: mp3.length, preset };\n}\n\nasync function uploadTtsMp3ToDrive(fileName, mp3Buffer, folderId) {\n  const boundary = `magnix_tts_${Date.now()}`;\n  const metadata = JSON.stringify({\n    name: fileName,\n    parents: [folderId],\n    mimeType: 'audio/mpeg',\n  });\n  const buf = Buffer.isBuffer(mp3Buffer) ? mp3Buffer : Buffer.from(mp3Buffer);\n  const multipartBody = Buffer.concat([\n    Buffer.from(`--${boundary}\\r\\nContent-Type: application/json; charset=UTF-8\\r\\n\\r\\n${metadata}\\r\\n`),\n    Buffer.from(`--${boundary}\\r\\nContent-Type: audio/mpeg\\r\\n\\r\\n`),\n    buf,\n    Buffer.from(`\\r\\n--${boundary}--`),\n  ]);\n\n  const uploaded = await this.helpers.httpRequestWithAuthentication.call(this, 'googleApi', {\n    method: 'POST',\n    url: 'https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id&supportsAllDrives=true',\n    headers: { 'Content-Type': `multipart/related; boundary=${boundary}` },\n    body: multipartBody,\n    json: true,\n  });\n\n  if (!uploaded?.id) return null;\n\n  await this.helpers.httpRequestWithAuthentication.call(this, 'googleApi', {\n    method: 'POST',\n    url: `https://www.googleapis.com/drive/v3/files/${uploaded.id}/permissions?supportsAllDrives=true`,\n    headers: { 'Content-Type': 'application/json' },\n    body: { type: 'anyone', role: 'reader' },\n    json: true,\n  });\n\n  return `https://drive.google.com/uc?export=download&id=${uploaded.id}`;\n}\n\nasync function fetchDirectElevenLabsToDrive(beats, jobId) {\n  const folderId = $env.DRIVE_VIDEO_FOLDER_READY || $env.GOOGLE_DRIVE_FOLDER_ID || '';\n  if (!$env.ELEVENLABS_API_KEY || !$env.ELEVENLABS_VOICE_ID || !folderId) {\n    return { ok: false, reason: 'NO_DIRECT_ELEVENLABS_OR_DRIVE_FOLDER' };\n  }\n\n  const tracks = [];\n  const errors = [];\n  for (let i = 0; i < beats.length; i += 1) {\n    const spoken = String(beats[i]?.spoken || '').trim();\n    if (!spoken) continue;\n    try {\n      const synth = await synthesizeDirectElevenLabs.call(this, spoken, {\n        role: beats[i]?.role,\n        beat_index: i,\n        spoken_motivate: beats[i]?.spoken_motivate,\n        spoken_tagline: beats[i]?.spoken_tagline,\n      });\n      if (!synth) {\n        errors.push({ beat_index: i, error: 'SYNTH_EMPTY' });\n        continue;\n      }\n      const fileName = `magnix-tts-${jobId}-${i}.mp3`.slice(0, 120);\n      const audioUrl = await uploadTtsMp3ToDrive.call(this, fileName, synth.mp3, folderId);\n      if (!audioUrl) {\n        errors.push({ beat_index: i, error: 'DRIVE_UPLOAD_FAIL' });\n        continue;\n      }\n      tracks.push({\n        beat_index: i,\n        audio_url: audioUrl,\n        bytes: synth.bytes,\n        duration_sec: estimateMp3DurationSec(synth.bytes),\n      });\n    } catch (e) {\n      errors.push({ beat_index: i, error: String(e.message || e).slice(0, 120) });\n    }\n  }\n\n  return {\n    ok: tracks.length > 0,\n    provider: 'elevenlabs_direct',\n    model_id: $env.ELEVENLABS_MODEL_ID || DEFAULT_VI_MODEL_ID,\n    tracks,\n    errors: errors.length ? errors : undefined,\n  };\n}\n\nfunction applyTtsTracks(sceneMedia, ttsResult, jobId, ttsLog) {\n  if (!ttsResult?.tracks || !Array.isArray(ttsResult.tracks)) return 0;\n  ttsLog.provider = ttsResult.provider || 'elevenlabs';\n  ttsLog.model_id = ttsResult.model_id || null;\n  ttsLog.text_preview = ttsResult.requested_text_preview || null;\n  let ok = 0;\n  for (const tr of ttsResult.tracks) {\n    const idx = Number(tr.beat_index);\n    if (!Number.isFinite(idx) || !sceneMedia[idx] || !tr.audio_url) continue;\n    const separator = String(tr.audio_url).includes('?') ? '&' : '?';\n    sceneMedia[idx].audioUrl = `${tr.audio_url}${separator}v=${encodeURIComponent(jobId)}`;\n    sceneMedia[idx].audioDurationSec = Number(tr.duration_sec) || estimateMp3DurationSec(tr.bytes);\n    ok += 1;\n  }\n  if (ttsResult.errors) ttsLog.errors = ttsResult.errors;\n  ttsLog.ok_count = ok;\n  return ok;\n}\n\nconst beats = parseBeatsJson(row.beats_json);\nconst durationSec = Number(row.duration_sec || 30) || 30;\nconst specCheck = validateBeatsRenderSpec(beats);\n\nif (!specCheck.ok) {\n  return [{\n    json: {\n      ok: false,\n      error: 'INVALID_BEATS_RENDER_SPEC',\n      hint: 'Re-run Agent 6 (production_brief_version: 3) — mỗi beat broll cần visual_spec.stock_query tiếng Anh',\n      sheet_row: row.sheet_row,\n      source_normalized_key: row.source_normalized_key,\n      render_spec_errors: specCheck.errors.slice(0, 8),\n      beat_count: specCheck.beat_count || beats.length,\n    },\n  }];\n}\n\nconst renderBeats = prepareBeatsForRender(beats);\nconst sceneMedia = [];\nconst pexelsLog = [];\nconst segment = row.segment || 'general_inbound';\nlet pexelsHits = 0;\n\nfor (let i = 0; i < renderBeats.length; i += 1) {\n  const beat = renderBeats[i];\n  const query = resolvePexelsStockQuery(beat, segment);\n  const entry = {\n    beat_index: i,\n    role: beat.role || null,\n    stock_query: query,\n    stock_query_source: 'visual_spec.stock_query',\n    videoUrl: null,\n    audioUrl: null,\n  };\n\n  if (query) {\n    const pexelsResult = await pexelsPortraitUrl.call(this, query);\n    if (typeof pexelsResult === 'string') {\n      entry.videoUrl = pexelsResult;\n      pexelsHits += 1;\n    } else if (pexelsResult?.pexels_error) {\n      entry.pexels_error = pexelsResult.pexels_error;\n    }\n  }\n\n  pexelsLog.push({\n    i,\n    role: beat.role || null,\n    query,\n    ok: Boolean(entry.videoUrl),\n  });\n  sceneMedia.push(entry);\n}\n\nconst minPexels = Math.min(2, renderBeats.length);\nif ($env.PEXELS_API_KEY && pexelsHits < minPexels) {\n  return [{\n    json: {\n      ok: false,\n      error: 'PEXELS_LOW_HIT_RATE',\n      hint: `Chỉ ${pexelsHits}/${renderBeats.length} scene có B-roll — kiểm tra stock_query EN cụ thể hơn`,\n      sheet_row: row.sheet_row,\n      pexels_scenes: pexelsLog,\n    },\n  }];\n}\n\nconst baseJobId = String(row.source_normalized_key || `row-${row.sheet_row}`).slice(0, 60);\nconst jobId = `${baseJobId}-${Date.now()}`.replace(/[^a-zA-Z0-9._-]/g, '_').slice(0, 80);\nconst ttsLog = { provider: null, ok_count: 0, errors: null, model_id: null };\n\nlet ttsResult = await fetchElevenLabsBatch.call(this, renderBeats, jobId);\nconst vpsModelOk = ttsResult?.model_id ? isAcceptableTtsModel(ttsResult.model_id) : false;\n\nif (ttsResult?.tracks?.length && !vpsModelOk) {\n  ttsLog.vps_rejected = `model ${ttsResult.model_id} không hỗ trợ tiếng Việt — chuyển direct ElevenLabs`;\n  ttsResult = { tracks: [] };\n}\n\nlet okCount = applyTtsTracks(sceneMedia, ttsResult, jobId, ttsLog);\n\nif (okCount === 0) {\n  if (ttsResult?.tts_error) ttsLog.errors = ttsResult.tts_error;\n  else if (ttsResult?.skipped) ttsLog.skipped = ttsResult.reason;\n\n  const direct = await fetchDirectElevenLabsToDrive.call(this, renderBeats, jobId);\n  if (direct.ok) {\n    ttsLog.fallback = 'elevenlabs_direct_drive';\n    okCount = applyTtsTracks(sceneMedia, direct, jobId, ttsLog);\n  } else if (!ttsLog.errors) {\n    ttsLog.direct_fail = direct.reason || direct.errors;\n  }\n}\n\nif (okCount === 0) {\n  return [{\n    json: {\n      ok: false,\n      error: 'TTS_VIETNAMESE_FAILED',\n      hint: 'Deploy webhooks/video-tts (eleven_flash_v2_5) HOẶC set ELEVENLABS_API_KEY + ELEVENLABS_VOICE_ID trên n8n env',\n      sheet_row: row.sheet_row,\n      tts: ttsLog,\n    },\n  }];\n}\n\nconst hasElevenLabs = okCount > 0;\n\nconst renderSource = buildCreatomateSourceFromBeats({\n  beats: renderBeats,\n  duration_sec: durationSec,\n  segment: row.segment,\n  title: row.title,\n  cta_keyword: row.cta_keyword,\n  sceneMedia,\n  useCreatomateVoice: !hasElevenLabs && String($env.CREATOMATE_DISABLE_VOICE || '') !== 'true',\n  voiceProvider: $env.CREATOMATE_VOICE_PROVIDER || 'google',\n  voiceId: $env.CREATOMATE_VOICE_ID || undefined,\n});\n\nconst payload = {\n  ...renderSource,\n  output_format: 'mp4',\n  metadata: String(row.source_normalized_key || row.sheet_row || '').slice(0, 200),\n};\n\nreturn [{\n  json: {\n    ok: true,\n    sheet_row: row.sheet_row,\n    source_normalized_key: row.source_normalized_key,\n    platform: row.platform,\n    title: row.title,\n    beats_count: beats.length,\n    duration_sec: durationSec,\n    render_duration_sec: payload.duration,\n    pexels_scenes: pexelsLog,\n    pexels_hit_rate: `${pexelsHits}/${renderBeats.length}`,\n    tts: ttsLog,\n    tts_job_id: jobId,\n    render_engine: 'creatomate_renderscript_v2',\n    creatomate_payload: payload,\n    existing_meta: row.meta || {},\n  },\n}];"
+      },
+      "id": "a708payload",
+      "name": "Build Creatomate Payload",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1560,
+        240
+      ],
+      "onError": "continueRegularOutput",
+      "credentials": {
+        "googleApi": {
+          "id": "magnix-google-sa",
+          "name": "Magnix Google Service Account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "c1",
+              "leftValue": "={{ $json.ok }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "a709ifpayload",
+      "name": "IF Payload OK",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1800,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.creatomate.com/v2/renders",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json.creatomate_payload) }}",
+        "options": {}
+      },
+      "id": "a710post",
+      "name": "HTTP POST Creatomate",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2040,
+        160
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const prev = $('Build Creatomate Payload').item?.json || {};\nconst res = $input.first().json || {};\n\nif (res?.error || res?.message?.includes?.('Authorization')) {\n  return [{\n    json: {\n      ok: false,\n      render_ok: false,\n      done_polling: true,\n      error: 'CREATOMATE_POST_FAILED',\n      detail: String(res.error?.message || res.message || res.error || '').slice(0, 300),\n      sheet_row: prev.sheet_row,\n      source_normalized_key: prev.source_normalized_key,\n    },\n  }];\n}\n\nconst first = Array.isArray(res) ? res[0] : res;\nconst renderId = first?.id || first?.render_id || null;\nconst renderStatus = first?.status || 'planned';\nconst renderUrl = first?.url || first?.download_url || null;\n\nif (!renderId) {\n  return [{\n    json: {\n      ok: false,\n      render_ok: false,\n      done_polling: true,\n      error: 'CREATOMATE_NO_RENDER_ID',\n      raw: res,\n      sheet_row: prev.sheet_row,\n      source_normalized_key: prev.source_normalized_key,\n    },\n  }];\n}\n\nreturn [{\n  json: {\n    ok: true,\n    render_id: renderId,\n    render_status: renderStatus,\n    render_url_early: renderUrl,\n    sheet_row: prev.sheet_row,\n    source_normalized_key: prev.source_normalized_key,\n    title: prev.title,\n    platform: prev.platform,\n    background_url: prev.background_url,\n    existing_meta: prev.existing_meta || {},\n    beats_count: prev.beats_count,\n    render_engine: prev.render_engine,\n    tts: prev.tts,\n    poll_attempt: 0,\n    poll_max: Number($env.CREATOMATE_POLL_MAX || 24),\n    poll_ms: Number($env.CREATOMATE_POLL_MS || 15000),\n  },\n}];"
+      },
+      "id": "a710parse",
+      "name": "Parse Creatomate Create",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2280,
+        160
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "c1",
+              "leftValue": "={{ $json.render_id }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "a710ifrid",
+      "name": "IF Has Render ID",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        2520,
+        160
+      ]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={{ 'https://api.creatomate.com/v2/renders/' + $('Parse Creatomate Create').item.json.render_id }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {}
+      },
+      "id": "a710get",
+      "name": "HTTP GET Creatomate Status",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2520,
+        160
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const create = $('Parse Creatomate Create').item?.json || {};\nconst getRes = $input.first().json || {};\nconst first = Array.isArray(getRes) ? getRes[0] : getRes;\n\nconst data = $getWorkflowStaticData('global');\nif (!data.a7_poll) data.a7_poll = {};\n\nconst renderId = create.render_id || first?.id || first?.render_id || 'unknown';\nconst prevAttempt = Number(data.a7_poll[renderId] || create.poll_attempt || 0);\nconst attempt = prevAttempt + 1;\ndata.a7_poll[renderId] = attempt;\n\nconst maxAttempts = Number(create.poll_max || 24);\n\nconst renderStatus = first?.status || create.render_status || 'rendering';\nconst outputFormat = String(first?.output_format || 'mp4').toLowerCase();\nlet renderUrl = first?.url || first?.download_url || create.render_url_early || null;\n\nfunction isMp4Url(url) {\n  return Boolean(url) && String(url).toLowerCase().includes('.mp4');\n}\n\nconst renderDone = renderStatus === 'succeeded'\n  && outputFormat === 'mp4'\n  && isMp4Url(renderUrl);\n\nif (renderDone) {\n  delete data.a7_poll[renderId];\n  return [{\n    json: {\n      ok: true,\n      render_ok: true,\n      done_polling: true,\n      render_id: renderId,\n      render_url: renderUrl,\n      render_status: 'ready_for_review',\n      sheet_row: create.sheet_row,\n      source_normalized_key: create.source_normalized_key,\n      title: create.title,\n      platform: create.platform,\n      background_url: create.background_url,\n      existing_meta: create.existing_meta || {},\n      beats_count: create.beats_count,\n      render_engine: create.render_engine,\n      tts_provider: create.tts?.provider || null,\n      poll_attempt: attempt,\n    },\n  }];\n}\n\nif (renderStatus === 'failed') {\n  delete data.a7_poll[renderId];\n  return [{\n    json: {\n      ok: false,\n      render_ok: false,\n      done_polling: true,\n      error: 'CREATOMATE_RENDER_FAILED',\n      render_id: renderId,\n      render_status: renderStatus,\n      failure: first?.error_message || first?.error || null,\n      sheet_row: create.sheet_row,\n      source_normalized_key: create.source_normalized_key,\n      poll_attempt: attempt,\n    },\n  }];\n}\n\nif (attempt >= maxAttempts) {\n  delete data.a7_poll[renderId];\n  return [{\n    json: {\n      ok: false,\n      render_ok: false,\n      done_polling: true,\n      error: 'CREATOMATE_POLL_TIMEOUT',\n      render_id: renderId,\n      render_status: renderStatus,\n      sheet_row: create.sheet_row,\n      poll_attempt: attempt,\n    },\n  }];\n}\n\nreturn [{\n  json: {\n    ok: true,\n    render_ok: false,\n    done_polling: false,\n    render_id: renderId,\n    render_status: renderStatus,\n    render_url_early: renderUrl,\n    sheet_row: create.sheet_row,\n    source_normalized_key: create.source_normalized_key,\n    title: create.title,\n    platform: create.platform,\n    background_url: create.background_url,\n    existing_meta: create.existing_meta || {},\n    poll_attempt: attempt,\n  },\n}];"
+      },
+      "id": "a710eval",
+      "name": "Evaluate Poll Status",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2760,
+        160
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "c1",
+              "leftValue": "={{ $json.done_polling }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "a710ifpoll",
+      "name": "IF Poll Done",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        3000,
+        160
+      ]
+    },
+    {
+      "parameters": {
+        "amount": 15,
+        "unit": "seconds"
+      },
+      "id": "a710wait",
+      "name": "Wait Poll Interval",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        3000,
+        320
+      ],
+      "webhookId": "a7-poll-wait"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "c1",
+              "leftValue": "={{ $json.render_ok }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "a711ifrender",
+      "name": "IF Render OK",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        3240,
+        80
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const SHEET_ID = '1fYB4h_BTiKXa9O3lBah-tQonWpQOQMG2aSkSfPs6yU4';\nconst TAB = 'video_drafts';\nconst META_COL = 'V';\nconst STATUS_COL = 'Q';\n\nconst item = $input.first().json;\nif (!item.render_ok || !item.sheet_row) {\n  return [{ json: { ok: false, skip: true, reason: item.error || 'NO_RENDER' } }];\n}\n\nconst row = item.sheet_row;\n\nconst render_meta_patch = {\n  render_status: 'ready_for_review',\n  render_id: item.render_id,\n  render_url: item.render_url,\n  render_provider: 'creatomate_renderscript_v2',\n  render_engine: item.render_engine || 'creatomate_renderscript_v2',\n  tts_provider: item.tts_provider || null,\n  beats_rendered: item.beats_count || null,\n  render_platform: item.platform,\n  render_background_url: item.background_url || null,\n  rendered_at: new Date().toISOString(),\n  agent: 'agent-7',\n};\n\nif (item.drive_ok && item.drive_file_id) {\n  render_meta_patch.drive_file_id = item.drive_file_id;\n  render_meta_patch.drive_file_name = item.drive_file_name;\n  render_meta_patch.drive_view_url = item.drive_view_url;\n  render_meta_patch.drive_download_url = item.drive_download_url;\n  render_meta_patch.drive_folder = 'ready_for_review';\n  render_meta_patch.drive_archived_at = new Date().toISOString();\n}\n\nreturn [{\n  json: {\n    ok: true,\n    sheet_row: row,\n    get_meta_url: `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent(`${TAB}!${META_COL}${row}`)}`,\n    put_meta_url: `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent(`${TAB}!${META_COL}${row}`)}?valueInputOption=USER_ENTERED`,\n    put_status_url: `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent(`${TAB}!${STATUS_COL}${row}`)}?valueInputOption=USER_ENTERED`,\n    render_meta_patch,\n    existing_meta: item.existing_meta || {},\n    render_url: item.render_url,\n    source_normalized_key: item.source_normalized_key,\n  },\n}];"
+      },
+      "id": "a712prep",
+      "name": "Prepare Sheet Update",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3720,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $json.get_meta_url }}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleApi",
+        "options": {}
+      },
+      "id": "a712get",
+      "name": "HTTP GET meta",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        3960,
+        0
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const prep = $('Prepare Sheet Update').item?.json || $input.first().json || {};\n\nif (!prep.ok || !prep.render_meta_patch) {\n  return [{ json: { ok: false, skip: true } }];\n}\n\nconst meta = JSON.stringify({\n  ...(prep.existing_meta || {}),\n  ...prep.render_meta_patch,\n}).slice(0, 50000);\n\nreturn [{\n  json: {\n    ok: true,\n    put_meta_url: prep.put_meta_url,\n    put_status_url: prep.put_status_url,\n    meta_body: { values: [[meta]] },\n    status_body: { values: [['ready_for_review']] },\n    sheet_row: prep.sheet_row,\n    render_url: prep.render_url,\n    source_normalized_key: prep.source_normalized_key,\n  },\n}];"
+      },
+      "id": "a712merge",
+      "name": "Merge Meta for PUT",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        4200,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "PUT",
+        "url": "={{ $json.put_meta_url }}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json.meta_body) }}",
+        "options": {}
+      },
+      "id": "a712putmeta",
+      "name": "HTTP PUT meta",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        4440,
+        0
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "method": "PUT",
+        "url": "={{ $('Merge Meta for PUT').item.json.put_status_url }}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($('Merge Meta for PUT').item.json.status_body) }}",
+        "options": {}
+      },
+      "id": "a712putstatus",
+      "name": "HTTP PUT status",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        4680,
+        0
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const item = $('Merge Meta for PUT').item?.json || $input.first().json || {};\nconst putMeta = $('HTTP PUT meta').item?.json || {};\nconst putStatus = $('HTTP PUT status').item?.json || {};\nconst data = $getWorkflowStaticData('global');\nif (!data.a7_stats) data.a7_stats = { render_ok: 0, render_fail: 0, payload_fail: 0 };\n\nconst metaWritten = Number(putMeta.updatedCells || 0) >= 1;\nconst statusWritten = Number(putStatus.updatedCells || 0) >= 1;\nconst sheetOk = item.ok && item.render_url && metaWritten && statusWritten;\n\nif (sheetOk) {\n  data.a7_stats.render_ok = (data.a7_stats.render_ok || 0) + 1;\n} else {\n  data.a7_stats.sheet_fail = (data.a7_stats.sheet_fail || 0) + 1;\n  data.a7_stats.last_error = !metaWritten || !statusWritten\n    ? 'HTTP PUT Sheet không ghi cell — kiểm tra googleApi credential'\n    : 'Merge/PUT thiếu render_url';\n}\n\nreturn [{\n  json: {\n    ok: sheetOk,\n    sheet_ok: sheetOk,\n    sheet_row: item.sheet_row,\n    render_url: item.render_url,\n    source_normalized_key: item.source_normalized_key,\n    meta_updated_cells: putMeta.updatedCells || 0,\n    status_updated_cells: putStatus.updatedCells || 0,\n  },\n}];"
+      },
+      "id": "a712track",
+      "name": "Track Sheet OK",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        4920,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $getWorkflowStaticData('global');\nif (!data.a7_stats) data.a7_stats = {};\ndata.a7_stats.render_fail = (data.a7_stats.render_fail || 0) + 1;\nreturn $input.all();"
+      },
+      "id": "a713fail",
+      "name": "Track Render Fail",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3480,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $getWorkflowStaticData('global');\nif (!data.a7_stats) data.a7_stats = {};\ndata.a7_stats.payload_fail = (data.a7_stats.payload_fail || 0) + 1;\nreturn $input.all();"
+      },
+      "id": "a714payloadfail",
+      "name": "Track Payload Fail",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2040,
+        320
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $getWorkflowStaticData('global');\nconst stats = data.a7_stats || {};\nconst env = data.a7_env || {};\nlet hint = null;\nif ((stats.render_ok || 0) === 0) {\n  if (stats.fetch_error) hint = 'Fetch Sheet lỗi — gán googleApi trên Fetch video_drafts';\n  else if (stats.no_candidates) hint = stats.skip_hint || 'Không candidate — row cần status=approved + ☑ l3_approved, chưa có meta.render_status';\n  else if ((stats.payload_fail || 0) > 0) hint = stats.last_error || 'Payload fail — thiếu beats_json v3 hoặc Header Auth Creatomate';\n  else if ((stats.render_fail || 0) > 0) hint = 'Creatomate fail/timeout — xem HTTP POST Creatomate + Evaluate Poll Status';\n  else if ((stats.sheet_fail || 0) > 0) hint = 'Render OK nhưng ghi Sheet fail — gán googleApi trên HTTP GET/PUT';\n  else hint = 'Mở execution log — Parse Filter / Loop / Creatomate nodes';\n} else {\n  hint = 'OK — cột meta (V) có render_url; status=ready_for_review';\n}\nreturn [{ json: {\n  ok: (stats.render_ok || 0) > 0,\n  workflow: 'content-video-render',\n  stats,\n  env_probe: env,\n  near_miss: stats.near_miss || null,\n  skip_hint: stats.skip_hint || null,\n  batch_count: stats.batch_count ?? null,\n  batch_size: 1,\n  provider: 'creatomate_renderscript_v2',\n  hint,\n  finished_at: new Date().toISOString(),\n}}];"
+      },
+      "id": "a715summary",
+      "name": "Build Summary",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1560,
+        420
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{ json: { ok: true, cleanup_skip: true, reason: 'Drive retention phase-2' } }];"
+      },
+      "id": "a717retention",
+      "name": "Drive Retention Cleanup",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1320,
+        420
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $getWorkflowStaticData('global');\nif (!data.a7_stats) data.a7_stats = {};\ndata.a7_stats.no_candidates = true;\nreturn [{ json: { ok: true, empty: true, message: 'No render candidates' } }];"
+      },
+      "id": "a716empty",
+      "name": "No Candidates Summary",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        720,
+        420
+      ]
+    }
+  ],
+  "connections": {
+    "Schedule Daily Video Render": {
+      "main": [
+        [
+          {
+            "node": "Fetch video_drafts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking 'Execute workflow'": {
+      "main": [
+        [
+          {
+            "node": "Fetch video_drafts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch video_drafts": {
+      "main": [
+        [
+          {
+            "node": "Parse Filter Approved",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Filter Approved": {
+      "main": [
+        [
+          {
+            "node": "IF Has Candidates",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF Has Candidates": {
+      "main": [
+        [
+          {
+            "node": "Reset Run Stats",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "No Candidates Summary",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Reset Run Stats": {
+      "main": [
+        [
+          {
+            "node": "Env Probe Creatomate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Env Probe Creatomate": {
+      "main": [
+        [
+          {
+            "node": "Loop Render Candidates",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Render Candidates": {
+      "main": [
+        [
+          {
+            "node": "Build Summary",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Build Creatomate Payload",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Creatomate Payload": {
+      "main": [
+        [
+          {
+            "node": "IF Payload OK",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF Payload OK": {
+      "main": [
+        [
+          {
+            "node": "HTTP POST Creatomate",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Track Payload Fail",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP POST Creatomate": {
+      "main": [
+        [
+          {
+            "node": "Parse Creatomate Create",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Creatomate Create": {
+      "main": [
+        [
+          {
+            "node": "IF Has Render ID",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF Has Render ID": {
+      "main": [
+        [
+          {
+            "node": "HTTP GET Creatomate Status",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "IF Poll Done",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP GET Creatomate Status": {
+      "main": [
+        [
+          {
+            "node": "Evaluate Poll Status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Evaluate Poll Status": {
+      "main": [
+        [
+          {
+            "node": "IF Poll Done",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF Poll Done": {
+      "main": [
+        [
+          {
+            "node": "IF Render OK",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait Poll Interval",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait Poll Interval": {
+      "main": [
+        [
+          {
+            "node": "HTTP GET Creatomate Status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF Render OK": {
+      "main": [
+        [
+          {
+            "node": "Prepare Sheet Update",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Track Render Fail",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Sheet Update": {
+      "main": [
+        [
+          {
+            "node": "HTTP GET meta",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP GET meta": {
+      "main": [
+        [
+          {
+            "node": "Merge Meta for PUT",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge Meta for PUT": {
+      "main": [
+        [
+          {
+            "node": "HTTP PUT meta",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP PUT meta": {
+      "main": [
+        [
+          {
+            "node": "HTTP PUT status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP PUT status": {
+      "main": [
+        [
+          {
+            "node": "Track Sheet OK",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Track Sheet OK": {
+      "main": [
+        [
+          {
+            "node": "Loop Render Candidates",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Track Render Fail": {
+      "main": [
+        [
+          {
+            "node": "Loop Render Candidates",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Track Payload Fail": {
+      "main": [
+        [
+          {
+            "node": "Loop Render Candidates",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Drive Retention Cleanup": {
+      "main": [
+        [
+          {
+            "node": "Build Summary",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "No Candidates Summary": {
+      "main": [
+        [
+          {
+            "node": "Build Summary",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [
+    {
+      "name": "magnix"
+    },
+    {
+      "name": "agent-7"
+    },
+    {
+      "name": "content-video-render"
+    }
+  ],
+  "meta": {
+    "templateCredsSetupCompleted": false
+  }
+}

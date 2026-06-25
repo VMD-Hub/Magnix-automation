@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "updated": "2026-06-22",
+  "research_doc": "docs/PLATFORM_VIRAL_RESEARCH.md",
+  "platforms": {
+    "tiktok": {
+      "role": "spoke_discovery",
+      "optimal_duration_sec": { "min": 21, "max": 45, "ideal": 30 },
+      "aspect_ratio": "9:16",
+      "metrics": {
+        "completion_rate": { "poor": 0.4, "average": 0.6, "good": 0.7, "scale": 0.7, "weight": 0.25 },
+        "rewatch_rate": { "poor": 0.05, "average": 0.1, "good": 0.15, "scale": 0.15, "weight": 0.15 },
+        "save_rate": { "poor": 0.01, "average": 0.02, "good": 0.04, "scale": 0.04, "weight": 0.12 },
+        "share_rate": { "poor": 0.005, "average": 0.01, "good": 0.02, "scale": 0.02, "weight": 0.1 },
+        "early_swipe_away_3s": { "poor": 0.5, "average": 0.35, "good": 0.25, "scale": 0.2, "weight": 0.18, "lower_is_better": true },
+        "keyword_comment_rate": { "poor": 0.003, "average": 0.008, "good": 0.015, "scale": 0.015, "weight": 0.1 },
+        "ivi": { "poor": 0.005, "average": 0.01, "good": 0.02, "scale": 0.02, "weight": 0.1 }
+      }
+    },
+    "fb_reels": {
+      "role": "hub_conversion",
+      "optimal_duration_sec": { "min": 25, "max": 45, "ideal": 35 },
+      "aspect_ratio": "9:16",
+      "metrics": {
+        "retention_3s": { "poor": 0.5, "average": 0.65, "good": 0.75, "scale": 0.75, "weight": 0.15 },
+        "retention_50pct": { "poor": 0.35, "average": 0.45, "good": 0.5, "scale": 0.5, "weight": 0.2 },
+        "completion_rate": { "poor": 0.3, "average": 0.45, "good": 0.55, "scale": 0.55, "weight": 0.2 },
+        "loop_factor": { "poor": 1.1, "average": 1.3, "good": 1.5, "scale": 1.5, "weight": 0.15 },
+        "share_rate": { "poor": 0.005, "average": 0.01, "good": 0.02, "scale": 0.02, "weight": 0.1 },
+        "keyword_comment_rate": { "poor": 0.003, "average": 0.008, "good": 0.015, "scale": 0.015, "weight": 0.1 },
+        "ivi": { "poor": 0.005, "average": 0.01, "good": 0.02, "scale": 0.02, "weight": 0.1 }
+      },
+      "notes": "Meta UTIS (2026): style/mood consistency affects distribution beyond watch time."
+    },
+    "fb_page": {
+      "role": "hub_trust",
+      "optimal_duration_sec": { "min": 45, "max": 90, "ideal": 60 },
+      "metrics": {
+        "video_avg_watch_pct": { "poor": 0.25, "average": 0.4, "good": 0.55, "scale": 0.55, "weight": 0.25 },
+        "comment_rate": { "poor": 0.005, "average": 0.015, "good": 0.03, "scale": 0.03, "weight": 0.2 },
+        "share_rate": { "poor": 0.003, "average": 0.008, "good": 0.015, "scale": 0.015, "weight": 0.15 },
+        "keyword_comment_rate": { "poor": 0.003, "average": 0.008, "good": 0.015, "scale": 0.015, "weight": 0.2 },
+        "ivi": { "poor": 0.005, "average": 0.01, "good": 0.02, "scale": 0.02, "weight": 0.2 }
+      }
+    },
+    "youtube_shorts": {
+      "role": "spoke_seo",
+      "optimal_duration_sec": { "min": 30, "max": 58, "ideal": 45 },
+      "aspect_ratio": "9:16",
+      "metrics": {
+        "viewed_not_swiped": { "poor": 0.5, "average": 0.65, "good": 0.7, "scale": 0.7, "weight": 0.25 },
+        "apv": { "poor": 0.5, "average": 0.7, "good": 0.8, "scale": 0.8, "weight": 0.25 },
+        "swipe_away_3s": { "poor": 0.5, "average": 0.35, "good": 0.3, "scale": 0.25, "weight": 0.15, "lower_is_better": true },
+        "comment_rate": { "poor": 0.003, "average": 0.008, "good": 0.015, "scale": 0.015, "weight": 0.1 },
+        "keyword_comment_rate": { "poor": 0.003, "average": 0.008, "good": 0.015, "scale": 0.015, "weight": 0.1 },
+        "ivi": { "poor": 0.003, "average": 0.008, "good": 0.015, "scale": 0.015, "weight": 0.15 }
+      }
+    }
+  },
+  "pre_publish_rubric": {
+    "publish_threshold": 75,
+    "fix_threshold": 60,
+    "items": [
+      { "id": "H1", "name": "hook_0_3s", "weight": 0.15, "max_score": 10 },
+      { "id": "H2", "name": "segment_clarity", "weight": 0.1, "max_score": 10 },
+      { "id": "H3", "name": "pattern_interrupt_density", "weight": 0.08, "max_score": 10 },
+      { "id": "H4", "name": "on_screen_text", "weight": 0.08, "max_score": 10 },
+      { "id": "H5", "name": "length_vs_platform", "weight": 0.07, "max_score": 10 },
+      { "id": "H6", "name": "audio_clarity", "weight": 0.05, "max_score": 10 },
+      { "id": "H7", "name": "search_keywords", "weight": 0.1, "max_score": 10 },
+      { "id": "H8", "name": "save_share_framing", "weight": 0.08, "max_score": 10 },
+      { "id": "H9", "name": "cta_opt_in", "weight": 0.12, "max_score": 10 },
+      { "id": "H10", "name": "loop_rewatch_design", "weight": 0.07, "max_score": 10 },
+      { "id": "H11", "name": "compliance", "weight": 0.1, "max_score": 10 },
+      { "id": "H12", "name": "repurpose_ready", "weight": 0.1, "max_score": 10 }
+    ]
+  },
+  "verdict_rules": {
+    "scale": {
+      "retention_tier_min": "good",
+      "ivi_tier_min": "good",
+      "warm_lead_rate_min": 0.4
+    },
+    "fix": {
+      "retention_tier_min": "good",
+      "ivi_tier_max": "average"
+    },
+    "kill": {
+      "retention_tier_max": "average"
+    },
+    "hub_candidate": {
+      "retention_tier_min": "scale",
+      "ivi_tier_min": "good",
+      "platform_role": "spoke_discovery"
+    }
+  }
+}

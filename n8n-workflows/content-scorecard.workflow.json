@@ -1,0 +1,456 @@
+{
+  "name": "Magnix Mạch 5 — Content Scorecard (Sheet → score → Sheet)",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "hoursInterval": 24,
+              "triggerAtHour": 10
+            }
+          ]
+        }
+      },
+      "id": "cs01schedule",
+      "name": "Schedule Daily 10h",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "cs02manual",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "documentId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "1fYB4h_BTiKXa9O3lBah-tQonWpQOQMG2aSkSfPs6yU4"
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "name",
+          "value": "content_metrics"
+        },
+        "options": {
+          "returnAllMatches": true
+        }
+      },
+      "id": "cs03sheets",
+      "name": "Read Metrics Sheet",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        240,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const SKIP_STATUSES = new Set(['done', 'analyzed', 'skip']);\n\nfunction isPending(row) {\n  const status = String(row.scorecard_status || row.status || '').trim().toLowerCase();\n  if (SKIP_STATUSES.has(status)) return false;\n  const analyzed = String(row.analyzed_at || '').trim();\n  if (analyzed && analyzed !== 'null' && analyzed !== 'undefined') return false;\n  const postId = String(row.post_id || '').trim();\n  const platform = String(row.platform || '').trim();\n  return Boolean(postId && platform);\n}\n\nconst pending = $input.all().filter((item) => isPending(item.json));\n\nif (!pending.length) {\n  return [{ json: { ok: true, empty: true, message: 'No pending rows to score', count: 0 } }];\n}\n\nreturn pending.map((item) => ({\n  json: {\n    ...item.json,\n    _sheet_row_number: item.json.row_number ?? item.json.rowNumber ?? null,\n  },\n}));"
+      },
+      "id": "cs04filter",
+      "name": "Filter Pending Rows",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        520,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "c-empty",
+              "leftValue": "={{ $json.empty }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "notEquals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "cs05ifrows",
+      "name": "IF Has Rows",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        760,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const PLATFORM_ALIASES = {\n  tiktok: 'tiktok',\n  tt: 'tiktok',\n  'fb reels': 'fb_reels',\n  fb_reels: 'fb_reels',\n  reels: 'fb_reels',\n  'fb page': 'fb_page',\n  fb_page: 'fb_page',\n  page: 'fb_page',\n  facebook: 'fb_page',\n  youtube_shorts: 'youtube_shorts',\n  shorts: 'youtube_shorts',\n  yt_shorts: 'youtube_shorts',\n};\n\nfunction num(v) {\n  if (v == null || v === '') return null;\n  const n = Number(String(v).replace(/,/g, '').replace('%', ''));\n  if (Number.isNaN(n)) return null;\n  if (String(v).includes('%') && n > 1) return n / 100;\n  return n;\n}\n\nfunction int(v) {\n  const n = num(v);\n  return n == null ? null : Math.round(n);\n}\n\nfunction normalizePlatform(raw) {\n  const key = String(raw || '')\n    .trim()\n    .toLowerCase()\n    .replace(/\\s+/g, ' ');\n  return PLATFORM_ALIASES[key] || key;\n}\n\nconst METRIC_KEYS = [\n  'reach',\n  'views',\n  'completion_rate',\n  'rewatch_rate',\n  'save_rate',\n  'share_rate',\n  'early_swipe_away_3s',\n  'retention_3s',\n  'retention_50pct',\n  'loop_factor',\n  'viewed_not_swiped',\n  'apv',\n  'swipe_away_3s',\n  'video_avg_watch_pct',\n  'comment_rate',\n  'keyword_comments',\n  'dm_opt_in',\n  'form_submit',\n  'warm_lead_rate',\n  'ivi',\n];\n\nconst results = [];\n\nfor (const item of $input.all()) {\n  const row = item.json;\n  if (row.empty === true) {\n    results.push({ json: row });\n    continue;\n  }\n\n  const platform = normalizePlatform(row.platform);\n  const postId = String(row.post_id || '').trim();\n\n  if (!postId || !platform) {\n    results.push({\n      json: {\n        ok: false,\n        error: 'MISSING_POST_OR_PLATFORM',\n        post_id: postId,\n        platform,\n        _sheet_row_number: row._sheet_row_number,\n      },\n    });\n    continue;\n  }\n\n  const metrics = {};\n  for (const key of METRIC_KEYS) {\n    const val = num(row[key]);\n    if (val != null) metrics[key] = val;\n  }\n\n  if (metrics.views && !metrics.reach) metrics.reach = metrics.views;\n\n  results.push({\n    json: {\n      ok: true,\n      post_id: postId,\n      platform,\n      segment: String(row.segment || 'general_inbound').trim(),\n      metrics,\n      _sheet_row_number: row._sheet_row_number,\n      content_summary: String(row.content_summary || '').slice(0, 500),\n    },\n  });\n}\n\nreturn results;"
+      },
+      "id": "cs06norm",
+      "name": "Normalize Sheet Row",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1000,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// AUTO-GENERATED — sync with tools/content-scorecard/score.mjs via build-content-scorecard.mjs\n// Do not edit manually; run: node n8n-workflows/build-content-scorecard.mjs\n\nconst SIGNALS = {\"version\":1,\"updated\":\"2026-06-22\",\"research_doc\":\"docs/PLATFORM_VIRAL_RESEARCH.md\",\"platforms\":{\"tiktok\":{\"role\":\"spoke_discovery\",\"optimal_duration_sec\":{\"min\":21,\"max\":45,\"ideal\":30},\"aspect_ratio\":\"9:16\",\"metrics\":{\"completion_rate\":{\"poor\":0.4,\"average\":0.6,\"good\":0.7,\"scale\":0.7,\"weight\":0.25},\"rewatch_rate\":{\"poor\":0.05,\"average\":0.1,\"good\":0.15,\"scale\":0.15,\"weight\":0.15},\"save_rate\":{\"poor\":0.01,\"average\":0.02,\"good\":0.04,\"scale\":0.04,\"weight\":0.12},\"share_rate\":{\"poor\":0.005,\"average\":0.01,\"good\":0.02,\"scale\":0.02,\"weight\":0.1},\"early_swipe_away_3s\":{\"poor\":0.5,\"average\":0.35,\"good\":0.25,\"scale\":0.2,\"weight\":0.18,\"lower_is_better\":true},\"keyword_comment_rate\":{\"poor\":0.003,\"average\":0.008,\"good\":0.015,\"scale\":0.015,\"weight\":0.1},\"ivi\":{\"poor\":0.005,\"average\":0.01,\"good\":0.02,\"scale\":0.02,\"weight\":0.1}}},\"fb_reels\":{\"role\":\"hub_conversion\",\"optimal_duration_sec\":{\"min\":25,\"max\":45,\"ideal\":35},\"aspect_ratio\":\"9:16\",\"metrics\":{\"retention_3s\":{\"poor\":0.5,\"average\":0.65,\"good\":0.75,\"scale\":0.75,\"weight\":0.15},\"retention_50pct\":{\"poor\":0.35,\"average\":0.45,\"good\":0.5,\"scale\":0.5,\"weight\":0.2},\"completion_rate\":{\"poor\":0.3,\"average\":0.45,\"good\":0.55,\"scale\":0.55,\"weight\":0.2},\"loop_factor\":{\"poor\":1.1,\"average\":1.3,\"good\":1.5,\"scale\":1.5,\"weight\":0.15},\"share_rate\":{\"poor\":0.005,\"average\":0.01,\"good\":0.02,\"scale\":0.02,\"weight\":0.1},\"keyword_comment_rate\":{\"poor\":0.003,\"average\":0.008,\"good\":0.015,\"scale\":0.015,\"weight\":0.1},\"ivi\":{\"poor\":0.005,\"average\":0.01,\"good\":0.02,\"scale\":0.02,\"weight\":0.1}},\"notes\":\"Meta UTIS (2026): style/mood consistency affects distribution beyond watch time.\"},\"fb_page\":{\"role\":\"hub_trust\",\"optimal_duration_sec\":{\"min\":45,\"max\":90,\"ideal\":60},\"metrics\":{\"video_avg_watch_pct\":{\"poor\":0.25,\"average\":0.4,\"good\":0.55,\"scale\":0.55,\"weight\":0.25},\"comment_rate\":{\"poor\":0.005,\"average\":0.015,\"good\":0.03,\"scale\":0.03,\"weight\":0.2},\"share_rate\":{\"poor\":0.003,\"average\":0.008,\"good\":0.015,\"scale\":0.015,\"weight\":0.15},\"keyword_comment_rate\":{\"poor\":0.003,\"average\":0.008,\"good\":0.015,\"scale\":0.015,\"weight\":0.2},\"ivi\":{\"poor\":0.005,\"average\":0.01,\"good\":0.02,\"scale\":0.02,\"weight\":0.2}}},\"youtube_shorts\":{\"role\":\"spoke_seo\",\"optimal_duration_sec\":{\"min\":30,\"max\":58,\"ideal\":45},\"aspect_ratio\":\"9:16\",\"metrics\":{\"viewed_not_swiped\":{\"poor\":0.5,\"average\":0.65,\"good\":0.7,\"scale\":0.7,\"weight\":0.25},\"apv\":{\"poor\":0.5,\"average\":0.7,\"good\":0.8,\"scale\":0.8,\"weight\":0.25},\"swipe_away_3s\":{\"poor\":0.5,\"average\":0.35,\"good\":0.3,\"scale\":0.25,\"weight\":0.15,\"lower_is_better\":true},\"comment_rate\":{\"poor\":0.003,\"average\":0.008,\"good\":0.015,\"scale\":0.015,\"weight\":0.1},\"keyword_comment_rate\":{\"poor\":0.003,\"average\":0.008,\"good\":0.015,\"scale\":0.015,\"weight\":0.1},\"ivi\":{\"poor\":0.003,\"average\":0.008,\"good\":0.015,\"scale\":0.015,\"weight\":0.15}}}},\"pre_publish_rubric\":{\"publish_threshold\":75,\"fix_threshold\":60,\"items\":[{\"id\":\"H1\",\"name\":\"hook_0_3s\",\"weight\":0.15,\"max_score\":10},{\"id\":\"H2\",\"name\":\"segment_clarity\",\"weight\":0.1,\"max_score\":10},{\"id\":\"H3\",\"name\":\"pattern_interrupt_density\",\"weight\":0.08,\"max_score\":10},{\"id\":\"H4\",\"name\":\"on_screen_text\",\"weight\":0.08,\"max_score\":10},{\"id\":\"H5\",\"name\":\"length_vs_platform\",\"weight\":0.07,\"max_score\":10},{\"id\":\"H6\",\"name\":\"audio_clarity\",\"weight\":0.05,\"max_score\":10},{\"id\":\"H7\",\"name\":\"search_keywords\",\"weight\":0.1,\"max_score\":10},{\"id\":\"H8\",\"name\":\"save_share_framing\",\"weight\":0.08,\"max_score\":10},{\"id\":\"H9\",\"name\":\"cta_opt_in\",\"weight\":0.12,\"max_score\":10},{\"id\":\"H10\",\"name\":\"loop_rewatch_design\",\"weight\":0.07,\"max_score\":10},{\"id\":\"H11\",\"name\":\"compliance\",\"weight\":0.1,\"max_score\":10},{\"id\":\"H12\",\"name\":\"repurpose_ready\",\"weight\":0.1,\"max_score\":10}]},\"verdict_rules\":{\"scale\":{\"retention_tier_min\":\"good\",\"ivi_tier_min\":\"good\",\"warm_lead_rate_min\":0.4},\"fix\":{\"retention_tier_min\":\"good\",\"ivi_tier_max\":\"average\"},\"kill\":{\"retention_tier_max\":\"average\"},\"hub_candidate\":{\"retention_tier_min\":\"scale\",\"ivi_tier_min\":\"good\",\"platform_role\":\"spoke_discovery\"}}};\n\nfunction tierForMetric(value, spec) {\n  if (value == null || Number.isNaN(value)) return \"unknown\";\n  const lowerBetter = spec.lower_is_better === true;\n  if (lowerBetter) {\n    if (value <= spec.scale) return \"scale\";\n    if (value <= spec.good) return \"good\";\n    if (value <= spec.average) return \"average\";\n    return \"poor\";\n  }\n  if (value >= spec.scale) return \"scale\";\n  if (value >= spec.good) return \"good\";\n  if (value >= spec.average) return \"average\";\n  return \"poor\";\n}\n\nconst TIER_SCORE = { scale: 100, good: 80, average: 55, poor: 25, unknown: 0 };\n\nfunction computeIvi(metrics) {\n  const reach = metrics.reach || metrics.views || 0;\n  if (!reach) return null;\n  const keywordComments = metrics.keyword_comments || 0;\n  const dmOptIn = metrics.dm_opt_in || 0;\n  const formSubmit = metrics.form_submit || 0;\n  return (keywordComments + dmOptIn + formSubmit) / reach;\n}\n\nfunction primaryRetentionMetric(platform, metrics, platformMetrics) {\n  const priority = {\n    tiktok: [\"completion_rate\", \"early_swipe_away_3s\"],\n    fb_reels: [\"completion_rate\", \"retention_50pct\", \"retention_3s\"],\n    fb_page: [\"video_avg_watch_pct\"],\n    youtube_shorts: [\"viewed_not_swiped\", \"apv\"],\n  };\n  const keys = priority[platform] || Object.keys(platformMetrics);\n  for (const key of keys) {\n    if (metrics[key] != null && platformMetrics[key]) {\n      return { key, value: metrics[key], spec: platformMetrics[key] };\n    }\n  }\n  return null;\n}\n\nfunction buildRecommendations(platform, scored, retentionTier, iviTier, primary) {\n  const recs = [];\n\n  if (retentionTier === \"poor\" || retentionTier === \"average\") {\n    recs.push({\n      priority: \"high\",\n      area: \"hook_pacing\",\n      action:\n        \"Re-cut first 3s: pain text on-screen + cut intro; add pattern interrupt every 3-5s\",\n    });\n  }\n\n  if (primary?.key === \"early_swipe_away_3s\" || primary?.key === \"swipe_away_3s\") {\n    if (primary.value > 0.35) {\n      recs.push({\n        priority: \"high\",\n        area: \"first_frame\",\n        action: \"First frame must show payoff preview, not logo or greeting\",\n      });\n    }\n  }\n\n  if (iviTier === \"poor\" || iviTier === \"average\") {\n    recs.push({\n      priority: \"high\",\n      area: \"cta\",\n      action:\n        \"Add comment keyword CTA (CHECKLIST/NOXH/DTI) + pin comment with opt-in instruction\",\n    });\n  }\n\n  if (platform === \"fb_reels\") {\n    recs.push({\n      priority: \"medium\",\n      area: \"utis_fit\",\n      action:\n        \"Keep mood/style consistent with Page; avoid generic BDS clips that mismatch audience interest\",\n    });\n  }\n\n  if (scored.save_rate?.tier === \"poor\" || scored.save_rate?.tier === \"average\") {\n    recs.push({\n      priority: \"medium\",\n      area: \"save_framing\",\n      action: \"Explicit save CTA: checklist/table worth saving before applying\",\n    });\n  }\n\n  if (recs.length === 0) {\n    recs.push({\n      priority: \"low\",\n      area: \"scale\",\n      action: \"Repurpose to Hub with lead magnet; A/B 2 hooks for next batch\",\n    });\n  }\n\n  return recs;\n}\n\nfunction scorePrePublish(input, platform, SIGNALS) {\n  const rubric = SIGNALS.pre_publish_rubric;\n  const platformSpec = SIGNALS.platforms[platform];\n  if (!platformSpec) throw new Error(`Unknown platform: ${platform}`);\n\n  const scores = input.scores || {};\n  const required = rubric.items.map((item) => item.id);\n  const missing = required.filter((id) => scores[id] == null);\n  if (missing.length) {\n    throw new Error(`Missing rubric scores for: ${missing.join(\", \")}. Each 0-10.`);\n  }\n\n  let weighted = 0;\n  const breakdown = rubric.items.map((item) => {\n    const raw = Math.max(0, Math.min(10, Number(scores[item.id])));\n    const normalized = (raw / item.max_score) * 100;\n    const contribution = normalized * item.weight;\n    weighted += contribution;\n    return {\n      id: item.id,\n      name: item.name,\n      score: raw,\n      normalized: Math.round(normalized),\n      weight: item.weight,\n      contribution: Math.round(contribution * 10) / 10,\n    };\n  });\n\n  const total = Math.round(weighted);\n  let action = \"kill\";\n  if (total >= rubric.publish_threshold) action = \"publish\";\n  else if (total >= rubric.fix_threshold) action = \"fix_before_publish\";\n\n  const duration = input.duration_sec;\n  let lengthCheck = null;\n  if (duration != null && platformSpec.optimal_duration_sec) {\n    const { min, max, ideal } = platformSpec.optimal_duration_sec;\n    const inRange = duration >= min && duration <= max;\n    lengthCheck = {\n      duration_sec: duration,\n      optimal: { min, max, ideal },\n      in_range: inRange,\n      note: inRange\n        ? duration === ideal\n          ? \"ideal_length\"\n          : \"acceptable_length\"\n        : duration < min\n          ? \"too_short_for_platform\"\n          : \"too_long_risk_retention_drop\",\n    };\n  }\n\n  return {\n    mode: \"pre_publish\",\n    platform,\n    platform_role: platformSpec.role,\n    total_score: total,\n    action,\n    thresholds: {\n      publish: rubric.publish_threshold,\n      fix: rubric.fix_threshold,\n    },\n    breakdown,\n    length_check: lengthCheck,\n    segment: input.segment || null,\n    post_id: input.post_id || null,\n  };\n}\n\nfunction scorePostPublish(input, platform, SIGNALS) {\n  const platformSpec = SIGNALS.platforms[platform];\n  if (!platformSpec) throw new Error(`Unknown platform: ${platform}`);\n\n  const metrics = { ...input.metrics };\n  const computedIvi = computeIvi(metrics);\n  if (computedIvi != null && metrics.ivi == null) {\n    metrics.ivi = computedIvi;\n  }\n\n  const platformMetrics = platformSpec.metrics;\n  const scored = {};\n  let weightedSum = 0;\n  let weightTotal = 0;\n\n  for (const [key, spec] of Object.entries(platformMetrics)) {\n    const value = metrics[key];\n    if (value == null) continue;\n    const tier = tierForMetric(value, spec);\n    const points = TIER_SCORE[tier] * spec.weight;\n    weightedSum += points;\n    weightTotal += spec.weight;\n    scored[key] = {\n      value,\n      tier,\n      weight: spec.weight,\n      benchmarks: {\n        poor: spec.poor,\n        average: spec.average,\n        good: spec.good,\n        scale: spec.scale,\n        lower_is_better: spec.lower_is_better || false,\n      },\n    };\n  }\n\n  const performanceScore =\n    weightTotal > 0 ? Math.round(weightedSum / weightTotal) : 0;\n\n  const primary = primaryRetentionMetric(platform, metrics, platformMetrics);\n  const retentionTier = primary\n    ? tierForMetric(primary.value, primary.spec)\n    : \"unknown\";\n  const iviTier =\n    metrics.ivi != null\n      ? tierForMetric(\n          metrics.ivi,\n          platformMetrics.ivi || SIGNALS.platforms.tiktok.metrics.ivi\n        )\n      : \"unknown\";\n\n  const warmLeadRate = metrics.warm_lead_rate ?? null;\n  const rules = SIGNALS.verdict_rules;\n\n  let verdict = \"review\";\n  const verdictReason = [];\n\n  if (retentionTier === \"poor\" || retentionTier === \"unknown\") {\n    verdict = \"kill\";\n    verdictReason.push(\"retention_below_average\");\n  } else if (\n    (retentionTier === \"good\" || retentionTier === \"scale\") &&\n    (iviTier === \"poor\" || iviTier === \"average\" || iviTier === \"unknown\")\n  ) {\n    verdict = \"fix\";\n    verdictReason.push(\"retention_ok_ivi_low_fix_cta\");\n  } else if (\n    (retentionTier === \"good\" || retentionTier === \"scale\") &&\n    (iviTier === \"good\" || iviTier === \"scale\")\n  ) {\n    if (warmLeadRate != null && warmLeadRate >= rules.scale.warm_lead_rate_min) {\n      verdict = \"scale\";\n      verdictReason.push(\"retention_and_ivi_good_warm_leads_ok\");\n    } else if (warmLeadRate == null) {\n      verdict = \"scale\";\n      verdictReason.push(\"retention_and_ivi_good_no_warm_lead_data\");\n    } else {\n      verdict = \"fix\";\n      verdictReason.push(\"ivi_ok_but_warm_lead_rate_low\");\n    }\n  }\n\n  if (\n    verdict === \"scale\" &&\n    platformSpec.role === \"spoke_discovery\" &&\n    (retentionTier === \"scale\" || retentionTier === \"good\") &&\n    (iviTier === \"good\" || iviTier === \"scale\")\n  ) {\n    verdict = \"hub_candidate\";\n    verdictReason.push(\"spoke_winner_repurpose_to_hub\");\n  }\n\n  const recommendations = buildRecommendations(\n    platform,\n    scored,\n    retentionTier,\n    iviTier,\n    primary\n  );\n\n  return {\n    mode: \"post_publish\",\n    platform,\n    platform_role: platformSpec.role,\n    performance_score: performanceScore,\n    ivi: computedIvi != null ? Math.round(computedIvi * 10000) / 10000 : null,\n    ivi_pct: computedIvi != null ? Math.round(computedIvi * 10000) / 100 : null,\n    primary_retention: primary\n      ? { metric: primary.key, value: primary.value, tier: retentionTier }\n      : null,\n    ivi_tier: iviTier,\n    warm_lead_rate: warmLeadRate,\n    verdict,\n    verdict_reason: verdictReason,\n    metrics_scored: scored,\n    recommendations,\n    post_id: input.post_id || null,\n    segment: input.segment || null,\n    analyzed_at: new Date().toISOString(),\n  };\n}\n\nconst results = [];\n\nfor (const item of $input.all()) {\n  const row = item.json;\n\n  if (row.empty === true) {\n    results.push({ json: row });\n    continue;\n  }\n\n  if (row.ok === false) {\n    results.push({ json: row });\n    continue;\n  }\n\n  try {\n    const input = {\n      post_id: row.post_id,\n      segment: row.segment,\n      metrics: row.metrics,\n    };\n    const scorecard = scorePostPublish(input, row.platform, SIGNALS);\n    results.push({\n      json: {\n        ok: true,\n        post_id: row.post_id,\n        platform: row.platform,\n        segment: row.segment,\n        scorecard,\n        _sheet_row_number: row._sheet_row_number,\n        next_action: scorecard.verdict === 'hub_candidate' ? 'repurpose_hub' : scorecard.verdict,\n      },\n    });\n  } catch (e) {\n    results.push({\n      json: {\n        ok: false,\n        error: 'SCORE_FAILED',\n        message: e.message,\n        post_id: row.post_id,\n        _sheet_row_number: row._sheet_row_number,\n      },\n    });\n  }\n}\n\nreturn results;\n"
+      },
+      "id": "cs07score",
+      "name": "Run score.mjs Logic",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1240,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "c-ok",
+              "leftValue": "={{ $json.ok }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "cs08ifok",
+      "name": "IF Score OK",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1480,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const SHEET_ID = '1fYB4h_BTiKXa9O3lBah-tQonWpQOQMG2aSkSfPs6yU4';\nconst TAB = 'content_scorecard';\n\nconst HEADERS = [\n  'post_id',\n  'platform',\n  'segment',\n  'performance_score',\n  'ivi_pct',\n  'verdict',\n  'primary_retention_metric',\n  'primary_retention_tier',\n  'ivi_tier',\n  'next_action',\n  'recommendations',\n  'scorecard_json',\n  'analyzed_at',\n  'status',\n];\n\nfunction toRow(item) {\n  const scorecard = item.scorecard || {};\n  return [\n    String(item.post_id || ''),\n    String(item.platform || ''),\n    String(item.segment || ''),\n    Number(scorecard.performance_score ?? 0),\n    Number(scorecard.ivi_pct ?? 0),\n    String(scorecard.verdict || item.verdict || ''),\n    String(scorecard.primary_retention_metric || ''),\n    String(scorecard.primary_retention_tier || ''),\n    String(scorecard.ivi_tier || ''),\n    String(item.next_action || scorecard.next_action || scorecard.verdict || ''),\n    JSON.stringify(scorecard.recommendations || []),\n    JSON.stringify(scorecard).slice(0, 50000),\n    String(scorecard.analyzed_at || new Date().toISOString()),\n    item.ok === false ? 'failed' : 'analyzed',\n  ];\n}\n\nasync function sheetRequest(opts) {\n  return this.helpers.httpRequestWithAuthentication.call(this, 'googleApi', {\n    json: true,\n    ...opts,\n  });\n}\n\nconst base = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}`;\nconst readRange = `${TAB}!A:N`;\n\nlet existingByPostId = new Map();\nlet nextAppendRow = 2;\n\ntry {\n  const getRes = await sheetRequest.call(this, {\n    method: 'GET',\n    url: `${base}/values/${encodeURIComponent(readRange)}`,\n  });\n  const rows = getRes.values || [];\n\n  if (!rows.length) {\n    await sheetRequest.call(this, {\n      method: 'PUT',\n      url: `${base}/values/${encodeURIComponent(`${TAB}!A1:N1`)}?valueInputOption=USER_ENTERED`,\n      body: { values: [HEADERS] },\n    });\n  } else {\n    const headerRow = rows[0].map((h) => String(h ?? '').trim().toLowerCase());\n    const postIdx = headerRow.indexOf('post_id');\n    const keyCol = postIdx >= 0 ? postIdx : 0;\n    for (let i = 1; i < rows.length; i += 1) {\n      const postId = String(rows[i][keyCol] ?? '').trim();\n      if (postId) existingByPostId.set(postId, i + 1);\n    }\n    nextAppendRow = rows.length + 1;\n  }\n} catch (e) {\n  throw new Error(`Sheet read failed (${TAB}): ${e.message}. Tạo tab trước — xem CONTENT_SCORECARD_SETUP.md`);\n}\n\nconst results = [];\n\nfor (const item of $input.all()) {\n  const row = item.json;\n  if (!row.post_id) {\n    results.push({ json: { ok: false, error: 'MISSING_POST_ID', message: 'Cannot upsert scorecard without post_id' } });\n    continue;\n  }\n\n  const postId = String(row.post_id);\n  const rowValues = toRow(row);\n  const existingRow = existingByPostId.get(postId);\n\n  try {\n    if (existingRow) {\n      await sheetRequest.call(this, {\n        method: 'PUT',\n        url: `${base}/values/${encodeURIComponent(`${TAB}!A${existingRow}:N${existingRow}`)}?valueInputOption=USER_ENTERED`,\n        body: { values: [rowValues] },\n      });\n      results.push({ json: { ...row, ok: true, storage: 'sheet_content_scorecard', sheet_row: existingRow, action: 'update' } });\n    } else {\n      await sheetRequest.call(this, {\n        method: 'POST',\n        url: `${base}/values/${encodeURIComponent(`${TAB}!A:N`)}:append?valueInputOption=USER_ENTERED&insertDataOption=INSERT_ROWS`,\n        body: { values: [rowValues] },\n      });\n      existingByPostId.set(postId, nextAppendRow);\n      results.push({ json: { ...row, ok: true, storage: 'sheet_content_scorecard', sheet_row: nextAppendRow, action: 'create' } });\n      nextAppendRow += 1;\n    }\n  } catch (e) {\n    results.push({ json: { ...row, ok: false, error: 'SHEET_UPSERT_FAILED', message: e.message } });\n  }\n}\n\nreturn results;"
+      },
+      "id": "cs09sheet",
+      "name": "Sheet Upsert Scorecard",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1720,
+        160
+      ]
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "1fYB4h_BTiKXa9O3lBah-tQonWpQOQMG2aSkSfPs6yU4"
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "name",
+          "value": "content_metrics"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "post_id": "={{ $(\"Run score.mjs Logic\").item.json.post_id }}",
+            "scorecard_status": "done",
+            "analyzed_at": "={{ $(\"Run score.mjs Logic\").item.json.scorecard.analyzed_at }}",
+            "verdict": "={{ $(\"Run score.mjs Logic\").item.json.scorecard.verdict }}",
+            "performance_score": "={{ $(\"Run score.mjs Logic\").item.json.scorecard.performance_score }}",
+            "ivi_pct": "={{ $(\"Run score.mjs Logic\").item.json.scorecard.ivi_pct }}",
+            "next_action": "={{ $(\"Run score.mjs Logic\").item.json.next_action }}"
+          },
+          "matchingColumns": [
+            "post_id"
+          ],
+          "schema": [
+            {
+              "id": "post_id",
+              "displayName": "post_id",
+              "required": false,
+              "defaultMatch": true,
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "scorecard_status",
+              "displayName": "scorecard_status",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "analyzed_at",
+              "displayName": "analyzed_at",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "verdict",
+              "displayName": "verdict",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "performance_score",
+              "displayName": "performance_score",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "ivi_pct",
+              "displayName": "ivi_pct",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "next_action",
+              "displayName": "next_action",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": false
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "cs10sheetupd",
+      "name": "Update Sheet Row",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        1960,
+        160
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all().map((i) => i.json);\n\nconst empty = items.find((i) => i.empty === true);\nif (empty && items.length === 1) {\n  return [{\n    json: {\n      ok: true,\n      storage: 'sheet_content_scorecard',\n      processed: 0,\n      scaled: 0,\n      fix: 0,\n      kill: 0,\n      hub_candidate: 0,\n      failed: 0,\n      message: empty.message,\n    },\n  }];\n}\n\nlet processed = 0;\nlet scaled = 0;\nlet fix = 0;\nlet kill = 0;\nlet hub = 0;\nlet failed = 0;\nconst highlights = [];\n\nfor (const item of items) {\n  if (item.ok === false && item.error) {\n    failed += 1;\n    continue;\n  }\n  if (!item.verdict && item.scorecard?.verdict) {\n    item.verdict = item.scorecard.verdict;\n  }\n  if (!item.post_id) continue;\n\n  processed += 1;\n  const v = item.verdict || item.scorecard?.verdict;\n  if (v === 'scale') scaled += 1;\n  else if (v === 'fix') fix += 1;\n  else if (v === 'kill') kill += 1;\n  else if (v === 'hub_candidate') hub += 1;\n\n  if (v === 'hub_candidate' || v === 'scale') {\n    highlights.push({\n      post_id: item.post_id,\n      verdict: v,\n      performance_score: item.performance_score ?? item.scorecard?.performance_score,\n      ivi_pct: item.ivi_pct ?? item.scorecard?.ivi_pct,\n    });\n  }\n}\n\nreturn [{\n  json: {\n    ok: true,\n    storage: 'sheet_content_scorecard',\n    processed,\n    scaled,\n    fix,\n    kill,\n    hub_candidate: hub,\n    failed,\n    highlights: highlights.slice(0, 10),\n    analyzed_at: new Date().toISOString(),\n  },\n}];"
+      },
+      "id": "cs11summary",
+      "name": "Build Run Summary",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2200,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{ json: { ok: true, empty: true, message: 'No pending metrics rows', count: 0 } }];"
+      },
+      "id": "cs12empty",
+      "name": "No Rows Summary",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1000,
+        420
+      ]
+    }
+  ],
+  "connections": {
+    "Schedule Daily 10h": {
+      "main": [
+        [
+          {
+            "node": "Read Metrics Sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Read Metrics Sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read Metrics Sheet": {
+      "main": [
+        [
+          {
+            "node": "Filter Pending Rows",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter Pending Rows": {
+      "main": [
+        [
+          {
+            "node": "IF Has Rows",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF Has Rows": {
+      "main": [
+        [
+          {
+            "node": "Normalize Sheet Row",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "No Rows Summary",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalize Sheet Row": {
+      "main": [
+        [
+          {
+            "node": "Run score.mjs Logic",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Run score.mjs Logic": {
+      "main": [
+        [
+          {
+            "node": "IF Score OK",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF Score OK": {
+      "main": [
+        [
+          {
+            "node": "Sheet Upsert Scorecard",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Build Run Summary",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sheet Upsert Scorecard": {
+      "main": [
+        [
+          {
+            "node": "Update Sheet Row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Sheet Row": {
+      "main": [
+        [
+          {
+            "node": "Build Run Summary",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "No Rows Summary": {
+      "main": [
+        [
+          {
+            "node": "Build Run Summary",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [
+    {
+      "name": "magnix"
+    },
+    {
+      "name": "circuit-5"
+    },
+    {
+      "name": "content-scorecard"
+    }
+  ],
+  "meta": {
+    "templateCredsSetupCompleted": false
+  }
+}

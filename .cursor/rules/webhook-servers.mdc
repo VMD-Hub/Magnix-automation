@@ -1,0 +1,13 @@
+---
+description: Quy ước mini webhook server TypeScript
+globs: webhooks/**
+alwaysApply: false
+---
+
+# Webhook Servers — Magnix
+
+- Mỗi service một thư mục con dưới `webhooks/` với `package.json` riêng.
+- Node.js >= 20, TypeScript strict, `tsconfig.json` bật `strict: true`.
+- Bắt buộc `.env.example`; validate auth token hoặc HMAC trên mọi route public.
+- Route prefix: `/magnix/{service}/{action}`.
+- Không log body chứa UID/PII ở level info — dùng hash hoặc truncated id.

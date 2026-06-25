@@ -1,0 +1,16 @@
+{
+  "post_id": "tt-20260622-noxh-01",
+  "segment": "noxh_income",
+  "metrics": {
+    "reach": 18500,
+    "completion_rate": 0.74,
+    "rewatch_rate": 0.16,
+    "save_rate": 0.042,
+    "share_rate": 0.021,
+    "early_swipe_away_3s": 0.22,
+    "keyword_comments": 62,
+    "dm_opt_in": 18,
+    "form_submit": 0,
+    "warm_lead_rate": 0.52
+  }
+}

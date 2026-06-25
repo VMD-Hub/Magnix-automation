@@ -1,0 +1,38 @@
+# Magnix — auto deploy workflow JSON lên n8n VPS
+# Secrets (GitHub repo Settings → Secrets):
+#   N8N_API_KEY          — n8n Settings → API
+#   N8N_PUBLIC_URL       — https://n8n.vmd.asia (optional, default in script)
+#
+# Optional SSH deploy env (chỉ khi dùng job deploy-env):
+#   MAGNIX_VPS_HOST, MAGNIX_VPS_SSH_KEY, MAGNIX_VPS_PORT
+
+name: Magnix Deploy Workflows
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'n8n-workflows/**'
+      - 'ai-agents-prompts/**'
+      - 'scripts/rebuild-all-workflows.mjs'
+      - 'scripts/push-n8n-workflows.mjs'
+  workflow_dispatch:
+
+jobs:
+  push-workflows:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Rebuild workflow JSON
+        run: node scripts/rebuild-all-workflows.mjs
+
+      - name: Push to n8n API
+        env:
+          N8N_API_KEY: ${{ secrets.N8N_API_KEY }}
+          N8N_PUBLIC_URL: ${{ secrets.N8N_PUBLIC_URL }}
+        run: node scripts/push-n8n-workflows.mjs

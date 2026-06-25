@@ -1,0 +1,8 @@
+{
+  "classify_method": "regex",
+  "segment": "noxh_income",
+  "score_min": 80,
+  "interest_key": "thu_nhap_noxh",
+  "status": "classified",
+  "needs_llm": false
+}
