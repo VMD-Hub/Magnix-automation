@@ -232,6 +232,8 @@ export function buildApplicationCounselingPack(intake = {}, opts = {}) {
       loan_nhcsxh: 'legal-sources/noxh/noxh-loan-nhcsxh-counseling.md',
       bank_credit_appraisal: 'legal-sources/noxh/bank-credit-appraisal-counseling.md',
       cic_self_check: 'legal-sources/noxh/cic-self-check-citizen-guide.md',
+      handwriting_sample: 'legal-sources/noxh/mau-01-handwriting-sample-guide.md',
+      handwriting_sample_filled: 'legal-sources/noxh/samples/mau-01-sample-filled-reference.md',
     },
   };
 }

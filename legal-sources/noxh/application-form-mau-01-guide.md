@@ -9,6 +9,8 @@
 
 ## Trước khi điền đơn — 5 câu hỏi bắt buộc
 
+> **Viết tay & bản mẫu tham chiếu:** `mau-01-handwriting-sample-guide.md` · bản điền mẫu (dữ liệu giả **in đậm**): `samples/mau-01-sample-filled-reference.md`
+
 | # | Câu hỏi | Vì sao quan trọng |
 |---|---------|-------------------|
 | 1 | **Dự án NOXH ở tỉnh/TP nào?** | QĐ địa phương (hệ số thu nhập, quy tắc ≥20 km…) áp theo **tỉnh dự án** |

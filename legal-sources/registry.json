@@ -121,6 +121,10 @@
   ],
   "application_form": {
     "guide_path": "legal-sources/noxh/application-form-mau-01-guide.md",
+    "handwriting_sample_guide_path": "legal-sources/noxh/mau-01-handwriting-sample-guide.md",
+    "handwriting_sample_filled_path": "legal-sources/noxh/samples/mau-01-sample-filled-reference.md",
+    "handwriting_module_verified_by": "human",
+    "handwriting_module_verified_at": "2026-06-26",
     "dossier_checklist_path": "legal-sources/noxh/application-dossier-checklist.md",
     "section_11_guide_path": "legal-sources/noxh/mau-01-section-11-income.md",
     "object_classification_guide_path": "legal-sources/noxh/object-classification-cbccvc-hdld.md",

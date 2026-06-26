@@ -612,5 +612,61 @@
     ],
     "counseling_guide_path": "legal-sources/noxh/application-dossier-checklist.md",
     "last_checked": "2026-06-26"
+  },
+  {
+    "claim_id": "mau01_handwriting_sign_001",
+    "topic": "noxh_documents",
+    "claim": "Đơn đăng ký Mẫu 01 (NĐ 100 Phụ lục II) thực hành điền viết tay trên bản in và ký tên người đăng ký; thông tin phải trung thực (NĐ 54). Không sửa tẩy bằng bút xóa — sai thì gạch một nét và viết đúng bên cạnh. Một số CĐT cho điền PDF in ký — phải đối chiếu thông báo dự án.",
+    "source_refs": ["mau01_core_bundle_001"],
+    "effective_from": "2024-08-01",
+    "effective_to": null,
+    "confidence": "verified",
+    "risk_level": "medium",
+    "disclaimer_required": true,
+    "usage_rules": ["Chi tiết + bản mẫu in đậm: mau-01-handwriting-sample-guide.md"],
+    "forbidden_claims": ["Mọi CĐT đều cho phép đánh máy toàn bộ đơn không cần hỏi"],
+    "counseling_guide_path": "legal-sources/noxh/mau-01-handwriting-sample-guide.md",
+    "last_checked": "2026-06-26"
+  },
+  {
+    "claim_id": "mau01_cccd_place_of_issue_001",
+    "topic": "noxh_documents",
+    "claim": "Nơi cấp CCCD trên Mẫu 01: ghi theo dòng in trên mặt sau thẻ — không ghi tên xã/phường làm thủ tục; không thêm chữ 'Cục trưởng'. Thẻ chip từ 10/10/2018 thường: Cục Cảnh sát quản lý hành chính về trật tự xã hội; nếu ô ngắn có thể viết gọn Cục CS QLHC về TTXH. Thẻ mới Luật Căn cước 2023 có thể ghi Bộ Công an — theo đúng thẻ.",
+    "source_refs": ["mau01_core_bundle_001", "vneid_cccd_identity_hierarchy_001"],
+    "effective_from": "2018-10-10",
+    "effective_to": null,
+    "confidence": "verified",
+    "risk_level": "medium",
+    "disclaimer_required": true,
+    "usage_rules": ["Đối chiếu TT 06/2021/TT-BCA và mặt sau CCCD thực tế"],
+    "forbidden_claims": ["Nơi cấp là Công an xã nơi làm thủ tục", "Bắt buộc viết đủ Cục trưởng trong ô nơi cấp"],
+    "counseling_guide_path": "legal-sources/noxh/mau-01-handwriting-sample-guide.md",
+    "last_checked": "2026-06-26"
+  },
+  {
+    "claim_id": "mau01_address_line_break_001",
+    "topic": "noxh_documents",
+    "claim": "Địa chỉ thường trú/tạm trú trên Mẫu 01 phải khớp VNeID/CSDL cư trú (không tự rút gọn sai). NĐ 100 không cấm xuống dòng trong cùng mục nếu địa chỉ dài — viết rõ trong ô, cùng mực; không viết đè sang mục khác. Hết chỗ: hỏi CĐT về phụ lục hoặc kèm CT07.",
+    "source_refs": ["vneid_cccd_identity_hierarchy_001", "ct07_residence_confirmation_001"],
+    "effective_from": "2024-08-01",
+    "effective_to": null,
+    "confidence": "verified",
+    "risk_level": "medium",
+    "disclaimer_required": true,
+    "counseling_guide_path": "legal-sources/noxh/mau-01-handwriting-sample-guide.md",
+    "last_checked": "2026-06-26"
+  },
+  {
+    "claim_id": "mau01_section_9_household_table_001",
+    "topic": "noxh_documents",
+    "claim": "Mục thành viên gia đình trên Mẫu 01: luật quốc gia không bắt khai hết con ≥18 cho mọi hồ sơ — bắt buộc đủ vợ/chồng nếu đã kết hôn; nhánh 15 m²/người hoặc hộ nghèo phải liệt kê người thường trú tại căn nhà. Bảng nhiều người: một người một dòng; hết dòng in sẵn có thể tiếp dòng/phụ lục theo hướng dẫn CĐT. Không khai sai quan hệ so với CSDL.",
+    "source_refs": ["mau01_spouse_only_mandatory_members_001", "housing_15m2_household_members_001"],
+    "effective_from": "2024-08-01",
+    "effective_to": null,
+    "confidence": "verified",
+    "risk_level": "medium",
+    "disclaimer_required": true,
+    "counseling_guide_path": "legal-sources/noxh/mau-01-handwriting-sample-guide.md",
+    "last_checked": "2026-06-26"
   }
 ]

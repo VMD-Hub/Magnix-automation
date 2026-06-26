@@ -2,7 +2,8 @@
 
 > **Trạng thái:** `human_verified` — 2026-06-26 · L3 duyệt (vẫn `disclaimer_required`)  
 > **Căn cứ:** NĐ 100 Đ.38 · NĐ 54 · Mẫu 01 · NĐ 136 · thực tế tiếp nhận CĐT  
-> **Mục đích:** “Làm mấy bộ?”, độc thân/kết hôn, có vay/không vay
+> **Mục đích:** “Làm mấy bộ?”, độc thân/kết hôn, có vay/không vay  
+> **Viết tay Mẫu 01:** `mau-01-handwriting-sample-guide.md` · bản mẫu tham chiếu: `samples/mau-01-sample-filled-reference.md`
 
 ---
 

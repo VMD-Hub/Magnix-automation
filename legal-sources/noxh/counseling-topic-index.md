@@ -10,6 +10,7 @@
 | Chủ đề khách hỏi | File tư vấn | Claim / Q&A chính |
 |------------------|-------------|-------------------|
 | Điền Mẫu 01 từng phần · L3 ✓ | `application-form-mau-01-guide.md` | `mau01_core_bundle_001` |
+| **Viết tay / nơi cấp / xuống dòng / mục 9** · L3 ✓ 2026-06-26 | `mau-01-handwriting-sample-guide.md` | `mau01_qa_handwriting_place_issue_001` · mẫu: `samples/mau-01-sample-filled-reference.md` |
 | **Số bộ hồ sơ / checklist giấy tờ** · L3 ✓ | `application-dossier-checklist.md` | `mau01_one_dossier_per_project_001`, `mau01_qa_dossier_sets_001` — **số bộ tùy CĐT từng dự án** |
 | Mục 11 thu nhập (11.1 / 11.2) · L3 ✓ | `mau-01-section-11-income.md` | `mau01_section_11_1_k568_001`, `mau01_section_11_2_k7_001` |
 | k7 vs k8, quốc phòng vs CBCCVC · L3 ✓ | `object-classification-cbccvc-hdld.md` | `luat76_k7_vs_k8_distinction_001` |

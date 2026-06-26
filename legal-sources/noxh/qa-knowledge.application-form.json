@@ -339,5 +339,24 @@
     ],
     "safe_cta": "Comment BOSO để nhận checklist bộ hồ sơ theo đối tượng.",
     "disclaimer": "Số bản photocopy theo từng dự án."
+  },
+  {
+    "qa_id": "mau01_qa_handwriting_place_issue_001",
+    "topic": "noxh_documents",
+    "question": "Điền Mẫu 01 viết tay thế nào? Nơi cấp CCCD quá dài, địa chỉ không đủ ô, mục 9 nhiều người — có viết tắt, xuống dòng được không?",
+    "short_answer": "Thường viết tay bút xanh/đen trên bản in và ký tên. Nơi cấp: ghi đúng mặt sau thẻ, bỏ 'Cục trưởng'; ô ngắn có thể 'Cục CS QLHC về TTXH'. Địa chỉ khớp VNeID — được xuống dòng trong cùng mục. Mục 9: một người một dòng; hết dòng hỏi CĐT về phụ lục.",
+    "expanded_answer": "Magnix có bản mẫu tham chiếu (dữ liệu giả in đậm) tại mau-01-handwriting-sample-guide.md và samples/mau-01-sample-filled-reference.md — khách đối chiếu rồi tự viết thông tin thật. Không ghi Công an xã làm nơi cấp. Không bắt buộc liệt kê hết con ≥18 trừ nhánh 15 m²/hộ nghèo/CĐT bổ sung. Photo phải đọc được chữ nhỏ; kèm CCCD.",
+    "source_refs": [
+      "mau01_handwriting_sign_001",
+      "mau01_cccd_place_of_issue_001",
+      "mau01_address_line_break_001",
+      "mau01_section_9_household_table_001"
+    ],
+    "related_questions": [
+      "Khai địa chỉ theo VNeID hay CCCD?",
+      "Mua NOXH có bắt khai hết thành viên hộ không?"
+    ],
+    "safe_cta": "Comment MAU01 để nhận bản mẫu tham chiếu và checklist viết tay.",
+    "disclaimer": "Một số CĐT cho điền PDF — đối chiếu thông báo dự án."
   }
 ]

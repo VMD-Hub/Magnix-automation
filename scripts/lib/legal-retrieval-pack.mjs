@@ -220,7 +220,7 @@ export function buildPackFromQuery(query, options = {}) {
   if (!topic) {
     const q = (query || '').toLowerCase().normalize('NFD').replace(/\p{M}/gu, '');
     if (/thu nhap|luong|trieu/.test(q)) topic = province_code ? 'local_policy' : 'noxh_income';
-    else if (/vneid|cccd|cu tru|cu trú|ho khau|hộ khẩu|ct07|xac nhan cu tru|xác nhận cư trú|mau ct07|mẫu ct07|thanh vien ho|thành viên hộ|ly lich|lý lịch|lltp|tu phap|tư pháp|sao y|chung thuc|chứng thực/.test(q)) topic = 'noxh_documents';
+    else if (/vneid|cccd|cu tru|cu trú|ho khau|hộ khẩu|ct07|xac nhan cu tru|xác nhận cư trú|mau ct07|mẫu ct07|thanh vien ho|thành viên hộ|ly lich|lý lịch|lltp|tu phap|tư pháp|sao y|chung thuc|chứng thực|viet tay|viết tay|noi cap|nơi cấp|xuong dong|xuống dòng|mau dien|mẫu điền|dien mau|điền mẫu/.test(q)) topic = 'noxh_documents';
     else if (/nghi huu|nghỉ hưu|het tuoi|hết tuổi|lao dong|lao động|ve huu|về hưu|luong huu|lương hưu/.test(q)) topic = 'noxh_eligibility';
     else if (/con tren 18|con trên 18|tach ho|tách hộ|ho khau con|thu nhap con|thu nhập con/.test(q)) topic = 'noxh_income';
     else if (/vo chong khac|vợ chồng khác|khac nhom|khác nhóm|dung don|đứng đơn/.test(q)) topic = 'noxh_eligibility';
