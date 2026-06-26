@@ -1,0 +1,343 @@
+[
+  {
+    "qa_id": "mau01_qa_what_to_prepare_001",
+    "topic": "noxh_documents",
+    "question": "Hồ sơ đăng ký mua nhà ở xã hội gồm những gì?",
+    "short_answer": "Đơn Mẫu 01 và giấy tờ chứng minh đúng nhóm đối tượng Điều 76, điều kiện nhà ở tại tỉnh có dự án, và thu nhập — loại giấy tờ tùy anh/chị có HĐLĐ hay không.",
+    "expanded_answer": "Theo NĐ 100 Điều 38 (đã sửa NĐ 54): hộ/cá nhân nộp cho chủ đầu tư Đơn đăng ký Mẫu 01 (Phụ lục II, đã cập nhật NĐ 136) kèm giấy tờ chứng minh. Tối thiểu: CCCD, xác nhận nhà ở (nếu cần), xác nhận thu nhập (đơn vị hoặc Công an cấp xã nếu không HĐLĐ). Giấy xác nhận có giá trị 12 tháng. Không đăng ký đồng thời nhiều dự án.",
+    "source_refs": [
+      "mau01_core_bundle_001",
+      "mau01_commitment_single_project_001"
+    ],
+    "related_questions": [
+      "Điền đơn Mẫu 01 như thế nào?",
+      "Không có HĐLĐ nộp hồ sơ NOXH ra sao?"
+    ],
+    "safe_cta": "Comment MAU01 để nhận checklist khai báo từng mục trên đơn.",
+    "disclaimer": "Danh mục chi tiết có thể thêm theo hướng dẫn từng dự án."
+  },
+  {
+    "qa_id": "mau01_qa_spouse_001",
+    "topic": "noxh_documents",
+    "question": "Đã kết hôn có cần khai vợ/chồng trên đơn đăng ký NOXH không?",
+    "short_answer": "Có — phải khai thông tin vợ/chồng vì điều kiện nhà ở và thu nhập được xét cho cả hai người tại tỉnh có dự án.",
+    "expanded_answer": "Dù vợ/chồng không đứng tên mua, Mẫu 01 vẫn yêu cầu khai để đối chiếu: có tên trên GCN nhà ở tại tỉnh dự án không, tổng thu nhập vợ chồng có vượt trần không. Khai thiếu hoặc sai tình trạng hôn nhân dễ bị trả hồ sơ.",
+    "source_refs": ["mau01_spouse_declaration_001"],
+    "related_questions": [
+      "Vợ chồng tính thu nhập thế nào trên đơn?",
+      "Vợ có nhà riêng có ảnh hưởng không?"
+    ],
+    "safe_cta": "Comment VOCHONG để nhận bảng tự kiểm trước khi ký đơn.",
+    "disclaimer": "Thông tin tham khảo; đối chiếu Mẫu 01 và thông báo CĐT."
+  },
+  {
+    "qa_id": "mau01_qa_no_hdld_001",
+    "topic": "noxh_documents",
+    "question": "Không có hợp đồng lao động điền đơn NOXH thế nào?",
+    "short_answer": "Thuộc khoản 5 Điều 76 (thu nhập thấp đô thị, không HĐLĐ) — mục 11.1 trên đơn; làm xác nhận tại Công an cấp xã, kê khai cam kết thu nhập.",
+    "expanded_answer": "Từ NĐ 54 (09/02/2026), không dùng UBND xã. Trên đơn tick đúng k5 (không HĐLĐ), mục thu nhập 11.1 — không nhầm k8 (cán bộ) hay 11.2 (bộ đội/công an). Công an xác nhận trong 07 ngày; có thể hậu kiểm. Trần 25/35/50 triệu tùy độc thân, nuôi con, vợ chồng.",
+    "source_refs": [
+      "mau01_article76_tick_001",
+      "nd54_income_ca_xa_001"
+    ],
+    "related_questions": [
+      "Làm tự do có được mua NOXH không?",
+      "Công an xã xác nhận thu nhập cần mang gì?"
+    ],
+    "safe_cta": "Comment K5 để nhận checklist đơn Công an cấp xã.",
+    "disclaimer": "Thủ tục chi tiết theo mẫu địa phương và Công an cấp xã."
+  },
+  {
+    "qa_id": "mau01_qa_housing_section_001",
+    "topic": "noxh_documents",
+    "question": "Phần nhà ở trên đơn đăng ký NOXH khai thế nào cho đúng?",
+    "short_answer": "Khai theo tình trạng tại tỉnh có dự án: chưa có nhà trên GCN (kể cả đất thổ cư chưa xây), hoặc nhà diện tích thấp, hoặc có nhà xa nơi làm việc nếu tỉnh đó đã quy định.",
+    "expanded_answer": "Đây là mục hay sai nhất. Không khai theo chỗ đang ở nếu khác tỉnh dự án. Đất thổ cư chưa xây mà GCN không ghi nhà ở thường thuộc 'chưa có nhà'. Trường hợp có nhà nhưng đi làm xa chỉ áp dụng khi QĐ tỉnh dự án có (vd Đồng Nai: ≥20 km nhà→nơi làm việc, không phải cách dự án 20 km).",
+    "source_refs": [
+      "mau01_housing_declaration_001",
+      "nd54_land_no_house_on_gcn_001"
+    ],
+    "related_questions": [
+      "Có đất thổ cư chưa xây có mua NOXH được không?",
+      "Có nhà cách nơi làm việc 20 km có điền được không?"
+    ],
+    "safe_cta": "Comment NHAO để nhận sơ đồ chọn đúng mục khai báo.",
+    "disclaimer": "Cần xác nhận VPĐK/cơ quan cấp GCN theo quy trình."
+  },
+  {
+    "qa_id": "mau01_qa_common_mistakes_001",
+    "topic": "noxh_documents",
+    "question": "Lỗi hay gặp khi nộp đơn đăng ký nhà ở xã hội?",
+    "short_answer": "Tick sai nhóm đối tượng, khai sai nhà ở theo tỉnh khác tỉnh dự án, nộp hai dự án cùng lúc, hoặc dùng giấy xác nhận quá 12 tháng.",
+    "expanded_answer": "Các lỗi thường gặp: (1) k5 nhưng không có HĐLĐ; (2) bỏ khai vợ/chồng; (3) khai chưa có nhà trong khi vợ/chồng có GCN tại tỉnh dự án; (4) thu nhập vượt trần chưa tính hệ số tỉnh; (5) đăng ký song song hai dự án; (6) thiếu xác nhận đơn vị khi khai có nhà xa nơi làm việc tại tỉnh có QĐ. Nên tự kiểm checklist trước khi nộp.",
+    "source_refs": [
+      "mau01_article76_tick_001",
+      "mau01_commitment_single_project_001",
+      "mau01_housing_declaration_001"
+    ],
+    "related_questions": [
+      "Hồ sơ NOXH bị trả thì làm gì?",
+      "Nộp online đơn NOXH được không?"
+    ],
+    "safe_cta": "Comment LOI để nhận bảng 10 lỗi cần tránh trước khi ký.",
+    "disclaimer": "Thông tin tham khảo; quyết định theo CĐT và cơ quan có thẩm quyền."
+  },
+  {
+    "qa_id": "mau01_qa_section_11_001",
+    "topic": "noxh_documents",
+    "question": "Mục 11 đơn NOXH 11.1 và 11.2 khác nhau thế nào?",
+    "short_answer": "11.1 dành cho công nhân, cán bộ, thu nhập thấp đô thị (k5, k6, k8) — trần 25/35/50 triệu. 11.2 chỉ cho bộ đội, công an, quốc phòng (k7) — trần theo mức Đại tá.",
+    "expanded_answer": "Tick một trong hai, khớp với nhóm đối tượng ở đầu đơn. Độc thân: một mình. Đã kết hôn: cộng thu nhập vợ chồng (11.1) hoặc chọn nhánh cả hai k7 / vợ chồng không k7 (11.2). Lao động tự do không HĐLĐ vẫn 11.1, không phải 11.2.",
+    "source_refs": [
+      "mau01_section_11_1_k568_001",
+      "mau01_section_11_2_k7_001"
+    ],
+    "related_questions": [
+      "Vợ chồng tính thu nhập thế nào?",
+      "Độc thân nuôi con được bao nhiêu triệu?"
+    ],
+    "safe_cta": "Comment MUC11 để nhận sơ đồ chọn 11.1 hay 11.2.",
+    "disclaimer": "Đối chiếu Mẫu 01 bản sau NĐ 136 (25/35/50 triệu)."
+  },
+  {
+    "qa_id": "mau01_qa_married_income_001",
+    "topic": "noxh_income",
+    "question": "Vợ chồng khai thu nhập trên đơn NOXH thế nào?",
+    "short_answer": "Nếu đã kết hôn và thuộc mục 11.1: ghi tổng thu nhập thực nhận của cả hai, không quá 50 triệu/tháng (hoặc theo hệ số tỉnh). Vợ/chồng không đi làm thì tính 0.",
+    "expanded_answer": "Phải tick ô đã kết hôn và khai thông tin vợ/chồng ở phần đầu đơn. Hai người cùng k6 hay khác k6/k8 đều cộng chung trần 11.1. Nếu người đứng đơn là k7 và vợ/chồng là dân sự: dùng mục 11.2 nhánh vợ/chồng không k7 — trần Đại tá + 25 triệu, không dùng 50 triệu.",
+    "source_refs": [
+      "mau01_section_11_1_k568_001",
+      "mau01_married_mixed_k568_k7_001"
+    ],
+    "related_questions": [
+      "Chồng công nhân vợ cán bộ xã điền thế nào?",
+      "Một vợ chồng không HĐLĐ xác nhận ở đâu?"
+    ],
+    "safe_cta": "Comment VOCHONG để nhận bảng cộng thu nhập mẫu.",
+    "disclaimer": "Thông tin tham khảo; số liệu theo bảng xác nhận cơ quan."
+  },
+  {
+    "qa_id": "mau01_qa_parent_minor_001",
+    "topic": "noxh_documents",
+    "question": "Cha mẹ mua nhà xã hội cho con dưới 18 tuổi điền đơn thế nào?",
+    "short_answer": "Thường cha/mẹ đủ điều kiện Điều 76 đứng đơn; mục 11 khai theo thu nhập cha/mẹ (và vợ/chồng nếu có). Con nhỏ không có thu nhập thì không cộng vào trần.",
+    "expanded_answer": "Không tick nhóm đối tượng của con nếu con chưa thuộc diện mua/thuê mua. Cha/mẹ độc thân nuôi con dưới 18 có thể áp trần 35 triệu (NĐ 136) nếu đơn có quy định. Trường hợp muốn con là người đứng đơn dưới 18 tuổi cần hỏi chủ đầu tư/Sở Xây dựng — không tư vấn chắc.",
+    "source_refs": [
+      "mau01_section_11_1_k568_001",
+      "luat76_objects_k568_001"
+    ],
+    "related_questions": [
+      "Học sinh có mua NOXH được không?",
+      "Độc thân nuôi con được bao nhiêu triệu?"
+    ],
+    "safe_cta": "Comment CHAME để nhận checklist hồ sơ cha mẹ đứng đơn.",
+    "disclaimer": "Quyền đứng tên và HĐ theo quy định CĐT và pháp luật dân sự."
+  },
+  {
+    "qa_id": "mau01_qa_cc_vc_vs_hdld_001",
+    "topic": "noxh_eligibility",
+    "question": "Công chức, viên chức và người làm theo hợp đồng lao động khác nhau thế nào khi đăng ký NOXH?",
+    "short_answer": "Công chức/viên chức (có quyết định tuyển dụng, lương ngạch CC/VC) thuộc khoản 8 — mục 11.1. Chỉ ký Hợp đồng lao động mà chưa là CC/VC thường thuộc khoản 6 (công nhân, LĐ), không tick k8.",
+    "expanded_answer": "Công chức: cơ quan hành chính, QĐ bổ nhiệm công chức. Viên chức: đơn vị sự nghiệp công lập, QĐ tuyển dụng VC, Hợp đồng làm việc theo Luật Viên chức. HĐLĐ theo Bộ luật Lao động (kể cả GV hợp đồng, nhân viên hợp đồng ở UBND) thường không phải k8. Tự do không HĐLĐ: k5, xác nhận Công an cấp xã.",
+    "source_refs": ["object_k8_cbccvc_vs_hdld_001"],
+    "related_questions": [
+      "Giáo viên hợp đồng có tick viên chức không?",
+      "Công chức thử việc thuộc nhóm nào?"
+    ],
+    "safe_cta": "Comment PHANLOAI để nhận bảng 5 câu hỏi tự phân loại.",
+    "disclaimer": "Ranh giới k6 tại đơn vị sự nghiệp: đối chiếu CĐT."
+  },
+  {
+    "qa_id": "mau01_qa_teacher_contract_001",
+    "topic": "noxh_eligibility",
+    "question": "Giáo viên biên chế và giáo viên hợp đồng đăng ký NOXH khác nhau thế nào?",
+    "short_answer": "GV biên chế/viên chức (QĐ tuyển dụng VC, HĐ làm việc): khoản 8, mục 11.1. GV chỉ ký Hợp đồng lao động với trường công: thường khoản 6, không tick viên chức.",
+    "expanded_answer": "Nhiều GV trường công lập ký HĐLĐ hàng năm nhưng chưa có quyết định viên chức — không được tick k8 chỉ vì làm trường công. Xác nhận thu nhập qua nhà trường (Bảng tiền công). GV tự do dạy thêm không HĐLĐ có thể k5 + Công an xã.",
+    "source_refs": ["object_k8_cbccvc_vs_hdld_001"],
+    "related_questions": [
+      "Viên chức và công chức khác gì?",
+      "Làm nhà nước có phải k8 không?"
+    ],
+    "safe_cta": "Comment GIAOVIEN để nhận checklist GV HĐ vs biên chế.",
+    "disclaimer": "Thông tin tham khảo; đối chiếu hồ sơ tuyển dụng thực tế."
+  },
+  {
+    "qa_id": "mau01_qa_married_mixed_object_001",
+    "topic": "noxh_eligibility",
+    "question": "Vợ chồng thuộc hai nhóm đối tượng NOXH khác nhau thì ai đứng đơn và khai thế nào?",
+    "short_answer": "Một đơn chỉ một người đứng đơn — tick đối tượng và mục 11 theo người đó. Nếu một bên thuộc k7 (quân đội, công an, quốc phòng tại ngũ) thì người k7 nên đứng đơn, mục 11.2; vợ/chồng còn lại vẫn khai đủ và cộng thu nhập.",
+    "expanded_answer": "Ví dụ chồng k7, vợ tự do: chồng đứng đơn, tick k7, 11.2 nhánh vợ không k7, tổng thu nhập ≤ Đại tá + 25 triệu; vợ xác nhận thu nhập tại Công an xã nếu tự do. Nếu cả hai chỉ k5/k6/k8: ai đứng cũng được, đều 11.1, tổng 50 triệu. Không tick hai nhóm Đ.76 trên một đơn.",
+    "source_refs": [
+      "mau01_married_mixed_k568_k7_001",
+      "mau01_spouse_declaration_001"
+    ],
+    "related_questions": [
+      "Chồng quốc phòng vợ làm công ty điền sao?",
+      "Vợ công chức chồng tự do ai đứng đơn?"
+    ],
+    "safe_cta": "Comment VOCHONGKHAC để nhận bảng ví dụ vợ chồng khác nhóm.",
+    "disclaimer": "So sánh trần Đại tá+25 với 50 triệu cần tính số cụ thể."
+  },
+  {
+    "qa_id": "mau01_qa_spouses_different_residence_001",
+    "topic": "noxh_documents",
+    "question": "Vợ chồng không cùng nơi đăng ký thường trú có đăng ký mua NOXH được không?",
+    "short_answer": "Được — không bắt buộc cùng hộ khẩu hay thường trú tại tỉnh dự án. Mỗi người khai đúng địa chỉ riêng trên đơn/CT07; vẫn khai đã kết hôn và cộng thu nhập.",
+    "expanded_answer": "Luật Nhà ở 2023 bỏ điều kiện cư trú tại tỉnh có dự án. Điều kiện nhà ở xét GCN tại tỉnh dự án (cả vợ chồng), không theo nơi đăng ký cư trú. Giấy xác nhận thu nhập có thể xin ở hai nơi: đơn vị nơi làm việc và Công an xã nơi cư trú của từng người (k5 không HĐLĐ). Không ghi chung địa chỉ nếu thực tế khác VNeID/CCCD.",
+    "source_refs": [
+      "spouses_different_residence_001",
+      "luat78_no_residence_requirement_001"
+    ],
+    "related_questions": [
+      "CT07 điền thế nào khi vợ chồng ở hai tỉnh?",
+      "Có bắt buộc hộ khẩu tỉnh dự án không?"
+    ],
+    "safe_cta": "Comment CUTRU để nhận checklist vợ chồng khác địa chỉ.",
+    "disclaimer": "Form CT07 CĐT có thể bổ sung — đối chiếu thông báo dự án."
+  },
+  {
+    "qa_id": "mau01_qa_ct07_001",
+    "topic": "noxh_documents",
+    "question": "CT07 là gì và làm ở đâu?",
+    "short_answer": "CT07 chính thức là Giấy xác nhận thông tin về cư trú (Thông tư 66/2023/TT-BCA), do Công an xã/phường cấp. Làm online qua VNeID/Cổng DVC (mức 2) hoặc trực tiếp tại CA nơi thường trú/tạm trú — không thu phí.",
+    "expanded_answer": "CT07 lấy dữ liệu từ CSDL cư trú: địa chỉ, thời gian cư trú, hình thức đăng ký. Hiệu lực 1 năm. Kết quả điện tử có trên VNeID. Trong NOXH thường dùng khi CĐT/NH không tra được cư trú hoặc cần chứng minh tạm trú (vd vay NHCSXH). Khác với lý lịch tư pháp và khác mẫu 'bảng lý lịch' riêng của CĐT. CĐT từng dự án chấp nhận bản in VNeID hoặc bắt bản gốc/sao y — hỏi thông báo dự án.",
+    "source_refs": [
+      "ct07_residence_confirmation_001",
+      "ct07_per_person_biography_001"
+    ],
+    "related_questions": [
+      "CT07 điền thế nào khi vợ chồng khác nơi cư trú?",
+      "CĐT có chấp nhận bản in từ VNeID không?"
+    ],
+    "safe_cta": "Comment CT07 để nhận checklist xin giấy cư trú.",
+    "disclaimer": "Đối chiếu TT 66/2023/TT-BCA khi hướng dẫn khách thao tác lần đầu."
+  },
+  {
+    "qa_id": "mau01_qa_ct07_spouses_residence_001",
+    "topic": "noxh_documents",
+    "question": "CT07 khi vợ chồng khác nơi cư trú — xin và khai thế nào?",
+    "short_answer": "Mỗi người xin CT07 (xác nhận cư trú) tại CA xã/phường nơi mình thường trú/tạm trú — hoặc online VNeID. Nội dung mỗi giấy khác địa chỉ; không ghi chung.",
+    "expanded_answer": "CT07 chính thức là giấy xác nhận cư trú từ CSDL, không phải một form chung cho hai người. Vợ chồng khác tỉnh: mỗi người làm CT07 riêng. Trên Mẫu 01 vẫn khai đã kết hôn, cộng thu nhập. Một số CĐT thêm mẫu 'bảng lý lịch người mua' riêng — điền tay theo mẫu CĐT.",
+    "source_refs": [
+      "ct07_residence_confirmation_001",
+      "spouses_different_residence_001"
+    ],
+    "related_questions": [
+      "Vợ chồng khác tỉnh có cần cùng hộ khẩu không?",
+      "Khai địa chỉ theo VNeID hay CCCD?"
+    ],
+    "safe_cta": "Comment CT07 để nhận mẫu tự kiểm trước khi nộp.",
+    "disclaimer": "Tên/mã CT07 có thể khác theo từng CĐT."
+  },
+  {
+    "qa_id": "mau01_qa_ct07_online_vneid_001",
+    "topic": "noxh_documents",
+    "question": "Làm CT07 (xác nhận cư trú) online thế nào? CĐT có chấp nhận bản VNeID in ra không?",
+    "short_answer": "Xin CT07 online qua VNeID mức 2 hoặc Cổng DVC; kết quả trên VNeID, có thể tải in. CĐT từng dự án khác nhau: có nơi chấp nhận bản in/scan, có nơi bắt bản giấy gốc hoặc sao y — hỏi thông báo dự án.",
+    "expanded_answer": "Trực tiếp: đến Công an phường/xã nơi cư trú. Online: VNeID → thủ tục xác nhận cư trú/CT07, hoặc dichvucong.gov.vn. Không thu phí xác nhận cư trú. Sau khi có giấy, đối chiếu CĐT chấp nhận điện tử hay sao y. Lý lịch tư pháp là thủ tục khác (có phí) — không nhầm với CT07.",
+    "source_refs": [
+      "ct07_residence_confirmation_001",
+      "ct07_lltp_online_vneid_001"
+    ],
+    "related_questions": [
+      "CT07 điền thế nào khi vợ chồng khác nơi cư trú?",
+      "Khai đơn theo VNeID hay CCCD?"
+    ],
+    "safe_cta": "Gửi tên dự án + đoạn thông báo về CT07 để kiểm tra scan hay sao y.",
+    "disclaimer": "Quy định tiếp nhận do CĐT từng dự án — đọc thông báo dự án trước khi nộp."
+  },
+  {
+    "qa_id": "mau01_qa_ct07_form_fields_001",
+    "topic": "noxh_documents",
+    "question": "Mẫu CT07 có những mục gì? Khai thế nào khi đã kết hôn, có con nhỏ?",
+    "short_answer": "CT07 có 3 phần: I cá nhân + chủ hộ, II thành viên cùng hộ trên CSDL, III lịch sử cư trú. CA in từ CSDL — trước khi xin kiểm tra VNeID. Kết hôn khác hộ: mỗi người một CT07. Con nhỏ chỉ hiện nếu đăng ký cùng hộ. Không khai 'người phụ thuộc' NOXH trên CT07.",
+    "expanded_answer": "Phần I: họ tên, CCCD, thường trú, tạm trú (không có thì bỏ trống), nơi ở hiện tại, chủ hộ. Phần II: bảng thành viên khác trong hộ (tên, ngày sinh, giới tính, số ĐDCN, quan hệ). Phần III: nơi cư trú trước, thời gian sinh sống — quan trọng khi cần chứng minh tạm trú. Mẫu 01 NOXH vẫn bắt khai vợ/chồng nếu kết hôn dù khác hộ. Chi tiết: ct07-form-fields-declaration-guide.md.",
+    "source_refs": [
+      "ct07_form_fields_household_001",
+      "ct07_residence_confirmation_001"
+    ],
+    "related_questions": [
+      "CT07 là gì và làm ở đâu?",
+      "Mua NOXH có bắt khai hết thành viên hộ không?"
+    ],
+    "safe_cta": "Comment CT07MAU để nhận sơ đồ mẫu và checklist kiểm tra VNeID.",
+    "disclaimer": "Đối chiếu TT 66/2023/TT-BCA khi hướng dẫn khách thao tác lần đầu."
+  },
+  {
+    "qa_id": "mau01_qa_vneid_vs_cccd_001",
+    "topic": "noxh_documents",
+    "question": "Khai đơn NOXH theo VNeID hay theo CCCD nếu hai nguồn khác nhau?",
+    "short_answer": "Số CCCD và họ tên theo thẻ; địa chỉ thường trú/tạm trú theo VNeID/CSDL cư trú (CA đối chiếu). Nếu lệch — đồng bộ tại Công an cấp xã trước khi nộp, không chọn bừa.",
+    "expanded_answer": "Hay gặp: đã chuyển thường trú, VNeID mới nhưng CCCD vẫn địa chỉ cũ — khai theo VNeID, xin giấy tại xã mới, nên đổi thẻ CCCD. Trường hợp CCCD mới mà VNeID chưa cập nhật: không khai theo VNeID cũ, yêu cầu CA đồng bộ trước. Tình trạng hôn nhân theo giấy kết hôn thực tế, không theo CCCD nếu chưa cập nhật.",
+    "source_refs": ["vneid_cccd_identity_hierarchy_001"],
+    "related_questions": [
+      "Chuyển hộ khẩu chưa đổi CCCD có nộp hồ sơ được không?",
+      "Tạm trú có ghi trên đơn không?"
+    ],
+    "safe_cta": "Comment VNEID để nhận checklist đồng bộ trước khi ký đơn.",
+    "disclaimer": "Thủ tục đổi thẻ CCCD theo Luật Căn cước."
+  },
+  {
+    "qa_id": "mau01_qa_retired_working_age_001",
+    "topic": "noxh_eligibility",
+    "question": "Người hết tuổi lao động hoặc nghỉ hưu có được mua nhà ở xã hội không?",
+    "short_answer": "Được — Luật Nhà ở 2023 không giới hạn tuổi tối đa. Người nghỉ hưu vẫn có thể mua nếu đủ điều kiện nhà ở tại tỉnh dự án và thu nhập trong trần; thường tick khoản 5 (thu nhập thấp đô thị), mục 11.1.",
+    "expanded_answer": "Hết tuổi lao động theo Bộ luật Lao động không phải căn cứ loại khỏi NOXH. Người đã nghỉ chế độ thường không còn tick k6 (công nhân/LĐ) hay k8 (CBCCVC đang công tác) mà tick k5, xác nhận lương hưu qua BHXH hoặc Công an cấp xã theo hướng dẫn dự án. Lương hưu và thu nhập khác phải cộng đủ và không vượt trần 25/35/50 triệu. Vay ngân hàng có thể có giới hạn tuổi riêng.",
+    "source_refs": [
+      "noxh_no_max_age_purchase_001",
+      "retired_object_k5_income_001"
+    ],
+    "related_questions": [
+      "Cán bộ nghỉ hưu tick đối tượng gì?",
+      "Lương hưu bao nhiêu thì đủ điều kiện NOXH?"
+    ],
+    "safe_cta": "Comment HUU để nhận checklist hồ sơ người nghỉ hưu.",
+    "disclaimer": "Mẫu xác nhận lương hưu đối chiếu CĐT/Sở XD từng dự án."
+  },
+  {
+    "qa_id": "mau01_qa_adult_child_income_001",
+    "topic": "noxh_income",
+    "question": "Con trên 18 tuổi thu nhập cao, chưa tách hộ khẩu với cha mẹ — cha mẹ có được mua NOXH không?",
+    "short_answer": "Có thể — thu nhập con ≥18 không cộng vào trần của cha/mẹ. Cha/mẹ đứng đơn theo thu nhập bản thân (và vợ/chồng nếu kết hôn); chưa tách sổ hộ khẩu không phải điều kiện loại trừ.",
+    "expanded_answer": "Mục 11.1 chỉ cộng vợ/chồng khi đã kết hôn, không cộng con trưởng thành. Cha/mẹ hết tuổi lao động làm tự do: k5 không HĐLĐ, 11.1 độc thân ≤25 triệu (lương hưu + tự do). Con giàu không tự động loại cha/mẹ. Điều kiện nhà ở xét tên cha/mẹ và vợ/chồng trên GCN tại tỉnh dự án, không xét nhà riêng của con. Tiền con hỗ trợ định kỳ nếu cha/mẹ thực nhận phải kê khai.",
+    "source_refs": ["income_adult_child_not_counted_001", "retired_object_k5_income_001"],
+    "related_questions": [
+      "Phải tách hộ khẩu với con mới đăng ký được?",
+      "Cha mẹ độc thân nuôi con 20 tuổi trần bao nhiêu?"
+    ],
+    "safe_cta": "Comment CON18 để nhận bảng ai được cộng thu nhập.",
+    "disclaimer": "CĐT hiểu sai có thể trả hồ sơ — đối chiếu NĐ 30."
+  },
+  {
+    "qa_id": "mau01_qa_household_members_001",
+    "topic": "noxh_documents",
+    "question": "Mua NOXH có bắt buộc khai tất cả thành viên hộ gia đình và nộp CCCD con không?",
+    "short_answer": "Theo NĐ 100/54: bắt buộc khai đủ vợ/chồng (nếu đã kết hôn) và CCCD người đứng đơn + vợ/chồng. Không quy định chung phải khai hết con ≥18 hay nộp CCCD từng thành viên — trừ nhánh nhà ở 15 m²/người, hộ nghèo, hoặc phụ lục riêng của CĐT/ngân hàng.",
+    "expanded_answer": "Con trên 18 tuổi không cộng thu nhập vào trần vợ chồng. CCCD con >16 hoặc giấy khai sinh con <16 thường là yêu cầu bổ sung của từng dự án/cổng nộp online, không phải điều kiện chung trong trích NĐ 100 Đ.38. Nếu khai có nhà diện tích thấp, phải đếm thành viên thường trú tại căn nhà (có thể gồm con). Đối chiếu thông báo tiếp nhận dự án.",
+    "source_refs": [
+      "mau01_spouse_only_mandatory_members_001",
+      "housing_15m2_household_members_001",
+      "income_adult_child_not_counted_001"
+    ],
+    "related_questions": [
+      "Con trên 18 thu nhập cao có ảnh hưởng cha mẹ không?",
+      "Cần giấy khai sinh con khi nào?"
+    ],
+    "safe_cta": "Comment HOGIADINH để nhận bảng ai phải khai theo từng nhánh.",
+    "disclaimer": "Danh mục CĐT có thể bổ sung — đối chiếu thông báo tiếp nhận dự án."
+  },
+  {
+    "qa_id": "mau01_qa_dossier_sets_001",
+    "topic": "noxh_documents",
+    "question": "Hồ sơ mua NOXH cần làm bao nhiêu bộ? Độc thân và kết hôn khác nhau thế nào?",
+    "short_answer": "Số bộ = số lần photo cả danh mục giấy — do từng CĐT quy định; phải đọc thông báo đúng dự án. Tham khảo: không vay ~3 bộ, có vay ~4 bộ. Độc thân/kết hôn cùng số bộ theo dự án, khác loại giấy trong mỗi bộ.",
+    "expanded_answer": "NĐ 100/54 quy loại giấy (Mẫu 01, CCCD, xác nhận nhà ở, thu nhập…), không cố định 3 hay 4 bộ. Mỗi chủ đầu tư/dự án có thể yêu cầu khác — agent cần hỏi kỹ hoặc đối chiếu Thông báo tiếp nhận trước khi photo. Tham khảo thị trường: ~3 bộ không vay, ~4 bộ có vay NH. Nộp online: thường 1 bộ scan. Chưa có thông báo dự án: needs_human_legal_source, không chốt số bộ.",
+    "source_refs": ["mau01_one_dossier_per_project_001", "mau01_core_bundle_001"],
+    "related_questions": [
+      "Độc thân cần những giấy gì?",
+      "Vợ chồng nộp chung mấy bộ?"
+    ],
+    "safe_cta": "Comment BOSO để nhận checklist bộ hồ sơ theo đối tượng.",
+    "disclaimer": "Số bản photocopy theo từng dự án."
+  }
+]

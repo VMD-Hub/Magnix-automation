@@ -1,0 +1,99 @@
+[
+  {
+    "qa_id": "noxh_objects_qa_d76_001",
+    "topic": "noxh_eligibility",
+    "question": "Ai được mua nhà ở xã hội theo Luật Nhà ở 2023?",
+    "short_answer": "Có 12 nhóm đối tượng tại Điều 76 — gồm người có công, hộ nghèo/cận nghèo, người thu nhập thấp đô thị, công nhân, lực lượng vũ trang, cán bộ công chức viên chức, người bị thu hồi đất, sinh viên (thuê), DN trong KCN (thuê nhà lưu trú), v.v. Mua/thuê mua còn phải đủ điều kiện Điều 78.",
+    "expanded_answer": "Điều 76 liệt kê đối tượng được hưởng chính sách hỗ trợ NOXH. Nhóm thường gặp trên thị trường inbound Magnix: khoản 5 (thu nhập thấp đô thị), 6 (công nhân/LĐ trong và ngoài KCN), 8 (CBCCVC) — phải thêm điều kiện thu nhập theo Nghị định 100/54/136. Khoản 4 (hộ nghèo/cận nghèo đô thị) xét chuẩn nghèo, không dùng mức 25 triệu. Khoản 7 (lực lượng vũ trang) xét theo mức lương Đại tá. Thuê NOXH (không mua) với nhiều nhóm không phải đáp ứng điều kiện nhà ở và thu nhập (Điều 78 khoản 2).",
+    "source_refs": [
+      "luat76_objects_k568_001",
+      "luat78_rent_no_income_test_001"
+    ],
+    "related_questions": [
+      "Công nhân KCN có mua NOXH được không?",
+      "Cán bộ công chức thuộc nhóm nào?",
+      "Sinh viên có mua được NOXH không?"
+    ],
+    "safe_cta": "Comment CHECKLIST để nhận bảng đối chiếu 12 nhóm Điều 76.",
+    "disclaimer": "Phải xác định đúng nhóm đối tượng và hình thức (mua/thuê mua/thuê) trước khi kết luận.",
+    "last_checked": "2026-06-26"
+  },
+  {
+    "qa_id": "noxh_residence_qa_removed_001",
+    "topic": "noxh_eligibility",
+    "question": "Mua nhà ở xã hội có bắt buộc hộ khẩu tại tỉnh có dự án không?",
+    "short_answer": "Luật Nhà ở 2023 không còn điều kiện cư trú/thường trú tại tỉnh có dự án như luật cũ; nhưng vẫn phải đáp ứng điều kiện về nhà ở tại tỉnh đó (chưa có nhà hoặc diện tích thấp theo quy định Chính phủ).",
+    "expanded_answer": "Một điểm thay đổi quan trọng so với Luật Nhà ở 2014: không yêu cầu đăng ký thường trú tại tỉnh/TP nơi có dự án. Tuy nhiên điều kiện nhà ở vẫn gắn với tỉnh có dự án — ví dụ không có tên hoặc không có thông tin nhà ở trên GCN tại tỉnh đó (theo NĐ 54 sửa Điều 29). Không đồng nghĩa mọi người ở tỉnh khác đều đủ điều kiện.",
+    "source_refs": ["luat78_no_residence_requirement_001", "nd54_housing_gcn_no_info_001"],
+    "related_questions": [
+      "Người tỉnh khác có mua NOXH tại Hà Nội được không?",
+      "Điều kiện nhà ở tính theo tỉnh nào?"
+    ],
+    "safe_cta": "Comment CHECKLIST để tự kiểm điều kiện nhà ở theo tỉnh dự án.",
+    "disclaimer": "Địa phương và chủ đầu tư có thể yêu cầu giấy tờ bổ sung theo hướng dẫn Bộ Xây dựng.",
+    "last_checked": "2026-06-26"
+  },
+  {
+    "qa_id": "noxh_income_qa_no_labor_contract_001",
+    "topic": "noxh_income",
+    "question": "Không có hợp đồng lao động thì xác nhận thu nhập mua NOXH ở đâu?",
+    "short_answer": "Từ 09/02/2026, đối tượng khoản 5 Điều 76 không có HĐLĐ nộp đơn cho Công an cấp xã nơi thường trú/tạm trú/nơi ở hiện tại; kê khai cam kết thu nhập; có thể hậu kiểm trong 07 ngày.",
+    "expanded_answer": "Nghị định 54/2026 chuyển thẩm quyền từ UBND cấp xã sang Công an cấp xã và bổ sung cơ chế kê khai, cam kết, hậu kiểm. Mức trần thu nhập vẫn theo khoản 1 Điều 30 (sau NĐ 136: 25/35/50 triệu tùy trường hợp). Đơn đề nghị xác nhận đồng thời là giấy chứng minh đối tượng.",
+    "source_refs": ["nd54_income_ca_xa_001", "nd100_income_k568_2026"],
+    "related_questions": [
+      "Lao động tự do có mua NOXH được không?",
+      "Thu nhập tính theo sao kê hay bảng lương?"
+    ],
+    "safe_cta": "Comment CHECKLIST để nhận checklist hồ sơ không HĐLĐ.",
+    "disclaimer": "Hậu kiểm có thể phát hiện kê khai không trung thực — người dùng chịu trách nhiệm trước pháp luật.",
+    "last_checked": "2026-06-26"
+  },
+  {
+    "qa_id": "noxh_procedure_qa_online_001",
+    "topic": "noxh_online_submission",
+    "question": "Đăng ký mua nhà ở xã hội online được không?",
+    "short_answer": "Có — từ NĐ 54/2026, có thể nộp hồ sơ trực tiếp, trực tuyến, qua bưu chính hoặc qua cơ quan/đơn vị nơi làm việc; không được đăng ký đồng thời nhiều dự án.",
+    "expanded_answer": "Nghị định 54 sửa Điều 38 NĐ 100: mở rộng hình thức nộp và chuẩn hóa công khai trên hệ thống/CSDL nhà ở và thị trường BĐS (nếu đã kết nối). Thời gian tiếp nhận tối thiểu 30 ngày; sau hết hạn CĐT gửi danh sách cho Sở Xây dựng trong 10 ngày. Quá số căn → bốc thăm có giám sát Sở XD, UBND xã, Công an xã.",
+    "source_refs": [
+      "nd54_register_one_project_001",
+      "nd100_registration_lottery_001"
+    ],
+    "related_questions": [
+      "Nộp hồ sơ NOXH qua công ty được không?",
+      "Bốc thăm NOXH diễn ra thế nào?"
+    ],
+    "safe_cta": "Comment CHECKLIST để nhận timeline đăng ký NOXH theo NĐ 54.",
+    "disclaimer": "Từng dự án có thể triển khai cổng khác nhau — cần theo thông báo chủ đầu tư và Sở Xây dựng địa phương.",
+    "last_checked": "2026-06-26"
+  },
+  {
+    "qa_id": "noxh_priority_qa_d79_001",
+    "topic": "noxh_eligibility",
+    "question": "Ai được ưu tiên mua nhà ở xã hội khi quá số căn?",
+    "short_answer": "Theo Điều 79 Luật Nhà ở và NĐ 54: người có công, thân nhân liệt sĩ, người khuyết tật, người tái định cư (mua NOXH), nữ giới — được ưu tiên trước; trong nhóm ưu tiên vượt chỉ tiêu thì bốc thăm.",
+    "expanded_answer": "Nguyên tắc ưu tiên nằm ở điểm đ khoản 1 Điều 79. Nghị định 54 chi tiết hóa tại Điều 38: số căn ưu tiên = (tổng hồ sơ đủ điều kiện nhóm ưu tiên / tổng hồ sơ đủ điều kiện) × tổng căn dự kiến bán. Nữ giới: đơn thân hoặc chủ hộ trên dữ liệu cư trú. Các đối tượng còn lại tham gia bốc thăm.",
+    "source_refs": ["nd54_priority_order_001", "luat79_single_best_policy_001"],
+    "related_questions": [
+      "Người khuyết tật có phải bốc thăm không?",
+      "Một người hưởng nhiều chính sách thì sao?"
+    ],
+    "safe_cta": "Comment CHECKLIST để xem bạn thuộc nhóm ưu tiên hay bốc thăm.",
+    "disclaimer": "Ưu tiên không đồng nghĩa chắc chắn được mua nếu vượt chỉ tiêu trong nhóm.",
+    "last_checked": "2026-06-26"
+  },
+  {
+    "qa_id": "noxh_income_qa_provincial_001",
+    "topic": "local_policy",
+    "question": "Mức thu nhập 25 triệu mua NOXH có áp dụng cho mọi tỉnh không?",
+    "short_answer": "25/35/50 triệu là mức khung quốc gia từ NĐ 136; UBND tỉnh có thể điều chỉnh hệ số theo thu nhập địa phương và có chính sách riêng cho hộ có từ 3 người phụ thuộc.",
+    "expanded_answer": "Điểm d khoản 1 Điều 30 (sau NĐ 136) cho phép UBND cấp tỉnh quyết định hệ số điều chỉnh nhưng không vượt quá tỷ lệ thu nhập bình quân đầu người địa phương so với cả nước. Trước khi khẳng định mức trần cho một tỉnh cụ thể, cần tra quyết định địa phương (nếu có).",
+    "source_refs": ["nd136_income_provincial_factor_001", "nd100_income_k568_2026"],
+    "related_questions": [
+      "Hà Nội có tăng mức thu nhập NOXH không?",
+      "Hộ 3 con có được ưu đãi thêm không?"
+    ],
+    "safe_cta": "Comment CHECKLIST để nhận hướng dẫn tra cứu quyết định tỉnh.",
+    "disclaimer": "Chưa có QĐ tỉnh trong KB thì không tự suy ra mức điều chỉnh.",
+    "last_checked": "2026-06-26"
+  }
+]

@@ -1,0 +1,217 @@
+[
+  {
+    "claim_id": "nd100_housing_no_owned_001",
+    "topic": "noxh_eligibility",
+    "claim": "Để được coi là chưa có nhà ở khi đăng ký mua/thuê mua NOXH, người đứng đơn và vợ/chồng (nếu có) không có tên trong GCN QSDĐ tại tỉnh/TP nơi có dự án. Từ 09/02/2026 (NĐ 54): thêm trường hợp không có nội dung thông tin về nhà ở trên GCN — không phụ thuộc thời điểm nộp hồ sơ.",
+    "source_refs": [
+      "noxh_nd_100_2024:article_29:k1",
+      "noxh_nd_54_2026:article_1:article_29_k1"
+    ],
+    "effective_from": "2024-08-01",
+    "effective_to": null,
+    "superseded_partially_by": "nd54_housing_gcn_no_info_001",
+    "confidence": "verified",
+    "risk_level": "high",
+    "disclaimer_required": true,
+    "usage_rules": [
+      "Không kết luận chắc chắn đủ điều kiện chỉ vì không thấy tên trên một GCN cụ thể",
+      "Phải xét đúng địa bàn tỉnh/TP nơi có dự án"
+    ],
+    "forbidden_claims": [
+      "Chắc chắn không bị loại vì nhà ở tỉnh khác",
+      "Không cần xác nhận VPĐK đất đai"
+    ],
+    "last_checked": "2026-06-26"
+  },
+  {
+    "claim_id": "nd100_housing_low_area_001",
+    "topic": "noxh_eligibility",
+    "claim": "Trường hợp đã có nhà thuộc sở hữu nhưng diện tích bình quân đầu người dưới 15 m² sàn/người (tính theo thành viên đăng ký thường trú tại căn nhà) vẫn có thể đáp ứng điều kiện nhà ở theo Nghị định 100/2024.",
+    "source_refs": ["noxh_nd_100_2024:article_29:k2"],
+    "effective_from": "2024-08-01",
+    "effective_to": null,
+    "confidence": "verified",
+    "risk_level": "high",
+    "disclaimer_required": true,
+    "usage_rules": [
+      "Cần xác nhận của UBND cấp xã trong 07 ngày",
+      "Không tự tính diện tích thay cơ quan có thẩm quyền"
+    ],
+    "forbidden_claims": [
+      "Có nhà rồi chắc chắn không mua được NOXH"
+    ],
+    "last_checked": "2026-06-26"
+  },
+  {
+    "claim_id": "nd100_income_k568_2024",
+    "topic": "noxh_income",
+    "claim": "Đối với đối tượng khoản 5, 6, 8 Điều 76 Luật Nhà ở (theo NĐ 100/2024 gốc, hiệu lực 01/08/2024 đến trước 07/04/2026): độc thân thu nhập thực nhận không quá 15 triệu đồng/tháng; đã kết hôn tổng thu nhập vợ chồng không quá 30 triệu đồng/tháng, theo Bảng tiền công/tiền lương do cơ quan, đơn vị, doanh nghiệp xác nhận.",
+    "source_refs": ["noxh_nd_100_2024:article_30:k1"],
+    "effective_from": "2024-08-01",
+    "effective_to": "2026-04-06",
+    "confidence": "verified",
+    "risk_level": "high",
+    "disclaimer_required": true,
+    "usage_rules": [
+      "Chỉ áp dụng cho hồ sơ xác định thu nhập trong giai đoạn hiệu lực bản gốc",
+      "Không dùng mức này cho hồ sơ sau 07/04/2026 nếu NĐ 136 đã hiệu lực"
+    ],
+    "forbidden_claims": [
+      "Mọi đối tượng NOXH đều áp dụng mức 15/30 triệu",
+      "Thu nhập tính theo sao kê ngân hàng tự do (nếu văn bản yêu cầu bảng lương CQ/ĐV/DN)"
+    ],
+    "last_checked": "2026-06-26"
+  },
+  {
+    "claim_id": "nd100_income_k568_2026",
+    "topic": "noxh_income",
+    "claim": "Từ 07/04/2026, khoản 1 Điều 30 NĐ 100/2024 (sửa tại NĐ 136/2026) quy định đối tượng khoản 5, 6, 8 Điều 76 Luật Nhà ở: độc thân/chưa kết hôn ≤ 25 triệu/tháng; độc thân nuôi con dưới tuổi thành niên ≤ 35 triệu/tháng; đã kết hôn tổng vợ chồng ≤ 50 triệu/tháng (thu nhập bình quân thực nhận theo Bảng tiền công, tiền lương). Thời gian xác định: 12 tháng liền kề từ thời điểm cơ quan có thẩm quyền xác nhận.",
+    "source_refs": [
+      "noxh_nd_100_2024:article_30:k1",
+      "noxh_nd_136_2026:article_1"
+    ],
+    "effective_from": "2026-04-07",
+    "effective_to": null,
+    "confidence": "verified",
+    "risk_level": "high",
+    "disclaimer_required": true,
+    "usage_rules": [
+      "Phải xác định thời điểm nộp/xác nhận hồ sơ để chọn mức 15-30 hay 25-50",
+      "UBND cấp tỉnh có thể điều chỉnh hệ số theo địa phương — không khẳng định một mức cho mọi tỉnh nếu có quyết định địa phương"
+    ],
+    "forbidden_claims": [
+      "Thu nhập 20 triệu chắc chắn đủ điều kiện mọi thời điểm",
+      "Áp dụng mức 25/50 triệu cho hồ sơ trước 07/04/2026"
+    ],
+    "last_checked": "2026-06-26"
+  },
+  {
+    "claim_id": "nd100_income_no_labor_contract_001",
+    "topic": "noxh_income",
+    "claim": "Đối tượng khoản 5 Điều 76 không có HĐLĐ (08/2024–08/02/2026): mức thu nhập theo Điều 30 NĐ 100; UBND cấp xã xác nhận trong 07 ngày; thu nhập 01 năm từ nộp hồ sơ CĐT. Từ 09/02/2026 → xem nd54_income_ca_xa_001 (Công an cấp xã, kê khai, hậu kiểm).",
+    "source_refs": ["noxh_nd_100_2024:article_30:k2"],
+    "effective_from": "2024-08-01",
+    "effective_to": "2026-02-08",
+    "superseded_by": "nd54_income_ca_xa_001",
+    "confidence": "verified",
+    "risk_level": "high",
+    "disclaimer_required": true,
+    "usage_rules": [
+      "Hồ sơ từ 09/02/2026: dùng claim nd54_income_ca_xa_001",
+      "Mức trần thu nhập: nd100_income_k568_2024 hoặc nd100_income_k568_2026 tùy ngày"
+    ],
+    "forbidden_claims": [],
+    "last_checked": "2026-06-26"
+  },
+  {
+    "claim_id": "nd100_income_poor_household_001",
+    "topic": "noxh_eligibility",
+    "claim": "Đối tượng khoản 2, 3, 4 Điều 76 Luật Nhà ở phải thuộc hộ gia đình nghèo hoặc cận nghèo theo chuẩn nghèo của Chính phủ (Điều 30 khoản 3 NĐ 100/2024).",
+    "source_refs": ["noxh_nd_100_2024:article_30:k3"],
+    "effective_from": "2024-08-01",
+    "effective_to": null,
+    "confidence": "verified",
+    "risk_level": "high",
+    "disclaimer_required": true,
+    "usage_rules": [
+      "Không nhầm với nhóm đối tượng khoản 5, 6, 8 (mức thu nhập số tuyệt đối)"
+    ],
+    "forbidden_claims": [],
+    "last_checked": "2026-06-26"
+  },
+  {
+    "claim_id": "nd100_apartment_area_001",
+    "topic": "noxh_eligibility",
+    "claim": "Căn hộ NOXH chung cư đầu tư theo dự án: diện tích sử dụng tối thiểu 25 m², tối đa 70 m²; có thể tăng tối đa thêm 10% nhưng căn trên 70 m² không quá 10% tổng số căn dự án.",
+    "source_refs": ["noxh_nd_100_2024:article_27:k1"],
+    "effective_from": "2024-08-01",
+    "effective_to": null,
+    "confidence": "verified",
+    "risk_level": "medium",
+    "disclaimer_required": true,
+    "usage_rules": [],
+    "forbidden_claims": [
+      "Mọi căn NOXH đều 70 m²",
+      "Dự án cụ thể chắc chắn có căn 90 m²"
+    ],
+    "last_checked": "2026-06-26"
+  },
+  {
+    "claim_id": "nd100_registration_one_project_001",
+    "topic": "noxh_online_submission",
+    "claim": "Mỗi hộ/cá nhân không được đồng thời đăng ký mua NOXH tại nhiều dự án (Điều 38 NĐ 100; NĐ 54 bổ sung hình thức nộp trực tuyến/bưu chính — xem nd54_register_one_project_001).",
+    "source_refs": [
+      "noxh_nd_100_2024:article_38:k1e",
+      "noxh_nd_54_2026:article_1:article_38"
+    ],
+    "effective_from": "2024-08-01",
+    "effective_to": null,
+    "see_also": "nd54_register_one_project_001",
+    "confidence": "verified",
+    "risk_level": "medium",
+    "disclaimer_required": true,
+    "usage_rules": [],
+    "forbidden_claims": [
+      "Có thể nộp nhiều dự án cùng lúc"
+    ],
+    "last_checked": "2026-06-26"
+  },
+  {
+    "claim_id": "nd100_registration_lottery_001",
+    "topic": "noxh_online_submission",
+    "claim": "Khi hồ sơ vượt số căn: bốc thăm (trực tiếp/trực tuyến) do CĐT tổ chức, Sở XD giám sát. Từ NĐ 54: thứ tự ưu tiên cụ thể (người có công → liệt sĩ → khuyết tật → tái định cư → nữ giới) — xem nd54_priority_order_001; giấy tờ có giá trị 12 tháng.",
+    "source_refs": [
+      "noxh_nd_100_2024:article_38:k2",
+      "noxh_nd_54_2026:article_1:article_38"
+    ],
+    "effective_from": "2024-08-01",
+    "effective_to": null,
+    "see_also": ["nd54_priority_order_001", "nd54_proof_valid_12m_001"],
+    "confidence": "verified",
+    "risk_level": "medium",
+    "disclaimer_required": true,
+    "usage_rules": [
+      "Không cam kết trúng bốc thăm"
+    ],
+    "forbidden_claims": [
+      "Nộp sớm là chắc chắn được mua",
+      "Không có bốc thăm khi quá số căn"
+    ],
+    "last_checked": "2026-06-26"
+  },
+  {
+    "claim_id": "nd100_resale_5years_001",
+    "topic": "noxh_transfer_restrictions",
+    "claim": "Bán lại NOXH trong thời hạn 5 năm: phải thanh lý Hợp đồng với chủ đầu tư; bán cho chủ đầu tư hoặc đối tượng đủ điều kiện mua NOXH; người mua lại phải có xác nhận đối tượng/điều kiện và nộp hồ sơ tại Sở Xây dựng địa phương.",
+    "source_refs": ["noxh_nd_100_2024:article_39"],
+    "effective_from": "2024-08-01",
+    "effective_to": null,
+    "confidence": "verified",
+    "risk_level": "high",
+    "disclaimer_required": true,
+    "usage_rules": [],
+    "forbidden_claims": [
+      "Mua xong bán tự do ngay",
+      "Không cần xác nhận khi bán lại trong 5 năm"
+    ],
+    "last_checked": "2026-06-26"
+  },
+  {
+    "claim_id": "nd100_resale_land_fee_50pct_001",
+    "topic": "noxh_transfer_restrictions",
+    "claim": "Bán lại nhà riêng lẻ NOXH sau 5 năm: ngoài nghĩa vụ theo luật đất đai, bên bán phải nộp thêm 50% tiền sử dụng đất (Điều 42 NĐ 100/2024).",
+    "source_refs": ["noxh_nd_100_2024:article_42"],
+    "effective_from": "2024-08-01",
+    "effective_to": null,
+    "confidence": "verified",
+    "risk_level": "high",
+    "disclaimer_required": true,
+    "usage_rules": [
+      "Chỉ áp dụng nhà riêng lẻ theo văn bản; căn hộ chung cư cần đối chiếu điểm luật liên quan"
+    ],
+    "forbidden_claims": [
+      "Bán lại sau 5 năm không phải nộp thêm gì"
+    ],
+    "last_checked": "2026-06-26"
+  }
+]

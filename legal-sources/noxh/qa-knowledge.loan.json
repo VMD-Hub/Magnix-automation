@@ -1,0 +1,104 @@
+[
+  {
+    "qa_id": "noxh_qa_loan_overview_001",
+    "topic": "loan_dti",
+    "question": "Vay mua nhà ở xã hội qua Ngân hàng Chính sách xã hội có gì? Chính phủ hỗ trợ thế nào?",
+    "short_answer": "Đủ điều kiện mua NOXH ≠ chắc được vay. NHCSXH: tối đa 80% HĐ, lãi 5,4%/năm (từ 10/10/2025), tối đa 25 năm. Nhà nước bố trí vốn và bù lãi cho NHCSXH — người vay vẫn trả gốc+lãi ưu đãi, cần ≥20% tự có.",
+    "expanded_answer": "Khung NĐ 100 Đ.46-50: vay qua NHCSXH hoặc TCTD chỉ định. Điều kiện vay: HĐ CĐT, khả năng trả nợ, TSBD từ tài sản hình thành vốn vay. Cơ chế hỗ trợ: NSNN + huy động NHCSXH, cấp bù chênh lệch lãi suất. Chi tiết: noxh-loan-nhcsxh-counseling.md.",
+    "source_refs": [
+      "noxh_loan_two_tier_001",
+      "noxh_loan_gov_support_mechanism_001",
+      "nd261_loan_rate_54pct_001"
+    ],
+    "related_questions": [
+      "Lãi suất vay mua nhà ở xã hội hiện nay là bao nhiêu?",
+      "Cần trả trước bao nhiêu phần trăm?"
+    ],
+    "safe_cta": "Comment VAYNOXH để nhận checklist hồ sơ vay NHCSXH.",
+    "disclaimer": "Thẩm định vay do NHCSXH/ngân hàng quyết định — không cam kết duyệt."
+  },
+  {
+    "qa_id": "noxh_qa_loan_conditions_001",
+    "topic": "loan_dti",
+    "question": "Điều kiện vay NHCSXH mua nhà ở xã hội là gì?",
+    "short_answer": "Thu nhập và khả năng trả nợ; giấy đề nghị vay; hợp đồng mua/thuê mua với CĐT; bảo đảm bằng nhà hình thành từ vốn vay (HĐ ba bên). Đối tượng theo khoản 1,4,5,6,7,8 Đ.76 (và k2,k3 nếu mua theo Đ.77).",
+    "expanded_answer": "NĐ 100 Đ.48 k1. Phải đủ điều kiện mua trước (Mẫu 01, xác nhận thu nhập…). CT07/cư trú có thể cần khi NH không tra được CSDL. Không vay nếu chưa có/ký HĐ CĐT.",
+    "source_refs": ["noxh_loan_nhcsxh_conditions_001"],
+    "related_questions": [
+      "Có cần hợp đồng mua nhà trước khi vay không?",
+      "Nghỉ hưu có vay được không?"
+    ],
+    "safe_cta": "Gửi tên dự án để đối chiếu NH liên kết.",
+    "disclaimer": "Điều kiện vay theo NHCSXH và HĐ CĐT từng dự án."
+  },
+  {
+    "qa_id": "noxh_qa_loan_down_payment_001",
+    "topic": "loan_dti",
+    "question": "Vay NOXH có cần trả trước bao nhiêu? Vay tối đa mấy phần trăm?",
+    "short_answer": "Tối đa 80% giá hợp đồng mua/thuê mua — cần tối thiểu khoảng 20% vốn tự có (NĐ 100 Đ.48).",
+    "expanded_answer": "20% trả theo tiến độ CĐT; 80% giải ngân vay thường theo tiến độ xây dựng/thanh toán, không một lần. Thuê mua: cộng thêm khoản thuê giai đoạn đầu theo HĐ CĐT.",
+    "source_refs": ["noxh_loan_nhcsxh_limit_80pct_001"],
+    "related_questions": [
+      "Lãi suất 5,4% vay bao lâu?",
+      "Thuê mua khác mua thế nào khi vay?"
+    ],
+    "safe_cta": "Comment DONGTIEN để ước tính trả góp tham khảo.",
+    "disclaimer": "Ước tính dòng tiền không thay thẩm định NH."
+  },
+  {
+    "qa_id": "noxh_qa_cic_bad_debt_001",
+    "topic": "loan_dti",
+    "question": "Nợ xấu CIC có vay mua nhà ở xã hội được không?",
+    "short_answer": "Nợ xấu (nhóm 3–5 theo TT 11/2021) trên CIC thường rất khó vay mới. Cần tất toán gốc+lãi, yêu cầu ngân hàng báo CIC; thông tin nợ xấu có thể lưu đến 5 năm (TT 15). Đủ điều kiện NOXH không tự động bỏ qua nợ xấu.",
+    "expanded_answer": "Tra CIC trước khi nộp. NHCSXH và NH thương mại đều thẩm định lịch sử tín dụng. Chi tiết phân loại 5 nhóm: bank-credit-appraisal-counseling.md.",
+    "source_refs": ["bank_npl_classification_001", "bank_cic_credit_history_001"],
+    "related_questions": [
+      "CIC là gì? Tra cứu thế nào?",
+      "Điểm tín dụng bao nhiêu thì được vay?"
+    ],
+    "safe_cta": "Comment CIC để nhận checklist tra cứu trước vay.",
+    "disclaimer": "Chính sách từng ngân hàng và room tín dụng có thể đổi theo CV NHNN từng năm."
+  },
+  {
+    "qa_id": "noxh_qa_dti_income_001",
+    "topic": "loan_dti",
+    "question": "Ngân hàng tính thu nhập và DTI thế nào khi vay mua nhà?",
+    "short_answer": "DTI = tổng trả nợ/tháng ÷ thu nhập hộ. Không có tỷ lệ cố định trong luật NOXH; NH thường mục tiêu dưới 40–50%. Thu nhập cần chứng minh (sao kê lương 3–6 tháng…). Trần 25/35/50 triệu NOXH ≠ đủ trả nợ vay.",
+    "expanded_answer": "NHCSXH: HD 4546 — chứng từ 3 tháng, Mẫu 05/NƠXH. NH thương mại: quy chế nội bộ TT 39. bank-credit-appraisal-counseling.md.",
+    "source_refs": ["bank_dti_income_appraisal_001", "noxh_loan_two_tier_001"],
+    "related_questions": [
+      "Vay NOXH cần trả trước bao nhiêu?",
+      "Nghỉ hưu có vay được không?"
+    ],
+    "safe_cta": "Gửi thu nhập và khoản nợ đang trả để ước tính DTI tham khảo.",
+    "disclaimer": "Ước tính không thay thẩm định ngân hàng."
+  },
+  {
+    "qa_id": "noxh_qa_room_noxh_001",
+    "topic": "loan_dti",
+    "question": "Nhà ở xã hội được ưu tiên trong room tín dụng thế nào?",
+    "short_answer": "Năm 2026, 25 NH được loại trừ phần dư nợ tăng thêm cho NOXH/KCN khỏi trần tăng trưởng tín dụng BĐS (CV 4551). Đây là ưu tiên vĩ mô cho ngân hàng giải ngân — không tự động duyệt hồ sơ cá nhân.",
+    "expanded_answer": "Room ≠ hạn mức vay của bạn. Vẫn cần CIC sạch, thu nhập, HĐ CĐT. NHCSXH là kênh chính sách riêng (5,4%). bank-credit-appraisal-counseling.md.",
+    "source_refs": ["bank_room_noxh_priority_001"],
+    "related_questions": [
+      "Vay NOXH qua ngân hàng nào?",
+      "Lãi suất 5,4% áp dụng thế nào?"
+    ],
+    "safe_cta": "Comment VAYNOXH + tên dự án để đối chiếu NH liên kết.",
+    "disclaimer": "CV 4551 hiệu lực 2026 — kiểm tra CV NHNN năm sau nếu tư vấn room."
+  },
+  {
+    "qa_id": "cic_self_check_qa_001",
+    "topic": "loan_dti",
+    "question": "Làm sao tự tra cứu CIC và xem điểm tín dụng?",
+    "short_answer": "Đăng ký trên app iCIC/CIC Credit Connect hoặc cic.gov.vn bằng CCCD + SĐT chính chủ. Sau khi CIC duyệt tài khoản: chọn Khai thác báo cáo (app: Kiểm tra CIC). Miễn phí 1 lần/năm (TT 15). Hotline: 1800585891.",
+    "expanded_answer": "Chi tiết từng bước, ảnh CCCD, phí lần 2: cic-self-check-citizen-guide.md. Không dùng dịch vụ xóa nợ xấu lừa đảo.",
+    "source_refs": ["cic_self_check_citizen_001"],
+    "related_questions": [
+      "Nợ xấu CIC có vay NOXH được không?",
+      "Tra CIC có mất phí không?"
+    ],
+    "safe_cta": "Comment CIC để nhận checklist tra cứu.",
+    "disclaimer": "Đối chiếu giao diện cic.gov.vn/app khi hướng dẫn khách thao tác lần đầu."
+  }
+]

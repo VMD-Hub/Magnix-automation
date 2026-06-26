@@ -1,0 +1,153 @@
+{
+  "version": "1.3.0",
+  "last_updated": "2026-06-26",
+  "sources": [
+    {
+      "source_id": "noxh_luat_nha_o_2023",
+      "title": "Luật Nhà ở số 27/2023/QH15",
+      "source_type": "law",
+      "jurisdiction": "vietnam",
+      "issued_date": "2023-11-27",
+      "effective_date": "2024-08-01",
+      "status": "active",
+      "url_primary": "https://thuvienphapluat.vn/van-ban/Bat-dong-san/Luat-Nha-o-27-2023-QH15-528669.aspx",
+      "stored_path": "legal-sources/noxh/luat-nha-o-2023-dieu-76-78-79.md",
+      "scope_note": "Batch 2: Điều 76, 78, 79",
+      "verified_by": "pending_human",
+      "last_checked": "2026-06-26"
+    },
+    {
+      "source_id": "noxh_nd_100_2024",
+      "title": "Nghị định 100/2024/NĐ-CP",
+      "source_type": "decree",
+      "jurisdiction": "vietnam",
+      "issued_date": "2024-07-26",
+      "effective_date": "2024-08-01",
+      "status": "active_amended",
+      "url_primary": "https://thuvienphapluat.vn/van-ban/Bat-dong-san/Nghi-dinh-100-2024-ND-CP-huong-dan-Luat-nha-o-ve-phat-trien-nha-o-xa-hoi-611295.aspx",
+      "stored_path": "legal-sources/noxh/nghi-dinh-100-2024-nd-cp.md",
+      "amended_by": [
+        { "source_id": "noxh_nd_261_2025", "effective_date": "2025-10-10", "note": "batch 3 — đã nhập" },
+        { "source_id": "noxh_nd_54_2026", "effective_date": "2026-02-09", "note": "batch 2" },
+        { "source_id": "noxh_nd_136_2026", "effective_date": "2026-04-07", "note": "batch 2" }
+      ],
+      "verified_by": "pending_human",
+      "last_checked": "2026-06-26"
+    },
+    {
+      "source_id": "noxh_nd_261_2025",
+      "title": "Nghị định 261/2025/NĐ-CP sửa NĐ 100/2024 và NĐ 192/2025",
+      "source_type": "decree",
+      "jurisdiction": "vietnam",
+      "issued_date": "2025-10-10",
+      "effective_date": "2025-10-10",
+      "status": "active_amended",
+      "url_primary": "https://baochinhphu.vn/sua-doi-nhieu-noi-dung-quan-trong-lien-quan-den-chinh-sach-nha-o-xa-hoi-102251013174542881.htm",
+      "url_secondary": "https://luatvietnam.vn/dat-dai/nghi-dinh-261-2025-nd-cp-sua-doi-nghi-dinh-100-2024-nd-cp-ve-nha-o-xa-hoi-414568-d1.html",
+      "stored_path": "legal-sources/noxh/nghi-dinh-261-2025-nd-cp.md",
+      "atomic_claims_path": "legal-sources/noxh/atomic-claims.batch3.json",
+      "superseded_income_by": "noxh_nd_136_2026",
+      "verified_by": "pending_human",
+      "last_checked": "2026-06-26"
+    },
+    {
+      "source_id": "noxh_nd_54_2026",
+      "title": "Nghị định 54/2026/NĐ-CP",
+      "source_type": "decree",
+      "jurisdiction": "vietnam",
+      "effective_date": "2026-02-09",
+      "status": "active",
+      "stored_path": "legal-sources/noxh/nghi-dinh-54-2026-nd-cp.md",
+      "verified_by": "pending_human",
+      "last_checked": "2026-06-26"
+    },
+    {
+      "source_id": "noxh_nd_136_2026",
+      "title": "Nghị định 136/2026/NĐ-CP",
+      "source_type": "decree",
+      "jurisdiction": "vietnam",
+      "effective_date": "2026-04-07",
+      "status": "active",
+      "stored_path": "legal-sources/noxh/nghi-dinh-136-2026-nd-cp.md",
+      "verified_by": "pending_human",
+      "last_checked": "2026-06-26"
+    }
+  ],
+  "local_policy_registry": "legal-sources/local-policy/registry.json",
+  "priority_provinces": [
+    "tp_ho_chi_minh",
+    "dong_nai",
+    "binh_duong",
+    "ba_ria_vung_tau",
+    "tp_can_tho",
+    "tay_ninh"
+  ],
+  "kb_files": {
+    "atomic_claims": [
+      "legal-sources/noxh/atomic-claims.nd100.json",
+      "legal-sources/noxh/atomic-claims.batch2.json",
+      "legal-sources/noxh/atomic-claims.batch3.json",
+      "legal-sources/noxh/atomic-claims.loan.json"
+    ],
+    "qa_knowledge": [
+      "legal-sources/noxh/qa-knowledge.nd100.json",
+      "legal-sources/noxh/qa-knowledge.batch2.json",
+      "legal-sources/noxh/qa-knowledge.batch3.json",
+      "legal-sources/noxh/qa-knowledge.loan.json"
+    ],
+    "retrieval_pack_module": "scripts/lib/legal-retrieval-pack.mjs"
+  },
+  "timeline_noxh_income_k568": [
+    {
+      "from": "2024-08-01",
+      "to": "2025-10-09",
+      "rule": "NĐ 100 gốc: độc thân ≤15tr; vợ chồng ≤30tr"
+    },
+    {
+      "from": "2025-10-10",
+      "to": "2026-04-06",
+      "rule": "NĐ 261: độc thân ≤20tr; nuôi con ≤30tr; vợ chồng ≤40tr; 12 tháng từ xác nhận"
+    },
+    {
+      "from": "2026-02-09",
+      "to": null,
+      "rule": "NĐ 54: CA cấp xã, kê khai + hậu kiểm (k5 không HĐLĐ)"
+    },
+    {
+      "from": "2026-04-07",
+      "to": null,
+      "rule": "NĐ 136: 25/35/50tr + hệ số UBND tỉnh; TP.HCM QĐ 14: 1,25 và 1,35"
+    }
+  ],
+  "application_form": {
+    "guide_path": "legal-sources/noxh/application-form-mau-01-guide.md",
+    "dossier_checklist_path": "legal-sources/noxh/application-dossier-checklist.md",
+    "section_11_guide_path": "legal-sources/noxh/mau-01-section-11-income.md",
+    "object_classification_guide_path": "legal-sources/noxh/object-classification-cbccvc-hdld.md",
+    "married_mixed_object_guide_path": "legal-sources/noxh/married-mixed-object-counseling.md",
+    "spouses_different_residence_guide_path": "legal-sources/noxh/spouses-different-residence-counseling.md",
+    "ct07_residence_guide_path": "legal-sources/noxh/ct07-residence-confirmation-guide.md",
+    "ct07_form_fields_guide_path": "legal-sources/noxh/ct07-form-fields-declaration-guide.md",
+    "ct07_submission_guide_path": "legal-sources/noxh/ct07-submission-to-cdt.md",
+    "lltp_guide_path": "legal-sources/noxh/lltp-online-counseling.md",
+    "vneid_vs_cccd_guide_path": "legal-sources/noxh/vneid-vs-cccd-counseling.md",
+    "retired_beyond_working_age_guide_path": "legal-sources/noxh/retired-beyond-working-age-counseling.md",
+    "parent_adult_child_household_guide_path": "legal-sources/noxh/parent-adult-child-household-income-counseling.md",
+    "household_members_declaration_guide_path": "legal-sources/noxh/household-members-declaration-counseling.md",
+    "loan_nhcsxh_guide_path": "legal-sources/noxh/noxh-loan-nhcsxh-counseling.md",
+    "bank_credit_appraisal_guide_path": "legal-sources/noxh/bank-credit-appraisal-counseling.md",
+    "cic_self_check_guide_path": "legal-sources/noxh/cic-self-check-citizen-guide.md",
+    "loan_claims_path": "legal-sources/noxh/atomic-claims.loan.json",
+    "loan_qa_path": "legal-sources/noxh/qa-knowledge.loan.json",
+    "loan_module_verified_by": "human",
+    "loan_module_verified_at": "2026-06-26",
+    "counseling_topic_index_path": "legal-sources/noxh/counseling-topic-index.md",
+    "intake_schema": "legal-sources/noxh/registration-intake-schema.json",
+    "claims_path": "legal-sources/noxh/atomic-claims.application-form.json",
+    "qa_path": "legal-sources/noxh/qa-knowledge.application-form.json",
+    "counseling_script": "scripts/lib/noxh-application-draft.mjs",
+    "agent_prompt": "ai-agents-prompts/n8n__noxh-application-form-draft.md",
+    "verified_by": "human",
+    "verified_at": "2026-06-26"
+  }
+}

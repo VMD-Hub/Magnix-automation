@@ -1,0 +1,89 @@
+[
+  {
+    "qa_id": "noxh_income_qa_threshold_001",
+    "topic": "noxh_income",
+    "question": "Thu nhập bao nhiêu thì được mua nhà ở xã hội?",
+    "short_answer": "Tùy nhóm đối tượng (khoản 5, 6, 8 Điều 76 Luật Nhà ở) và thời điểm xác nhận hồ sơ. Mức trần đã thay đổi từ 07/04/2026 theo NĐ 136/2026/NĐ-CP.",
+    "expanded_answer": "Theo Nghị định 100/2024/NĐ-CP (hướng dẫn điều kiện thu nhập Điều 30), đối tượng khoản 5, 6, 8 Điều 76 trước 07/04/2026 thường được đối chiếu mức 15 triệu/tháng (độc thân) và 30 triệu/tháng (vợ chồng). Từ 07/04/2026, NĐ 136/2026 sửa khoản 1 Điều 30 thành 25 triệu (độc thân), 35 triệu (độc thân nuôi con dưới tuổi thành niên), 50 triệu (vợ chồng). Thu nhập tính theo Bảng tiền công, tiền lương do cơ quan/đơn vị/doanh nghiệp xác nhận — không nên tự kết luận chỉ từ một con số lương trên hợp đồng nếu chưa đúng cách xác định theo văn bản.",
+    "source_refs": [
+      "nd100_income_k568_2024",
+      "nd100_income_k568_2026"
+    ],
+    "related_questions": [
+      "Vợ chồng cộng thu nhập thế nào?",
+      "Không có hợp đồng lao động thì tính thu nhập ra sao?",
+      "Đối tượng lực lượng vũ trang có cùng mức 15/25 triệu không?"
+    ],
+    "safe_cta": "Comment CHECKLIST để nhận bảng tự kiểm điều kiện NOXH theo nhóm đối tượng.",
+    "disclaimer": "Thông tin tham khảo theo Nghị định 100/2024/NĐ-CP và sửa đổi; kết luận cuối cùng phụ thuộc hồ sơ, thời điểm xác nhận và hướng dẫn địa phương.",
+    "last_checked": "2026-06-26"
+  },
+  {
+    "qa_id": "noxh_housing_qa_no_house_001",
+    "topic": "noxh_eligibility",
+    "question": "Có nhà rồi có mua được nhà ở xã hội không?",
+    "short_answer": "Có thể, nếu thuộc trường hợp diện tích bình quân đầu người dưới 15 m² sàn/người và được cơ quan có thẩm quyền xác nhận; hoặc nếu chưa có nhà theo cách xác định tại Điều 29 NĐ 100/2024.",
+    "expanded_answer": "Nghị định 100/2024 quy định hai nhánh: (1) chưa có nhà thuộc sở hữu — không có tên trên GCN tại tỉnh/TP nơi có dự án; (2) đã có nhà nhưng diện tích bình quân đầu người thấp hơn 15 m² sàn, tính theo thành viên thường trú tại căn nhà. Cả hai trường hợp đều cần giấy xác nhận của cơ quan có thẩm quyền (VPĐK đất đai hoặc UBND cấp xã) trong 07 ngày.",
+    "source_refs": [
+      "nd100_housing_no_owned_001",
+      "nd100_housing_low_area_001"
+    ],
+    "related_questions": [
+      "Nhà ở tỉnh khác có bị tính không?",
+      "Diện tích 15 m²/người tính những ai?"
+    ],
+    "safe_cta": "Comment CHECKLIST để nhận checklist điều kiện nhà ở.",
+    "disclaimer": "Cần đối chiếu hồ sơ thực tế và quy định hiện hành tại thời điểm nộp đơn.",
+    "last_checked": "2026-06-26"
+  },
+  {
+    "qa_id": "noxh_docs_qa_register_001",
+    "topic": "noxh_documents",
+    "question": "Hồ sơ đăng ký mua nhà ở xã hội gồm những gì?",
+    "short_answer": "Đơn đăng ký Mẫu 01 (Phụ lục II NĐ 100/2024) và giấy tờ chứng minh đối tượng, điều kiện được hưởng chính sách — nộp trực tiếp cho chủ đầu tư dự án.",
+    "expanded_answer": "Theo Điều 38 NĐ 100/2024, hộ/cá nhân nộp hồ sơ cho chủ đầu tư sau khi dự án được công bố công khai. Hồ sơ gồm đơn Mẫu 01 và giấy tờ chứng minh đối tượng/điều kiện theo Điều 76, 78 Luật Nhà ở. Trường hợp không có HĐLĐ (khoản 5 Đ.76) cần xác nhận UBND cấp xã; người bị thu hồi đất (khoản 10 Đ.76) cần xác nhận UBND cấp huyện. Mỗi hộ/cá nhân chỉ nộp tại một dự án.",
+    "source_refs": [
+      "nd100_registration_one_project_001"
+    ],
+    "related_questions": [
+      "Nộp online được không?",
+      "Hồ sơ thiếu giấy tờ thì sao?"
+    ],
+    "safe_cta": "Comment CHECKLIST để nhận danh mục giấy tờ theo nhóm đối tượng.",
+    "disclaimer": "Mẫu đơn và giấy tờ chi tiết theo hướng dẫn Bộ Xây dựng và chủ đầu tư từng dự án.",
+    "last_checked": "2026-06-26"
+  },
+  {
+    "qa_id": "noxh_transfer_qa_5years_001",
+    "topic": "noxh_transfer_restrictions",
+    "question": "Mua nhà ở xã hội bao lâu thì được bán lại?",
+    "short_answer": "Trong 5 năm: chỉ bán lại theo quy trình hạn chế (chủ đầu tư hoặc đối tượng đủ điều kiện, có xác nhận). Sau 5 năm: theo luật kinh doanh BĐS và đất đai; nhà riêng lẻ có thể phải nộp thêm 50% tiền sử dụng đất.",
+    "expanded_answer": "Nghị định 100/2024 Điều 39–40 hướng dẫn bán lại trong và sau 5 năm theo Luật Nhà ở Điều 89. Trong 5 năm phải thanh lý HĐ với chủ đầu tư và đối tượng mua lại phải đủ điều kiện. Điều 42 quy định thêm: bán lại nhà riêng lẻ sau 5 năm, bên bán nộp 50% tiền sử dụng đất theo luật đất đai.",
+    "source_refs": [
+      "nd100_resale_5years_001",
+      "nd100_resale_land_fee_50pct_001"
+    ],
+    "related_questions": [
+      "Bán lại có được lãi không?",
+      "Cho thuê NOXH được không?"
+    ],
+    "safe_cta": "Comment CHECKLIST để nhận checklist ràng buộc chuyển nhượng NOXH.",
+    "disclaimer": "Chi tiết từng loại nhà và thời điểm ký HĐ cần đối chiếu hợp đồng và luật hiện hành.",
+    "last_checked": "2026-06-26"
+  },
+  {
+    "qa_id": "noxh_area_qa_apartment_001",
+    "topic": "noxh_eligibility",
+    "question": "Căn hộ nhà ở xã hội thường có diện tích bao nhiêu?",
+    "short_answer": "Theo NĐ 100/2024 Điều 27: căn hộ chung cư NOXH đầu tư theo dự án thường từ 25 m² đến 70 m² diện tích sử dụng; có quy định về tỷ lệ căn lớn hơn 70 m².",
+    "expanded_answer": "Tiêu chuẩn diện tích sử dụng mỗi căn tối thiểu 25 m², tối đa 70 m². Có thể điều chỉnh tăng tối đa 10% so với 70 m² nhưng số căn trên 70 m² không quá 10% tổng số căn dự án. Dự án cụ thể có thể có phân bổ diện tích khác trong khung này.",
+    "source_refs": ["nd100_apartment_area_001"],
+    "related_questions": [
+      "NOXH có căn 2 phòng ngủ không?",
+      "Giá bán NOXH tính thế nào?"
+    ],
+    "safe_cta": "Comment CHECKLIST để nhận bảng so sánh diện tích–giá tạm tính cần kiểm tra trên hợp đồng.",
+    "disclaimer": "Diện tích và giá từng dự án do chủ đầu tư công bố và thẩm định theo quy định.",
+    "last_checked": "2026-06-26"
+  }
+]

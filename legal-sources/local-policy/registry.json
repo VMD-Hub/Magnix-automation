@@ -1,0 +1,168 @@
+{
+  "version": "1.1.0",
+  "last_updated": "2026-06-26",
+  "project_jurisdiction_rule": "Dự án NOXH tỉnh/TP nào → áp QĐ và điều kiện địa phương của tỉnh/TP đó (không theo nơi ở nếu khác tỉnh dự án).",
+  "admin_merger_map_path": "legal-sources/local-policy/ADMIN_MERGER_MAP.md",
+  "merger_groups": [
+    {
+      "merger_group_id": "mega_hcm",
+      "constituent_province_codes": ["tp_ho_chi_minh", "binh_duong", "ba_ria_vung_tau"],
+      "counseling_note": "HCM QĐ 14/2026 hệ số thu nhập; BD/BR-VT chưa QĐ 20km — sau sáp nhập chờ QĐ thống nhất"
+    },
+    {
+      "merger_group_id": "mega_tay_ninh",
+      "constituent_province_codes": ["tay_ninh", "long_an"],
+      "counseling_note": "Tây Ninh QĐ 71/2026 (20km); Long An khung quốc gia — tách theo tỉnh dự án"
+    },
+    {
+      "merger_group_id": "mega_dong_nai",
+      "constituent_province_codes": ["dong_nai", "binh_phuoc"],
+      "counseling_note": "Đồng Nai QĐ 08/2025 Đ.4 k3; Bình Phước khung quốc gia"
+    },
+    {
+      "merger_group_id": "mega_can_tho",
+      "constituent_province_codes": ["tp_can_tho", "hau_giang", "soc_trang"],
+      "counseling_note": "Cần Thơ QĐ 44/2026; Hậu Giang/Sóc Trăng khung quốc gia"
+    }
+  ],
+  "priority_provinces": [
+    "tp_ho_chi_minh",
+    "dong_nai",
+    "binh_duong",
+    "ba_ria_vung_tau",
+    "tp_can_tho",
+    "tay_ninh"
+  ],
+  "sources": [
+    {
+      "source_id": "local_tp_hcm_qd14_2026",
+      "province_code": "tp_ho_chi_minh",
+      "province_name": "Thành phố Hồ Chí Minh",
+      "title": "Quyết định 14/2026/QĐ-UBND — hệ số thu nhập NOXH",
+      "issued_date": "2026-03-28",
+      "effective_date": "2026-04-01",
+      "status": "active",
+      "income_coefficient_status": "issued",
+      "url_primary": "https://luatvietnam.vn/dat-dai/quyet-dinh-14-2026-qd-ubnd-tp-hcm-he-so-dieu-chinh-thu-nhap-va-chinh-sach-nha-o-xa-hoi-430316-d2.html",
+      "stored_path": "legal-sources/local-policy/tp-ho-chi-minh.md",
+      "verified_by": "pending_human",
+      "last_checked": "2026-06-26"
+    },
+    {
+      "source_id": "local_dong_nai_qd08_2025",
+      "province_code": "dong_nai",
+      "province_name": "Tỉnh Đồng Nai",
+      "title": "Quyết định 08/2025/QĐ-UBND — tiêu chuẩn, đối tượng NOXH (gồm Đ.4 k3: ≥20km nhà→nơi làm việc)",
+      "issued_date": "2025-07-01",
+      "effective_date": "2025-07-01",
+      "status": "active_pending_amendment",
+      "income_coefficient_status": "not_issued_use_nd136_national",
+      "housing_distance_rule": "nq201_art9_k2_via_qd08_k3_20km_workplace",
+      "amendment_note": "UBND Đồng Nai chỉ đạo sửa QĐ 08 sau NĐ 136 — chưa có QĐ hệ số riêng tại thời điểm KB",
+      "url_primary": "https://thuviennhadat.vn/phap-luat/quyet-dinh-08-2025-qd-ubnd-tieu-chuan-va-dieu-kien-mua-nha-o-xa-hoi-tai-dong-nai-691236.html",
+      "stored_path": "legal-sources/local-policy/dong-nai.md",
+      "verified_by": "pending_human",
+      "last_checked": "2026-06-26"
+    },
+    {
+      "source_id": "local_binh_duong",
+      "province_code": "binh_duong",
+      "province_name": "Tỉnh Bình Dương",
+      "title": "(Chưa tra thấy QĐ hệ số thu nhập NOXH sau NĐ 136)",
+      "status": "national_default",
+      "income_coefficient_status": "not_issued_use_nd136_national",
+      "stored_path": "legal-sources/local-policy/binh-duong.md",
+      "verified_by": "pending_human",
+      "last_checked": "2026-06-26"
+    },
+    {
+      "source_id": "local_ba_ria_vung_tau",
+      "province_code": "ba_ria_vung_tau",
+      "province_name": "Tỉnh Bà Rịa - Vũng Tàu",
+      "title": "(Chưa tra thấy QĐ hệ số thu nhập NOXH sau NĐ 136)",
+      "status": "national_default",
+      "income_coefficient_status": "not_issued_use_nd136_national",
+      "stored_path": "legal-sources/local-policy/ba-ria-vung-tau.md",
+      "verified_by": "pending_human",
+      "last_checked": "2026-06-26"
+    },
+    {
+      "source_id": "local_tp_can_tho",
+      "province_code": "tp_can_tho",
+      "province_name": "Thành phố Cần Thơ",
+      "title": "QĐ 44/2026 (Luật Nhà ở chi tiết) — chưa thấy QĐ hệ số thu nhập NOXH",
+      "status": "national_default",
+      "income_coefficient_status": "not_issued_use_nd136_national",
+      "related_docs": ["44/2026/QĐ-UBND — chi tiết Luật Nhà ở, không phải hệ số thu nhập"],
+      "stored_path": "legal-sources/local-policy/tp-can-tho.md",
+      "verified_by": "pending_human",
+      "last_checked": "2026-06-26"
+    },
+    {
+      "source_id": "local_tay_ninh_qd71_2026",
+      "province_code": "tay_ninh",
+      "province_name": "Tỉnh Tây Ninh",
+      "title": "Quyết định 71/2026/QĐ-UBND — nhà ở cách xa nơi làm việc",
+      "issued_date": "2026-05-29",
+      "effective_date": "2026-07-01",
+      "status": "active",
+      "income_coefficient_status": "not_issued_use_nd136_national",
+      "stored_path": "legal-sources/local-policy/tay-ninh.md",
+      "url_primary": "https://thuviennhadat.vn/phap-luat/quyet-dinh-71-2026-qd-ubnd-tay-ninh-quy-dinh-truong-hop-nguoi-co-nha-o-cach-xa-noi-lam-viec-duoc-mua-739341.html",
+      "verified_by": "pending_human",
+      "last_checked": "2026-06-26"
+    },
+    {
+      "source_id": "local_long_an",
+      "province_code": "long_an",
+      "province_name": "Tỉnh Long An",
+      "merger_group_id": "mega_tay_ninh",
+      "title": "(Chưa tra thấy QĐ NOXH địa phương riêng — khung quốc gia)",
+      "status": "national_default",
+      "income_coefficient_status": "not_issued_use_nd136_national",
+      "housing_distance_rule": "none_use_national_art29",
+      "stored_path": "legal-sources/local-policy/ADMIN_MERGER_MAP.md",
+      "verified_by": "pending_human",
+      "last_checked": "2026-06-26"
+    },
+    {
+      "source_id": "local_binh_phuoc",
+      "province_code": "binh_phuoc",
+      "province_name": "Tỉnh Bình Phước",
+      "merger_group_id": "mega_dong_nai",
+      "title": "(Chưa tra thấy QĐ NOXH địa phương riêng — khung quốc gia)",
+      "status": "national_default",
+      "income_coefficient_status": "not_issued_use_nd136_national",
+      "housing_distance_rule": "none_use_national_art29",
+      "stored_path": "legal-sources/local-policy/ADMIN_MERGER_MAP.md",
+      "verified_by": "pending_human",
+      "last_checked": "2026-06-26"
+    },
+    {
+      "source_id": "local_hau_giang",
+      "province_code": "hau_giang",
+      "province_name": "Tỉnh Hậu Giang",
+      "merger_group_id": "mega_can_tho",
+      "title": "(Chưa tra thấy QĐ NOXH địa phương riêng — khung quốc gia)",
+      "status": "national_default",
+      "income_coefficient_status": "not_issued_use_nd136_national",
+      "housing_distance_rule": "none_use_national_art29",
+      "stored_path": "legal-sources/local-policy/ADMIN_MERGER_MAP.md",
+      "verified_by": "pending_human",
+      "last_checked": "2026-06-26"
+    },
+    {
+      "source_id": "local_soc_trang",
+      "province_code": "soc_trang",
+      "province_name": "Tỉnh Sóc Trăng",
+      "merger_group_id": "mega_can_tho",
+      "title": "(Chưa tra thấy QĐ NOXH địa phương riêng — khung quốc gia)",
+      "status": "national_default",
+      "income_coefficient_status": "not_issued_use_nd136_national",
+      "housing_distance_rule": "none_use_national_art29",
+      "stored_path": "legal-sources/local-policy/ADMIN_MERGER_MAP.md",
+      "verified_by": "pending_human",
+      "last_checked": "2026-06-26"
+    }
+  ]
+}

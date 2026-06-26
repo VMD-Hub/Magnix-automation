@@ -1,0 +1,218 @@
+{
+  "schema_version": "1.6.0",
+  "purpose": "Intake trước khi hỗ trợ điền Mẫu 01 — không lưu PII vào repo; dùng trong agent/sheet",
+  "required_before_draft": [
+    "project_province_code",
+    "project_name",
+    "registration_type",
+    "article_76_clause",
+    "marital_status"
+  ],
+  "fields": [
+    {
+      "field_id": "project_province_code",
+      "label": "Tỉnh/TP nơi có dự án NOXH",
+      "type": "enum",
+      "counseling_note": "Quyết định QĐ địa phương và xét GCN nhà ở",
+      "required": true
+    },
+    {
+      "field_id": "project_name",
+      "label": "Tên dự án / chủ đầu tư",
+      "type": "string",
+      "required": true
+    },
+    {
+      "field_id": "registration_type",
+      "label": "Hình thức đăng ký",
+      "type": "enum",
+      "options": ["mua", "thue_mua", "thue"],
+      "required": true
+    },
+    {
+      "field_id": "article_76_clause",
+      "label": "Nhóm đối tượng Điều 76",
+      "type": "enum",
+      "options": ["k5_hdld", "k5_no_hdld", "k6_worker", "k7_llvt", "k8_cbccvc", "k2_k4_poor", "k10_land_recovery", "other"],
+      "counseling_note": "Quyết định loại giấy xác nhận thu nhập",
+      "required": true
+    },
+    {
+      "field_id": "marital_status",
+      "label": "Tình trạng hôn nhân",
+      "type": "enum",
+      "options": ["doc_than", "doc_than_nuoi_con", "vo_chong"],
+      "counseling_note": "Ảnh hưởng trần 25/35/50 triệu",
+      "required": true
+    },
+    {
+      "field_id": "housing_path",
+      "label": "Điều kiện nhà ở",
+      "type": "enum",
+      "options": [
+        "chua_co_nha_gcn",
+        "dat_tho_cu_chua_xay",
+        "co_nha_dt_duoi_15m2",
+        "co_nha_xa_noi_lam_viec",
+        "unclear"
+      ],
+      "counseling_note": "Phải xét tại tỉnh project_province_code",
+      "required": true
+    },
+    {
+      "field_id": "has_other_noxh_registration",
+      "label": "Đang/đã nộp dự án NOXH khác trong cùng đợt?",
+      "type": "boolean",
+      "counseling_note": "Nếu true → không được nộp thêm",
+      "required": true
+    },
+    {
+      "field_id": "workplace_province",
+      "label": "Tỉnh nơi làm việc (nếu khai có nhà xa nơi làm việc)",
+      "type": "string",
+      "required_if": { "housing_path": "co_nha_xa_noi_lam_viec" }
+    },
+    {
+      "field_id": "distance_workplace_km",
+      "label": "Khoảng cách nhà → nơi làm việc (km)",
+      "type": "number",
+      "required_if": { "housing_path": "co_nha_xa_noi_lam_viec" }
+    },
+    {
+      "field_id": "employer_confirmation_available",
+      "label": "Đơn vị có thể xác nhận khoảng cách?",
+      "type": "boolean",
+      "required_if": { "housing_path": "co_nha_xa_noi_lam_viec" }
+    },
+    {
+      "field_id": "income_declaration_monthly",
+      "label": "Thu nhập thực nhận bình quân/tháng (tự khai)",
+      "type": "number",
+      "counseling_note": "So sánh với trần + hệ số tỉnh — không thay xác nhận cơ quan",
+      "required": false
+    },
+    {
+      "field_id": "spouses_same_residence",
+      "label": "Vợ/chồng có cùng nơi đăng ký thường trú?",
+      "type": "enum",
+      "options": ["same", "different", "unclear"],
+      "counseling_note": "Khác địa chỉ vẫn được NOXH — xem spouses-different-residence-counseling.md",
+      "required_if": { "marital_status": "vo_chong" }
+    },
+    {
+      "field_id": "vneid_cccd_aligned",
+      "label": "VNeID và CCCD đã khớp địa chỉ/họ tên?",
+      "type": "enum",
+      "options": ["aligned", "mismatch_address", "mismatch_name", "not_checked"],
+      "counseling_note": "Nếu mismatch → đồng bộ CA trước khi nộp — xem vneid-vs-cccd-counseling.md",
+      "required": false
+    },
+    {
+      "field_id": "employment_status",
+      "label": "Tình trạng việc làm",
+      "type": "enum",
+      "options": [
+        "dang_hdld",
+        "tu_do_khong_hdld",
+        "nghi_huu",
+        "het_tuoi_ld_van_lam",
+        "khac"
+      ],
+      "counseling_note": "Nghỉ hưu → thường k5, không tick k6/k8 — xem retired-beyond-working-age-counseling.md",
+      "required": false
+    },
+    {
+      "field_id": "cdt_requires_ct07",
+      "label": "CĐT yêu cầu CT07 (xác nhận cư trú) — ai phải nộp?",
+      "type": "enum",
+      "options": ["applicant_only", "both_spouses", "not_required", "unknown"],
+      "counseling_note": "CT07 = giấy xác nhận cư trú BCA — xem ct07-residence-confirmation-guide.md",
+      "required": false
+    },
+    {
+      "field_id": "ct07_acceptance_format",
+      "label": "CĐT chấp nhận hình thức nộp CT07",
+      "type": "enum",
+      "options": [
+        "unknown",
+        "scan_vneid_print",
+        "original_only",
+        "certified_copy",
+        "both_form_and_lltp"
+      ],
+      "counseling_note": "Tùy từng dự án — không đoán scan vs sao y nếu unknown",
+      "required": false
+    },
+    {
+      "field_id": "dossier_copy_sets",
+      "label": "Số bộ photo CĐT yêu cầu (theo thông báo dự án)",
+      "type": "enum",
+      "options": ["unknown", "2", "3", "4", "5_plus", "online_only"],
+      "counseling_note": "Bắt buộc tra thông báo CĐT — không đoán 3/4 nếu unknown",
+      "required": false
+    },
+    {
+      "field_id": "loan_intent",
+      "label": "Có vay mua/thuê mua NOXH không?",
+      "type": "enum",
+      "options": ["none", "nhcsxh", "designated_bank", "commercial_bank", "cdt_installment", "unknown"],
+      "counseling_note": "none = không vay; nhcsxh = NHCSXH Đ.48; designated_bank = TCTD chỉ định Đ.49; commercial_bank = NH thương mại thường; cdt_installment = trả chậm CĐT không qua NH chính sách — xem noxh-loan-nhcsxh-counseling.md",
+      "required": false
+    },
+    {
+      "field_id": "loan_down_payment_pct",
+      "label": "Tỷ lệ vốn tự có dự kiến (% giá HĐ)",
+      "type": "number",
+      "counseling_note": "NHCSXH tối đa 80% vốn vay — cần ≥20% tự có (Đ.48 k3a)",
+      "required_if": { "loan_intent": ["nhcsxh", "designated_bank", "commercial_bank"] }
+    },
+    {
+      "field_id": "cic_checked",
+      "label": "Đã tra CIC / lịch sử tín dụng",
+      "type": "enum",
+      "options": ["not_checked", "clean", "group_1_2", "bad_debt_3_5", "unknown"],
+      "counseling_note": "Nợ xấu nhóm 3–5 (TT 11) rất khó vay — bank-credit-appraisal-counseling.md",
+      "required": false
+    },
+    {
+      "field_id": "monthly_debt_obligations",
+      "label": "Tổng trả nợ hiện tại/tháng (ước tính)",
+      "type": "number",
+      "counseling_note": "Dùng ước tính DTI tham khảo — không thay thẩm định NH",
+      "required": false
+    },
+    {
+      "field_id": "priority_groups",
+      "label": "Nhóm ưu tiên Đ.79 (nếu có)",
+      "type": "array",
+      "options": [
+        "nguoi_co_cong",
+        "than_nhan_liet_si",
+        "nguoi_khuyet_tat",
+        "tai_dinh_cu",
+        "nu_gioi"
+      ],
+      "required": false
+    }
+  ],
+  "validation_rules": [
+    {
+      "rule_id": "single_project",
+      "when": { "has_other_noxh_registration": true },
+      "block": true,
+      "message": "Không được đăng ký đồng thời nhiều dự án (NĐ 54 Đ.38)."
+    },
+    {
+      "rule_id": "housing_local_qd_required",
+      "when": { "housing_path": "co_nha_xa_noi_lam_viec" },
+      "check": "local_policy_has_distance_rule",
+      "message": "Tỉnh dự án chưa ghi nhận QĐ NQ 201 Đ.9 k2 — không tư vấn chắc theo cơ chế có nhà xa nơi làm việc."
+    },
+    {
+      "rule_id": "spouse_required_if_married",
+      "when": { "marital_status": "vo_chong" },
+      "require_fields": ["spouse_on_form"],
+      "message": "Phải khai đầy đủ thông tin vợ/chồng trên Mẫu 01."
+    }
+  ]
+}

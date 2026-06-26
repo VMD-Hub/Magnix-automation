@@ -1,0 +1,94 @@
+[
+  {
+    "qa_id": "noxh_income_qa_timeline_001",
+    "topic": "noxh_income",
+    "question": "Mức thu nhập mua NOXH thay đổi thế nào từ 2024 đến 2026?",
+    "short_answer": "Ba giai đoạn: đến 09/10/2025 là 15/30 triệu (NĐ 100 gốc); 10/10/2025–06/04/2026 là 20/30/40 (NĐ 261); từ 07/04/2026 là 25/35/50 (NĐ 136), có thể điều chỉnh theo tỉnh (ví dụ TP.HCM QĐ 14).",
+    "expanded_answer": "Khi tư vấn phải hỏi thời điểm xác nhận thu nhập và tỉnh có dự án. NĐ 54 (02/2026) và NĐ 136 (04/2026) sửa tiếp trên nền NĐ 100 đã qua NĐ 261 — không quay về mức cũ. Hồ sơ xác nhận trước 07/04/2026 vẫn có giá trị 12 tháng theo điều khoản chuyển tiếp NĐ 136.",
+    "source_refs": [
+      "nd100_income_k568_2024",
+      "nd261_income_k568_2025",
+      "nd100_income_k568_2026",
+      "nd136_transition_income_doc_001"
+    ],
+    "related_questions": [
+      "Thu nhập 20 triệu năm 2025 có mua được không?",
+      "Giấy xác nhận thu nhập cũ còn dùng được không?"
+    ],
+    "safe_cta": "Comment CHECKLIST để nhận bảng timeline thu nhập NOXH.",
+    "disclaimer": "Mức cuối cùng phụ thuộc ngày xác nhận và quyết định địa phương.",
+    "last_checked": "2026-06-26"
+  },
+  {
+    "qa_id": "noxh_loan_qa_rate_54_001",
+    "topic": "loan_dti",
+    "question": "Lãi suất vay mua nhà ở xã hội hiện nay là bao nhiêu?",
+    "short_answer": "Theo NĐ 261/2025 (sửa Điều 48 NĐ 100): lãi suất cho vay tại Ngân hàng Chính sách xã hội là 5,4%/năm; nợ quá hạn bằng 130% lãi suất cho vay.",
+    "expanded_answer": "Giảm từ 6,6%/năm. Khoản vay đã ký trước 10/10/2025 có thể được điều chỉnh HĐ theo mức mới. Thay đổi lãi suất trong tương lai cần quyết định cấp Thủ tướng — không tự suy ra.",
+    "source_refs": ["nd261_loan_rate_54pct_001"],
+    "related_questions": [
+      "Vay NOXH tại ngân hàng thương mại được không?",
+      "DTI bao nhiêu thì đủ trả nợ?"
+    ],
+    "safe_cta": "Comment CHECKLIST để nhận checklist hồ sơ vay NHCSXH.",
+    "disclaimer": "Được vay hay không do ngân hàng và hồ sơ thực tế quyết định.",
+    "last_checked": "2026-06-26"
+  },
+  {
+    "qa_id": "local_hcm_income_qa_001",
+    "topic": "local_policy",
+    "province_code": "tp_ho_chi_minh",
+    "question": "Mua nhà ở xã hội tại TP.HCM thu nhập tối đa bao nhiêu?",
+    "short_answer": "Từ 01/04/2026 (QĐ 14/2026): hệ số 1,25 → 25 / 37,5 / 50 triệu; hộ từ 3 người phụ thuộc hệ số 1,35 → 27 / 40,5 / 54 triệu.",
+    "expanded_answer": "QĐ 14 triển khai điểm d Điều 30 sau NĐ 136 trên địa bàn TP.HCM. Hộ đông người phụ thuộc còn được ưu tiên căn lớn hoặc từ 2 phòng ngủ. Phải xác định đúng tỉnh có dự án và ngày xác nhận thu nhập.",
+    "source_refs": [
+      "local_hcm_income_coeff_125_001",
+      "local_hcm_income_coeff_135_001"
+    ],
+    "related_questions": [
+      "Hộ 3 con ở TP.HCM được ưu tiên gì?",
+      "Dự án NOXH Bình Dương có áp dụng QĐ 14 không?"
+    ],
+    "safe_cta": "Comment CHECKLIST để tự đối chiếu thu nhập theo QĐ 14.",
+    "disclaimer": "Cần đối chiếu toàn văn QĐ 14 trên Công báo TP.HCM.",
+    "last_checked": "2026-06-26"
+  },
+  {
+    "qa_id": "local_priority_provinces_income_qa_001",
+    "topic": "local_policy",
+    "question": "Đồng Nai, Bình Dương, Vũng Tàu, Cần Thơ, Tây Ninh có mức thu nhập NOXH riêng chưa?",
+    "short_answer": "Tại thời điểm KB (06/2026): 5 tỉnh/TP này chưa ghi nhận QĐ hệ số riêng — áp dụng khung NĐ 136: 25/35/50 triệu. TP.HCM đã có QĐ 14 (hệ số 1,25 và 1,35).",
+    "expanded_answer": "Đồng Nai có QĐ 08/2025 về đối tượng/ưu tiên và đang tham mưu sửa sau NĐ 136. Tây Ninh có QĐ 71/2026 về nhà ở xa nơi làm việc (không phải hệ số thu nhập). Cần Thơ có QĐ 62/2026 về giá đất — không nhầm với trần thu nhập.",
+    "source_refs": [
+      "local_dong_nai_income_national_default_001",
+      "local_binh_duong_income_national_default_001",
+      "local_brvt_income_national_default_001",
+      "local_can_tho_income_national_default_001",
+      "local_tay_ninh_income_national_default_001",
+      "local_hcm_income_coeff_125_001"
+    ],
+    "related_questions": [
+      "Bình Dương có tăng mức thu nhập không?",
+      "Công nhân KCN Đồng Nai thuộc nhóm nào?"
+    ],
+    "safe_cta": "Comment CHECKLIST + tên tỉnh để nhận bảng địa phương.",
+    "disclaimer": "Địa phương có thể ban hành QĐ mới — cần cập nhật KB trước khi khẳng định.",
+    "last_checked": "2026-06-26"
+  },
+  {
+    "qa_id": "local_tay_ninh_housing_qa_001",
+    "topic": "local_policy",
+    "province_code": "tay_ninh",
+    "question": "Có nhà ở rồi có mua NOXH tại Tây Ninh được không?",
+    "short_answer": "Có thể — nếu từ 01/07/2026, làm việc trên địa bàn tỉnh, nhà hiện có cách nơi làm việc ≥20km (≥10km với LLVT/KCN), và căn NOXH gần nơi làm việc (cùng xã/liền kề ≤10km) theo QĐ 71/2026.",
+    "expanded_answer": "Đây là ngoại lệ địa phương bổ sung điều kiện nhà ở, không thay thế điều kiện thu nhập (25/35/50 nếu chưa có QĐ hệ số). Phải đo khoảng cách và xác định đúng nhóm Điều 76.",
+    "source_refs": ["local_tay_ninh_housing_distance_001"],
+    "related_questions": [
+      "Làm việc KCN Tây Ninh xa nhà 15km có được không?",
+      "Thu nhập bao nhiêu ở Tây Ninh?"
+    ],
+    "safe_cta": "Comment CHECKLIST để kiểm khoảng cách và hồ sơ QĐ 71.",
+    "disclaimer": "Cơ quan có thẩm quyền xác nhận khoảng cách và đối tượng.",
+    "last_checked": "2026-06-26"
+  }
+]

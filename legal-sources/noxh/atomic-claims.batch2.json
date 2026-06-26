@@ -1,0 +1,223 @@
+[
+  {
+    "claim_id": "nd54_housing_gcn_no_info_001",
+    "topic": "noxh_eligibility",
+    "claim": "Theo NĐ 54/2026 (sửa khoản 1 Điều 29 NĐ 100/2024, hiệu lực 09/02/2026): chưa có nhà ở được xác định khi người đứng đơn và vợ/chồng (nếu có) không có tên hoặc không có nội dung thông tin về nhà ở trong GCN QSDĐ tại tỉnh/TP nơi có dự án — không phụ thuộc thời điểm nộp hồ sơ.",
+    "source_refs": ["noxh_nd_54_2026:article_1:article_29_k1"],
+    "effective_from": "2026-02-09",
+    "effective_to": null,
+    "supersedes_notes": ["nd100_housing_no_owned_001 — bổ sung trường hợp không có thông tin nhà ở trên GCN"],
+    "confidence": "verified",
+    "risk_level": "high",
+    "disclaimer_required": true,
+    "usage_rules": [
+      "Xác nhận do cơ quan có thẩm quyền cấp GCN theo luật đất đai",
+      "Không tự kết luận chỉ vì GCN không ghi nhà ở"
+    ],
+    "forbidden_claims": [
+      "Chắc chắn đủ điều kiện nhà ở vì GCN trống",
+      "Vẫn áp dụng quy tắc chỉ VPĐK huyện như NĐ 100 gốc"
+    ],
+    "last_checked": "2026-06-26"
+  },
+  {
+    "claim_id": "nd54_income_ca_xa_001",
+    "topic": "noxh_income",
+    "claim": "Đối tượng khoản 5 Điều 76 không có HĐLĐ: từ 09/02/2026 (NĐ 54 sửa khoản 2 Điều 30), Công an cấp xã nơi thường trú/tạm trú/nơi ở hiện tại xác nhận trong 07 ngày; công dân kê khai cam kết thu nhập; có hậu kiểm; đơn đề nghị xác nhận đồng thời là giấy chứng minh đối tượng.",
+    "source_refs": ["noxh_nd_54_2026:article_1:article_30_k2"],
+    "effective_from": "2026-02-09",
+    "effective_to": null,
+    "confidence": "verified",
+    "risk_level": "high",
+    "disclaimer_required": true,
+    "usage_rules": [
+      "Mức trần thu nhập vẫn theo khoản 1 Điều 30 (15-30 trước 07/04/2026; 25-50 sau NĐ 136)",
+      "Không cam kết hậu kiểm không phát hiện sai"
+    ],
+    "forbidden_claims": [
+      "UBND xã vẫn là cơ quan xác nhận thu nhập",
+      "Không cần kê khai thu nhập"
+    ],
+    "last_checked": "2026-06-26"
+  },
+  {
+    "claim_id": "nd54_register_one_project_001",
+    "topic": "noxh_online_submission",
+    "claim": "Theo NĐ 54 sửa Điều 38: mỗi hộ/cá nhân không được đồng thời đăng ký mua NOXH tại nhiều dự án trong cùng thời điểm; có thể nộp trực tiếp, trực tuyến, bưu chính hoặc qua đơn vị nơi làm việc.",
+    "source_refs": ["noxh_nd_54_2026:article_1:article_38"],
+    "effective_from": "2026-02-09",
+    "effective_to": null,
+    "confidence": "verified",
+    "risk_level": "medium",
+    "disclaimer_required": true,
+    "usage_rules": [],
+    "forbidden_claims": [
+      "Có thể nộp nhiều dự án cùng lúc để tăng cơ hội"
+    ],
+    "last_checked": "2026-06-26"
+  },
+  {
+    "claim_id": "nd54_priority_order_001",
+    "topic": "noxh_eligibility",
+    "claim": "Khi bốc thăm NOXH (NĐ 54 Điều 38): đối tượng ưu tiên Điều 79 Luật Nhà ở được ưu tiên không bốc thăm theo tỷ lệ; thứ tự bố trí: người có công → thân nhân liệt sĩ → người khuyết tật → tái định cư (mua NOXH) → nữ giới (đơn thân hoặc chủ hộ trên dữ liệu cư trú).",
+    "source_refs": [
+      "noxh_nd_54_2026:article_1:article_38",
+      "noxh_luat_nha_o_2023:article_79:k1d"
+    ],
+    "effective_from": "2026-02-09",
+    "effective_to": null,
+    "confidence": "verified",
+    "risk_level": "medium",
+    "disclaimer_required": true,
+    "usage_rules": [
+      "Không cam kết trúng ưu tiên"
+    ],
+    "forbidden_claims": [
+      "Nộp sớm là được ưu tiên tuyệt đối"
+    ],
+    "last_checked": "2026-06-26"
+  },
+  {
+    "claim_id": "nd54_proof_valid_12m_001",
+    "topic": "noxh_documents",
+    "claim": "Giấy tờ chứng minh đối tượng, điều kiện NOXH (NĐ 54 Điều 38) có giá trị 12 tháng kể từ thời điểm xác nhận; người đăng ký phải cam kết chưa được hưởng chính sách hỗ trợ nhà ở.",
+    "source_refs": ["noxh_nd_54_2026:article_1:article_38"],
+    "effective_from": "2026-02-09",
+    "effective_to": null,
+    "confidence": "verified",
+    "risk_level": "medium",
+    "disclaimer_required": true,
+    "usage_rules": [],
+    "forbidden_claims": [],
+    "last_checked": "2026-06-26"
+  },
+  {
+    "claim_id": "nd136_income_provincial_factor_001",
+    "topic": "noxh_income",
+    "claim": "UBND cấp tỉnh được quyết định hệ số điều chỉnh mức thu nhập (25/35/50 triệu) theo điều kiện địa phương, không vượt quá tỷ lệ thu nhập bình quân đầu người địa phương so với cả nước; có thể có chính sách khuyến khích hộ có từ 3 người phụ thuộc trở lên (NĐ 136 điểm d khoản 1 Điều 30).",
+    "source_refs": ["noxh_nd_136_2026:article_1:article_30_k1d"],
+    "effective_from": "2026-04-07",
+    "effective_to": null,
+    "confidence": "verified",
+    "risk_level": "high",
+    "disclaimer_required": true,
+    "usage_rules": [
+      "Phải tra quyết định địa phương trước khi khẳng định mức trần",
+      "local_policy topic nếu có QĐ tỉnh"
+    ],
+    "forbidden_claims": [
+      "25 triệu áp dụng cứng cho mọi tỉnh",
+      "Không có điều chỉnh địa phương"
+    ],
+    "last_checked": "2026-06-26"
+  },
+  {
+    "claim_id": "nd136_transition_income_doc_001",
+    "topic": "noxh_documents",
+    "claim": "Giấy tờ xác nhận điều kiện thu nhập NOXH đã cấp trước 07/04/2026 vẫn có giá trị 12 tháng kể từ ngày xác nhận (NĐ 136 Điều 2 chuyển tiếp).",
+    "source_refs": ["noxh_nd_136_2026:article_2"],
+    "effective_from": "2026-04-07",
+    "effective_to": null,
+    "confidence": "verified",
+    "risk_level": "medium",
+    "disclaimer_required": true,
+    "usage_rules": [
+      "Kiểm tra ngày xác nhận trên giấy tờ"
+    ],
+    "forbidden_claims": [
+      "Giấy xác nhận cũ phải làm lại ngay 07/04/2026"
+    ],
+    "last_checked": "2026-06-26"
+  },
+  {
+    "claim_id": "nd136_llvt_income_spouse_001",
+    "topic": "noxh_income",
+    "claim": "Vợ/chồng người đứng đơn thuộc lực lượng vũ trang (khoản 7 Đ.76) nhưng vợ/chồng không thuộc khoản 7: tổng thu nhập vợ chồng không quá thu nhập sĩ quan hàm Đại tá (gồm phụ cấp khu vực) cộng mức lương điểm a khoản 1 Điều 30 (25 triệu theo NĐ 136).",
+    "source_refs": ["noxh_nd_136_2026:article_1:article_67_k2b"],
+    "effective_from": "2026-04-07",
+    "effective_to": null,
+    "confidence": "verified",
+    "risk_level": "high",
+    "disclaimer_required": true,
+    "usage_rules": [],
+    "forbidden_claims": [
+      "Vợ chồng lực lượng vũ trang dùng mức 25/50 triệu như dân sự"
+    ],
+    "last_checked": "2026-06-26"
+  },
+  {
+    "claim_id": "luat76_objects_k568_001",
+    "topic": "noxh_eligibility",
+    "claim": "Khoản 5 Điều 76 Luật Nhà ở 2023: người thu nhập thấp tại khu vực đô thị. Khoản 6: công nhân, lao động tại DN/HTX trong và ngoài KCN. Khoản 8: cán bộ, công chức, viên chức. Ba nhóm này chịu điều kiện thu nhập theo Chính phủ (NĐ 30/136).",
+    "source_refs": [
+      "noxh_luat_nha_o_2023:article_76:k5",
+      "noxh_luat_nha_o_2023:article_76:k6",
+      "noxh_luat_nha_o_2023:article_76:k8"
+    ],
+    "effective_from": "2024-08-01",
+    "effective_to": null,
+    "confidence": "verified",
+    "risk_level": "high",
+    "disclaimer_required": true,
+    "usage_rules": [
+      "Phải xác định đúng khoản đối tượng trước khi áp mức thu nhập"
+    ],
+    "forbidden_claims": [
+      "Mọi người mua NOXH đều là khoản 5"
+    ],
+    "last_checked": "2026-06-26"
+  },
+  {
+    "claim_id": "luat78_rent_no_income_test_001",
+    "topic": "noxh_eligibility",
+    "claim": "Theo khoản 2 Điều 78 Luật Nhà ở 2023: đối tượng thuê (không mua/thuê mua) nhà ở xã hội không phải đáp ứng điều kiện về nhà ở và thu nhập quy định tại khoản 1 Điều 78.",
+    "source_refs": ["noxh_luat_nha_o_2023:article_78:k2"],
+    "effective_from": "2024-08-01",
+    "effective_to": null,
+    "confidence": "verified",
+    "risk_level": "medium",
+    "disclaimer_required": true,
+    "usage_rules": [
+      "Phân biệt thuê vs mua/thuê mua khi tư vấn"
+    ],
+    "forbidden_claims": [
+      "Thuê NOXH cũng phải đủ mức thu nhập 25 triệu"
+    ],
+    "last_checked": "2026-06-26"
+  },
+  {
+    "claim_id": "luat78_no_residence_requirement_001",
+    "topic": "noxh_eligibility",
+    "claim": "Luật Nhà ở 2023 không quy định điều kiện cư trú (đăng ký thường trú tại tỉnh có dự án) khi mua/thuê mua nhà ở xã hội — khác Luật Nhà ở 2014.",
+    "source_refs": ["noxh_luat_nha_o_2023:article_78:k1"],
+    "effective_from": "2024-08-01",
+    "effective_to": null,
+    "confidence": "verified",
+    "risk_level": "medium",
+    "disclaimer_required": true,
+    "usage_rules": [
+      "Vẫn phải đáp ứng điều kiện nhà ở tại tỉnh có dự án"
+    ],
+    "forbidden_claims": [
+      "Bắt buộc hộ khẩu tại tỉnh có dự án",
+      "Phải cư trú 2 năm tại địa phương"
+    ],
+    "last_checked": "2026-06-26"
+  },
+  {
+    "claim_id": "luat79_single_best_policy_001",
+    "topic": "noxh_eligibility",
+    "claim": "Một đối tượng hưởng nhiều chính sách hỗ trợ nhà ở thì chỉ được hưởng một chính sách mức cao nhất (điểm đ khoản 1 Điều 79 Luật Nhà ở 2023).",
+    "source_refs": ["noxh_luat_nha_o_2023:article_79:k1d"],
+    "effective_from": "2024-08-01",
+    "effective_to": null,
+    "confidence": "verified",
+    "risk_level": "medium",
+    "disclaimer_required": true,
+    "usage_rules": [],
+    "forbidden_claims": [
+      "Cộng dồn nhiều chính sách hỗ trợ nhà ở"
+    ],
+    "last_checked": "2026-06-26"
+  }
+]

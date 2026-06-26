@@ -1,0 +1,190 @@
+[
+  {
+    "claim_id": "noxh_loan_two_tier_001",
+    "topic": "loan_dti",
+    "claim": "Đủ điều kiện mua/thuê mua NOXH (CĐT/Sở XD — đối tượng Đ.76, nhà ở Đ.78, thu nhập, Mẫu 01) tách biệt với được duyệt vay ưu đãi (NHCSXH/TCTD chỉ định thẩm định khả năng trả nợ). Agent không cam kết vay khi chỉ đủ Tầng A.",
+    "source_refs": ["noxh_nd_100_2024:article_48", "noxh_luat_nha_o_2023:article_77"],
+    "effective_from": "2024-08-01",
+    "effective_to": null,
+    "confidence": "verified",
+    "risk_level": "high",
+    "disclaimer_required": true,
+    "usage_rules": ["Chi tiết: noxh-loan-nhcsxh-counseling.md"],
+    "forbidden_claims": [
+      "Đủ điều kiện NOXH chắc chắn được vay",
+      "CĐT duyệt là ngân hàng tự động duyệt vay"
+    ],
+    "counseling_guide_path": "legal-sources/noxh/noxh-loan-nhcsxh-counseling.md",
+    "last_checked": "2026-06-26"
+  },
+  {
+    "claim_id": "noxh_loan_nhcsxh_conditions_001",
+    "topic": "loan_dti",
+    "claim": "Vay mua/thuê mua NOXH tại NHCSXH (NĐ 100 Đ.48 k1): đối tượng k1,4,5,6,7,8 Đ.76; phải có thu nhập và khả năng trả nợ; giấy đề nghị vay; hợp đồng mua/thuê mua với CĐT; bảo đảm bằng tài sản hình thành từ vốn vay (HĐ ba bên NH-CĐT-người vay). Đối tượng k2,k3 Đ.76 mua theo Đ.77 k1 cũng được vay theo Đ.48.",
+    "source_refs": ["noxh_nd_100_2024:article_48"],
+    "effective_from": "2024-08-01",
+    "effective_to": null,
+    "confidence": "verified",
+    "risk_level": "high",
+    "disclaimer_required": true,
+    "usage_rules": ["Cần HĐ CĐT trước khi giải ngân — không chốt nếu chưa có HĐ"],
+    "forbidden_claims": [
+      "Vay NOXH không cần hợp đồng chủ đầu tư",
+      "Mọi đối tượng Đ.76 đều vay NHCSXH"
+    ],
+    "counseling_guide_path": "legal-sources/noxh/noxh-loan-nhcsxh-counseling.md",
+    "last_checked": "2026-06-26"
+  },
+  {
+    "claim_id": "noxh_loan_nhcsxh_limit_80pct_001",
+    "topic": "loan_dti",
+    "claim": "Mức vốn cho vay mua/thuê mua NOXH tại NHCSXH tối đa 80% giá trị hợp đồng mua/thuê mua; người vay cần tối thiểu khoảng 20% vốn tự có (NĐ 100 Đ.48 k3a). Thời hạn vay tối đa 25 năm từ ngày giải ngân đầu tiên, thỏa thuận theo khả năng trả nợ.",
+    "source_refs": ["noxh_nd_100_2024:article_48:k3", "noxh_nd_100_2024:article_48:k5"],
+    "effective_from": "2024-08-01",
+    "effective_to": null,
+    "confidence": "verified",
+    "risk_level": "high",
+    "disclaimer_required": true,
+    "usage_rules": [],
+    "forbidden_claims": [
+      "Vay 100% giá căn NOXH tại NHCSXH",
+      "Mọi khoản vay đều 25 năm cố định"
+    ],
+    "counseling_guide_path": "legal-sources/noxh/noxh-loan-nhcsxh-counseling.md",
+    "last_checked": "2026-06-26"
+  },
+  {
+    "claim_id": "noxh_loan_gov_support_mechanism_001",
+    "topic": "loan_dti",
+    "claim": "Chính sách hỗ trợ cho vay ưu đãi NOXH: Nhà nước bố trí nguồn vốn qua NHCSXH (Đ.50 NĐ 100) — với đối tượng mua/thuê mua khoản 5 Đ.77 Luật Nhà ở thường NSNN cấp khoảng 50% vốn KHTĐT công, NHCSXH huy động khoảng 50%, NSNN cấp bù chênh lệch lãi suất và phí quản lý. NHCSXH được huy động tiền gửi tiết kiệm người mua NOXH để cho vay (Đ.46 k4). Một người/hộ chỉ áp dụng một chính sách vay hỗ trợ mức cao nhất (Đ.46 k1-k2).",
+    "source_refs": [
+      "noxh_nd_100_2024:article_46",
+      "noxh_nd_100_2024:article_50",
+      "noxh_luat_nha_o_2023:article_77"
+    ],
+    "effective_from": "2024-08-01",
+    "effective_to": null,
+    "confidence": "verified",
+    "risk_level": "medium",
+    "disclaimer_required": true,
+    "usage_rules": [
+      "Không nhầm cấp bù lãi suất với miễn trả lãi cho người vay",
+      "Tiết kiệm trước vay: theo hướng dẫn NHCSXH từng đợt"
+    ],
+    "forbidden_claims": [
+      "Nhà nước trả hết lãi vay NOXH thay người mua",
+      "Không cần vốn tự có vì có hỗ trợ Chính phủ"
+    ],
+    "counseling_guide_path": "legal-sources/noxh/noxh-loan-nhcsxh-counseling.md",
+    "last_checked": "2026-06-26"
+  },
+  {
+    "claim_id": "noxh_loan_designated_credit_institution_001",
+    "topic": "loan_dti",
+    "claim": "Ngoài NHCSXH, vay ưu đãi mua/thuê mua NOXH có thể qua tổ chức tín dụng do Nhà nước chỉ định (NĐ 100 Đ.49) theo chương trình tín dụng Chính phủ/Thủ tướng từng thời kỳ — lãi suất và điều kiện không mặc định bằng 5,4% như NHCSXH.",
+    "source_refs": ["noxh_nd_100_2024:article_49"],
+    "effective_from": "2024-08-01",
+    "effective_to": null,
+    "confidence": "verified",
+    "risk_level": "medium",
+    "disclaimer_required": true,
+    "usage_rules": ["Đối chiếu thông báo dự án nếu vay qua NH liên kết"],
+    "forbidden_claims": [
+      "Mọi ngân hàng thương mại đều cho vay 5,4%",
+      "NH liên kết dự án = tự động là vay chính sách"
+    ],
+    "counseling_guide_path": "legal-sources/noxh/noxh-loan-nhcsxh-counseling.md",
+    "last_checked": "2026-06-26"
+  },
+  {
+    "claim_id": "bank_cic_credit_history_001",
+    "topic": "loan_dti",
+    "claim": "CIC (TT 15/2023) lưu lịch sử tín dụng; ngân hàng tra CIC trước khi cho vay. Điểm tín dụng/chấm điểm CIC là công cụ tham khảo — không có ngưỡng điểm quốc gia bắt buộc; mỗi TCTD tự quyết theo quy chế nội bộ (TT 39/2016). Khách nên tự tra CIC trước khi vay.",
+    "source_refs": ["bank_tt_15_2023", "bank_tt_39_2016"],
+    "effective_from": "2023-07-01",
+    "effective_to": null,
+    "confidence": "verified",
+    "risk_level": "medium",
+    "disclaimer_required": true,
+    "usage_rules": ["Chi tiết: bank-credit-appraisal-counseling.md"],
+    "forbidden_claims": [
+      "Điểm CIC X chắc chắn được vay",
+      "Không cần tra CIC khi vay NOXH"
+    ],
+    "counseling_guide_path": "legal-sources/noxh/bank-credit-appraisal-counseling.md",
+    "last_checked": "2026-06-26"
+  },
+  {
+    "claim_id": "bank_npl_classification_001",
+    "topic": "loan_dti",
+    "claim": "Phân loại nợ theo TT 11/2021: nợ xấu (NPL) = nhóm 3, 4, 5. Nhóm 1 đủ tiêu chuẩn; nhóm 2 cần chú ý. Thời gian quá hạn xác định nhóm theo Đ.10 (định lượng). Nợ xấu trên CIC làm rất khó vay mới; thông tin nợ xấu lưu tối đa 5 năm sau kết thúc (TT 15 Đ.13).",
+    "source_refs": ["bank_tt_11_2021:article_10", "bank_tt_15_2023:article_13"],
+    "effective_from": "2021-07-01",
+    "effective_to": null,
+    "confidence": "verified",
+    "risk_level": "high",
+    "disclaimer_required": true,
+    "usage_rules": [],
+    "forbidden_claims": [
+      "Nợ xấu nhóm 1 hoặc nhóm 2",
+      "Trả xong nợ xấu là vay ngay được"
+    ],
+    "counseling_guide_path": "legal-sources/noxh/bank-credit-appraisal-counseling.md",
+    "last_checked": "2026-06-26"
+  },
+  {
+    "claim_id": "bank_dti_income_appraisal_001",
+    "topic": "loan_dti",
+    "claim": "Trần thu nhập NOXH (25/35/50) khác thẩm định khả năng trả nợ vay. TT 39/2016 không cố định DTI toàn hệ thống; NH thương mại áp dụng DTI nội bộ (thông lệ thường 36–50%). NHCSXH (HD 4546/2024): chứng từ tài chính tối thiểu 3 tháng, Báo cáo thẩm định Mẫu 05/NƠXH, có thể yêu cầu gửi tiết kiệm 12 tháng.",
+    "source_refs": ["bank_tt_39_2016", "bank_hd_4546_nhcs_2024", "noxh_nd_100_2024:article_48"],
+    "effective_from": "2024-01-01",
+    "effective_to": null,
+    "confidence": "verified",
+    "risk_level": "high",
+    "disclaimer_required": true,
+    "usage_rules": ["Không chốt DTI % cố định nếu chưa biết ngân hàng"],
+    "forbidden_claims": [
+      "Luật quy định DTI 40% cho mọi vay nhà",
+      "Đủ 25 triệu NOXH là đủ trả nợ"
+    ],
+    "counseling_guide_path": "legal-sources/noxh/bank-credit-appraisal-counseling.md",
+    "last_checked": "2026-06-26"
+  },
+  {
+    "claim_id": "bank_room_noxh_priority_001",
+    "topic": "loan_dti",
+    "claim": "Room tín dụng là giới hạn tăng trưởng tín dụng NHNN giao cho từng ngân hàng — không phải hạn mức cá nhân. CV 11686/2025: tăng trưởng tín dụng BĐS không vượt tăng trưởng chung. CV 4551/NHNN-CSTT 2026 (25 NH): phần dư nợ tăng thêm cho NOXH/KCN/KCX có thể không tính vào trần tăng trưởng tín dụng BĐS — ưu tiên dòng vốn vĩ mô, không tự động duyệt hồ sơ người mua.",
+    "source_refs": ["bank_cv_11686_2025", "bank_cv_4551_2026"],
+    "effective_from": "2026-01-01",
+    "effective_to": "2026-12-31",
+    "confidence": "verified",
+    "risk_level": "medium",
+    "disclaimer_required": true,
+    "usage_rules": ["Dư nợ NOXH hạch toán mục 2.5.1 Biểu 015-CSTT (TT 35/2015)"],
+    "forbidden_claims": [
+      "Room NOXH = chắc được vay",
+      "Mọi ngân hàng đều được loại trừ NOXH khỏi room BĐS"
+    ],
+    "counseling_guide_path": "legal-sources/noxh/bank-credit-appraisal-counseling.md",
+    "last_checked": "2026-06-26"
+  },
+  {
+    "claim_id": "cic_self_check_citizen_001",
+    "topic": "loan_dti",
+    "claim": "Công dân tự tra cứu báo cáo/điểm tín dụng qua cổng chính thức cic.gov.vn hoặc app iCIC/CIC Credit Connect (CICB). Đăng ký bằng CCCD + SĐT chính chủ; khai thác báo cáo K11. Miễn phí 1 lần/năm (TT 15/2023 Đ.18); từ lần 2 trả phí theo bảng giá CIC. Hotline CIC: 1800585891. Không có dịch vụ xóa nợ xấu trái phép.",
+    "source_refs": ["bank_tt_15_2023:article_18", "cic_portal_cic_gov_vn"],
+    "effective_from": "2023-07-01",
+    "effective_to": null,
+    "confidence": "verified",
+    "risk_level": "medium",
+    "disclaimer_required": true,
+    "usage_rules": ["Chi tiết từng bước: cic-self-check-citizen-guide.md", "Đối chiếu màn hình cic.gov.vn trước publish"],
+    "forbidden_claims": [
+      "Dùng app/website không phải CIC để tra điểm chính thức",
+      "Trả tiền bên thứ ba để xóa nợ xấu CIC",
+      "Mọi lần tra CIC đều miễn phí"
+    ],
+    "counseling_guide_path": "legal-sources/noxh/cic-self-check-citizen-guide.md",
+    "last_checked": "2026-06-26"
+  }
+]

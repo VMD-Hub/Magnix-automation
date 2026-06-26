@@ -1,0 +1,616 @@
+[
+  {
+    "claim_id": "mau01_core_bundle_001",
+    "topic": "noxh_documents",
+    "claim": "Hồ sơ đăng ký mua/thuê mua/thuê NOXH gồm Đơn Mẫu 01 (Phụ lục II NĐ 100, đã cập nhật NĐ 136) và giấy tờ chứng minh đối tượng, điều kiện theo Đ.76, 78 Luật Nhà ở — nộp cho chủ đầu tư trong thời gian tiếp nhận tối thiểu 30 ngày.",
+    "source_refs": [
+      "noxh_nd_100_2024:article_38",
+      "noxh_nd_54_2026:article_1:article_38",
+      "noxh_nd_136_2026:article_1:mau_01"
+    ],
+    "effective_from": "2026-04-07",
+    "effective_to": null,
+    "confidence": "verified",
+    "risk_level": "high",
+    "disclaimer_required": true,
+    "usage_rules": [
+      "Luôn nhắc đối chiếu thông báo CĐT từng dự án"
+    ],
+    "forbidden_claims": [
+      "Chỉ cần photo CCCD là đủ",
+      "Mẫu đơn mọi dự án giống hệt nhau không cần đọc hướng dẫn CĐT"
+    ],
+    "last_checked": "2026-06-26"
+  },
+  {
+    "claim_id": "mau01_spouse_declaration_001",
+    "topic": "noxh_documents",
+    "claim": "Trên Mẫu 01, người đã kết hôn phải khai thông tin vợ/chồng dù vợ/chồng không đứng tên mua — vì điều kiện nhà ở và thu nhập xét cả vợ chồng tại tỉnh có dự án.",
+    "source_refs": [
+      "noxh_nd_100_2024:article_29:k1",
+      "noxh_nd_100_2024:article_30:k1"
+    ],
+    "effective_from": "2024-08-01",
+    "effective_to": null,
+    "confidence": "verified",
+    "risk_level": "high",
+    "disclaimer_required": true,
+    "usage_rules": [],
+    "forbidden_claims": [
+      "Vợ/chồng không liên quan thì không cần khai",
+      "Chỉ người đứng đơn mới bị xét nhà ở"
+    ],
+    "last_checked": "2026-06-26"
+  },
+  {
+    "claim_id": "mau01_article76_tick_001",
+    "topic": "noxh_documents",
+    "claim": "Phần đối tượng trên đơn phải tick đúng nhóm Đ.76: k5 (thu nhập thấp đô thị, có/không HĐLĐ); k6 (CN/LĐ DN-KCN); k8 (CBCCVC); k7 (LLVT → mục 11.2). k5 không HĐLĐ: Công an cấp xã (NĐ 54). Lao động tự do không phải k8.",
+    "source_refs": [
+      "noxh_luat_nha_o_2023:article_76",
+      "noxh_nd_54_2026:article_1:article_30_k2"
+    ],
+    "effective_from": "2026-02-09",
+    "effective_to": null,
+    "confidence": "verified",
+    "risk_level": "high",
+    "disclaimer_required": true,
+    "usage_rules": [
+      "Hỏi rõ có HĐLĐ trước khi hướng dẫn tick k5 vs k8"
+    ],
+    "forbidden_claims": [
+      "Không có HĐLĐ vẫn tick k5 được",
+      "Công an chỉ xác nhận cư trú, không liên quan thu nhập k8"
+    ],
+    "last_checked": "2026-06-26"
+  },
+  {
+    "claim_id": "mau01_housing_declaration_001",
+    "topic": "noxh_documents",
+    "claim": "Phần khai báo nhà ở trên đơn phải phản ánh đúng tình trạng tại tỉnh/TP nơi có dự án: chưa có tên/không có thông tin nhà ở trên GCN (NĐ 54), hoặc diện tích <15 m²/người, hoặc trường hợp có nhà xa nơi làm việc theo QĐ tỉnh dự án — không khai theo tỉnh đang ở nếu khác tỉnh dự án.",
+    "source_refs": [
+      "noxh_nd_54_2026:article_1:article_29_k1",
+      "counseling_project_province_jurisdiction_001"
+    ],
+    "effective_from": "2026-02-09",
+    "effective_to": null,
+    "confidence": "verified",
+    "risk_level": "high",
+    "disclaimer_required": true,
+    "usage_rules": [
+      "Tra COUNSELING_FRAMEWORK.md — hai con đường nhà ở"
+    ],
+    "forbidden_claims": [
+      "Ở tỉnh khác không có nhà thì khai chưa có nhà tại tỉnh dự án",
+      "Cách dự án 20km là đủ trên đơn"
+    ],
+    "last_checked": "2026-06-26"
+  },
+  {
+    "claim_id": "mau01_income_on_form_001",
+    "topic": "noxh_documents",
+    "claim": "Phần thu nhập trên Mẫu 01 (sau NĐ 136): khai theo trần 25/35/50 triệu hoặc theo Đ.67 nếu k7; tính Bảng tiền công tiền lương thực nhận 12 tháng liền kề từ thời điểm xác nhận; có QĐ hệ số tỉnh thì áp hệ số lên mức a,b Đ.30.",
+    "source_refs": [
+      "noxh_nd_136_2026:article_1:article_30_k1",
+      "nd100_income_k568_2026"
+    ],
+    "effective_from": "2026-04-07",
+    "effective_to": null,
+    "confidence": "verified",
+    "risk_level": "high",
+    "disclaimer_required": true,
+    "usage_rules": [
+      "Tra local-policy cho hệ số tỉnh dự án"
+    ],
+    "forbidden_claims": [
+      "Ghi lương HĐLĐ là đủ không cần bảng xác nhận",
+      "Tự nhân hệ số tỉnh khi chưa có QĐ"
+    ],
+    "last_checked": "2026-06-26"
+  },
+  {
+    "claim_id": "mau01_commitment_single_project_001",
+    "topic": "noxh_online_submission",
+    "claim": "Cuối đơn và hồ sơ: người đăng ký cam kết chưa hưởng chính sách hỗ trợ nhà ở và không đăng ký đồng thời nhiều dự án (NĐ 54 Đ.38); giấy tờ chứng minh có giá trị 12 tháng từ ngày xác nhận.",
+    "source_refs": [
+      "noxh_nd_54_2026:article_1:article_38",
+      "nd54_single_project_001"
+    ],
+    "effective_from": "2026-02-09",
+    "effective_to": null,
+    "confidence": "verified",
+    "risk_level": "high",
+    "disclaimer_required": true,
+    "usage_rules": [],
+    "forbidden_claims": [
+      "Nộp thử 2 dự án rồi chọn sau",
+      "Giấy xác nhận cũ 2 năm vẫn dùng"
+    ],
+    "last_checked": "2026-06-26"
+  },
+  {
+    "claim_id": "mau01_priority_section_001",
+    "topic": "noxh_documents",
+    "claim": "Nếu đơn có mục ưu tiên: chỉ tick khi có giấy tờ Đ.79 (người có công, liệt sĩ, khuyết tật, tái định cư, nữ giới đơn thân/chủ hộ cư trú) hoặc nhóm bổ sung QĐ tỉnh dự án — tick không có căn cứ có thể bị loại khi đối chiếu.",
+    "source_refs": [
+      "noxh_luat_nha_o_2023:article_79",
+      "noxh_nd_54_2026:article_1:article_38"
+    ],
+    "effective_from": "2026-02-09",
+    "effective_to": null,
+    "confidence": "verified",
+    "risk_level": "medium",
+    "disclaimer_required": true,
+    "usage_rules": [],
+    "forbidden_claims": [
+      "Tick ưu tiên để tăng cơ hội không cần giấy tờ"
+    ],
+    "last_checked": "2026-06-26"
+  },
+  {
+    "claim_id": "mau01_section_11_1_k568_001",
+    "topic": "noxh_documents",
+    "claim": "Mẫu 01 mục 11.1: đối tượng khoản 5, 6, 8 Đ.76 — tick độc thân (≤25 triệu), độc thân nuôi con <18 (≤35 triệu), hoặc đã kết hôn (tổng vợ chồng ≤50 triệu) sau NĐ 136; thu nhập theo Bảng tiền công 12 tháng từ thời điểm xác nhận; có hệ số tỉnh thì nhân lên mức a,b Đ.30.",
+    "source_refs": [
+      "noxh_nd_136_2026:article_1:article_30_k1",
+      "nd100_income_k568_2026",
+      "noxh_nd_100_2024:mau_01:section_11_1"
+    ],
+    "effective_from": "2026-04-07",
+    "effective_to": null,
+    "confidence": "verified",
+    "risk_level": "high",
+    "disclaimer_required": true,
+    "usage_rules": [
+      "Không tick 11.1 nếu người đứng đơn thuộc k7",
+      "Kết hôn: cộng thu nhập cả vợ chồng"
+    ],
+    "forbidden_claims": [
+      "Kết hôn chỉ khai lương người đứng đơn",
+      "Dùng mức 15/30 triệu sau 07/04/2026"
+    ],
+    "last_checked": "2026-06-26"
+  },
+  {
+    "claim_id": "mau01_section_11_2_k7_001",
+    "topic": "noxh_documents",
+    "claim": "Mẫu 01 mục 11.2: chỉ đối tượng khoản 7 Đ.76. Độc thân ≤ thu nhập sĩ quan hàm Đại tá (gồm phụ cấp khu vực). Kết hôn: cả hai k7 ≤ 2×Đại tá; vợ/chồng không k7 ≤ Đại tá + 25 triệu (NĐ 136). Không dùng trần 50 triệu của 11.1.",
+    "source_refs": [
+      "noxh_nd_136_2026:article_1:article_67",
+      "noxh_nd_100_2024:mau_01:section_11_2"
+    ],
+    "effective_from": "2026-04-07",
+    "effective_to": null,
+    "confidence": "verified",
+    "risk_level": "high",
+    "disclaimer_required": true,
+    "usage_rules": [
+      "Xác định vợ/chồng có thuộc k7 không trước khi chọn nhánh con trong 11.2"
+    ],
+    "forbidden_claims": [
+      "Công nhân KCN tick 11.2",
+      "Vợ k7 chồng dân sự dùng trần 50 triệu"
+    ],
+    "last_checked": "2026-06-26"
+  },
+  {
+    "claim_id": "mau01_married_mixed_k568_k7_001",
+    "topic": "noxh_documents",
+    "claim": "Vợ chồng khác nhóm k5/k6/k8 vẫn dùng mục 11.1 nếu người đứng đơn thuộc k5/k6/k8 — trần tổng 50 triệu (hoặc có hệ số tỉnh). Người đứng đơn k7 với vợ/chồng không k7: mục 11.2 nhánh vợ/chồng không thuộc k7 — trần Đại tá + 25 triệu, không phải 11.1.",
+    "source_refs": [
+      "mau01_section_11_1_k568_001",
+      "mau01_section_11_2_k7_001",
+      "nd136_llvt_income_spouse_001"
+    ],
+    "effective_from": "2026-04-07",
+    "effective_to": null,
+    "confidence": "verified",
+    "risk_level": "high",
+    "disclaimer_required": true,
+    "usage_rules": [],
+    "forbidden_claims": [
+      "Hai vợ chồng khác ngành thì mỗi người tick một mục 11"
+    ],
+    "last_checked": "2026-06-26"
+  },
+  {
+    "claim_id": "mau01_k5_no_hdld_freelance_001",
+    "topic": "noxh_documents",
+    "claim": "Lao động tự do/không HĐLĐ thuộc khoản 5 Đ.76 (thu nhập thấp đô thị), mục 11.1 — không tick k8. Xác nhận thu nhập: Công an cấp xã, kê khai cam kết (NĐ 54 Đ.30 k2); trần vẫn 25/35/50 theo tình trạng hôn nhân.",
+    "source_refs": [
+      "nd54_income_ca_xa_001",
+      "mau01_section_11_1_k568_001"
+    ],
+    "effective_from": "2026-02-09",
+    "effective_to": null,
+    "confidence": "verified",
+    "risk_level": "high",
+    "disclaimer_required": true,
+    "usage_rules": [],
+    "forbidden_claims": [
+      "Tự do = k8",
+      "Tự do = mục 11.2"
+    ],
+    "last_checked": "2026-06-26"
+  },
+  {
+    "claim_id": "luat76_k7_vs_k8_distinction_001",
+    "topic": "noxh_eligibility",
+    "claim": "Khoản 7 Đ.76 (LLVT: quân đội, công an, QNCN, công chức/CN/VC quốc phòng đang tại ngũ, cơ yếu) → Mẫu 01 mục 11.2, thu nhập Đ.67 (Đại tá). Khoản 8 Đ.76 (CBCCVC theo luật hành chính/sự nghiệp dân sự) → mục 11.1, thu nhập 25/35/50. Hai nhóm khác nhau; giấy chứng minh k7 do BQP/BCA ban hành (Đ.78 k9, TT 94-BQP, TT 56-BCA), k8 do cơ quan chủ quản xác nhận theo Thông tư Bộ Xây dựng.",
+    "source_refs": [
+      "noxh_luat_nha_o_2023:article_76:k7",
+      "noxh_luat_nha_o_2023:article_76:k8",
+      "noxh_luat_nha_o_2023:article_78:k9",
+      "noxh_luat_nha_o_2023:article_101:k2",
+      "mau01_section_11_2_k7_001"
+    ],
+    "effective_from": "2024-08-01",
+    "effective_to": null,
+    "confidence": "verified",
+    "risk_level": "high",
+    "disclaimer_required": true,
+    "usage_rules": [
+      "Hỏi rõ đang tại ngũ LLVT hay CBCCVC dân sự trước khi chọn 11.1 vs 11.2",
+      "Công chức quốc phòng tại ngũ = k7, không phải k8"
+    ],
+    "forbidden_claims": [
+      "Làm nhà nước thì đều là k7",
+      "Công chức xã dùng mục 11.2",
+      "Công an nhân dân dùng mẫu xác nhận như công chức Sở"
+    ],
+    "last_checked": "2026-06-26"
+  },
+  {
+    "claim_id": "object_k8_cbccvc_vs_hdld_001",
+    "topic": "noxh_eligibility",
+    "claim": "Khoản 8 Đ.76 (cán bộ, công chức, viên chức theo Luật CBCCVC) khác người lao động chỉ có Hợp đồng lao động (Bộ luật Lao động) chưa có QĐ tuyển dụng CC/VC: GV/viên chức biên chế có QĐ VC và HĐ làm việc → k8; GV HĐLĐ trường công, nhân viên HĐLĐ tại cơ quan hành chính chưa công chức → thường k6, không k8; tự do không HĐLĐ → k5 + CA cấp xã.",
+    "source_refs": [
+      "noxh_luat_nha_o_2023:article_76:k6",
+      "noxh_luat_nha_o_2023:article_76:k8",
+      "mau01_article76_tick_001",
+      "nd54_income_ca_xa_001"
+    ],
+    "effective_from": "2024-08-01",
+    "effective_to": null,
+    "confidence": "verified",
+    "risk_level": "high",
+    "disclaimer_required": true,
+    "usage_rules": [
+      "Hỏi QĐ tuyển dụng CC/VC vs HĐLĐ trước khi tick k8",
+      "needs_human_legal_source nếu cán bộ không chuyên trách hoặc hợp đồng dịch vụ"
+    ],
+    "forbidden_claims": [
+      "Làm trường công là viên chức",
+      "Có hợp đồng với nhà nước là công chức",
+      "Chưa vào biên chế thì không bao giờ k8"
+    ],
+    "last_checked": "2026-06-26"
+  },
+  {
+    "claim_id": "married_mixed_object_applicant_k7_001",
+    "topic": "noxh_eligibility",
+    "claim": "Vợ chồng khác nhóm Đ.76: một hồ sơ một người đứng đơn — tick đối tượng và mục 11 theo người đứng đơn; vợ/chồng khai đủ thông tin và cộng thu nhập nếu kết hôn. Có một bên k7: nên để người k7 đứng đơn, mục 11.2; vợ/chồng dân sự (k5/k6/k8) không tick k7 trên đơn nhưng thu nhập vẫn cộng — trần Đại tá + 25 triệu (vợ/chồng không k7), không dùng 50 triệu của 11.1.",
+    "source_refs": [
+      "mau01_married_mixed_k568_k7_001",
+      "nd136_llvt_income_spouse_001",
+      "noxh_luat_nha_o_2023:article_79:k1e"
+    ],
+    "effective_from": "2024-08-01",
+    "effective_to": null,
+    "confidence": "verified",
+    "risk_level": "high",
+    "disclaimer_required": true,
+    "usage_rules": [
+      "Vợ k5 tự do + chồng k7: chồng đứng đơn; vợ CA cấp xã cho thu nhập",
+      "Cả hai chỉ k5/k6/k8: trần chung 11.1 — 50 triệu"
+    ],
+    "forbidden_claims": [
+      "Hai vợ chồng cùng tick hai khoản Đ.76 trên một đơn",
+      "Chồng k7 vợ tự do tick 11.1 trần 50 triệu",
+      "Vợ đứng đơn k6 khi chồng k7 và muốn giấy BQP"
+    ],
+    "last_checked": "2026-06-26"
+  },
+  {
+    "claim_id": "spouses_different_residence_001",
+    "topic": "noxh_documents",
+    "claim": "Vợ chồng không cùng nơi đăng ký thường trú vẫn được nộp hồ sơ NOXH nếu đủ điều kiện nhà ở tại tỉnh có dự án, thu nhập và đối tượng. Luật Nhà ở 2023 không yêu cầu thường trú tại tỉnh dự án. Trên Mẫu 01/CT07 mỗi người khai đúng địa chỉ riêng theo CSDL cư trú; không ghi chung địa chỉ; giấy xác nhận có thể xin tại hai địa phương khác nhau (đơn vị + CA xã theo nơi cư trú từng người).",
+    "source_refs": [
+      "noxh_luat_nha_o_2023:article_78:k1",
+      "nd54_income_ca_xa_001",
+      "noxh_nd_100_2024:article_29:k1"
+    ],
+    "effective_from": "2024-08-01",
+    "effective_to": null,
+    "confidence": "verified",
+    "risk_level": "high",
+    "disclaimer_required": true,
+    "usage_rules": [
+      "CT07 là biểu mẫu CĐT/NH — đối chiếu thông báo dự án",
+      "CT07 chính thức = xác nhận cư trú BCA — xem ct07-residence-confirmation-guide.md",
+      "Tách tư vấn đủ điều kiện NOXH vs thẩm định vay ngân hàng"
+    ],
+    "forbidden_claims": [
+      "Bắt buộc cùng hộ khẩu mới mua NOXH",
+      "Phải thường trú tại tỉnh có dự án",
+      "Vợ chồng phải ghi cùng địa chỉ trên CT07"
+    ],
+    "counseling_guide_path": "legal-sources/noxh/spouses-different-residence-counseling.md",
+    "last_checked": "2026-06-26"
+  },
+  {
+    "claim_id": "ct07_per_person_biography_001",
+    "topic": "noxh_documents",
+    "claim": "Một số CĐT/ngân hàng có mẫu riêng gọi là 'bảng lý lịch người mua' (đôi khi nhầm với CT07 chính thức). Mẫu này khai theo từng cá nhân: người đứng đơn và/hoặc vợ/chồng mỗi người một bảng với địa chỉ thường trú/tạm trú riêng khớp CSDL cư trú; không thay Mẫu 01 NĐ 100. Khác với Giấy xác nhận thông tin về cư trú CT07 (Thông tư 66/2023/TT-BCA) do Công an cấp.",
+    "source_refs": [
+      "mau01_core_bundle_001",
+      "spouses_different_residence_001"
+    ],
+    "effective_from": "2024-08-01",
+    "effective_to": null,
+    "confidence": "verified",
+    "risk_level": "medium",
+    "disclaimer_required": true,
+    "usage_rules": [
+      "needs_human_legal_source nếu CĐT có mẫu CT07 riêng chưa đối chiếu"
+    ],
+    "forbidden_claims": [
+      "CT07 thay thế Mẫu 01",
+      "Chỉ cần CT07 không cần CCCD"
+    ],
+    "counseling_guide_path": "legal-sources/noxh/spouses-different-residence-counseling.md",
+    "last_checked": "2026-06-26"
+  },
+  {
+    "claim_id": "ct07_residence_confirmation_001",
+    "topic": "noxh_documents",
+    "claim": "CT07 (chính thức theo Thông tư 66/2023/TT-BCA) là Giấy xác nhận thông tin về cư trú do Công an xã/phường/thị trấn cấp từ CSDL cư trú và CSDL quốc gia về dân cư. Công dân có thể yêu cầu trực tiếp tại cơ quan đăng ký cư trú hoặc trực tuyến qua VNeID/Cổng Dịch vụ công (cần định danh mức 2 khi online). Không thu phí/lệ phí xác nhận cư trú theo quy định hiện hành. Giá trị sử dụng 01 năm; hết hiệu lực khi thông tin cư trú thay đổi trên CSDL. Kết quả điện tử có thể hiển thị trên VNeID. CĐT từng dự án quy định khác nhau khi nộp: chấp nhận bản in/scan từ VNeID hoặc yêu cầu bản giấy gốc/sao y chứng thực.",
+    "source_refs": [
+      "mau01_core_bundle_001"
+    ],
+    "effective_from": "2024-01-01",
+    "effective_to": null,
+    "confidence": "verified",
+    "risk_level": "medium",
+    "disclaimer_required": true,
+    "usage_rules": [
+      "Hướng dẫn chi tiết: ct07-residence-confirmation-guide.md",
+      "Phân biệt CT07 (cư trú) vs LLTP vs mẫu CĐT",
+      "Hỏi CĐT hình thức nộp: ct07-submission-to-cdt.md"
+    ],
+    "forbidden_claims": [
+      "CT07 do Sở Tư pháp cấp",
+      "CT07 là phiếu lý lịch tư pháp",
+      "Mọi CĐT đều chấp nhận bản in VNeID",
+      "Phải đến Sở Tư pháp để xin CT07 xác nhận cư trú"
+    ],
+    "counseling_guide_path": "legal-sources/noxh/ct07-residence-confirmation-guide.md",
+    "last_checked": "2026-06-26"
+  },
+  {
+    "claim_id": "ct07_form_fields_household_001",
+    "topic": "noxh_documents",
+    "claim": "Mẫu CT07 (TT 66/2023/TT-BCA) gồm Phần I (thông tin cá nhân, thường trú/tạm trú, chủ hộ), Phần II (bảng thành viên khác cùng hộ trên CSDL: họ tên, ngày sinh, giới tính, số ĐDCN, quan hệ chủ hộ), Phần III (lịch sử cư trú từ CSDL). CT07 do CA cấp từ CSDL — công dân kiểm tra/đồng bộ dữ liệu trước khi xin, không tự khai thêm người không thuộc hộ. Đã kết hôn khác hộ: mỗi người một CT07, vợ/chồng không xuất hiện Phần II của nhau. Con nhỏ chỉ có nếu đã đăng ký cùng hộ. 'Người phụ thuộc' NOXH không phải mục khai trên CT07.",
+    "source_refs": [
+      "ct07_residence_confirmation_001",
+      "mau01_spouse_only_mandatory_members_001"
+    ],
+    "effective_from": "2024-01-01",
+    "effective_to": null,
+    "confidence": "verified",
+    "risk_level": "medium",
+    "disclaimer_required": true,
+    "usage_rules": [
+      "Chi tiết mẫu + tình huống gia đình: ct07-form-fields-declaration-guide.md",
+      "Phân biệt CT07 vs khai Mẫu 01 NOXH"
+    ],
+    "forbidden_claims": [
+      "Phải khai hết con ≥18 trên CT07",
+      "Vợ chồng khác hộ phải cùng một CT07",
+      "Người phụ thuộc NOXH khai trên CT07",
+      "Công dân tự viết tay mẫu CT07 gửi CA"
+    ],
+    "counseling_guide_path": "legal-sources/noxh/ct07-form-fields-declaration-guide.md",
+    "last_checked": "2026-06-26"
+  },
+  {
+    "claim_id": "ct07_lltp_online_vneid_001",
+    "topic": "noxh_documents",
+    "claim": "Phiếu lý lịch tư pháp (LLTP) — khác CT07 xác nhận cư trú — có thể xin trực tuyến qua VNeID/Cổng DVC; kết quả hiển thị trên VNeID. Có phí theo Thông tư 16/2025/TT-BTC. Chỉ cần khi thông báo dự án/NH yêu cầu LLTP. Hình thức nộp cho CĐT tùy từng dự án (scan vs bản gốc/sao y).",
+    "source_refs": [
+      "ct07_per_person_biography_001",
+      "vneid_cccd_identity_hierarchy_001"
+    ],
+    "effective_from": "2024-08-01",
+    "effective_to": null,
+    "confidence": "verified",
+    "risk_level": "high",
+    "disclaimer_required": true,
+    "usage_rules": [
+      "LLTP khác CT07 — chỉ xin khi danh mục yêu cầu",
+      "Chi tiết: lltp-online-counseling.md"
+    ],
+    "forbidden_claims": [
+      "LLTP và CT07 là cùng một giấy tờ",
+      "Xin LLTP tại Công an xã để thay CT07 cư trú"
+    ],
+    "counseling_guide_path": "legal-sources/noxh/lltp-online-counseling.md",
+    "last_checked": "2026-06-26"
+  },
+  {
+    "claim_id": "vneid_cccd_identity_hierarchy_001",
+    "topic": "noxh_documents",
+    "claim": "Khai Mẫu 01/CT07: số CCCD và họ tên theo thẻ CCCD còn hiệu lực; nơi thường trú/tạm trú theo CSDL cư trú quốc gia (thường tra VNeID hoặc CA xác nhận theo NĐ 54). Tình trạng hôn nhân theo thực tế pháp lý (giấy kết hôn), không theo CCCD nếu chưa cập nhật. Khi VNeID và CCCD lệch địa chỉ: không chọn bừa — đồng bộ tại CA cấp xã trước khi nộp; thường VNeID mới hơn khi đã chuyển cư trú nhưng chưa đổi thẻ.",
+    "source_refs": [
+      "noxh_nd_54_2026:article_1:article_30_k2",
+      "mau01_spouse_declaration_001"
+    ],
+    "effective_from": "2026-02-09",
+    "effective_to": null,
+    "confidence": "verified",
+    "risk_level": "high",
+    "disclaimer_required": true,
+    "usage_rules": [
+      "Checklist: VNeID → CCCD → CA đồng bộ → mới điền đơn",
+      "Ghi cả tạm trú nếu có trên VNeID và form có ô"
+    ],
+    "forbidden_claims": [
+      "Luôn theo CCCD khi VNeID đã chuyển cư trú",
+      "Luôn theo VNeID khi CCCD mới hơn chưa đồng bộ",
+      "Khai độc thân vì CCCD chưa cập nhật hôn nhân"
+    ],
+    "counseling_guide_path": "legal-sources/noxh/vneid-vs-cccd-counseling.md",
+    "last_checked": "2026-06-26"
+  },
+  {
+    "claim_id": "noxh_no_max_age_purchase_001",
+    "topic": "noxh_eligibility",
+    "claim": "Luật Nhà ở 2023 không quy định giới hạn tuổi tối đa (hết tuổi lao động, nghỉ hưu) để được mua/thuê mua nhà ở xã hội. Điều kiện then chốt là nhóm đối tượng Đ.76, điều kiện nhà ở và thu nhập theo Đ.78 và NĐ 100/54/136 — không phải độ tuổi theo Bộ luật Lao động.",
+    "source_refs": [
+      "noxh_luat_nha_o_2023:article_76",
+      "noxh_luat_nha_o_2023:article_78:k1"
+    ],
+    "effective_from": "2024-08-01",
+    "effective_to": null,
+    "confidence": "verified",
+    "risk_level": "high",
+    "disclaimer_required": true,
+    "usage_rules": [
+      "Không tư vấn chắc nếu CĐT từ chối chỉ vì tuổi — trích Luật 2023 và hướng dẫn Bộ XD"
+    ],
+    "forbidden_claims": [
+      "Hết tuổi lao động không được mua NOXH",
+      "Nghỉ hưu bị loại khỏi chính sách nhà ở xã hội",
+      "Phải dưới 60 tuổi mới mua được"
+    ],
+    "counseling_guide_path": "legal-sources/noxh/retired-beyond-working-age-counseling.md",
+    "last_checked": "2026-06-26"
+  },
+  {
+    "claim_id": "retired_object_k5_income_001",
+    "topic": "noxh_eligibility",
+    "claim": "Người đã nghỉ hưu/nghỉ chế độ, không còn quan hệ lao động hoặc không còn là CBCCVC đang công tác: thường đăng ký theo khoản 5 Đ.76 (người thu nhập thấp khu vực đô thị), mục 11.1 — không tick k6/k8 chỉ vì trước đây là công nhân hay công chức. Thu nhập: lương hưu và các khoản thực nhận khác, bình quân 12 tháng; trần 25/35/50 (NĐ 136). Xác nhận thu nhập: BHXH chi trả lương hưu hoặc Công an cấp xã (k5 không HĐLĐ) — đối chiếu mẫu CĐT địa phương.",
+    "source_refs": [
+      "noxh_luat_nha_o_2023:article_76:k5",
+      "mau01_section_11_1_k568_001",
+      "nd54_income_ca_xa_001"
+    ],
+    "effective_from": "2024-08-01",
+    "effective_to": null,
+    "confidence": "verified",
+    "risk_level": "high",
+    "disclaimer_required": true,
+    "usage_rules": [
+      "needs_human_legal_source nếu vẫn đi làm sau tuổi nghỉ — có thể k6",
+      "Tách tư vấn đủ NOXH vs điều kiện vay NH (tuổi vay)"
+    ],
+    "forbidden_claims": [
+      "Nghỉ hưu tick k8",
+      "Lương hưu không tính vào thu nhập",
+      "Người già tự động đủ điều kiện thu nhập thấp"
+    ],
+    "counseling_guide_path": "legal-sources/noxh/retired-beyond-working-age-counseling.md",
+    "last_checked": "2026-06-26"
+  },
+  {
+    "claim_id": "income_adult_child_not_counted_001",
+    "topic": "noxh_income",
+    "claim": "Mẫu 01 mục 11.1 — thu nhập xét để đủ điều kiện NOXH: độc thân chỉ tính bản thân người đứng đơn; đã kết hôn cộng vợ/chồng. Thu nhập con từ 18 tuổi trở lên không cộng vào trần cha/mẹ dù còn chung hộ khẩu hoặc chưa tách sổ. Độc thân nuôi con chỉ áp trần 35 triệu khi con dưới 18 tuổi — con ≥18 không dùng nhánh này.",
+    "source_refs": [
+      "mau01_section_11_1_k568_001",
+      "noxh_nd_136_2026:article_1:article_30_k1",
+      "noxh_nd_100_2024:article_30:k1"
+    ],
+    "effective_from": "2026-04-07",
+    "effective_to": null,
+    "confidence": "verified",
+    "risk_level": "high",
+    "disclaimer_required": true,
+    "usage_rules": [
+      "Tiền con hỗ trợ cha/mẹ định kỳ nếu thực nhận → kê khai thu nhập của cha/mẹ",
+      "Tách hộ khẩu không bắt buộc theo luật NOXH — chỉ giảm nhầm lẫn thực tế"
+    ],
+    "forbidden_claims": [
+      "Con thu nhập cao làm cha mẹ không được mua NOXH",
+      "Phải tách hộ khẩu với con trưởng thành mới nộp được",
+      "Cộng lương con ≥18 vào tổng 11.1 của cha mẹ"
+    ],
+    "counseling_guide_path": "legal-sources/noxh/parent-adult-child-household-income-counseling.md",
+    "last_checked": "2026-06-26"
+  },
+  {
+    "claim_id": "mau01_spouse_only_mandatory_members_001",
+    "topic": "noxh_documents",
+    "claim": "Theo khung NĐ 100/54 và Mẫu 01: hồ sơ đăng ký mua/thuê mua NOXH bắt buộc khai đầy đủ người đứng đơn và vợ/chồng (nếu đã kết hôn) — bản sao CCCD tương ứng. Không quy định chung phải kê khai và nộp CCCD/giấy khai sinh của tất cả thành viên hộ gia đình; con từ 18 tuổi trở lên không cộng thu nhập vào trần vợ chồng (mục 11.1).",
+    "source_refs": [
+      "mau01_spouse_declaration_001",
+      "income_adult_child_not_counted_001",
+      "mau01_core_bundle_001"
+    ],
+    "effective_from": "2024-08-01",
+    "effective_to": null,
+    "confidence": "verified",
+    "risk_level": "high",
+    "disclaimer_required": true,
+    "usage_rules": [
+      "Phân biệt yêu cầu quốc gia vs phụ lục CĐT/ngân hàng",
+      "Đối chiếu thông báo tiếp nhận từng dự án nếu CĐT yêu CCCD cả hộ"
+    ],
+    "forbidden_claims": [
+      "Luật bắt buộc nộp CCCD tất cả con trên hộ khẩu",
+      "Phải khai thu nhập con trưởng thành trên Mẫu 01",
+      "Không cần khai vợ/chồng khi chỉ một người đứng tên"
+    ],
+    "counseling_guide_path": "legal-sources/noxh/household-members-declaration-counseling.md",
+    "last_checked": "2026-06-26"
+  },
+  {
+    "claim_id": "housing_15m2_household_members_001",
+    "topic": "noxh_eligibility",
+    "claim": "Ngoại lệ nhà ở diện tích bình quân đầu người dưới 15 m² sàn (NĐ 100 Đ.29 k2): tính số người gồm người đứng đơn, vợ/chồng, cha mẹ, con đăng ký thường trú tại căn nhà đó — có thể cần danh sách thành viên thường trú và giấy tờ hộ tịch/xác nhận xã. Khác với nhánh chưa có nhà (chỉ xét tên vợ/chồng trên GCN tỉnh dự án).",
+    "source_refs": [
+      "noxh_nd_100_2024:article_29:k2",
+      "nd100_housing_low_area_001"
+    ],
+    "effective_from": "2024-08-01",
+    "effective_to": null,
+    "confidence": "verified",
+    "risk_level": "high",
+    "disclaimer_required": true,
+    "usage_rules": [
+      "Chỉ áp khi khách khai nhánh có nhà diện tích thấp",
+      "Con ≥18 chỉ liên quan nếu thường trú tại căn nhà đang tính 15 m²"
+    ],
+    "forbidden_claims": [
+      "Mọi hồ sơ NOXH đều phải nộp giấy khai sinh con",
+      "15 m² tính cả con không thường trú tại căn nhà"
+    ],
+    "last_checked": "2026-06-26"
+  },
+  {
+    "claim_id": "mau01_one_dossier_per_project_001",
+    "topic": "noxh_documents",
+    "claim": "Số bộ hồ sơ photo (bản sao đầy đủ cùng danh mục) khi đăng ký NOXH do chủ đầu tư quy định trong thông báo tiếp nhận từng dự án — không cố định toàn quốc. Tham khảo thị trường: thường ~3 bộ không vay, ~4 bộ có vay NH; CĐT khác nhau có thể 2, 3, 4 hoặc 5 bộ. Agent phải hỏi kỹ/đối chiếu thông báo dự án trước khi khẳng định số bộ. Danh mục loại giấy theo NĐ 100/54 (Mẫu 01 + chứng minh Đ.76, 78).",
+    "source_refs": [
+      "mau01_core_bundle_001",
+      "mau01_spouse_declaration_001",
+      "nd54_proof_valid_12m_001"
+    ],
+    "effective_from": "2024-08-01",
+    "effective_to": null,
+    "confidence": "verified",
+    "risk_level": "medium",
+    "disclaimer_required": true,
+    "usage_rules": [
+      "Chi tiết checklist: application-dossier-checklist.md",
+      "Bắt buộc hỏi số bộ theo thông báo CĐT từng dự án — không chốt 3/4 nếu chưa có nguồn dự án"
+    ],
+    "forbidden_claims": [
+      "Mọi hồ sơ NOXH luôn 3 bộ hoặc luôn 4 bộ",
+      "Số bộ giống nhau mọi chủ đầu tư",
+      "Không cần đọc thông báo dự án về số bản photo"
+    ],
+    "counseling_guide_path": "legal-sources/noxh/application-dossier-checklist.md",
+    "last_checked": "2026-06-26"
+  }
+]

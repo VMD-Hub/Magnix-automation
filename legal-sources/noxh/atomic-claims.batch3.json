@@ -1,0 +1,317 @@
+[
+  {
+    "claim_id": "nd261_income_k568_2025",
+    "topic": "noxh_income",
+    "claim": "Từ 10/10/2025 đến 06/04/2026 (NĐ 261/2025 sửa Điều 30 NĐ 100, trước NĐ 136): đối tượng k5, k6, k8 Điều 76 — độc thân ≤20 triệu/tháng; độc thân nuôi con ≤30 triệu; vợ chồng ≤40 triệu. Thời gian xác định: 12 tháng từ thời điểm CQ có thẩm quyền xác nhận.",
+    "source_refs": ["noxh_nd_261_2025:article_1:article_30_k1"],
+    "effective_from": "2025-10-10",
+    "effective_to": "2026-04-06",
+    "confidence": "verified",
+    "risk_level": "high",
+    "disclaimer_required": true,
+    "usage_rules": [
+      "Không dùng mức 20/40 cho hồ sơ xác nhận từ 07/04/2026",
+      "Không dùng mức 15/30 cho hồ sơ trong giai đoạn này"
+    ],
+    "forbidden_claims": [
+      "Thu nhập 18 triệu chắc chắn đủ mọi thời điểm 2025–2026"
+    ],
+    "last_checked": "2026-06-26"
+  },
+  {
+    "claim_id": "nd261_loan_rate_54pct_001",
+    "topic": "loan_dti",
+    "claim": "Lãi suất cho vay mua/thuê mua NOXH tại Ngân hàng Chính sách xã hội: 5,4%/năm; nợ quá hạn 130% lãi suất cho vay (NĐ 261 sửa Điều 48 k4 NĐ 100). Khoản vay đã ký trước 10/10/2025 được điều chỉnh HĐ áp dụng mức mới.",
+    "source_refs": ["noxh_nd_261_2025:article_1:article_48_k4", "noxh_nd_261_2025:article_3:k1"],
+    "effective_from": "2025-10-10",
+    "effective_to": null,
+    "confidence": "verified",
+    "risk_level": "high",
+    "disclaimer_required": true,
+    "usage_rules": [
+      "Không cam kết được duyệt vay",
+      "Thay đổi lãi suất cần quyết định Thủ tướng qua NHCSXH"
+    ],
+    "forbidden_claims": [
+      "Lãi suất NOXH cố định 5,4% mãi mãi",
+      "Mọi ngân hàng đều 5,4%"
+    ],
+    "last_checked": "2026-06-26"
+  },
+  {
+    "claim_id": "nd261_developer_land_fee_001",
+    "topic": "noxh_eligibility",
+    "claim": "NĐ 261 quy định cách tính tiền CĐT nộp thay 20% quỹ đất NOXH: tiền sử dụng đất 20% diện tích đất ở + tiền tương đương chi phí HTKT (theo suất Bộ Xây dựng); chậm nộp chịu tiền chậm nộp theo luật thuế.",
+    "source_refs": ["noxh_nd_261_2025:article_1:article_19"],
+    "effective_from": "2025-10-10",
+    "effective_to": null,
+    "confidence": "verified",
+    "risk_level": "medium",
+    "disclaimer_required": true,
+    "usage_rules": [
+      "Chủ yếu cho tư vấn B2B/CĐT — không dùng trong copy inbound cá nhân trừ khi giải thích giá NOXH"
+    ],
+    "forbidden_claims": [],
+    "last_checked": "2026-06-26"
+  },
+  {
+    "claim_id": "local_hcm_income_coeff_125_001",
+    "topic": "local_policy",
+    "province_code": "tp_ho_chi_minh",
+    "claim": "TP.HCM (QĐ 14/2026/QĐ-UBND, từ 01/04/2026): hệ số thu nhập 1,25 → trần 25 / 37,5 / 50 triệu (độc thân / nuôi con / vợ chồng) cho k5,k6,k8 Đ.76.",
+    "source_refs": ["local_tp_hcm_qd14_2026:article_3:k1"],
+    "effective_from": "2026-04-01",
+    "effective_to": null,
+    "confidence": "verified",
+    "risk_level": "high",
+    "disclaimer_required": true,
+    "usage_rules": [
+      "Chỉ áp dụng khi dự án trên địa bàn TP.HCM",
+      "Phải xác nhận ngày nộp/xác nhận hồ sơ"
+    ],
+    "forbidden_claims": [
+      "Mọi tỉnh miền Nam đều 37,5 triệu",
+      "Áp dụng QĐ 14 cho dự án Bình Dương"
+    ],
+    "last_checked": "2026-06-26"
+  },
+  {
+    "claim_id": "local_hcm_income_coeff_135_001",
+    "topic": "local_policy",
+    "province_code": "tp_ho_chi_minh",
+    "claim": "TP.HCM: hộ có từ 3 người phụ thuộc — hệ số 1,35 → trần 27 / 40,5 / 54 triệu; được ưu tiên căn lớn hoặc ≥2 phòng ngủ nếu có (QĐ 14/2026).",
+    "source_refs": ["local_tp_hcm_qd14_2026:article_3:k2"],
+    "effective_from": "2026-04-01",
+    "effective_to": null,
+    "confidence": "verified",
+    "risk_level": "high",
+    "disclaimer_required": true,
+    "usage_rules": [
+      "Phải đủ điều kiện phụ thuộc theo QĐ 14 và pháp luật"
+    ],
+    "forbidden_claims": [
+      "3 con chắc chắn được căn 2PN"
+    ],
+    "last_checked": "2026-06-26"
+  },
+  {
+    "claim_id": "local_dong_nai_income_national_default_001",
+    "topic": "local_policy",
+    "province_code": "dong_nai",
+    "claim": "Đồng Nai (tại thời điểm KB 06/2026): chưa có QĐ hệ số thu nhập riêng sau NĐ 136 — áp dụng khung quốc gia 25/35/50 triệu. QĐ 08/2025 quy định đối tượng/ưu tiên; UBND đang tham mưu sửa đổi.",
+    "source_refs": [
+      "local_dong_nai_qd08_2025",
+      "nd100_income_k568_2026"
+    ],
+    "effective_from": "2026-04-07",
+    "effective_to": null,
+    "confidence": "verified",
+    "risk_level": "high",
+    "disclaimer_required": true,
+    "usage_rules": [
+      "needs_human_legal_source nếu user hỏi mức khác 25/35/50 và chưa cập nhật QĐ mới"
+    ],
+    "forbidden_claims": [
+      "Đồng Nai đã tăng lên 30 triệu (chưa có căn cứ KB)"
+    ],
+    "last_checked": "2026-06-26"
+  },
+  {
+    "claim_id": "local_binh_duong_income_national_default_001",
+    "topic": "local_policy",
+    "province_code": "binh_duong",
+    "claim": "Bình Dương (KB 06/2026): chưa ghi nhận QĐ hệ số thu nhập NOXH — áp dụng NĐ 136: 25/35/50 triệu cho k5,k6,k8.",
+    "source_refs": ["nd100_income_k568_2026"],
+    "effective_from": "2026-04-07",
+    "effective_to": null,
+    "confidence": "verified",
+    "risk_level": "high",
+    "disclaimer_required": true,
+    "usage_rules": [],
+    "forbidden_claims": [
+      "Bình Dương có hệ số 1,25 như TP.HCM"
+    ],
+    "last_checked": "2026-06-26"
+  },
+  {
+    "claim_id": "local_brvt_income_national_default_001",
+    "topic": "local_policy",
+    "province_code": "ba_ria_vung_tau",
+    "claim": "Bà Rịa - Vũng Tàu (KB 06/2026): chưa ghi nhận QĐ hệ số thu nhập — áp dụng khung NĐ 136: 25/35/50 triệu.",
+    "source_refs": ["nd100_income_k568_2026"],
+    "effective_from": "2026-04-07",
+    "effective_to": null,
+    "confidence": "verified",
+    "risk_level": "high",
+    "disclaimer_required": true,
+    "usage_rules": [],
+    "forbidden_claims": [],
+    "last_checked": "2026-06-26"
+  },
+  {
+    "claim_id": "local_can_tho_income_national_default_001",
+    "topic": "local_policy",
+    "province_code": "tp_can_tho",
+    "claim": "Cần Thơ (KB 06/2026): chưa ghi nhận QĐ hệ số thu nhập NOXH (QĐ 62/2026 là hệ số giá đất, không phải thu nhập) — áp dụng 25/35/50 triệu theo NĐ 136.",
+    "source_refs": ["nd100_income_k568_2026"],
+    "effective_from": "2026-04-07",
+    "effective_to": null,
+    "confidence": "verified",
+    "risk_level": "high",
+    "disclaimer_required": true,
+    "usage_rules": [
+      "Không nhầm QĐ giá đất với trần thu nhập"
+    ],
+    "forbidden_claims": [],
+    "last_checked": "2026-06-26"
+  },
+  {
+    "claim_id": "local_tay_ninh_housing_distance_001",
+    "topic": "local_policy",
+    "province_code": "tay_ninh",
+    "claim": "Tây Ninh (QĐ 71/2026, từ 01/07/2026): người đã có nhà nhưng xa nơi làm việc trên địa bàn tỉnh có thể mua/thuê mua NOXH nếu khoảng cách nhà → nơi làm việc ≥20km (≥10km với k7/KCN); căn NOXH và nơi làm việc cùng xã hoặc xã liền kề, ≤10km.",
+    "source_refs": ["local_tay_ninh_qd71_2026:article_1"],
+    "effective_from": "2026-07-01",
+    "effective_to": null,
+    "confidence": "verified",
+    "risk_level": "high",
+    "disclaimer_required": true,
+    "usage_rules": [
+      "Vẫn phải đủ điều kiện thu nhập (25/35/50 nếu không có QĐ hệ số)"
+    ],
+    "forbidden_claims": [
+      "Có nhà ở tỉnh khác chắc chắn mua được NOXH Tây Ninh",
+      "Không cần đo khoảng cách"
+    ],
+    "last_checked": "2026-06-26"
+  },
+  {
+    "claim_id": "local_tay_ninh_income_national_default_001",
+    "topic": "local_policy",
+    "province_code": "tay_ninh",
+    "claim": "Tây Ninh (KB 06/2026): chưa ghi nhận QĐ hệ số thu nhập — áp dụng NĐ 136: 25/35/50 triệu.",
+    "source_refs": ["nd100_income_k568_2026"],
+    "effective_from": "2026-04-07",
+    "effective_to": null,
+    "confidence": "verified",
+    "risk_level": "high",
+    "disclaimer_required": true,
+    "usage_rules": [],
+    "forbidden_claims": [],
+    "last_checked": "2026-06-26"
+  },
+  {
+    "claim_id": "counseling_national_default_no_local_qd_001",
+    "topic": "local_policy",
+    "claim": "Tỉnh/thành phố chưa ban hành QĐ chi tiết: điều kiện đối tượng, thu nhập cơ bản (25/35/50 sau NĐ 136), chưa có nhà trên GCN (NĐ 100+54), thủ tục (NĐ 54) áp dụng khung Chính phủ. UBND tỉnh chỉ được bổ sung khi có văn bản (hệ số thu nhập, NQ 201 Đ.9 k2, ưu tiên) — không tự suy ra 20km hay mức cao hơn.",
+    "source_refs": [
+      "noxh_nd_100_2024:article_29",
+      "noxh_nd_54_2026:article_1:article_29_k1",
+      "nd100_income_k568_2026",
+      "nq201_2025:article_9:k2"
+    ],
+    "effective_from": "2026-04-07",
+    "effective_to": null,
+    "confidence": "verified",
+    "risk_level": "high",
+    "disclaimer_required": true,
+    "usage_rules": [
+      "Tra legal-sources/local-policy/registry.json trước khi khẳng định ngoại lệ địa phương"
+    ],
+    "forbidden_claims": [
+      "Mọi tỉnh đều áp dụng 20km như Đồng Nai",
+      "Không có QĐ tỉnh thì không mua được NOXH"
+    ],
+    "last_checked": "2026-06-26"
+  },
+  {
+    "claim_id": "local_dong_nai_housing_distance_work_001",
+    "topic": "local_policy",
+    "province_code": "dong_nai",
+    "claim": "Đồng Nai (QĐ 08/2025 Đ.4 k3, NQ 201 Đ.9 k2): có nhà sở hữu vẫn có thể mua/thuê mua NOXH nếu (1) nhà→nơi làm việc ≥20km, (2) nơi làm việc→căn NOXH đăng ký gần hơn nhà→nơi làm việc, (3) đơn vị nơi làm việc xác nhận. Không phải quy tắc nhà cách dự án 20km.",
+    "source_refs": [
+      "local_dong_nai_qd08_2025:article_4:k3",
+      "nq201_2025:article_9:k2"
+    ],
+    "effective_from": "2025-07-01",
+    "effective_to": null,
+    "confidence": "verified",
+    "risk_level": "high",
+    "disclaimer_required": true,
+    "usage_rules": [
+      "Phân biệt với con đường chưa có nhà trên GCN (NĐ 54) — đất thổ cư chưa xây",
+      "Vẫn phải đủ điều kiện thu nhập và đối tượng"
+    ],
+    "forbidden_claims": [
+      "Cách dự án 20km là đủ điều kiện nhà ở",
+      "Không cần xác nhận đơn vị"
+    ],
+    "last_checked": "2026-06-26"
+  },
+  {
+    "claim_id": "counseling_project_province_jurisdiction_001",
+    "topic": "local_policy",
+    "claim": "Quy định NOXH địa phương (hệ số thu nhập, NQ 201 Đ.9 k2 về nhà xa nơi làm việc, ưu tiên) áp theo tỉnh/TP nơi dự án NOXH được phê duyệt/triển khai — không theo tỉnh nơi ở nếu khác tỉnh dự án. Điều kiện GCN/chưa có nhà ở xét tại tỉnh có dự án (NĐ 100 Đ.29, NĐ 54).",
+    "source_refs": [
+      "noxh_nd_100_2024:article_29",
+      "noxh_nd_54_2026:article_1:article_29_k1",
+      "nq201_2025:article_9:k2"
+    ],
+    "effective_from": "2024-08-01",
+    "effective_to": null,
+    "confidence": "verified",
+    "risk_level": "high",
+    "disclaimer_required": true,
+    "usage_rules": [
+      "Luôn hỏi tỉnh dự án trước khi tra registry.json",
+      "Không áp QĐ Đồng Nai cho dự án Bình Phước chỉ vì cùng nhóm sáp nhập"
+    ],
+    "forbidden_claims": [
+      "Ở tỉnh nào thì áp quy định tỉnh đó",
+      "Làm việc Đồng Nai thì dự án Bình Dương áp QĐ Đồng Nai"
+    ],
+    "last_checked": "2026-06-26"
+  },
+  {
+    "claim_id": "admin_merger_transitional_noxh_001",
+    "topic": "local_policy",
+    "claim": "Sau sáp nhập: HCM+BD+BR-VT; Tây Ninh+Long An; Đồng Nai+Bình Phước; Cần Thơ+Hậu Giang+Sóc Trăng — không tự gộp QĐ tỉnh thành phần. Dự án đã đăng ký/hồ sơ cũ thường theo văn bản tại thời điểm đăng ký cho đến khi UBND mới ban hành QĐ thống nhất hoặc chuyển tiếp; cần xác nhận Sở XD/CĐT.",
+    "source_refs": ["local_policy:admin_merger_map"],
+    "effective_from": "2026-06-26",
+    "effective_to": null,
+    "confidence": "verified",
+    "risk_level": "high",
+    "disclaimer_required": true,
+    "usage_rules": [
+      "Tra legal-sources/local-policy/ADMIN_MERGER_MAP.md",
+      "needs_human_legal_source khi khách hỏi sau ngày sáp nhập có hiệu lực"
+    ],
+    "forbidden_claims": [
+      "Sáp nhập xong mọi dự án vùng Đông Nam Bộ áp QĐ Đồng Nai",
+      "Long An tự động áp QĐ 71 Tây Ninh"
+    ],
+    "last_checked": "2026-06-26"
+  },
+  {
+    "claim_id": "nd54_land_no_house_on_gcn_001",
+    "topic": "noxh_eligibility",
+    "claim": "Đất thổ cư/GCN tại tỉnh có dự án mà không có nội dung thông tin về nhà ở (chưa xây) có thể được xác định là chưa có nhà ở theo NĐ 54 sửa Đ.29 NĐ 100 — con đường quốc gia, không yêu cầu khoảng cách 20km. Cần xác nhận cơ quan có thẩm quyền.",
+    "source_refs": [
+      "noxh_nd_54_2026:article_1:article_29_k1",
+      "nd54_housing_gcn_no_info_001"
+    ],
+    "effective_from": "2026-02-09",
+    "effective_to": null,
+    "confidence": "verified",
+    "risk_level": "high",
+    "disclaimer_required": true,
+    "usage_rules": [
+      "Không nhầm với cơ chế có nhà xa nơi làm việc (NQ 201 + QĐ tỉnh)"
+    ],
+    "forbidden_claims": [
+      "Đất thổ cư chắc chắn được mua NOXH mọi tỉnh",
+      "Đất thổ cư = tự động đủ điều kiện không cần xác nhận"
+    ],
+    "last_checked": "2026-06-26"
+  }
+]
