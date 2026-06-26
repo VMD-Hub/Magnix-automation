@@ -7,6 +7,7 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { loadFireNotifyCode, wireNotifyAfter } from './code/shared/notify-wire.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const codeDir = path.join(__dirname, 'code', 'outreach-queue');
@@ -365,6 +366,17 @@ const connections = {
   'Track Parse Fail': { main: [[{ node: 'Loop Outreach Candidates', type: 'main', index: 0 }]] },
   'No Candidates Summary': { main: [[{ node: 'Build Summary', type: 'main', index: 0 }]] },
 };
+
+wireNotifyAfter(nodes, connections, {
+  idPrefix: 'a4n',
+  fireCode: loadFireNotifyCode('fire-notify-agent4.js', {
+    __GOOGLE_SHEET_ID__: PUBLIC.google_sheet_id,
+    __OUTREACH_QUEUE_TAB__: PUBLIC.outreach_queue_tab,
+  }),
+  insertAfter: 'Mark Draft Outreach',
+  resumeTo: 'Loop Outreach Candidates',
+  position: pos(5520, 0),
+});
 
 const workflow = {
   name: 'Magnix Agent 4 — Outreach Queue (drafts → outreach_queue)',

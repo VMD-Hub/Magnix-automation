@@ -9,6 +9,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { extractSystemPrompt } from './code/shared/extract-prompt.mjs';
 import { withPipelineStub } from './code/shared/with-pipeline-stub.mjs';
+import { loadFireNotifyCode, wireNotifyAfter } from './code/shared/notify-wire.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const codeDir = path.join(__dirname, 'code', 'content-video-draft');
@@ -528,6 +529,17 @@ const connections = {
   'Track Parse Fail': { main: [[{ node: 'Loop Video Candidates', type: 'main', index: 0 }]] },
   'No Candidates Summary': { main: [[{ node: 'Build Summary', type: 'main', index: 0 }]] },
 };
+
+wireNotifyAfter(nodes, connections, {
+  idPrefix: 'a6n',
+  fireCode: loadFireNotifyCode('fire-notify-agent6.js', {
+    __GOOGLE_SHEET_ID__: PUBLIC.google_sheet_id,
+    __VIDEO_DRAFTS_TAB__: PUBLIC.video_drafts_tab,
+  }),
+  insertAfter: 'HTTP PUT queue meta',
+  resumeTo: 'Loop Video Candidates',
+  position: pos(5520, 0),
+});
 
 const workflow = {
   name: 'Magnix Agent 6 — Short Video Script (queue → video_drafts)',

@@ -1,0 +1,517 @@
+{
+  "name": "Magnix Telegram — Notify (webhook)",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## Telegram Notify\n**Webhook:** POST `/webhook/magnix/telegram-notify`\n**Manual:** Execute workflow → nhánh Manual Test\n**googleApi** bắt buộc trên HTTP GET/POST/PUT\n~2–4s: GET dedupe + append + Telegram",
+        "height": 200,
+        "width": 460
+      },
+      "id": "tg00note",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -200,
+        80
+      ]
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "magnix/telegram-notify",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "tg01webhook",
+      "name": "Webhook telegram-notify",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        280
+      ],
+      "webhookId": "magnix-telegram-notify"
+    },
+    {
+      "parameters": {},
+      "id": "tg01manual",
+      "name": "When clicking 'Execute workflow'",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        520
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Inlined vào n8n Code nodes — build deep link tới cột duyệt L3\n// Placeholder {\"content_queue\":546012823,\"content_drafts\":299240858,\"outreach_queue\":1077351628,\"video_drafts\":532130684,\"notification_events\":160985613} được thay lúc build workflow.\n\nconst SHEET_TAB_GIDS = {\"content_queue\":546012823,\"content_drafts\":299240858,\"outreach_queue\":1077351628,\"video_drafts\":532130684,\"notification_events\":160985613};\n\nconst APPROVAL_COL = {\n  video_drafts: { status: 'Q', l3: 'S' },\n  content_drafts: { status: 'K' },\n  outreach_queue: { status: 'I', l3: 'J' },\n};\n\nfunction buildReviewUrl(sheetId, tab, row, approvalFields) {\n  const base = `https://docs.google.com/spreadsheets/d/${sheetId}/edit`;\n  const gid = SHEET_TAB_GIDS[tab];\n  const cols = APPROVAL_COL[tab] || { status: 'A' };\n  const fields = Array.isArray(approvalFields) ? approvalFields : [];\n  const wantsL3 = fields.some((f) => String(f).toLowerCase().includes('l3_approved'));\n  const col = wantsL3 && cols.l3 ? cols.l3 : cols.status || 'A';\n  const r = Number(row) || 0;\n\n  if (!gid) {\n    return r > 1 ? `${base}#range=${col}${r}` : base;\n  }\n  if (r <= 1) {\n    return `${base}#gid=${gid}`;\n  }\n  return `${base}#gid=${gid}&range=${col}${r}`;\n}\n\nconst SHEET_ID = '1fYB4h_BTiKXa9O3lBah-tQonWpQOQMG2aSkSfPs6yU4';\nconst now = Date.now();\nconst sheet_tab = 'content_drafts';\nconst sheet_row = 2;\nconst approval_fields = ['status=approved'];\n\nreturn [{\n  json: {\n    event_id: `manual:test:${now}:approval_needed`,\n    event_type: 'approval_needed',\n    agent: 'manual-test',\n    severity: 'action_required',\n    product_type: 'lead_magnet',\n    target_channel: 'facebook_page',\n    title: 'Magnix manual test — Telegram Notify',\n    segment: 'noxh_income',\n    source_row_key: 'manual:test',\n    sheet_tab,\n    sheet_row,\n    approval_fields,\n    review_url: buildReviewUrl(SHEET_ID, sheet_tab, sheet_row, approval_fields),\n    preview_url: '',\n    due_at: new Date(Date.now() + 2 * 3600000).toISOString(),\n    telegram_enabled: String($env.TELEGRAM_APPROVAL_ENABLED || '').toLowerCase() === 'true',\n    bot_token_set: String($env.TELEGRAM_BOT_TOKEN || '').length > 10,\n    chat_id: $env.TELEGRAM_CHAT_ID_OWNER || $env.TELEGRAM_CHAT_ID_OPS || '',\n  },\n}];"
+      },
+      "id": "tg01inject",
+      "name": "Inject Manual Test Event",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        240,
+        520
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Inlined vào n8n Code nodes — build deep link tới cột duyệt L3\n// Placeholder {\"content_queue\":546012823,\"content_drafts\":299240858,\"outreach_queue\":1077351628,\"video_drafts\":532130684,\"notification_events\":160985613} được thay lúc build workflow.\n\nconst SHEET_TAB_GIDS = {\"content_queue\":546012823,\"content_drafts\":299240858,\"outreach_queue\":1077351628,\"video_drafts\":532130684,\"notification_events\":160985613};\n\nconst APPROVAL_COL = {\n  video_drafts: { status: 'Q', l3: 'S' },\n  content_drafts: { status: 'K' },\n  outreach_queue: { status: 'I', l3: 'J' },\n};\n\nfunction buildReviewUrl(sheetId, tab, row, approvalFields) {\n  const base = `https://docs.google.com/spreadsheets/d/${sheetId}/edit`;\n  const gid = SHEET_TAB_GIDS[tab];\n  const cols = APPROVAL_COL[tab] || { status: 'A' };\n  const fields = Array.isArray(approvalFields) ? approvalFields : [];\n  const wantsL3 = fields.some((f) => String(f).toLowerCase().includes('l3_approved'));\n  const col = wantsL3 && cols.l3 ? cols.l3 : cols.status || 'A';\n  const r = Number(row) || 0;\n\n  if (!gid) {\n    return r > 1 ? `${base}#range=${col}${r}` : base;\n  }\n  if (r <= 1) {\n    return `${base}#gid=${gid}`;\n  }\n  return `${base}#gid=${gid}&range=${col}${r}`;\n}\n\nconst EXPECTED = $env.MAGNIX_WEBHOOK_TOKEN || '';\nconst headers = $input.first().json.headers || {};\nconst auth = headers.authorization || headers.Authorization || '';\nif (EXPECTED && auth !== `Bearer ${EXPECTED}`) {\n  throw new Error('Unauthorized: invalid MAGNIX_WEBHOOK_TOKEN');\n}\n\nconst raw = $input.first().json;\nconst body = raw.body && typeof raw.body === 'object' ? raw.body : raw;\n\nconst event_id = String(body.event_id || '').trim();\nif (!event_id) throw new Error('Validation: event_id is required');\n\nconst event_type = String(body.event_type || 'approval_needed').trim();\nconst agent = String(body.agent || body.source_workflow || 'unknown').trim();\nconst title = String(body.title || '(no title)').slice(0, 120);\nconst segment = String(body.segment || '').slice(0, 40);\nconst sheet_tab = String(body.sheet_tab || body.target_tab || '').trim();\nconst sheet_row = Number(body.sheet_row || 0);\nconst product_type = String(body.product_type || '').slice(0, 60);\nconst target_channel = String(body.target_channel || '').slice(0, 40);\nconst preview_url = String(body.preview_url || '').slice(0, 500);\nconst source_row_key = String(body.source_row_key || body.source_key || '').slice(0, 120);\nconst approval_fields = Array.isArray(body.approval_fields) ? body.approval_fields : [];\n\nconst SHEET_ID = '1fYB4h_BTiKXa9O3lBah-tQonWpQOQMG2aSkSfPs6yU4';\nconst review_url = sheet_tab\n  ? buildReviewUrl(SHEET_ID, sheet_tab, sheet_row, approval_fields)\n  : String(body.review_url || '').slice(0, 500);\n\nconst due_at = body.due_at || new Date(Date.now() + 2 * 3600000).toISOString();\nconst chat_id = $env.TELEGRAM_CHAT_ID_OWNER || $env.TELEGRAM_CHAT_ID_OPS || '';\n\nreturn [{\n  json: {\n    event_id,\n    event_type,\n    agent,\n    severity: String(body.severity || 'action_required'),\n    title,\n    segment,\n    product_type,\n    target_channel,\n    sheet_tab,\n    sheet_row,\n    source_row_key,\n    review_url,\n    preview_url,\n    approval_fields,\n    due_at,\n    telegram_enabled: String($env.TELEGRAM_APPROVAL_ENABLED || '').toLowerCase() === 'true',\n    bot_token_set: String($env.TELEGRAM_BOT_TOKEN || '').length > 10,\n    chat_id,\n  },\n}];"
+      },
+      "id": "tg02auth",
+      "name": "Auth & Normalize Event",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        240,
+        280
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const item = $input.first().json;\nconst approval = (item.approval_fields || []).join(' + ') || 'approve / reject trên Sheet';\nconst now = new Date().toISOString();\n\nlet header = '[Magnix]';\nif (item.event_type === 'approval_needed') header = '[Magnix] Cần duyệt L3';\nelse if (item.event_type === 'render_review_needed') header = '[Magnix] Cần xem bản dựng video';\nelse if (item.event_type === 'legal_source_needed') header = '[Magnix] Cần bổ sung căn cứ pháp lý';\nelse if (item.event_type === 'workflow_blocked') header = '[Magnix] Workflow bị block';\nelse if (item.event_type === 'qa_failed') header = '[Magnix] QA fail — cần sửa';\nelse if (item.event_type === 'metrics_needed') header = '[Magnix] Thiếu metrics';\nelse if (item.event_type === 'publish_ready') header = '[Magnix] Sẵn sàng đăng';\n\nconst lines = [\n  header,\n  `Agent: ${item.agent}`,\n  `Loại: ${item.product_type || item.event_type}${item.target_channel ? ` → ${item.target_channel}` : ''}`,\n  `Tiêu đề: ${item.title}`,\n];\n\nif (item.segment) lines.push(`Segment: ${item.segment}`);\nif (item.sheet_tab) {\n  lines.push(\n    item.sheet_row\n      ? `Dòng: ${item.sheet_tab} row ${item.sheet_row}`\n      : `Tab: ${item.sheet_tab}`\n  );\n}\nif (item.event_type === 'approval_needed' || item.event_type === 'legal_source_needed') {\n  lines.push(`Cần làm: ${approval}`);\n  lines.push('Trên Sheet: dùng dropdown cột status (draft/approved/rejected). Video & outreach: tick ☑ l3_approved.');\n}\nif (item.preview_url) lines.push(`Preview: ${item.preview_url}`);\nif (item.review_url) {\n  lines.push(`👉 Mở duyệt (nhảy đúng tab + cột): ${item.review_url}`);\n}\nif (item.due_at) lines.push(`Hạn xử lý: ${item.due_at}`);\n\nconst message = lines.join('\\n').slice(0, 3900);\n\nconst meta = JSON.stringify({\n  severity: item.severity,\n  title: item.title,\n  segment: item.segment,\n  product_type: item.product_type,\n  target_channel: item.target_channel,\n  sheet_row: item.sheet_row,\n  review_url: item.review_url,\n  preview_url: item.preview_url,\n  approval_fields: item.approval_fields || [],\n  due_at: item.due_at,\n  reminder_count: 0,\n  last_reminded_at: null,\n  agent: item.agent,\n}).slice(0, 45000);\n\nreturn [{\n  json: {\n    ...item,\n    message,\n    created_at: now,\n    append_row: [\n      item.event_id,\n      item.event_type,\n      item.agent,\n      item.source_row_key || `row_${item.sheet_row || 0}`,\n      item.sheet_tab,\n      'pending',\n      message,\n      '',\n      '',\n      now,\n      '',\n      meta,\n    ],\n  },\n}];"
+      },
+      "id": "tg03format",
+      "name": "Format Message",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        480,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "https://sheets.googleapis.com/v4/spreadsheets/1fYB4h_BTiKXa9O3lBah-tQonWpQOQMG2aSkSfPs6yU4/values/notification_events!A%3AF",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleApi",
+        "options": {}
+      },
+      "id": "tg04get",
+      "name": "HTTP GET events",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        720,
+        400
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const item = $('Format Message').item?.json || $input.first().json;\nconst getRes = $input.first().json || {};\nconst rows = getRes.values || [];\n\nconst existingIds = new Set();\nfor (const row of rows) {\n  const id = String(row[0] || '').trim();\n  const status = String(row[5] || '').trim().toLowerCase();\n  if (id && ['sent', 'reminded', 'pending'].includes(status)) {\n    existingIds.add(id);\n  }\n}\n\nif (existingIds.has(item.event_id)) {\n  return [{\n    json: {\n      ...item,\n      duplicate: true,\n      skipped: true,\n      ok: true,\n      reason: 'DUPLICATE_EVENT_ID',\n    },\n  }];\n}\n\nreturn [{\n  json: {\n    ...item,\n    duplicate: false,\n    skipped: false,\n    append_body: { values: [item.append_row] },\n  },\n}];"
+      },
+      "id": "tg05dedupe",
+      "name": "Dedupe Check",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        960,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "c1",
+              "leftValue": "={{ $json.skipped }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "false",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "tg06if",
+      "name": "IF Not Duplicate",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1200,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://sheets.googleapis.com/v4/spreadsheets/1fYB4h_BTiKXa9O3lBah-tQonWpQOQMG2aSkSfPs6yU4/values/notification_events!A%3AL:append?valueInputOption=USER_ENTERED&insertDataOption=INSERT_ROWS",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json.append_body) }}",
+        "options": {}
+      },
+      "id": "tg07append",
+      "name": "HTTP POST append",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1440,
+        320
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const item = $('Dedupe Check').item?.json || {};\nconst postRes = $input.first().json || {};\n\nlet sheet_row = null;\nconst range = postRes?.updates?.updatedRange || '';\nconst m = range.match(/!(?:[A-Z]+)(\\d+):/i);\nif (m) sheet_row = Number(m[1]);\n\nreturn [{\n  json: {\n    ...item,\n    sheet_logged: true,\n    sheet_row,\n    duplicate: false,\n    skipped: false,\n  },\n}];"
+      },
+      "id": "tg08merge",
+      "name": "Merge Append Row",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1680,
+        320
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const item = $input.first().json;\nif (item.duplicate || item.skipped) {\n  return [{ json: { ...item, telegram_sent: false, telegram_skip: item.reason || 'duplicate' } }];\n}\n\nif (!item.telegram_enabled) {\n  return [{ json: { ...item, telegram_sent: false, telegram_skip: 'TELEGRAM_APPROVAL_ENABLED' } }];\n}\n\nconst token = $env.TELEGRAM_BOT_TOKEN || '';\nconst chatId = item.chat_id || '';\nif (!token || !chatId) {\n  return [{\n    json: {\n      ...item,\n      telegram_sent: false,\n      telegram_skip: 'MISSING_BOT_TOKEN_OR_CHAT_ID',\n      sheet_status: 'failed',\n    },\n  }];\n}\n\nlet tgRes;\ntry {\n  tgRes = await this.helpers.httpRequest({\n    method: 'POST',\n    url: `https://api.telegram.org/bot${token}/sendMessage`,\n    body: {\n      chat_id: chatId,\n      text: item.message,\n      disable_web_page_preview: false,\n    },\n    json: true,\n    timeout: 15000,\n  });\n} catch (e) {\n  return [{\n    json: {\n      ...item,\n      telegram_sent: false,\n      telegram_error: e.message || 'TELEGRAM_HTTP_FAIL',\n      sheet_status: 'failed',\n    },\n  }];\n}\n\nconst messageId = tgRes?.result?.message_id ? String(tgRes.result.message_id) : '';\nconst chatIdOut = tgRes?.result?.chat?.id ? String(tgRes.result.chat.id) : chatId;\n\nreturn [{\n  json: {\n    ...item,\n    telegram_sent: Boolean(tgRes?.ok),\n    telegram_message_id: messageId,\n    telegram_chat_id: chatIdOut,\n    sheet_status: tgRes?.ok ? 'sent' : 'failed',\n  },\n}];"
+      },
+      "id": "tg09send",
+      "name": "Send Telegram",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1920,
+        320
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const item = $input.first().json;\nconst SHEET_ID = '1fYB4h_BTiKXa9O3lBah-tQonWpQOQMG2aSkSfPs6yU4';\nconst TAB = 'notification_events';\n\nif (!item.sheet_logged || item.duplicate || item.skipped || !item.sheet_row) {\n  return [{\n    json: {\n      ok: item.ok !== false,\n      event_id: item.event_id,\n      event_type: item.event_type,\n      telegram_sent: item.telegram_sent === true,\n      duplicate: item.duplicate === true,\n      skipped: item.skipped === true,\n      reason: item.reason || item.telegram_skip || item.telegram_error || null,\n      sheet_row: item.sheet_row || null,\n      finished_at: new Date().toISOString(),\n    },\n  }];\n}\n\nconst status = item.sheet_status || (item.telegram_sent ? 'sent' : 'failed');\nconst row = item.sheet_row;\n\nreturn [{\n  json: {\n    ...item,\n    put_url: `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent(`${TAB}!F${row}:I${row}`)}?valueInputOption=USER_ENTERED`,\n    put_body: {\n      values: [[status, item.message, item.telegram_chat_id || '', item.telegram_message_id || '']],\n    },\n    response: {\n      ok: item.ok !== false,\n      event_id: item.event_id,\n      event_type: item.event_type,\n      telegram_sent: item.telegram_sent === true,\n      duplicate: false,\n      skipped: false,\n      reason: item.telegram_error || null,\n      sheet_row: row,\n      sheet_status: status,\n      finished_at: new Date().toISOString(),\n    },\n  },\n}];"
+      },
+      "id": "tg10prep",
+      "name": "Prepare Status PUT",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2160,
+        320
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "c1",
+              "leftValue": "={{ $json.put_url }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "tg11ifput",
+      "name": "IF Has PUT",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        2400,
+        320
+      ]
+    },
+    {
+      "parameters": {
+        "method": "PUT",
+        "url": "={{ $json.put_url }}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json.put_body) }}",
+        "options": {}
+      },
+      "id": "tg12put",
+      "name": "HTTP PUT status",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2640,
+        240
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const item = $input.first().json;\nconst prep = $('Prepare Status PUT').item?.json;\n\nif (prep?.response) {\n  return [{ json: prep.response }];\n}\n\nif (item.skipped || item.duplicate) {\n  return [{\n    json: {\n      ok: true,\n      event_id: item.event_id,\n      event_type: item.event_type,\n      telegram_sent: false,\n      duplicate: true,\n      skipped: true,\n      reason: item.reason || 'DUPLICATE_EVENT_ID',\n      finished_at: new Date().toISOString(),\n    },\n  }];\n}\n\nreturn [{ json: item }];"
+      },
+      "id": "tg13final",
+      "name": "Finalize Response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2880,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify($json) }}",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "id": "tg14respond",
+      "name": "Respond to Webhook",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        3120,
+        320
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "return $input.all();"
+      },
+      "id": "tg15manualdone",
+      "name": "Manual Test Done",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3120,
+        520
+      ]
+    }
+  ],
+  "connections": {
+    "Webhook telegram-notify": {
+      "main": [
+        [
+          {
+            "node": "Auth & Normalize Event",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking 'Execute workflow'": {
+      "main": [
+        [
+          {
+            "node": "Inject Manual Test Event",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Inject Manual Test Event": {
+      "main": [
+        [
+          {
+            "node": "Format Message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Auth & Normalize Event": {
+      "main": [
+        [
+          {
+            "node": "Format Message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format Message": {
+      "main": [
+        [
+          {
+            "node": "HTTP GET events",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP GET events": {
+      "main": [
+        [
+          {
+            "node": "Dedupe Check",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Dedupe Check": {
+      "main": [
+        [
+          {
+            "node": "IF Not Duplicate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF Not Duplicate": {
+      "main": [
+        [
+          {
+            "node": "HTTP POST append",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Finalize Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP POST append": {
+      "main": [
+        [
+          {
+            "node": "Merge Append Row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge Append Row": {
+      "main": [
+        [
+          {
+            "node": "Send Telegram",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Telegram": {
+      "main": [
+        [
+          {
+            "node": "Prepare Status PUT",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Status PUT": {
+      "main": [
+        [
+          {
+            "node": "IF Has PUT",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF Has PUT": {
+      "main": [
+        [
+          {
+            "node": "HTTP PUT status",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Finalize Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP PUT status": {
+      "main": [
+        [
+          {
+            "node": "Finalize Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Finalize Response": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Manual Test Done",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [
+    {
+      "name": "magnix"
+    },
+    {
+      "name": "telegram"
+    },
+    {
+      "name": "telegram-notify"
+    }
+  ],
+  "meta": {
+    "templateCredsSetupCompleted": false
+  }
+}

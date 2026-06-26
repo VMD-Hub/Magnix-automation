@@ -38,11 +38,21 @@ for (let i = 1; i < rows.length; i++) {
   const score = Number(row.score || 0);
   const status = String(row.status || '').trim().toLowerCase();
   const meta = parseMeta(row.meta);
+  row.meta_parsed = meta;
 
   if (meta.draft_created === true) continue;
   if (!ALLOW_SEGMENTS.has(segment)) continue;
   if (score < MIN_SCORE) continue;
   if (status !== 'classified' && row.claude_verdict !== 'qualified') continue;
+
+  const LEGAL_SEGMENTS = new Set(['noxh_income', 'valuation', 'sme_credit']);
+  if (LEGAL_SEGMENTS.has(segment)) {
+    if (!meta.editorial_brief_v1) continue;
+    const pack = meta.legal_retrieval_pack;
+    if (!pack || pack.needs_human_legal_source === true) continue;
+    row.legal_retrieval_pack = pack;
+    row.editorial_brief_v1 = meta.editorial_brief_v1;
+  }
 
   const text = String(row.text || '').trim();
   if (text.length < 20) continue;

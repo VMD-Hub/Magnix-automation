@@ -7,6 +7,7 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { loadFireNotifyCode, wireNotifyAfter } from './code/shared/notify-wire.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const codeDir = path.join(__dirname, 'code', 'content-draft');
@@ -360,6 +361,17 @@ const connections = {
   'Track Parse Fail': { main: [[{ node: 'Loop Draft Candidates', type: 'main', index: 0 }]] },
   'No Candidates Summary': { main: [[{ node: 'Build Summary', type: 'main', index: 0 }]] },
 };
+
+wireNotifyAfter(nodes, connections, {
+  idPrefix: 'a3n',
+  fireCode: loadFireNotifyCode('fire-notify-agent3.js', {
+    __GOOGLE_SHEET_ID__: PUBLIC.google_sheet_id,
+    __CONTENT_DRAFTS_TAB__: PUBLIC.content_drafts_tab,
+  }),
+  insertAfter: 'Mark Queue Drafted',
+  resumeTo: 'Loop Draft Candidates',
+  position: pos(5520, 0),
+});
 
 const workflow = {
   name: 'Magnix Agent 3 — Lead Magnet Draft (queue → content_drafts)',

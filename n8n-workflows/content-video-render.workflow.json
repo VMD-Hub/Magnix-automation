@@ -550,6 +550,20 @@
         720,
         420
       ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Inlined vào n8n Code nodes — build deep link tới cột duyệt L3\n// Placeholder {\"content_queue\":546012823,\"content_drafts\":299240858,\"outreach_queue\":1077351628,\"video_drafts\":532130684,\"notification_events\":160985613} được thay lúc build workflow.\n\nconst SHEET_TAB_GIDS = {\"content_queue\":546012823,\"content_drafts\":299240858,\"outreach_queue\":1077351628,\"video_drafts\":532130684,\"notification_events\":160985613};\n\nconst APPROVAL_COL = {\n  video_drafts: { status: 'Q', l3: 'S' },\n  content_drafts: { status: 'K' },\n  outreach_queue: { status: 'I', l3: 'J' },\n};\n\nfunction buildReviewUrl(sheetId, tab, row, approvalFields) {\n  const base = `https://docs.google.com/spreadsheets/d/${sheetId}/edit`;\n  const gid = SHEET_TAB_GIDS[tab];\n  const cols = APPROVAL_COL[tab] || { status: 'A' };\n  const fields = Array.isArray(approvalFields) ? approvalFields : [];\n  const wantsL3 = fields.some((f) => String(f).toLowerCase().includes('l3_approved'));\n  const col = wantsL3 && cols.l3 ? cols.l3 : cols.status || 'A';\n  const r = Number(row) || 0;\n\n  if (!gid) {\n    return r > 1 ? `${base}#range=${col}${r}` : base;\n  }\n  if (r <= 1) {\n    return `${base}#gid=${gid}`;\n  }\n  return `${base}#gid=${gid}&range=${col}${r}`;\n}\n\n// n8n Code: fire render_review_needed after Agent 7 render OK\n\nconst prev = $input.first().json || {};\nif (!prev.ok || !prev.sheet_ok) return [{ json: prev }];\n\nconst prep = $('Prepare Sheet Update').item?.json || {};\nconst title = String($('Loop Render Candidates').item?.json?.title || 'Video render').slice(0, 120);\nconst segment = String($('Loop Render Candidates').item?.json?.segment || '').slice(0, 40);\nconst sheet_row = Number(prev.sheet_row || prep.sheet_row || 0);\nconst source_key = String(prev.source_normalized_key || 'unknown');\nconst preview_url = String(prev.render_url || prep.render_url || prep.render_meta_patch?.drive_view_url || '').slice(0, 500);\n\nconst SHEET_ID = '1fYB4h_BTiKXa9O3lBah-tQonWpQOQMG2aSkSfPs6yU4';\nconst sheet_tab = 'video_drafts';\nconst approval_fields = ['xem MP4', 'status=published hoặc rejected'];\n\nconst body = {\n  event_id: `agent7:video_drafts:row_${sheet_row}:render_review_needed`,\n  event_type: 'render_review_needed',\n  agent: 'agent7',\n  severity: 'action_required',\n  product_type: 'short_video_package',\n  target_channel: String(prep.render_meta_patch?.render_platform || 'tiktok'),\n  title,\n  segment,\n  source_row_key: source_key,\n  sheet_tab,\n  sheet_row,\n  preview_url,\n  approval_fields,\n  review_url: buildReviewUrl(SHEET_ID, sheet_tab, sheet_row, ['status=published']),\n  due_at: new Date(Date.now() + 2 * 3600000).toISOString(),\n};\n\nreturn fireNotify(body, prev);\n\n// Shared tail — inlined by notify-wire.mjs into agent fire-notify scripts\n\nasync function fireNotify(body, prev) {\n  const enabled = String($env.TELEGRAM_APPROVAL_ENABLED || '').toLowerCase() === 'true';\n  if (!enabled) {\n    return [{ json: { ...prev, notify_skipped: true, reason: 'TELEGRAM_APPROVAL_ENABLED' } }];\n  }\n\n  const token = $env.MAGNIX_WEBHOOK_TOKEN || '';\n  const base = String($env.N8N_PUBLIC_URL || 'https://n8n.vmd.asia').replace(/\\/$/, '');\n\n  try {\n    await this.helpers.httpRequest({\n      method: 'POST',\n      url: `${base}/webhook/magnix/telegram-notify`,\n      headers: {\n        Authorization: token ? `Bearer ${token}` : '',\n        'Content-Type': 'application/json',\n      },\n      body,\n      json: true,\n      timeout: 15000,\n    });\n    return [{ json: { ...prev, notify_fired: true, notify_event_id: body.event_id } }];\n  } catch (e) {\n    return [{ json: { ...prev, notify_fired: false, notify_error: e.message || 'NOTIFY_FAIL' } }];\n  }\n}\n"
+      },
+      "id": "a7nnotify",
+      "name": "Fire Telegram Notify",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        5160,
+        0
+      ],
+      "onError": "continueRegularOutput"
     }
   ],
   "connections": {
@@ -852,7 +866,7 @@
       "main": [
         [
           {
-            "node": "Loop Render Candidates",
+            "node": "Fire Telegram Notify",
             "type": "main",
             "index": 0
           }
@@ -897,6 +911,17 @@
         [
           {
             "node": "Build Summary",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fire Telegram Notify": {
+      "main": [
+        [
+          {
+            "node": "Loop Render Candidates",
             "type": "main",
             "index": 0
           }

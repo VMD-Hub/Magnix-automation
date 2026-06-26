@@ -14,6 +14,8 @@ Legal Knowledge Base la nen tang cho cac noi dung:
 
 Agent khong duoc tu suy luan quy dinh phap ly neu khong co facts trong Legal KB hoac brief da duoc human verify.
 
+**Ba kenh phan phoi NOXH:** xem `docs/NOXH_THREE_CHANNEL_ARCHITECTURE.md` — AIO/SEO (bai viet), inbox (chat), staff (mau ho so NV). Router: `legal-sources/channels/registry.json`, `scripts/lib/legal-channel-pack.mjs`.
+
 ## 2. Vi tri trong Magnix
 
 Layer K nam truoc cac agent content:
@@ -185,11 +187,12 @@ Khong dua toan bo KB vao prompt. Pipeline dung:
 
 ## 8. Uu tien trien khai
 
-1. Tao schema file / sheet cho Legal Source Library.
-2. Nhap cum NOXH dau tien: eligibility, income, documents.
-3. Chia atomic legal notes co source_refs.
-4. Sinh Q&A AIO tu atomic notes.
-5. Cap nhat Agent 2 / Layer B de tao `legal_retrieval_pack`.
-6. Cap nhat Agent 3 va Agent 6: neu thieu pack thi tra `needs_human_legal_source`.
+1. ~~Tao schema file / sheet cho Legal Source Library.~~
+2. ~~Nhap cum NOXH dau tien~~ (L3 verified).
+3. ~~Chia atomic legal notes co source_refs.~~
+4. ~~Sinh Q&A AIO tu atomic notes.~~
+5. ~~Cap nhat Layer B de tao `legal_retrieval_pack`~~ — node Attach Legal Pack + `docs/LEGAL_GATE_PIPELINE.md`.
+6. ~~Cap nhat Agent 3 va Agent 6: neu thieu pack thi block~~ — filter + prompt consume.
 7. Them L2 QA kiem tra "claim ngoai pack".
+8. Agent 4 outreach + Agent 5 scorecard audit (xem checklist `LEGAL_GATE_PIPELINE.md` §7).
 

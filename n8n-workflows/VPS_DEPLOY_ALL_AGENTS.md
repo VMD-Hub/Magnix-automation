@@ -100,6 +100,9 @@ GitHub Actions (`.github/workflows/magnix-deploy-workflows.yml`) tự rebuild + 
 | 7 | `content-video-render.workflow.json` | Agent 7 (Creatomate) — activate only after manual pass |
 | 8 | `outreach-queue.workflow.json` | Agent 4 |
 | 9 | `content-scorecard.workflow.json` | Agent 5 (Mạch 5) |
+| 10 | `telegram-notify.workflow.json` | Telegram webhook — **activate trước** Agent 3/4/6/7 |
+| 11 | `telegram-reminder.workflow.json` | SLA reminder (30m) |
+| 12 | `telegram-resolver.workflow.json` | Auto-resolve events (30m) |
 
 **Credential `googleApi`:** gán trên mọi node Fetch + Sheet Update/Append (Code node).
 

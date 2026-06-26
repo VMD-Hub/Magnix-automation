@@ -20,6 +20,7 @@ const root = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
 const wfDir = path.join(root, 'n8n-workflows');
 
 const WORKFLOW_FILES = [
+  'uid-ingest.workflow.json',
   'social-listening.workflow.json',
   'social-listening-facebook.workflow.json',
   'content-classify.workflow.json',
@@ -29,6 +30,9 @@ const WORKFLOW_FILES = [
   'content-video-render.workflow.json',
   'outreach-queue.workflow.json',
   'content-scorecard.workflow.json',
+  'telegram-notify.workflow.json',
+  'telegram-reminder.workflow.json',
+  'telegram-resolver.workflow.json',
 ];
 
 /** Tên workflow cũ trên n8n — push cập nhật in-place thay vì tạo bản trùng */
@@ -77,6 +81,14 @@ function mergeNodeCredentials(nodes, prevNodes) {
 
   return nodes.map((n) => {
     let credentials = n.credentials || credByNode.get(n.name);
+    if (
+      !credentials?.googleApi &&
+      googleTemplate &&
+      n.type === 'n8n-nodes-base.code' &&
+      String(n.parameters?.jsCode || '').includes("httpRequestWithAuthentication.call(this, 'googleApi'")
+    ) {
+      credentials = { ...(credentials || {}), googleApi: googleTemplate };
+    }
     if (!credentials?.googleApi && n.parameters?.nodeCredentialType === 'googleApi' && googleTemplate) {
       credentials = { ...(credentials || {}), googleApi: googleTemplate };
     }

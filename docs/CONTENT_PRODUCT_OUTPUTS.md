@@ -6,6 +6,8 @@
 
 Magnix dung agent de san xuat asset inbound co the duyet va dang, khong chi tao y tuong.
 
+**Legal Gate:** Moi item phap ly (segment `noxh_income`, `valuation`, `sme_credit`) phai co `legal_retrieval_pack` tu Layer B truoc Agent 3/6. Xem `docs/LEGAL_GATE_PIPELINE.md`.
+
 Moi item sau khi qua Layer B phai co:
 
 - `product_type`

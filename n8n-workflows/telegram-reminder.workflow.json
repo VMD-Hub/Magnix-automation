@@ -1,0 +1,209 @@
+{
+  "name": "Magnix Telegram — Reminder (SLA)",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## Telegram Reminder\n- **Mỗi 30 phút** · SLA theo `docs/TELEGRAM_APPROVAL_NOTIFICATIONS.md`\n- Cần `TELEGRAM_REMINDER_ENABLED=true`",
+        "height": 140,
+        "width": 400
+      },
+      "id": "tgr00note",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -160,
+        80
+      ]
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "*/30 * * * *"
+            }
+          ]
+        }
+      },
+      "id": "tgr01sched",
+      "name": "Schedule Reminder 30m",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        280
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "tgr01manual",
+      "name": "When clicking 'Execute workflow'",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        440
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const SHEET_ID = '1fYB4h_BTiKXa9O3lBah-tQonWpQOQMG2aSkSfPs6yU4';\nconst TAB = 'notification_events';\n\nconst enabled = String($env.TELEGRAM_REMINDER_ENABLED || '').toLowerCase() === 'true';\nif (!enabled) {\n  return [{ json: { ok: true, empty: true, reason: 'TELEGRAM_REMINDER_ENABLED' } }];\n}\n\nconst token = $env.TELEGRAM_BOT_TOKEN || '';\nconst chatId = $env.TELEGRAM_CHAT_ID_OWNER || $env.TELEGRAM_CHAT_ID_OPS || '';\nif (!token || !chatId) {\n  return [{ json: { ok: true, empty: true, reason: 'MISSING_TELEGRAM_CONFIG' } }];\n}\n\nconst SLA_HOURS = {\n  approval_needed: [2, 8, 24],\n  render_review_needed: [2, 8, 24],\n  legal_source_needed: [1, 4, 12],\n  qa_failed: [4, 24, 168],\n  metrics_needed: [24, 72, 168],\n  workflow_blocked: [0, 2, 8],\n};\n\nlet rows = [];\ntry {\n  const res = await this.helpers.httpRequestWithAuthentication.call(this, 'googleApi', {\n    method: 'GET',\n    url: `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent(`${TAB}!A:L`)}`,\n    json: true,\n  });\n  rows = res.values || [];\n} catch (e) {\n  return [{ json: { ok: false, error: 'SHEET_READ_FAIL', message: e.message } }];\n}\n\nif (rows.length < 2) {\n  return [{ json: { ok: true, empty: true, reason: 'NO_EVENTS' } }];\n}\n\nconst now = Date.now();\nconst due = [];\n\nfor (let i = 1; i < rows.length; i += 1) {\n  const r = rows[i];\n  const event_id = String(r[0] || '').trim();\n  const event_type = String(r[1] || '').trim();\n  const status = String(r[5] || '').trim().toLowerCase();\n  const message = String(r[6] || '');\n  const created_at = String(r[9] || '');\n  const resolved_at = String(r[10] || '').trim();\n  const metaRaw = String(r[11] || '{}');\n\n  if (!event_id || resolved_at) continue;\n  if (!['sent', 'reminded', 'pending'].includes(status)) continue;\n\n  let meta = {};\n  try {\n    meta = JSON.parse(metaRaw);\n  } catch {\n    meta = {};\n  }\n\n  const reminder_count = Number(meta.reminder_count || 0);\n  const sla = SLA_HOURS[event_type] || SLA_HOURS.approval_needed;\n  const thresholdHours = sla[Math.min(reminder_count, sla.length - 1)];\n  const createdMs = Date.parse(created_at);\n  if (!Number.isFinite(createdMs)) continue;\n\n  const ageHours = (now - createdMs) / 3600000;\n  const lastRemindedMs = meta.last_reminded_at ? Date.parse(meta.last_reminded_at) : 0;\n  const sinceLastHours = lastRemindedMs ? (now - lastRemindedMs) / 3600000 : ageHours;\n\n  if (ageHours < thresholdHours) continue;\n  if (reminder_count > 0 && sinceLastHours < thresholdHours) continue;\n\n  const sheet_row = i + 1;\n  const ageRounded = Math.round(ageHours);\n\n  const reminderText = [\n    '[Magnix Reminder] Chưa xử lý approval',\n    `Đã chờ: ${ageRounded}h`,\n    `Agent: ${String(r[2] || meta.agent || '')}`,\n    `Dòng: ${String(r[4] || '')} · ${event_id}`,\n    meta.review_url ? `Mở review: ${meta.review_url}` : '',\n    'Cần làm: approve / reject / request_revision',\n  ]\n    .filter(Boolean)\n    .join('\\n')\n    .slice(0, 3900);\n\n  due.push({\n    json: {\n      ok: true,\n      event_id,\n      event_type,\n      sheet_row,\n      reminder_count: reminder_count + 1,\n      message: reminderText,\n      chat_id: chatId,\n      meta,\n      original_message: message,\n    },\n  });\n}\n\nif (!due.length) {\n  return [{ json: { ok: true, empty: true, reason: 'NO_DUE_REMINDERS' } }];\n}\n\nreturn due;"
+      },
+      "id": "tgr02find",
+      "name": "Find Due Reminders",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        280,
+        360
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "c1",
+              "leftValue": "={{ $json.empty }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "false",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "tgr03if",
+      "name": "IF Has Reminders",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        520,
+        360
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const SHEET_ID = '1fYB4h_BTiKXa9O3lBah-tQonWpQOQMG2aSkSfPs6yU4';\nconst TAB = 'notification_events';\nconst item = $input.first().json;\n\nif (item.empty) return [{ json: item }];\n\nconst token = $env.TELEGRAM_BOT_TOKEN || '';\nlet tgOk = false;\nlet tgMessageId = '';\n\ntry {\n  const tgRes = await this.helpers.httpRequest({\n    method: 'POST',\n    url: `https://api.telegram.org/bot${token}/sendMessage`,\n    body: { chat_id: item.chat_id, text: item.message },\n    json: true,\n    timeout: 15000,\n  });\n  tgOk = Boolean(tgRes?.ok);\n  tgMessageId = tgRes?.result?.message_id ? String(tgRes.result.message_id) : '';\n} catch (e) {\n  return [{ json: { ok: false, event_id: item.event_id, error: e.message || 'TELEGRAM_FAIL' } }];\n}\n\nconst meta = {\n  ...(item.meta || {}),\n  reminder_count: item.reminder_count,\n  last_reminded_at: new Date().toISOString(),\n};\n\ntry {\n  await this.helpers.httpRequestWithAuthentication.call(this, 'googleApi', {\n    method: 'PUT',\n    url: `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent(`${TAB}!F${item.sheet_row}:L${item.sheet_row}`)}?valueInputOption=USER_ENTERED`,\n    body: {\n      values: [['reminded', item.message, item.chat_id, tgMessageId, '', '', JSON.stringify(meta)]],\n    },\n    json: true,\n  });\n} catch {\n  // non-fatal\n}\n\nreturn [{\n  json: {\n    ok: tgOk,\n    event_id: item.event_id,\n    reminder_count: item.reminder_count,\n    telegram_message_id: tgMessageId,\n  },\n}];"
+      },
+      "id": "tgr04send",
+      "name": "Send Reminder",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        760,
+        280
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all().map((i) => i.json);\nconst sent = items.filter((j) => j.ok && j.event_id).length;\nconst empty = items.some((j) => j.empty);\n\nreturn [{\n  json: {\n    ok: true,\n    workflow: 'telegram-reminder',\n    reminders_sent: sent,\n    empty: empty && sent === 0,\n    finished_at: new Date().toISOString(),\n  },\n}];"
+      },
+      "id": "tgr05sum",
+      "name": "Build Summary",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1000,
+        360
+      ]
+    }
+  ],
+  "connections": {
+    "Schedule Reminder 30m": {
+      "main": [
+        [
+          {
+            "node": "Find Due Reminders",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking 'Execute workflow'": {
+      "main": [
+        [
+          {
+            "node": "Find Due Reminders",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Find Due Reminders": {
+      "main": [
+        [
+          {
+            "node": "IF Has Reminders",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF Has Reminders": {
+      "main": [
+        [
+          {
+            "node": "Send Reminder",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Build Summary",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Reminder": {
+      "main": [
+        [
+          {
+            "node": "Build Summary",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [
+    {
+      "name": "magnix"
+    },
+    {
+      "name": "telegram"
+    },
+    {
+      "name": "telegram-reminder"
+    }
+  ],
+  "meta": {
+    "templateCredsSetupCompleted": false
+  }
+}

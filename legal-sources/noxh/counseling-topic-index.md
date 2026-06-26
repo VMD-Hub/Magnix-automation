@@ -5,6 +5,18 @@
 
 ---
 
+## Ba kênh phục vụ (cùng một KB)
+
+| Kênh | Ai dùng | Playbook |
+|------|---------|----------|
+| **1 — AIO/SEO** | Viết bài website & Page | `../channels/aio-seo.md` |
+| **2 — Inbox** | Chat tư vấn khách Page | `../channels/inbox-counseling.md` |
+| **3 — Staff** | NV tra cứu & mẫu hồ sơ | `../channels/staff-ops.md` |
+
+Chi tiết: `docs/NOXH_THREE_CHANNEL_ARCHITECTURE.md` · `buildChannelPack('aio_seo'|'inbox_counseling'|'staff_ops')`
+
+---
+
 ## Bảng tra nhanh
 
 | Chủ đề khách hỏi | File tư vấn | Claim / Q&A chính |

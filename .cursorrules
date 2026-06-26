@@ -31,13 +31,9 @@
 - Rule engine trước LLM; LLM + `/ooda` khi score 40–59
 - L2 `/devil` cho content NOXH/vay/định giá; L3 human approve trước publish
 
-## 5. Swing Paper Trading — Data contract (PAPER)
+## 5. Ranh giới dự án — Trade tách riêng
 
-- Playbook: `scripts/SWING-EXECUTION-PLAYBOOK.md` · Constitution: `scripts/SWING-PORTFOLIO-CONSTITUTION.md`
-- T2 chưa khớp: `swing-watchlist.mjs treo` — không `Trades_PAPER` cho đến `filled` + `open --filled true`
-- CRO tuần: `swing-cro.mjs ritual` — Satellite chỉ sau `/trade` + `--data-source vnstock|tcbs`
-- Research contract: `scripts/SWING-RESEARCH-CONTRACT.md` — 5 mã seed **không** phải universe đo lường
-- **OPEN:** đủ trường + `--exec` + gate (2 OPEN, 60% NAV, risk ≤1.25% NAV, MWG 25%)
-- Trước OPEN mới: `swing-log.mjs portfolio` · Sau log: `validate`
-- Shadow/Theory: `SWING-THEORY-RESEARCH.md` · `SWING-SHADOW-SCHEMA.md` — không ảnh hưởng KPI real-gate
-- Phase 1 **PAPER spot only** — margin/phái sinh mô phỏng trên `Trades_SHADOW`
+- **Magnix** = inbound lead, content pipeline, n8n — **không** chứa swing/CRO/paper trading.
+- **Trade / CRO / VN100 / Telegram bot giao dịch** → dự án riêng: `C:\Users\nguye\trading-intelligence`
+- Chi tiết: `TRADE_PROJECT.md` (Magnix) · `docs/MAGNIX_BOUNDARY.md` (trading-intelligence)
+- Telegram Magnix (nếu có) chỉ cho L3 content approval — **không** dùng chung bot trade.

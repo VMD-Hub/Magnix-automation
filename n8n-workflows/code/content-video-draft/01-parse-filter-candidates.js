@@ -69,6 +69,16 @@ for (let i = 1; i < rows.length; i++) {
 
   if (!meta.editorial_brief_v1) { blockers.no_brief += 1; continue; }
 
+  const LEGAL_SEGMENTS = new Set(['noxh_income', 'valuation', 'sme_credit']);
+  if (LEGAL_SEGMENTS.has(segment)) {
+    const pack = meta.legal_retrieval_pack;
+    if (!pack || pack.needs_human_legal_source === true) {
+      blockers.no_legal_pack = (blockers.no_legal_pack || 0) + 1;
+      continue;
+    }
+    row.legal_retrieval_pack = pack;
+  }
+
   const ensured = ensureIntakeV1(
     { ...row, segment, score, intake_stub_source: 'agent6_filter' },
     meta

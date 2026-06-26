@@ -10,11 +10,13 @@ Kho prompt cho pipeline **Inbound** và **n8n LLM node**.
 
 ## Mạch prompt (3 tầng content)
 
-| Layer | File | Parse | QA |
-|-------|------|-------|-----|
-| A Pain intake | `n8n__pain-intake.md` | ✅ | L0 |
-| B Editorial brief | `n8n__editorial-brief.md` | ✅ | L0–L1 |
-| C Production brief | `n8n__production-brief.md` | ✅ | L0–L2 + L3 |
+| Layer | File | Parse | QA | Legal |
+|-------|------|-------|-----|-------|
+| A Pain intake | `n8n__pain-intake.md` | ✅ | L0 | — |
+| B Editorial brief | `n8n__editorial-brief.md` | ✅ | L0–L1 | **Inject** pack |
+| C Production brief | `n8n__production-brief.md` | ✅ | L0–L2 + L3 | **Consume** pack |
+
+Pipeline đầy đủ: `docs/LEGAL_GATE_PIPELINE.md`.
 
 ## Mạch prompt (legacy / khác)
 

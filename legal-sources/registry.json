@@ -74,6 +74,12 @@
     }
   ],
   "local_policy_registry": "legal-sources/local-policy/registry.json",
+  "delivery_channels": {
+    "architecture_doc": "docs/NOXH_THREE_CHANNEL_ARCHITECTURE.md",
+    "registry_path": "legal-sources/channels/registry.json",
+    "pack_module": "scripts/lib/legal-channel-pack.mjs",
+    "channels": ["aio_seo", "inbox_counseling", "staff_ops"]
+  },
   "priority_provinces": [
     "tp_ho_chi_minh",
     "dong_nai",

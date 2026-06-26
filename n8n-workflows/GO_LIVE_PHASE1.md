@@ -9,7 +9,7 @@
 [✓] 1B — Import workflow cần chạy (node scripts/go-live-vps.mjs — push qua n8n API)
 [ ] 1C — Gán Google Sheets/Drive credential (Agent 1 Drive Backup Upload — workflow đang inactive)
 [ ] 1D — Manual run → Sheet cập nhật đúng status/output
-[ ] 1E — Telegram notification (spec có — workflow chưa wire, Phase 2)
+[~] 1E — Telegram notification (3 workflow: notify webhook + reminder + resolver; bật env + activate)
 ```
 
 **Script go-live (local):**
@@ -79,11 +79,38 @@ Dry-run local:
 ```powershell
 node scripts/run-scorecard-from-sheet.mjs
 node scripts/verify-google-setup.mjs
+node scripts/test-telegram-notify.mjs
 ```
 
 ## 1E — Telegram notification
 
 Workflow có human gate phải tạo row `notification_events` và gửi Telegram theo `docs/TELEGRAM_APPROVAL_NOTIFICATIONS.md`.
+
+**3 workflow Telegram (rebuild + push cùng các agent khác):**
+
+| Workflow | Slug webhook / cron | Khi activate |
+|----------|---------------------|--------------|
+| `telegram-notify.workflow.json` | `POST /webhook/magnix/telegram-notify` | **Trước** Agent 3/4/6/7 — agent gọi webhook này |
+| `telegram-reminder.workflow.json` | Cron 30 phút | Sau khi notify OK |
+| `telegram-resolver.workflow.json` | Cron 30 phút | Sau khi notify OK |
+
+**Env bắt buộc trên VPS:**
+
+```env
+TELEGRAM_BOT_TOKEN=
+TELEGRAM_CHAT_ID_OWNER=
+TELEGRAM_APPROVAL_ENABLED=true
+TELEGRAM_REMINDER_ENABLED=true
+N8N_PUBLIC_URL=https://n8n.vmd.asia
+```
+
+**Smoke test sau push:**
+
+```powershell
+node scripts/test-telegram-notify.mjs
+```
+
+Kỳ vọng: row mới tab `notification_events` + tin Telegram trên owner chat (nếu env đủ).
 
 ## Lỗi thường gặp
 

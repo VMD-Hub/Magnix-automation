@@ -7,6 +7,7 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { loadFireNotifyCode, wireNotifyAfter } from './code/shared/notify-wire.mjs';
 import { toN8nInline } from './code/shared/video-drive-name.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -577,6 +578,17 @@ const connections = {
   'Drive Retention Cleanup': { main: [[{ node: 'Build Summary', type: 'main', index: 0 }]] },
   'No Candidates Summary': { main: [[{ node: 'Build Summary', type: 'main', index: 0 }]] },
 };
+
+wireNotifyAfter(nodes, connections, {
+  idPrefix: 'a7n',
+  fireCode: loadFireNotifyCode('fire-notify-agent7.js', {
+    __GOOGLE_SHEET_ID__: PUBLIC.google_sheet_id,
+    __VIDEO_DRAFTS_TAB__: PUBLIC.video_drafts_tab,
+  }),
+  insertAfter: 'Track Sheet OK',
+  resumeTo: 'Loop Render Candidates',
+  position: pos(5160, 0),
+});
 
 const workflow = {
   // Giữ tên khớp workflow đang active trên n8n — push cập nhật in-place

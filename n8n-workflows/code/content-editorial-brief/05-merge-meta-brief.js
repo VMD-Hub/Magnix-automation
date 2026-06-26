@@ -23,6 +23,13 @@ const meta = {
   editorial_brief_v1: prep.editorial_brief_v1,
   editorial_brief_at: new Date().toISOString(),
 };
+if (prep.legal_retrieval_pack) {
+  meta.legal_retrieval_pack = prep.legal_retrieval_pack;
+  meta.legal_retrieval_pack_at = new Date().toISOString();
+}
+if (prep.legal_gate) {
+  meta.legal_gate = prep.legal_gate;
+}
 if (prepMeta.intake_v1 && !fromSheet.intake_v1) {
   meta.intake_v1_from = meta.intake_v1_from || 'stub_layer_b';
 }

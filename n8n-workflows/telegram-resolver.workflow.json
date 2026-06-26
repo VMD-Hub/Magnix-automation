@@ -1,0 +1,209 @@
+{
+  "name": "Magnix Telegram — Resolver",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## Telegram Resolver\n- **Mỗi 30 phút** — mark `notification_events` resolved khi Sheet đã approve/reject",
+        "height": 120,
+        "width": 400
+      },
+      "id": "tgx00note",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -160,
+        80
+      ]
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "*/30 * * * *"
+            }
+          ]
+        }
+      },
+      "id": "tgx01sched",
+      "name": "Schedule Resolver 30m",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        280
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "tgx01manual",
+      "name": "When clicking 'Execute workflow'",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        440
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const SHEET_ID = '1fYB4h_BTiKXa9O3lBah-tQonWpQOQMG2aSkSfPs6yU4';\nconst TAB_EVENTS = 'notification_events';\nconst TAB_VIDEO = 'video_drafts';\nconst TAB_DRAFTS = 'content_drafts';\nconst TAB_OUTREACH = 'outreach_queue';\n\nlet res;\ntry {\n  res = await this.helpers.httpRequestWithAuthentication.call(this, 'googleApi', {\n    method: 'GET',\n    url: `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent(`${TAB_EVENTS}!A:L`)}`,\n    json: true,\n  });\n} catch (e) {\n  return [{\n    json: {\n      ok: false,\n      empty: true,\n      error: 'SHEET_READ_FAIL',\n      message: e.message || String(e),\n      hint: 'Gán googleApi credential + tạo tab notification_events',\n    },\n  }];\n}\n\nconst rows = res.values || [];\nif (rows.length < 2) {\n  return [{ json: { ok: true, empty: true, resolved: 0 } }];\n}\n\nasync function fetchCol(tab, col) {\n  const r = await this.helpers.httpRequestWithAuthentication.call(this, 'googleApi', {\n    method: 'GET',\n    url: `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent(`${tab}!${col}:${col}`)}`,\n    json: true,\n  });\n  return (r.values || []).map((v) => String(v[0] || '').trim().toLowerCase());\n}\n\nconst videoStatus = await fetchCol.call(this, TAB_VIDEO, 'Q');\nconst draftStatus = await fetchCol.call(this, TAB_DRAFTS, 'J');\nconst outreachStatus = await fetchCol.call(this, TAB_OUTREACH, 'I');\nconst outreachL3 = await fetchCol.call(this, TAB_OUTREACH, 'J');\n\nfunction checkResolved(targetTab, sheetRow, eventType) {\n  const idx = Number(sheetRow) - 1;\n  if (!Number.isFinite(idx) || idx < 0) return false;\n\n  if (targetTab === TAB_VIDEO) {\n    const status = videoStatus[idx] || '';\n    if (eventType === 'render_review_needed') {\n      return ['published', 'rejected'].includes(status);\n    }\n    return ['approved', 'rejected', 'ready_for_review', 'published'].includes(status);\n  }\n\n  if (targetTab === TAB_DRAFTS) {\n    const status = draftStatus[idx] || '';\n    return ['approved', 'rejected', 'published'].includes(status);\n  }\n\n  if (targetTab === TAB_OUTREACH) {\n    const status = outreachStatus[idx] || '';\n    const l3 = outreachL3[idx] || '';\n    return status === 'approved' || l3 === 'true';\n  }\n\n  return false;\n}\n\nfunction normalizeTab(name) {\n  const n = String(name || '').trim().toLowerCase();\n  if (n === TAB_VIDEO.toLowerCase() || n === 'video_drafts') return TAB_VIDEO;\n  if (n === TAB_DRAFTS.toLowerCase() || n === 'content_drafts') return TAB_DRAFTS;\n  if (n === TAB_OUTREACH.toLowerCase() || n === 'outreach_queue') return TAB_OUTREACH;\n  return '';\n}\n\nconst now = new Date().toISOString();\nconst updates = [];\n\nfor (let i = 1; i < rows.length; i += 1) {\n  const r = rows[i];\n  const event_id = String(r[0] || '').trim();\n  const event_type = String(r[1] || '').trim();\n  const target_tab = normalizeTab(r[4]);\n  const status = String(r[5] || '').trim().toLowerCase();\n  const resolved_at = String(r[10] || '').trim();\n  const metaRaw = String(r[11] || '{}');\n\n  if (!event_id || resolved_at) continue;\n  if (!['sent', 'reminded', 'pending'].includes(status)) continue;\n\n  let meta = {};\n  try {\n    meta = JSON.parse(metaRaw);\n  } catch {\n    meta = {};\n  }\n\n  const sheet_row = Number(meta.sheet_row || 0);\n  if (!target_tab || !sheet_row) continue;\n  if (!checkResolved(target_tab, sheet_row, event_type)) continue;\n\n  updates.push({\n    json: {\n      event_id,\n      event_sheet_row: i + 1,\n      resolved_at: now,\n      target_tab,\n      source_sheet_row: sheet_row,\n    },\n  });\n}\n\nif (!updates.length) {\n  return [{ json: { ok: true, empty: true, resolved: 0 } }];\n}\n\nreturn updates;"
+      },
+      "id": "tgx02find",
+      "name": "Find Resolved Events",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        280,
+        360
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "c1",
+              "leftValue": "={{ $json.empty }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "false",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "tgx03if",
+      "name": "IF Has Updates",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        520,
+        360
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const SHEET_ID = '1fYB4h_BTiKXa9O3lBah-tQonWpQOQMG2aSkSfPs6yU4';\nconst TAB = 'notification_events';\nconst item = $input.first().json;\n\nif (item.empty) return [{ json: item }];\n\ntry {\n  await this.helpers.httpRequestWithAuthentication.call(this, 'googleApi', {\n    method: 'PUT',\n    url: `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent(`${TAB}!F${item.event_sheet_row}`)}?valueInputOption=USER_ENTERED`,\n    body: { values: [['resolved']] },\n    json: true,\n  });\n  await this.helpers.httpRequestWithAuthentication.call(this, 'googleApi', {\n    method: 'PUT',\n    url: `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent(`${TAB}!K${item.event_sheet_row}`)}?valueInputOption=USER_ENTERED`,\n    body: { values: [[item.resolved_at]] },\n    json: true,\n  });\n} catch (e) {\n  return [{ json: { ok: false, event_id: item.event_id, error: e.message } }];\n}\n\nreturn [{ json: { ok: true, event_id: item.event_id, resolved_at: item.resolved_at } }];"
+      },
+      "id": "tgx04mark",
+      "name": "Mark Resolved",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        760,
+        280
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all().map((i) => i.json);\nconst resolved = items.filter((j) => j.ok && j.event_id && !j.empty).length;\nconst empty = items.some((j) => j.empty);\n\nreturn [{\n  json: {\n    ok: true,\n    workflow: 'telegram-resolver',\n    resolved_count: resolved,\n    empty: empty && resolved === 0,\n    finished_at: new Date().toISOString(),\n  },\n}];"
+      },
+      "id": "tgx05sum",
+      "name": "Build Summary",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1000,
+        360
+      ]
+    }
+  ],
+  "connections": {
+    "Schedule Resolver 30m": {
+      "main": [
+        [
+          {
+            "node": "Find Resolved Events",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking 'Execute workflow'": {
+      "main": [
+        [
+          {
+            "node": "Find Resolved Events",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Find Resolved Events": {
+      "main": [
+        [
+          {
+            "node": "IF Has Updates",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF Has Updates": {
+      "main": [
+        [
+          {
+            "node": "Mark Resolved",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Build Summary",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mark Resolved": {
+      "main": [
+        [
+          {
+            "node": "Build Summary",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [
+    {
+      "name": "magnix"
+    },
+    {
+      "name": "telegram"
+    },
+    {
+      "name": "telegram-resolver"
+    }
+  ],
+  "meta": {
+    "templateCredsSetupCompleted": false
+  }
+}

@@ -17,6 +17,9 @@ function normPlatform(raw) {
   return map[key] || key;
 }
 
+const legalPack = row.legal_retrieval_pack || null;
+const legalGate = row.legal_gate || { required: false, pass: true };
+
 const userPayload = JSON.stringify({
   normalized_key: row.normalized_key,
   platform: row.platform,
@@ -26,6 +29,9 @@ const userPayload = JSON.stringify({
   text: String(row.text || '').slice(0, 8000),
   intake_v1: row.intake_v1 || row.meta_parsed?.intake_v1,
   pattern_refs: row.meta_parsed?.pattern_refs || [],
+  legal_retrieval_pack: legalPack,
+  legal_gate: legalGate,
+  requires_legal_kb: legalGate.required === true,
 });
 
 try {

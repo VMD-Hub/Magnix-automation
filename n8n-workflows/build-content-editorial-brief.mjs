@@ -9,6 +9,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { extractSystemPrompt } from './code/shared/extract-prompt.mjs';
 import { withPipelineStub } from './code/shared/with-pipeline-stub.mjs';
+import { buildLegalGateNodeCode } from './code/shared/inject-legal-bundle.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const codeDir = path.join(__dirname, 'code', 'content-editorial-brief');
@@ -25,6 +26,9 @@ const read = (f) =>
 const editorialSystem = extractSystemPrompt('ai-agents-prompts/n8n__editorial-brief.md');
 
 const codes = {
+  attachLegal: buildLegalGateNodeCode(
+    path.join(codeDir, '01b-attach-legal-pack.js')
+  ),
   parseFilter: withPipelineStub(
     read('01-parse-filter-needs-brief.js')
       .replace('__EDITORIAL_BRIEF_MIN_SCORE__', String(PUBLIC.editorial_brief_min_score ?? 70))
@@ -90,7 +94,7 @@ const nodes = [
   {
     parameters: {
       content:
-        '## Layer B — Editorial Brief\n- **08:30 VN** · max **5**/lần\n- Input: classified score≥70 (intake stub nếu thiếu Agent 1)\n- Output: `meta.editorial_brief_v1` trên content_queue\n- Chạy sau Agent 2 (08:00), trước Agent 6 (09:15)',
+        '## Layer B — Editorial Brief + Legal Gate\n- **08:30 VN** · max **5**/lần\n- **Attach Legal Pack** trước LLM (NOXH/vay/định giá)\n- Output: `meta.editorial_brief_v1` + `meta.legal_retrieval_pack`\n- Chạy sau Agent 2 (08:00), trước Agent 3/6',
       height: 200,
       width: 440,
     },
@@ -181,12 +185,20 @@ const nodes = [
     position: pos(1200, 240),
   },
   {
+    parameters: { jsCode: codes.attachLegal },
+    id: 'eb07blegal',
+    name: 'Attach Legal Pack',
+    type: 'n8n-nodes-base.code',
+    typeVersion: 2,
+    position: pos(1320, 240),
+  },
+  {
     parameters: { jsCode: codes.llm },
     id: 'eb08llm',
     name: 'LLM Editorial Brief',
     type: 'n8n-nodes-base.code',
     typeVersion: 2,
-    position: pos(1440, 240),
+    position: pos(1560, 240),
     onError: 'continueRegularOutput',
   },
   {
@@ -366,9 +378,10 @@ const connections = {
   'Loop Brief Candidates': {
     main: [
       [{ node: 'Build Summary', type: 'main', index: 0 }],
-      [{ node: 'LLM Editorial Brief', type: 'main', index: 0 }],
+      [{ node: 'Attach Legal Pack', type: 'main', index: 0 }],
     ],
   },
+  'Attach Legal Pack': { main: [[{ node: 'LLM Editorial Brief', type: 'main', index: 0 }]] },
   'LLM Editorial Brief': { main: [[{ node: 'IF LLM OK', type: 'main', index: 0 }]] },
   'IF LLM OK': {
     main: [

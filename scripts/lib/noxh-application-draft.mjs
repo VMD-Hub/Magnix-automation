@@ -21,9 +21,256 @@ const INCOME_COEFFICIENT_PROVINCES = {
   tp_ho_chi_minh: { base: [25, 35, 50], coeff: 1.25, coeff_3deps: 1.35 },
 };
 
+const VALID_CLAUSES = new Set([
+  'k5_hdld',
+  'k5_no_hdld',
+  'k6_worker',
+  'k7_llvt',
+  'k8_cbccvc',
+  'k2_k4_poor',
+  'k10_land_recovery',
+  'other',
+]);
+
+/** @deprecated alias in old intakes */
+const CLAUSE_ALIASES = {
+  k8_no_hdld: 'k5_no_hdld',
+};
+
+const OBJECT_SECTION_GUIDANCE = {
+  k5_hdld: {
+    action: 'Tick khoản 5 Đ.76 — thu nhập thấp đô thị, có HĐLĐ',
+    explain: 'Bảng tiền công, tiền lương do đơn vị nơi làm việc xác nhận (mục 11.1).',
+    attachments: ['bang_tien_cong_don_vi'],
+  },
+  k5_no_hdld: {
+    action: 'Tick khoản 5 Đ.76 — thu nhập thấp đô thị, không HĐLĐ',
+    explain: 'Đơn đề nghị + xác nhận tại Công an cấp xã; kê khai cam kết thu nhập (NĐ 54).',
+    attachments: ['don_cong_an_cap_xa'],
+  },
+  k6_worker: {
+    action: 'Tick khoản 6 Đ.76 — công nhân, người lao động tại DN/HTX/KCN',
+    explain: 'Bảng tiền công do đơn vị nơi làm việc xác nhận — mục 11.1, không phải 11.2.',
+    attachments: ['bang_tien_cong_don_vi'],
+  },
+  k7_llvt: {
+    action: 'Tick khoản 7 Đ.76 — lực lượng vũ trang',
+    explain: 'Thu nhập theo Đ.67 NĐ 100 (NĐ 136) — mục 11.2, trần Đại tá.',
+    attachments: ['xac_nhan_co_quan_llvt'],
+  },
+  k8_cbccvc: {
+    action: 'Tick khoản 8 Đ.76 — cán bộ, công chức, viên chức',
+    explain: 'Bảng tiền công do thủ trưởng cơ quan/đơn vị sự nghiệp xác nhận — mục 11.1.',
+    attachments: ['bang_tien_cong_don_vi'],
+  },
+  k2_k4_poor: {
+    action: 'Tick khoản 2–4 Đ.76 — hộ nghèo/cận nghèo',
+    explain: 'Chuẩn nghèo Chính phủ + xác nhận địa phương; danh sách thành viên hộ.',
+    attachments: ['ho_ngheo_can_ngheo'],
+  },
+  k10_land_recovery: {
+    action: 'Tick khoản 10 Đ.76 — bị thu hồi đất',
+    explain: 'Xác nhận UBND cấp huyện nơi bị thu hồi đất.',
+    attachments: ['xac_nhan_thu_hoi_dat'],
+  },
+};
+
 function loadRegistry() {
   if (!existsSync(LOCAL_POLICY_REGISTRY)) return { sources: [] };
   return JSON.parse(readFileSync(LOCAL_POLICY_REGISTRY, 'utf8'));
+}
+
+/**
+ * Suy has_hdld từ employment_status nếu intake chưa khai.
+ * @returns {boolean|null}
+ */
+export function resolveHasHdld(intake = {}) {
+  if (typeof intake.has_hdld === 'boolean') return intake.has_hdld;
+  const emp = intake.employment_status;
+  if (emp === 'dang_hdld') return true;
+  if (emp === 'tu_do_khong_hdld' || emp === 'nghi_huu') return false;
+  if (emp === 'het_tuoi_ld_van_lam') return null;
+  return null;
+}
+
+/**
+ * Rule engine: employment_status + has_hdld (+ employer_type) → article_76_clause.
+ * @returns {{
+ *   clause: string|null,
+ *   confidence: 'high'|'medium'|'low'|null,
+ *   source: 'declared'|'inferred'|null,
+ *   needs_fields: string[],
+ *   notes: string[],
+ * }}
+ */
+export function inferArticle76Clause(intake = {}) {
+  const needs_fields = [];
+  const notes = [];
+  let declared = intake.article_76_clause || null;
+  if (declared && CLAUSE_ALIASES[declared]) {
+    notes.push(`Chuẩn hóa alias ${declared} → ${CLAUSE_ALIASES[declared]}`);
+    declared = CLAUSE_ALIASES[declared];
+  }
+
+  if (declared && declared !== 'other' && VALID_CLAUSES.has(declared)) {
+    return {
+      clause: declared,
+      confidence: 'high',
+      source: 'declared',
+      needs_fields: [],
+      notes,
+    };
+  }
+
+  const emp = intake.employment_status || null;
+  const hasHdld = resolveHasHdld(intake);
+  const employer = intake.employer_type || null;
+
+  if (!emp && hasHdld === null && !employer) {
+    needs_fields.push('employment_status', 'has_hdld');
+    return { clause: null, confidence: null, source: null, needs_fields, notes };
+  }
+
+  if (employer === 'llvt') {
+    return {
+      clause: 'k7_llvt',
+      confidence: 'high',
+      source: 'inferred',
+      needs_fields: [],
+      notes: [...notes, 'employer_type=llvt'],
+    };
+  }
+
+  if (emp === 'nghi_huu') {
+    return {
+      clause: 'k5_no_hdld',
+      confidence: 'high',
+      source: 'inferred',
+      needs_fields: [],
+      notes: [...notes, 'Nghỉ hưu → k5 không HĐLĐ, mục 11.1'],
+    };
+  }
+
+  if (emp === 'het_tuoi_ld_van_lam' && hasHdld !== true) {
+    return {
+      clause: 'k5_no_hdld',
+      confidence: hasHdld === false ? 'high' : 'medium',
+      source: 'inferred',
+      needs_fields: [],
+      notes: [...notes, 'Hết tuổi LĐ / làm tự do không HĐLĐ → k5'],
+    };
+  }
+
+  if (emp === 'tu_do_khong_hdld' && hasHdld === true) {
+    notes.push('Xung đột: tu_do_khong_hdld nhưng has_hdld=true — làm rõ với khách');
+  }
+
+  if (emp === 'tu_do_khong_hdld' || hasHdld === false) {
+    return {
+      clause: 'k5_no_hdld',
+      confidence: emp === 'tu_do_khong_hdld' ? 'high' : 'medium',
+      source: 'inferred',
+      needs_fields: [],
+      notes: [...notes, 'Không HĐLĐ → k5 + Công an cấp xã'],
+    };
+  }
+
+  if (hasHdld === true || emp === 'dang_hdld' || emp === 'het_tuoi_ld_van_lam') {
+    if (employer === 'cbccvc') {
+      return {
+        clause: 'k8_cbccvc',
+        confidence: 'high',
+        source: 'inferred',
+        needs_fields: [],
+        notes: [...notes, 'employer_type=cbccvc'],
+      };
+    }
+    if (employer === 'enterprise_worker') {
+      return {
+        clause: 'k6_worker',
+        confidence: 'high',
+        source: 'inferred',
+        needs_fields: [],
+        notes: [...notes, 'employer_type=enterprise_worker'],
+      };
+    }
+    if (employer === 'other_hdld') {
+      return {
+        clause: 'k5_hdld',
+        confidence: 'medium',
+        source: 'inferred',
+        needs_fields: [],
+        notes: [...notes, 'HĐLĐ nhưng không rõ k6/k8 → k5 có HĐLĐ; xác nhận đơn vị'],
+      };
+    }
+
+    needs_fields.push('employer_type');
+    notes.push('Có HĐLĐ — cần employer_type: cbccvc | enterprise_worker | llvt | other_hdld');
+    return {
+      clause: null,
+      confidence: 'low',
+      source: 'inferred',
+      needs_fields,
+      notes,
+    };
+  }
+
+  if (emp === 'khac') {
+    needs_fields.push('employer_type', 'has_hdld');
+    return {
+      clause: null,
+      confidence: null,
+      source: null,
+      needs_fields,
+      notes: [...notes, 'employment_status=khac — cần làm rõ tư cách việc làm'],
+    };
+  }
+
+  needs_fields.push('employment_status');
+  return { clause: null, confidence: null, source: null, needs_fields, notes };
+}
+
+/**
+ * Gộp clause khai tay + suy luận; cảnh báo nếu lệch.
+ */
+export function resolveArticle76Clause(intake = {}) {
+  const inference = inferArticle76Clause(intake);
+  let declared = intake.article_76_clause || null;
+  if (declared && CLAUSE_ALIASES[declared]) declared = CLAUSE_ALIASES[declared];
+
+  if (declared && declared !== 'other' && VALID_CLAUSES.has(declared)) {
+    const mismatch =
+      inference.clause &&
+      inference.source === 'inferred' &&
+      inference.clause !== declared;
+    return {
+      clause: declared,
+      declared,
+      inferred: inference.clause,
+      source: 'declared',
+      confidence: mismatch ? 'medium' : 'high',
+      mismatch,
+      needs_fields: inference.needs_fields,
+      notes: inference.notes,
+    };
+  }
+
+  return {
+    clause: inference.clause,
+    declared: null,
+    inferred: inference.clause,
+    source: inference.source,
+    confidence: inference.confidence,
+    mismatch: false,
+    needs_fields: inference.needs_fields,
+    notes: inference.notes,
+  };
+}
+
+function incomeAttachmentForClause(clause) {
+  if (clause === 'k5_no_hdld') return ['don_cong_an_cap_xa'];
+  if (clause === 'k7_llvt') return ['xac_nhan_co_quan_llvt'];
+  return ['bang_tien_cong_don_vi'];
 }
 
 /**
@@ -46,6 +293,9 @@ export function buildApplicationCounselingPack(intake = {}, opts = {}) {
   const checklist = [];
   const section_guidance = [];
 
+  const article76 = resolveArticle76Clause(intake);
+  const clause = article76.clause;
+
   if (!province) {
     warnings.push({
       code: 'missing_project_province',
@@ -62,32 +312,36 @@ export function buildApplicationCounselingPack(intake = {}, opts = {}) {
     });
   }
 
-  // Phần C — đối tượng
-  const clause = intake.article_76_clause;
-  if (clause === 'k5_hdld') {
-    section_guidance.push({
-      section: 'C_doi_tuong',
-      action: 'Tick khoản 5 Đ.76 — có HĐLĐ',
-      explain: 'Chuẩn bị Bảng tiền công, tiền lương do đơn vị nơi làm việc xác nhận.',
-      attachments: ['bang_tien_cong_don_vi'],
+  if (!clause) {
+    warnings.push({
+      code: 'article_76_unresolved',
+      message: `Chưa xác định nhóm đối tượng Đ.76 — cần: ${article76.needs_fields.join(', ') || 'employment_status, has_hdld, employer_type'}.`,
+      severity: 'block',
     });
-  } else if (clause === 'k8_no_hdld') {
-    section_guidance.push({
-      section: 'C_doi_tuong',
-      action: 'Tick khoản 8 Đ.76 — không HĐLĐ',
-      explain: 'Đơn đề nghị xác nhận tại Công an cấp xã; kê khai cam kết thu nhập (NĐ 54).',
-      attachments: ['don_cong_an_cap_xa'],
+  } else if (article76.mismatch) {
+    warnings.push({
+      code: 'article_76_mismatch',
+      message: `Khai article_76_clause=${article76.declared} nhưng rule engine suy ${article76.inferred} — đối chiếu object-classification-cbccvc-hdld.md.`,
+      severity: 'review',
     });
-  } else if (clause === 'k7_llvt') {
-    section_guidance.push({
-      section: 'C_doi_tuong',
-      action: 'Tick khoản 7 Đ.76 — lực lượng vũ trang',
-      explain: 'Thu nhập theo Đ.67 NĐ 100 (NĐ 136) — trần Đại tá, công thức vợ/chồng riêng.',
-      attachments: ['xac_nhan_co_quan_llvt'],
+  } else if (article76.source === 'inferred' && article76.confidence === 'low') {
+    warnings.push({
+      code: 'article_76_low_confidence',
+      message: 'Đối tượng suy từ intake chưa chắc — hỏi thêm tư cách việc làm (CBCCVC / công nhân KCN / LLVT).',
+      severity: 'review',
     });
   }
 
-  // Phần D — nhà ở
+  if (clause && OBJECT_SECTION_GUIDANCE[clause]) {
+    const g = OBJECT_SECTION_GUIDANCE[clause];
+    section_guidance.push({
+      section: 'C_doi_tuong',
+      action: g.action,
+      explain: g.explain,
+      attachments: g.attachments,
+    });
+  }
+
   const housing = intake.housing_path;
   if (housing === 'chua_co_nha_gcn' || housing === 'dat_tho_cu_chua_xay') {
     section_guidance.push({
@@ -126,7 +380,6 @@ export function buildApplicationCounselingPack(intake = {}, opts = {}) {
     }
   }
 
-  // Phần E — thu nhập
   const marital = intake.marital_status;
   let incomeCaps = [25, 35, 50];
   if (province && INCOME_COEFFICIENT_PROVINCES[province]) {
@@ -138,12 +391,13 @@ export function buildApplicationCounselingPack(intake = {}, opts = {}) {
     doc_than_nuoi_con: incomeCaps[1],
     vo_chong: incomeCaps[2],
   };
-  if (marital && capMap[marital]) {
+  const incomeSection = clause === 'k7_llvt' ? '11.2' : '11.1';
+  if (marital && capMap[marital] && clause !== 'k7_llvt') {
     section_guidance.push({
       section: 'E_thu_nhap',
-      action: `So sánh thu nhập với trần ${capMap[marital]} triệu/tháng`,
+      action: `Mục ${incomeSection} — so sánh thu nhập với trần ${capMap[marital]} triệu/tháng`,
       explain: 'Khai theo Bảng tiền công thực nhận 12 tháng — không chỉ lương trên HĐLĐ.',
-      attachments: clause === 'k8_no_hdld' ? ['don_cong_an_cap_xa'] : ['bang_tien_cong_don_vi'],
+      attachments: incomeAttachmentForClause(clause),
     });
     if (
       typeof intake.income_declaration_monthly === 'number'
@@ -155,6 +409,13 @@ export function buildApplicationCounselingPack(intake = {}, opts = {}) {
         severity: 'review',
       });
     }
+  } else if (clause === 'k7_llvt') {
+    section_guidance.push({
+      section: 'E_thu_nhap',
+      action: 'Mục 11.2 — trần theo cấp bậc Đại tá (Đ.67)',
+      explain: 'Không dùng bảng 25/35/50 thông thường — xác nhận cơ quan LLVT.',
+      attachments: ['xac_nhan_co_quan_llvt'],
+    });
   }
 
   if (marital === 'vo_chong') {
@@ -210,6 +471,16 @@ export function buildApplicationCounselingPack(intake = {}, opts = {}) {
     project_province_code: province,
     project_name: intake.project_name || null,
     local_policy_status: localSource?.status || 'unknown',
+    article_76_resolution: {
+      resolved_clause: clause,
+      declared_clause: article76.declared,
+      inferred_clause: article76.inferred,
+      source: article76.source,
+      confidence: article76.confidence,
+      has_hdld_resolved: resolveHasHdld(intake),
+      needs_fields: article76.needs_fields,
+      notes: article76.notes,
+    },
     section_guidance,
     checklist,
     warnings,
@@ -220,6 +491,7 @@ export function buildApplicationCounselingPack(intake = {}, opts = {}) {
     guide_path: 'legal-sources/noxh/application-form-mau-01-guide.md',
     counseling_guides: {
       topic_index: 'legal-sources/noxh/counseling-topic-index.md',
+      object_classification: 'legal-sources/noxh/object-classification-cbccvc-hdld.md',
       married_mixed_object: 'legal-sources/noxh/married-mixed-object-counseling.md',
       spouses_different_residence: 'legal-sources/noxh/spouses-different-residence-counseling.md',
       vneid_vs_cccd: 'legal-sources/noxh/vneid-vs-cccd-counseling.md',

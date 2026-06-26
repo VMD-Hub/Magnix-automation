@@ -1,16 +1,15 @@
 #!/usr/bin/env node
 /**
  * Smoke test: node scripts/build-noxh-application-counseling.mjs
- * Hoặc: node scripts/build-noxh-application-counseling.mjs --province dong_nai --housing co_nha_xa_noi_lam_viec
+ * Inference: node scripts/build-noxh-application-counseling.mjs --employment_status dang_hdld --employer_type enterprise_worker --marital_status vo_chong --housing_path chua_co_nha_gcn --project_province_code tp_ho_chi_minh
  */
-import { buildApplicationCounselingPack } from './lib/noxh-application-draft.mjs';
+import { buildApplicationCounselingPack, inferArticle76Clause } from './lib/noxh-application-draft.mjs';
 
 const args = process.argv.slice(2);
 const intake = {
   project_province_code: 'dong_nai',
   project_name: 'Dự án NOXH ví dụ',
   registration_type: 'mua',
-  article_76_clause: 'k5_hdld',
   marital_status: 'vo_chong',
   housing_path: 'co_nha_xa_noi_lam_viec',
   has_other_noxh_registration: false,
@@ -27,6 +26,11 @@ for (let i = 0; i < args.length; i += 2) {
   else if (val === 'false') intake[key] = false;
   else if (val && !Number.isNaN(Number(val))) intake[key] = Number(val);
   else if (val) intake[key] = val;
+}
+
+if (!intake.article_76_clause) {
+  const inf = inferArticle76Clause(intake);
+  console.error('[infer]', JSON.stringify(inf));
 }
 
 const pack = buildApplicationCounselingPack(intake);

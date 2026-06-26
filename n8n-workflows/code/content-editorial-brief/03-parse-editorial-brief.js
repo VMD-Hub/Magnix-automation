@@ -75,6 +75,15 @@ try {
     created_at: new Date().toISOString(),
   };
 
+  const legalPack = row.legal_retrieval_pack || null;
+  if (legalPack) {
+    brief.legal_retrieval_pack = legalPack;
+    brief.legal_topic = row.legal_topic || null;
+  }
+  if (row.legal_gate?.needs_human_legal_source) {
+    brief.compliance_notes = `${brief.compliance_notes || ''} [LEGAL_GATE: needs_human_legal_source]`.trim();
+  }
+
   return [{
     json: {
       ok: true,
@@ -83,6 +92,8 @@ try {
       editorial_brief_v1: brief,
       interest_key: brief.interest_key,
       existing_meta: row.meta_parsed || {},
+      legal_retrieval_pack: legalPack,
+      legal_gate: row.legal_gate || null,
     },
   }];
 } catch (e) {

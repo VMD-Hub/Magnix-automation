@@ -86,7 +86,7 @@ Moi workflow neu can thong bao nen tao event object:
 | Agent 6 - Production Package | `approval_needed` cho video/slide/screen package |
 | Agent 7 - Assembly Assistant | `render_review_needed` khi co MP4/package; `workflow_blocked` neu thieu footage, voice, SRT, render URL |
 
-## 6. Message templates
+> Trade / CRO Telegram: du an `trading-intelligence` — khong map vao bang nay.
 
 ### 6.1 Approval needed
 

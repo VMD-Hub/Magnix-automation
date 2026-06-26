@@ -12,19 +12,24 @@ Chỉ trả JSON hợp lệ, không markdown bọc ngoài:
 
 const segment = String(row.segment || 'general_inbound');
 const pain = String(row.text || '').slice(0, 2000);
+const meta = row.meta_parsed || {};
+const legalPack = row.legal_retrieval_pack || meta.legal_retrieval_pack || null;
 const assetMap = {
   noxh_income: 'checklist_ho_so_noxh',
   valuation: 'checklist_tham_dinh',
   sme_credit: 'checklist_vay_dn',
   general_inbound: 'checklist_mua_nha',
 };
+const requiresLegal = ['noxh_income', 'valuation', 'sme_credit'].includes(segment);
 const userPayload = JSON.stringify({
   segment,
   pain,
   asset_type: assetMap[segment] || 'checklist',
   angle: 'pain_from_social_listen',
   reference_url_or_text: String(row.post_url || '').slice(0, 500),
-  requires_legal_qa: ['noxh_income', 'valuation', 'sme_credit'].includes(segment),
+  requires_legal_qa: requiresLegal,
+  legal_retrieval_pack: legalPack,
+  editorial_brief_v1: row.editorial_brief_v1 || meta.editorial_brief_v1 || null,
   interest_key: row.interest_key || '',
   source_normalized_key: row.normalized_key,
 });

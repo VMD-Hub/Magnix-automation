@@ -71,7 +71,7 @@ async function main() {
   console.log(`[${skipPush ? '~' : '✓'}] 1B — Push workflow JSON qua n8n API`);
   console.log('[ ] 1C — Credential googleApi + Creatomate Header Auth trên n8n UI (1 lần)');
   console.log('[ ] 1D — Manual run từng agent trên n8n → Sheet cập nhật');
-  console.log('[ ] 1E — Telegram (chưa implement trong workflow — bỏ qua Phase 1)');
+  console.log('[~] 1E — Telegram: activate telegram-notify + reminder + resolver; set TELEGRAM_* env');
 
   console.log('\nManual run trên https://n8n.vmd.asia (Execute workflow):');
   console.log('  1. Agent 2 Classify → content_queue có status=classified');

@@ -21,9 +21,20 @@ const BUILDS = [
   'build-content-video-render.mjs',
   'build-outreach-queue.mjs',
   'build-content-scorecard.mjs',
+  'build-telegram-notify.mjs',
+  'build-telegram-reminder.mjs',
+  'build-telegram-resolver.mjs',
 ];
 
 let failed = 0;
+
+console.log('\n>> build-legal-pack-bundle.mjs');
+const bundle = spawnSync(process.execPath, [path.join(root, 'scripts', 'build-legal-pack-bundle.mjs')], {
+  stdio: 'inherit',
+  cwd: root,
+});
+if (bundle.status !== 0) failed += 1;
+
 for (const file of BUILDS) {
   const script = path.join(wfDir, file);
   console.log('\n>>', file);

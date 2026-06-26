@@ -123,13 +123,14 @@ Luồng n8n: **Webhook → normalize/enrich skeleton → classify (regex | LLM) 
 ### 3.2 Inbound content production
 
 1. **Trigger:** lịch (calendar), sự kiện UID mới, hoặc brief thủ công trên Sheet.
-2. **Legal retrieval:** nếu topic NOXH / vay / định giá → lấy `legal_retrieval_pack` từ `docs/LEGAL_KB_ARCHITECTURE.md`; thiếu căn cứ thì trả `needs_human_legal_source`.
-3. **Prompt:** đọc từ `ai-agents-prompts/` — version trong tên file hoặc frontmatter.
-4. **Generate:** n8n gọi LLM (OpenAI/Anthropic/Gemini node).
-5. **Parse layer:** Code node bắt buộc sau LLM — xem `.cursor/JSON_PARSE_LAYER.md`.
-6. **QA phân tầng:** L0–L3 — xem `.cursor/QA_TIERS.md` (không LLM-QA mọi output).
-7. **Notify gate:** nếu cần human action → tạo notification event + gửi Telegram theo `docs/TELEGRAM_APPROVAL_NOTIFICATIONS.md`.
-8. **Review gate:** trạng thái `draft` → `approved` (L3) trên Google Sheet trước khi publish.
+2. **Legal Gate (bắt buộc):** pipeline 8 agent — chi tiết `docs/LEGAL_GATE_PIPELINE.md`. Layer B inject `legal_retrieval_pack`; Agent 3/4/6 consume; thiếu căn cứ → `needs_human_legal_source` + Telegram.
+3. **Legal retrieval:** nếu topic NOXH / vay / định giá → pack từ `legal-sources/` qua `scripts/build-legal-pack-bundle.mjs`; schema `docs/LEGAL_KB_ARCHITECTURE.md` §3.4.
+4. **Prompt:** đọc từ `ai-agents-prompts/` — version trong tên file hoặc frontmatter.
+5. **Generate:** n8n gọi LLM (OpenAI/Anthropic/Gemini node).
+6. **Parse layer:** Code node bắt buộc sau LLM — xem `.cursor/JSON_PARSE_LAYER.md`.
+7. **QA phân tầng:** L0–L3 — xem `.cursor/QA_TIERS.md` (không LLM-QA mọi output).
+8. **Notify gate:** nếu cần human action → tạo notification event + gửi Telegram theo `docs/TELEGRAM_APPROVAL_NOTIFICATIONS.md`.
+9. **Review gate:** trạng thái `draft` → `approved` (L3) trên Google Sheet trước khi publish.
 
 **Definition of done:** workflow content phải tạo `product_type` và asset cụ thể theo `docs/CONTENT_PRODUCT_OUTPUTS.md` (Page post, website article, video package, carousel, lead magnet, outreach reply hoặc assembly package). Nếu cần approve / bổ sung nguồn / review render thì phải có Telegram notification event. Brief / outline / insight không được tính là sản phẩm cuối.
 

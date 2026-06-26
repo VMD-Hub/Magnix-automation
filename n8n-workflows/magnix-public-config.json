@@ -8,7 +8,6 @@
   "scrape_index_tab": "scrape_index",
   "channel_state_tab": "channel_state",
   "drive_folder_id": "1iBjsrXLYmHfOHMQaAfLmZGug2kN0314D",
-  "drive_trade_project_folder_id": "1hr8fs1ocZZ72JAcm1k5QDTVxsCg2q7Pv",
   "apify_tiktok_run_url": "https://api.apify.com/v2/acts/clockworks~tiktok-scraper/run-sync-get-dataset-items",
   "apify_facebook_run_url": "https://api.apify.com/v2/acts/apify~facebook-posts-scraper/run-sync-get-dataset-items",
   "apify_max_items": 5,
@@ -55,5 +54,12 @@
   "drive_video_folder_ready": "1Po-s54cgin2IgvJ8RYUyOxPidXQC3V_8",
   "video_drive_retention_days_ready": 30,
   "video_drive_retention_days_published": 180,
-  "google_sheet_swing_kpi_id": "1rgjLhL6FPz3fWRzoIL4WV0LcdknegD7bQWhPLIhM5Lc"
+  "notification_events_tab": "notification_events",
+  "sheet_tab_gids": {
+    "content_queue": 546012823,
+    "content_drafts": 299240858,
+    "outreach_queue": 1077351628,
+    "video_drafts": 532130684,
+    "notification_events": 160985613
+  }
 }

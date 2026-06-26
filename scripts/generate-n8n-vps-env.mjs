@@ -86,12 +86,13 @@ const lines = [
   `DRIVE_VIDEO_FOLDER_PUBLISHED=${local.DRIVE_VIDEO_FOLDER_PUBLISHED || driveFolders.published?.id || ''}`,
   'VIDEO_DRIVE_RETENTION_DAYS_READY=30',
   '',
-  `# Telegram approval (Phase 1E — workflow chưa wire; để trống = tắt)`,
+  `# Telegram approval`,
   `TELEGRAM_BOT_TOKEN=${local.TELEGRAM_BOT_TOKEN || ''}`,
   `TELEGRAM_CHAT_ID_OWNER=${local.TELEGRAM_CHAT_ID_OWNER || local.TELEGRAM_CHAT_ID || ''}`,
   `TELEGRAM_CHAT_ID_OPS=${local.TELEGRAM_CHAT_ID_OPS || ''}`,
   `TELEGRAM_APPROVAL_ENABLED=${local.TELEGRAM_APPROVAL_ENABLED || 'false'}`,
   `TELEGRAM_REMINDER_ENABLED=${local.TELEGRAM_REMINDER_ENABLED || 'false'}`,
+  `GOOGLE_SHEET_NOTIFICATION_EVENTS_TAB=${local.GOOGLE_SHEET_NOTIFICATION_EVENTS_TAB || 'notification_events'}`,
   '',
 ];
 

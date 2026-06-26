@@ -1,0 +1,117 @@
+{
+  "version": "1.0.0",
+  "last_updated": "2026-06-26",
+  "canon_root": "legal-sources/noxh",
+  "architecture_doc": "docs/NOXH_THREE_CHANNEL_ARCHITECTURE.md",
+  "channels": {
+    "aio_seo": {
+      "channel_id": "aio_seo",
+      "label": "Website & Page — SEO / AIO",
+      "audience": "public_organic",
+      "playbook_path": "legal-sources/channels/aio-seo.md",
+      "primary_assets": [
+        "legal-sources/noxh/qa-knowledge.application-form.json",
+        "legal-sources/noxh/qa-knowledge.batch2.json",
+        "legal-sources/noxh/qa-knowledge.batch3.json",
+        "legal-sources/noxh/qa-knowledge.loan.json",
+        "legal-sources/noxh/qa-knowledge.nd100.json",
+        "legal-sources/noxh/atomic-claims.application-form.json",
+        "legal-sources/noxh/atomic-claims.batch2.json",
+        "legal-sources/noxh/atomic-claims.batch3.json",
+        "legal-sources/noxh/atomic-claims.loan.json",
+        "legal-sources/noxh/atomic-claims.nd100.json"
+      ],
+      "retrieval_topics": [
+        "noxh_eligibility",
+        "noxh_income",
+        "noxh_documents",
+        "loan_dti",
+        "local_policy"
+      ],
+      "product_types": ["website_article", "fb_page_post", "lead_magnet"],
+      "agent_prompts": [
+        "ai-agents-prompts/n8n__content-draft.md"
+      ],
+      "subagent": "magnix-inbound-copywriter",
+      "qa_tiers": ["L0", "L2", "L3"],
+      "intake_schema": null,
+      "pii_in_output": false,
+      "disclaimer_required": true,
+      "output_rules": [
+        "H2/H3 dạng câu hỏi",
+        "short_answer trong 2-3 câu đầu",
+        "Không cam kết duyệt hồ sơ",
+        "Mọi số liệu từ retrieval pack"
+      ]
+    },
+    "inbox_counseling": {
+      "channel_id": "inbox_counseling",
+      "label": "Page inbox — tư vấn chat trực tiếp",
+      "audience": "inbound_dm",
+      "playbook_path": "legal-sources/channels/inbox-counseling.md",
+      "primary_assets": [
+        "legal-sources/noxh/counseling-topic-index.md",
+        "legal-sources/noxh/registration-intake-schema.json",
+        "scripts/lib/noxh-application-draft.mjs",
+        "scripts/lib/legal-retrieval-pack.mjs"
+      ],
+      "counseling_guides_glob": "legal-sources/noxh/*-counseling.md",
+      "retrieval_topics": [
+        "noxh_eligibility",
+        "noxh_income",
+        "noxh_documents",
+        "loan_dti"
+      ],
+      "product_types": ["outreach_reply", "inbox_thread"],
+      "agent_prompts": [
+        "ai-agents-prompts/n8n__noxh-application-form-draft.md"
+      ],
+      "subagent": "magnix-inbound-copywriter",
+      "qa_tiers": ["L0", "L2"],
+      "intake_schema": "legal-sources/noxh/registration-intake-schema.json",
+      "counseling_pack_fn": "buildApplicationCounselingPack",
+      "pii_in_output": false,
+      "disclaimer_required": true,
+      "output_rules": [
+        "Tin nhắn ngắn 3-8 câu",
+        "Hỏi thêm 1 intake field mỗi lượt nếu thiếu",
+        "needs_fields từ article_76_resolution → hỏi employer_type",
+        "Không thay khách ký nộp hồ sơ"
+      ]
+    },
+    "staff_ops": {
+      "channel_id": "staff_ops",
+      "label": "Nhân viên — tra cứu & mẫu hồ sơ",
+      "audience": "internal_staff",
+      "playbook_path": "legal-sources/channels/staff-ops.md",
+      "primary_assets": [
+        "legal-sources/noxh/counseling-topic-index.md",
+        "legal-sources/noxh/application-dossier-checklist.md",
+        "legal-sources/noxh/mau-01-handwriting-sample-guide.md",
+        "legal-sources/noxh/samples/mau-01-sample-filled-reference.md",
+        "legal-sources/noxh/object-classification-cbccvc-hdld.md",
+        "legal-sources/noxh/application-form-mau-01-guide.md",
+        "legal-sources/noxh/registration-intake-schema.json",
+        "scripts/lib/noxh-application-draft.mjs"
+      ],
+      "retrieval_topics": [
+        "noxh_documents",
+        "noxh_eligibility",
+        "noxh_income"
+      ],
+      "product_types": ["staff_sop", "filled_form_reference", "checklist_print"],
+      "agent_prompts": [],
+      "subagent": "magnix-growth-architect",
+      "qa_tiers": ["L0"],
+      "intake_schema": "legal-sources/noxh/registration-intake-schema.json",
+      "pii_in_output": false,
+      "disclaimer_required": true,
+      "output_rules": [
+        "Được dùng bản mẫu in đậm nội bộ",
+        "Không gửi nguyên file mẫu Magnix cho khách nộp",
+        "Checklist đánh dấu từng bước",
+        "Ghi chú CĐT từng dự án khi số bộ/CT07 unknown"
+      ]
+    }
+  }
+}

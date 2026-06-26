@@ -1,17 +1,22 @@
 # Magnix — n8n Workflow Registry
 
-| Slug | File | Trigger | QA tiers | Parse | Mô tả | Trạng thái |
-|------|------|---------|----------|-------|-------|------------|
-| `uid-ingest` | `uid-ingest.workflow.json` | Webhook POST | L0 | ✅ | Google Sheet `uid_leads` upsert by `normalized_key` + Drive JSONL archive | staging |
-| `content-scorecard` | `content-scorecard.workflow.json` | Cron 10h + Manual | L0 | — | Sheet metrics → score.mjs logic → Sheet `content_scorecard` | staging |
-| `social-listening` | `social-listening.workflow.json` | Cron Mon 7h + Manual | L0 | ✅ | TikTok weekly → Claude → Sheet content_queue + dedupe | staging |
-| `social-listening-facebook` | `social-listening-facebook.workflow.json` | Cron Wed 7h + Manual | L0 | ✅ | Facebook page/group weekly → Claude → content_queue | staging |
-| `content-classify` | `content-classify.workflow.json` | Cron 8h + Manual | L0 | ✅ | Agent 2: regex → LLM classify content_queue (200/batch) | staging |
-| `content-editorial-brief` | `content-editorial-brief.workflow.json` | Cron 8:30 + Manual | L0–L1 | ✅ | Layer B: intake_v1 → editorial_brief + target_products (5/batch) | staging |
-| `content-draft` | `content-draft.workflow.json` | Cron 9h + Manual | L0–L3 | ✅ | Agent 3: sản phẩm viết — lead magnet / Page post / website article / carousel (5/batch) | staging |
-| `outreach-queue` | `outreach-queue.workflow.json` | Cron 9:30 + Manual | L0–L3 | ✅ | Agent 4: Zalo outreach → outreach_queue (10/batch) | staging |
-| `content-video-draft` | `content-video-draft.workflow.json` | Cron 9:15 + Manual | L0–L3 | ✅ | Agent 6: video/slide production package — script, SRT, slide/screen plan, caption (3/batch) | staging |
-| `content-video-render` | `content-video-render.workflow.json` | Cron 9:45 + Manual | L3 | — | Agent 7: assembly/render package — assets, edit recipe, optional MP4 (1/batch) | staging v2 |
+| Slug | File | Trigger | QA tiers | Legal gate | Parse | Mô tả | Trạng thái |
+|------|------|---------|----------|------------|-------|-------|------------|
+| `uid-ingest` | `uid-ingest.workflow.json` | Webhook POST | L0 | Route (classify) | ✅ | Google Sheet `uid_leads` upsert by `normalized_key` + Drive JSONL archive | staging |
+| `content-scorecard` | `content-scorecard.workflow.json` | Cron 10h + Manual | L0 | Audit refs | — | Sheet metrics → score.mjs logic → Sheet `content_scorecard` | staging |
+| `social-listening` | `social-listening.workflow.json` | Cron Mon 7h + Manual | L0 | Tag | ✅ | TikTok weekly → Claude → Sheet content_queue + dedupe | staging |
+| `social-listening-facebook` | `social-listening-facebook.workflow.json` | Cron Wed 7h + Manual | L0 | Tag | ✅ | Facebook page/group weekly → Claude → content_queue | staging |
+| `content-classify` | `content-classify.workflow.json` | Cron 8h + Manual | L0 | Route | ✅ | Agent 2: regex → LLM classify content_queue (200/batch) | staging |
+| `content-editorial-brief` | `content-editorial-brief.workflow.json` | Cron 8:30 + Manual | L0–L1 | **Inject** | ✅ | Layer B: intake → brief + `legal_retrieval_pack` (5/batch) | staging |
+| `content-draft` | `content-draft.workflow.json` | Cron 9h + Manual | L0–L3 | **Consume** | ✅ | Agent 3: lead magnet / Page / article (5/batch) | staging |
+| `outreach-queue` | `outreach-queue.workflow.json` | Cron 9:30 + Manual | L0–L3 | Consume | ✅ | Agent 4: Zalo outreach → outreach_queue (10/batch) | staging |
+| `content-video-draft` | `content-video-draft.workflow.json` | Cron 9:15 + Manual | L0–L3 | **Consume** | ✅ | Agent 6: video production package (3/batch) | staging |
+| `content-video-render` | `content-video-render.workflow.json` | Cron 9:45 + Manual | L3 | L0 text | — | Agent 7: assembly/render package (1/batch) | staging v2 |
+| `telegram-notify` | `telegram-notify.workflow.json` | Webhook POST | L0 | Escalate | — | Central notify incl. `legal_source_needed` | staging |
+| `telegram-reminder` | `telegram-reminder.workflow.json` | Cron 30m + Manual | L0 | SLA legal | — | SLA reminder cho approval/render/legal | staging |
+| `telegram-resolver` | `telegram-resolver.workflow.json` | Cron 30m + Manual | L0 | — | — | Mark `notification_events` resolved khi Sheet approved | staging |
+
+> **Trade / swing / CRO** không thuộc Magnix — xem `TRADE_PROJECT.md` và repo `trading-intelligence`.
 
 ## Cột bắt buộc khi thêm dòng
 
@@ -19,6 +24,7 @@
 - **File:** tên JSON trong thư mục này
 - **Trigger:** Webhook / Cron / Manual
 - **QA tiers:** L0–L3 áp dụng (xem `.cursor/QA_TIERS.md`)
+- **Legal gate:** Inject / Consume / Audit / Tag — xem `docs/LEGAL_GATE_PIPELINE.md`
 - **Parse layer:** có/không — bắt buộc nếu có LLM node
 - **Notification:** workflow có approve / legal source needed / render review / blocked human action phải gửi Telegram theo `docs/TELEGRAM_APPROVAL_NOTIFICATIONS.md`
 - **Credential:** `uid-ingest` — `googleApi`/Google Sheets credential + Drive credential. Agent 1 — `googleApi`, Drive SA, Apify, Anthropic. Agent 2 — `googleApi` + `DEEPSEEK_API_KEY` hoặc `ANTHROPIC_API_KEY`. Workflow content dùng Google Sheets làm ops queue/review.

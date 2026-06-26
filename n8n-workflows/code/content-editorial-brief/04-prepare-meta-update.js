@@ -17,6 +17,8 @@ return [{
     normalized_key: item.normalized_key,
     interest_key: item.interest_key,
     editorial_brief_v1: item.editorial_brief_v1,
+    legal_retrieval_pack: item.legal_retrieval_pack || null,
+    legal_gate: item.legal_gate || null,
     existing_meta: item.existing_meta || {},
     get_meta_url: `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent(`${TAB}!O${row}`)}`,
     put_meta_url: `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent(`${TAB}!O${row}`)}?valueInputOption=USER_ENTERED`,

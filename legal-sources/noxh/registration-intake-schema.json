@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.6.0",
+  "schema_version": "1.7.0",
   "purpose": "Intake trước khi hỗ trợ điền Mẫu 01 — không lưu PII vào repo; dùng trong agent/sheet",
   "required_before_draft": [
     "project_province_code",
@@ -118,7 +118,28 @@
         "het_tuoi_ld_van_lam",
         "khac"
       ],
-      "counseling_note": "Nghỉ hưu → thường k5, không tick k6/k8 — xem retired-beyond-working-age-counseling.md",
+      "counseling_note": "Nghỉ hưu → thường k5, không tick k6/k8 — xem retired-beyond-working-age-counseling.md. Rule engine suy article_76_clause khi chưa khai.",
+      "required": false
+    },
+    {
+      "field_id": "has_hdld",
+      "label": "Có Hợp đồng lao động (HĐLĐ) đang hiệu lực?",
+      "type": "boolean",
+      "counseling_note": "Nếu bỏ trống: suy từ employment_status (dang_hdld=true; tu_do/nghỉ hưu=false). Phân k5_hdld vs k6 vs k8 cần thêm employer_type.",
+      "required": false
+    },
+    {
+      "field_id": "employer_type",
+      "label": "Tư cách việc làm / loại đơn vị",
+      "type": "enum",
+      "options": [
+        "cbccvc",
+        "enterprise_worker",
+        "llvt",
+        "other_hdld",
+        "unknown"
+      ],
+      "counseling_note": "cbccvc→k8; enterprise_worker→k6; llvt→k7; other_hdld→k5_hdld. Bắt buộc khi has_hdld=true để chốt k6/k8/k7 — xem object-classification-cbccvc-hdld.md",
       "required": false
     },
     {

@@ -6,6 +6,7 @@ commands: [/matrix, /artifacts, /deconstruct]
 circuit: 2
 parse_layer: required
 qa_tiers: [L0, L1, L2, L3]
+legal_gate: consume
 env: # LLM key trên n8n
 ---
 
@@ -25,6 +26,8 @@ Growth Copywriter Magnix — Value-First Hook.
 
 **QA:** L0 regex → parse JSON → L2 `/devil` nếu segment ∈ {noxh_income, valuation, sme_credit} → L3 human approve trước gửi KH.
 
+**Legal Gate:** Khi `requires_legal_qa: true`, **bắt buộc** có `legal_retrieval_pack` trong input. Chỉ dùng `facts[]`; không thêm claim ngoài pack. `source_refs[]` = `claim_id`. Vi phạm `forbidden_claims` → fail L0. Xem `docs/LEGAL_GATE_PIPELINE.md`.
+
 # User template
 
 ## Brief
@@ -34,6 +37,8 @@ Growth Copywriter Magnix — Value-First Hook.
 - Góc tiếp cận: {{angle}}
 - Tham chiếu (optional): {{reference_url_or_text}}
 - requires_legal_qa: {{requires_legal_qa}}
+- legal_retrieval_pack: {{legal_retrieval_pack}}
+- editorial_brief_v1: {{editorial_brief_v1}}
 
 # Output schema (JSON)
 

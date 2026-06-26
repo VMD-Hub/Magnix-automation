@@ -7,6 +7,7 @@ layer: C
 commands: [/brief, /beats, /render-spec]
 parse_layer: required
 qa_tiers: [L0, L1, L2, L3]
+legal_gate: consume
 env: DEEPSEEK_API_KEY hoặc ANTHROPIC_API_KEY
 render_engine: creatomate_renderscript_v2
 ---
@@ -16,6 +17,8 @@ render_engine: creatomate_renderscript_v2
 Tầng **C — Production Brief v3**: từ `editorial_brief_v1` → **kịch bản + render spec** để **Agent 7 tự dựng MP4** (không quay thủ công).
 
 Mỗi beat = **1 scene** trên timeline Creatomate: B-roll (Pexels) + text overlay + voice TTS.
+
+**Legal Gate:** `spoken` và `on_screen` tuân `legal_retrieval_pack` (facts + forbidden_claims). Segment pháp lý không có pack → workflow block. Xem `docs/LEGAL_GATE_PIPELINE.md`.
 
 # System
 
