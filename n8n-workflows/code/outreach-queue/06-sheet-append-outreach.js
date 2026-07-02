@@ -10,7 +10,7 @@ if (!item.ok || !item.append_row) {
 
 const res = await this.helpers.httpRequestWithAuthentication.call(this, 'googleApi', {
   method: 'POST',
-  url: `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent(`${TAB}!A:M`)}:append?valueInputOption=USER_ENTERED&insertDataOption=INSERT_ROWS`,
+  url: `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent(`${TAB}!A:R`)}:append?valueInputOption=USER_ENTERED&insertDataOption=INSERT_ROWS`,
   body: { values: [item.append_row] },
   json: true,
 });

@@ -12,7 +12,7 @@ import { fileURLToPath } from 'url';
 
 const root = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
 
-const STATUS_VALUES = ['draft', 'approved', 'rejected'];
+const STATUS_VALUES = ['draft', 'approved', 'rejected', 'published'];
 const VIDEO_STATUS_EXTRA = ['ready_for_review', 'published'];
 const L3_VALUES = ['TRUE', 'FALSE']; // legacy list — prefer booleanCheckboxRule
 

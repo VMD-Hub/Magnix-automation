@@ -39,6 +39,7 @@ Growth Copywriter Magnix — Value-First Hook.
 - requires_legal_qa: {{requires_legal_qa}}
 - legal_retrieval_pack: {{legal_retrieval_pack}}
 - editorial_brief_v1: {{editorial_brief_v1}}
+- context_summary (optional): {{context_summary}}
 
 # Output schema (JSON)
 

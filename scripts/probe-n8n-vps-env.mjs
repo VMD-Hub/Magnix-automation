@@ -62,6 +62,8 @@ async function main() {
 
   const localChecks = [
     ['MAGNIX_VIDEO_TTS_URL', env.MAGNIX_VIDEO_TTS_URL],
+    ['CONTENT_PAGE_COVER_ENABLED', env.CONTENT_PAGE_COVER_ENABLED ? '(set)' : 'false'],
+    ['GEMINI_API_KEY', env.GEMINI_API_KEY || env.GOOGLE_GEMINI_API_KEY ? '(set)' : 'MISSING — Page Cover'],
     ['MAGNIX_WEBHOOK_TOKEN', env.MAGNIX_WEBHOOK_TOKEN ? '(set)' : ''],
     ['DEEPSEEK_API_KEY', env.DEEPSEEK_API_KEY ? '(set)' : 'MISSING — Agent 2 dùng Anthropic fallback'],
     ['ANTHROPIC_API_KEY', env.ANTHROPIC_API_KEY ? '(set)' : 'MISSING'],

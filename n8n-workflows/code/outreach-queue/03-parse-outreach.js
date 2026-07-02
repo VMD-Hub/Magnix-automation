@@ -23,6 +23,8 @@ try {
   return [{
     json: {
       ok: true,
+      outreach_warmth: res.outreach_warmth,
+      outreach_context: res.outreach_context,
       outreach: {
         segment: String(parsed.segment),
         variant_a_cold: String(parsed.variant_a_cold).slice(0, 500),

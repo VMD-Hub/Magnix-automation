@@ -15,17 +15,27 @@ if (!item.ok || !item.video) {
 }
 
 const v = item.video;
-// Outbound copy — Magnix chịu trách nhiệm compliance
-const outboundText = [
-  v.title,
-  v.hook_3s,
-  v.caption,
-  v.cta_keyword,
-  ...(v.on_screen_text || []),
-].join('\n');
+const isVideoScript = v.format_type === 'video_script';
 
-// Teleprompter — cho phép dẫn pain/FAQ, vẫn chặn hứa hẹn (không có "không" phía trước)
-const scriptText = String(v.spoken_script || '');
+const outboundText = isVideoScript
+  ? [
+    v.verbal_hook,
+    v.on_screen_text,
+    v.verbal_cta,
+    v.caption_cta,
+    ...(v.body_beats || []).map((b) => b.on_screen_text),
+  ].join('\n')
+  : [
+    v.title,
+    v.hook_3s,
+    v.caption,
+    v.cta_keyword,
+    ...(v.on_screen_text || []),
+  ].join('\n');
+
+const scriptText = isVideoScript
+  ? (v.body_beats || []).map((b) => b.spoken_line).join('\n')
+  : String(v.spoken_script || '');
 
 const hits = [];
 for (const re of FORBIDDEN) {
@@ -35,9 +45,11 @@ for (const re of FORBIDDEN) {
   if (re.test(scriptText)) hits.push(re.source + ':script');
 }
 
-const hookWords = String(v.hook_3s || '').trim().split(/\s+/).filter(Boolean).length;
+const hookWords = isVideoScript
+  ? String(v.verbal_hook || '').trim().split(/\s+/).filter(Boolean).length
+  : String(v.hook_3s || '').trim().split(/\s+/).filter(Boolean).length;
 if (hookWords > 18) {
-  hits.push('hook_3s_too_long');
+  hits.push(isVideoScript ? 'verbal_hook_too_long' : 'hook_3s_too_long');
 }
 
 if (hits.length) {

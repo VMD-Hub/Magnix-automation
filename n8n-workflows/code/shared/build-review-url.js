@@ -6,7 +6,7 @@ const SHEET_TAB_GIDS = __SHEET_TAB_GIDS__;
 const APPROVAL_COL = {
   video_drafts: { status: 'Q', l3: 'S' },
   content_drafts: { status: 'K' },
-  outreach_queue: { status: 'I', l3: 'J' },
+  outreach_queue: { status: 'J', l3: 'K' },
 };
 
 function buildReviewUrl(sheetId, tab, row, approvalFields) {

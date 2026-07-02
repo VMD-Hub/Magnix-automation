@@ -1,0 +1,38 @@
+{
+  "version": 1,
+  "agent3_text_post_formats": [
+    "fb_page_post",
+    "fb_page_post_image",
+    "facebook_page",
+    "facebook",
+    "website_article",
+    "blog_seo",
+    "aio_seo"
+  ],
+  "agent6_video_formats": [
+    "fb_reels",
+    "tiktok",
+    "youtube_shorts",
+    "short_video_package"
+  ],
+  "carousel_formats": [
+    "carousel_image"
+  ],
+  "format_type_by_product": {
+    "fb_reels": "video_script",
+    "tiktok": "video_script",
+    "youtube_shorts": "video_script",
+    "short_video_package": "video_script",
+    "fb_page_post_image": "text_post",
+    "fb_page_post": "text_post",
+    "facebook_page": "text_post",
+    "carousel_image": "carousel",
+    "website_article": "text_post",
+    "blog_seo": "text_post"
+  },
+  "prompt_hints": {
+    "text_post": "Bài đọc Facebook Page: hook_line ≤25 từ + body Q&A (H2/H3 là câu hỏi). KHÔNG viết script theo giây.",
+    "video_script": "Chỉ Agent 6 — hook visual/verbal + body_beats theo giây. KHÔNG dùng cho Agent 3.",
+    "carousel": "Chia slide (Slide 1…N), mỗi slide 1 ý. KHÔNG viết bài đọc dài một khối."
+  }
+}

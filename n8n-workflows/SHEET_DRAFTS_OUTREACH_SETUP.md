@@ -29,19 +29,26 @@ source_normalized_key	post_id	segment	title	hook_line	artifact_markdown	cta_opt_
 
 ## Tab `outreach_queue` (Agent 4 output)
 
-Header dòng 1:
+Header dòng 1 (Phase 0 — 18 cột):
 
 ```
-source_normalized_key	draft_title	segment	variant_a_cold	variant_b_after_engagement	variant_c_follow_up	ghost_check_passed	compliance_note	status	l3_approved	created_at	source	meta
+source_normalized_key	draft_title	segment	warmth	variant_a_cold	variant_b_after_engagement	variant_c_follow_up	ghost_check_passed	compliance_note	status	l3_approved	variant_used	sent_at	replied	opt_in	created_at	source	meta
 ```
 
 | Cột | Ghi chú |
 |-----|---------|
+| `warmth` | `cold` \| `commented` \| `partner` \| … — từ `content_drafts.meta.outreach_warmth` |
 | `variant_a_cold` | ≤3 dòng Zalo cold |
 | `l3_approved` | `false` — **bắt buộc true trước khi gửi** |
+| `variant_used` | Human: `a` / `b` / `c` sau khi gửi |
+| `sent_at` / `replied` / `opt_in` | Tracking Phase 0 (thủ công) |
 | `status` | `draft` |
 
-**Input Agent 4:** `content_drafts` — `status=draft`, chưa `meta.outreach_created`.
+**Input Agent 4:** `content_drafts` — `status=draft|approved`, chưa `meta.outreach_created`.
+
+**Warmth trước cron:** `node scripts/patch-draft-outreach-warmth.mjs --row N --warmth commented`
+
+**SOP gửi tay:** `docs/OUTBOUND_RUNBOOK.md`
 
 ---
 

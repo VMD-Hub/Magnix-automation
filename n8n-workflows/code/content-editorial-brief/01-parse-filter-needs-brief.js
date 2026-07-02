@@ -23,7 +23,14 @@ if (rows.length < 2) {
 }
 
 const headers = rows[0].map((x) => String(x ?? '').trim().toLowerCase());
-const out = [];
+const editorial = [];
+const general = [];
+
+function isEditorialRow(row, meta) {
+  if (String(row.source || '').trim() === 'editorial_calendar') return true;
+  if (meta.editorial_page_key || meta.editorial_calendar_id) return true;
+  return String(row.normalized_key || '').startsWith('editorial:queue:');
+}
 
 for (let i = 1; i < rows.length; i += 1) {
   const cells = rows[i];
@@ -57,9 +64,27 @@ for (let i = 1; i < rows.length; i += 1) {
   row.meta_parsed = ensured.meta;
   row.intake_v1 = ensured.intake_v1;
   row.intake_stubbed = ensured.stubbed;
-  out.push({ json: row });
-  if (out.length >= BATCH) break;
+  const bucket = isEditorialRow(row, meta) ? editorial : general;
+  row.editorial_priority = (() => {
+    const scheduled = meta.scheduled_publish_at || meta.publish_at;
+    if (scheduled) {
+      const t = new Date(scheduled).getTime();
+      if (!Number.isNaN(t)) return t;
+    }
+    const calId = String(meta.editorial_calendar_id || '').trim();
+    if (calId) {
+      const num = Number(calId.split(':').pop());
+      if (Number.isFinite(num)) return num;
+    }
+    return isEditorialRow(row, meta) ? 0 : 500000;
+  })();
+  bucket.push(row);
 }
+
+editorial.sort((a, b) => a.editorial_priority - b.editorial_priority);
+general.sort((a, b) => a.editorial_priority - b.editorial_priority);
+
+const out = [...editorial, ...general].slice(0, BATCH).map((row) => ({ json: row }));
 
 if (!out.length) {
   return [{

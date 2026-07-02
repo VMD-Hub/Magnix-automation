@@ -29,6 +29,10 @@ const PRESERVE_KEYS = new Set([
   'N8N_PROTOCOL',
   'WEBHOOK_URL',
   'N8N_API_KEY',
+  'GEMINI_API_KEY',
+  'GOOGLE_GEMINI_API_KEY',
+  'GOOGLE_AI_API_KEY',
+  'GENERATIVE_LANGUAGE_API_KEY',
 ]);
 
 function parseEnv(text) {
@@ -78,8 +82,17 @@ const remoteEnv = sshBatch(['cat /root/n8n.env 2>/dev/null || true']);
 if (remoteEnv.status === 0 && remoteEnv.stdout?.trim()) {
   const existing = parseEnv(remoteEnv.stdout);
   for (const [k, v] of Object.entries(existing)) {
-    if (PRESERVE_KEYS.has(k) && v) merged[k] = v;
-    if (!(k in generated) && v) merged[k] = v;
+    if (!v) continue;
+    if (PRESERVE_KEYS.has(k)) {
+      merged[k] = v;
+      continue;
+    }
+    if (!(k in generated)) {
+      merged[k] = v;
+      continue;
+    }
+    // Giữ key trên VPS nếu file generated để trống (vd. GEMINI_API_KEY chỉ có trên server)
+    if (!String(generated[k] || '').trim()) merged[k] = v;
   }
   for (const k of PRESERVE_KEYS) {
     if (existing[k] && !generated[k]) merged[k] = existing[k];

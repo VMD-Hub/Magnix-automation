@@ -13,20 +13,25 @@
 | 1 | Social Listening | `social-listening` (+ FB) | Tag `legal_confusion` | `content_queue` + `intake_v1` | T2/T4 07:00 |
 | 2 | Classify | `content-classify` | Set `requires_legal_kb` | segment, score | 08:00 · 200 |
 | — | **Layer B** | `content-editorial-brief` | **Inject** `legal_retrieval_pack` | `editorial_brief_v1` | 08:30 · 5 |
-| 3 | Lead Magnet | `content-draft` | **Consume** pack | `content_drafts` | 09:00 · 5 |
+| 3 | Lead Magnet | `content-draft` | **Consume** pack | `content_drafts` (text_post) | 09:00 · 5 |
+| 3b | Carousel | `content-carousel-draft` | **Consume** pack | `content_drafts` (carousel slides) | 09:20 · 3 |
 | 4 | Outreach | `outreach-queue` | **Consume** (segment pháp lý) | `outreach_queue` | 09:30 · 10 |
 | 5 | Scorecard | `content-scorecard` | Audit `source_refs` | verdict, IVI | 10:00 |
 | 6 | Video Script **v3** | `content-video-draft` | **Consume** pack | `video_drafts` + beats_json | 09:15 · 3 |
 | 7 | Video Render **v2** | `content-video-render` | L0 text on-screen | MP4 / render package | 09:45 · 1 |
+| **P** | **Page Publish** | `content-page-publish` | L0 + đã L3 | FB Page post live | 10/14/18h · 3 |
 
-**Layer B** bắt buộc trước Agent 3 và 6. Segment `noxh_income` / `valuation` / `sme_credit` **không** chạy Agent 3/6 nếu thiếu pack hoặc `needs_human_legal_source`.
+**Layer B** bắt buộc trước Agent 3 và 6. **Page Publish** chạy sau L3 `approved` trên `content_drafts` — xem `docs/CONTENT_PAGE_PUBLISH_SETUP.md`.
+
+**LLM routing** (`magnix-public-config.json` → `llm_task_providers`): **DeepSeek** cho classify · Layer B · outreach · video script; **Anthropic** cho Agent 3 segment pháp lý (`noxh_income` / `valuation` / `sme_credit`). Cả hai key nên có trên VPS — fallback tự động. **Bản chuẩn:** `docs/LLM_PROVIDER_POLICY.md` · `ARCHITECTURE_MAGNIX.md` §8.
 
 ---
 
 ## Sơ đồ đầy đủ
 
 ```
-Listen → Classify → Editorial (+ Legal Pack) → ┬→ Lead Magnet → Outreach
+Listen → Classify → Editorial (+ Legal Pack) → ┬→ Lead Magnet → [L3] → Page Publish → FB Page
+                                                │                    └→ Outreach
                                                 └→ Video Script v3 → [L3] → Render v2 → Metrics → Scorecard
                          ↓ needs_human_legal_source
                     Telegram legal_source_needed

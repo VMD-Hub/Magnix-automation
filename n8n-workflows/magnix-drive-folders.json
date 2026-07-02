@@ -28,5 +28,20 @@
   },
   "naming_pattern": "{segment-slug}-{platform}-{topic-slug}-{YYYYMMDD}.mp4",
   "updated_at": "2026-06-25T12:00:00.000Z",
-  "note": "Trade_Project Drive + Swing KPI Sheet đã chuyển sang trading-intelligence — xem TRADE_PROJECT.md"
+  "note": "Trade_Project Drive + Swing KPI Sheet đã chuyển sang trading-intelligence — xem TRADE_PROJECT.md",
+  "noxh_templates": {
+    "folder_id": "1MqPOPCwNp9ga1i2O0yqd7F8GP9_TJYKr",
+    "folder_name": "Magnix_NOXH_Mau_Ho_So",
+    "public_url": "https://drive.google.com/drive/folders/1MqPOPCwNp9ga1i2O0yqd7F8GP9_TJYKr",
+    "upload_note": "Đã upload + share anyone-with-link (2026-06-26)",
+    "drive_pack_ready": true,
+    "updated_at": "2026-06-26T16:27:04.190Z"
+  },
+  "page_covers": {
+    "folder_id": "1EVNn-4ASRhZwSnnapBkMzbHjdIjCNhBJ",
+    "folder_name": "Magnix_Page_Covers",
+    "webViewLink": "https://drive.google.com/drive/folders/1EVNn-4ASRhZwSnnapBkMzbHjdIjCNhBJ",
+    "note": "Ảnh cover Facebook Page (Gemini → publish_image_url)",
+    "updated_at": "2026-06-26T16:48:03.214Z"
+  }
 }

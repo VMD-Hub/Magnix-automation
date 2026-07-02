@@ -1,0 +1,186 @@
+{
+  "version": 1,
+  "min_cluster_size": 8,
+  "generated_at": "2026-06-28T10:38:26.064Z",
+  "generated_by": "run-context-enrichment.mjs",
+  "by_content_type": {
+    "NOXH_LEGAL": {
+      "status": "ready",
+      "post_count": 2184,
+      "sample_post_ids": [
+        "1478144464114896",
+        "1629991639134487",
+        "1629988232468161",
+        "1629984252468559",
+        "1478308700765139",
+        "1478329794096363",
+        "1478582554071087",
+        "1478574497405226",
+        "1478598010736208",
+        "1,47863E+15",
+        "1478181040777905",
+        "1477923680803641",
+        "1478014550794554",
+        "1629977452469239",
+        "1629977102469274",
+        "1629964552470529",
+        "1478043007458375",
+        "1478093530786656",
+        "1477756850820324",
+        "1477764774152865"
+      ],
+      "context_summary": {
+        "top_questions": [
+          "Khi nào bốc thăm NOXH Kim Chung?",
+          "Cách kê khai mẫu 02 trên dịch vụ công?",
+          "Vợ nội trợ/chồng XKLĐ xin xác nhận thu nhập thế nào?"
+        ],
+        "pains": [
+          "Không rõ quy trình, thủ tục hành chính phức tạp",
+          "Lo lắng về điều kiện vay vốn ngân hàng chính sách",
+          "Băn khoăn về quy định sang nhượng sau 5 năm"
+        ],
+        "audience_voice": "Các bác cho em hỏi, hồ sơ em được duyệt rồi mà không đủ tiền mua thì có chuyển cho người khác được không ạ?",
+        "hook_angles": []
+      },
+      "classify_method_stats": {
+        "keyword_rules": 1798,
+        "segment_default": 209,
+        "segment_tiebreak": 177
+      }
+    },
+    "LOAN_FINANCE": {
+      "status": "ready",
+      "post_count": 251,
+      "sample_post_ids": [
+        "1,47816E+15",
+        "1478170604112282",
+        "1478461750749834",
+        "1628941122572872",
+        "1472571471338862",
+        "1628499149283736",
+        "1628450932621891",
+        "1470944978168178",
+        "1471017911494218",
+        "1470188204910522",
+        "1628050302661954",
+        "1627189669414684",
+        "1,28394E+15",
+        "1283763170591393",
+        "3983188018654482",
+        "1280442424256801",
+        "1279771670990543",
+        "1279609427673434",
+        "1279591631008547",
+        "1278809757753401"
+      ],
+      "context_summary": {
+        "top_questions": [
+          "Lãi suất vay ngân hàng thương mại có thay đổi sau thời gian ưu đãi không?",
+          "Thủ tục vay Ngân hàng Chính sách Xã hội có phức tạp không?",
+          "Nếu không vay được ngân hàng thì có mất cọc khi mua NOXH không?"
+        ],
+        "pains": [
+          "Lãi suất vay thay đổi bất ngờ, không minh bạch",
+          "Thủ tục vay NHCSXH rườm rà, chờ đợi lâu",
+          "Lo sợ không được duyệt vay sau khi ký hợp đồng mua bán"
+        ],
+        "audience_voice": "Em cứ sợ lỡ ký hợp đồng mua bán rồi, mà ngân hàng ko cho vay thì sao?",
+        "hook_angles": []
+      },
+      "classify_method_stats": {
+        "keyword_rules": 239,
+        "segment_default": 12
+      }
+    },
+    "VALUATION": {
+      "status": "ready",
+      "post_count": 28,
+      "sample_post_ids": [
+        "1467337868528889",
+        "1488378866178389",
+        "3426121380871081",
+        "3419557931527426",
+        "3,41753E+15",
+        "3412684082214811",
+        "3411661008983785",
+        "1,52675E+15",
+        "1479362973940494",
+        "1294572895739902",
+        "3549554815199477",
+        "3549497625205196",
+        "3549496995205259",
+        "3549115128576779",
+        "3547489012072724",
+        "3546291802192445",
+        "3545811412240484",
+        "3544752712346354",
+        "3543284662493159",
+        "4799386590284486"
+      ],
+      "context_summary": {
+        "top_questions": [
+          "Nhà phố bị quy hoạch thì được đền bù thế nào? Có được mua chung cư tương đương số tiền đền bù không?",
+          "Ngân hàng nào định giá cao và cho vay cao? Cần vay 10 tỷ, phí bao nhiêu?",
+          "Nhà hẻm nhỏ có dễ bán lại không? Ngân hàng có định giá dễ không?"
+        ],
+        "pains": [
+          "Lo lắng về giá trị đền bù khi bị quy hoạch, không rõ quyền lợi.",
+          "Khó tìm ngân hàng định giá cao để vay được nhiều, sợ bị từ chối hoặc phí cao.",
+          "Băn khoăn tính thanh khoản của nhà hẻm nhỏ, sợ mua vào khó bán."
+        ],
+        "audience_voice": "Em cần ngân hàng định giá cao và vay cao, không phải vay bỏ sổ đâu nha!",
+        "hook_angles": []
+      },
+      "classify_method_stats": {
+        "segment_default": 1,
+        "keyword_rules": 23,
+        "segment_tiebreak": 4
+      }
+    },
+    "GENERAL_POLICY": {
+      "status": "ready",
+      "post_count": 686,
+      "sample_post_ids": [
+        "1477921720803837",
+        "1629951502471834",
+        "1629109295889388",
+        "1629045012562483",
+        "1472610144668328",
+        "1,62831E+15",
+        "1,62814E+15",
+        "1627978249335826",
+        "1467561615173181",
+        "1280420350925675",
+        "1278781631089547",
+        "1278779761089734",
+        "1,27793E+15",
+        "1630046782462306",
+        "1275340884766955",
+        "1273757241591986",
+        "1283986143903354",
+        "1283926963909272",
+        "3976637855976165",
+        "1281967937438508"
+      ],
+      "context_summary": {
+        "top_questions": [
+          "Thủ tục mua NƠXH có cần bảng lương 12 tháng không?",
+          "Dự án Ecohome 3, CT3 Kim Chung, Bảo Ngọc City Cổ Linh đã có lịch bốc thăm/mở bán chưa?",
+          "Giấy cam kết chưa hưởng chính sách xã hội làm ở UBND phường hay văn phòng đăng ký đất đai?"
+        ],
+        "pains": [
+          "Thiếu thông tin minh bạch về tiến độ và lịch bốc thăm dự án NƠXH.",
+          "Quy trình thủ tục hành chính rườm rà, hướng dẫn không nhất quán giữa các cơ quan.",
+          "Lo lắng về cơ hội mua nhà khi đối tượng ưu tiên (cán bộ, công chức) được ưu đãi không qua bốc thăm."
+        ],
+        "audience_voice": "Các bác ơi giờ làm hồ sơ mua NƠXH là không cần bảng lương 12 tháng nữa ạ? nếu quy định là không cần nhưng mình cứ chuẩn bị rồi kèm vào nộp thì khả năng đạt có cao hơn không ạ?",
+        "hook_angles": []
+      },
+      "classify_method_stats": {
+        "keyword_rules": 76,
+        "segment_default": 610
+      }
+    }
+  }
+}

@@ -22,7 +22,7 @@ export function injectLegalBundle(code) {
     console.warn('legal-pack-bundle.json missing — run: node scripts/build-legal-pack-bundle.mjs');
   }
   return code
-    .replace('__LEGAL_PACK_BUNDLE_JSON__', bundleJson)
+    .replaceAll('__LEGAL_PACK_BUNDLE_JSON__', bundleJson)
     .replace(/^\/\/[^\n]*\n(\/\/[^\n]*\n)*/gm, '')
     .trim();
 }

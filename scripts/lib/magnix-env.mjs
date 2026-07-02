@@ -9,14 +9,17 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 export const REPO_ROOT = path.join(__dirname, '..', '..');
 
 export function loadEnv() {
-  const envPath = path.join(REPO_ROOT, 'n8n-workflows/.env');
+  const envDir = path.join(REPO_ROOT, 'n8n-workflows');
   const map = {};
-  if (!fs.existsSync(envPath)) return map;
-  for (const line of fs.readFileSync(envPath, 'utf8').split('\n')) {
-    const t = line.trim();
-    if (!t || t.startsWith('#')) continue;
-    const i = t.indexOf('=');
-    if (i > 0) map[t.slice(0, i).trim()] = t.slice(i + 1).trim();
+  for (const name of ['.env', '.env.local']) {
+    const envPath = path.join(envDir, name);
+    if (!fs.existsSync(envPath)) continue;
+    for (const line of fs.readFileSync(envPath, 'utf8').split('\n')) {
+      const t = line.trim();
+      if (!t || t.startsWith('#')) continue;
+      const i = t.indexOf('=');
+      if (i > 0) map[t.slice(0, i).trim()] = t.slice(i + 1).trim();
+    }
   }
   return map;
 }

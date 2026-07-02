@@ -28,12 +28,19 @@ const local = loadEnv(path.join(root, 'n8n-workflows/.env'));
 const out = path.join(root, 'n8n-workflows/.env.vps.generated');
 
 let driveFolders = {};
+let noxhTemplates = {};
+let pageCovers = {};
 const dfPath = path.join(root, 'n8n-workflows/magnix-drive-folders.json');
 if (fs.existsSync(dfPath)) {
   try {
-    driveFolders = JSON.parse(fs.readFileSync(dfPath, 'utf8')).folders || {};
+    const df = JSON.parse(fs.readFileSync(dfPath, 'utf8'));
+    driveFolders = df.folders || {};
+    noxhTemplates = df.noxh_templates || {};
+    pageCovers = df.page_covers || {};
   } catch {
     driveFolders = {};
+    noxhTemplates = {};
+    pageCovers = {};
   }
 }
 
@@ -93,6 +100,21 @@ const lines = [
   `TELEGRAM_APPROVAL_ENABLED=${local.TELEGRAM_APPROVAL_ENABLED || 'false'}`,
   `TELEGRAM_REMINDER_ENABLED=${local.TELEGRAM_REMINDER_ENABLED || 'false'}`,
   `GOOGLE_SHEET_NOTIFICATION_EVENTS_TAB=${local.GOOGLE_SHEET_NOTIFICATION_EVENTS_TAB || 'notification_events'}`,
+  '',
+  `# Facebook Page publish`,
+  `CONTENT_PAGE_PUBLISH_ENABLED=${local.CONTENT_PAGE_PUBLISH_ENABLED || 'false'}`,
+  `META_PAGE_ID=${local.META_PAGE_ID || ''}`,
+  `META_PAGE_ACCESS_TOKEN=${local.META_PAGE_ACCESS_TOKEN || ''}`,
+  `META_GRAPH_API_VERSION=${local.META_GRAPH_API_VERSION || 'v21.0'}`,
+  `DRIVE_NOXH_TEMPLATES_FOLDER_ID=${local.DRIVE_NOXH_TEMPLATES_FOLDER_ID || noxhTemplates.folder_id || ''}`,
+  `DRIVE_NOXH_TEMPLATES_PUBLIC_URL=${local.DRIVE_NOXH_TEMPLATES_PUBLIC_URL || noxhTemplates.public_url || ''}`,
+  '',
+  `# Facebook Page cover (Gemini)`,
+  `CONTENT_PAGE_COVER_ENABLED=${local.CONTENT_PAGE_COVER_ENABLED || 'false'}`,
+  `GEMINI_API_KEY=${local.GEMINI_API_KEY || ''}`,
+  `GEMINI_IMAGE_MODEL=${local.GEMINI_IMAGE_MODEL || 'gemini-2.5-flash-image'}`,
+  `PAGE_COVER_ASPECT_RATIO=${local.PAGE_COVER_ASPECT_RATIO || '1:1'}`,
+  `DRIVE_PAGE_COVERS_FOLDER_ID=${local.DRIVE_PAGE_COVERS_FOLDER_ID || pageCovers.folder_id || ''}`,
   '',
 ];
 

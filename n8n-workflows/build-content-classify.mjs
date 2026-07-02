@@ -8,6 +8,7 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { withPipelineStub } from './code/shared/with-pipeline-stub.mjs';
+import { withLlmRouter } from './code/shared/with-llm-router.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const codeDir = path.join(__dirname, 'code', 'content-classify');
@@ -21,6 +22,8 @@ const read = (f) =>
     .replace(/^\/\/[^\n]*\n(\/\/[^\n]*\n)*/gm, '')
     .trim();
 
+const llmProviders = PUBLIC.llm_task_providers || {};
+
 const codes = {
   parseFilter: read('01-parse-filter-pending.js').replace(
     '__CLASSIFY_BATCH_SIZE__',
@@ -28,7 +31,7 @@ const codes = {
   ),
   classifyFast: read('02-classify-fast.js'),
   wrapRegex: read('03-wrap-regex-classify.js'),
-  llmRequest: read('04-llm-classify-request.js'),
+  llmRequest: withLlmRouter(read('04-llm-classify-request.js'), llmProviders),
   parseLlm: read('04-parse-llm-json.js'),
   merge: withPipelineStub(read('05-merge-content-row.js')),
   sheetUpdate: read('06-sheet-update-row.js')

@@ -6,6 +6,20 @@
 import { loadPublicConfig, parseMeta } from './lib/magnix-env.mjs';
 import { fetchTab, rowsToObjects } from './lib/sheet-client.mjs';
 import { printDiagnostic } from './lib/diagnose-print.mjs';
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+import vm from 'node:vm';
+
+const root = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
+const resolveSrc = fs.readFileSync(
+  path.join(root, 'n8n-workflows/code/shared/resolve-outreach-context.js'),
+  'utf8',
+);
+const sandbox = {};
+vm.createContext(sandbox);
+vm.runInContext(resolveSrc, sandbox);
+const { resolveOutreachContext } = sandbox;
 
 const BATCH = loadPublicConfig().outreach_batch_size ?? 10;
 
@@ -42,12 +56,21 @@ async function main() {
     }
     reasons.eligible += 1;
     if (samples.length < 5) {
-      samples.push({ row: row.sheet_row, status, title: title.slice(0, 50), segment: row.segment });
+      const { warmth, context } = resolveOutreachContext(row);
+      samples.push({
+        row: row.sheet_row,
+        status,
+        title: title.slice(0, 50),
+        segment: row.segment,
+        warmth,
+        context,
+      });
     }
   }
 
   console.log('=== Agent 4 — Outreach Queue diagnostic ===');
   console.log(`Batch: ${BATCH} · Cron 09:30 VN · L3 bắt buộc trước gửi Zalo`);
+  console.log('Runbook: docs/OUTBOUND_RUNBOOK.md · Patch warmth: scripts/patch-draft-outreach-warmth.mjs');
   printDiagnostic('Outreach candidates', reasons, { 'Top status': statusCounts });
   if (samples.length) {
     console.log('\n--- Sample eligible ---');

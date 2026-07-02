@@ -1,0 +1,62 @@
+{
+  "version": 2,
+  "default_page_display_name": "Tim Nha O Xa Hoi",
+  "default_brand": "Magnix",
+  "disclaimer_format_map": {
+    "reel_short": [
+      "fb_reels",
+      "tiktok",
+      "youtube_shorts",
+      "short_video_package",
+      "video_script"
+    ],
+    "post_long": [
+      "fb_page_post_image",
+      "fb_page_post",
+      "facebook_page",
+      "carousel_image",
+      "fb_page_post",
+      "website_article"
+    ]
+  },
+  "templates": {
+    "reel_short": {
+      "_default": "Mỗi hồ sơ có tình huống riêng — inbox ngay để được {{page}} tư vấn cụ thể theo trường hợp của bạn.",
+      "NOXH_LEGAL": "Mỗi hồ sơ NOXH có tình huống riêng — inbox {{page}} để được tư vấn cụ thể theo trường hợp của bạn.",
+      "LOAN_FINANCE": "Mỗi hồ sơ vay có tình huống riêng — inbox {{page}} để được tư vấn dòng tiền theo đúng hồ sơ của bạn.",
+      "VALUATION": "Mỗi tài sản cần góc nhìn riêng — inbox {{page}} để được tư vấn định giá theo trường hợp của bạn.",
+      "GENERAL_POLICY": "Mỗi trường hợp có thể khác nhau theo từng địa phương — inbox {{page}} để chuyên gia page xem cụ thể hồ sơ bạn."
+    },
+    "post_long": {
+      "_default": "Thông tin từ team {{page}}. Để được tư vấn chi tiết theo đúng hồ sơ của bạn, inbox hoặc để lại SĐT ngay dưới bài viết — mình hỗ trợ 1:1 nhé.",
+      "NOXH_LEGAL": "Mỗi trường hợp NOXH có thể khác nhau theo từng địa phương — để chuyên gia {{page}} xem cụ thể hồ sơ bạn, inbox hoặc để lại SĐT dưới bài nhé.",
+      "LOAN_FINANCE": "Dòng tiền và room vay phụ thuộc hồ sơ từng người — team {{page}} hỗ trợ bóc tách 1:1. Inbox hoặc để lại SĐT dưới bài.",
+      "VALUATION": "Giá trị và phương án định giá khác nhau theo từng tài sản — inbox {{page}} hoặc để lại SĐT để được tư vấn chi tiết.",
+      "GENERAL_POLICY": "Mỗi trường hợp có thể khác nhau theo từng địa phương — để chuyên gia {{page}} xem cụ thể hồ sơ bạn, inbox ngay nhé."
+    }
+  },
+  "segment_map": {
+    "noxh_income": "NOXH_LEGAL",
+    "sme_credit": "LOAN_FINANCE",
+    "valuation": "VALUATION",
+    "general_inbound": "GENERAL_POLICY",
+    "unclassified": "GENERAL_POLICY"
+  },
+  "boilerplate_patterns": [
+    "không phải tư vấn pháp lý",
+    "không thay thế tư vấn pháp lý",
+    "không thay thế tư vấn",
+    "không thay thế chứng thư",
+    "mang tính tham khảo",
+    "thông tin tham khảo",
+    "quy định hiện hành",
+    "không cam kết duyệt",
+    "phụ thuộc hồ sơ thực tế",
+    "tùy thẩm định ngân hàng",
+    "tùy quy định hiện hành",
+    "Căn cứ: Luật Nhà ở",
+    "biểu lãi suất tham khảo",
+    "chứng thư thẩm định giá chính thức"
+  ],
+  "legal_content_types": ["NOXH_LEGAL", "LOAN_FINANCE", "VALUATION"]
+}

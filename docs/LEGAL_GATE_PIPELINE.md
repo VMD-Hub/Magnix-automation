@@ -85,6 +85,7 @@ Chi tiết: `docs/NOXH_THREE_CHANNEL_ARCHITECTURE.md`.
 - [x] Bundle cho n8n VPS: `scripts/build-legal-pack-bundle.mjs` → `n8n-workflows/legal-pack-bundle.json`
 - [x] Layer B node **Attach Legal Pack**
 - [x] Agent 3 / 6 đọc pack từ `meta`
+- [x] **Page Publish** workflow `content-page-publish` — xem `docs/CONTENT_PAGE_PUBLISH_SETUP.md`
 - [ ] Agent 4 outreach đọc pack (filter + prompt)
 - [ ] Agent 5 scorecard audit `source_refs` vs pack
 - [ ] Workflow inbox `noxh-application-form-draft` (kênh 2)

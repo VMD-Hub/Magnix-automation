@@ -1,0 +1,573 @@
+{
+  "name": "Magnix — Facebook Page Cover (Gemini → Drive → Sheet)",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## Page Cover (Gemini → Drive)\n- **09:30 VN** · max **3**/lần (trước Page Publish 10h)\n- Input: `content_drafts` `fb_page_post_image` thiếu `publish_image_url`\n- Env: `CONTENT_PAGE_COVER_ENABLED`, `GEMINI_API_KEY`, `DRIVE_PAGE_COVERS_FOLDER_ID`\n- Output: `meta.publish_image_url` (Drive public)",
+        "height": 200,
+        "width": 520
+      },
+      "id": "cpc00note",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -480,
+        160
+      ]
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "30 9 * * *"
+            }
+          ]
+        }
+      },
+      "id": "cpc01sched",
+      "name": "Schedule Page Cover",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "cpc02manual",
+      "name": "When clicking 'Execute workflow'",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "https://sheets.googleapis.com/v4/spreadsheets/1fYB4h_BTiKXa9O3lBah-tQonWpQOQMG2aSkSfPs6yU4/values/content_drafts!A%3AN",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleApi",
+        "options": {}
+      },
+      "id": "cpc03fetch",
+      "name": "Fetch content_drafts",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        240,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const BATCH = 3;\r\n\r\nfunction parseMeta(raw) {\r\n  if (!raw) return {};\r\n  try {\r\n    return typeof raw === 'string' ? JSON.parse(raw) : raw;\r\n  } catch {\r\n    return {};\r\n  }\r\n}\r\n\r\nconst enabled = String($env.CONTENT_PAGE_COVER_ENABLED || '').toLowerCase() === 'true';\r\nif (!enabled) {\r\n  return [{\r\n    json: {\r\n      empty: true,\r\n      message: 'CONTENT_PAGE_COVER_ENABLED không bật — set true trên VPS',\r\n    },\r\n  }];\r\n}\r\n\r\nconst apiKey = String(\r\n  $env.GEMINI_API_KEY\r\n  || $env.GOOGLE_GEMINI_API_KEY\r\n  || $env.GOOGLE_AI_API_KEY\r\n  || $env.GENERATIVE_LANGUAGE_API_KEY\r\n  || ''\r\n).trim();\r\nif (!apiKey) {\r\n  return [{\r\n    json: {\r\n      empty: true,\r\n      message: 'Thiếu GEMINI_API_KEY — lấy tại https://aistudio.google.com/apikey',\r\n    },\r\n  }];\r\n}\r\n\r\nconst res = $input.first().json;\r\nconst rows = Array.isArray(res.values) ? res.values : [];\r\nif (rows.length < 2) {\r\n  return [{ json: { empty: true, message: 'content_drafts trống' } }];\r\n}\r\n\r\nconst headers = rows[0].map((x) => String(x ?? '').trim().toLowerCase());\r\nconst out = [];\r\nconst blockers = {\r\n  not_ready: 0,\r\n  has_image: 0,\r\n  wrong_format: 0,\r\n  no_prompt: 0,\r\n};\r\n\r\nconst allowedStatus = new Set(['approved', 'draft']);\r\n\r\nfor (let i = 1; i < rows.length; i++) {\r\n  const cells = rows[i];\r\n  if (!cells?.some((c) => String(c ?? '').trim())) continue;\r\n\r\n  const row = { sheet_row: i + 1 };\r\n  headers.forEach((key, j) => {\r\n    if (key) row[key] = cells[j] ?? '';\r\n  });\r\n\r\n  const status = String(row.status || '').trim().toLowerCase();\r\n  const meta = parseMeta(row.meta);\r\n\r\n  if (!allowedStatus.has(status)) {\r\n    blockers.not_ready += 1;\r\n    continue;\r\n  }\r\n\r\n  const imageUrl = String(meta.publish_image_url || meta.cover_image_url || '').trim();\r\n  if (imageUrl) {\r\n    blockers.has_image += 1;\r\n    continue;\r\n  }\r\n\r\n  const channel = String(meta.target_channel || '').trim().toLowerCase();\r\n  const fmt = String(meta.content_format || '').trim().toLowerCase();\r\n  const wantsCover =\r\n    fmt === 'fb_page_post_image'\r\n    || (channel === 'facebook_page' && fmt === 'fb_page_post_image');\r\n\r\n  if (!wantsCover) {\r\n    blockers.wrong_format += 1;\r\n    continue;\r\n  }\r\n\r\n  const prompt = String(\r\n    meta.publish_image_prompt\r\n    || meta.cover_image_prompt\r\n    || ''\r\n  ).trim();\r\n  const title = String(row.title || '').trim();\r\n  const hook = String(row.hook_line || '').trim();\r\n\r\n  if (!prompt && !title && !hook) {\r\n    blockers.no_prompt += 1;\r\n    continue;\r\n  }\r\n\r\n  if (status === 'draft' && meta.publish_image_pending !== true && !meta.needs_cover_image) {\r\n    blockers.not_ready += 1;\r\n    continue;\r\n  }\r\n\r\n  row.meta_parsed = meta;\r\n  out.push({ json: row });\r\n  if (out.length >= BATCH) break;\r\n}\r\n\r\nif (!out.length) {\r\n  return [{\r\n    json: {\r\n      empty: true,\r\n      message: 'Không có bài cần cover — cần fb_page_post_image + thiếu publish_image_url + có prompt/title',\r\n      blockers,\r\n    },\r\n  }];\r\n}\r\n\r\nreturn out;"
+      },
+      "id": "cpc04filter",
+      "name": "Parse Filter Cover Candidates",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        480,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "c1",
+              "leftValue": "={{ $json.empty }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "notEquals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "cpc05if",
+      "name": "IF Has Candidates",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        720,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $getWorkflowStaticData('global');\ndata.cpc_stats = { cover_ok: 0, generate_fail: 0, drive_fail: 0, other_fail: 0 };\nreturn $input.all();"
+      },
+      "id": "cpc06reset",
+      "name": "Reset Run Stats",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        960,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "batchSize": 1,
+        "options": {}
+      },
+      "id": "cpc07loop",
+      "name": "Loop Cover Candidates",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        1200,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const row = $('Loop Cover Candidates').item?.json || $input.first().json;\r\nconst meta = row.meta_parsed || {};\r\n\r\nconst title = String(row.title || '').trim();\r\nconst hook = String(row.hook_line || '').trim();\r\nconst basePrompt = String(\r\n  meta.publish_image_prompt\r\n  || meta.cover_image_prompt\r\n  || title\r\n  || hook\r\n).trim();\r\n\r\nconst headline = hook || title || 'Magnix NOXH';\r\nconst pillar = String(meta.content_pillar || 'B').trim();\r\n\r\nconst brandRules = [\r\n  'Professional Vietnamese social media cover for Facebook Page.',\r\n  'Style: trustworthy financial/legal advisory, clean modern layout.',\r\n  'Colors: deep teal #0D7377 and white, subtle checklist or folder icon.',\r\n  'NO stock photo watermarks. NO fake government logos.',\r\n  'Readable Vietnamese headline text on image (large, high contrast).',\r\n  'Square 1:1 composition, safe margins for mobile crop.',\r\n  'Small subtle \"Magnix\" wordmark bottom-right.',\r\n].join(' ');\r\n\r\nconst pillarHint = {\r\n  A: 'Focus: income eligibility, salary documents.',\r\n  B: 'Focus: application forms, checklist, folder templates.',\r\n  C: 'Focus: community trust, Q&A helpful tone.',\r\n}[pillar] || '';\r\n\r\nconst userPrompt = [\r\n  basePrompt,\r\n  pillarHint,\r\n  `Headline text on image (Vietnamese): \"${headline.slice(0, 80)}\"`,\r\n  'Avoid: guarantees, approval promises, specific interest rates.',\r\n].filter(Boolean).join('\\n');\r\n\r\nconst fullPrompt = `${brandRules}\\n\\n${userPrompt}`.slice(0, 4000);\r\n\r\nconst aspect = String($env.PAGE_COVER_ASPECT_RATIO || '1:1').trim();\r\n\r\nreturn [{\r\n  json: {\r\n    ok: true,\r\n    sheet_row: row.sheet_row,\r\n    normalized_key: row.source_normalized_key,\r\n    segment: row.segment,\r\n    title,\r\n    hook_line: hook,\r\n    cover_prompt: fullPrompt,\r\n    aspect_ratio: aspect,\r\n    meta_parsed: meta,\r\n  },\r\n}];"
+      },
+      "id": "cpc08prompt",
+      "name": "Build Cover Prompt",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1440,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const item = $input.first().json;\r\nif (!item.ok || !item.cover_prompt) {\r\n  return [{ json: { ...item, generate_ok: false, generate_error: 'NO_PROMPT' } }];\r\n}\r\n\r\nconst apiKey = String(\r\n  $env.GEMINI_API_KEY\r\n  || $env.GOOGLE_GEMINI_API_KEY\r\n  || $env.GOOGLE_AI_API_KEY\r\n  || $env.GENERATIVE_LANGUAGE_API_KEY\r\n  || ''\r\n).trim();\r\nconst model = String(\r\n  $env.GEMINI_IMAGE_MODEL || 'gemini-2.5-flash-image'\r\n).trim();\r\n\r\nif (!apiKey) {\r\n  return [{\r\n    json: {\r\n      ...item,\r\n      generate_ok: false,\r\n      generate_error: 'MISSING_GEMINI_API_KEY',\r\n    },\r\n  }];\r\n}\r\n\r\nconst url = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent?key=${encodeURIComponent(apiKey)}`;\r\n\r\nconst body = {\r\n  contents: [{ role: 'user', parts: [{ text: item.cover_prompt }] }],\r\n  generationConfig: {\r\n    responseModalities: ['IMAGE'],\r\n    imageConfig: {\r\n      aspectRatio: item.aspect_ratio || '1:1',\r\n    },\r\n  },\r\n};\r\n\r\ntry {\r\n  const res = await this.helpers.httpRequest({\r\n    method: 'POST',\r\n    url,\r\n    headers: { 'Content-Type': 'application/json' },\r\n    body,\r\n    json: true,\r\n    timeout: 120000,\r\n  });\r\n\r\n  const parts = res?.candidates?.[0]?.content?.parts || [];\r\n  let inline = null;\r\n  for (const p of parts) {\r\n    if (p.inlineData?.data) {\r\n      inline = p.inlineData;\r\n      break;\r\n    }\r\n  }\r\n\r\n  if (!inline?.data) {\r\n    const block = res?.promptFeedback?.blockReason || res?.candidates?.[0]?.finishReason;\r\n    return [{\r\n      json: {\r\n        ...item,\r\n        generate_ok: false,\r\n        generate_error: block ? `BLOCKED:${block}` : 'NO_IMAGE_IN_RESPONSE',\r\n        gemini_model: model,\r\n      },\r\n    }];\r\n  }\r\n\r\n  const mime = String(inline.mimeType || 'image/png').trim();\r\n  const ext = mime.includes('jpeg') ? 'jpg' : 'png';\r\n\r\n  return [{\r\n    json: {\r\n      ...item,\r\n      generate_ok: true,\r\n      image_base64: inline.data,\r\n      image_mime: mime,\r\n      image_ext: ext,\r\n      gemini_model: model,\r\n    },\r\n  }];\r\n} catch (e) {\r\n  const detail = e.response?.data || e.cause?.response?.data || e.message;\r\n  const msg = detail?.error?.message || (typeof detail === 'string' ? detail : JSON.stringify(detail).slice(0, 400));\r\n  return [{\r\n    json: {\r\n      ...item,\r\n      generate_ok: false,\r\n      generate_error: msg || 'GEMINI_REQUEST_FAILED',\r\n      gemini_model: model,\r\n    },\r\n  }];\r\n}"
+      },
+      "id": "cpc09gemini",
+      "name": "Generate Image Gemini",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1680,
+        240
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "c1",
+              "leftValue": "={{ $json.generate_ok }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "cpc10ifgen",
+      "name": "IF Generate OK",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1920,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "function slugify(s) {\r\n  return String(s || 'cover')\r\n    .normalize('NFD')\r\n    .replace(/[\\u0300-\\u036f]/g, '')\r\n    .replace(/[^a-zA-Z0-9]+/g, '-')\r\n    .replace(/^-+|-+$/g, '')\r\n    .slice(0, 48)\r\n    .toLowerCase() || 'cover';\r\n}\r\n\r\nfunction buildFileName(item) {\r\n  const key = String(item.normalized_key || '').trim();\r\n  const slug = slugify(item.title || item.hook_line);\r\n  const date = new Date().toISOString().slice(0, 10).replace(/-/g, '');\r\n  const shortKey = key.includes(':') ? key.split(':').pop() : key.slice(0, 12);\r\n  return `magnix-page-cover-${shortKey || slug}-${date}.${item.image_ext || 'png'}`;\r\n}\r\n\r\nconst item = $input.first().json;\r\nif (!item.generate_ok || !item.image_base64) {\r\n  return [{ json: { ...item, drive_ok: false, drive_skip: true } }];\r\n}\r\n\r\nconst folderId =\r\n  $env.DRIVE_PAGE_COVERS_FOLDER_ID\r\n  || '1EVNn-4ASRhZwSnnapBkMzbHjdIjCNhBJ';\r\n\r\nif (!folderId || String(folderId).startsWith('__')) {\r\n  return [{\r\n    json: {\r\n      ...item,\r\n      drive_ok: false,\r\n      drive_error: 'MISSING_DRIVE_PAGE_COVERS_FOLDER_ID',\r\n      hint: 'Chạy: node scripts/init-magnix-drive-page-covers.mjs',\r\n    },\r\n  }];\r\n}\r\n\r\nconst fileName = buildFileName(item);\r\nconst buf = Buffer.from(item.image_base64, 'base64');\r\nif (!buf.length) {\r\n  return [{ json: { ...item, drive_ok: false, drive_error: 'EMPTY_IMAGE_BUFFER' } }];\r\n}\r\n\r\nconst mime = item.image_mime || 'image/png';\r\nconst boundary = `magnix_cover_${Date.now()}`;\r\nconst metadata = JSON.stringify({\r\n  name: fileName,\r\n  parents: [folderId],\r\n  mimeType: mime,\r\n  description: [\r\n    'Magnix Page Cover',\r\n    item.normalized_key || '',\r\n    item.gemini_model || '',\r\n  ].filter(Boolean).join(' | ').slice(0, 500),\r\n});\r\n\r\nconst multipartBody = Buffer.concat([\r\n  Buffer.from(`--${boundary}\\r\\nContent-Type: application/json; charset=UTF-8\\r\\n\\r\\n${metadata}\\r\\n`),\r\n  Buffer.from(`--${boundary}\\r\\nContent-Type: ${mime}\\r\\n\\r\\n`),\r\n  buf,\r\n  Buffer.from(`\\r\\n--${boundary}--`),\r\n]);\r\n\r\ntry {\r\n  const uploaded = await this.helpers.httpRequestWithAuthentication.call(this, 'googleApi', {\r\n    method: 'POST',\r\n    url: 'https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id,name,webViewLink,webContentLink,size&supportsAllDrives=true',\r\n    headers: {\r\n      'Content-Type': `multipart/related; boundary=${boundary}`,\r\n    },\r\n    body: multipartBody,\r\n    json: true,\r\n  });\r\n\r\n  const fileId = uploaded.id;\r\n  if (!fileId) {\r\n    return [{ json: { ...item, drive_ok: false, drive_error: 'NO_FILE_ID' } }];\r\n  }\r\n\r\n  await this.helpers.httpRequestWithAuthentication.call(this, 'googleApi', {\r\n    method: 'POST',\r\n    url: `https://www.googleapis.com/drive/v3/files/${fileId}/permissions?supportsAllDrives=true`,\r\n    headers: { 'Content-Type': 'application/json' },\r\n    body: { role: 'reader', type: 'anyone' },\r\n    json: true,\r\n  });\r\n\r\n  const publishUrl = `https://drive.google.com/uc?export=view&id=${fileId}`;\r\n\r\n  return [{\r\n    json: {\r\n      ...item,\r\n      drive_ok: true,\r\n      drive_file_id: fileId,\r\n      drive_file_name: uploaded.name || fileName,\r\n      drive_view_url: uploaded.webViewLink || `https://drive.google.com/file/d/${fileId}/view`,\r\n      publish_image_url: publishUrl,\r\n      drive_folder_id: folderId,\r\n      drive_size_bytes: uploaded.size ? Number(uploaded.size) : buf.length,\r\n    },\r\n  }];\r\n} catch (e) {\r\n  return [{\r\n    json: {\r\n      ...item,\r\n      drive_ok: false,\r\n      drive_error: 'DRIVE_UPLOAD_FAILED',\r\n      drive_message: String(e.message || e),\r\n      drive_file_name: fileName,\r\n    },\r\n  }];\r\n}"
+      },
+      "id": "cpc11drive",
+      "name": "Upload Drive Share",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2160,
+        160
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const SHEET_ID = '1fYB4h_BTiKXa9O3lBah-tQonWpQOQMG2aSkSfPs6yU4';\r\nconst DRAFTS_TAB = 'content_drafts';\r\n\r\nconst item = $input.first().json;\r\nconst row = item.sheet_row;\r\nif (!row) {\r\n  return [{ json: { ok: false, skip: true, reason: 'NO_SHEET_ROW' } }];\r\n}\r\n\r\nconst loopRow = $('Loop Cover Candidates').item?.json || {};\r\nconst existingMeta = item.meta_parsed || loopRow.meta_parsed || {};\r\n\r\nif (item.generate_ok === false || !item.drive_ok || !item.publish_image_url) {\r\n  const errMeta = {\r\n    ...existingMeta,\r\n    cover_generate_error: item.generate_error || item.drive_error || item.drive_message || 'UNKNOWN',\r\n    cover_generate_at: new Date().toISOString(),\r\n    cover_agent: 'content-page-cover',\r\n  };\r\n  return [{\r\n    json: {\r\n      ok: false,\r\n      sheet_row: row,\r\n      normalized_key: item.normalized_key,\r\n      sheet_batch_url: `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values:batchUpdate`,\r\n      sheet_batch_body: {\r\n        valueInputOption: 'USER_ENTERED',\r\n        data: [\r\n          { range: `${DRAFTS_TAB}!N${row}`, values: [[JSON.stringify(errMeta).slice(0, 50000)]] },\r\n        ],\r\n      },\r\n      cover_ok: false,\r\n    },\r\n  }];\r\n}\r\n\r\nconst metaPatch = {\r\n  ...existingMeta,\r\n  publish_image_url: item.publish_image_url,\r\n  cover_image_url: item.publish_image_url,\r\n  drive_cover_file_id: item.drive_file_id,\r\n  drive_cover_file_name: item.drive_file_name,\r\n  drive_cover_view_url: item.drive_view_url,\r\n  cover_generated_at: new Date().toISOString(),\r\n  cover_agent: 'content-page-cover',\r\n  cover_gemini_model: item.gemini_model || null,\r\n  publish_image_pending: false,\r\n};\r\n\r\nconst metaStr = JSON.stringify(metaPatch).slice(0, 50000);\r\n\r\nreturn [{\r\n  json: {\r\n    ok: true,\r\n    sheet_row: row,\r\n    normalized_key: item.normalized_key,\r\n    publish_image_url: item.publish_image_url,\r\n    sheet_batch_url: `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values:batchUpdate`,\r\n    sheet_batch_body: {\r\n      valueInputOption: 'USER_ENTERED',\r\n      data: [\r\n        { range: `${DRAFTS_TAB}!N${row}`, values: [[metaStr]] },\r\n      ],\r\n    },\r\n    cover_ok: true,\r\n  },\r\n}];"
+      },
+      "id": "cpc12sheet",
+      "name": "Prepare Sheet Meta Update",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2400,
+        160
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $json.sheet_batch_url }}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json.sheet_batch_body }}",
+        "options": {}
+      },
+      "id": "cpc13batch",
+      "name": "POST Draft Sheet Batch",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2640,
+        160
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "c1",
+              "leftValue": "={{ $(\"Prepare Sheet Meta Update\").item.json.cover_ok }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "cpc13ifok",
+      "name": "IF Cover Sheet OK",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        2880,
+        160
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $getWorkflowStaticData('global');\nif (!data.cpc_stats) data.cpc_stats = {};\ndata.cpc_stats.cover_ok = (data.cpc_stats.cover_ok || 0) + 1;\nreturn $input.all();"
+      },
+      "id": "cpc14ok",
+      "name": "Track Cover OK",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3120,
+        80
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $getWorkflowStaticData('global');\r\nif (!data.cpc_stats) data.cpc_stats = {};\r\nconst item = $input.first().json;\r\nif (item.cover_ok) {\r\n  data.cpc_stats.cover_ok = (data.cpc_stats.cover_ok || 0) + 1;\r\n} else if (item.generate_ok === false) {\r\n  data.cpc_stats.generate_fail = (data.cpc_stats.generate_fail || 0) + 1;\r\n} else if (item.drive_ok === false) {\r\n  data.cpc_stats.drive_fail = (data.cpc_stats.drive_fail || 0) + 1;\r\n} else {\r\n  data.cpc_stats.other_fail = (data.cpc_stats.other_fail || 0) + 1;\r\n}\r\nreturn $input.all();"
+      },
+      "id": "cpc15fail",
+      "name": "Track Cover Fail",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3120,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $getWorkflowStaticData('global');\nconst stats = data.cpc_stats || {};\nlet hint = null;\nif ((stats.cover_ok || 0) === 0) {\n  if (stats.no_candidates) hint = 'Không candidate — cần fb_page_post_image + thiếu publish_image_url';\n  else if ((stats.generate_fail || 0) > 0) hint = 'Gemini fail — kiểm tra GEMINI_API_KEY + GEMINI_IMAGE_MODEL';\n  else if ((stats.drive_fail || 0) > 0) hint = 'Drive upload fail — googleApi credential + DRIVE_PAGE_COVERS_FOLDER_ID';\n  else hint = 'Bật CONTENT_PAGE_COVER_ENABLED=true + GEMINI_API_KEY';\n}\nreturn [{ json: {\n  ok: true,\n  workflow: 'content-page-cover',\n  stats,\n  batch_size: 3,\n  hint,\n  finished_at: new Date().toISOString(),\n}}];"
+      },
+      "id": "cpc16summary",
+      "name": "Build Summary",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3120,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $getWorkflowStaticData('global');\nif (!data.cpc_stats) data.cpc_stats = {};\ndata.cpc_stats.no_candidates = true;\nconst msg = $input.first()?.json?.message || 'No cover candidates';\nreturn [{ json: { ok: true, empty: true, message: msg, blockers: $input.first()?.json?.blockers } }];"
+      },
+      "id": "cpc17empty",
+      "name": "No Candidates Summary",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        720,
+        420
+      ]
+    }
+  ],
+  "connections": {
+    "Schedule Page Cover": {
+      "main": [
+        [
+          {
+            "node": "Fetch content_drafts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking 'Execute workflow'": {
+      "main": [
+        [
+          {
+            "node": "Fetch content_drafts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch content_drafts": {
+      "main": [
+        [
+          {
+            "node": "Parse Filter Cover Candidates",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Filter Cover Candidates": {
+      "main": [
+        [
+          {
+            "node": "IF Has Candidates",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF Has Candidates": {
+      "main": [
+        [
+          {
+            "node": "Reset Run Stats",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "No Candidates Summary",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Reset Run Stats": {
+      "main": [
+        [
+          {
+            "node": "Loop Cover Candidates",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Cover Candidates": {
+      "main": [
+        [
+          {
+            "node": "Build Summary",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Build Cover Prompt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Cover Prompt": {
+      "main": [
+        [
+          {
+            "node": "Generate Image Gemini",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Image Gemini": {
+      "main": [
+        [
+          {
+            "node": "IF Generate OK",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF Generate OK": {
+      "main": [
+        [
+          {
+            "node": "Upload Drive Share",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Prepare Sheet Meta Update",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload Drive Share": {
+      "main": [
+        [
+          {
+            "node": "Prepare Sheet Meta Update",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Sheet Meta Update": {
+      "main": [
+        [
+          {
+            "node": "POST Draft Sheet Batch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "POST Draft Sheet Batch": {
+      "main": [
+        [
+          {
+            "node": "IF Cover Sheet OK",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF Cover Sheet OK": {
+      "main": [
+        [
+          {
+            "node": "Track Cover OK",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Track Cover Fail",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Track Cover OK": {
+      "main": [
+        [
+          {
+            "node": "Loop Cover Candidates",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Track Cover Fail": {
+      "main": [
+        [
+          {
+            "node": "Loop Cover Candidates",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "No Candidates Summary": {
+      "main": [
+        [
+          {
+            "node": "Build Summary",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [
+    {
+      "name": "magnix"
+    },
+    {
+      "name": "content-page-cover"
+    },
+    {
+      "name": "gemini"
+    }
+  ],
+  "meta": {
+    "templateCredsSetupCompleted": false
+  }
+}

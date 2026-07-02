@@ -3,7 +3,7 @@
   "nodes": [
     {
       "parameters": {
-        "content": "## Agent 3 — Lead Magnet\n- **09:00 VN** · max **5**/lần\n- Input: `content_queue` score≥70 classified\n- Output: tab `content_drafts`\n- **L3:** duyệt `status=approved` trên Sheet trước publish",
+        "content": "## Agent 3 — Lead Magnet\n- **09:00 VN** · max **5**/lần\n- LLM → Title QA → Parse → Router → **Hook Gate** → L0 → L2\n- hook_review: comment-bait / truncation / frequency flags",
         "height": 180,
         "width": 400
       },
@@ -66,7 +66,7 @@
     },
     {
       "parameters": {
-        "jsCode": "const MIN_SCORE = 70;\nconst BATCH = 5;\n\nconst ALLOW_SEGMENTS = new Set([\n  'noxh_income', 'valuation', 'sme_credit', 'general_inbound',\n]);\n\nfunction parseMeta(raw) {\n  if (!raw) return {};\n  try {\n    return typeof raw === 'string' ? JSON.parse(raw) : raw;\n  } catch {\n    return {};\n  }\n}\n\nconst res = $input.first().json;\nconst rows = Array.isArray(res.values) ? res.values : [];\nif (rows.length < 2) {\n  return [{ json: { empty: true, message: 'content_queue trống' } }];\n}\n\nconst headers = rows[0].map((x) => String(x ?? '').trim().toLowerCase());\nconst out = [];\n\nfor (let i = 1; i < rows.length; i++) {\n  const cells = rows[i];\n  if (!cells?.some((c) => String(c ?? '').trim())) continue;\n\n  const row = { sheet_row: i + 1 };\n  headers.forEach((key, j) => {\n    if (key) row[key] = cells[j] ?? '';\n  });\n\n  const segment = String(row.segment || '').trim().toLowerCase();\n  const score = Number(row.score || 0);\n  const status = String(row.status || '').trim().toLowerCase();\n  const meta = parseMeta(row.meta);\n  row.meta_parsed = meta;\n\n  if (meta.draft_created === true) continue;\n  if (!ALLOW_SEGMENTS.has(segment)) continue;\n  if (score < MIN_SCORE) continue;\n  if (status !== 'classified' && row.claude_verdict !== 'qualified') continue;\n\n  const LEGAL_SEGMENTS = new Set(['noxh_income', 'valuation', 'sme_credit']);\n  if (LEGAL_SEGMENTS.has(segment)) {\n    if (!meta.editorial_brief_v1) continue;\n    const pack = meta.legal_retrieval_pack;\n    if (!pack || pack.needs_human_legal_source === true) continue;\n    row.legal_retrieval_pack = pack;\n    row.editorial_brief_v1 = meta.editorial_brief_v1;\n  }\n\n  const text = String(row.text || '').trim();\n  if (text.length < 20) continue;\n\n  out.push({ json: row });\n  if (out.length >= BATCH) break;\n}\n\nif (!out.length) {\n  return [{ json: { empty: true, message: 'Không còn candidate draft (score≥70, classified, chưa draft)' } }];\n}\n\nreturn out;"
+        "jsCode": "const MIN_SCORE = 70;\nconst BATCH = 5;\nconst FORMAT_ROUTING = {\"version\":1,\"agent3_text_post_formats\":[\"fb_page_post\",\"fb_page_post_image\",\"facebook_page\",\"facebook\",\"website_article\",\"blog_seo\",\"aio_seo\"],\"agent6_video_formats\":[\"fb_reels\",\"tiktok\",\"youtube_shorts\",\"short_video_package\"],\"carousel_formats\":[\"carousel_image\"],\"format_type_by_product\":{\"fb_reels\":\"video_script\",\"tiktok\":\"video_script\",\"youtube_shorts\":\"video_script\",\"short_video_package\":\"video_script\",\"fb_page_post_image\":\"text_post\",\"fb_page_post\":\"text_post\",\"facebook_page\":\"text_post\",\"carousel_image\":\"carousel\",\"website_article\":\"text_post\",\"blog_seo\":\"text_post\"},\"prompt_hints\":{\"text_post\":\"Bài đọc Facebook Page: hook_line ≤25 từ + body Q&A (H2/H3 là câu hỏi). KHÔNG viết script theo giây.\",\"video_script\":\"Chỉ Agent 6 — hook visual/verbal + body_beats theo giây. KHÔNG dùng cho Agent 3.\",\"carousel\":\"Chia slide (Slide 1…N), mỗi slide 1 ý. KHÔNG viết bài đọc dài một khối.\"}};\n\nconst ALLOW_SEGMENTS = new Set([\n  'noxh_income', 'valuation', 'sme_credit', 'general_inbound',\n]);\n\nconst TEXT_FORMATS = new Set(FORMAT_ROUTING.agent3_text_post_formats || []);\nconst VIDEO_FORMATS = new Set(FORMAT_ROUTING.agent6_video_formats || []);\nconst CAROUSEL_FORMATS = new Set(FORMAT_ROUTING.carousel_formats || []);\n\nfunction parseMeta(raw) {\n  if (!raw) return {};\n  try {\n    return typeof raw === 'string' ? JSON.parse(raw) : raw;\n  } catch {\n    return {};\n  }\n}\n\nfunction resolveFormat(meta, row) {\n  return String(\n    meta.content_format\n    || meta.product_type\n    || row.product_type\n    || meta.editorial_brief_v1?.content_format\n    || 'fb_page_post_image',\n  ).trim().toLowerCase();\n}\n\nfunction editorialPriority(meta) {\n  const scheduled = meta.scheduled_publish_at\n    || meta.editorial_brief_v1?.scheduled_publish_at\n    || meta.publish_at;\n  if (scheduled) {\n    const t = new Date(scheduled).getTime();\n    if (!Number.isNaN(t)) return t;\n  }\n  const calId = String(meta.editorial_calendar_id || '').trim();\n  if (calId) {\n    const num = Number(calId.split(':').pop());\n    if (Number.isFinite(num)) return num;\n  }\n  const pageKey = String(meta.editorial_page_key || '').trim();\n  if (pageKey) {\n    const num = Number(pageKey.split(':').pop());\n    if (Number.isFinite(num)) return num;\n  }\n  return 999999;\n}\n\nconst res = $input.first().json;\nconst rows = Array.isArray(res.values) ? res.values : [];\nif (rows.length < 2) {\n  return [{ json: { empty: true, message: 'content_queue trống' } }];\n}\n\nconst headers = rows[0].map((x) => String(x ?? '').trim().toLowerCase());\nconst candidates = [];\n\nfor (let i = 1; i < rows.length; i++) {\n  const cells = rows[i];\n  if (!cells?.some((c) => String(c ?? '').trim())) continue;\n\n  const row = { sheet_row: i + 1 };\n  headers.forEach((key, j) => {\n    if (key) row[key] = cells[j] ?? '';\n  });\n\n  const segment = String(row.segment || '').trim().toLowerCase();\n  const score = Number(row.score || 0);\n  const status = String(row.status || '').trim().toLowerCase();\n  const meta = parseMeta(row.meta);\n  row.meta_parsed = meta;\n\n  if (meta.draft_created === true) continue;\n  if (!ALLOW_SEGMENTS.has(segment)) continue;\n  if (score < MIN_SCORE) continue;\n  if (status !== 'classified' && row.claude_verdict !== 'qualified') continue;\n\n  const fmt = resolveFormat(meta, row);\n  if (VIDEO_FORMATS.has(fmt)) continue;\n  if (CAROUSEL_FORMATS.has(fmt)) continue;\n  if (!TEXT_FORMATS.has(fmt) && fmt !== 'fb_page_post_image') {\n    if (VIDEO_FORMATS.has(fmt) || CAROUSEL_FORMATS.has(fmt)) continue;\n  }\n\n  const LEGAL_SEGMENTS = new Set(['noxh_income', 'valuation', 'sme_credit']);\n  if (LEGAL_SEGMENTS.has(segment)) {\n    if (!meta.editorial_brief_v1) continue;\n    const pack = meta.legal_retrieval_pack;\n    if (!pack || pack.needs_human_legal_source === true) continue;\n    row.legal_retrieval_pack = pack;\n    row.editorial_brief_v1 = meta.editorial_brief_v1;\n  }\n\n  row.channel = meta.channel || null;\n  row.target_channel = meta.target_channel || meta.editorial_brief_v1?.target_channel || null;\n  row.product_type = meta.product_type || meta.content_format || fmt;\n  row.format_type = 'text_post';\n  row.editorial_priority = editorialPriority(meta);\n\n  const text = String(row.text || '').trim();\n  if (text.length < 20) continue;\n\n  candidates.push(row);\n}\n\ncandidates.sort((a, b) => a.editorial_priority - b.editorial_priority);\nconst out = candidates.slice(0, BATCH).map((row) => ({ json: row }));\n\nif (!out.length) {\n  return [{ json: { empty: true, message: 'Không còn candidate draft (score≥70, text_post format, chưa draft)' } }];\n}\n\nreturn out;"
       },
       "id": "a304filter",
       "name": "Parse Filter Draft Candidates",
@@ -112,7 +112,7 @@
     },
     {
       "parameters": {
-        "jsCode": "const data = $getWorkflowStaticData('global');\ndata.a3_stats = { draft_ok: 0, draft_fail: 0, l0_fail: 0, parse_fail: 0 };\nreturn $input.all();"
+        "jsCode": "const data = $getWorkflowStaticData('global');\ndata.a3_stats = { draft_ok: 0, draft_fail: 0, l0_fail: 0, parse_fail: 0, l2_fail: 0, l2_parse_fail: 0, l2_llm_fail: 0, title_rejected: 0, title_capitalization_error: 0, title_dup_review: 0, hook_rejected: 0, hook_comment_bait_review: 0, hook_truncation_review: 0, hook_frequency_review: 0 };\nreturn $input.all();"
       },
       "id": "a305reset",
       "name": "Reset Run Stats",
@@ -125,6 +125,36 @@
     },
     {
       "parameters": {
+        "method": "GET",
+        "url": "https://sheets.googleapis.com/v4/spreadsheets/1fYB4h_BTiKXa9O3lBah-tQonWpQOQMG2aSkSfPs6yU4/values/content_drafts!A%3AN",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleApi",
+        "options": {}
+      },
+      "id": "a305fetchdrafts",
+      "name": "Fetch content_drafts titles",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1080,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const res = $input.first().json;\nconst rows = Array.isArray(res.values) ? res.values : [];\nconst data = $getWorkflowStaticData('global');\n\nconst RULES = {\"version\":1,\"similarity_threshold\":0.7,\"published_statuses\":[\"approved\",\"published\"],\"title_formulas\":{\"NOXH_LEGAL\":\"Dạng câu hỏi trực diện; có số liệu cụ thể nếu phù hợp (vd: ngưỡng thu nhập, diện tích). Không dùng tag [TEST]/placeholder. Không nhét CTA vào title.\",\"LOAN_FINANCE\":\"Khẳng định rõ lợi ích; dùng thuật ngữ DTI, room vay, dòng tiền khi phù hợp. Không cam kết lãi suất cụ thể trong title.\",\"VALUATION\":\"So sánh hoặc giải thích trực diện (giá tham khảo vs chứng thư, sai lệch thẩm định). Không hứa giá chính thức.\",\"GENERAL_POLICY\":\"Tin tức/tổng hợp chính sách + mốc thời gian cụ thể (tháng/năm). Tránh CTA comment trong title.\"},\"segment_to_content_type\":{\"noxh_income\":\"NOXH_LEGAL\",\"sme_credit\":\"LOAN_FINANCE\",\"valuation\":\"VALUATION\",\"general_inbound\":\"GENERAL_POLICY\",\"unclassified\":\"GENERAL_POLICY\"}};\nconst CONTENT_TYPES = new Set(['NOXH_LEGAL', 'LOAN_FINANCE', 'VALUATION', 'GENERAL_POLICY']);\n\nfunction segmentToType(segment) {\n  const key = String(segment || '').trim().toLowerCase();\n  const mapped = RULES.segment_to_content_type?.[key];\n  return mapped && CONTENT_TYPES.has(mapped) ? mapped : 'GENERAL_POLICY';\n}\n\nconst byType = {\n  NOXH_LEGAL: [],\n  LOAN_FINANCE: [],\n  VALUATION: [],\n  GENERAL_POLICY: [],\n};\n\nif (rows.length >= 2) {\n  const headers = rows[0].map((x) => String(x ?? '').trim().toLowerCase());\n  const idx = {\n    title: headers.indexOf('title'),\n    status: headers.indexOf('status'),\n    meta: headers.indexOf('meta'),\n    key: headers.indexOf('source_normalized_key'),\n    segment: headers.indexOf('segment'),\n  };\n  const publishedStatuses = new Set(\n    (RULES.published_statuses || ['approved', 'published']).map((s) => s.toLowerCase()),\n  );\n\n  for (let i = 1; i < rows.length; i++) {\n    const cells = rows[i];\n    if (!cells?.some((c) => String(c ?? '').trim())) continue;\n    const status = String(cells[idx.status] ?? '').trim().toLowerCase();\n    if (!publishedStatuses.has(status)) continue;\n    const title = String(cells[idx.title] ?? '').trim();\n    if (!title) continue;\n\n    let content_type = null;\n    try {\n      const metaRaw = cells[idx.meta];\n      const meta = typeof metaRaw === 'string' ? JSON.parse(metaRaw) : metaRaw;\n      content_type = meta?.content_type || meta?.content_type_router?.content_type || null;\n    } catch {\n      content_type = null;\n    }\n    if (!CONTENT_TYPES.has(content_type)) {\n      content_type = segmentToType(cells[idx.segment]);\n    }\n\n    byType[content_type].push({\n      title,\n      normalized_key: String(cells[idx.key] ?? '').slice(0, 120),\n    });\n  }\n}\n\ndata.published_titles_by_type = byType;\ndata.published_title_count = Object.values(byType).reduce((n, arr) => n + arr.length, 0);\n\nfunction isCommentKeywordCta(text) {\n  const t = String(text || '').trim();\n  if (!t) return false;\n  return /^comment\\s+[\"']?[A-Z0-9_]+[\"']?/i.test(t)\n    || /\\bcomment\\s+[\"']?[A-Z0-9_]+[\"']?\\s+(?:để|de)\\s/i.test(t);\n}\n\nconst commentUnlockIndex = [];\nconst smStatuses = new Set(\n  ['draft', 'review', 'approved', 'published'].map((s) => s.toLowerCase()),\n);\n\nif (rows.length >= 2) {\n  const headers2 = rows[0].map((x) => String(x ?? '').trim().toLowerCase());\n  const idx2 = {\n    cta: headers2.indexOf('cta_opt_in'),\n    status: headers2.indexOf('status'),\n    created: headers2.indexOf('created_at'),\n    key: headers2.indexOf('source_normalized_key'),\n  };\n\n  for (let i = 1; i < rows.length; i++) {\n    const cells = rows[i];\n    if (!cells?.some((c) => String(c ?? '').trim())) continue;\n    const status = String(cells[idx2.status] ?? '').trim().toLowerCase();\n    if (!smStatuses.has(status)) continue;\n    const cta = String(cells[idx2.cta] ?? '').trim();\n    if (!isCommentKeywordCta(cta)) continue;\n    commentUnlockIndex.push({\n      normalized_key: String(cells[idx2.key] ?? '').slice(0, 120),\n      created_at: String(cells[idx2.created] ?? '').trim() || null,\n      status,\n    });\n  }\n}\n\ndata.comment_unlock_index = commentUnlockIndex;\n\nconst coverageByTopic = {};\nconst coverageRecent = [];\nconst activeStatuses = new Set(['draft', 'review', 'approved', 'published']);\nconst topicPatterns = [\n  { id: 'dti', re: /\\\\b(dti|dòng\\\\s+tiền|room\\\\s+vay)\\\\b/i },\n  { id: 'noxh_income', re: /\\\\b(lương|thu\\\\s+nhập|triệu|đủ\\\\s+điều\\\\s+kiện)\\\\b/i },\n  { id: 'noxh_profile', re: /\\\\b(hồ\\\\s+sơ|mẫu\\\\s*01|photo)\\\\b/i },\n];\n\nif (rows.length >= 2) {\n  const h3 = rows[0].map((x) => String(x ?? '').trim().toLowerCase());\n  const i3 = { title: h3.indexOf('title'), status: h3.indexOf('status'), meta: h3.indexOf('meta'), created: h3.indexOf('created_at'), segment: h3.indexOf('segment') };\n  for (let i = 1; i < rows.length; i++) {\n    const cells = rows[i];\n    if (!cells?.some((c) => String(c ?? '').trim())) continue;\n    const status = String(cells[i3.status] ?? '').trim().toLowerCase();\n    if (!activeStatuses.has(status)) continue;\n    const title = String(cells[i3.title] ?? '').trim();\n    if (!title) continue;\n    const entry = { title, segment: String(cells[i3.segment] ?? ''), created_at: String(cells[i3.created] ?? '') };\n    coverageRecent.push(entry);\n    for (const p of topicPatterns) {\n      if (p.re.test(title)) {\n        if (!coverageByTopic[p.id]) coverageByTopic[p.id] = [];\n        coverageByTopic[p.id].push(entry);\n      }\n    }\n  }\n}\n\ndata.content_coverage = { byTopic: coverageByTopic, recentTitles: coverageRecent.slice(0, 30) };\n\nreturn [{\n  json: {\n    ok: true,\n    published_title_count: data.published_title_count,\n    comment_unlock_index_count: commentUnlockIndex.length,\n    content_coverage_topics: Object.keys(coverageByTopic).length,\n    by_type_counts: Object.fromEntries(\n      Object.entries(byType).map(([k, v]) => [k, v.length]),\n    ),\n  },\n}];"
+      },
+      "id": "a305index",
+      "name": "Index Published Titles",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1080,
+        360
+      ]
+    },
+    {
+      "parameters": {
         "batchSize": 1,
         "options": {}
       },
@@ -133,20 +163,20 @@
       "type": "n8n-nodes-base.splitInBatches",
       "typeVersion": 3,
       "position": [
-        1200,
+        1320,
         240
       ]
     },
     {
       "parameters": {
-        "jsCode": "const row = $('Loop Draft Candidates').item?.json || $input.first().json;\n\nconst system = `Growth Copywriter Magnix — Value-First Hook.\n[/matrix] [/artifacts] [/deconstruct]\nChỉ trả JSON hợp lệ, không markdown bọc ngoài:\n{\"title\":\"\",\"hook_line\":\"\",\"segment\":\"\",\"artifact_markdown\":\"\",\"source_refs\":[],\"cta_opt_in\":\"\",\"disclaimer\":\"\",\"export_hint\":\"pdf|excel|both\"}\n- hook_line ≤25 từ\n- artifact_markdown: ≥1 bảng Markdown so sánh\n- Không cam kết lãi suất cụ thể, không hứa duyệt vay`;\n\nconst segment = String(row.segment || 'general_inbound');\nconst pain = String(row.text || '').slice(0, 2000);\nconst meta = row.meta_parsed || {};\nconst legalPack = row.legal_retrieval_pack || meta.legal_retrieval_pack || null;\nconst assetMap = {\n  noxh_income: 'checklist_ho_so_noxh',\n  valuation: 'checklist_tham_dinh',\n  sme_credit: 'checklist_vay_dn',\n  general_inbound: 'checklist_mua_nha',\n};\nconst requiresLegal = ['noxh_income', 'valuation', 'sme_credit'].includes(segment);\nconst userPayload = JSON.stringify({\n  segment,\n  pain,\n  asset_type: assetMap[segment] || 'checklist',\n  angle: 'pain_from_social_listen',\n  reference_url_or_text: String(row.post_url || '').slice(0, 500),\n  requires_legal_qa: requiresLegal,\n  legal_retrieval_pack: legalPack,\n  editorial_brief_v1: row.editorial_brief_v1 || meta.editorial_brief_v1 || null,\n  interest_key: row.interest_key || '',\n  source_normalized_key: row.normalized_key,\n});\n\ntry {\n  if ($env.DEEPSEEK_API_KEY) {\n    const res = await this.helpers.httpRequest({\n      method: 'POST',\n      url: $env.DEEPSEEK_API_URL || 'https://api.deepseek.com/chat/completions',\n      headers: {\n        Authorization: `Bearer ${$env.DEEPSEEK_API_KEY}`,\n        'Content-Type': 'application/json',\n      },\n      body: {\n        model: $env.DEEPSEEK_MODEL || 'deepseek-chat',\n        temperature: 0.4,\n        max_tokens: 4096,\n        response_format: { type: 'json_object' },\n        messages: [\n          { role: 'system', content: system },\n          { role: 'user', content: userPayload },\n        ],\n      },\n      json: true,\n    });\n    return [{ json: res }];\n  }\n\n  if ($env.ANTHROPIC_API_KEY) {\n    const model = $env.ANTHROPIC_DRAFT_MODEL || 'claude-sonnet-4-6';\n    const res = await this.helpers.httpRequest({\n      method: 'POST',\n      url: 'https://api.anthropic.com/v1/messages',\n      headers: {\n        'x-api-key': $env.ANTHROPIC_API_KEY,\n        'anthropic-version': '2023-06-01',\n        'Content-Type': 'application/json',\n      },\n      body: {\n        model,\n        max_tokens: 4096,\n        temperature: 0.4,\n        system,\n        messages: [{ role: 'user', content: userPayload }],\n      },\n      json: true,\n    });\n    return [{ json: res }];\n  }\n\n  throw new Error('Thiếu DEEPSEEK_API_KEY hoặc ANTHROPIC_API_KEY');\n} catch (e) {\n  return [{ json: { error: true, message: e.message } }];\n}"
+        "jsCode": "const MAGNIX_LLM_DEFAULTS = {\"classify\":\"deepseek\",\"editorial_brief\":\"deepseek\",\"outreach\":\"deepseek\",\"video_draft\":\"deepseek\",\"carousel_draft\":\"deepseek\",\"content_draft\":\"anthropic\",\"content_draft_general\":\"deepseek\",\"content_qa\":\"anthropic\"};\r\n\r\nfunction hasLlmKey(raw) {\r\n  return String(raw || '').trim().length > 12;\r\n}\r\n\r\nfunction envProvider(taskId) {\r\n  const key = `MAGNIX_LLM_${String(taskId || '')\r\n    .toUpperCase()\r\n    .replace(/[^A-Z0-9]/g, '_')}_PROVIDER`;\r\n  const v = String($env[key] || '').trim().toLowerCase();\r\n  if (v === 'deepseek' || v === 'anthropic') return v;\r\n  return null;\r\n}\r\n\r\nfunction resolveProvider(taskId) {\r\n  return envProvider(taskId) || MAGNIX_LLM_DEFAULTS[taskId] || 'deepseek';\r\n}\r\n\r\nfunction hasProvider(provider) {\r\n  if (provider === 'anthropic') return hasLlmKey($env.ANTHROPIC_API_KEY);\r\n  return hasLlmKey($env.DEEPSEEK_API_KEY);\r\n}\r\n\r\nfunction anthropicModelForTask(taskId) {\r\n  if (taskId === 'classify') {\r\n    return $env.ANTHROPIC_CLASSIFY_MODEL || 'claude-haiku-4-5-20251001';\r\n  }\r\n  if (taskId === 'video_draft') {\r\n    return $env.ANTHROPIC_VIDEO_MODEL || $env.ANTHROPIC_DRAFT_MODEL || 'claude-sonnet-4-6';\r\n  }\r\n  return $env.ANTHROPIC_DRAFT_MODEL || $env.ANTHROPIC_MODEL || 'claude-sonnet-4-6';\r\n}\r\n\r\nasync function callDeepSeekLlm(ctx, opts) {\r\n  const {\r\n    system,\r\n    userPayload,\r\n    temperature = 0.35,\r\n    maxTokens = 4096,\r\n    jsonMode = true,\r\n  } = opts;\r\n  return ctx.helpers.httpRequest({\r\n    method: 'POST',\r\n    url: $env.DEEPSEEK_API_URL || 'https://api.deepseek.com/chat/completions',\r\n    headers: {\r\n      Authorization: `Bearer ${$env.DEEPSEEK_API_KEY}`,\r\n      'Content-Type': 'application/json',\r\n    },\r\n    body: {\r\n      model: $env.DEEPSEEK_MODEL || 'deepseek-chat',\r\n      temperature,\r\n      max_tokens: maxTokens,\r\n      ...(jsonMode ? { response_format: { type: 'json_object' } } : {}),\r\n      messages: [\r\n        { role: 'system', content: system },\r\n        { role: 'user', content: userPayload },\r\n      ],\r\n    },\r\n    json: true,\r\n  });\r\n}\r\n\r\nasync function callAnthropicLlm(ctx, opts) {\r\n  const {\r\n    system,\r\n    userPayload,\r\n    temperature = 0.35,\r\n    maxTokens = 4096,\r\n    taskId = 'content_draft',\r\n  } = opts;\r\n  return ctx.helpers.httpRequest({\r\n    method: 'POST',\r\n    url: 'https://api.anthropic.com/v1/messages',\r\n    headers: {\r\n      'x-api-key': $env.ANTHROPIC_API_KEY,\r\n      'anthropic-version': '2023-06-01',\r\n      'Content-Type': 'application/json',\r\n    },\r\n    body: {\r\n      model: anthropicModelForTask(taskId),\r\n      max_tokens: maxTokens,\r\n      temperature,\r\n      system,\r\n      messages: [{ role: 'user', content: userPayload }],\r\n    },\r\n    json: true,\r\n  });\r\n}\r\n\r\nasync function invokeMagnixLlm(ctx, taskId, opts) {\r\n  const primary = resolveProvider(taskId);\r\n  const fallback = primary === 'deepseek' ? 'anthropic' : 'deepseek';\r\n  const errors = [];\r\n\r\n  for (const provider of [primary, fallback]) {\r\n    if (!hasProvider(provider)) continue;\r\n    try {\r\n      if (provider === 'deepseek') {\r\n        return await callDeepSeekLlm(ctx, opts);\r\n      }\r\n      return await callAnthropicLlm(ctx, { ...opts, taskId });\r\n    } catch (e) {\r\n      errors.push(`${provider}: ${e.message}`);\r\n    }\r\n  }\r\n\r\n  if (!hasProvider('deepseek') && !hasProvider('anthropic')) {\r\n    throw new Error('Thiếu DEEPSEEK_API_KEY hoặc ANTHROPIC_API_KEY trên n8n env');\r\n  }\r\n  throw new Error(errors.join(' | ') || 'LLM providers failed');\r\n}\n\nconst CONTEXT_STORE = {\"version\":1,\"min_cluster_size\":8,\"generated_at\":\"2026-06-28T10:38:26.064Z\",\"generated_by\":\"run-context-enrichment.mjs\",\"by_content_type\":{\"NOXH_LEGAL\":{\"status\":\"ready\",\"post_count\":2184,\"sample_post_ids\":[\"1478144464114896\",\"1629991639134487\",\"1629988232468161\",\"1629984252468559\",\"1478308700765139\",\"1478329794096363\",\"1478582554071087\",\"1478574497405226\",\"1478598010736208\",\"1,47863E+15\",\"1478181040777905\",\"1477923680803641\",\"1478014550794554\",\"1629977452469239\",\"1629977102469274\",\"1629964552470529\",\"1478043007458375\",\"1478093530786656\",\"1477756850820324\",\"1477764774152865\"],\"context_summary\":{\"top_questions\":[\"Khi nào bốc thăm NOXH Kim Chung?\",\"Cách kê khai mẫu 02 trên dịch vụ công?\",\"Vợ nội trợ/chồng XKLĐ xin xác nhận thu nhập thế nào?\"],\"pains\":[\"Không rõ quy trình, thủ tục hành chính phức tạp\",\"Lo lắng về điều kiện vay vốn ngân hàng chính sách\",\"Băn khoăn về quy định sang nhượng sau 5 năm\"],\"audience_voice\":\"Các bác cho em hỏi, hồ sơ em được duyệt rồi mà không đủ tiền mua thì có chuyển cho người khác được không ạ?\",\"hook_angles\":[]},\"classify_method_stats\":{\"keyword_rules\":1798,\"segment_default\":209,\"segment_tiebreak\":177}},\"LOAN_FINANCE\":{\"status\":\"ready\",\"post_count\":251,\"sample_post_ids\":[\"1,47816E+15\",\"1478170604112282\",\"1478461750749834\",\"1628941122572872\",\"1472571471338862\",\"1628499149283736\",\"1628450932621891\",\"1470944978168178\",\"1471017911494218\",\"1470188204910522\",\"1628050302661954\",\"1627189669414684\",\"1,28394E+15\",\"1283763170591393\",\"3983188018654482\",\"1280442424256801\",\"1279771670990543\",\"1279609427673434\",\"1279591631008547\",\"1278809757753401\"],\"context_summary\":{\"top_questions\":[\"Lãi suất vay ngân hàng thương mại có thay đổi sau thời gian ưu đãi không?\",\"Thủ tục vay Ngân hàng Chính sách Xã hội có phức tạp không?\",\"Nếu không vay được ngân hàng thì có mất cọc khi mua NOXH không?\"],\"pains\":[\"Lãi suất vay thay đổi bất ngờ, không minh bạch\",\"Thủ tục vay NHCSXH rườm rà, chờ đợi lâu\",\"Lo sợ không được duyệt vay sau khi ký hợp đồng mua bán\"],\"audience_voice\":\"Em cứ sợ lỡ ký hợp đồng mua bán rồi, mà ngân hàng ko cho vay thì sao?\",\"hook_angles\":[]},\"classify_method_stats\":{\"keyword_rules\":239,\"segment_default\":12}},\"VALUATION\":{\"status\":\"ready\",\"post_count\":28,\"sample_post_ids\":[\"1467337868528889\",\"1488378866178389\",\"3426121380871081\",\"3419557931527426\",\"3,41753E+15\",\"3412684082214811\",\"3411661008983785\",\"1,52675E+15\",\"1479362973940494\",\"1294572895739902\",\"3549554815199477\",\"3549497625205196\",\"3549496995205259\",\"3549115128576779\",\"3547489012072724\",\"3546291802192445\",\"3545811412240484\",\"3544752712346354\",\"3543284662493159\",\"4799386590284486\"],\"context_summary\":{\"top_questions\":[\"Nhà phố bị quy hoạch thì được đền bù thế nào? Có được mua chung cư tương đương số tiền đền bù không?\",\"Ngân hàng nào định giá cao và cho vay cao? Cần vay 10 tỷ, phí bao nhiêu?\",\"Nhà hẻm nhỏ có dễ bán lại không? Ngân hàng có định giá dễ không?\"],\"pains\":[\"Lo lắng về giá trị đền bù khi bị quy hoạch, không rõ quyền lợi.\",\"Khó tìm ngân hàng định giá cao để vay được nhiều, sợ bị từ chối hoặc phí cao.\",\"Băn khoăn tính thanh khoản của nhà hẻm nhỏ, sợ mua vào khó bán.\"],\"audience_voice\":\"Em cần ngân hàng định giá cao và vay cao, không phải vay bỏ sổ đâu nha!\",\"hook_angles\":[]},\"classify_method_stats\":{\"segment_default\":1,\"keyword_rules\":23,\"segment_tiebreak\":4}},\"GENERAL_POLICY\":{\"status\":\"ready\",\"post_count\":686,\"sample_post_ids\":[\"1477921720803837\",\"1629951502471834\",\"1629109295889388\",\"1629045012562483\",\"1472610144668328\",\"1,62831E+15\",\"1,62814E+15\",\"1627978249335826\",\"1467561615173181\",\"1280420350925675\",\"1278781631089547\",\"1278779761089734\",\"1,27793E+15\",\"1630046782462306\",\"1275340884766955\",\"1273757241591986\",\"1283986143903354\",\"1283926963909272\",\"3976637855976165\",\"1281967937438508\"],\"context_summary\":{\"top_questions\":[\"Thủ tục mua NƠXH có cần bảng lương 12 tháng không?\",\"Dự án Ecohome 3, CT3 Kim Chung, Bảo Ngọc City Cổ Linh đã có lịch bốc thăm/mở bán chưa?\",\"Giấy cam kết chưa hưởng chính sách xã hội làm ở UBND phường hay văn phòng đăng ký đất đai?\"],\"pains\":[\"Thiếu thông tin minh bạch về tiến độ và lịch bốc thăm dự án NƠXH.\",\"Quy trình thủ tục hành chính rườm rà, hướng dẫn không nhất quán giữa các cơ quan.\",\"Lo lắng về cơ hội mua nhà khi đối tượng ưu tiên (cán bộ, công chức) được ưu đãi không qua bốc thăm.\"],\"audience_voice\":\"Các bác ơi giờ làm hồ sơ mua NƠXH là không cần bảng lương 12 tháng nữa ạ? nếu quy định là không cần nhưng mình cứ chuẩn bị rồi kèm vào nộp thì khả năng đạt có cao hơn không ạ?\",\"hook_angles\":[]},\"classify_method_stats\":{\"keyword_rules\":76,\"segment_default\":610}}}};\nconst CONTENT_TYPE_RULES = {\"version\":1,\"min_cluster_size\":8,\"llm_score_band\":{\"min\":40,\"max\":59},\"segment_default\":{\"noxh_income\":\"NOXH_LEGAL\",\"sme_credit\":\"LOAN_FINANCE\",\"valuation\":\"VALUATION\",\"general_inbound\":\"GENERAL_POLICY\",\"unclassified\":\"GENERAL_POLICY\"},\"keyword_rules\":[{\"content_type\":\"NOXH_LEGAL\",\"patterns\":[\"noxh\",\"nhà ở xã hội\",\"nha o xa hoi\",\"hồ sơ noxh\",\"mẫu 01\",\"mau 01\",\"thu nhập\",\"điều kiện mua\",\"đối tượng mua\",\"ct07\",\"cư trú\"],\"weight\":3},{\"content_type\":\"LOAN_FINANCE\",\"patterns\":[\"dti\",\"dòng tiền\",\"dong tien\",\"room vay\",\"lãi suất\",\"hạn mức\",\"vay mua nhà\",\"ngân hàng\",\"nhcsxh\",\"cic\",\"nợ xấu\"],\"weight\":3},{\"content_type\":\"VALUATION\",\"patterns\":[\"định giá\",\"dinh gia\",\"thẩm định\",\"tham dinh\",\"chứng thư\",\"giá trị tài sản\",\"đơn giá\"],\"weight\":3},{\"content_type\":\"GENERAL_POLICY\",\"patterns\":[\"quy định\",\"nghị định\",\"thông tư\",\"chính sách\",\"cập nhật\",\"tp.hcm\",\"bình dương\"],\"weight\":2}],\"archive_exclude_sources\":[\"editorial_calendar\",\"magnix_editorial\"],\"archive_exclude_key_prefixes\":[\"editorial:queue:\",\"editorial:page:\"]};\n\nfunction resolveEnrichmentContentType(segment, contentType) {\n  const types = new Set(['NOXH_LEGAL', 'LOAN_FINANCE', 'VALUATION', 'GENERAL_POLICY']);\n  const raw = String(contentType || '').toUpperCase();\n  if (types.has(raw)) return raw;\n  const map = CONTENT_TYPE_RULES.segment_default || {};\n  return map[String(segment || '').toLowerCase()] || 'GENERAL_POLICY';\n}\n\nfunction buildContextEnrichment(segment, contentType) {\n  const ct = resolveEnrichmentContentType(segment, contentType);\n  const entry = CONTEXT_STORE.by_content_type?.[ct] || {};\n  const summary = entry.status === 'ready' ? entry.context_summary : null;\n  return {\n    content_type: ct,\n    context_enrichment_status: summary ? 'ready' : (entry.status || 'waiting_for_context'),\n    context_summary: summary,\n  };\n}\n\nconst row = $('Loop Draft Candidates').item?.json || $input.first().json;\n\nconst system = `Growth Copywriter Magnix — Value-First Hook.\n[/matrix] [/artifacts] [/deconstruct]\nBrand voice (bắt buộc):\n1. **Trợ lý hữu ích, không môi giới:** Nói như người am hiểu quy trình NOXH/vay/định giá đang giúp bạn rà hồ sơ — không chèo kéo, không hứa duyệt.\n2. **Cụ thể trước, khái niệm sau:** Ưu tiên câu hỏi thật của người mua, số liệu minh họa có căn cứ, checklist hành động — tránh văn mẫu pháp lý rỗng.\n3. **Giọng đồng hành:** Dùng \"bạn/mình\" tự nhiên; tránh ALL CAPS, emoji spam, và từ ngữ sales (\"nóng\", \"chốt ngay\", \"inbox liền\").\n4. **Pháp lý thận trọng:** Diễn đạt \"theo quy định hiện hành\", \"thường gặp\", \"cần đối chiếu hồ sơ\" — không khẳng định tuyệt đối.\n5. **Value-first CTA:** Mời nhận tài liệu vì giải quyết pain cụ thể — không chỉ ra lệnh comment trống.\nCanonical facts (bắt buộc — không tự bịa số):\n- DTI: DTI (tỷ lệ trả nợ trên thu nhập) là thông lệ thẩm định nội bộ từng ngân hàng — không có con số cố định trong luật nhà ở. Khi cần nêu ngưỡng tham khảo: thường dưới khoảng 36–40% thuận lợi; 40–50% thẩm định kỹ; trên 50% thường khó — luôn ghi \"tùy ngân hàng và hồ sơ\".\n- Cấm claim: luật quy định DTI 40%; DTI 40% là bắt buộc; mọi ngân hàng áp DTI 40%; chắc chắn duyệt nếu DTI dưới 40%\nFormat: Bài đọc Facebook Page: hook_line ≤25 từ + body Q&A (H2/H3 là câu hỏi). KHÔNG viết script theo giây.\nChỉ trả JSON hợp lệ, không markdown bọc ngoài:\n{\"title\":\"\",\"hook_line\":\"\",\"segment\":\"\",\"content_type\":\"\",\"artifact_markdown\":\"\",\"source_refs\":[],\"cta_opt_in\":\"\",\"disclaimer\":\"\",\"export_hint\":\"pdf|excel|both\"}\n- format_type luôn là text_post — KHÔNG viết script video theo giây\n- content_type: NOXH_LEGAL | LOAN_FINANCE | VALUATION | GENERAL_POLICY (theo segment/chủ đề)\n- disclaimer: để trống — hệ thống inject template sau Parse\n- cta_opt_in: để trống — hệ thống inject CTA theo content_type + channel sau Parse\n- title: sentence case tiếng Việt — chỉ hoa chữ đầu câu + từ whitelist (NOXH, DTI, CĐT, TP.HCM…); KHÔNG Title Case từng từ, KHÔNG ALL CAPS; KHÔNG [TEST]/placeholder/CTA trong title\n- Công thức title theo content_type:\n  - NOXH_LEGAL: Dạng câu hỏi trực diện; có số liệu cụ thể nếu phù hợp (vd: ngưỡng thu nhập, diện tích). Không dùng tag [TEST]/placeholder. Không nhét CTA vào title.\n  - LOAN_FINANCE: Khẳng định rõ lợi ích; dùng thuật ngữ DTI, room vay, dòng tiền khi phù hợp. Không cam kết lãi suất cụ thể trong title.\n  - VALUATION: So sánh hoặc giải thích trực diện (giá tham khảo vs chứng thư, sai lệch thẩm định). Không hứa giá chính thức.\n  - GENERAL_POLICY: Tin tức/tổng hợp chính sách + mốc thời gian cụ thể (tháng/năm). Tránh CTA comment trong title.\n- hook_line ≤25 từ\n- artifact_markdown: ≥1 bảng Markdown so sánh; H2/H3 là câu hỏi Q&A\n- Không cam kết lãi suất cụ thể, không hứa duyệt vay\n- Tránh lặp góc đã có trong content_coverage.avoid_recent_titles — chọn angle mới`;\n\nconst segment = String(row.segment || 'general_inbound');\nconst pain = String(row.text || '').slice(0, 2000);\nconst meta = row.meta_parsed || {};\nconst legalPack = row.legal_retrieval_pack || meta.legal_retrieval_pack || null;\nconst assetMap = {\n  noxh_income: 'checklist_ho_so_noxh',\n  valuation: 'checklist_tham_dinh',\n  sme_credit: 'checklist_vay_dn',\n  general_inbound: 'checklist_mua_nha',\n};\nconst requiresLegal = ['noxh_income', 'valuation', 'sme_credit'].includes(segment);\nconst hintType = {\n  noxh_income: 'NOXH_LEGAL',\n  sme_credit: 'LOAN_FINANCE',\n  valuation: 'VALUATION',\n  general_inbound: 'GENERAL_POLICY',\n}[segment] || 'GENERAL_POLICY';\n\nconst workflowData = $getWorkflowStaticData('global');\nconst coverage = workflowData.content_coverage || { byTopic: {}, recentTitles: [] };\nconst briefTitle = row.editorial_brief_v1?.editorial_title\n  || row.editorial_brief_v1?.one_line_insight\n  || pain.slice(0, 300);\n\nconst enrichment = buildContextEnrichment(segment, hintType);\n\nconst userPayload = JSON.stringify({\n  format_type: 'text_post',\n  product_format: row.product_type || meta.content_format || 'fb_page_post_image',\n  segment,\n  pain,\n  asset_type: assetMap[segment] || 'checklist',\n  angle: 'pain_from_social_listen',\n  reference_url_or_text: String(row.post_url || '').slice(0, 500),\n  requires_legal_qa: requiresLegal,\n  legal_retrieval_pack: legalPack,\n  editorial_brief_v1: row.editorial_brief_v1 || meta.editorial_brief_v1 || null,\n  interest_key: row.interest_key || '',\n  source_normalized_key: row.normalized_key,\n  title_content_type_hint: hintType,\n  content_type: enrichment.content_type,\n  context_enrichment_status: enrichment.context_enrichment_status,\n  context_summary: enrichment.context_summary,\n  content_pillar: meta.content_pillar || meta.editorial_brief_v1?.content_pillar || null,\n  content_coverage: {\n    avoid_recent_titles: (coverage.recentTitles || []).slice(0, 10).map((t) => t.title),\n    topic_counts: Object.fromEntries(\n      Object.entries(coverage.byTopic || {}).map(([k, v]) => [k, v.length]),\n    ),\n    brief_title_hint: briefTitle,\n  },\n});\n\nconst taskId = requiresLegal ? 'content_draft' : 'content_draft_general';\n\ntry {\n  const res = await invokeMagnixLlm(this, taskId, {\n    system,\n    userPayload,\n    temperature: 0.4,\n    maxTokens: 4096,\n    jsonMode: true,\n  });\n  return [{ json: res }];\n} catch (e) {\n  return [{ json: { error: true, message: e.message } }];\n}"
       },
       "id": "a307llm",
       "name": "LLM Lead Magnet",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1440,
+        1560,
         240
       ],
       "onError": "continueRegularOutput"
@@ -180,22 +210,83 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        1680,
+        1800,
         240
       ]
     },
     {
       "parameters": {
-        "jsCode": "function extractJsonString(raw) {\n  if (raw == null) throw new Error('EMPTY_LLM_OUTPUT');\n  const s = typeof raw === 'string' ? raw : JSON.stringify(raw);\n  const fenced = s.match(/```(?:json)?\\s*([\\s\\S]*?)```/i);\n  return (fenced ? fenced[1] : s).trim();\n}\n\nconst res = $input.first().json;\nconst raw =\n  res.choices?.[0]?.message?.content ??\n  res.content?.[0]?.text ??\n  res.message?.content ??\n  res;\n\ntry {\n  const parsed = JSON.parse(extractJsonString(raw));\n  const required = ['title', 'hook_line', 'segment', 'artifact_markdown', 'cta_opt_in'];\n  for (const k of required) {\n    if (!parsed[k] || !String(parsed[k]).trim()) throw new Error(`MISSING_${k.toUpperCase()}`);\n  }\n  if (!Array.isArray(parsed.source_refs)) parsed.source_refs = [];\n  return [{\n    json: {\n      ok: true,\n      draft: {\n        title: String(parsed.title).slice(0, 500),\n        hook_line: String(parsed.hook_line).slice(0, 500),\n        segment: String(parsed.segment),\n        artifact_markdown: String(parsed.artifact_markdown).slice(0, 45000),\n        source_refs: parsed.source_refs.map(String).slice(0, 10),\n        cta_opt_in: String(parsed.cta_opt_in).slice(0, 1000),\n        disclaimer: String(parsed.disclaimer || '').slice(0, 2000),\n        export_hint: String(parsed.export_hint || 'pdf'),\n      },\n    },\n  }];\n} catch (e) {\n  return [{ json: { ok: false, parse_error: e.message, raw_preview: String(raw).slice(0, 200) } }];\n}"
+        "jsCode": "const RULES = {\"version\":1,\"similarity_threshold\":0.7,\"published_statuses\":[\"approved\",\"published\"],\"title_formulas\":{\"NOXH_LEGAL\":\"Dạng câu hỏi trực diện; có số liệu cụ thể nếu phù hợp (vd: ngưỡng thu nhập, diện tích). Không dùng tag [TEST]/placeholder. Không nhét CTA vào title.\",\"LOAN_FINANCE\":\"Khẳng định rõ lợi ích; dùng thuật ngữ DTI, room vay, dòng tiền khi phù hợp. Không cam kết lãi suất cụ thể trong title.\",\"VALUATION\":\"So sánh hoặc giải thích trực diện (giá tham khảo vs chứng thư, sai lệch thẩm định). Không hứa giá chính thức.\",\"GENERAL_POLICY\":\"Tin tức/tổng hợp chính sách + mốc thời gian cụ thể (tháng/năm). Tránh CTA comment trong title.\"},\"segment_to_content_type\":{\"noxh_income\":\"NOXH_LEGAL\",\"sme_credit\":\"LOAN_FINANCE\",\"valuation\":\"VALUATION\",\"general_inbound\":\"GENERAL_POLICY\",\"unclassified\":\"GENERAL_POLICY\"}};\nconst TITLE_WHITELIST = [\"NOXH\",\"DTI\",\"CT07\",\"NHCSXH\",\"CIC\",\"NHNN\",\"CĐT\",\"DN\",\"SME\",\"SMEs\",\"TP.HCM\",\"TPHCM\",\"VPS\",\"CRM\",\"API\",\"JSON\",\"MAU01\"];\nconst CONTENT_TYPES = new Set(['NOXH_LEGAL', 'LOAN_FINANCE', 'VALUATION', 'GENERAL_POLICY']);\nconst source = $('Loop Draft Candidates').item?.json || {};\nconst llmJson = $input.first().json;\n\nfunction extractJsonString(raw) {\n  if (raw == null) throw new Error('EMPTY_LLM_OUTPUT');\n  const s = typeof raw === 'string' ? raw : JSON.stringify(raw);\n  const fenced = s.match(/```(?:json)?\\s*([\\s\\S]*?)```/i);\n  let t = (fenced ? fenced[1] : s).trim();\n  const start = t.indexOf('{');\n  const end = t.lastIndexOf('}');\n  if (start >= 0 && end > start) t = t.slice(start, end + 1);\n  return t;\n}\n\nfunction segmentToType(segment) {\n  const key = String(segment || '').trim().toLowerCase();\n  const mapped = RULES.segment_to_content_type?.[key];\n  return mapped && CONTENT_TYPES.has(mapped) ? mapped : 'GENERAL_POLICY';\n}\n\nfunction validateTitle(title) {\n  const t = String(title || '').trim();\n  const reasons = [];\n  if (!t) return { pass: false, reasons: ['EMPTY_TITLE'] };\n  if (/\\[(TEST|DRAFT|WIP)\\]/i.test(t)) {\n    reasons.push('Draft tag [TEST]/[DRAFT]/[WIP] found in title');\n  }\n  const placeholders = [\n    { re: /\\{\\{[^}]+\\}\\}/, reason: 'Unrendered template variable {{...}} in title' },\n    { re: /\\bX\\s+tri[eệ]u\\b/i, reason: 'Unfilled placeholder \"X triệu\" in title' },\n    { re: /\\[số\\]/i, reason: 'Unfilled placeholder \"[số]\" in title' },\n    { re: /_{3,}/, reason: 'Unfilled placeholder \"___\" in title' },\n  ];\n  for (const p of placeholders) {\n    if (p.re.test(t)) reasons.push(p.reason);\n  }\n  const ctas = [\n    { re: /\\bcomment\\b/i, reason: 'CTA content found in title field — move to cta_templates.json' },\n    { re: /\\btải\\s+ngay\\b/i, reason: 'CTA content found in title field — move to cta_templates.json' },\n    { re: /\\blink\\s+drive\\b/i, reason: 'CTA content found in title field — move to cta_templates.json' },\n    { re: /\\bMAU0?1\\b/i, reason: 'CTA content found in title field — move to cta_templates.json' },\n    { re: /\\bCHECKLIST\\b/i, reason: 'CTA content found in title field — move to cta_templates.json' },\n    { re: /^[\\s📂📥]+/u, reason: 'CTA content found in title field — move to cta_templates.json' },\n  ];\n  for (const p of ctas) {\n    if (p.re.test(t)) reasons.push(p.reason);\n  }\n  if (reasons.length) return { pass: false, reasons, capitalization_error: false };\n\n  const cap = validateTitleCapitalization(t, TITLE_WHITELIST);\n  if (!cap.pass) {\n    return { pass: false, reasons: cap.reasons, capitalization_error: true };\n  }\n  return { pass: true, reasons: [], capitalization_error: false };\n}\n\nfunction buildWhitelistLookup(whitelist) {\n  const set = new Set();\n  for (const term of whitelist || []) {\n    const w = String(term || '').trim();\n    if (w) set.add(w.toUpperCase());\n  }\n  return set;\n}\n\nfunction stripEdgePunctuation(word) {\n  return String(word || '').replace(/^[^\\p{L}\\p{N}]+|[^\\p{L}\\p{N}]+$/gu, '');\n}\n\nfunction splitTitleWords(title) {\n  return String(title || '').trim().split(/\\s+/).filter(Boolean);\n}\n\nfunction isSentenceStart(title, wordIndex) {\n  if (wordIndex === 0) return true;\n  const before = splitTitleWords(title).slice(0, wordIndex).join(' ');\n  return /[.?!][\"')\\]]?\\s*$/.test(before);\n}\n\nfunction uppercaseLetters(core) {\n  return [...String(core || '')].filter((c) => /\\p{Lu}/u.test(c));\n}\n\nfunction validateTitleCapitalization(title, whitelist) {\n  const t = String(title || '').trim();\n  const reasons = [];\n  const lookup = buildWhitelistLookup(whitelist);\n  const words = splitTitleWords(t);\n\n  for (let i = 0; i < words.length; i++) {\n    const core = stripEdgePunctuation(words[i]);\n    if (!core || /^[\\d\\W]+$/.test(core)) continue;\n    if (lookup.has(core.toUpperCase())) continue;\n\n    const uppers = uppercaseLetters(core);\n    const atStart = isSentenceStart(t, i);\n\n    if (atStart) {\n      if (uppers.length > 1) {\n        reasons.push(`Word \"${core}\": ALL CAPS or multiple uppercase at sentence start — use sentence case`);\n      } else if (uppers.length === 1 && core[0] !== uppers[0]) {\n        reasons.push(`Word \"${core}\": invalid capitalization at sentence start`);\n      }\n      continue;\n    }\n\n    if (uppers.length >= 2) {\n      reasons.push(`Word \"${core}\": English Title Case or ALL CAPS not allowed mid-sentence (use sentence case)`);\n    } else if (uppers.length === 1) {\n      reasons.push(`Word \"${core}\": unexpected capitalization mid-sentence — only sentence-start or whitelist terms may be uppercase`);\n    }\n  }\n\n  return { pass: reasons.length === 0, reasons };\n}\n\nfunction tokenize(text) {\n  return String(text || '')\n    .toLowerCase()\n    .normalize('NFD')\n    .replace(/\\p{M}/gu, '')\n    .split(/[^\\p{L}\\p{N}]+/u)\n    .filter((w) => w.length > 1);\n}\n\nfunction jaccard(a, b) {\n  const A = new Set(tokenize(a));\n  const B = new Set(tokenize(b));\n  if (!A.size && !B.size) return 0;\n  let inter = 0;\n  for (const x of A) if (B.has(x)) inter += 1;\n  return inter / (A.size + B.size - inter);\n}\n\nconst raw =\n  llmJson?.choices?.[0]?.message?.content\n  ?? llmJson?.content?.[0]?.text\n  ?? llmJson?.message?.content\n  ?? llmJson;\n\nlet title = '';\nlet content_type = null;\nlet segment = null;\n\ntry {\n  const parsed = JSON.parse(extractJsonString(raw));\n  title = String(parsed.title || '').trim();\n  content_type = String(parsed.content_type || '').trim().toUpperCase() || null;\n  segment = String(parsed.segment || '').trim().toLowerCase() || null;\n  if (!title) throw new Error('MISSING_TITLE');\n} catch (e) {\n  const data = $getWorkflowStaticData('global');\n  if (!data.a3_stats) data.a3_stats = {};\n  data.a3_stats.title_rejected = (data.a3_stats.title_rejected || 0) + 1;\n  return [{\n    json: {\n      ...llmJson,\n      title_qa_pass: false,\n      qa_status: 'title_rejected',\n      title_qa_reason: e.message || 'TITLE_JSON_EXTRACT_FAIL',\n      title_qa: {\n        normalized_key: String(source.normalized_key || '').slice(0, 120),\n        pass: false,\n        reasons: [e.message || 'TITLE_JSON_EXTRACT_FAIL'],\n      },\n      queue_sheet_row: source.sheet_row,\n    },\n  }];\n}\n\nconst resolvedType = CONTENT_TYPES.has(content_type)\n  ? content_type\n  : segmentToType(segment || source.segment);\n\nconst validation = validateTitle(title);\nif (!validation.pass) {\n  const data = $getWorkflowStaticData('global');\n  if (!data.a3_stats) data.a3_stats = {};\n  if (validation.capitalization_error) {\n    data.a3_stats.title_capitalization_error = (data.a3_stats.title_capitalization_error || 0) + 1;\n  } else {\n    data.a3_stats.title_rejected = (data.a3_stats.title_rejected || 0) + 1;\n  }\n  const qaStatus = validation.capitalization_error\n    ? 'title_capitalization_error'\n    : 'title_rejected';\n  return [{\n    json: {\n      ...llmJson,\n      title_qa_pass: false,\n      qa_status: qaStatus,\n      title_qa_reason: validation.reasons.join('; '),\n      title_qa: {\n        normalized_key: String(source.normalized_key || '').slice(0, 120),\n        title_preview: title.slice(0, 120),\n        content_type: resolvedType,\n        pass: false,\n        reasons: validation.reasons,\n        capitalization_error: Boolean(validation.capitalization_error),\n      },\n      queue_sheet_row: source.sheet_row,\n    },\n  }];\n}\n\nconst data = $getWorkflowStaticData('global');\nconst published = data.published_titles_by_type?.[resolvedType] || [];\nconst threshold = Number(RULES.similarity_threshold ?? 0.7);\nlet duplicate_review = false;\nlet dupMeta = {};\n\nlet bestScore = 0;\nlet best = null;\nfor (const row of published) {\n  const score = jaccard(title, row.title);\n  if (score > bestScore) {\n    bestScore = score;\n    best = row;\n  }\n}\n\nif (bestScore > threshold && best) {\n  duplicate_review = true;\n  dupMeta = {\n    similarity: Number(bestScore.toFixed(3)),\n    matched_title: best.title,\n    matched_normalized_key: best.normalized_key,\n    duplicate_message: `Có thể trùng chủ đề với bài \"${best.title}\" (similarity=${bestScore.toFixed(2)})`,\n  };\n  if (!data.a3_stats) data.a3_stats = {};\n  data.a3_stats.title_dup_review = (data.a3_stats.title_dup_review || 0) + 1;\n}\n\nreturn [{\n  json: {\n    ...llmJson,\n    title_qa_pass: true,\n    title_duplicate_review: duplicate_review,\n    title_qa: {\n      normalized_key: String(source.normalized_key || '').slice(0, 120),\n      title_preview: title.slice(0, 120),\n      content_type: resolvedType,\n      pass: true,\n      reasons: [],\n      duplicate_review,\n      similarity: bestScore ? Number(bestScore.toFixed(3)) : 0,\n      ...dupMeta,\n    },\n  },\n}];"
       },
-      "id": "a309parse",
-      "name": "Parse Lead Magnet JSON",
+      "id": "a308titleqa",
+      "name": "Title QA Gate",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
         1920,
         160
       ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "c1",
+              "leftValue": "={{ $json.title_qa_pass }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "a308iftitle",
+      "name": "IF Title Pass",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        2160,
+        160
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "function extractJsonString(raw) {\n  if (raw == null) throw new Error('EMPTY_LLM_OUTPUT');\n  const s = typeof raw === 'string' ? raw : JSON.stringify(raw);\n  const fenced = s.match(/```(?:json)?\\s*([\\s\\S]*?)```/i);\n  return (fenced ? fenced[1] : s).trim();\n}\n\nconst res = $input.first().json;\nconst raw =\n  res.choices?.[0]?.message?.content ??\n  res.content?.[0]?.text ??\n  res.message?.content ??\n  res;\n\ntry {\n  const parsed = JSON.parse(extractJsonString(raw));\n  const required = ['title', 'hook_line', 'segment', 'artifact_markdown', 'cta_opt_in'];\n  for (const k of required) {\n    if (!parsed[k] || !String(parsed[k]).trim()) throw new Error(`MISSING_${k.toUpperCase()}`);\n  }\n  if (!Array.isArray(parsed.source_refs)) parsed.source_refs = [];\n  const content_type = String(parsed.content_type || '').trim().toUpperCase();\n  return [{\n    json: {\n      ok: true,\n      draft: {\n        title: String(parsed.title).slice(0, 500),\n        hook_line: String(parsed.hook_line).slice(0, 500),\n        segment: String(parsed.segment),\n        content_type: content_type || null,\n        artifact_markdown: String(parsed.artifact_markdown).slice(0, 45000),\n        source_refs: parsed.source_refs.map(String).slice(0, 10),\n        cta_opt_in: String(parsed.cta_opt_in).slice(0, 1000),\n        disclaimer: String(parsed.disclaimer || '').slice(0, 2000),\n        export_hint: String(parsed.export_hint || 'pdf'),\n      },\n      ...(res.title_qa ? { title_qa: res.title_qa } : {}),\n      ...(res.title_duplicate_review ? { title_duplicate_review: res.title_duplicate_review } : {}),\n    },\n  }];\n} catch (e) {\n  return [{ json: { ok: false, parse_error: e.message, raw_preview: String(raw).slice(0, 200) } }];\n}"
+      },
+      "id": "a309parse",
+      "name": "Parse Lead Magnet JSON",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2400,
+        80
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const SHEET_ID = '1fYB4h_BTiKXa9O3lBah-tQonWpQOQMG2aSkSfPs6yU4';\nconst TAB = 'content_queue';\n\nconst source = $('Loop Draft Candidates').item?.json || {};\nconst item = $input.first().json;\nconst row = item.queue_sheet_row || source.sheet_row;\n\nif (!row) {\n  return [{ json: { ok: false, skip: true, reason: 'NO_QUEUE_ROW' } }];\n}\n\nlet existing = {};\ntry {\n  const getRes = await this.helpers.httpRequestWithAuthentication.call(this, 'googleApi', {\n    method: 'GET',\n    url: `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent(`${TAB}!O${row}`)}`,\n    json: true,\n  });\n  const cell = getRes.values?.[0]?.[0];\n  if (cell) existing = JSON.parse(cell);\n} catch {\n  existing = {};\n}\n\nconst patch = {\n  qa_status: item.qa_status || 'title_rejected',\n  title_qa_reason: String(item.title_qa_reason || '').slice(0, 500),\n  title_qa: item.title_qa || null,\n  title_rejected_at: new Date().toISOString(),\n  draft_created: false,\n};\n\nconst meta = JSON.stringify({ ...existing, ...patch }).slice(0, 50000);\n\nawait this.helpers.httpRequestWithAuthentication.call(this, 'googleApi', {\n  method: 'PUT',\n  url: `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent(`${TAB}!O${row}`)}?valueInputOption=USER_ENTERED`,\n  body: { values: [[meta]] },\n  json: true,\n});\n\nreturn [{\n  json: {\n    ok: true,\n    title_rejected: true,\n    normalized_key: String(source.normalized_key || '').slice(0, 120),\n    queue_row_updated: row,\n    qa_status: patch.qa_status,\n    title_qa_reason: patch.title_qa_reason,\n  },\n}];"
+      },
+      "id": "a308titlerej",
+      "name": "Track Title Reject",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2400,
+        280
+      ],
+      "onError": "continueRegularOutput"
     },
     {
       "parameters": {
@@ -227,8 +318,80 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        2160,
-        160
+        2640,
+        80
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const DISCLAIMER_CFG = {\"version\":2,\"default_page_display_name\":\"Tim Nha O Xa Hoi\",\"default_brand\":\"Magnix\",\"disclaimer_format_map\":{\"reel_short\":[\"fb_reels\",\"tiktok\",\"youtube_shorts\",\"short_video_package\",\"video_script\"],\"post_long\":[\"fb_page_post_image\",\"fb_page_post\",\"facebook_page\",\"carousel_image\",\"fb_page_post\",\"website_article\"]},\"templates\":{\"reel_short\":{\"_default\":\"Mỗi hồ sơ có tình huống riêng — inbox ngay để được {{page}} tư vấn cụ thể theo trường hợp của bạn.\",\"NOXH_LEGAL\":\"Mỗi hồ sơ NOXH có tình huống riêng — inbox {{page}} để được tư vấn cụ thể theo trường hợp của bạn.\",\"LOAN_FINANCE\":\"Mỗi hồ sơ vay có tình huống riêng — inbox {{page}} để được tư vấn dòng tiền theo đúng hồ sơ của bạn.\",\"VALUATION\":\"Mỗi tài sản cần góc nhìn riêng — inbox {{page}} để được tư vấn định giá theo trường hợp của bạn.\",\"GENERAL_POLICY\":\"Mỗi trường hợp có thể khác nhau theo từng địa phương — inbox {{page}} để chuyên gia page xem cụ thể hồ sơ bạn.\"},\"post_long\":{\"_default\":\"Thông tin từ team {{page}}. Để được tư vấn chi tiết theo đúng hồ sơ của bạn, inbox hoặc để lại SĐT ngay dưới bài viết — mình hỗ trợ 1:1 nhé.\",\"NOXH_LEGAL\":\"Mỗi trường hợp NOXH có thể khác nhau theo từng địa phương — để chuyên gia {{page}} xem cụ thể hồ sơ bạn, inbox hoặc để lại SĐT dưới bài nhé.\",\"LOAN_FINANCE\":\"Dòng tiền và room vay phụ thuộc hồ sơ từng người — team {{page}} hỗ trợ bóc tách 1:1. Inbox hoặc để lại SĐT dưới bài.\",\"VALUATION\":\"Giá trị và phương án định giá khác nhau theo từng tài sản — inbox {{page}} hoặc để lại SĐT để được tư vấn chi tiết.\",\"GENERAL_POLICY\":\"Mỗi trường hợp có thể khác nhau theo từng địa phương — để chuyên gia {{page}} xem cụ thể hồ sơ bạn, inbox ngay nhé.\"}},\"segment_map\":{\"noxh_income\":\"NOXH_LEGAL\",\"sme_credit\":\"LOAN_FINANCE\",\"valuation\":\"VALUATION\",\"general_inbound\":\"GENERAL_POLICY\",\"unclassified\":\"GENERAL_POLICY\"},\"boilerplate_patterns\":[\"không phải tư vấn pháp lý\",\"không thay thế tư vấn pháp lý\",\"không thay thế tư vấn\",\"không thay thế chứng thư\",\"mang tính tham khảo\",\"thông tin tham khảo\",\"quy định hiện hành\",\"không cam kết duyệt\",\"phụ thuộc hồ sơ thực tế\",\"tùy thẩm định ngân hàng\",\"tùy quy định hiện hành\",\"Căn cứ: Luật Nhà ở\",\"biểu lãi suất tham khảo\",\"chứng thư thẩm định giá chính thức\"],\"legal_content_types\":[\"NOXH_LEGAL\",\"LOAN_FINANCE\",\"VALUATION\"]};\nconst CTA_CFG = {\"version\":1,\"default_channel\":\"facebook\",\"target_channel_map\":{\"facebook\":\"facebook\",\"facebook_page\":\"facebook\",\"fb_page\":\"facebook\",\"fb_page_post\":\"facebook\",\"fb_reels\":\"facebook\",\"fb_page_post_image\":\"facebook\",\"carousel_image\":\"facebook\",\"tiktok\":\"facebook\",\"short_video_package\":\"facebook\",\"blog_seo\":\"blog_seo\",\"website\":\"blog_seo\",\"website_article\":\"blog_seo\",\"aio_seo\":\"blog_seo\"},\"keywords\":{\"NOXH_LEGAL\":\"NOXH\",\"LOAN_FINANCE\":\"DONGTIEN\",\"VALUATION\":\"DINHGIA\"},\"offers\":{\"NOXH_LEGAL\":{\"document_name\":\"Checklist hồ sơ NOXH\"},\"LOAN_FINANCE\":{\"document_name\":\"Bảng Excel tính dòng tiền vay bank\"},\"VALUATION\":{\"document_name\":\"Giải pháp thẩm định giá độc lập\"}},\"offer_links_env\":{\"NOXH_LEGAL\":\"MAGNIX_OFFER_LINK_NOXH\",\"LOAN_FINANCE\":\"MAGNIX_OFFER_LINK_DONGTIEN\",\"VALUATION\":\"MAGNIX_OFFER_LINK_DINHGIA\"},\"templates\":{\"NOXH_LEGAL\":{\"facebook\":\"Comment \\\"{{keyword}}\\\" để mình gửi {{document_name}} qua tin nhắn.\",\"blog_seo\":\"Tải {{document_name}} tại đây: {{link}}\"},\"LOAN_FINANCE\":{\"facebook\":\"Comment \\\"{{keyword}}\\\" để mình gửi {{document_name}} qua tin nhắn.\",\"blog_seo\":\"Tải {{document_name}} tại đây: {{link}}\"},\"VALUATION\":{\"facebook\":\"Comment \\\"{{keyword}}\\\" để mình gửi {{document_name}} qua tin nhắn.\",\"blog_seo\":\"Tải {{document_name}} tại đây: {{link}}\"},\"GENERAL_POLICY\":{\"facebook\":\"\",\"blog_seo\":\"\"}},\"general_policy_soft\":{\"facebook\":\"Nếu bạn cần {{document_name}}, comment \\\"{{keyword}}\\\" — mình gửi qua tin nhắn.\",\"blog_seo\":\"Tải {{document_name}} tại đây: {{link}}\"},\"context_hints\":{\"NOXH_LEGAL\":[\"noxh\",\"nhà ở xã hội\",\"hồ sơ\",\"thu nhập\",\"đối tượng mua\"],\"LOAN_FINANCE\":[\"vay\",\"dòng tiền\",\"lãi suất\",\"hạn mức\",\"ngân hàng\",\"dti\"],\"VALUATION\":[\"định giá\",\"thẩm định\",\"chứng thư\",\"giá trị tài sản\"]},\"legacy_cta_keywords\":[\"CHECKLIST\",\"MAU01\",\"SAVE\",\"DTI\"],\"forbidden_cta_phrases\":[\"không thay tư vấn chính thức\",\"không thay thế tư vấn\",\"mang tính tham khảo\",\"thông tin tham khảo\"],\"hashtags\":{\"count_min\":2,\"count_max\":3,\"NOXH_LEGAL\":[\"#NOXH\",\"#NhaOXH\",\"#HoSoNOXH\"],\"LOAN_FINANCE\":[\"#VayMuaNha\",\"#DongTienVay\",\"#DTI\"],\"VALUATION\":[\"#DinhGiaNhaDat\",\"#ThamDinhGia\",\"#ChungThuDinhGia\"],\"GENERAL_POLICY\":[\"#ChinhSachNhaO\",\"#BatDongSanVN\"],\"forbidden\":[\"#xuhuong\",\"#viral\",\"#fyp\",\"#foryou\",\"#trending\",\"#tiktok\",\"#reels\",\"#followme\",\"#like4like\"]},\"social_mechanics\":{\"facebook_truncation_chars\":125,\"comment_unlock_pattern\":\"comment\\\\s+[\\\"']?([A-Z0-9_]+)[\\\"']?\",\"max_comment_unlock_per_week\":3,\"max_comment_unlock_per_day\":1,\"thresholds_confirmed\":true,\"thresholds_confirmed_at\":\"2026-06-28\",\"thresholds_note\":\"Owner confirmed: max 3 comment-unlock CTA/tuần, max 1/ngày\",\"count_statuses\":[\"draft\",\"review\",\"approved\",\"published\"]},\"verbal_cta_templates\":{\"NOXH_LEGAL\":\"Comment {{keyword}} bên dưới, mình gửi {{document_name}} ngay.\",\"LOAN_FINANCE\":\"Comment {{keyword}} bên dưới, mình gửi {{document_name}} qua tin nhắn.\",\"VALUATION\":\"Comment {{keyword}} bên dưới để nhận {{document_name}}.\",\"GENERAL_POLICY\":\"Cần tài liệu thì comment {{keyword}} — mình gửi qua tin nhắn.\"},\"cta_modes\":{\"facebook\":{\"question_then_comment\":\"Bạn đang ở bước nào trong hồ sơ — chuẩn bị hay đã nộp? Nếu cần {{document_name}}, comment \\\"{{keyword}}\\\" — mình gửi qua tin nhắn.\",\"link_direct\":\"Tải {{document_name}} tại đây: {{link}}\",\"inbox_soft\":\"Nhắn tin cho Page nếu cần {{document_name}} — mình gửi link Drive trong chat.\"},\"blog_seo\":{\"link_direct\":\"Tải {{document_name}} tại đây: {{link}}\"}}};\nconst CONTENT_TYPES = new Set(['NOXH_LEGAL', 'LOAN_FINANCE', 'VALUATION', 'GENERAL_POLICY']);\nconst LEGAL_CONTENT_TYPES = new Set(['NOXH_LEGAL', 'LOAN_FINANCE', 'VALUATION']);\nconst CHANNELS = new Set(['facebook', 'blog_seo']);\n\nfunction formatDisclaimerDate(isoOrDate) {\n  const d = isoOrDate instanceof Date ? isoOrDate : new Date(isoOrDate || Date.now());\n  if (Number.isNaN(d.getTime())) return formatDisclaimerDate(new Date());\n  const dd = String(d.getDate()).padStart(2, '0');\n  const mm = String(d.getMonth() + 1).padStart(2, '0');\n  return `${dd}/${mm}/${d.getFullYear()}`;\n}\n\nfunction mapSegmentToContentType(segment) {\n  const key = String(segment || '').trim().toLowerCase();\n  const mapped = DISCLAIMER_CFG.segment_map?.[key];\n  return mapped && CONTENT_TYPES.has(mapped) ? mapped : 'GENERAL_POLICY';\n}\n\nfunction resolveContentType(content_type, segment) {\n  const raw = String(content_type || '').trim().toUpperCase();\n  if (CONTENT_TYPES.has(raw)) {\n    return { content_type: raw, content_type_source: 'llm', warn: null };\n  }\n  const fromSegment = mapSegmentToContentType(segment);\n  let warn = null;\n  if (raw && !CONTENT_TYPES.has(raw)) warn = `INVALID_CONTENT_TYPE:${raw}`;\n  else if (!content_type) warn = 'MISSING_CONTENT_TYPE';\n  return { content_type: fromSegment, content_type_source: warn ? 'segment_fallback' : 'segment', warn };\n}\n\nfunction resolveChannel(input) {\n  const raw = String(input.channel || '').trim().toLowerCase();\n  if (CHANNELS.has(raw)) return { channel: raw, channel_source: 'explicit', warn: null };\n\n  const candidates = [input.target_channel, input.product_type, input.format]\n    .map((v) => String(v || '').trim().toLowerCase())\n    .filter(Boolean);\n  const map = CTA_CFG.target_channel_map || {};\n  for (const key of candidates) {\n    const mapped = map[key];\n    if (mapped && CHANNELS.has(mapped)) {\n      return { channel: mapped, channel_source: 'target_channel_map', warn: null };\n    }\n  }\n  const def = String(CTA_CFG.default_channel || 'facebook').toLowerCase();\n  return {\n    channel: CHANNELS.has(def) ? def : 'facebook',\n    channel_source: 'default',\n    warn: candidates.length ? 'CHANNEL_UNMAPPED' : 'CHANNEL_DEFAULT',\n  };\n}\n\nfunction buildBoilerplateRegexes(patterns) {\n  return (patterns || [])\n    .map((p) => String(p || '').trim())\n    .filter(Boolean)\n    .map((p) => new RegExp(p.replace(/[.*+?^${}()|[\\]\\\\]/g, '\\\\$&'), 'gi'));\n}\n\nfunction stripBoilerplateDisclaimers(text, regexes) {\n  let out = String(text || '');\n  if (!out.trim()) return out;\n  out = out.replace(/\\n*[-—]{1,2}\\s*\\n[\\s\\S]*$/m, '').trim();\n  out = out.replace(/\\n*(?:\\*\\*)?Disclaimer(?:\\*\\*)?:[\\s\\S]*$/im, '').trim();\n  for (const re of regexes) {\n    const parts = out.split(re);\n    if (parts.length > 1) out = parts[0].trim();\n    out = out.replace(re, '').trim();\n  }\n  return out.replace(/\\n{3,}/g, '\\n\\n').trim();\n}\n\nfunction stripLegacyCta(text) {\n  let out = String(text || '');\n  if (!out.trim()) return out;\n  for (const k of CTA_CFG.legacy_cta_keywords || []) {\n    const esc = String(k).replace(/[.*+?^${}()|[\\]\\\\]/g, '\\\\$&');\n    const re = new RegExp(`(?:^|\\\\n)[^\\\\n]*\\\\b${esc}\\\\b[^\\\\n]*`, 'gim');\n    out = out.replace(re, '\\n').trim();\n  }\n  out = out.replace(/\\n*Comment\\s+[\"']?[A-Z0-9_]+[\"']?[^\\n]*/gi, '').trim();\n  return out.replace(/\\n{3,}/g, '\\n\\n').trim();\n}\n\nfunction stripForbiddenCtaPhrases(text) {\n  let out = String(text || '');\n  for (const phrase of CTA_CFG.forbidden_cta_phrases || []) {\n    const re = new RegExp(String(phrase).replace(/[.*+?^${}()|[\\]\\\\]/g, '\\\\$&'), 'gi');\n    out = out.replace(re, '').trim();\n  }\n  return out.replace(/\\s{2,}/g, ' ').trim();\n}\n\nfunction inferNearestOfferType(body, segment) {\n  const fromSegment = mapSegmentToContentType(segment);\n  if (fromSegment !== 'GENERAL_POLICY') return fromSegment;\n  const lower = String(body || '').toLowerCase();\n  const hints = CTA_CFG.context_hints || {};\n  let best = null;\n  let bestScore = 0;\n  for (const [type, words] of Object.entries(hints)) {\n    let score = 0;\n    for (const w of words) {\n      if (lower.includes(String(w).toLowerCase())) score += 1;\n    }\n    if (score > bestScore) {\n      bestScore = score;\n      best = type;\n    }\n  }\n  return bestScore > 0 ? best : null;\n}\n\nfunction resolveOfferLink(contentType) {\n  const envKey = CTA_CFG.offer_links_env?.[contentType];\n  if (!envKey) return '';\n  return String($env[envKey] || '').trim();\n}\n\nfunction renderCta(template, vars) {\n  return String(template || '')\n    .replace(/\\{\\{keyword\\}\\}/g, vars.keyword || '')\n    .replace(/\\{\\{document_name\\}\\}/g, vars.document_name || '')\n    .replace(/\\{\\{link\\}\\}/g, vars.link || '')\n    .trim();\n}\n\nfunction buildCta(content_type, channel, body, segment, commentUnlockWeekCount) {\n  let effectiveType = content_type;\n  let template = CTA_CFG.templates?.[content_type]?.[channel] || '';\n  let cta_mode = 'primary';\n\n  if (content_type === 'GENERAL_POLICY') {\n    const nearest = inferNearestOfferType(body, segment);\n    if (!nearest) {\n      return { cta: '', cta_keyword: null, cta_skipped: true, cta_mode: 'none' };\n    }\n    effectiveType = nearest;\n    template = CTA_CFG.general_policy_soft?.[channel] || '';\n    cta_mode = 'general_soft';\n  }\n\n  if (!template.trim()) {\n    return { cta: '', cta_keyword: null, cta_skipped: true, cta_mode: 'empty_template' };\n  }\n\n  const keyword = CTA_CFG.keywords?.[effectiveType] || null;\n  const document_name = CTA_CFG.offers?.[effectiveType]?.document_name || '';\n  const link = resolveOfferLink(effectiveType);\n\n  const maxWeek = Number(CTA_CFG.social_mechanics?.max_comment_unlock_per_week ?? 3);\n  if (channel === 'facebook' && commentUnlockWeekCount >= maxWeek) {\n    const modes = CTA_CFG.cta_modes?.facebook || {};\n    if (link && modes.link_direct) {\n      template = modes.link_direct;\n      cta_mode = 'link_direct_frequency_cap';\n    } else if (modes.question_then_comment) {\n      template = modes.question_then_comment;\n      cta_mode = 'question_then_comment';\n    }\n  }\n\n  if (channel === 'blog_seo' && !link) {\n    return { cta: '', cta_keyword: keyword, cta_skipped: true, cta_mode: 'missing_link' };\n  }\n\n  let cta = renderCta(template, { keyword, document_name, link });\n  cta = stripForbiddenCtaPhrases(cta);\n\n  return {\n    cta,\n    cta_keyword: keyword,\n    cta_skipped: !cta.trim(),\n    cta_mode,\n    cta_offer_type: effectiveType,\n  };\n}\n\nfunction renderDisclaimerTemplate(template, pageName) {\n  return String(template || '')\n    .replace(/\\{\\{page\\}\\}/g, pageName)\n    .replace(/\\{\\{brand\\}\\}/g, pageName)\n    .trim();\n}\n\nfunction resolveDisclaimerVariant(input) {\n  const formatType = String(input.format_type || '').trim().toLowerCase();\n  const product = String(input.content_format || input.product_type || input.format || '').trim().toLowerCase();\n  const reelFormats = new Set(DISCLAIMER_CFG.disclaimer_format_map?.reel_short || []);\n  if (formatType === 'video_script' || reelFormats.has(product)) return 'reel_short';\n  return 'post_long';\n}\n\nfunction getDisclaimerTemplate(contentType, variant) {\n  const bucket = DISCLAIMER_CFG.templates?.[variant] || DISCLAIMER_CFG.templates?.post_long || {};\n  const key = CONTENT_TYPES.has(contentType) ? contentType : 'GENERAL_POLICY';\n  return bucket[key] || bucket._default || bucket.GENERAL_POLICY || '';\n}\n\nconst item = $input.first().json;\nconst source = $('Loop Draft Candidates').item?.json || {};\nconst meta = source.meta_parsed || {};\nconst brief = source.editorial_brief_v1 || meta.editorial_brief_v1 || {};\n\nif (!item.ok || !item.draft) {\n  return [{ json: item }];\n}\n\nconst pageDisplay =\n  String($env.MAGNIX_PAGE_DISPLAY_NAME || '').trim()\n  || String(DISCLAIMER_CFG.default_page_display_name || '').trim()\n  || String($env.MAGNIX_BRAND_NAME || '').trim()\n  || String(DISCLAIMER_CFG.default_brand || '').trim()\n  || 'Magnix';\n\nconst d = item.draft;\nconst resolved = resolveContentType(d.content_type, d.segment || source.segment);\nconst content_type = resolved.content_type;\n\nconst channelResolved = resolveChannel({\n  channel: meta.channel || brief.channel || d.channel,\n  target_channel: meta.target_channel || brief.target_channel || meta.product_type,\n  product_type: meta.product_type || brief.product_type,\n  format: brief.format || meta.format,\n});\nconst channel = channelResolved.channel;\n\nconst disclaimerRegexes = buildBoilerplateRegexes(DISCLAIMER_CFG.boilerplate_patterns || []);\nconst cleanedBody = stripLegacyCta(\n  stripBoilerplateDisclaimers(d.artifact_markdown || '', disclaimerRegexes),\n);\n\nconst workflowData = $getWorkflowStaticData('global');\nlet commentUnlockWeekCount = 0;\nconst weekMs = 7 * 86400000;\nconst nowMs = Date.now();\nfor (const p of workflowData.comment_unlock_index || []) {\n  const t = new Date(p.created_at || '').getTime();\n  if (!Number.isNaN(t) && nowMs - t >= 0 && nowMs - t <= weekMs) commentUnlockWeekCount += 1;\n}\n\nconst ctaBuilt = buildCta(\n  content_type,\n  channel,\n  cleanedBody,\n  d.segment || source.segment,\n  commentUnlockWeekCount,\n);\nconst injectedCta = ctaBuilt.cta_skipped ? '' : ctaBuilt.cta;\n\nconst productFormat = String(\n  meta.content_format || meta.product_type || d.product_type || brief.content_format || 'fb_page_post_image',\n).trim().toLowerCase();\nconst disclaimerVariant = resolveDisclaimerVariant({\n  format_type: d.format_type || 'text_post',\n  content_format: productFormat,\n  product_type: productFormat,\n  format: brief.format || meta.format,\n  channel,\n});\nconst disclaimerTpl = getDisclaimerTemplate(content_type, disclaimerVariant);\nconst injectedDisclaimer = renderDisclaimerTemplate(disclaimerTpl, pageDisplay);\n\nconst hashtagCfg = CTA_CFG.hashtags || {};\nconst forbiddenTags = new Set((hashtagCfg.forbidden || []).map((t) => t.toLowerCase()));\nconst tagPool = (hashtagCfg[content_type] || hashtagCfg.GENERAL_POLICY || [])\n  .map((t) => (String(t).startsWith('#') ? String(t) : `#${t}`))\n  .filter((t) => t && !forbiddenTags.has(t.toLowerCase()));\nconst hashtags = tagPool.slice(0, Number(hashtagCfg.count_max ?? 3));\n\nconst content_type_router = {\n  normalized_key: String(source.normalized_key || '').slice(0, 120),\n  content_type,\n  content_type_source: resolved.content_type_source,\n  channel,\n  channel_source: channelResolved.channel_source,\n  cta_keyword: ctaBuilt.cta_keyword,\n  cta_skipped: ctaBuilt.cta_skipped,\n  cta_mode: ctaBuilt.cta_mode,\n  cta_offer_type: ctaBuilt.cta_offer_type || content_type,\n  disclaimer_variant: disclaimerVariant,\n  disclaimer_template_key: `${disclaimerVariant}/${content_type}`,\n  page_display_name: pageDisplay,\n  requires_legal_review: LEGAL_CONTENT_TYPES.has(content_type),\n  disclaimer_warn: resolved.warn,\n  channel_warn: channelResolved.warn,\n  hashtags,\n};\n\nif (resolved.warn || channelResolved.warn) {\n  const data = $getWorkflowStaticData('global');\n  if (!data.a3_stats) data.a3_stats = {};\n  if (resolved.warn) data.a3_stats.disclaimer_warn = (data.a3_stats.disclaimer_warn || 0) + 1;\n  if (channelResolved.warn) data.a3_stats.channel_warn = (data.a3_stats.channel_warn || 0) + 1;\n}\n\nreturn [{\n  json: {\n    ...item,\n    draft: {\n      ...d,\n      content_type,\n      channel,\n      artifact_markdown: cleanedBody,\n      cta_opt_in: injectedCta.slice(0, 1000),\n      disclaimer: injectedDisclaimer.slice(0, 2000),\n      hashtags,\n      format_type: d.format_type || 'text_post',\n    },\n    content_type_router,\n    disclaimer_injection: content_type_router,\n    requires_legal_review: content_type_router.requires_legal_review,\n  },\n}];"
+      },
+      "id": "a310router",
+      "name": "Content Type Router",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2760,
+        80
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const CTA_CFG = {\"version\":1,\"default_channel\":\"facebook\",\"target_channel_map\":{\"facebook\":\"facebook\",\"facebook_page\":\"facebook\",\"fb_page\":\"facebook\",\"fb_page_post\":\"facebook\",\"fb_reels\":\"facebook\",\"fb_page_post_image\":\"facebook\",\"carousel_image\":\"facebook\",\"tiktok\":\"facebook\",\"short_video_package\":\"facebook\",\"blog_seo\":\"blog_seo\",\"website\":\"blog_seo\",\"website_article\":\"blog_seo\",\"aio_seo\":\"blog_seo\"},\"keywords\":{\"NOXH_LEGAL\":\"NOXH\",\"LOAN_FINANCE\":\"DONGTIEN\",\"VALUATION\":\"DINHGIA\"},\"offers\":{\"NOXH_LEGAL\":{\"document_name\":\"Checklist hồ sơ NOXH\"},\"LOAN_FINANCE\":{\"document_name\":\"Bảng Excel tính dòng tiền vay bank\"},\"VALUATION\":{\"document_name\":\"Giải pháp thẩm định giá độc lập\"}},\"offer_links_env\":{\"NOXH_LEGAL\":\"MAGNIX_OFFER_LINK_NOXH\",\"LOAN_FINANCE\":\"MAGNIX_OFFER_LINK_DONGTIEN\",\"VALUATION\":\"MAGNIX_OFFER_LINK_DINHGIA\"},\"templates\":{\"NOXH_LEGAL\":{\"facebook\":\"Comment \\\"{{keyword}}\\\" để mình gửi {{document_name}} qua tin nhắn.\",\"blog_seo\":\"Tải {{document_name}} tại đây: {{link}}\"},\"LOAN_FINANCE\":{\"facebook\":\"Comment \\\"{{keyword}}\\\" để mình gửi {{document_name}} qua tin nhắn.\",\"blog_seo\":\"Tải {{document_name}} tại đây: {{link}}\"},\"VALUATION\":{\"facebook\":\"Comment \\\"{{keyword}}\\\" để mình gửi {{document_name}} qua tin nhắn.\",\"blog_seo\":\"Tải {{document_name}} tại đây: {{link}}\"},\"GENERAL_POLICY\":{\"facebook\":\"\",\"blog_seo\":\"\"}},\"general_policy_soft\":{\"facebook\":\"Nếu bạn cần {{document_name}}, comment \\\"{{keyword}}\\\" — mình gửi qua tin nhắn.\",\"blog_seo\":\"Tải {{document_name}} tại đây: {{link}}\"},\"context_hints\":{\"NOXH_LEGAL\":[\"noxh\",\"nhà ở xã hội\",\"hồ sơ\",\"thu nhập\",\"đối tượng mua\"],\"LOAN_FINANCE\":[\"vay\",\"dòng tiền\",\"lãi suất\",\"hạn mức\",\"ngân hàng\",\"dti\"],\"VALUATION\":[\"định giá\",\"thẩm định\",\"chứng thư\",\"giá trị tài sản\"]},\"legacy_cta_keywords\":[\"CHECKLIST\",\"MAU01\",\"SAVE\",\"DTI\"],\"forbidden_cta_phrases\":[\"không thay tư vấn chính thức\",\"không thay thế tư vấn\",\"mang tính tham khảo\",\"thông tin tham khảo\"],\"hashtags\":{\"count_min\":2,\"count_max\":3,\"NOXH_LEGAL\":[\"#NOXH\",\"#NhaOXH\",\"#HoSoNOXH\"],\"LOAN_FINANCE\":[\"#VayMuaNha\",\"#DongTienVay\",\"#DTI\"],\"VALUATION\":[\"#DinhGiaNhaDat\",\"#ThamDinhGia\",\"#ChungThuDinhGia\"],\"GENERAL_POLICY\":[\"#ChinhSachNhaO\",\"#BatDongSanVN\"],\"forbidden\":[\"#xuhuong\",\"#viral\",\"#fyp\",\"#foryou\",\"#trending\",\"#tiktok\",\"#reels\",\"#followme\",\"#like4like\"]},\"social_mechanics\":{\"facebook_truncation_chars\":125,\"comment_unlock_pattern\":\"comment\\\\s+[\\\"']?([A-Z0-9_]+)[\\\"']?\",\"max_comment_unlock_per_week\":3,\"max_comment_unlock_per_day\":1,\"thresholds_confirmed\":true,\"thresholds_confirmed_at\":\"2026-06-28\",\"thresholds_note\":\"Owner confirmed: max 3 comment-unlock CTA/tuần, max 1/ngày\",\"count_statuses\":[\"draft\",\"review\",\"approved\",\"published\"]},\"verbal_cta_templates\":{\"NOXH_LEGAL\":\"Comment {{keyword}} bên dưới, mình gửi {{document_name}} ngay.\",\"LOAN_FINANCE\":\"Comment {{keyword}} bên dưới, mình gửi {{document_name}} qua tin nhắn.\",\"VALUATION\":\"Comment {{keyword}} bên dưới để nhận {{document_name}}.\",\"GENERAL_POLICY\":\"Cần tài liệu thì comment {{keyword}} — mình gửi qua tin nhắn.\"},\"cta_modes\":{\"facebook\":{\"question_then_comment\":\"Bạn đang ở bước nào trong hồ sơ — chuẩn bị hay đã nộp? Nếu cần {{document_name}}, comment \\\"{{keyword}}\\\" — mình gửi qua tin nhắn.\",\"link_direct\":\"Tải {{document_name}} tại đây: {{link}}\",\"inbox_soft\":\"Nhắn tin cho Page nếu cần {{document_name}} — mình gửi link Drive trong chat.\"},\"blog_seo\":{\"link_direct\":\"Tải {{document_name}} tại đây: {{link}}\"}}};\n\nfunction isCommentKeywordCta(text) {\n  const t = String(text || '').trim();\n  if (!t) return false;\n  return /^comment\\s+[\"']?[A-Z0-9_]+[\"']?/i.test(t)\n    || /\\bcomment\\s+[\"']?[A-Z0-9_]+[\"']?\\s+(?:để|de)\\s/i.test(t);\n}\n\nfunction detectPureCommentBait(draft) {\n  const hook = String(draft.hook_line || '').trim();\n  const body = String(draft.artifact_markdown || '').trim();\n  const cta = String(draft.cta_opt_in || '').trim();\n  const paragraphs = [hook, body, cta].join('\\n\\n').split(/\\n+/).map((p) => p.trim()).filter(Boolean);\n  if (!paragraphs.length) return { risk_comment_bait_pure: false, reasons: [] };\n\n  const last = paragraphs[paragraphs.length - 1];\n  const isClosing = isCommentKeywordCta(last) || (cta && last === cta && isCommentKeywordCta(cta));\n  if (!isClosing) return { risk_comment_bait_pure: false, reasons: [] };\n\n  const beforeLast = paragraphs.slice(0, -1).join('\\n');\n  const hasOpenQuestion = /\\?\\s*$/.test(beforeLast)\n    || /\\b(bạn|anh|chị|ai|gì|sao|nào|thế nào|bao nhiêu|liệu|có\\s+\\S+\\s+không)\\b/i.test(beforeLast);\n  const valueWords = ['checklist', 'bảng excel', 'excel', 'giải pháp', 'tài liệu', 'hồ sơ', 'mẫu', 'file', 'điều kiện', 'thu nhập', 'vay', 'định giá'];\n  const lowerBefore = beforeLast.toLowerCase();\n  const hasValueContext = valueWords.some((w) => lowerBefore.includes(w));\n\n  if (hasOpenQuestion || hasValueContext) return { risk_comment_bait_pure: false, reasons: [] };\n  return {\n    risk_comment_bait_pure: true,\n    reasons: ['Closing line is comment-keyword CTA only — add open question or value context before CTA'],\n  };\n}\n\nfunction checkFacebookTruncation(hookLine) {\n  const hook = String(hookLine || '').trim();\n  const limit = Number(CTA_CFG.social_mechanics?.facebook_truncation_chars ?? 125);\n  if (!hook || hook.length <= limit) return { hook_truncation_risk: false, reasons: [] };\n\n  const preview = hook.slice(0, limit);\n  const signals = [/\\?/, /\\d/, /\\b(có|đủ|vượt|mất|nhận|biết|tại\\s+sao|vì\\s+sao|lương|thu\\s+nhập|triệu|tỷ|%|điều\\s+kiện|hồ\\s+sơ|vay|noxh)\\b/i];\n  if (signals.some((re) => re.test(preview))) {\n    return { hook_truncation_risk: false, reasons: [] };\n  }\n  return {\n    hook_truncation_risk: true,\n    reasons: [`hook_line > ${limit} chars and first ${limit} chars lack question/number/key hook signal`],\n  };\n}\n\nfunction countCommentUnlockFrequency(index, now) {\n  const sm = CTA_CFG.social_mechanics || {};\n  const maxWeek = Number(sm.max_comment_unlock_per_week ?? 3);\n  const maxDay = Number(sm.max_comment_unlock_per_day ?? 1);\n  const nowMs = now.getTime();\n  const dayMs = 86400000;\n  const weekMs = 7 * dayMs;\n  let dayCount = 0;\n  let weekCount = 0;\n\n  for (const p of index || []) {\n    const t = new Date(p.created_at || '').getTime();\n    if (Number.isNaN(t)) continue;\n    const age = nowMs - t;\n    if (age >= 0 && age <= dayMs) dayCount += 1;\n    if (age >= 0 && age <= weekMs) weekCount += 1;\n  }\n\n  const flags = [];\n  if (weekCount >= maxWeek) flags.push(`COMMENT_UNLOCK_FREQUENCY_WEEK:${weekCount}>=${maxWeek}`);\n  if (dayCount >= maxDay) flags.push(`COMMENT_UNLOCK_FREQUENCY_DAY:${dayCount}>=${maxDay}`);\n\n  return {\n    risk_comment_unlock_frequency: flags.length > 0,\n    frequency_flags: flags,\n    comment_unlock_day_count: dayCount,\n    comment_unlock_week_count: weekCount,\n  };\n}\n\nconst PLACEHOLDER_HOOK_RE = /chờ\\s+biên\\s+tập|chờ\\s+layer\\s+b|placeholder|\\{\\{|\\[TODO\\]/i;\n\nconst item = $input.first().json;\nconst source = $('Loop Draft Candidates').item?.json || {};\n\nif (!item.ok || !item.draft) {\n  return [{ json: item }];\n}\n\nconst d = item.draft;\nconst channel = d.channel || item.content_type_router?.channel || 'facebook';\nconst hook = String(d.hook_line || '').trim();\nconst reasons = [];\nconst flags = [];\n\nif (!hook || PLACEHOLDER_HOOK_RE.test(hook)) {\n  const data = $getWorkflowStaticData('global');\n  if (!data.a3_stats) data.a3_stats = {};\n  data.a3_stats.hook_rejected = (data.a3_stats.hook_rejected || 0) + 1;\n  return [{\n    json: {\n      ...item,\n      ok: false,\n      hook_qa_pass: false,\n      hook_qa_blocked: true,\n      qa_status: 'hook_rejected',\n      hook_qa_reason: 'hook_line empty or placeholder',\n      hook_qa: { pass: false, blocked: true, reasons: ['hook_line empty or placeholder'] },\n    },\n  }];\n}\n\nif (channel === 'facebook') {\n  const trunc = checkFacebookTruncation(hook);\n  if (trunc.hook_truncation_risk) {\n    flags.push('hook_truncation_risk');\n    reasons.push(...trunc.reasons);\n  }\n}\n\nconst bait = detectPureCommentBait(d);\nif (bait.risk_comment_bait_pure) {\n  flags.push('risk_comment_bait_pure');\n  reasons.push(...bait.reasons);\n}\n\nconst data = $getWorkflowStaticData('global');\nconst freq = countCommentUnlockFrequency(data.comment_unlock_index || [], new Date());\nif (freq.risk_comment_unlock_frequency) {\n  flags.push('risk_comment_unlock_frequency');\n  reasons.push(...freq.frequency_flags);\n}\n\nconst needsReview = flags.length > 0;\nif (needsReview) {\n  if (!data.a3_stats) data.a3_stats = {};\n  if (flags.includes('risk_comment_bait_pure')) {\n    data.a3_stats.hook_comment_bait_review = (data.a3_stats.hook_comment_bait_review || 0) + 1;\n  }\n  if (flags.includes('hook_truncation_risk')) {\n    data.a3_stats.hook_truncation_review = (data.a3_stats.hook_truncation_review || 0) + 1;\n  }\n  if (flags.includes('risk_comment_unlock_frequency')) {\n    data.a3_stats.hook_frequency_review = (data.a3_stats.hook_frequency_review || 0) + 1;\n  }\n}\n\nconst hook_qa = {\n  normalized_key: String(source.normalized_key || '').slice(0, 120),\n  pass: true,\n  blocked: false,\n  channel,\n  hook_preview: hook.slice(0, 125),\n  flags,\n  reasons,\n  risk_comment_bait_pure: bait.risk_comment_bait_pure,\n  risk_comment_unlock_frequency: freq.risk_comment_unlock_frequency,\n  hook_truncation_risk: flags.includes('hook_truncation_risk'),\n  comment_unlock_day_count: freq.comment_unlock_day_count,\n  comment_unlock_week_count: freq.comment_unlock_week_count,\n  hashtags: d.hashtags || [],\n};\n\nreturn [{\n  json: {\n    ...item,\n    hook_qa_pass: true,\n    hook_qa_blocked: false,\n    hook_needs_review: needsReview,\n    hook_qa,\n    ...(needsReview ? { qa_status: 'hook_review', sheet_status_override: 'review' } : {}),\n    draft: {\n      ...d,\n      format_type: d.format_type || 'text_post',\n    },\n  },\n}];"
+      },
+      "id": "a310hook",
+      "name": "Hook Completion Gate",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2880,
+        80
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "c1",
+              "leftValue": "={{ $json.hook_qa_blocked }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "notEquals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "a310ifhook",
+      "name": "IF Hook Pass",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        3000,
+        80
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $getWorkflowStaticData('global');\nif (!data.a3_stats) data.a3_stats = {};\ndata.a3_stats.hook_rejected = (data.a3_stats.hook_rejected || 0) + 1;\nreturn $input.all();"
+      },
+      "id": "a310hookrej",
+      "name": "Track Hook Reject",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3240,
+        200
       ]
     },
     {
@@ -240,7 +403,7 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        2400,
+        3120,
         80
       ]
     },
@@ -274,21 +437,188 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        2640,
+        3120,
         80
       ]
     },
     {
       "parameters": {
-        "jsCode": "const source = $('Loop Draft Candidates').item?.json || {};\nconst item = $input.first().json;\n\nif (!item.ok || !item.draft) {\n  return [{ json: { ok: false, error: 'MERGE_SKIP', sheet_row: source.sheet_row } }];\n}\n\nconst d = item.draft;\nconst meta = JSON.stringify({\n  source_refs: d.source_refs,\n  l0_hits: item.l0_hits || [],\n  agent: 'agent-3',\n  source_post_url: source.post_url,\n  created_at: new Date().toISOString(),\n}).slice(0, 50000);\n\nreturn [{\n  json: {\n    ok: true,\n    source_normalized_key: source.normalized_key,\n    queue_sheet_row: source.sheet_row,\n    append_row: [\n      String(source.normalized_key || ''),\n      String(source.post_id || ''),\n      String(d.segment || source.segment || ''),\n      d.title,\n      d.hook_line,\n      d.artifact_markdown,\n      d.cta_opt_in,\n      d.disclaimer,\n      d.export_hint,\n      'draft',\n      'L0',\n      new Date().toISOString(),\n      'agent3_lead_magnet',\n      meta,\n    ],\n    queue_meta_patch: {\n      draft_created: true,\n      draft_status: 'draft',\n      draft_title: d.title,\n      draft_at: new Date().toISOString(),\n    },\n  },\n}];"
+        "jsCode": "const LEGAL_SEGMENTS = new Set(['noxh_income', 'valuation', 'sme_credit']);\nconst LEGAL_CONTENT_TYPES = new Set(['NOXH_LEGAL', 'LOAN_FINANCE', 'VALUATION']);\n\nconst item = $input.first().json;\nconst source = $('Loop Draft Candidates').item?.json || {};\n\nif (!item.l0_pass || !item.draft) {\n  return [{ json: { ...item, needs_l2_devil: false, l2_skip_reason: 'NO_DRAFT' } }];\n}\n\nconst segment = String(item.draft.segment || source.segment || '').trim().toLowerCase();\nconst contentType = String(item.draft.content_type || item.disclaimer_injection?.content_type || '').trim().toUpperCase();\nconst meta = source.meta_parsed || {};\n\nconst needs_l2_devil =\n  LEGAL_CONTENT_TYPES.has(contentType)\n  || LEGAL_SEGMENTS.has(segment)\n  || item.requires_legal_review === true\n  || meta.requires_legal_qa === true;\n\nreturn [{\n  json: {\n    ...item,\n    needs_l2_devil,\n    l2_segment: segment,\n    l2_content_type: contentType || null,\n    l2_legal_pack: source.legal_retrieval_pack || meta.legal_retrieval_pack || null,\n    editorial_brief_v1: source.editorial_brief_v1 || meta.editorial_brief_v1 || null,\n  },\n}];"
+      },
+      "id": "a312route",
+      "name": "Route L2 Devil",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3240,
+        80
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "c1",
+              "leftValue": "={{ $json.needs_l2_devil }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "a312ifl2",
+      "name": "IF Needs L2 Devil",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        3120,
+        80
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const MAGNIX_LLM_DEFAULTS = {\"classify\":\"deepseek\",\"editorial_brief\":\"deepseek\",\"outreach\":\"deepseek\",\"video_draft\":\"deepseek\",\"carousel_draft\":\"deepseek\",\"content_draft\":\"anthropic\",\"content_draft_general\":\"deepseek\",\"content_qa\":\"anthropic\"};\r\n\r\nfunction hasLlmKey(raw) {\r\n  return String(raw || '').trim().length > 12;\r\n}\r\n\r\nfunction envProvider(taskId) {\r\n  const key = `MAGNIX_LLM_${String(taskId || '')\r\n    .toUpperCase()\r\n    .replace(/[^A-Z0-9]/g, '_')}_PROVIDER`;\r\n  const v = String($env[key] || '').trim().toLowerCase();\r\n  if (v === 'deepseek' || v === 'anthropic') return v;\r\n  return null;\r\n}\r\n\r\nfunction resolveProvider(taskId) {\r\n  return envProvider(taskId) || MAGNIX_LLM_DEFAULTS[taskId] || 'deepseek';\r\n}\r\n\r\nfunction hasProvider(provider) {\r\n  if (provider === 'anthropic') return hasLlmKey($env.ANTHROPIC_API_KEY);\r\n  return hasLlmKey($env.DEEPSEEK_API_KEY);\r\n}\r\n\r\nfunction anthropicModelForTask(taskId) {\r\n  if (taskId === 'classify') {\r\n    return $env.ANTHROPIC_CLASSIFY_MODEL || 'claude-haiku-4-5-20251001';\r\n  }\r\n  if (taskId === 'video_draft') {\r\n    return $env.ANTHROPIC_VIDEO_MODEL || $env.ANTHROPIC_DRAFT_MODEL || 'claude-sonnet-4-6';\r\n  }\r\n  return $env.ANTHROPIC_DRAFT_MODEL || $env.ANTHROPIC_MODEL || 'claude-sonnet-4-6';\r\n}\r\n\r\nasync function callDeepSeekLlm(ctx, opts) {\r\n  const {\r\n    system,\r\n    userPayload,\r\n    temperature = 0.35,\r\n    maxTokens = 4096,\r\n    jsonMode = true,\r\n  } = opts;\r\n  return ctx.helpers.httpRequest({\r\n    method: 'POST',\r\n    url: $env.DEEPSEEK_API_URL || 'https://api.deepseek.com/chat/completions',\r\n    headers: {\r\n      Authorization: `Bearer ${$env.DEEPSEEK_API_KEY}`,\r\n      'Content-Type': 'application/json',\r\n    },\r\n    body: {\r\n      model: $env.DEEPSEEK_MODEL || 'deepseek-chat',\r\n      temperature,\r\n      max_tokens: maxTokens,\r\n      ...(jsonMode ? { response_format: { type: 'json_object' } } : {}),\r\n      messages: [\r\n        { role: 'system', content: system },\r\n        { role: 'user', content: userPayload },\r\n      ],\r\n    },\r\n    json: true,\r\n  });\r\n}\r\n\r\nasync function callAnthropicLlm(ctx, opts) {\r\n  const {\r\n    system,\r\n    userPayload,\r\n    temperature = 0.35,\r\n    maxTokens = 4096,\r\n    taskId = 'content_draft',\r\n  } = opts;\r\n  return ctx.helpers.httpRequest({\r\n    method: 'POST',\r\n    url: 'https://api.anthropic.com/v1/messages',\r\n    headers: {\r\n      'x-api-key': $env.ANTHROPIC_API_KEY,\r\n      'anthropic-version': '2023-06-01',\r\n      'Content-Type': 'application/json',\r\n    },\r\n    body: {\r\n      model: anthropicModelForTask(taskId),\r\n      max_tokens: maxTokens,\r\n      temperature,\r\n      system,\r\n      messages: [{ role: 'user', content: userPayload }],\r\n    },\r\n    json: true,\r\n  });\r\n}\r\n\r\nasync function invokeMagnixLlm(ctx, taskId, opts) {\r\n  const primary = resolveProvider(taskId);\r\n  const fallback = primary === 'deepseek' ? 'anthropic' : 'deepseek';\r\n  const errors = [];\r\n\r\n  for (const provider of [primary, fallback]) {\r\n    if (!hasProvider(provider)) continue;\r\n    try {\r\n      if (provider === 'deepseek') {\r\n        return await callDeepSeekLlm(ctx, opts);\r\n      }\r\n      return await callAnthropicLlm(ctx, { ...opts, taskId });\r\n    } catch (e) {\r\n      errors.push(`${provider}: ${e.message}`);\r\n    }\r\n  }\r\n\r\n  if (!hasProvider('deepseek') && !hasProvider('anthropic')) {\r\n    throw new Error('Thiếu DEEPSEEK_API_KEY hoặc ANTHROPIC_API_KEY trên n8n env');\r\n  }\r\n  throw new Error(errors.join(' | ') || 'LLM providers failed');\r\n}\n\nconst item = $input.first().json;\nconst source = $('Loop Draft Candidates').item?.json || {};\nconst d = item.draft;\n\nconst system = `Magnix L2 QA — cổng /devil (luật sư nghiêm). Không viết lại toàn bộ; chỉ verdict + issues.\n[/devil]: Sai pháp lý, hứa lãi/giá/duyệt chắc, thiếu disclaimer NOXH/vay/định giá, claim không có trong brief/pack.\nVerdict: pass | fail | human_review. Score: 100 − 25×critical − 10×major − 5×minor. score < 75 → fail.\nChỉ trả JSON hợp lệ:\n{\"verdict\":\"\",\"score\":0,\"devil_findings\":[],\"issues\":[{\"severity\":\"critical|major|minor\",\"location\":\"\",\"fix_suggestion\":\"\"}]}`;\n\nconst draftContent = [\n  d.title,\n  d.hook_line,\n  d.artifact_markdown,\n  d.cta_opt_in,\n  d.disclaimer,\n].join('\\n\\n');\n\nconst brief = item.editorial_brief_v1 || source.editorial_brief_v1 || null;\nconst pack = item.l2_legal_pack || source.legal_retrieval_pack || null;\n\nconst userPayload = JSON.stringify({\n  content_type: 'lead_magnet',\n  segment: item.l2_segment || d.segment || source.segment,\n  requires_legal_qa: true,\n  draft_content: draftContent.slice(0, 12000),\n  original_brief: brief,\n  legal_retrieval_pack: pack,\n  source_refs: d.source_refs || [],\n});\n\ntry {\n  const res = await invokeMagnixLlm(this, 'content_qa', {\n    system,\n    userPayload,\n    temperature: 0.2,\n    maxTokens: 2048,\n    jsonMode: true,\n    taskId: 'content_qa',\n  });\n  return [{ json: { ...item, l2_llm: res } }];\n} catch (e) {\n  return [{ json: { ...item, l2_error: true, message: e.message } }];\n}"
+      },
+      "id": "a312llm2",
+      "name": "LLM L2 Devil QA",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3360,
+        0
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "c1",
+              "leftValue": "={{ $json.l2_error }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "notEquals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "a312ifl2llm",
+      "name": "IF L2 LLM OK",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        3600,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const VERDICTS = new Set(['pass', 'fail', 'human_review']);\nconst SEVERITIES = new Set(['critical', 'major', 'minor']);\n\nfunction extractJsonString(raw) {\n  if (raw == null) throw new Error('EMPTY_LLM_OUTPUT');\n  const s = typeof raw === 'string' ? raw : JSON.stringify(raw);\n  const fenced = s.match(/```(?:json)?\\s*([\\s\\S]*?)```/i);\n  let t = (fenced ? fenced[1] : s).trim();\n  const start = t.indexOf('{');\n  const end = t.lastIndexOf('}');\n  if (start >= 0 && end > start) t = t.slice(start, end + 1);\n  return t;\n}\n\nconst upstream = $input.first().json;\nconst res = upstream.l2_llm || $input.first().json;\nconst raw =\n  res.choices?.[0]?.message?.content ??\n  res.content?.[0]?.text ??\n  res.message?.content ??\n  res.text ??\n  res;\n\ntry {\n  const parsed = JSON.parse(extractJsonString(raw));\n  const verdict = String(parsed.verdict || 'fail').toLowerCase();\n  if (!VERDICTS.has(verdict)) throw new Error('INVALID_VERDICT');\n\n  let score = Number(parsed.score ?? 0);\n  if (!Number.isFinite(score)) score = 0;\n\n  const issues = Array.isArray(parsed.issues)\n    ? parsed.issues.slice(0, 12).map((x) => ({\n        severity: SEVERITIES.has(String(x.severity || '').toLowerCase())\n          ? String(x.severity).toLowerCase()\n          : 'major',\n        location: String(x.location || '').slice(0, 200),\n        fix_suggestion: String(x.fix_suggestion || '').slice(0, 500),\n      }))\n    : [];\n\n  const findings = Array.isArray(parsed.devil_findings)\n    ? parsed.devil_findings.map(String).slice(0, 12)\n    : [];\n\n  let finalVerdict = verdict;\n  if (score < 75 && verdict === 'pass') finalVerdict = 'fail';\n\n  return [{\n    json: {\n      ...upstream,\n      l2_ok: true,\n      l2_qa: {\n        verdict: finalVerdict,\n        score,\n        devil_findings: findings,\n        issues,\n      },\n    },\n  }];\n} catch (e) {\n  return [{\n    json: {\n      ...upstream,\n      l2_ok: false,\n      l2_parse_error: e.message,\n      raw_preview: String(raw).slice(0, 200),\n    },\n  }];\n}"
+      },
+      "id": "a312parse2",
+      "name": "Parse L2 Devil JSON",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3840,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "c1",
+              "leftValue": "={{ $json.l2_ok }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "a312ifl2parse",
+      "name": "IF L2 Parse OK",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        4080,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const item = $input.first().json;\nreturn [{\n  json: {\n    ...item,\n    l2_skipped: true,\n    l2_qa: null,\n  },\n}];"
+      },
+      "id": "a312skipl2",
+      "name": "Wrap Skip L2",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3360,
+        200
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const source = $('Loop Draft Candidates').item?.json || {};\nconst item = $input.first().json;\n\nif (!item.draft && !item.ok) {\n  return [{ json: { ok: false, error: 'MERGE_SKIP', sheet_row: source.sheet_row } }];\n}\n\nconst d = item.draft;\nif (!d) {\n  return [{ json: { ok: false, error: 'MERGE_SKIP', sheet_row: source.sheet_row } }];\n}\n\nconst l2 = item.l2_qa || null;\nconst l2Skipped = item.l2_skipped === true;\n\nlet sheetStatus = 'draft';\nlet qaTier = 'L0';\n\nif (l2) {\n  qaTier = 'L2';\n  if (l2.verdict === 'fail' || l2.verdict === 'human_review') {\n    sheetStatus = 'review';\n  }\n} else if (!l2Skipped) {\n  qaTier = 'L0';\n}\n\nconst metaObj = {\n  source_refs: d.source_refs,\n  l0_hits: item.l0_hits || [],\n  agent: 'agent-3',\n  source_post_url: source.post_url,\n  created_at: new Date().toISOString(),\n};\n\nif (item.disclaimer_injection) {\n  metaObj.disclaimer_injection = item.disclaimer_injection;\n  metaObj.content_type = item.disclaimer_injection.content_type;\n}\nif (item.content_type_router) {\n  metaObj.content_type_router = item.content_type_router;\n  metaObj.channel = item.content_type_router.channel;\n  metaObj.cta_keyword = item.content_type_router.cta_keyword;\n  if (!metaObj.content_type) metaObj.content_type = item.content_type_router.content_type;\n}\nif (d.content_type) metaObj.content_type = d.content_type;\nif (item.disclaimer_injection?.requires_legal_review) {\n  metaObj.requires_legal_review = true;\n}\n\nif (item.title_qa) {\n  metaObj.title_qa = item.title_qa;\n}\nif (item.title_duplicate_review) {\n  sheetStatus = 'review';\n  metaObj.title_duplicate_review = true;\n  metaObj.qa_status = 'title_duplicate_review';\n}\nif (item.hook_qa) {\n  metaObj.hook_qa = item.hook_qa;\n  metaObj.format_type = d.format_type || 'text_post';\n}\nif (item.hook_needs_review || item.qa_status === 'hook_review') {\n  sheetStatus = 'review';\n  metaObj.qa_status = item.qa_status || 'hook_review';\n}\nif (item.sheet_status_override) {\n  sheetStatus = item.sheet_status_override;\n}\nif (Array.isArray(d.hashtags) && d.hashtags.length) {\n  metaObj.hashtags = d.hashtags;\n}\n\nconst workflowData = $getWorkflowStaticData('global');\nconst coverage = workflowData.content_coverage || { byTopic: {} };\nconst titleTopics = [];\nconst topicRes = [\n  { id: 'dti', re: /\\b(dti|dòng\\s+tiền|room\\s+vay)\\b/i },\n  { id: 'noxh_income', re: /\\b(lương|thu\\s+nhập|triệu|đủ\\s+điều\\s+kiện)\\b/i },\n  { id: 'noxh_profile', re: /\\b(hồ\\s+sơ|mẫu\\s*01|photo)\\b/i },\n];\nfor (const p of topicRes) {\n  if (p.re.test(String(d.title || ''))) titleTopics.push(p.id);\n}\nconst coverageOverlaps = titleTopics\n  .filter((t) => (coverage.byTopic?.[t] || []).length >= 2)\n  .map((t) => ({ topic: t, count: coverage.byTopic[t].length }));\nif (coverageOverlaps.length) {\n  sheetStatus = 'review';\n  metaObj.content_coverage_review = true;\n  metaObj.coverage_overlaps = coverageOverlaps;\n  if (!metaObj.qa_status) metaObj.qa_status = 'content_coverage_review';\n}\n\nif (l2) {\n  metaObj.l2_qa = l2;\n  metaObj.l2_verdict = l2.verdict;\n  metaObj.l2_score = l2.score;\n  if (l2.verdict === 'fail') metaObj.l2_blocked = true;\n  if (l2.verdict === 'human_review') metaObj.l2_human_review = true;\n}\n\nconst meta = JSON.stringify(metaObj).slice(0, 50000);\n\nreturn [{\n  json: {\n    ok: true,\n    source_normalized_key: source.normalized_key,\n    queue_sheet_row: source.sheet_row,\n    sheet_status: sheetStatus,\n    l2_verdict: l2?.verdict || null,\n    append_row: [\n      String(source.normalized_key || ''),\n      String(source.post_id || ''),\n      String(d.segment || source.segment || ''),\n      d.title,\n      d.hook_line,\n      d.artifact_markdown,\n      d.cta_opt_in,\n      d.disclaimer,\n      d.export_hint,\n      sheetStatus,\n      qaTier,\n      new Date().toISOString(),\n      'agent3_lead_magnet',\n      meta,\n    ],\n    queue_meta_patch: {\n      draft_created: true,\n      draft_status: sheetStatus,\n      draft_title: d.title,\n      draft_at: new Date().toISOString(),\n      ...(item.title_qa ? { title_qa: item.title_qa } : {}),\n      ...(item.title_duplicate_review ? { qa_status: 'title_duplicate_review' } : {}),\n      ...(item.hook_qa ? { hook_qa: item.hook_qa } : {}),\n      ...(item.hook_needs_review ? { qa_status: 'hook_review' } : {}),\n      ...(metaObj.content_coverage_review ? { qa_status: 'content_coverage_review' } : {}),\n      ...(l2 ? { l2_verdict: l2.verdict, l2_score: l2.score } : {}),\n    },\n  },\n}];"
       },
       "id": "a313merge",
       "name": "Merge Draft Row",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        2880,
-        0
+        4320,
+        80
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $getWorkflowStaticData('global');\nif (!data.a3_stats) data.a3_stats = {};\nconst v = $input.first().json?.l2_qa?.verdict;\nif (v === 'fail') data.a3_stats.l2_fail = (data.a3_stats.l2_fail || 0) + 1;\nreturn $input.all();"
+      },
+      "id": "a313l2track",
+      "name": "Track L2 Verdict",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        4560,
+        80
       ]
     },
     {
@@ -300,8 +630,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        3120,
-        0
+        4800,
+        80
       ],
       "onError": "continueRegularOutput"
     },
@@ -314,8 +644,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        3360,
-        0
+        5040,
+        80
       ],
       "onError": "continueRegularOutput"
     },
@@ -329,7 +659,7 @@
       "typeVersion": 2,
       "position": [
         2880,
-        160
+        240
       ]
     },
     {
@@ -347,7 +677,33 @@
     },
     {
       "parameters": {
-        "jsCode": "const data = $getWorkflowStaticData('global');\nconst stats = data.a3_stats || {};\nreturn [{ json: {\n  ok: true,\n  workflow: 'content-draft',\n  stats,\n  batch_size: 5,\n  hint: (stats.draft_ok || 0) === 0 ? 'Không draft mới — hết candidate hoặc lỗi LLM/L0' : null,\n  finished_at: new Date().toISOString(),\n}}];"
+        "jsCode": "const data = $getWorkflowStaticData('global');\nif (!data.a3_stats) data.a3_stats = {};\ndata.a3_stats.l2_parse_fail = (data.a3_stats.l2_parse_fail || 0) + 1;\nreturn $input.all();"
+      },
+      "id": "a317l2parsefail",
+      "name": "Track L2 Parse Fail",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        4320,
+        200
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $getWorkflowStaticData('global');\nif (!data.a3_stats) data.a3_stats = {};\ndata.a3_stats.l2_llm_fail = (data.a3_stats.l2_llm_fail || 0) + 1;\nreturn $input.all();"
+      },
+      "id": "a317l2llmfail",
+      "name": "Track L2 LLM Fail",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3840,
+        160
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $getWorkflowStaticData('global');\nconst stats = data.a3_stats || {};\nlet hint = null;\nif ((stats.draft_ok || 0) === 0) {\n  hint = 'Không draft mới — hết candidate hoặc lỗi LLM/L0/L2';\n} else if ((stats.l2_fail || 0) > 0) {\n  hint = 'Có L2 fail — kiểm tra content_drafts status=review';\n} else if ((stats.title_rejected || 0) > 0) {\n  hint = 'Có title_rejected — kiểm tra content_queue meta';\n} else if ((stats.title_capitalization_error || 0) > 0) {\n  hint = 'Có title_capitalization_error — sửa sentence case trên queue';\n}\nreturn [{ json: {\n  ok: true,\n  workflow: 'content-draft',\n  stats,\n  batch_size: 5,\n  hint,\n  finished_at: new Date().toISOString(),\n}}];"
       },
       "id": "a318summary",
       "name": "Build Summary",
@@ -373,15 +729,15 @@
     },
     {
       "parameters": {
-        "jsCode": "// Inlined vào n8n Code nodes — build deep link tới cột duyệt L3\n// Placeholder {\"content_queue\":546012823,\"content_drafts\":299240858,\"outreach_queue\":1077351628,\"video_drafts\":532130684,\"notification_events\":160985613} được thay lúc build workflow.\n\nconst SHEET_TAB_GIDS = {\"content_queue\":546012823,\"content_drafts\":299240858,\"outreach_queue\":1077351628,\"video_drafts\":532130684,\"notification_events\":160985613};\n\nconst APPROVAL_COL = {\n  video_drafts: { status: 'Q', l3: 'S' },\n  content_drafts: { status: 'K' },\n  outreach_queue: { status: 'I', l3: 'J' },\n};\n\nfunction buildReviewUrl(sheetId, tab, row, approvalFields) {\n  const base = `https://docs.google.com/spreadsheets/d/${sheetId}/edit`;\n  const gid = SHEET_TAB_GIDS[tab];\n  const cols = APPROVAL_COL[tab] || { status: 'A' };\n  const fields = Array.isArray(approvalFields) ? approvalFields : [];\n  const wantsL3 = fields.some((f) => String(f).toLowerCase().includes('l3_approved'));\n  const col = wantsL3 && cols.l3 ? cols.l3 : cols.status || 'A';\n  const r = Number(row) || 0;\n\n  if (!gid) {\n    return r > 1 ? `${base}#range=${col}${r}` : base;\n  }\n  if (r <= 1) {\n    return `${base}#gid=${gid}`;\n  }\n  return `${base}#gid=${gid}&range=${col}${r}`;\n}\n\n// n8n Code: fire approval_needed after Agent 3 draft (post Mark Queue Drafted)\n\nconst prev = $input.first().json || {};\nif (!prev.ok) return [{ json: prev }];\n\nconst merge = $('Merge Draft Row').item?.json || {};\nconst append = $('Sheet Append content_drafts').item?.json || {};\nconst row = merge.append_row || [];\nconst title = String(row[3] || merge.queue_meta_patch?.draft_title || 'Lead magnet draft').slice(0, 120);\nconst segment = String(row[2] || '').slice(0, 40);\nconst source_key = String(merge.source_normalized_key || 'unknown');\nconst sheet_row = Number(append.draft_sheet_row || 0);\n\nconst SHEET_ID = '1fYB4h_BTiKXa9O3lBah-tQonWpQOQMG2aSkSfPs6yU4';\nconst sheet_tab = 'content_drafts';\nconst approval_fields = ['status=approved'];\n\nconst body = {\n  event_id: `agent3:content_drafts:${source_key}:approval_needed`,\n  event_type: 'approval_needed',\n  agent: 'agent3',\n  severity: 'action_required',\n  product_type: 'lead_magnet',\n  target_channel: 'facebook_page',\n  title,\n  segment,\n  source_row_key: source_key,\n  sheet_tab,\n  sheet_row,\n  approval_fields,\n  review_url: buildReviewUrl(SHEET_ID, sheet_tab, sheet_row, approval_fields),\n  due_at: new Date(Date.now() + 2 * 3600000).toISOString(),\n};\n\nreturn fireNotify(body, prev);\n\n// Shared tail — inlined by notify-wire.mjs into agent fire-notify scripts\n\nasync function fireNotify(body, prev) {\n  const enabled = String($env.TELEGRAM_APPROVAL_ENABLED || '').toLowerCase() === 'true';\n  if (!enabled) {\n    return [{ json: { ...prev, notify_skipped: true, reason: 'TELEGRAM_APPROVAL_ENABLED' } }];\n  }\n\n  const token = $env.MAGNIX_WEBHOOK_TOKEN || '';\n  const base = String($env.N8N_PUBLIC_URL || 'https://n8n.vmd.asia').replace(/\\/$/, '');\n\n  try {\n    await this.helpers.httpRequest({\n      method: 'POST',\n      url: `${base}/webhook/magnix/telegram-notify`,\n      headers: {\n        Authorization: token ? `Bearer ${token}` : '',\n        'Content-Type': 'application/json',\n      },\n      body,\n      json: true,\n      timeout: 15000,\n    });\n    return [{ json: { ...prev, notify_fired: true, notify_event_id: body.event_id } }];\n  } catch (e) {\n    return [{ json: { ...prev, notify_fired: false, notify_error: e.message || 'NOTIFY_FAIL' } }];\n  }\n}\n"
+        "jsCode": "// Inlined vào n8n Code nodes — build deep link tới cột duyệt L3\n// Placeholder {\"content_queue\":546012823,\"content_drafts\":299240858,\"outreach_queue\":1077351628,\"video_drafts\":532130684,\"notification_events\":160985613} được thay lúc build workflow.\n\nconst SHEET_TAB_GIDS = {\"content_queue\":546012823,\"content_drafts\":299240858,\"outreach_queue\":1077351628,\"video_drafts\":532130684,\"notification_events\":160985613};\n\nconst APPROVAL_COL = {\n  video_drafts: { status: 'Q', l3: 'S' },\n  content_drafts: { status: 'K' },\n  outreach_queue: { status: 'J', l3: 'K' },\n};\n\nfunction buildReviewUrl(sheetId, tab, row, approvalFields) {\n  const base = `https://docs.google.com/spreadsheets/d/${sheetId}/edit`;\n  const gid = SHEET_TAB_GIDS[tab];\n  const cols = APPROVAL_COL[tab] || { status: 'A' };\n  const fields = Array.isArray(approvalFields) ? approvalFields : [];\n  const wantsL3 = fields.some((f) => String(f).toLowerCase().includes('l3_approved'));\n  const col = wantsL3 && cols.l3 ? cols.l3 : cols.status || 'A';\n  const r = Number(row) || 0;\n\n  if (!gid) {\n    return r > 1 ? `${base}#range=${col}${r}` : base;\n  }\n  if (r <= 1) {\n    return `${base}#gid=${gid}`;\n  }\n  return `${base}#gid=${gid}&range=${col}${r}`;\n}\n\n// n8n Code: fire approval_needed after Agent 3 draft (post Mark Queue Drafted)\n\nconst prev = $input.first().json || {};\nif (!prev.ok) return [{ json: prev }];\n\nconst merge = $('Merge Draft Row').item?.json || {};\nconst append = $('Sheet Append content_drafts').item?.json || {};\nconst row = merge.append_row || [];\nconst title = String(row[3] || merge.queue_meta_patch?.draft_title || 'Lead magnet draft').slice(0, 120);\nconst segment = String(row[2] || '').slice(0, 40);\nconst source_key = String(merge.source_normalized_key || 'unknown');\nconst sheet_row = Number(append.draft_sheet_row || 0);\n\nconst SHEET_ID = '1fYB4h_BTiKXa9O3lBah-tQonWpQOQMG2aSkSfPs6yU4';\nconst sheet_tab = 'content_drafts';\nconst approval_fields = ['status=approved'];\n\nconst body = {\n  event_id: `agent3:content_drafts:${source_key}:approval_needed`,\n  event_type: 'approval_needed',\n  agent: 'agent3',\n  severity: 'action_required',\n  product_type: 'lead_magnet',\n  target_channel: 'facebook_page',\n  title,\n  segment,\n  source_row_key: source_key,\n  sheet_tab,\n  sheet_row,\n  approval_fields,\n  review_url: buildReviewUrl(SHEET_ID, sheet_tab, sheet_row, approval_fields),\n  due_at: new Date(Date.now() + 2 * 3600000).toISOString(),\n};\n\nreturn fireNotify(body, prev);\n\n// Shared tail — inlined by notify-wire.mjs into agent fire-notify scripts\n\nasync function fireNotify(body, prev) {\n  const enabled = String($env.TELEGRAM_APPROVAL_ENABLED || '').toLowerCase() === 'true';\n  if (!enabled) {\n    return [{ json: { ...prev, notify_skipped: true, reason: 'TELEGRAM_APPROVAL_ENABLED' } }];\n  }\n\n  const token = $env.MAGNIX_WEBHOOK_TOKEN || '';\n  const base = String($env.N8N_PUBLIC_URL || 'https://n8n.vmd.asia').replace(/\\/$/, '');\n\n  try {\n    await this.helpers.httpRequest({\n      method: 'POST',\n      url: `${base}/webhook/magnix/telegram-notify`,\n      headers: {\n        Authorization: token ? `Bearer ${token}` : '',\n        'Content-Type': 'application/json',\n      },\n      body,\n      json: true,\n      timeout: 15000,\n    });\n    return [{ json: { ...prev, notify_fired: true, notify_event_id: body.event_id } }];\n  } catch (e) {\n    return [{ json: { ...prev, notify_fired: false, notify_error: e.message || 'NOTIFY_FAIL' } }];\n  }\n}\n"
       },
       "id": "a3nnotify",
       "name": "Fire Telegram Notify",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        5520,
-        0
+        7200,
+        80
       ],
       "onError": "continueRegularOutput"
     }
@@ -453,6 +809,28 @@
       "main": [
         [
           {
+            "node": "Fetch content_drafts titles",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch content_drafts titles": {
+      "main": [
+        [
+          {
+            "node": "Index Published Titles",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Index Published Titles": {
+      "main": [
+        [
+          {
             "node": "Loop Draft Candidates",
             "type": "main",
             "index": 0
@@ -493,11 +871,51 @@
       "main": [
         [
           {
+            "node": "Title QA Gate",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Loop Draft Candidates",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Title QA Gate": {
+      "main": [
+        [
+          {
+            "node": "IF Title Pass",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF Title Pass": {
+      "main": [
+        [
+          {
             "node": "Parse Lead Magnet JSON",
             "type": "main",
             "index": 0
           }
         ],
+        [
+          {
+            "node": "Track Title Reject",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Track Title Reject": {
+      "main": [
         [
           {
             "node": "Loop Draft Candidates",
@@ -522,7 +940,7 @@
       "main": [
         [
           {
-            "node": "L0 Forbidden Check",
+            "node": "Content Type Router",
             "type": "main",
             "index": 0
           }
@@ -530,6 +948,57 @@
         [
           {
             "node": "Track Parse Fail",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Content Type Router": {
+      "main": [
+        [
+          {
+            "node": "Hook Completion Gate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Hook Completion Gate": {
+      "main": [
+        [
+          {
+            "node": "IF Hook Pass",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF Hook Pass": {
+      "main": [
+        [
+          {
+            "node": "L0 Forbidden Check",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Track Hook Reject",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Track Hook Reject": {
+      "main": [
+        [
+          {
+            "node": "Loop Draft Candidates",
             "type": "main",
             "index": 0
           }
@@ -551,7 +1020,7 @@
       "main": [
         [
           {
-            "node": "Merge Draft Row",
+            "node": "Route L2 Devil",
             "type": "main",
             "index": 0
           }
@@ -565,7 +1034,116 @@
         ]
       ]
     },
+    "Route L2 Devil": {
+      "main": [
+        [
+          {
+            "node": "IF Needs L2 Devil",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF Needs L2 Devil": {
+      "main": [
+        [
+          {
+            "node": "LLM L2 Devil QA",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wrap Skip L2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "LLM L2 Devil QA": {
+      "main": [
+        [
+          {
+            "node": "IF L2 LLM OK",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF L2 LLM OK": {
+      "main": [
+        [
+          {
+            "node": "Parse L2 Devil JSON",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Track L2 LLM Fail",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse L2 Devil JSON": {
+      "main": [
+        [
+          {
+            "node": "IF L2 Parse OK",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF L2 Parse OK": {
+      "main": [
+        [
+          {
+            "node": "Merge Draft Row",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Track L2 Parse Fail",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wrap Skip L2": {
+      "main": [
+        [
+          {
+            "node": "Merge Draft Row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
     "Merge Draft Row": {
+      "main": [
+        [
+          {
+            "node": "Track L2 Verdict",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Track L2 Verdict": {
       "main": [
         [
           {
@@ -610,6 +1188,28 @@
       ]
     },
     "Track Parse Fail": {
+      "main": [
+        [
+          {
+            "node": "Loop Draft Candidates",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Track L2 Parse Fail": {
+      "main": [
+        [
+          {
+            "node": "Loop Draft Candidates",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Track L2 LLM Fail": {
       "main": [
         [
           {

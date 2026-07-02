@@ -9,12 +9,20 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { extractSystemPrompt } from './code/shared/extract-prompt.mjs';
 import { withPipelineStub } from './code/shared/with-pipeline-stub.mjs';
+import { withLlmRouter } from './code/shared/with-llm-router.mjs';
 import { loadFireNotifyCode, wireNotifyAfter } from './code/shared/notify-wire.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const codeDir = path.join(__dirname, 'code', 'content-video-draft');
 const PUBLIC = JSON.parse(
   fs.readFileSync(path.join(__dirname, 'magnix-public-config.json'), 'utf8')
+);
+const DISCLAIMER_CFG = JSON.parse(
+  fs.readFileSync(path.join(__dirname, 'disclaimers.json'), 'utf8')
+);
+
+const FORMAT_ROUTING = JSON.parse(
+  fs.readFileSync(path.join(__dirname, 'format_routing.json'), 'utf8')
 );
 
 const read = (f) =>
@@ -23,21 +31,30 @@ const read = (f) =>
     .replace(/^\/\/[^\n]*\n(\/\/[^\n]*\n)*/gm, '')
     .trim();
 
-const videoModel = PUBLIC.anthropic_video_model || PUBLIC.anthropic_draft_model;
 const productionSystem = extractSystemPrompt('ai-agents-prompts/n8n__production-brief.md');
+const llmProviders = PUBLIC.llm_task_providers || {};
 
 const codes = {
   parseFilter: withPipelineStub(
     read('01-parse-filter-candidates.js')
       .replace('__VIDEO_DRAFT_MIN_SCORE__', String(PUBLIC.video_draft_min_score ?? 70))
       .replace('__VIDEO_DRAFT_BATCH_SIZE__', String(PUBLIC.content_video_draft_batch_size ?? 3))
+      .replace('__FORMAT_ROUTING_JSON__', JSON.stringify(FORMAT_ROUTING))
   ),
-  llm: read('02-llm-short-video.js')
-    .replace('__PRODUCTION_BRIEF_SYSTEM__', productionSystem.replace(/\\/g, '\\\\').replace(/`/g, '\\`'))
-    .replace('${ANTHROPIC_VIDEO_MODEL}', videoModel),
+  llm: withLlmRouter(
+    read('02-llm-short-video.js').replace(
+      '__PRODUCTION_BRIEF_SYSTEM__',
+      productionSystem.replace(/\\/g, '\\\\').replace(/`/g, '\\`')
+    ),
+    llmProviders
+  ),
   parse: read('03-parse-video-script.js'),
+  videoScriptQa: read('03b-video-script-qa-gate.js'),
   l0: read('04-l0-forbidden-check.js'),
-  merge: read('05-merge-video-row.js'),
+  merge: read('05-merge-video-row.js').replace(
+    '__DISCLAIMER_CONFIG_JSON__',
+    JSON.stringify(DISCLAIMER_CFG),
+  ),
   trackAppend: read('06-track-append-ok.js'),
   prepareMark: read('07-prepare-queue-mark.js')
     .replace('__GOOGLE_SHEET_ID__', PUBLIC.google_sheet_id)
@@ -53,7 +70,7 @@ const sheetQueueUrl = `https://sheets.googleapis.com/v4/spreadsheets/${PUBLIC.go
 const sheetVideoSlotsUrl = `https://sheets.googleapis.com/v4/spreadsheets/${PUBLIC.google_sheet_id}/values/${encodeURIComponent(`${PUBLIC.video_drafts_tab}!A2:E500`)}`;
 
 const resetStats = `const data = $getWorkflowStaticData('global');
-data.a6_stats = { video_ok: 0, video_fail: 0, l0_fail: 0, parse_fail: 0, llm_fail: 0, no_candidates: false, sheet_fail: 0 };
+data.a6_stats = { video_ok: 0, video_fail: 0, l0_fail: 0, parse_fail: 0, llm_fail: 0, no_candidates: false, sheet_fail: 0, video_script_rejected: 0, video_script_review: 0 };
 return $input.all();`;
 
 const trackL0Fail = `const data = $getWorkflowStaticData('global');
@@ -260,6 +277,36 @@ const nodes = [
     type: 'n8n-nodes-base.if',
     typeVersion: 2.2,
     position: pos(2160, 160),
+  },
+  {
+    parameters: { jsCode: codes.videoScriptQa },
+    id: 'a609vqa',
+    name: 'Video Script QA Gate',
+    type: 'n8n-nodes-base.code',
+    typeVersion: 2,
+    position: pos(2280, 80),
+  },
+  {
+    parameters: {
+      conditions: {
+        options: { caseSensitive: true, leftValue: '', typeValidation: 'strict', version: 2 },
+        conditions: [
+          {
+            id: 'c1',
+            leftValue: '={{ $json.video_script_qa_blocked }}',
+            rightValue: true,
+            operator: { type: 'boolean', operation: 'notEquals' },
+          },
+        ],
+        combinator: 'and',
+      },
+      options: {},
+    },
+    id: 'a609ifvqa',
+    name: 'IF Video Script QA Pass',
+    type: 'n8n-nodes-base.if',
+    typeVersion: 2.2,
+    position: pos(2520, 80),
   },
   {
     parameters: { jsCode: codes.l0 },
@@ -496,6 +543,13 @@ const connections = {
   },
   'Parse Video Script JSON': { main: [[{ node: 'IF Parse OK', type: 'main', index: 0 }]] },
   'IF Parse OK': {
+    main: [
+      [{ node: 'Video Script QA Gate', type: 'main', index: 0 }],
+      [{ node: 'Track Parse Fail', type: 'main', index: 0 }],
+    ],
+  },
+  'Video Script QA Gate': { main: [[{ node: 'IF Video Script QA Pass', type: 'main', index: 0 }]] },
+  'IF Video Script QA Pass': {
     main: [
       [{ node: 'L0 Forbidden Check', type: 'main', index: 0 }],
       [{ node: 'Track Parse Fail', type: 'main', index: 0 }],

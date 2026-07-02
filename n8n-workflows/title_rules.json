@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "similarity_threshold": 0.7,
+  "published_statuses": ["approved", "published"],
+  "title_formulas": {
+    "NOXH_LEGAL": "Dạng câu hỏi trực diện; có số liệu cụ thể nếu phù hợp (vd: ngưỡng thu nhập, diện tích). Không dùng tag [TEST]/placeholder. Không nhét CTA vào title.",
+    "LOAN_FINANCE": "Khẳng định rõ lợi ích; dùng thuật ngữ DTI, room vay, dòng tiền khi phù hợp. Không cam kết lãi suất cụ thể trong title.",
+    "VALUATION": "So sánh hoặc giải thích trực diện (giá tham khảo vs chứng thư, sai lệch thẩm định). Không hứa giá chính thức.",
+    "GENERAL_POLICY": "Tin tức/tổng hợp chính sách + mốc thời gian cụ thể (tháng/năm). Tránh CTA comment trong title."
+  },
+  "segment_to_content_type": {
+    "noxh_income": "NOXH_LEGAL",
+    "sme_credit": "LOAN_FINANCE",
+    "valuation": "VALUATION",
+    "general_inbound": "GENERAL_POLICY",
+    "unclassified": "GENERAL_POLICY"
+  }
+}

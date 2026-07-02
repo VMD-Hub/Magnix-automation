@@ -1,0 +1,831 @@
+{
+  "name": "Magnix Agent 3b — Carousel Draft (queue → content_drafts)",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## Agent 3b — Carousel Draft\n- **09:20 VN** · max **3**/lần\n- Input: `carousel_image` + `editorial_brief_v1`\n- Output: `content_drafts` (slides trong meta)",
+        "height": 180,
+        "width": 400
+      },
+      "id": "a3bnote",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -480,
+        160
+      ]
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "20 9 * * *"
+            }
+          ]
+        }
+      },
+      "id": "a3b1sched",
+      "name": "Schedule Daily Carousel Draft",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "a3b2manual",
+      "name": "When clicking 'Execute workflow'",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "https://sheets.googleapis.com/v4/spreadsheets/1fYB4h_BTiKXa9O3lBah-tQonWpQOQMG2aSkSfPs6yU4/values/content_queue!A%3AO",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleApi",
+        "options": {}
+      },
+      "id": "a3b3fetch",
+      "name": "Fetch content_queue",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        240,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "function extractQuestion(text) {\r\n  const t = String(text || '').trim();\r\n  if (!t) return [];\r\n  const parts = t.split(/[?？]/).map((s) => s.trim()).filter(Boolean);\r\n  if (parts.length > 1) {\r\n    return parts.slice(0, -1).map((p) => `${p}?`.slice(0, 300)).slice(0, 3);\r\n  }\r\n  if (/[?？]/.test(t)) return [t.slice(0, 300)];\r\n  return [];\r\n}\r\n\r\nfunction buildIntakeStubFromRow(row) {\r\n  const text = String(row.text || '').trim();\r\n  const segment = String(row.segment || 'general_inbound').trim().toLowerCase();\r\n  const score = Number(row.score || 0);\r\n  const platform = String(row.platform || 'tiktok').trim().toLowerCase();\r\n  const questions = extractQuestion(text);\r\n  const summary = text.slice(0, 500);\r\n\r\n  return {\r\n    intake_version: 1,\r\n    verdict: score >= 70 ? 'qualified' : score >= 40 ? 'maybe' : 'reject',\r\n    score,\r\n    reject_reason: null,\r\n    summary,\r\n    conversation: {\r\n      surface_topic: summary.slice(0, 200),\r\n      explicit_questions: questions.length ? questions : [summary.slice(0, 120)],\r\n      implicit_fears: [],\r\n      misconceptions: [],\r\n      journey_stage: 'consideration',\r\n      audience_voice: text.slice(0, 300),\r\n    },\r\n    content_signals: {\r\n      pain_intensity: Math.min(100, Math.max(0, score)),\r\n      discussion_heat: score >= 75 ? 'high' : 'medium',\r\n      inbound_potential: score >= 70 ? 'medium' : 'low',\r\n      segment_hint: segment,\r\n      evidence_quotes: text ? [text.slice(0, 120)] : [],\r\n      single_insight_clip: true,\r\n      hook_candidate: text.slice(0, 80),\r\n      cta_keyword_hint: segment === 'noxh_income' ? 'NOXH' : 'CHECKLIST',\r\n    },\r\n    compliance_flags: [],\r\n    _stub: true,\r\n    _stub_source: String(row.intake_stub_source || row.source || 'classified_row'),\r\n    _stub_platform: platform,\r\n    _stub_normalized_key: String(row.normalized_key || ''),\r\n  };\r\n}\r\n\r\nfunction ensureIntakeV1(row, meta) {\r\n  if (meta?.intake_v1 && typeof meta.intake_v1 === 'object') {\r\n    return { meta, intake_v1: meta.intake_v1, stubbed: false };\r\n  }\r\n  const intake_v1 = buildIntakeStubFromRow(row);\r\n  const next = { ...meta, intake_v1, intake_stub_at: new Date().toISOString() };\r\n  return { meta: next, intake_v1, stubbed: true };\r\n}\n\nconst MIN_SCORE = 70;\nconst BATCH = 3;\nconst FORMAT_ROUTING = {\"version\":1,\"agent3_text_post_formats\":[\"fb_page_post\",\"fb_page_post_image\",\"facebook_page\",\"facebook\",\"website_article\",\"blog_seo\",\"aio_seo\"],\"agent6_video_formats\":[\"fb_reels\",\"tiktok\",\"youtube_shorts\",\"short_video_package\"],\"carousel_formats\":[\"carousel_image\"],\"format_type_by_product\":{\"fb_reels\":\"video_script\",\"tiktok\":\"video_script\",\"youtube_shorts\":\"video_script\",\"short_video_package\":\"video_script\",\"fb_page_post_image\":\"text_post\",\"fb_page_post\":\"text_post\",\"facebook_page\":\"text_post\",\"carousel_image\":\"carousel\",\"website_article\":\"text_post\",\"blog_seo\":\"text_post\"},\"prompt_hints\":{\"text_post\":\"Bài đọc Facebook Page: hook_line ≤25 từ + body Q&A (H2/H3 là câu hỏi). KHÔNG viết script theo giây.\",\"video_script\":\"Chỉ Agent 6 — hook visual/verbal + body_beats theo giây. KHÔNG dùng cho Agent 3.\",\"carousel\":\"Chia slide (Slide 1…N), mỗi slide 1 ý. KHÔNG viết bài đọc dài một khối.\"}};\n\nconst ALLOW_SEGMENTS = new Set([\n  'noxh_income', 'valuation', 'sme_credit', 'general_inbound',\n]);\n\nconst CAROUSEL_FORMATS = new Set(FORMAT_ROUTING.carousel_formats || ['carousel_image']);\n\nfunction parseMeta(raw) {\n  if (!raw) return {};\n  try {\n    return typeof raw === 'string' ? JSON.parse(raw) : raw;\n  } catch {\n    return {};\n  }\n}\n\nfunction resolveFormat(meta, row) {\n  return String(\n    meta.content_format\n    || meta.product_type\n    || row.product_type\n    || meta.editorial_brief_v1?.content_format\n    || 'carousel_image',\n  ).trim().toLowerCase();\n}\n\nfunction editorialPriority(meta) {\n  const scheduled = meta.scheduled_publish_at || meta.editorial_brief_v1?.scheduled_publish_at;\n  if (scheduled) {\n    const t = new Date(scheduled).getTime();\n    if (!Number.isNaN(t)) return t;\n  }\n  const calId = String(meta.editorial_calendar_id || '').trim();\n  if (calId) {\n    const num = Number(calId.split(':').pop());\n    if (Number.isFinite(num)) return num;\n  }\n  const pageKey = String(meta.editorial_page_key || '').trim();\n  if (pageKey) {\n    const num = Number(pageKey.split(':').pop());\n    if (Number.isFinite(num)) return num;\n  }\n  return 999999;\n}\n\nconst res = $input.first().json;\nconst rows = Array.isArray(res.values) ? res.values : [];\nif (rows.length < 2) {\n  return [{ json: { empty: true, message: 'content_queue trống' } }];\n}\n\nconst headers = rows[0].map((x) => String(x ?? '').trim().toLowerCase());\nconst pool = [];\nconst blockers = { no_brief: 0, already_draft: 0, bad_format: 0, low_score: 0 };\n\nfor (let i = 1; i < rows.length; i++) {\n  const cells = rows[i];\n  if (!cells?.some((c) => String(c ?? '').trim())) continue;\n\n  const row = { sheet_row: i + 1 };\n  headers.forEach((key, j) => {\n    if (key) row[key] = cells[j] ?? '';\n  });\n\n  const segment = String(row.segment || '').trim().toLowerCase();\n  const score = Number(row.score || 0);\n  const status = String(row.status || '').trim().toLowerCase();\n  const meta = parseMeta(row.meta);\n  const fmt = resolveFormat(meta, row);\n\n  if (meta.carousel_draft_created === true || meta.draft_created === true) {\n    blockers.already_draft += 1;\n    continue;\n  }\n  if (!ALLOW_SEGMENTS.has(segment)) continue;\n  if (score < MIN_SCORE) { blockers.low_score += 1; continue; }\n  if (status !== 'classified' && row.claude_verdict !== 'qualified') continue;\n  if (!CAROUSEL_FORMATS.has(fmt)) { blockers.bad_format += 1; continue; }\n\n  const text = String(row.text || '').trim();\n  if (text.length < 20) continue;\n\n  if (!meta.editorial_brief_v1) { blockers.no_brief += 1; continue; }\n\n  const LEGAL_SEGMENTS = new Set(['noxh_income', 'valuation', 'sme_credit']);\n  if (LEGAL_SEGMENTS.has(segment)) {\n    const pack = meta.legal_retrieval_pack;\n    if (!pack || pack.needs_human_legal_source === true) continue;\n    row.legal_retrieval_pack = pack;\n  }\n\n  row.meta_parsed = meta;\n  row.editorial_brief_v1 = meta.editorial_brief_v1;\n  row.format_type = 'carousel';\n  row.editorial_priority = editorialPriority(meta);\n  pool.push(row);\n}\n\npool.sort((a, b) => a.editorial_priority - b.editorial_priority);\nconst out = pool.slice(0, BATCH).map((row) => ({ json: row }));\n\nif (!out.length) {\n  return [{\n    json: {\n      empty: true,\n      message: 'Không còn candidate carousel — cần carousel_image + editorial_brief_v1 + score≥70',\n      blockers,\n    },\n  }];\n}\n\nreturn out;"
+      },
+      "id": "a3b4filter",
+      "name": "Parse Filter Carousel Candidates",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        480,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "c1",
+              "leftValue": "={{ $json.empty }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "notEquals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "a3b5if",
+      "name": "IF Has Candidates",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        720,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $getWorkflowStaticData('global');\ndata.a3b_stats = { carousel_ok: 0, carousel_fail: 0, l0_fail: 0, parse_fail: 0, llm_fail: 0, no_candidates: false };\nreturn $input.all();"
+      },
+      "id": "a3b6reset",
+      "name": "Reset Run Stats",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        960,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "batchSize": 1,
+        "options": {}
+      },
+      "id": "a3b7loop",
+      "name": "Loop Carousel Candidates",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        1200,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const MAGNIX_LLM_DEFAULTS = {\"classify\":\"deepseek\",\"editorial_brief\":\"deepseek\",\"outreach\":\"deepseek\",\"video_draft\":\"deepseek\",\"carousel_draft\":\"deepseek\",\"content_draft\":\"anthropic\",\"content_draft_general\":\"deepseek\",\"content_qa\":\"anthropic\"};\r\n\r\nfunction hasLlmKey(raw) {\r\n  return String(raw || '').trim().length > 12;\r\n}\r\n\r\nfunction envProvider(taskId) {\r\n  const key = `MAGNIX_LLM_${String(taskId || '')\r\n    .toUpperCase()\r\n    .replace(/[^A-Z0-9]/g, '_')}_PROVIDER`;\r\n  const v = String($env[key] || '').trim().toLowerCase();\r\n  if (v === 'deepseek' || v === 'anthropic') return v;\r\n  return null;\r\n}\r\n\r\nfunction resolveProvider(taskId) {\r\n  return envProvider(taskId) || MAGNIX_LLM_DEFAULTS[taskId] || 'deepseek';\r\n}\r\n\r\nfunction hasProvider(provider) {\r\n  if (provider === 'anthropic') return hasLlmKey($env.ANTHROPIC_API_KEY);\r\n  return hasLlmKey($env.DEEPSEEK_API_KEY);\r\n}\r\n\r\nfunction anthropicModelForTask(taskId) {\r\n  if (taskId === 'classify') {\r\n    return $env.ANTHROPIC_CLASSIFY_MODEL || 'claude-haiku-4-5-20251001';\r\n  }\r\n  if (taskId === 'video_draft') {\r\n    return $env.ANTHROPIC_VIDEO_MODEL || $env.ANTHROPIC_DRAFT_MODEL || 'claude-sonnet-4-6';\r\n  }\r\n  return $env.ANTHROPIC_DRAFT_MODEL || $env.ANTHROPIC_MODEL || 'claude-sonnet-4-6';\r\n}\r\n\r\nasync function callDeepSeekLlm(ctx, opts) {\r\n  const {\r\n    system,\r\n    userPayload,\r\n    temperature = 0.35,\r\n    maxTokens = 4096,\r\n    jsonMode = true,\r\n  } = opts;\r\n  return ctx.helpers.httpRequest({\r\n    method: 'POST',\r\n    url: $env.DEEPSEEK_API_URL || 'https://api.deepseek.com/chat/completions',\r\n    headers: {\r\n      Authorization: `Bearer ${$env.DEEPSEEK_API_KEY}`,\r\n      'Content-Type': 'application/json',\r\n    },\r\n    body: {\r\n      model: $env.DEEPSEEK_MODEL || 'deepseek-chat',\r\n      temperature,\r\n      max_tokens: maxTokens,\r\n      ...(jsonMode ? { response_format: { type: 'json_object' } } : {}),\r\n      messages: [\r\n        { role: 'system', content: system },\r\n        { role: 'user', content: userPayload },\r\n      ],\r\n    },\r\n    json: true,\r\n  });\r\n}\r\n\r\nasync function callAnthropicLlm(ctx, opts) {\r\n  const {\r\n    system,\r\n    userPayload,\r\n    temperature = 0.35,\r\n    maxTokens = 4096,\r\n    taskId = 'content_draft',\r\n  } = opts;\r\n  return ctx.helpers.httpRequest({\r\n    method: 'POST',\r\n    url: 'https://api.anthropic.com/v1/messages',\r\n    headers: {\r\n      'x-api-key': $env.ANTHROPIC_API_KEY,\r\n      'anthropic-version': '2023-06-01',\r\n      'Content-Type': 'application/json',\r\n    },\r\n    body: {\r\n      model: anthropicModelForTask(taskId),\r\n      max_tokens: maxTokens,\r\n      temperature,\r\n      system,\r\n      messages: [{ role: 'user', content: userPayload }],\r\n    },\r\n    json: true,\r\n  });\r\n}\r\n\r\nasync function invokeMagnixLlm(ctx, taskId, opts) {\r\n  const primary = resolveProvider(taskId);\r\n  const fallback = primary === 'deepseek' ? 'anthropic' : 'deepseek';\r\n  const errors = [];\r\n\r\n  for (const provider of [primary, fallback]) {\r\n    if (!hasProvider(provider)) continue;\r\n    try {\r\n      if (provider === 'deepseek') {\r\n        return await callDeepSeekLlm(ctx, opts);\r\n      }\r\n      return await callAnthropicLlm(ctx, { ...opts, taskId });\r\n    } catch (e) {\r\n      errors.push(`${provider}: ${e.message}`);\r\n    }\r\n  }\r\n\r\n  if (!hasProvider('deepseek') && !hasProvider('anthropic')) {\r\n    throw new Error('Thiếu DEEPSEEK_API_KEY hoặc ANTHROPIC_API_KEY trên n8n env');\r\n  }\r\n  throw new Error(errors.join(' | ') || 'LLM providers failed');\r\n}\n\nconst CAROUSEL_CFG = {\"version\":1,\"slide_count_min\":5,\"slide_count_max\":8,\"slide_roles\":{\"1\":\"hook — 1 câu hỏi hoặc insight gây dừng scroll\",\"2\":\"context — vì sao chủ đề quan trọng\",\"3-6\":\"value — mỗi slide 1 ý / 1 bước / 1 lỗi thường gặp\",\"last\":\"CTA mềm — comment keyword hoặc inbox Page\"},\"headline_max_chars\":60,\"body_max_chars\":120,\"caption_max_chars\":300,\"forbidden\":[\"cam kết duyệt\",\"100% thành công\",\"lãi suất cụ thể %\",\"inbox ngay mua\"]};\n\nconst row = $('Loop Carousel Candidates').item?.json || $input.first().json;\nconst system = `Growth Copywriter Magnix — Value-First, không hard sell.\n\n**Legal Gate:** Chỉ dùng \\`facts[]\\` trong \\`legal_retrieval_pack\\`. \\`source_refs[]\\` = claim_id.\n\n**Cấu trúc slide:**\n- Slide 1: hook (câu hỏi / insight) — không placeholder.\n- Slide 2–N-1: mỗi slide 1 ý checklist / bước / lỗi thường gặp.\n- Slide cuối: CTA mềm (comment keyword hoặc inbox Page).\n- \\`visual_note\\`: gợi ý layout (icon, số thứ tự, màu brand xanh tin cậy).\n\n**KHÔNG** viết bài đọc dài một khối. **KHÔNG** cam kết duyệt / lãi suất % cụ thể.`;\n\nconst segment = String(row.segment || 'noxh_income');\nconst editorial = row.editorial_brief_v1 || row.meta_parsed?.editorial_brief_v1;\nconst legalPack =\n  row.legal_retrieval_pack\n  || editorial?.legal_retrieval_pack\n  || row.meta_parsed?.legal_retrieval_pack\n  || null;\n\nif (!editorial) {\n  return [{ json: { error: true, message: 'MISSING_EDITORIAL_BRIEF' } }];\n}\n\nconst requiresLegal = ['noxh_income', 'valuation', 'sme_credit'].includes(segment);\nif (requiresLegal && (!legalPack || legalPack.needs_human_legal_source === true)) {\n  return [{ json: { error: true, message: 'MISSING_OR_BLOCKED_LEGAL_PACK' } }];\n}\n\nconst userPayload = JSON.stringify({\n  normalized_key: row.normalized_key,\n  segment,\n  format_type: 'carousel',\n  product_type: 'carousel_image',\n  editorial_brief_v1: editorial,\n  legal_retrieval_pack: legalPack,\n  cta_keyword: row.meta_parsed?.cta_keyword || editorial.cta_keyword || 'CHECKLIST',\n  slide_count_target: CAROUSEL_CFG.slide_count_max || 6,\n  reference_url: String(row.post_url || '').slice(0, 500),\n});\n\ntry {\n  const res = await invokeMagnixLlm(this, 'carousel_draft', {\n    system,\n    userPayload,\n    temperature: 0.4,\n    maxTokens: 4096,\n    jsonMode: true,\n  });\n  return [{ json: res }];\n} catch (e) {\n  return [{ json: { error: true, message: e.message } }];\n}"
+      },
+      "id": "a3b8llm",
+      "name": "LLM Carousel Draft",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1440,
+        240
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "c1",
+              "leftValue": "={{ $json.error }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "notEquals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "a3b9ifllm",
+      "name": "IF LLM OK",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1680,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const CAROUSEL_CFG = {\"version\":1,\"slide_count_min\":5,\"slide_count_max\":8,\"slide_roles\":{\"1\":\"hook — 1 câu hỏi hoặc insight gây dừng scroll\",\"2\":\"context — vì sao chủ đề quan trọng\",\"3-6\":\"value — mỗi slide 1 ý / 1 bước / 1 lỗi thường gặp\",\"last\":\"CTA mềm — comment keyword hoặc inbox Page\"},\"headline_max_chars\":60,\"body_max_chars\":120,\"caption_max_chars\":300,\"forbidden\":[\"cam kết duyệt\",\"100% thành công\",\"lãi suất cụ thể %\",\"inbox ngay mua\"]};\n\nfunction extractJsonString(raw) {\n  if (raw == null) throw new Error('EMPTY_LLM_OUTPUT');\n  const s = typeof raw === 'string' ? raw : JSON.stringify(raw);\n  const fenced = s.match(/```(?:json)?\\s*([\\s\\S]*?)```/i);\n  let t = (fenced ? fenced[1] : s).trim();\n  const start = t.indexOf('{');\n  const end = t.lastIndexOf('}');\n  if (start >= 0 && end > start) t = t.slice(start, end + 1);\n  return t;\n}\n\nfunction parseJsonLoose(text) {\n  const attempts = [text, text.replace(/,\\s*([}\\]])/g, '$1')];\n  let lastErr;\n  for (const candidate of attempts) {\n    try {\n      return JSON.parse(candidate);\n    } catch (e) {\n      lastErr = e;\n    }\n  }\n  throw lastErr || new Error('JSON_PARSE_FAIL');\n}\n\nconst res = $input.first().json;\nconst source = $('Loop Carousel Candidates').item?.json || {};\nconst raw =\n  res.choices?.[0]?.message?.content\n  ?? res.content?.[0]?.text\n  ?? res.message?.content\n  ?? res;\n\nlet parsed;\ntry {\n  parsed = parseJsonLoose(extractJsonString(raw));\n} catch (e) {\n  return [{ json: { ok: false, parse_error: e.message } }];\n}\n\nconst slides = Array.isArray(parsed.slides) ? parsed.slides : [];\nconst minSlides = Number(CAROUSEL_CFG.slide_count_min || 5);\nconst maxSlides = Number(CAROUSEL_CFG.slide_count_max || 8);\n\nif (slides.length < minSlides || slides.length > maxSlides) {\n  return [{\n    json: {\n      ok: false,\n      parse_error: `SLIDE_COUNT_${slides.length}_OUT_OF_RANGE_${minSlides}_${maxSlides}`,\n    },\n  }];\n}\n\nconst eb = source.editorial_brief_v1 || {};\nconst title = String(parsed.title || eb.editorial_title || slides[0]?.headline || 'Magnix carousel').slice(0, 500);\nconst caption = String(parsed.caption || '').slice(0, Number(CAROUSEL_CFG.caption_max_chars || 300));\n\nconst normalizedSlides = slides.map((s, i) => ({\n  index: Number(s.index || i + 1),\n  headline: String(s.headline || '').slice(0, Number(CAROUSEL_CFG.headline_max_chars || 60)),\n  body: String(s.body || '').slice(0, Number(CAROUSEL_CFG.body_max_chars || 120)),\n  visual_note: String(s.visual_note || '').slice(0, 200),\n}));\n\nfor (const s of normalizedSlides) {\n  if (!s.headline.trim() || !s.body.trim()) {\n    return [{ json: { ok: false, parse_error: 'SLIDE_MISSING_HEADLINE_OR_BODY' } }];\n  }\n}\n\nreturn [{\n  json: {\n    ok: true,\n    carousel: {\n      format_type: 'carousel',\n      product_type: 'carousel_image',\n      segment: String(source.segment || 'noxh_income'),\n      title,\n      caption,\n      slides: normalizedSlides,\n      source_refs: Array.isArray(parsed.source_refs) ? parsed.source_refs : [],\n      content_format: 'carousel_image',\n    },\n  },\n}];"
+      },
+      "id": "a3b10parse",
+      "name": "Parse Carousel JSON",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1920,
+        160
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "c1",
+              "leftValue": "={{ $json.ok }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "a3b11ifparse",
+      "name": "IF Parse OK",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        2160,
+        160
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const FORBIDDEN = [\n  /(?<!không\\s)(?<!\\bko\\s)cam kết[^.\\n]{0,50}duyệt/i,\n  /lãi suất\\s*\\d+([.,]\\d+)?\\s*%/i,\n  /100%\\s*(thành công|duyệt)/i,\n  /inbox ngay[^.\\n]{0,40}(mua|đặt cọc)/i,\n];\n\nconst item = $input.first().json;\nif (!item.ok || !item.carousel) {\n  return [{ json: { ...item, l0_pass: false } }];\n}\n\nconst c = item.carousel;\nconst probe = [\n  c.title,\n  c.caption,\n  ...(c.slides || []).map((s) => `${s.headline}\\n${s.body}`),\n].join('\\n');\n\nconst hits = FORBIDDEN.filter((re) => re.test(probe)).map((re) => re.source);\nif (hits.length) {\n  return [{ json: { ok: false, l0_pass: false, l0_hits: hits, error: 'L0_FORBIDDEN' } }];\n}\n\nreturn [{ json: { ...item, l0_pass: true, l0_hits: [] } }];"
+      },
+      "id": "a3b12l0",
+      "name": "L0 Forbidden Check",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2400,
+        80
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "c1",
+              "leftValue": "={{ $json.l0_pass }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "a3b13ifl0",
+      "name": "IF L0 Pass",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        2640,
+        80
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const DISCLAIMER_CFG = {\"version\":2,\"default_page_display_name\":\"Tim Nha O Xa Hoi\",\"default_brand\":\"Magnix\",\"disclaimer_format_map\":{\"reel_short\":[\"fb_reels\",\"tiktok\",\"youtube_shorts\",\"short_video_package\",\"video_script\"],\"post_long\":[\"fb_page_post_image\",\"fb_page_post\",\"facebook_page\",\"carousel_image\",\"fb_page_post\",\"website_article\"]},\"templates\":{\"reel_short\":{\"_default\":\"Mỗi hồ sơ có tình huống riêng — inbox ngay để được {{page}} tư vấn cụ thể theo trường hợp của bạn.\",\"NOXH_LEGAL\":\"Mỗi hồ sơ NOXH có tình huống riêng — inbox {{page}} để được tư vấn cụ thể theo trường hợp của bạn.\",\"LOAN_FINANCE\":\"Mỗi hồ sơ vay có tình huống riêng — inbox {{page}} để được tư vấn dòng tiền theo đúng hồ sơ của bạn.\",\"VALUATION\":\"Mỗi tài sản cần góc nhìn riêng — inbox {{page}} để được tư vấn định giá theo trường hợp của bạn.\",\"GENERAL_POLICY\":\"Mỗi trường hợp có thể khác nhau theo từng địa phương — inbox {{page}} để chuyên gia page xem cụ thể hồ sơ bạn.\"},\"post_long\":{\"_default\":\"Thông tin từ team {{page}}. Để được tư vấn chi tiết theo đúng hồ sơ của bạn, inbox hoặc để lại SĐT ngay dưới bài viết — mình hỗ trợ 1:1 nhé.\",\"NOXH_LEGAL\":\"Mỗi trường hợp NOXH có thể khác nhau theo từng địa phương — để chuyên gia {{page}} xem cụ thể hồ sơ bạn, inbox hoặc để lại SĐT dưới bài nhé.\",\"LOAN_FINANCE\":\"Dòng tiền và room vay phụ thuộc hồ sơ từng người — team {{page}} hỗ trợ bóc tách 1:1. Inbox hoặc để lại SĐT dưới bài.\",\"VALUATION\":\"Giá trị và phương án định giá khác nhau theo từng tài sản — inbox {{page}} hoặc để lại SĐT để được tư vấn chi tiết.\",\"GENERAL_POLICY\":\"Mỗi trường hợp có thể khác nhau theo từng địa phương — để chuyên gia {{page}} xem cụ thể hồ sơ bạn, inbox ngay nhé.\"}},\"segment_map\":{\"noxh_income\":\"NOXH_LEGAL\",\"sme_credit\":\"LOAN_FINANCE\",\"valuation\":\"VALUATION\",\"general_inbound\":\"GENERAL_POLICY\",\"unclassified\":\"GENERAL_POLICY\"},\"boilerplate_patterns\":[\"không phải tư vấn pháp lý\",\"không thay thế tư vấn pháp lý\",\"không thay thế tư vấn\",\"không thay thế chứng thư\",\"mang tính tham khảo\",\"thông tin tham khảo\",\"quy định hiện hành\",\"không cam kết duyệt\",\"phụ thuộc hồ sơ thực tế\",\"tùy thẩm định ngân hàng\",\"tùy quy định hiện hành\",\"Căn cứ: Luật Nhà ở\",\"biểu lãi suất tham khảo\",\"chứng thư thẩm định giá chính thức\"],\"legal_content_types\":[\"NOXH_LEGAL\",\"LOAN_FINANCE\",\"VALUATION\"]};\nconst CONTENT_TYPES = new Set(['NOXH_LEGAL', 'LOAN_FINANCE', 'VALUATION', 'GENERAL_POLICY']);\nconst SEGMENT_MAP = DISCLAIMER_CFG.segment_map || {};\n\nfunction mapSegmentToContentType(segment) {\n  const key = String(segment || '').trim().toLowerCase();\n  const mapped = SEGMENT_MAP[key];\n  return mapped && CONTENT_TYPES.has(mapped) ? mapped : 'GENERAL_POLICY';\n}\n\nfunction renderDisclaimerTemplate(template, pageName) {\n  return String(template || '')\n    .replace(/\\{\\{page\\}\\}/g, pageName)\n    .replace(/\\{\\{brand\\}\\}/g, pageName)\n    .trim();\n}\n\nfunction getPostDisclaimer(contentType) {\n  const bucket = DISCLAIMER_CFG.templates?.post_long || {};\n  const key = CONTENT_TYPES.has(contentType) ? contentType : 'GENERAL_POLICY';\n  return bucket[key] || bucket._default || bucket.GENERAL_POLICY || '';\n}\n\nfunction slidesToMarkdown(slides, caption) {\n  const parts = slides.map((s) => `### Slide ${s.index}: ${s.headline}\\n\\n${s.body}\\n\\n*${s.visual_note || ''}*`);\n  if (caption) parts.push(`\\n---\\n\\n${caption}`);\n  return parts.join('\\n\\n').slice(0, 45000);\n}\n\nconst source = $('Loop Carousel Candidates').item?.json || {};\nconst item = $input.first().json;\n\nif (!item.ok || !item.carousel || !item.l0_pass) {\n  return [{ json: { ok: false, error: 'MERGE_SKIP', sheet_row: source.sheet_row } }];\n}\n\nconst c = item.carousel;\nconst pageDisplay =\n  String($env.MAGNIX_PAGE_DISPLAY_NAME || '').trim()\n  || String(DISCLAIMER_CFG.default_page_display_name || '').trim()\n  || 'Tim Nha O Xa Hoi';\nconst contentType = mapSegmentToContentType(c.segment || source.segment);\nconst disclaimer = renderDisclaimerTemplate(getPostDisclaimer(contentType), pageDisplay).slice(0, 2000);\n\nconst ctaKeyword = String(source.meta_parsed?.cta_keyword || 'CHECKLIST');\nconst ctaOptIn = `Comment **${ctaKeyword}** nếu bạn muốn tài liệu — mình gửi qua tin nhắn.`;\n\nconst pageKey = String(source.meta_parsed?.editorial_page_key || '')\n  || String(source.normalized_key || '').replace('editorial:queue:', 'editorial:page:');\nconst hookLine = String(c.slides[0]?.headline || c.title).slice(0, 500);\nconst artifact = slidesToMarkdown(c.slides, c.caption);\n\nconst metaObj = {\n  format_type: 'carousel',\n  product_type: 'carousel_image',\n  content_format: 'carousel_image',\n  target_channel: 'facebook_page',\n  carousel_slides: c.slides,\n  caption: c.caption,\n  source_refs: c.source_refs,\n  agent: 'agent-3b-carousel',\n  content_type: contentType,\n  disclaimer_injection: { variant: 'post_long', content_type: contentType },\n  l0_hits: item.l0_hits || [],\n  created_at: new Date().toISOString(),\n};\n\nreturn [{\n  json: {\n    ok: true,\n    source_normalized_key: pageKey,\n    queue_sheet_row: source.sheet_row,\n    sheet_status: 'draft',\n    update_row: [\n      pageKey,\n      String(source.post_id || `cal_carousel_${pageKey.split(':').pop()}`),\n      String(c.segment || source.segment || 'noxh_income'),\n      c.title,\n      hookLine,\n      artifact,\n      ctaOptIn,\n      disclaimer,\n      'carousel',\n      'draft',\n      'L0',\n      new Date().toISOString(),\n      'agent3b_carousel',\n      JSON.stringify(metaObj).slice(0, 50000),\n    ],\n    queue_meta_patch: {\n      carousel_draft_created: true,\n      draft_created: true,\n      draft_status: 'draft',\n      draft_title: c.title,\n      draft_at: new Date().toISOString(),\n    },\n  },\n}];"
+      },
+      "id": "a3b14merge",
+      "name": "Merge Carousel Row",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2880,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "https://sheets.googleapis.com/v4/spreadsheets/1fYB4h_BTiKXa9O3lBah-tQonWpQOQMG2aSkSfPs6yU4/values/content_drafts!A2%3AD500",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleApi",
+        "options": {}
+      },
+      "id": "a3b15getdrafts",
+      "name": "HTTP GET content_drafts keys",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        3120,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const SHEET_ID = '1fYB4h_BTiKXa9O3lBah-tQonWpQOQMG2aSkSfPs6yU4';\nconst TAB = 'content_drafts';\n\nconst merge = $('Merge Carousel Row').item?.json || {};\nconst getRes = $input.first().json || {};\nconst values = Array.isArray(getRes.values) ? getRes.values : [];\n\nif (!merge.ok || !merge.update_row) {\n  return [{ json: { ok: false, skip: true } }];\n}\n\nconst targetKey = String(merge.source_normalized_key || '').trim();\nlet targetRow = null;\n\nfor (let i = 0; i < values.length; i += 1) {\n  const key = String(values[i]?.[0] ?? '').trim();\n  if (key === targetKey) {\n    targetRow = i + 2;\n    break;\n  }\n}\n\nif (!targetRow) {\n  for (let i = 0; i < values.length; i += 1) {\n    const key = String(values[i]?.[0] ?? '').trim();\n    const title = String(values[i]?.[3] ?? '').trim();\n    if (!key && !title) {\n      targetRow = i + 2;\n      break;\n    }\n    targetRow = i + 3;\n  }\n}\n\nreturn [{\n  json: {\n    ok: true,\n    target_row: targetRow,\n    put_url: `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent(`${TAB}!A${targetRow}:N${targetRow}`)}?valueInputOption=USER_ENTERED`,\n    put_body: { values: [merge.update_row] },\n    source_normalized_key: targetKey,\n    queue_sheet_row: merge.queue_sheet_row,\n    queue_meta_patch: merge.queue_meta_patch,\n  },\n}];"
+      },
+      "id": "a3b16resolve",
+      "name": "Resolve Draft Put Row",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3360,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "PUT",
+        "url": "={{ $json.put_url }}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json.put_body) }}",
+        "options": {}
+      },
+      "id": "a3b17put",
+      "name": "HTTP PUT content_drafts row",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        3600,
+        0
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $getWorkflowStaticData('global');\nif (!data.a3b_stats) data.a3b_stats = { carousel_ok: 0, carousel_fail: 0 };\ndata.a3b_stats.carousel_ok += 1;\nreturn $input.all();"
+      },
+      "id": "a3b18track",
+      "name": "Track Carousel OK",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3840,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const SHEET_ID = '1fYB4h_BTiKXa9O3lBah-tQonWpQOQMG2aSkSfPs6yU4';\nconst TAB = 'content_queue';\n\nconst item = $('Resolve Draft Put Row').item?.json || $input.first().json || {};\nif (!item.queue_sheet_row || !item.queue_meta_patch) {\n  return [{ json: { ok: false, skip: true } }];\n}\n\nconst row = item.queue_sheet_row;\nconst getUrl = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent(`${TAB}!O${row}`)}`;\nconst putUrl = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent(`${TAB}!O${row}`)}?valueInputOption=USER_ENTERED`;\n\nreturn [{\n  json: {\n    ok: true,\n    queue_sheet_row: row,\n    queue_meta_patch: item.queue_meta_patch,\n    get_url: getUrl,\n    put_url: putUrl,\n    normalized_key: item.source_normalized_key,\n  },\n}];"
+      },
+      "id": "a3b19prep",
+      "name": "Prepare Queue Mark",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        4080,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $json.get_url }}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleApi",
+        "options": {}
+      },
+      "id": "a3b20getq",
+      "name": "HTTP GET queue meta",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        4320,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const prep = $('Prepare Queue Mark').item?.json || {};\nconst getRes = $input.first().json || {};\n\nif (!prep.ok || !prep.queue_meta_patch) {\n  return [{ json: { ok: false, skip: true } }];\n}\n\nlet existing = {};\ntry {\n  const cell = getRes.values?.[0]?.[0];\n  if (cell) existing = JSON.parse(cell);\n} catch {\n  existing = {};\n}\n\nconst meta = JSON.stringify({ ...existing, ...prep.queue_meta_patch }).slice(0, 50000);\n\nreturn [{\n  json: {\n    ok: true,\n    put_url: prep.put_url,\n    put_body: { values: [[meta]] },\n    queue_row_updated: prep.queue_sheet_row,\n    normalized_key: prep.normalized_key,\n  },\n}];"
+      },
+      "id": "a3b21mergeq",
+      "name": "Merge Queue Meta",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        4560,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "PUT",
+        "url": "={{ $json.put_url }}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json.put_body) }}",
+        "options": {}
+      },
+      "id": "a3b22putq",
+      "name": "HTTP PUT queue meta",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        4800,
+        0
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $getWorkflowStaticData('global');\nif (!data.a3b_stats) data.a3b_stats = {};\ndata.a3b_stats.llm_fail = (data.a3b_stats.llm_fail || 0) + 1;\nreturn $input.all();"
+      },
+      "id": "a3b23llmfail",
+      "name": "Track LLM Fail",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1680,
+        360
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $getWorkflowStaticData('global');\nif (!data.a3b_stats) data.a3b_stats = {};\ndata.a3b_stats.l0_fail = (data.a3b_stats.l0_fail || 0) + 1;\nreturn $input.all();"
+      },
+      "id": "a3b24l0fail",
+      "name": "Track L0 Fail",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2880,
+        160
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $getWorkflowStaticData('global');\nif (!data.a3b_stats) data.a3b_stats = {};\ndata.a3b_stats.parse_fail = (data.a3b_stats.parse_fail || 0) + 1;\nreturn $input.all();"
+      },
+      "id": "a3b25parsefail",
+      "name": "Track Parse Fail",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2400,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $getWorkflowStaticData('global');\nconst stats = data.a3b_stats || {};\nlet hint = null;\nif ((stats.carousel_ok || 0) === 0) {\n  if (stats.no_candidates) hint = 'Không candidate — cần carousel_image + editorial_brief_v1 (Layer B)';\n  else if ((stats.llm_fail || 0) > 0) hint = 'LLM fail — kiểm tra DEEPSEEK_API_KEY';\n  else if ((stats.parse_fail || 0) > 0) hint = 'Parse fail — xem Parse Carousel JSON';\n  else if ((stats.l0_fail || 0) > 0) hint = 'L0 chặn — xem L0 Forbidden Check';\n}\nreturn [{ json: {\n  ok: true,\n  workflow: 'content-carousel-draft',\n  stats,\n  batch_size: 3,\n  hint,\n  finished_at: new Date().toISOString(),\n}}];"
+      },
+      "id": "a3b26summary",
+      "name": "Build Summary",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3600,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $getWorkflowStaticData('global');\nif (!data.a3b_stats) data.a3b_stats = {};\ndata.a3b_stats.no_candidates = true;\nreturn [{ json: { ok: true, empty: true, message: $input.first()?.json?.message || 'No carousel candidates' } }];"
+      },
+      "id": "a3b27empty",
+      "name": "No Candidates Summary",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        720,
+        420
+      ]
+    }
+  ],
+  "connections": {
+    "Schedule Daily Carousel Draft": {
+      "main": [
+        [
+          {
+            "node": "Fetch content_queue",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking 'Execute workflow'": {
+      "main": [
+        [
+          {
+            "node": "Fetch content_queue",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch content_queue": {
+      "main": [
+        [
+          {
+            "node": "Parse Filter Carousel Candidates",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Filter Carousel Candidates": {
+      "main": [
+        [
+          {
+            "node": "IF Has Candidates",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF Has Candidates": {
+      "main": [
+        [
+          {
+            "node": "Reset Run Stats",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "No Candidates Summary",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Reset Run Stats": {
+      "main": [
+        [
+          {
+            "node": "Loop Carousel Candidates",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Carousel Candidates": {
+      "main": [
+        [
+          {
+            "node": "Build Summary",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "LLM Carousel Draft",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "LLM Carousel Draft": {
+      "main": [
+        [
+          {
+            "node": "IF LLM OK",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF LLM OK": {
+      "main": [
+        [
+          {
+            "node": "Parse Carousel JSON",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Track LLM Fail",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Carousel JSON": {
+      "main": [
+        [
+          {
+            "node": "IF Parse OK",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF Parse OK": {
+      "main": [
+        [
+          {
+            "node": "L0 Forbidden Check",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Track Parse Fail",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "L0 Forbidden Check": {
+      "main": [
+        [
+          {
+            "node": "IF L0 Pass",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF L0 Pass": {
+      "main": [
+        [
+          {
+            "node": "Merge Carousel Row",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Track L0 Fail",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge Carousel Row": {
+      "main": [
+        [
+          {
+            "node": "HTTP GET content_drafts keys",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP GET content_drafts keys": {
+      "main": [
+        [
+          {
+            "node": "Resolve Draft Put Row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Resolve Draft Put Row": {
+      "main": [
+        [
+          {
+            "node": "HTTP PUT content_drafts row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP PUT content_drafts row": {
+      "main": [
+        [
+          {
+            "node": "Track Carousel OK",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Track Carousel OK": {
+      "main": [
+        [
+          {
+            "node": "Prepare Queue Mark",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Queue Mark": {
+      "main": [
+        [
+          {
+            "node": "HTTP GET queue meta",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP GET queue meta": {
+      "main": [
+        [
+          {
+            "node": "Merge Queue Meta",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge Queue Meta": {
+      "main": [
+        [
+          {
+            "node": "HTTP PUT queue meta",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP PUT queue meta": {
+      "main": [
+        [
+          {
+            "node": "Loop Carousel Candidates",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Track L0 Fail": {
+      "main": [
+        [
+          {
+            "node": "Loop Carousel Candidates",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Track LLM Fail": {
+      "main": [
+        [
+          {
+            "node": "Loop Carousel Candidates",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Track Parse Fail": {
+      "main": [
+        [
+          {
+            "node": "Loop Carousel Candidates",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "No Candidates Summary": {
+      "main": [
+        [
+          {
+            "node": "Build Summary",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [
+    {
+      "name": "magnix"
+    },
+    {
+      "name": "agent-3b"
+    },
+    {
+      "name": "content-carousel-draft"
+    }
+  ],
+  "meta": {
+    "templateCredsSetupCompleted": false
+  }
+}

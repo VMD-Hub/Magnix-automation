@@ -8,6 +8,7 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { loadFireNotifyCode, wireNotifyAfter } from './code/shared/notify-wire.mjs';
+import { withLlmRouter } from './code/shared/with-llm-router.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const codeDir = path.join(__dirname, 'code', 'outreach-queue');
@@ -21,17 +22,21 @@ const read = (f) =>
     .replace(/^\/\/[^\n]*\n(\/\/[^\n]*\n)*/gm, '')
     .trim();
 
-const draftModel = PUBLIC.anthropic_draft_model || PUBLIC.anthropic_model;
+const resolveOutreachContext = fs
+  .readFileSync(path.join(__dirname, 'code/shared/resolve-outreach-context.js'), 'utf8')
+  .trim();
+
+const llmProviders = PUBLIC.llm_task_providers || {};
 
 const codes = {
   parseFilter: read('01-parse-filter-candidates.js').replace(
     '__OUTREACH_BATCH_SIZE__',
     String(PUBLIC.outreach_batch_size ?? 10)
   ),
-  llm: read('02-llm-outreach.js').replace('${ANTHROPIC_DRAFT_MODEL}', draftModel),
+  llm: withLlmRouter(`${resolveOutreachContext}\n\n${read('02-llm-outreach.js')}`, llmProviders),
   parse: read('03-parse-outreach.js'),
   l0l1: read('04-l0-l1-check.js'),
-  merge: read('05-merge-outreach-row.js'),
+  merge: `${resolveOutreachContext}\n\n${read('05-merge-outreach-row.js')}`,
   append: read('06-sheet-append-outreach.js')
     .replace('__GOOGLE_SHEET_ID__', PUBLIC.google_sheet_id)
     .replace('__OUTREACH_QUEUE_TAB__', PUBLIC.outreach_queue_tab),
@@ -77,7 +82,7 @@ const nodes = [
   {
     parameters: {
       content:
-        '## Agent 4 — Outreach\n- **09:30 VN** · max **10**/lần\n- Input: `content_drafts` status=draft\n- Output: `outreach_queue`\n- **L3 bắt buộc:** `l3_approved=true` trước khi gửi Zalo',
+        '## Agent 4 — Outreach (Phase 0)\n- **09:30 VN** · max **10**/lần\n- Input: `content_drafts` status=draft|approved\n- Output: `outreach_queue` (+ warmth, tracking cols)\n- **L3 bắt buộc:** `l3_approved=true` → gửi Zalo thủ công\n- SOP: `docs/OUTBOUND_RUNBOOK.md`',
       height: 180,
       width: 400,
     },

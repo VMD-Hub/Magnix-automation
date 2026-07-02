@@ -1,0 +1,119 @@
+{
+  "version": 1,
+  "default_channel": "facebook",
+  "target_channel_map": {
+    "facebook": "facebook",
+    "facebook_page": "facebook",
+    "fb_page": "facebook",
+    "fb_page_post": "facebook",
+    "fb_reels": "facebook",
+    "fb_page_post_image": "facebook",
+    "carousel_image": "facebook",
+    "tiktok": "facebook",
+    "short_video_package": "facebook",
+    "blog_seo": "blog_seo",
+    "website": "blog_seo",
+    "website_article": "blog_seo",
+    "aio_seo": "blog_seo"
+  },
+  "keywords": {
+    "NOXH_LEGAL": "NOXH",
+    "LOAN_FINANCE": "DONGTIEN",
+    "VALUATION": "DINHGIA"
+  },
+  "offers": {
+    "NOXH_LEGAL": {
+      "document_name": "Checklist hồ sơ NOXH"
+    },
+    "LOAN_FINANCE": {
+      "document_name": "Bảng Excel tính dòng tiền vay bank"
+    },
+    "VALUATION": {
+      "document_name": "Giải pháp thẩm định giá độc lập"
+    }
+  },
+  "offer_links_env": {
+    "NOXH_LEGAL": "MAGNIX_OFFER_LINK_NOXH",
+    "LOAN_FINANCE": "MAGNIX_OFFER_LINK_DONGTIEN",
+    "VALUATION": "MAGNIX_OFFER_LINK_DINHGIA"
+  },
+  "templates": {
+    "NOXH_LEGAL": {
+      "facebook": "Comment \"{{keyword}}\" để mình gửi {{document_name}} qua tin nhắn.",
+      "blog_seo": "Tải {{document_name}} tại đây: {{link}}"
+    },
+    "LOAN_FINANCE": {
+      "facebook": "Comment \"{{keyword}}\" để mình gửi {{document_name}} qua tin nhắn.",
+      "blog_seo": "Tải {{document_name}} tại đây: {{link}}"
+    },
+    "VALUATION": {
+      "facebook": "Comment \"{{keyword}}\" để mình gửi {{document_name}} qua tin nhắn.",
+      "blog_seo": "Tải {{document_name}} tại đây: {{link}}"
+    },
+    "GENERAL_POLICY": {
+      "facebook": "",
+      "blog_seo": ""
+    }
+  },
+  "general_policy_soft": {
+    "facebook": "Nếu bạn cần {{document_name}}, comment \"{{keyword}}\" — mình gửi qua tin nhắn.",
+    "blog_seo": "Tải {{document_name}} tại đây: {{link}}"
+  },
+  "context_hints": {
+    "NOXH_LEGAL": ["noxh", "nhà ở xã hội", "hồ sơ", "thu nhập", "đối tượng mua"],
+    "LOAN_FINANCE": ["vay", "dòng tiền", "lãi suất", "hạn mức", "ngân hàng", "dti"],
+    "VALUATION": ["định giá", "thẩm định", "chứng thư", "giá trị tài sản"]
+  },
+  "legacy_cta_keywords": ["CHECKLIST", "MAU01", "SAVE", "DTI"],
+  "forbidden_cta_phrases": [
+    "không thay tư vấn chính thức",
+    "không thay thế tư vấn",
+    "mang tính tham khảo",
+    "thông tin tham khảo"
+  ],
+  "hashtags": {
+    "count_min": 2,
+    "count_max": 3,
+    "NOXH_LEGAL": ["#NOXH", "#NhaOXH", "#HoSoNOXH"],
+    "LOAN_FINANCE": ["#VayMuaNha", "#DongTienVay", "#DTI"],
+    "VALUATION": ["#DinhGiaNhaDat", "#ThamDinhGia", "#ChungThuDinhGia"],
+    "GENERAL_POLICY": ["#ChinhSachNhaO", "#BatDongSanVN"],
+    "forbidden": [
+      "#xuhuong",
+      "#viral",
+      "#fyp",
+      "#foryou",
+      "#trending",
+      "#tiktok",
+      "#reels",
+      "#followme",
+      "#like4like"
+    ]
+  },
+  "social_mechanics": {
+    "facebook_truncation_chars": 125,
+    "comment_unlock_pattern": "comment\\s+[\"']?([A-Z0-9_]+)[\"']?",
+    "max_comment_unlock_per_week": 3,
+    "max_comment_unlock_per_day": 1,
+    "thresholds_confirmed": true,
+    "thresholds_confirmed_at": "2026-06-28",
+    "thresholds_note": "Owner confirmed: max 3 comment-unlock CTA/tuần, max 1/ngày",
+    "count_statuses": ["draft", "review", "approved", "published"]
+  },
+  "verbal_cta_templates": {
+    "NOXH_LEGAL": "Comment {{keyword}} bên dưới, mình gửi {{document_name}} ngay.",
+    "LOAN_FINANCE": "Comment {{keyword}} bên dưới, mình gửi {{document_name}} qua tin nhắn.",
+    "VALUATION": "Comment {{keyword}} bên dưới để nhận {{document_name}}.",
+    "GENERAL_POLICY": "Cần tài liệu thì comment {{keyword}} — mình gửi qua tin nhắn."
+  },
+  "cta_modes": {
+    "facebook": {
+      "question_then_comment": "Bạn đang ở bước nào trong hồ sơ — chuẩn bị hay đã nộp? Nếu cần {{document_name}}, comment \"{{keyword}}\" — mình gửi qua tin nhắn.",
+      "link_direct": "Tải {{document_name}} tại đây: {{link}}",
+      "inbox_soft": "Nhắn tin cho Page nếu cần {{document_name}} — mình gửi link Drive trong chat."
+    },
+    "blog_seo": {
+      "link_direct": "Tải {{document_name}} tại đây: {{link}}"
+    }
+  }
+}

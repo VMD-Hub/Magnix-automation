@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "DTI": {
+    "canonical_guidance": "DTI (tỷ lệ trả nợ trên thu nhập) là thông lệ thẩm định nội bộ từng ngân hàng — không có con số cố định trong luật nhà ở. Khi cần nêu ngưỡng tham khảo: thường dưới khoảng 36–40% thuận lợi; 40–50% thẩm định kỹ; trên 50% thường khó — luôn ghi \"tùy ngân hàng và hồ sơ\".",
+    "forbidden_claims": [
+      "luật quy định DTI 40%",
+      "DTI 40% là bắt buộc",
+      "mọi ngân hàng áp DTI 40%",
+      "chắc chắn duyệt nếu DTI dưới 40%"
+    ],
+    "example_formula": "DTI (%) = (Tổng trả nợ hiện có + Trả nợ nhà dự kiến) / Thu nhập hộ hàng tháng × 100"
+  },
+  "NOXH_INCOME": {
+    "canonical_guidance": "Trần thu nhập NOXH (25/35/50 triệu theo vùng) là điều kiện đối tượng mua — khác với thẩm định khả năng trả nợ vay."
+  }
+}

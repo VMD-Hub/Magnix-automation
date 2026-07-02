@@ -10,6 +10,7 @@
 | Tầng | Cơ chế | Áp dụng | Bắt buộc |
 |------|--------|---------|----------|
 | **L0** | Regex / rule cấm từ + schema JSON | Mọi output tự động | ✅ Luôn |
+| **Title QA** | Regex title gate (pre-parse) | Agent 3 lead magnet | ✅ Trước Parse |
 | **L1** | Validate format (`/brief` ≤3 dòng cold, field schema) | Outreach, lead magnet parse | ✅ Trước lưu draft |
 | **L2** | LLM **`/devil` only** — pháp lý, số liệu, disclaimer | NOXH, vay, định giá, SME credit | ✅ Content nhạy cảm |
 | **L3** | Human approve trên Google Sheet (`draft` → `approved`) | Trước publish ra ngoài | ✅ Publish |
@@ -52,8 +53,11 @@ Fail L1 → `status=review`, không publish.
 
 ## L2 — LLM `/devil` (prompt `n8n__content-qa.md`)
 
-**Chỉ khi** `content_type ∈ { lead_magnet, blog_outline }` AND `segment ∈ { noxh_income, valuation, sme_credit }`  
-HOẶC brief flag `requires_legal_qa: true`.
+**Chỉ khi** `content_type ∈ { NOXH_LEGAL, LOAN_FINANCE, VALUATION }`  
+HOẶC `segment ∈ { noxh_income, valuation, sme_credit }`  
+HOẶC brief/meta flag `requires_legal_qa: true` / `requires_legal_review: true`.
+
+Chi tiết disclaimer: `.cursor/DISCLAIMER_RULES.md`
 
 - **`/devil`:** luật sư nghiêm — claim, disclaimer, số liệu
 - **`/roast`:** *không* dùng trên n8n mặc định — chỉ Cursor khi A/B test copy
@@ -80,7 +84,7 @@ Không node publish n8n chạy khi `status != approved`.
 | Mạch | L0 | L1 | L2 | L3 |
 |------|----|----|----|-----|
 | 1 UID classify | ✅ parse JSON | ✅ schema | — | — |
-| 2 Lead magnet | ✅ | ✅ | ✅ nếu segment nhạy cảm | ✅ trước gửi KH |
+| 2 Lead magnet | Title QA | ✅ | ✅ nếu legal | ✅ trước publish |
 | 3 Outreach | ✅ | ✅ | tùy chọn | ✅ trước gửi |
 | 4 QA node | — | — | ✅ (chính nó) | — |
 

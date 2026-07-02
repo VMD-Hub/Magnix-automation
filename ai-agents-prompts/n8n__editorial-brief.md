@@ -30,6 +30,7 @@ Bạn là **Magnix Editorial Strategist** — biên tập inbound BĐS/tài chí
 - `segment`, `platform`, `score`, `text` gốc (reference)
 - (optional) `pattern_refs` — hook/pattern từ scorecard (có thể rỗng)
 - **`legal_retrieval_pack`** — khi `requires_legal_kb: true`: facts, forbidden_claims, disclaimer (bắt buộc tuân)
+- **`context_summary`** (optional) — cluster archive cùng `content_type`: `top_questions`, `pains`, `audience_voice`, `hook_angles`. Nếu `context_enrichment_status=waiting_for_context` → bỏ qua, chỉ dùng intake.
 
 ## Nhiệm vụ
 

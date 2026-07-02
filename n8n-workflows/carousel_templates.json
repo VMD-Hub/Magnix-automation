@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "slide_count_min": 5,
+  "slide_count_max": 8,
+  "slide_roles": {
+    "1": "hook — 1 câu hỏi hoặc insight gây dừng scroll",
+    "2": "context — vì sao chủ đề quan trọng",
+    "3-6": "value — mỗi slide 1 ý / 1 bước / 1 lỗi thường gặp",
+    "last": "CTA mềm — comment keyword hoặc inbox Page"
+  },
+  "headline_max_chars": 60,
+  "body_max_chars": 120,
+  "caption_max_chars": 300,
+  "forbidden": [
+    "cam kết duyệt",
+    "100% thành công",
+    "lãi suất cụ thể %",
+    "inbox ngay mua"
+  ]
+}

@@ -22,51 +22,14 @@ const userPayload = JSON.stringify({
 });
 
 try {
-  if ($env.DEEPSEEK_API_KEY) {
-    const res = await this.helpers.httpRequest({
-      method: 'POST',
-      url: $env.DEEPSEEK_API_URL || 'https://api.deepseek.com/chat/completions',
-      headers: {
-        Authorization: `Bearer ${$env.DEEPSEEK_API_KEY}`,
-        'Content-Type': 'application/json',
-      },
-      body: {
-        model: $env.DEEPSEEK_MODEL || 'deepseek-chat',
-        temperature: 0.2,
-        response_format: { type: 'json_object' },
-        messages: [
-          { role: 'system', content: system },
-          { role: 'user', content: userPayload },
-        ],
-      },
-      json: true,
-    });
-    return [{ json: res }];
-  }
-
-  if ($env.ANTHROPIC_API_KEY) {
-    const model = $env.ANTHROPIC_CLASSIFY_MODEL || 'claude-haiku-4-5-20251001';
-    const res = await this.helpers.httpRequest({
-      method: 'POST',
-      url: 'https://api.anthropic.com/v1/messages',
-      headers: {
-        'x-api-key': $env.ANTHROPIC_API_KEY,
-        'anthropic-version': '2023-06-01',
-        'Content-Type': 'application/json',
-      },
-      body: {
-        model,
-        max_tokens: 256,
-        temperature: 0.2,
-        system,
-        messages: [{ role: 'user', content: userPayload }],
-      },
-      json: true,
-    });
-    return [{ json: res }];
-  }
-
-  throw new Error('Thiếu DEEPSEEK_API_KEY hoặc ANTHROPIC_API_KEY');
+  const res = await invokeMagnixLlm(this, 'classify', {
+    system,
+    userPayload,
+    temperature: 0.2,
+    maxTokens: 256,
+    jsonMode: true,
+  });
+  return [{ json: res }];
 } catch (e) {
   return [{ json: { error: true, message: e.message } }];
 }

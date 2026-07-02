@@ -9,6 +9,7 @@
 [✓] 1B — Import workflow cần chạy (node scripts/go-live-vps.mjs — push qua n8n API)
 [ ] 1C — Gán Google Sheets/Drive credential (Agent 1 Drive Backup Upload — workflow đang inactive)
 [ ] 1D — Manual run → Sheet cập nhật đúng status/output
+[ ] 1F — Page Publish: Meta token + `docs/CONTENT_PAGE_PUBLISH_SETUP.md`
 [~] 1E — Telegram notification (3 workflow: notify webhook + reminder + resolver; bật env + activate)
 ```
 

@@ -59,35 +59,98 @@ function normalizeProductionBrief(parsed) {
     next.cta_keyword = String(eb.cta_keyword || 'CHECKLIST').slice(0, 50);
   }
   if (!String(next.disclaimer || '').trim()) {
-    next.disclaimer = 'Thông tin tham khảo; quyết định theo quy định và hồ sơ thực tế.';
+    next.disclaimer = '';
   }
   if (!next.aspect_ratio) next.aspect_ratio = '9:16';
   return next;
 }
 
+function isVideoScriptFormat(parsed) {
+  return parsed.format_type === 'video_script'
+    || (parsed.visual_hook && parsed.verbal_hook && Array.isArray(parsed.body_beats));
+}
+
+function parseVideoScriptSchema(parsed, source) {
+  const eb = source.editorial_brief_v1 || {};
+  const platform = String(parsed.platform || source.target_platform || 'tiktok').trim().toLowerCase();
+  if (!ALLOW_PLATFORMS.has(platform)) throw new Error('INVALID_PLATFORM');
+
+  const target_length_seconds = Math.min(
+    60,
+    Math.max(15, Math.round(Number(parsed.target_length_seconds ?? parsed.duration_sec ?? 30))),
+  );
+
+  const body_beats = (parsed.body_beats || []).slice(0, 16).map((b) => ({
+    timestamp: String(b.timestamp || `${Number(b.start_sec ?? 0)}-${Number(b.end_sec ?? 0)}s`),
+    spoken_line: String(b.spoken_line || b.spoken || ''),
+    on_screen_text: String(b.on_screen_text || b.on_screen || '').slice(0, 120),
+    visual_note: String(b.visual_note || b.visual || ''),
+  }));
+
+  if (body_beats.length < 2) throw new Error('INSUFFICIENT_BODY_BEATS');
+
+  const on_screen_text = String(
+    parsed.on_screen_text
+    || (Array.isArray(parsed.on_screen_text) ? parsed.on_screen_text[0] : '')
+    || body_beats[0]?.on_screen_text
+    || '',
+  ).slice(0, 120);
+
+  const content_type = String(parsed.content_type || eb.content_type || '').trim().toUpperCase() || null;
+
+  return {
+    ok: true,
+    video: {
+      format_type: 'video_script',
+      production_brief_version: Number(parsed.production_brief_version || 4),
+      platform,
+      segment: String(parsed.segment || source.segment || 'general_inbound'),
+      content_type,
+      visual_hook: String(parsed.visual_hook).slice(0, 500),
+      verbal_hook: String(parsed.verbal_hook).slice(0, 500),
+      on_screen_text,
+      body_beats,
+      verbal_cta: String(parsed.verbal_cta || '').slice(0, 300),
+      caption_cta: String(parsed.caption_cta || parsed.caption || '').slice(0, 500),
+      target_length_seconds,
+      aspect_ratio: String(parsed.aspect_ratio || '9:16'),
+      source_insight: String(parsed.source_insight || eb.one_line_insight || '').slice(0, 2000),
+      hashtags: Array.isArray(parsed.hashtags) ? parsed.hashtags.map(String).slice(0, 8) : [],
+      disclaimer: String(parsed.disclaimer || '').slice(0, 2000),
+      source_refs: Array.isArray(parsed.source_refs) ? parsed.source_refs.map(String).slice(0, 10) : [],
+    },
+  };
+}
+
 try {
-  const parsed = normalizeProductionBrief(parseJsonLoose(extractJsonString(raw)));
+  const parsed = parseJsonLoose(extractJsonString(raw));
+
+  if (isVideoScriptFormat(parsed)) {
+    return [{ json: parseVideoScriptSchema(parsed, source) }];
+  }
+
+  const parsedLegacy = normalizeProductionBrief(parsed);
   const required = [
     'title', 'platform', 'segment', 'hook_3s', 'spoken_script',
     'caption', 'cta_keyword', 'source_insight',
   ];
   for (const k of required) {
-    if (!parsed[k] || !String(parsed[k]).trim()) throw new Error(`MISSING_${k.toUpperCase()}`);
+    if (!parsedLegacy[k] || !String(parsedLegacy[k]).trim()) throw new Error(`MISSING_${k.toUpperCase()}`);
   }
 
-  const platform = String(parsed.platform).trim().toLowerCase();
+  const platform = String(parsedLegacy.platform).trim().toLowerCase();
   if (!ALLOW_PLATFORMS.has(platform)) throw new Error('INVALID_PLATFORM');
 
-  const duration = Number(parsed.duration_sec || 30);
+  const duration = Number(parsedLegacy.duration_sec || 30);
   if (!Number.isFinite(duration) || duration < 21 || duration > 60) {
     throw new Error('INVALID_DURATION');
   }
 
-  if (!Array.isArray(parsed.beats) || parsed.beats.length < 4) {
+  if (!Array.isArray(parsedLegacy.beats) || parsedLegacy.beats.length < 4) {
     throw new Error('INSUFFICIENT_BEATS');
   }
 
-  const beats = parsed.beats.slice(0, 12).map((b) => ({
+  const beats = parsedLegacy.beats.slice(0, 12).map((b) => ({
     start_sec: Number(b.start_sec ?? 0),
     end_sec: Number(b.end_sec ?? 0),
     role: String(b.role || 'value'),
@@ -107,7 +170,7 @@ try {
       : undefined,
   }));
 
-  const productionVersion = Number(parsed.production_brief_version || 1);
+  const productionVersion = Number(parsedLegacy.production_brief_version || 1);
   const brollBeats = beats.filter((b) => (b.visual_spec?.type || 'broll') === 'broll');
   if (productionVersion >= 3) {
     for (const b of brollBeats) {
@@ -129,44 +192,45 @@ try {
       if (words.length > 14) throw new Error('ON_SCREEN_TOO_LONG');
     }
   }
-  if (!Array.isArray(parsed.on_screen_text) || parsed.on_screen_text.length < 2) {
-    parsed.on_screen_text = parsed.beats
+  if (!Array.isArray(parsedLegacy.on_screen_text) || parsedLegacy.on_screen_text.length < 2) {
+    parsedLegacy.on_screen_text = parsedLegacy.beats
       .map((b) => String(b.on_screen || '').trim())
       .filter(Boolean)
       .slice(0, 8);
   }
-  if (parsed.on_screen_text.length < 2) throw new Error('MISSING_ON_SCREEN_TEXT');
+  if (parsedLegacy.on_screen_text.length < 2) throw new Error('MISSING_ON_SCREEN_TEXT');
 
-  if (!Array.isArray(parsed.hashtags)) parsed.hashtags = [];
-  if (!Array.isArray(parsed.source_refs)) parsed.source_refs = [];
+  if (!Array.isArray(parsedLegacy.hashtags)) parsedLegacy.hashtags = [];
+  if (!Array.isArray(parsedLegacy.source_refs)) parsedLegacy.source_refs = [];
 
   return [{
     json: {
       ok: true,
       video: {
+        format_type: 'production_brief_v3',
         production_brief_version: productionVersion,
-        render_engine: String(parsed.render_engine || 'creatomate_renderscript_v2'),
-        title: String(parsed.title).slice(0, 500),
+        render_engine: String(parsedLegacy.render_engine || 'creatomate_renderscript_v2'),
+        title: String(parsedLegacy.title).slice(0, 500),
         platform,
-        segment: String(parsed.segment),
-        hook_3s: String(parsed.hook_3s).slice(0, 500),
+        segment: String(parsedLegacy.segment),
+        hook_3s: String(parsedLegacy.hook_3s).slice(0, 500),
         duration_sec: Math.round(duration),
-        aspect_ratio: String(parsed.aspect_ratio || '9:16'),
-        source_insight: String(parsed.source_insight).slice(0, 2000),
-        pattern_applied: Array.isArray(parsed.pattern_applied)
-          ? parsed.pattern_applied.map(String).slice(0, 8)
+        aspect_ratio: String(parsedLegacy.aspect_ratio || '9:16'),
+        source_insight: String(parsedLegacy.source_insight).slice(0, 2000),
+        pattern_applied: Array.isArray(parsedLegacy.pattern_applied)
+          ? parsedLegacy.pattern_applied.map(String).slice(0, 8)
           : [],
-        pain_deconstruct: parsed.pain_deconstruct && typeof parsed.pain_deconstruct === 'object'
-          ? parsed.pain_deconstruct
+        pain_deconstruct: parsedLegacy.pain_deconstruct && typeof parsedLegacy.pain_deconstruct === 'object'
+          ? parsedLegacy.pain_deconstruct
           : undefined,
         beats,
-        spoken_script: String(parsed.spoken_script).slice(0, 15000),
-        on_screen_text: parsed.on_screen_text.map(String).slice(0, 8),
-        caption: String(parsed.caption).slice(0, 500),
-        hashtags: parsed.hashtags.map(String).slice(0, 8),
-        cta_keyword: String(parsed.cta_keyword).slice(0, 50),
-        disclaimer: String(parsed.disclaimer || '').slice(0, 2000),
-        source_refs: parsed.source_refs.map(String).slice(0, 10),
+        spoken_script: String(parsedLegacy.spoken_script).slice(0, 15000),
+        on_screen_text: parsedLegacy.on_screen_text.map(String).slice(0, 8),
+        caption: String(parsedLegacy.caption).slice(0, 500),
+        hashtags: parsedLegacy.hashtags.map(String).slice(0, 8),
+        cta_keyword: String(parsedLegacy.cta_keyword).slice(0, 50),
+        disclaimer: String(parsedLegacy.disclaimer || '').slice(0, 2000),
+        source_refs: parsedLegacy.source_refs.map(String).slice(0, 10),
       },
     },
   }];

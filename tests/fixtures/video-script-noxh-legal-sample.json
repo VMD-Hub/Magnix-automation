@@ -1,0 +1,35 @@
+{
+  "format_type": "video_script",
+  "content_type": "NOXH_LEGAL",
+  "platform": "fb_reels",
+  "segment": "noxh_income",
+  "target_length_seconds": 30,
+  "visual_hook": "Cận mặt, cầm tờ hồ sơ NOXH bị gạch đỏ ở mục thu nhập",
+  "verbal_hook": "Lương 8 triệu có đủ mua NOXH không?",
+  "on_screen_text": "8 triệu đủ NOXH?",
+  "body_beats": [
+    {
+      "timestamp": "0-8s",
+      "spoken_line": "Nhiều người tưởng lương 8 triệu không đủ, nhưng còn tùy khu vực và diện tích căn.",
+      "on_screen_text": "8 triệu — đủ hay không?",
+      "visual_note": "Zoom vào dòng thu nhập trên form đăng ký"
+    },
+    {
+      "timestamp": "8-22s",
+      "spoken_line": "Ba lỗi hay gặp: không đối chiếu mức thu nhập theo quy định địa phương, thiếu giấy xác nhận thu nhập, và nhầm diện đối tượng ưu tiên.",
+      "on_screen_text": "3 lỗi hồ sơ NOXH",
+      "visual_note": "Checklist 3 mục tick từng dòng"
+    },
+    {
+      "timestamp": "22-30s",
+      "spoken_line": "Comment NOXH bên dưới, mình gửi checklist tự rà hồ sơ qua tin nhắn.",
+      "on_screen_text": "Comment NOXH",
+      "visual_note": "Chỉ tay xuống vùng comment"
+    }
+  ],
+  "verbal_cta": "Comment NOXH bên dưới, mình gửi checklist ngay.",
+  "caption_cta": "Comment \"NOXH\" để nhận Checklist hồ sơ NOXH qua tin nhắn.",
+  "hashtags": ["#NOXH", "#HoSoNOXH"],
+  "disclaimer": "Thông tin tham khảo; quyết định theo quy định và hồ sơ thực tế.",
+  "source_refs": ["editorial_calendar:2026w27-02"]
+}

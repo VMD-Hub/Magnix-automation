@@ -9,12 +9,19 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { extractSystemPrompt } from './code/shared/extract-prompt.mjs';
 import { withPipelineStub } from './code/shared/with-pipeline-stub.mjs';
+import { withLlmRouter } from './code/shared/with-llm-router.mjs';
 import { buildLegalGateNodeCode } from './code/shared/inject-legal-bundle.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const codeDir = path.join(__dirname, 'code', 'content-editorial-brief');
 const PUBLIC = JSON.parse(
   fs.readFileSync(path.join(__dirname, 'magnix-public-config.json'), 'utf8')
+);
+const CONTEXT_SUMMARIES = JSON.parse(
+  fs.readFileSync(path.join(__dirname, 'context_summaries.json'), 'utf8')
+);
+const CONTENT_TYPE_RULES = JSON.parse(
+  fs.readFileSync(path.join(__dirname, 'content_type_rules.json'), 'utf8')
 );
 
 const read = (f) =>
@@ -24,6 +31,7 @@ const read = (f) =>
     .trim();
 
 const editorialSystem = extractSystemPrompt('ai-agents-prompts/n8n__editorial-brief.md');
+const llmProviders = PUBLIC.llm_task_providers || {};
 
 const codes = {
   attachLegal: buildLegalGateNodeCode(
@@ -34,9 +42,15 @@ const codes = {
       .replace('__EDITORIAL_BRIEF_MIN_SCORE__', String(PUBLIC.editorial_brief_min_score ?? 70))
       .replace('__EDITORIAL_BRIEF_BATCH_SIZE__', String(PUBLIC.content_editorial_brief_batch_size ?? 5))
   ),
-  llm: read('02-llm-editorial-brief.js').replace(
-    '__EDITORIAL_BRIEF_SYSTEM__',
-    editorialSystem.replace(/\\/g, '\\\\').replace(/`/g, '\\`')
+  llm: withLlmRouter(
+    read('02-llm-editorial-brief.js')
+      .replace('__CONTEXT_SUMMARIES_JSON__', JSON.stringify(CONTEXT_SUMMARIES))
+      .replace('__CONTENT_TYPE_RULES_JSON__', JSON.stringify(CONTENT_TYPE_RULES))
+      .replace(
+        '__EDITORIAL_BRIEF_SYSTEM__',
+        editorialSystem.replace(/\\/g, '\\\\').replace(/`/g, '\\`')
+      ),
+    llmProviders
   ),
   parse: read('03-parse-editorial-brief.js'),
   prepare: read('04-prepare-meta-update.js')
@@ -94,7 +108,7 @@ const nodes = [
   {
     parameters: {
       content:
-        '## Layer B — Editorial Brief + Legal Gate\n- **08:30 VN** · max **5**/lần\n- **Attach Legal Pack** trước LLM (NOXH/vay/định giá)\n- Output: `meta.editorial_brief_v1` + `meta.legal_retrieval_pack`\n- Chạy sau Agent 2 (08:00), trước Agent 3/6',
+        '## Layer B — Editorial Brief + Legal Gate\n- **08:30 VN** · max **5**/lần\n- **Webhook:** POST `/webhook/magnix/editorial-brief`\n- **Attach Legal Pack** trước LLM (NOXH/vay/định giá)\n- Output: `meta.editorial_brief_v1` + `meta.legal_retrieval_pack`\n- Editorial calendar ưu tiên trước scrape queue',
       height: 200,
       width: 440,
     },
@@ -123,6 +137,38 @@ const nodes = [
     type: 'n8n-nodes-base.manualTrigger',
     typeVersion: 1,
     position: pos(0, 400),
+  },
+  {
+    parameters: {
+      httpMethod: 'POST',
+      path: 'magnix/editorial-brief',
+      responseMode: 'onReceived',
+      options: {},
+    },
+    id: 'eb02webhook',
+    name: 'Webhook editorial-brief',
+    type: 'n8n-nodes-base.webhook',
+    typeVersion: 2,
+    position: pos(0, 560),
+    webhookId: 'magnix-editorial-brief',
+  },
+  {
+    parameters: {
+      jsCode: `const EXPECTED = $env.MAGNIX_WEBHOOK_TOKEN || '';
+const headers = $input.first().json.headers || {};
+const auth = headers.authorization || headers.Authorization || '';
+if (EXPECTED && auth !== \`Bearer \${EXPECTED}\`) {
+  throw new Error('Unauthorized: invalid MAGNIX_WEBHOOK_TOKEN');
+}
+const raw = $input.first().json;
+const body = raw.body && typeof raw.body === 'object' ? raw.body : raw;
+return [{ json: { triggered: true, source: 'webhook', at: new Date().toISOString(), ...body } }];`,
+    },
+    id: 'eb02auth',
+    name: 'Auth Webhook',
+    type: 'n8n-nodes-base.code',
+    typeVersion: 2,
+    position: pos(120, 560),
   },
   {
     parameters: {
@@ -366,6 +412,10 @@ const connections = {
   "When clicking 'Execute workflow'": {
     main: [[{ node: 'Fetch content_queue', type: 'main', index: 0 }]],
   },
+  'Webhook editorial-brief': {
+    main: [[{ node: 'Auth Webhook', type: 'main', index: 0 }]],
+  },
+  'Auth Webhook': { main: [[{ node: 'Fetch content_queue', type: 'main', index: 0 }]] },
   'Fetch content_queue': { main: [[{ node: 'Parse Filter Needs Brief', type: 'main', index: 0 }]] },
   'Parse Filter Needs Brief': { main: [[{ node: 'IF Has Candidates', type: 'main', index: 0 }]] },
   'IF Has Candidates': {

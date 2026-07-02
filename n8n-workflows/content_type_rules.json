@@ -1,0 +1,76 @@
+{
+  "version": 1,
+  "min_cluster_size": 8,
+  "llm_score_band": { "min": 40, "max": 59 },
+  "segment_default": {
+    "noxh_income": "NOXH_LEGAL",
+    "sme_credit": "LOAN_FINANCE",
+    "valuation": "VALUATION",
+    "general_inbound": "GENERAL_POLICY",
+    "unclassified": "GENERAL_POLICY"
+  },
+  "keyword_rules": [
+    {
+      "content_type": "NOXH_LEGAL",
+      "patterns": [
+        "noxh",
+        "nhà ở xã hội",
+        "nha o xa hoi",
+        "hồ sơ noxh",
+        "mẫu 01",
+        "mau 01",
+        "thu nhập",
+        "điều kiện mua",
+        "đối tượng mua",
+        "ct07",
+        "cư trú"
+      ],
+      "weight": 3
+    },
+    {
+      "content_type": "LOAN_FINANCE",
+      "patterns": [
+        "dti",
+        "dòng tiền",
+        "dong tien",
+        "room vay",
+        "lãi suất",
+        "hạn mức",
+        "vay mua nhà",
+        "ngân hàng",
+        "nhcsxh",
+        "cic",
+        "nợ xấu"
+      ],
+      "weight": 3
+    },
+    {
+      "content_type": "VALUATION",
+      "patterns": [
+        "định giá",
+        "dinh gia",
+        "thẩm định",
+        "tham dinh",
+        "chứng thư",
+        "giá trị tài sản",
+        "đơn giá"
+      ],
+      "weight": 3
+    },
+    {
+      "content_type": "GENERAL_POLICY",
+      "patterns": [
+        "quy định",
+        "nghị định",
+        "thông tư",
+        "chính sách",
+        "cập nhật",
+        "tp.hcm",
+        "bình dương"
+      ],
+      "weight": 2
+    }
+  ],
+  "archive_exclude_sources": ["editorial_calendar", "magnix_editorial"],
+  "archive_exclude_key_prefixes": ["editorial:queue:", "editorial:page:"]
+}

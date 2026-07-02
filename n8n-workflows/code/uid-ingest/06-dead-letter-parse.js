@@ -1,7 +1,9 @@
-// n8n Code node: Dead Letter (parse LLM fail)
+// n8n Code node: Dead Letter (parse LLM fail) — không log uid/PII
 
 const skeleton = $('Auth & Enrich Skeleton').first().json;
 const parse = $input.first().json;
+
+const nk = String(skeleton.normalized_key || '').trim();
 
 return [{
   json: {
@@ -9,9 +11,8 @@ return [{
     error: parse.parse_error || 'PARSE_JSON',
     message: parse.parse_error || 'LLM output parse failed',
     retryable: false,
-    uid: skeleton.uid,
-    uid_source: skeleton.uid_source,
-    normalized_key: skeleton.normalized_key,
+    normalized_key: nk || null,
+    uid_source: skeleton.uid_source ? String(skeleton.uid_source) : null,
     captured_at: skeleton.captured_at,
     status: 'failed',
     classify_method: 'llm',
