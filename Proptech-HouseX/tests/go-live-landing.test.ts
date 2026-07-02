@@ -20,4 +20,10 @@ describe("go-live landing catalog", () => {
       VINHOMES_SAIGON_PARK_NAME,
     );
   });
+
+  it("list cards for commercial filter returns all 7 go-live projects", async () => {
+    const { listGoLiveProjectCards } = await import("../lib/preview/demo-projects");
+    assert.equal(listGoLiveProjectCards({ projectType: "THUONG_MAI" }).length, 7);
+    assert.equal(listGoLiveProjectCards({ projectType: "NHA_O_XA_HOI" }).length, 0);
+  });
 });

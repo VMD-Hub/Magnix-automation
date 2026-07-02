@@ -5,7 +5,10 @@ import {
   resolveLandingHeroImage,
 } from "@/lib/content/project-landing";
 import { allowDemoProjectFallback } from "@/lib/deploy/demo-fallback";
-import { listDemoProjectCards } from "@/lib/preview/demo-projects";
+import {
+  listDemoProjectCards,
+  listGoLiveProjectCards,
+} from "@/lib/preview/demo-projects";
 
 export type ProjectListParams = {
   province?: string;
@@ -25,6 +28,8 @@ export type ProjectListResult = {
   };
   /** true khi đang hiển thị dự án demo (chưa seed / DB offline). */
   isDemo?: boolean;
+  /** true khi đang hiển thị catalog go-live tĩnh (7 landing thương mại). */
+  isCatalog?: boolean;
 };
 
 function rowToCard(p: {
@@ -52,6 +57,26 @@ function rowToCard(p: {
     priceFrom: p.unitTypes[0]?.priceFrom?.toString() ?? null,
     listingCount: p._count.listings,
     imageUrl: hero?.url ?? null,
+  };
+}
+
+function paginateCatalog(
+  cards: ProjectCardData[],
+  page: number,
+  pageSize: number,
+  isCatalog: boolean,
+): ProjectListResult {
+  const total = cards.length;
+  const start = (page - 1) * pageSize;
+  return {
+    items: cards.slice(start, start + pageSize),
+    pagination: {
+      page,
+      pageSize,
+      total,
+      totalPages: Math.max(1, Math.ceil(total / pageSize)),
+    },
+    isCatalog,
   };
 }
 
@@ -101,7 +126,16 @@ export async function listProjects(
       };
     }
   } catch {
-    // DB offline — dev fallback demo bên dưới.
+    // DB offline — thử catalog go-live bên dưới.
+  }
+
+  const catalogItems = listGoLiveProjectCards({
+    projectType: params.projectType,
+    province: params.province,
+    district: params.district,
+  });
+  if (catalogItems.length > 0) {
+    return paginateCatalog(catalogItems, page, pageSize, true);
   }
 
   if (!allowDemoProjectFallback()) {

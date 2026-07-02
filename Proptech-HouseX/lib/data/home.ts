@@ -1,14 +1,13 @@
 import { prisma } from "@/lib/prisma";
 import type { ListingCardData } from "@/components/listings/listing-card";
 import type { ProjectCardData } from "@/components/projects/project-card";
+import { listGoLiveProjectCards } from "@/lib/preview/demo-projects";
 
 export type HomepageData = {
   ok: boolean;
   projects: ProjectCardData[];
   saleListings: ListingCardData[];
 };
-
-const EMPTY: HomepageData = { ok: false, projects: [], saleListings: [] };
 
 const listingInclude = {
   media: {
@@ -52,18 +51,21 @@ export async function getHomepageData(): Promise<HomepageData> {
 
     return {
       ok: true,
-      projects: projects.map((p) => ({
-        slug: p.slug,
-        name: p.name,
-        projectType: p.projectType,
-        status: p.status,
-        province: p.province,
-        district: p.district,
-        developerName: p.developer?.name ?? null,
-        priceFrom: p.unitTypes[0]?.priceFrom?.toString() ?? null,
-        listingCount: p._count.listings,
-        imageUrl: null,
-      })),
+      projects:
+        projects.length > 0
+          ? projects.map((p) => ({
+              slug: p.slug,
+              name: p.name,
+              projectType: p.projectType,
+              status: p.status,
+              province: p.province,
+              district: p.district,
+              developerName: p.developer?.name ?? null,
+              priceFrom: p.unitTypes[0]?.priceFrom?.toString() ?? null,
+              listingCount: p._count.listings,
+              imageUrl: null,
+            }))
+          : listGoLiveProjectCards().slice(0, 6),
       saleListings: saleListings.map((l) => ({
         code: l.code,
         propertyType: l.propertyType,
@@ -80,6 +82,10 @@ export async function getHomepageData(): Promise<HomepageData> {
       })),
     };
   } catch {
-    return EMPTY;
+    return {
+      ok: false,
+      projects: listGoLiveProjectCards().slice(0, 6),
+      saleListings: [],
+    };
   }
 }
