@@ -96,7 +96,7 @@ export function LoanCalculator() {
   return (
     <div className="grid gap-6 lg:grid-cols-[380px_1fr]">
       {/* Inputs */}
-      <div className="space-y-4 rounded-2xl border border-slate-200 bg-slate-50 p-5 print:hidden">
+      <div className="space-y-4 rounded-2xl border border-brand-100 bg-gradient-to-br from-brand-50/40 to-white p-5 print:hidden">
         <Field label="Giá trị bất động sản" hint={`${groupVnd(price)} đ`}>
           <input
             inputMode="numeric"
