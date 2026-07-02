@@ -1,4 +1,5 @@
 import { parseProjectOverview, resolveLandingHeroImage } from "@/lib/content/project-landing";
+import { DTA_HAPPY_HOME_IMAGES } from "@/lib/content/dta-happy-home-images";
 import { getDemoProjectBySlug } from "@/lib/preview/demo-projects";
 import { getCatalogSlugs } from "@/lib/seed/catalog-project-slugs";
 
@@ -11,6 +12,7 @@ const GENERIC_COMMERCIAL = u("photo-1613490493576-7fde63acd811");
 
 /** Ảnh bìa dự phòng khi hero landing thiếu hoặc hotlink lỗi — admin thay sau. */
 const SLUG_OVERRIDES: Record<string, string> = {
+  "dta-happy-home-nhon-trach": DTA_HAPPY_HOME_IMAGES.hero.url,
   "chung-cu-phuc-loc-tho-noxh": u("photo-1600047509358-52dc686375e8"),
   "dragon-e-home-phu-huu": u("photo-1600607687939-ce8a6c25118c"),
   "eco-residence-long-binh-tan": u("photo-1600566753190-17f0baa2a6a3"),

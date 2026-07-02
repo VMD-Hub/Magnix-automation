@@ -6,6 +6,7 @@ import {
   buildDemoListingDetail,
   listDemoSaleListingCards,
 } from "../lib/preview/demo-listings";
+import { buildDtaHappyHomeLanding } from "../lib/content/dta-happy-home-landing";
 
 describe("catalog media fallbacks", () => {
   it("every catalog project slug has a cover image", () => {
@@ -26,5 +27,14 @@ describe("catalog media fallbacks", () => {
       assert.ok(c.imageUrl?.startsWith("http"), `${c.code} missing image`);
       assert.ok(buildDemoListingDetail(c.code), `${c.code} missing detail`);
     }
+  });
+
+  it("DTA Happy Home landing has floor plans, show units and payment gallery", () => {
+    const landing = buildDtaHappyHomeLanding();
+    assert.ok(landing.gallery.length >= 10);
+    assert.ok(landing.heroImage?.url.includes("dtanhontrach.com"));
+    assert.ok(landing.locationMapImage?.url.includes("ban_do"));
+    assert.match(landing.gallery[0]?.caption ?? "", /Mặt bằng tổng thể/i);
+    assert.ok(landing.services.length >= 2);
   });
 });
