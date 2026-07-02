@@ -1,15 +1,200 @@
+import Link from "next/link";
+import type { ReactNode } from "react";
 import type { ArticleCardData } from "@/lib/data/article-types";
 
-export function ArticleBody({ body }: { body: string }) {
-  const paragraphs = body.split(/\n\n+/).filter(Boolean);
+const LINK_RE = /\[([^\]]+)\]\(([^)]+)\)/g;
+const HEADING_RE = /^##\s+(.+)$/;
+const IMAGE_RE = /^!\[([^\]]*)\]\(([^)]+)\)$/;
+const CAPTION_RE = /^\*([^*]+)\*$/;
+const BLOCKQUOTE_RE = /^>\s?(.+)$/;
+const TABLE_ROW_RE = /^\|.+\|$/;
+const TABLE_SEP_RE = /^\|[-:\s|]+\|$/;
+
+function renderInline(text: string, keyPrefix: string) {
+  const parts: ReactNode[] = [];
+  let last = 0;
+  let match: RegExpExecArray | null;
+  LINK_RE.lastIndex = 0;
+  while ((match = LINK_RE.exec(text)) !== null) {
+    if (match.index > last) {
+      parts.push(text.slice(last, match.index));
+    }
+    const label = match[1];
+    const href = match[2];
+    if (href.startsWith("/")) {
+      parts.push(
+        <Link
+          key={`${keyPrefix}-${match.index}`}
+          href={href}
+          className="font-medium text-brand-700 underline decoration-brand-300 underline-offset-2 hover:text-brand-900"
+        >
+          {label}
+        </Link>,
+      );
+    } else {
+      parts.push(
+        <a
+          key={`${keyPrefix}-${match.index}`}
+          href={href}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="font-medium text-brand-700 underline decoration-brand-300 underline-offset-2 hover:text-brand-900"
+        >
+          {label}
+        </a>,
+      );
+    }
+    last = match.index + match[0].length;
+  }
+  if (last < text.length) parts.push(text.slice(last));
+  return parts.length === 1 ? parts[0] : parts;
+}
+
+function renderFigure(
+  alt: string,
+  src: string,
+  caption: string | null,
+  key: string,
+) {
   return (
-    <div className="prose prose-slate max-w-none prose-p:leading-relaxed prose-headings:font-bold">
-      {paragraphs.map((p, i) => (
-        <p key={i} className="text-base leading-relaxed text-slate-700">
-          {p.trim()}
-        </p>
-      ))}
+    <figure
+      key={key}
+      className="my-8 overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm"
+    >
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={src}
+        alt={alt || "Minh họa bài viết"}
+        className="aspect-[16/10] w-full object-cover"
+        loading="lazy"
+      />
+      {caption && (
+        <figcaption className="border-t border-slate-100 bg-slate-50 px-4 py-3 text-sm leading-relaxed text-slate-600">
+          {renderInline(caption, `${key}-cap`)}
+        </figcaption>
+      )}
+    </figure>
+  );
+}
+
+function renderParagraph(text: string, key: string) {
+  const trimmed = text.trim();
+  const heading = HEADING_RE.exec(trimmed);
+  if (heading) {
+    return (
+      <h2
+        key={key}
+        className="mt-10 scroll-mt-24 border-t border-slate-100 pt-8 text-xl font-bold text-slate-900 first:mt-0 first:border-t-0 first:pt-0 sm:text-2xl"
+      >
+        {renderInline(heading[1], key)}
+      </h2>
+    );
+  }
+  const quote = BLOCKQUOTE_RE.exec(trimmed);
+  if (quote) {
+    return (
+      <blockquote
+        key={key}
+        className="my-6 border-l-4 border-brand-500 bg-brand-50/40 px-5 py-4 text-base italic leading-relaxed text-slate-800"
+      >
+        {renderInline(quote[1], key)}
+      </blockquote>
+    );
+  }
+  return (
+    <p key={key} className="text-base leading-[1.75] text-slate-700">
+      {renderInline(trimmed, key)}
+    </p>
+  );
+}
+
+function renderTable(rows: string[], key: string) {
+  const cells = rows
+    .filter((row) => !TABLE_SEP_RE.test(row))
+    .map((row) =>
+      row
+        .split("|")
+        .slice(1, -1)
+        .map((c) => c.trim()),
+    );
+  if (cells.length === 0) return null;
+  const [header, ...body] = cells;
+  return (
+    <div key={key} className="my-8 overflow-x-auto rounded-xl border border-slate-200">
+      <table className="min-w-full border-collapse text-sm">
+        <thead>
+          <tr className="border-b border-slate-200 bg-slate-50">
+            {header.map((cell, i) => (
+              <th
+                key={i}
+                className="px-4 py-3 text-left font-semibold text-slate-900"
+              >
+                {renderInline(cell.replace(/\*\*/g, ""), `${key}-h-${i}`)}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {body.map((row, ri) => (
+            <tr key={ri} className="border-b border-slate-100 last:border-0">
+              {row.map((cell, ci) => (
+                <td key={ci} className="px-4 py-3 text-slate-700">
+                  {renderInline(cell.replace(/\*\*/g, ""), `${key}-${ri}-${ci}`)}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
+  );
+}
+
+export function ArticleBody({ body }: { body: string }) {
+  const blocks = body.split(/\n\n+/).filter(Boolean);
+  const nodes: ReactNode[] = [];
+  let tableBuffer: string[] = [];
+  let blockIndex = 0;
+
+  const flushTable = () => {
+    if (tableBuffer.length === 0) return;
+    nodes.push(renderTable(tableBuffer, `table-${blockIndex}`));
+    tableBuffer = [];
+  };
+
+  for (let i = 0; i < blocks.length; i++) {
+    const block = blocks[i]!;
+    const lines = block.split("\n");
+    const isTable = lines.every(
+      (line) => TABLE_ROW_RE.test(line.trim()) || TABLE_SEP_RE.test(line.trim()),
+    );
+    if (isTable) {
+      tableBuffer.push(...lines.map((l) => l.trim()));
+      continue;
+    }
+    flushTable();
+
+    const trimmed = block.trim();
+    const image = IMAGE_RE.exec(trimmed);
+    if (image) {
+      const next = blocks[i + 1]?.trim();
+      const capMatch = next ? CAPTION_RE.exec(next) : null;
+      const caption = capMatch ? capMatch[1] : null;
+      nodes.push(
+        renderFigure(image[1], image[2], caption, `fig-${blockIndex}`),
+      );
+      if (capMatch) i += 1;
+      blockIndex += 1;
+      continue;
+    }
+
+    nodes.push(renderParagraph(trimmed, `p-${blockIndex}`));
+    blockIndex += 1;
+  }
+  flushTable();
+
+  return (
+    <div className="article-body space-y-5 text-slate-700">{nodes}</div>
   );
 }
 

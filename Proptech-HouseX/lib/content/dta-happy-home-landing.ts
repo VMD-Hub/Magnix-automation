@@ -18,6 +18,7 @@ Kết nối giao thông:
 • Quốc lộ 51: khoảng 15 phút
 • Đường 25C (Nguyễn Ái Quốc) → Sân bay Long Thành: khoảng 20 phút
 • Hướng TP.HCM (Quận 2): khoảng 40 phút
+• Tuyến đường sắt Thủ Thiêm – Long Thành (quy hoạch): vùng phụ cận ga S12/S13 tại Nhơn Trạch — khoảng cách tới ga dự kiến trong bán kính ~5 km (tham khảo quy hoạch FEED, chưa vận hành)
 
 Tiện ích ngoại khu DTA City: chợ truyền thống DTA, Bệnh viện Đa khoa Quốc tế DTA, Trường Mầm non & Tiểu học Quốc tế DTA.`;
 

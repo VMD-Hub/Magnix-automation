@@ -1,4 +1,7 @@
 import type { ArticleCardData, ArticleDetail, ArticleTagSummary } from "@/lib/data/article-types";
+import { applyEditorialMedia, EDITORIAL_FIGURES } from "@/lib/content/articles/article-editorial-media";
+import { NOXH_TREND_ARTICLES_2026 } from "@/lib/content/articles/noxh-trend-series-2026";
+import { TOD_NHON_TRACH_ARTICLES_2026 } from "@/lib/content/articles/tod-nhon-trach-series-2026";
 import { LTK_PROJECT_SLUG } from "@/lib/preview/phu-tho-dmc-mock";
 import { CS_PROJECT_SLUG } from "@/lib/preview/kdc-chang-song-mock";
 
@@ -35,22 +38,50 @@ export const DEMO_ARTICLE_TAGS: ArticleTagSummary[] = [
     description: "Nhận định thị trường và xu hướng nhà ở.",
     articleCount: 1,
   },
+  {
+    slug: "nha-o-xa-hoi-ly-thuong-kiet",
+    name: "NOXH Lý Thường Kiệt",
+    description: "Phú Thọ DMC — giá, tiến độ và hồ sơ đăng ký.",
+    articleCount: 0,
+  },
+  {
+    slug: "dta-happy-home-nhon-trach",
+    name: "DTA Happy Home",
+    description: "NOXH Nhơn Trạch — giá căn, vay và Block A10.",
+    articleCount: 0,
+  },
+  {
+    slug: "ha-tang-giao-thong",
+    name: "Hạ tầng & giao thông",
+    description: "Metro, đường sắt, cao tốc và kết nối vùng ven.",
+    articleCount: 0,
+  },
+  {
+    slug: "do-thi-ve-tinh-tod",
+    name: "Đô thị vệ tinh & TOD",
+    description: "Phát triển đô thị định hướng giao thông công cộng.",
+    articleCount: 0,
+  },
 ];
 
-const DEMO_ARTICLES: ArticleDetail[] = [
+const DEMO_ARTICLES_RAW: ArticleDetail[] = [
   {
     id: "demo-article-ltk-gia",
     slug: "gia-nha-o-xa-hoi-ly-thuong-kiet-cong-bo-6-2026",
     title: "Giá nhà ở xã hội Lý Thường Kiệt công bố chính thức cuối 6/2026",
     excerpt:
       "Sở Xây dựng TP.HCM và CĐT công bố mức 23,25 triệu/m² — căn tham chiếu từ ~800 triệu đến ~1,8 tỷ tùy diện tích.",
-    body: `Cuối tháng 6/2026, Sở Xây dựng TP.HCM và Công ty Cổ phần Đức Mạnh đã công bố phương án giá bán cho dự án Nhà ở xã hội Lý Thường Kiệt (tên thương mại Phú Thọ DMC) tại 324 Lý Thường Kiệt, Quận 10.
+    body: `Cuối tháng 6/2026, Sở Xây dựng TP.HCM và Công ty Cổ phần Đức Mạnh đã công bố phương án giá bán cho dự án Nhà ở xã hội Lý Thường Kiệt (tên thương mại Phú Thọ DMC) tại 324 Lý Thường Kiệt, Quận 10 — chi tiết trên [VnExpress](https://vnexpress.net/hai-du-an-nha-xa-hoi-noi-thanh-tp-hcm-co-gia-tu-23-trieu-va-35-trieu-mot-m2-5090748.html).
+
+${EDITORIAL_FIGURES.ltkPhoiCanh}
 
 Mức giá chính thức: 23.251.398 đồng/m², đã bao gồm VAT, chưa gồm 2% phí bảo trì và hệ số điều chỉnh theo vị trí căn hộ. Với diện tích 34,5–77 m², giá căn tham chiếu khoảng 800 triệu – 1,8 tỷ.
 
 Dự án mở bán 755 căn NOXH; hơn 12.000 hồ sơ đăng ký từ các đợt rà soát trước. Công trình đang hoàn thiện cuối, dự kiến bàn giao khoảng tháng 8/2026.
 
-Người quan tâm cần đáp ứng điều kiện đối tượng NOXH theo Luật Nhà ở. Liên hệ HouseX để được tư vấn hồ sơ và cập nhật lịch nộp đơn mới nhất.`,
+Đọc thêm: [TP.HCM công bố giá 2 NOXH nội thành](/tin-tuc/tp-hcm-cong-bo-gia-2-du-an-noxh-ly-thuong-kiet-phu-tho-dmc) · [So sánh với DTA Happy Home](/tin-tuc/so-sanh-gia-noxh-ly-thuong-kiet-dta-happy-home-2026) · Trang dự án [/du-an/nha-o-xa-hoi-ly-thuong-kiet](/du-an/nha-o-xa-hoi-ly-thuong-kiet).
+
+Người quan tâm cần đáp ứng điều kiện đối tượng NOXH theo Luật Nhà ở. [Đăng ký tư vấn hồ sơ](/lien-he) trên HouseX.`,
     status: "PUBLISHED",
     publishedAt: new Date("2026-06-28T00:00:00.000Z"),
     updatedAt: NOW,
@@ -63,6 +94,7 @@ Người quan tâm cần đáp ứng điều kiện đối tượng NOXH theo Lu
     tags: [
       { slug: "noxh", name: "Nhà ở xã hội" },
       { slug: "tien-do-du-an", name: "Tiến độ dự án" },
+      { slug: "nha-o-xa-hoi-ly-thuong-kiet", name: "NOXH Lý Thường Kiệt" },
     ],
     projects: [
       { slug: LTK_PROJECT_SLUG, name: "Nhà ở xã hội Lý Thường Kiệt" },
@@ -126,7 +158,11 @@ Mỗi dự án có thể có thêm tiêu chí ưu tiên (ví dụ hộ bị thu 
     ],
     projects: [],
   },
+  ...NOXH_TREND_ARTICLES_2026,
+  ...TOD_NHON_TRACH_ARTICLES_2026,
 ];
+
+const DEMO_ARTICLES: ArticleDetail[] = DEMO_ARTICLES_RAW.map(applyEditorialMedia);
 
 function toCard(a: ArticleDetail): ArticleCardData {
   const { body: _b, seoTitle: _st, seoDesc: _sd, status: _s, ...card } = a;

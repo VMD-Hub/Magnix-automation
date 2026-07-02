@@ -1,8 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArticleBody, ArticleTagList } from "@/components/articles/article-body";
+import { ArticleBody } from "@/components/articles/article-body";
+import { ArticleHero } from "@/components/articles/article-hero";
 import { ArticleCard } from "@/components/articles/article-card";
+import {
+  absoluteArticleImageUrl,
+  applyEditorialMedia,
+} from "@/lib/content/articles/article-editorial-media";
 import {
   getPublishedArticleBySlug,
   listPublishedArticles,
@@ -22,12 +27,16 @@ export async function generateMetadata({
   const result = await getPublishedArticleBySlug(slug);
   if (!result) return { title: "Không tìm thấy bài viết" };
 
-  const { article } = result;
+  const { article: raw } = result;
+  const article = applyEditorialMedia(raw);
+  const siteUrl = getSiteUrl();
   const title = article.seoTitle ?? article.title;
   const description =
     article.seoDesc ?? article.excerpt ?? article.title.slice(0, 160);
-  const siteUrl = getSiteUrl();
   const canonical = `${siteUrl}/tin-tuc/${article.slug}`;
+  const ogImage = article.coverImageUrl
+    ? absoluteArticleImageUrl(article.coverImageUrl, siteUrl)
+    : undefined;
 
   return {
     title,
@@ -40,9 +49,7 @@ export async function generateMetadata({
       type: "article",
       publishedTime: article.publishedAt?.toISOString(),
       modifiedTime: article.updatedAt.toISOString(),
-      images: article.coverImageUrl
-        ? [{ url: article.coverImageUrl }]
-        : undefined,
+      images: ogImage ? [{ url: ogImage, alt: article.coverImageAlt ?? title }] : undefined,
     },
   };
 }
@@ -52,7 +59,8 @@ export default async function ArticleDetailPage({ params }: PageProps) {
   const result = await getPublishedArticleBySlug(slug);
   if (!result) notFound();
 
-  const { article } = result;
+  const { article: raw } = result;
+  const article = applyEditorialMedia(raw);
 
   const related = await listPublishedArticles({
     tagSlug: article.tags[0]?.slug,
@@ -86,45 +94,22 @@ export default async function ArticleDetailPage({ params }: PageProps) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <article className="bg-white">
-        {article.coverImageUrl && (
-          <div className="relative h-48 w-full overflow-hidden bg-slate-100 sm:h-72">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={article.coverImageUrl}
-              alt=""
-              className="h-full w-full object-cover"
-            />
-          </div>
-        )}
-        <div className="mx-auto max-w-3xl px-4 py-10 container-px">
+        <div className="mx-auto max-w-6xl px-4 pt-6 container-px">
           <nav className="text-sm text-slate-500">
+            <Link href="/" className="hover:text-brand-700">
+              Trang chủ
+            </Link>
+            <span className="mx-2">/</span>
             <Link href="/tin-tuc" className="hover:text-brand-700">
               Tin tức
             </Link>
-            <span className="mx-2">/</span>
-            <span className="line-clamp-1 text-slate-800">{article.title}</span>
           </nav>
+        </div>
 
-          <ArticleTagList tags={article.tags} className="mt-4" />
+        <ArticleHero article={article} publishedLabel={publishedLabel} />
 
-          <h1 className="mt-4 text-3xl font-extrabold text-slate-900 sm:text-4xl">
-            {article.title}
-          </h1>
-
-          <p className="mt-3 text-sm text-slate-500">
-            {publishedLabel}
-            {article.authorName ? ` · ${article.authorName}` : ""}
-          </p>
-
-          {article.excerpt && (
-            <p className="mt-6 text-lg font-medium text-slate-700">
-              {article.excerpt}
-            </p>
-          )}
-
-          <div className="mt-8">
-            <ArticleBody body={article.body} />
-          </div>
+        <div className="mx-auto max-w-3xl px-4 py-10 container-px">
+          <ArticleBody body={article.body} />
 
           {article.projects.length > 0 && (
             <div className="mt-10 rounded-xl border border-brand-100 bg-brand-50/50 p-5">

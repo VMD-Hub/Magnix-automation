@@ -11,6 +11,8 @@ import {
   listDemoArticleCards,
   listDemoTags,
 } from "@/lib/preview/demo-articles";
+import { applyEditorialMedia } from "@/lib/content/articles/article-editorial-media";
+import { orderProjectRelatedArticles } from "@/lib/content/project-related-articles";
 
 const articleCardInclude = {
   tags: { include: { tag: true } },
@@ -127,7 +129,7 @@ export async function getPublishedArticleBySlug(
 
   const demo = getDemoArticleBySlug(slug);
   if (!demo) return null;
-  return { article: demo, source: "demo" };
+  return { article: applyEditorialMedia(demo), source: "demo" };
 }
 
 export async function getArticlesForProjectSlug(
@@ -144,11 +146,21 @@ export async function getArticlesForProjectSlug(
       orderBy: { publishedAt: "desc" },
       take: limit,
     });
-    if (rows.length > 0) return rows.map(mapToCard);
+    if (rows.length > 0) {
+      return orderProjectRelatedArticles(
+        projectSlug,
+        rows.map(mapToCard),
+        limit,
+      );
+    }
   } catch {
     // demo
   }
-  return getDemoArticlesForProject(projectSlug, limit);
+  return orderProjectRelatedArticles(
+    projectSlug,
+    getDemoArticlesForProject(projectSlug, limit),
+    limit,
+  );
 }
 
 export async function getPublishedTagBySlug(

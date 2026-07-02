@@ -5,6 +5,10 @@ export type ArticleCardData = {
   title: string;
   excerpt: string | null;
   coverImageUrl: string | null;
+  /** Alt text ảnh đại diện — chuẩn SEO & báo chí. */
+  coverImageAlt?: string | null;
+  /** Chú thích ảnh đại diện (figcaption hero). */
+  coverImageCaption?: string | null;
   authorName: string | null;
   publishedAt: Date | null;
   updatedAt: Date;

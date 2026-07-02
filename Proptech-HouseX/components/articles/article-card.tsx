@@ -20,7 +20,7 @@ export function ArticleCard({ article }: { article: ArticleCardData }) {
         // eslint-disable-next-line @next/next/no-img-element
         <img
           src={article.coverImageUrl}
-          alt={article.title}
+          alt={article.coverImageAlt ?? article.title}
           className="aspect-[16/9] w-full object-cover transition group-hover:scale-[1.02]"
         />
       ) : (

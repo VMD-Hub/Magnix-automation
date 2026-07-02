@@ -1,3 +1,4 @@
+import { applyEditorialMedia, absoluteArticleImageUrl } from "@/lib/content/articles/article-editorial-media";
 import type { ArticleDetail } from "@/lib/data/article-types";
 
 import { getSiteUrl, getBrandName } from "@/lib/site-config";
@@ -22,7 +23,9 @@ export function buildArticleJsonLd(article: ArticleDetail) {
       name: getBrandName(),
       url: BASE,
     },
-    image: article.coverImageUrl ? [article.coverImageUrl] : undefined,
+    image: article.coverImageUrl
+      ? [absoluteArticleImageUrl(article.coverImageUrl, BASE)]
+      : undefined,
     mainEntityOfPage: `${BASE}/tin-tuc/${article.slug}`,
   };
 }

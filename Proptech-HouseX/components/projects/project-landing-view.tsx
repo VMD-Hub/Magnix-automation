@@ -273,6 +273,14 @@ export function ProjectLandingContent({
                   Xem bảng hàng
                 </a>
               )}
+              {relatedArticles.length > 0 && (
+                <a
+                  href="#project-related-articles"
+                  className="inline-flex h-11 items-center rounded-xl border border-white/30 bg-white/10 px-6 font-medium text-white backdrop-blur-sm transition hover:bg-white/20"
+                >
+                  Bài liên quan
+                </a>
+              )}
               <a
                 href="#project-gallery-heading"
                 className="inline-flex h-11 items-center rounded-xl border border-white/30 bg-white/10 px-6 font-medium text-white backdrop-blur-sm transition hover:bg-white/20"
@@ -429,6 +437,15 @@ export function ProjectLandingContent({
             projectName={project.name}
             inventory={inventory}
             filters={inventoryFilters}
+          />
+        )}
+
+        {relatedArticles.length > 0 && (
+          <ProjectRelatedArticles
+            projectName={project.name}
+            projectSlug={project.slug}
+            articles={relatedArticles}
+            isNoxh={isNoxh}
           />
         )}
 
@@ -604,12 +621,6 @@ export function ProjectLandingContent({
             </div>
           </section>
         )}
-
-        <ProjectRelatedArticles
-          projectName={project.name}
-          projectSlug={project.slug}
-          articles={relatedArticles}
-        />
 
         <section id="project-lead-form" className="scroll-mt-24">
           <LeadContactForm
