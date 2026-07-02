@@ -1,0 +1,26 @@
+# Postgres local cho dev HouseX — khớp .env.example:
+# DATABASE_URL=postgresql://postgres:postgres@localhost:5432/housex?schema=public
+name: housex
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: housex-postgres
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: housex
+    volumes:
+      - housex_pg_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d housex"]
+      interval: 2s
+      timeout: 5s
+      retries: 15
+      start_period: 5s
+
+volumes:
+  housex_pg_data:

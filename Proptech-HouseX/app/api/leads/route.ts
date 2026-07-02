@@ -1,0 +1,106 @@
+import { NextRequest } from "next/server";
+import { prisma } from "@/lib/prisma";
+import { created, fail, handleApiError, ok } from "@/lib/api/http";
+import { leadCreateSchema } from "@/lib/validation/lead";
+import { REFERRAL_COOKIE } from "@/lib/rules/referral-attribution";
+import { resolveAttribution, type ReferralTouch } from "@/lib/rules/attribution-lock";
+import { normalizeVnPhone, isValidVnPhone } from "@/lib/phone";
+import { kv, isRateLimited } from "@/lib/redis";
+import { ipHash } from "@/lib/api/request-meta";
+
+const LEAD_RATE_MAX = Number(process.env.LEAD_RATE_MAX ?? "20");
+const LEAD_RATE_WINDOW_SEC = Number(process.env.LEAD_RATE_WINDOW_SEC ?? "3600");
+const IDEMPOTENCY_TTL_SEC = 24 * 3600;
+
+// POST /api/leads — khách submit form liên hệ.
+// P0: identity resolution (normalizedPhone) + attribution lock (chống lộn cò)
+//     + idempotency key + rate limit theo IP.
+export async function POST(req: NextRequest) {
+  try {
+    const body = leadCreateSchema.parse(await req.json());
+
+    const normalizedPhone = normalizeVnPhone(body.phone);
+    if (!isValidVnPhone(normalizedPhone)) {
+      return fail(422, "INVALID_PHONE", "Số điện thoại không hợp lệ.");
+    }
+
+    // Rate limit theo IP (chống bơm lead).
+    const ip = ipHash(req);
+    if (await isRateLimited(`lead:${ip}`, LEAD_RATE_MAX, LEAD_RATE_WINDOW_SEC)) {
+      return fail(429, "RATE_LIMITED", "Quá nhiều yêu cầu, vui lòng thử lại sau.");
+    }
+
+    // Idempotency: cùng Idempotency-Key trả lại lead đã tạo, không nhân đôi.
+    const idemKey = req.headers.get("idempotency-key");
+    if (idemKey) {
+      const existingLeadId = await kv.get(`idem:lead:${idemKey}`);
+      if (existingLeadId) {
+        const existingLead = await prisma.lead.findUnique({
+          where: { id: existingLeadId },
+        });
+        if (existingLead) return ok(existingLead);
+      }
+    }
+
+    // Attribution touch từ cookie (rule #3) → resolve broker + phone CTV.
+    const refCode = req.cookies.get(REFERRAL_COOKIE)?.value;
+    let referralTouch: ReferralTouch = null;
+    if (refCode) {
+      const referral = await prisma.referral.findUnique({
+        where: { code: refCode },
+        select: { id: true, broker: { select: { id: true, phone: true } } },
+      });
+      if (referral) {
+        referralTouch = {
+          id: referral.id,
+          brokerId: referral.broker.id,
+          brokerNormalizedPhone: normalizeVnPhone(referral.broker.phone),
+        };
+      }
+    }
+
+    const lead = await prisma.$transaction(async (tx) => {
+      // Identity resolution: gộp về customer cũ theo normalizedPhone.
+      const customer = await tx.customer.upsert({
+        where: { normalizedPhone },
+        update: {
+          // chỉ bổ sung email/tên nếu trước đó thiếu (không ghi đè dữ liệu cũ).
+          name: body.name,
+          email: body.email ?? undefined,
+        },
+        create: {
+          name: body.name,
+          phone: body.phone,
+          normalizedPhone,
+          email: body.email,
+        },
+      });
+
+      const attribution = await resolveAttribution(tx, {
+        customerId: customer.id,
+        customerNormalizedPhone: normalizedPhone,
+        referral: referralTouch,
+      });
+
+      return tx.lead.create({
+        data: {
+          customerId: customer.id,
+          listingId: body.listingId,
+          projectId: body.projectId,
+          referralId: attribution.referralId,
+          assignedBrokerId: attribution.assignedBrokerId,
+          source: attribution.assignedBrokerId ? "referral" : body.source ?? "organic",
+          message: body.message,
+        },
+      });
+    });
+
+    if (idemKey) {
+      await kv.set(`idem:lead:${idemKey}`, lead.id, IDEMPOTENCY_TTL_SEC);
+    }
+
+    return created(lead);
+  } catch (err) {
+    return handleApiError(err);
+  }
+}

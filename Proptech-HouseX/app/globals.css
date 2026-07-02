@@ -1,0 +1,570 @@
+@import "tailwindcss";
+@import "./hero-slide.css";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/*
+ * HouseX design system — Luxury Proptech.
+ * Phong thủy: Thiên Thượng Hoả + Thần số học Số 1.
+ * 60% Silver (Kim) · 30% Ruby (Hoả) · 10% Gold (CTA) · Mộc emerald (accent phụ).
+ * CTA v2: nền gold phẳng + bevel viền (2026-07).
+ */
+@theme {
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+
+  /* Silver — nền Kim (60%) */
+  --color-silver-50: #f5f5f7;
+  --color-silver-100: #ebebed;
+  --color-silver-200: #dcdce0;
+
+  /* Ruby Fire — thương hiệu Hoả (30%) */
+  --color-brand-50: #fdf2f3;
+  --color-brand-100: #fce4e6;
+  --color-brand-200: #f9c8cc;
+  --color-brand-300: #f0959c;
+  --color-brand-400: #d6404f;
+  --color-brand-500: #b81425;
+  --color-brand-600: #9b111e;
+  --color-brand-700: #7a0e18;
+  --color-brand-800: #5c0b12;
+  --color-brand-900: #3d070c;
+
+  /* Metallic Gold — CTA Số 1 (10%) */
+  --color-gold-400: #e8c547;
+  --color-gold-500: #daa520;
+  --color-gold-600: #b8860b;
+  --color-gold-700: #96700a;
+
+  /* Emerald — Mộc sinh Hoả (accent phụ) */
+  --color-wood-500: #2e8b57;
+  --color-wood-600: #046307;
+
+  /* Ink — dark sections & footer */
+  --color-ink-700: #4a4446;
+  --color-ink-800: #2a2224;
+  --color-ink-900: #1a1214;
+}
+
+:root {
+  --background: #fcfcfe;
+  --foreground: #2d2d2d;
+  --surface: #ffffff;
+  --surface-muted: #f8f8fb;
+  --border: #e8e8ed;
+  --muted: #5c5c5c;
+  /* Nền giấy logo — mean pixel PNG + texture tile cùng file gốc */
+  --brand-logo-paper: #ebebe6;
+  --header-bar: var(--brand-logo-paper);
+  --header-paper-tile: url("/brand/header-paper-tile.webp");
+  --ruby-glow: rgba(155, 17, 30, 0.12);
+  --gold-glow: rgba(218, 165, 32, 0.18);
+}
+
+.dark {
+  --background: #121010;
+  --foreground: #ebebed;
+  --surface: #1a1214;
+  --surface-muted: #2a2224;
+  --border: #3d3032;
+  --muted: #a8a0a2;
+  --header-bar: var(--surface);
+  --ruby-glow: rgba(155, 17, 30, 0.38);
+  --gold-glow: rgba(218, 165, 32, 0.14);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+.container-px {
+  padding-inline: 1rem;
+}
+@media (min-width: 640px) {
+  .container-px {
+    padding-inline: 1.5rem;
+  }
+}
+
+/* --- Luxury Proptech utilities --- */
+
+.proptech-kicker {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-gold-500);
+}
+
+.proptech-section-glow {
+  background: radial-gradient(
+    ellipse 80% 60% at 50% 0%,
+    color-mix(in srgb, var(--color-brand-400) 8%, transparent),
+    transparent 72%
+  );
+}
+
+.proptech-card {
+  border-radius: 1rem;
+  border: 1px solid color-mix(in srgb, var(--color-brand-400) 10%, #dcdce0);
+  background: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.96) 0%,
+    rgba(245, 245, 247, 0.88) 100%
+  );
+  box-shadow:
+    0 1px 2px rgba(26, 18, 20, 0.04),
+    0 8px 24px rgba(155, 17, 30, 0.05);
+  transition:
+    border-color 0.25s ease,
+    box-shadow 0.25s ease,
+    transform 0.25s ease;
+}
+
+.proptech-card:hover {
+  border-color: color-mix(in srgb, var(--color-brand-400) 28%, var(--border));
+  box-shadow:
+    0 4px 12px rgba(26, 18, 20, 0.06),
+    0 12px 32px rgba(155, 17, 30, 0.1);
+  transform: translateY(-2px);
+}
+
+.dark .proptech-card {
+  border-color: color-mix(in srgb, var(--color-brand-400) 22%, var(--border));
+  background: linear-gradient(
+    145deg,
+    rgba(42, 34, 36, 0.96) 0%,
+    rgba(26, 18, 20, 0.92) 100%
+  );
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.2),
+    0 8px 24px rgba(155, 17, 30, 0.12);
+}
+
+.dark .proptech-card:hover {
+  border-color: color-mix(in srgb, var(--color-brand-400) 40%, var(--border));
+  box-shadow:
+    0 4px 12px rgba(0, 0, 0, 0.25),
+    0 12px 32px rgba(155, 17, 30, 0.2);
+}
+
+.proptech-footer-glow {
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  background:
+    radial-gradient(ellipse 70% 50% at 50% 0%, var(--ruby-glow), transparent 65%),
+    radial-gradient(ellipse 40% 30% at 90% 20%, var(--gold-glow), transparent 55%),
+    var(--color-ink-900);
+}
+
+/* Gold CTA — nền vàng đồng nhất, chữ trắng, bevel 3D chỉ ở viền */
+.lux-gold-cta {
+  position: relative;
+  isolation: isolate;
+  background-color: var(--color-gold-500);
+  color: #ffffff;
+  text-shadow: 0 1px 1px rgba(26, 18, 20, 0.18);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.38),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.14),
+    0 1px 0 var(--color-gold-700),
+    0 2px 0 color-mix(in srgb, var(--color-gold-700) 75%, #1a1214),
+    0 4px 14px rgba(218, 165, 32, 0.38);
+  transition:
+    background-color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
+}
+
+/* Viền kim loại 3D — gradient chỉ trên mép, không phủ nền trong */
+.lux-gold-cta::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(
+    165deg,
+    rgba(255, 255, 255, 0.62) 0%,
+    rgba(255, 255, 255, 0.12) 38%,
+    rgba(150, 112, 10, 0.45) 72%,
+    rgba(60, 40, 5, 0.55) 100%
+  );
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+.lux-gold-cta:hover {
+  background-color: color-mix(in srgb, var(--color-gold-500) 88%, #fff);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.48),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.12),
+    0 1px 0 var(--color-gold-700),
+    0 3px 0 color-mix(in srgb, var(--color-gold-700) 75%, #1a1214),
+    0 6px 20px rgba(218, 165, 32, 0.48);
+  transform: translateY(-1px);
+}
+
+.lux-gold-cta:active {
+  transform: translateY(1px);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.28),
+    inset 0 2px 4px rgba(0, 0, 0, 0.16),
+    0 1px 0 var(--color-gold-700),
+    0 2px 8px rgba(218, 165, 32, 0.32);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lux-gold-cta:hover,
+  .lux-gold-cta:active {
+    transform: none;
+  }
+}
+
+/* Hero — dark mặc định; light: ảnh sáng + radiant Ruby/Gold vừa phải */
+.lux-hero {
+  position: relative;
+  isolation: isolate;
+  background: var(--color-ink-900);
+}
+
+html:not(.dark) .lux-hero {
+  background: #f5f5f7;
+}
+
+.lux-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background:
+    radial-gradient(ellipse 90% 70% at 15% 20%, rgba(155, 17, 30, 0.45), transparent 55%),
+    radial-gradient(ellipse 60% 50% at 85% 15%, rgba(218, 165, 32, 0.12), transparent 50%),
+    radial-gradient(ellipse 50% 40% at 50% 100%, rgba(46, 139, 87, 0.08), transparent 45%),
+    linear-gradient(160deg, #1a1214 0%, #2a2224 45%, #1a1214 100%);
+  pointer-events: none;
+}
+
+html:not(.dark) .lux-hero::before {
+  background:
+    radial-gradient(ellipse 75% 55% at 18% 28%, rgba(155, 17, 30, 0.28), transparent 58%),
+    radial-gradient(ellipse 55% 48% at 88% 18%, rgba(218, 165, 32, 0.22), transparent 52%),
+    radial-gradient(ellipse 45% 38% at 62% 88%, rgba(46, 139, 87, 0.1), transparent 50%);
+}
+
+html:not(.dark) .lux-hero-mesh {
+  opacity: 0.18;
+  background-image:
+    linear-gradient(rgba(155, 17, 30, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(155, 17, 30, 0.08) 1px, transparent 1px);
+}
+
+html:not(.dark) .lux-hero-photo {
+  opacity: 0.62 !important;
+}
+
+html:not(.dark) .lux-hero-photo-overlay {
+  background: linear-gradient(
+    118deg,
+    rgba(155, 17, 30, 0.52) 0%,
+    rgba(26, 18, 20, 0.28) 42%,
+    rgba(218, 165, 32, 0.14) 78%,
+    rgba(255, 252, 248, 0.08) 100%
+  ) !important;
+}
+
+html:not(.dark) .lux-hero-title {
+  color: #ffffff;
+  text-shadow: 0 1px 2px rgba(26, 18, 20, 0.35);
+}
+
+html:not(.dark) .lux-hero-title-accent {
+  color: var(--color-gold-400);
+}
+
+html:not(.dark) .lux-hero-lead {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+html:not(.dark) .lux-hero-kicker {
+  color: var(--color-gold-400);
+}
+
+html:not(.dark) .lux-hero .lux-glass {
+  border-color: rgba(255, 255, 255, 0.22);
+  background: color-mix(in srgb, #ffffff 18%, transparent);
+  box-shadow:
+    0 8px 32px rgba(26, 18, 20, 0.18),
+    0 0 0 1px rgba(155, 17, 30, 0.12);
+}
+
+/* Thanh tiêu đề — texture giấy cùng nguồn logo (tránh lệch phẳng vs grain) */
+.site-header-bar {
+  background-color: var(--header-bar);
+  background-image: var(--header-paper-tile);
+  background-repeat: repeat;
+  background-size: 128px 128px;
+}
+
+.housex-header-logo__img {
+  display: block;
+  height: 2.85rem;
+  width: auto;
+  max-width: min(13.5rem, 52vw);
+  object-fit: contain;
+  object-position: left center;
+  opacity: 1;
+  filter: none;
+  mix-blend-mode: normal;
+}
+
+.housex-footer-logo__frame {
+  display: inline-flex;
+  overflow: hidden;
+  border-radius: 0.75rem;
+  line-height: 0;
+}
+
+.housex-footer-logo__img {
+  display: block;
+  height: 3.25rem;
+  width: auto;
+  max-width: min(15rem, 100%);
+  object-fit: contain;
+  object-position: left center;
+  border-radius: inherit;
+}
+
+@media (min-width: 640px) {
+  .housex-header-logo__img {
+    height: 3rem;
+    max-width: 14.5rem;
+  }
+
+  .housex-footer-logo__img {
+    height: 3.5rem;
+    max-width: 16rem;
+  }
+}
+
+/* Header brand lockup — SVG fallback (theme showcase, v.v.) */
+.brand-header-lockup {
+  position: relative;
+  border-radius: 0.5rem;
+  padding: 0.1rem 0.35rem 0.15rem;
+  background: transparent;
+  box-shadow: none;
+}
+
+.brand-header-lockup::before {
+  display: none;
+}
+
+.dark .brand-header-lockup {
+  background: transparent;
+  box-shadow: none;
+}
+
+.brand-wordmark-lux {
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+.brand-wordmark-x {
+  filter: none;
+}
+
+/* Tagline header — không rộng hơn khối House X */
+.brand-header-tagline {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  font-size: 6px;
+  line-height: 1.2;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+@media (min-width: 640px) {
+  .brand-header-tagline {
+    font-size: 6.5px;
+    letter-spacing: 0.035em;
+  }
+}
+
+html:not(.dark) .lux-hero-project-overlay-r {
+  background: linear-gradient(
+    to right,
+    rgba(155, 17, 30, 0.48),
+    rgba(26, 18, 20, 0.22) 50%,
+    rgba(218, 165, 32, 0.1),
+    transparent
+  ) !important;
+}
+
+html:not(.dark) .lux-hero-project-overlay-t {
+  background: linear-gradient(
+    to top,
+    rgba(26, 18, 20, 0.45),
+    transparent 55%,
+    rgba(255, 255, 255, 0.08)
+  ) !important;
+}
+
+html:not(.dark) .lux-hero-project-photo {
+  opacity: 0.58 !important;
+}
+
+html:not(.dark) .lux-hero .lux-hero-title {
+  color: #ffffff;
+  text-shadow: 0 1px 2px rgba(26, 18, 20, 0.35);
+}
+
+html:not(.dark) .lux-hero .lux-hero-lead {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+html:not(.dark) .lux-hero .text-slate-300 {
+  color: rgba(255, 255, 255, 0.78);
+}
+
+html:not(.dark) .lux-hero .text-slate-200 {
+  color: rgba(255, 255, 255, 0.88);
+}
+
+html:not(.dark) .lux-hero .text-slate-100 {
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.lux-hero-mesh {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  opacity: 0.35;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: radial-gradient(ellipse 80% 70% at 50% 30%, black, transparent);
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .lux-hero-mesh {
+    animation: lux-mesh-drift 24s linear infinite;
+  }
+}
+
+@keyframes lux-mesh-drift {
+  from {
+    background-position: 0 0, 0 0;
+  }
+  to {
+    background-position: 48px 48px, 48px 48px;
+  }
+}
+
+/* Glass panel — search hero & cards nổi */
+.lux-glass {
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: color-mix(in srgb, var(--surface) 92%, transparent);
+  backdrop-filter: blur(16px);
+  box-shadow:
+    0 8px 32px rgba(26, 18, 20, 0.12),
+    0 0 0 1px rgba(155, 17, 30, 0.04);
+}
+
+.dark .lux-glass {
+  border-color: rgba(255, 255, 255, 0.08);
+  background: color-mix(in srgb, var(--surface) 88%, transparent);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.35),
+    0 0 0 1px rgba(155, 17, 30, 0.15);
+}
+
+/* Ruby divider accent */
+.lux-ruby-rule {
+  height: 3px;
+  width: 3rem;
+  border-radius: 9999px;
+  background: linear-gradient(90deg, var(--color-brand-600), var(--color-brand-400));
+}
+
+/* Section heading ruby underline glow */
+.lux-heading-accent {
+  position: relative;
+  display: inline-block;
+  color: var(--color-brand-700);
+}
+
+.dark .lux-heading-accent {
+  color: var(--color-brand-300);
+}
+
+.lux-heading-accent::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -0.35rem;
+  width: 2.5rem;
+  height: 2px;
+  border-radius: 9999px;
+  background: linear-gradient(90deg, var(--color-brand-600), var(--color-gold-500));
+}
+
+/* Stat / info tile — dùng trang dự án & tin đăng */
+.lux-stat-card {
+  border-radius: 1rem;
+  border: 1px solid color-mix(in srgb, var(--color-brand-400) 8%, var(--border));
+  border-top: 3px solid var(--color-brand-600);
+  background: linear-gradient(
+    160deg,
+    color-mix(in srgb, var(--surface) 98%, transparent) 0%,
+    color-mix(in srgb, var(--surface-muted) 85%, transparent) 100%
+  );
+  box-shadow: 0 4px 16px rgba(155, 17, 30, 0.04);
+}
+
+.dark .lux-stat-card {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+}
+
+.lux-detail-panel {
+  border-radius: 1rem;
+  border: 1px solid color-mix(in srgb, var(--color-brand-400) 10%, var(--border));
+  background: color-mix(in srgb, var(--surface) 92%, transparent);
+  box-shadow: 0 8px 28px rgba(26, 18, 20, 0.06);
+}
+
+.dark .lux-detail-panel {
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.3);
+}
+
+.dark .proptech-section-glow {
+  background: radial-gradient(
+    ellipse 80% 60% at 50% 0%,
+    color-mix(in srgb, var(--color-brand-400) 22%, transparent),
+    transparent 70%
+  );
+}
+
+.lux-price {
+  background: linear-gradient(
+    135deg,
+    var(--color-brand-700) 0%,
+    var(--color-brand-600) 55%,
+    var(--color-gold-600) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+

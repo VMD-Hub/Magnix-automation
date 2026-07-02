@@ -1,0 +1,35 @@
+/* Hero slide — fade giữa các ảnh (không ngày/đêm) */
+
+.hero-slide-bg {
+  isolation: isolate;
+  background: #080c12;
+}
+
+.hero-slide-layer {
+  opacity: 0;
+  transition: opacity 1.2s ease-in-out;
+  will-change: opacity;
+}
+
+.hero-slide-layer--active {
+  opacity: 1;
+}
+
+.hero-slide-img {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  image-rendering: auto;
+}
+
+.hero-slide-vignette {
+  pointer-events: none;
+  background:
+    linear-gradient(to right, rgba(16, 12, 14, 0.58) 0%, transparent 50%),
+    linear-gradient(to top, rgba(8, 8, 12, 0.26) 0%, transparent 36%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-slide-layer {
+    transition: none;
+  }
+}

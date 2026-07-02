@@ -1,0 +1,701 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum ProjectType {
+  THUONG_MAI
+  NHA_O_XA_HOI
+}
+
+enum ProjectStatus {
+  SAP_MO_BAN
+  DANG_BAN
+  DA_BAN_GIAO
+  TAM_DUNG
+}
+
+enum TransactionType {
+  SALE
+  RENT
+}
+
+enum ListingStatus {
+  DRAFT
+  ACTIVE
+  EXPIRED
+  SOLD
+  REJECTED
+}
+
+enum ListingTier {
+  FREE
+  VIP
+  PREMIUM
+}
+
+enum BrokerType {
+  FREE
+  CTV
+  AGENCY
+}
+
+/// ADR-009 — Nguồn hàng. Quyết định lớp xác minh tối thiểu + track vận hành.
+enum ListingSource {
+  DEVELOPER_F1 // sản phẩm sơ cấp từ chủ đầu tư (F1)
+  CONSIGNMENT // ký gửi nhà phố/thứ cấp qua Đầu chủ
+  BANK_NPL // tài sản phát mãi / xử lý nợ / đấu giá từ ngân hàng
+  EXTERNAL_AD // tin đăng quảng cáo từ môi giới ngoài
+}
+
+/// ADR-009 — Lớp xác minh tài sản (T0 = chỉ duyệt nội dung → T3 = institutional).
+enum VerificationTier {
+  T0
+  T1
+  T2
+  T3
+}
+
+/// ADR-009 — Đường vận hành/kiếm tiền: quảng cáo (phí gói) vs nội sàn (hoa hồng).
+enum MonetizationTrack {
+  ADVERTISING
+  MANAGED
+}
+
+/// ADR-012 — Trạng thái căn trong giỏ hàng dự án sơ cáp (F1).
+/// Giữ suất mua (UnitBooking) KHÔNG đổi trạng thái căn — chỉ khi chuyển cọc
+/// thủ công (admin) căn mới → DEPOSITED và khóa.
+enum ProjectUnitStatus {
+  AVAILABLE
+  HELD // dự phòng / thao tác nội bộ (không dùng cho giữ suất)
+  BOOKED // legacy/demo — ưu tiên đếm UnitBooking thay vì đổi status
+  DEPOSITED // đã khóa sau chuyển cọc thủ công
+  SOLD
+  HANDED_OVER
+  LIQUIDATED
+}
+
+/// Phase B — Giữ suất mua: nhiều suất/căn khi căn còn AVAILABLE; không lock căn.
+enum UnitBookingStatus {
+  PENDING
+  CONFIRMED
+  EXPIRED
+  CANCELLED
+  CONVERTED_TO_DEPOSIT
+}
+
+/// Vai trò tài khoản nền tảng — mọi user đăng ký đều cùng yêu cầu SĐT + email + xác nhận.
+enum AccountRole {
+  CUSTOMER
+  BROKER
+}
+
+enum CtvApplicationStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum LeadStatus {
+  NEW
+  CONTACTED
+  QUALIFIED
+  WON
+  LOST
+}
+
+enum ReferralType {
+  CTV_PROJECT
+  SHARE_LISTING
+}
+
+enum CommissionStatus {
+  PENDING
+  APPROVED
+  PAID
+  REJECTED
+}
+
+enum ArticleStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+model Developer {
+  id        String   @id @default(uuid())
+  name      String
+  taxCode   String   @unique @map("tax_code")
+  logoUrl   String?  @map("logo_url")
+  verified  Boolean  @default(false)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  projects Project[]
+
+  @@map("developers")
+}
+
+model Project {
+  id           String        @id @default(uuid())
+  developerId  String        @map("developer_id")
+  slug         String        @unique
+  name         String
+  projectType  ProjectType   @map("project_type")
+  status       ProjectStatus @default(SAP_MO_BAN)
+  province     String
+  district     String
+  ward         String?
+  address      String?
+  lat          Float?
+  lng          Float?
+  totalArea    Float?        @map("total_area")
+  density      Float?
+  overviewData Json?         @map("overview_data")
+  description  String?       @db.Text
+  handoverDate DateTime?     @map("handover_date")
+  seoTitle     String?       @map("seo_title")
+  seoDesc      String?       @map("seo_description")
+  deletedAt    DateTime?     @map("deleted_at")
+  createdAt    DateTime      @default(now()) @map("created_at")
+  updatedAt    DateTime      @updatedAt @map("updated_at")
+
+  developer Developer         @relation(fields: [developerId], references: [id])
+  unitTypes ProjectUnitType[]
+  legalDocs ProjectLegalDoc[]
+  listings  Listing[]
+  referrals Referral[]
+  leads     Lead[]
+  articles  ArticleProject[]
+  units     ProjectUnit[]
+  unitBookings UnitBooking[]
+
+  @@index([province, district])
+  @@index([deletedAt])
+  @@map("projects")
+}
+
+model ProjectUnitType {
+  id           String   @id @default(uuid())
+  projectId    String   @map("project_id")
+  name         String
+  areaMin      Float?   @map("area_min")
+  areaMax      Float?   @map("area_max")
+  bedrooms     Int?
+  priceFrom    Decimal? @map("price_from") @db.Decimal(18, 2)
+  floorPlanUrl String?  @map("floor_plan_url")
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  project  Project       @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  listings Listing[]
+  units    ProjectUnit[]
+
+  @@map("project_unit_types")
+}
+
+/// ADR-012 (Phase A/B) — Giỏ hàng F1. Giữ suất = UnitBooking (không lock).
+/// Lock căn chỉ khi admin chuyển cọc → status DEPOSITED + depositBookingId.
+model ProjectUnit {
+  id              String            @id @default(uuid())
+  projectId       String            @map("project_id")
+  unitTypeId      String?           @map("unit_type_id")
+  code            String // mã căn, vd A-12-05
+  block           String? // toà / block / phân khu
+  floor           Int?
+  direction       String? // hướng (Đông/Tây/...)
+  view            String?
+  area            Float? // diện tích (m2)
+  bedrooms        Int?
+  price           Decimal           @db.Decimal(18, 2)
+  status          ProjectUnitStatus @default(AVAILABLE)
+  /// Cọc thủ công — 1 căn chỉ 1 booking thắng.
+  depositBookingId String?          @unique @map("deposit_booking_id")
+  depositLockedAt  DateTime?        @map("deposit_locked_at")
+  deletedAt       DateTime?         @map("deleted_at")
+  createdAt       DateTime          @default(now()) @map("created_at")
+  updatedAt       DateTime          @updatedAt @map("updated_at")
+
+  project        Project          @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  unitType       ProjectUnitType? @relation(fields: [unitTypeId], references: [id])
+  depositBooking UnitBooking?     @relation("DepositBooking", fields: [depositBookingId], references: [id])
+  bookings       UnitBooking[]    @relation("UnitBookings")
+
+  @@unique([projectId, code])
+  @@index([projectId, status])
+  @@index([deletedAt])
+  @@map("project_units")
+}
+
+/// Giữ suất mua — nhiều bản ghi/căn khi căn AVAILABLE; không khóa tồn kho.
+model UnitBooking {
+  id               String            @id @default(uuid())
+  code             String            @unique
+  projectId        String            @map("project_id")
+  unitId           String            @map("unit_id")
+  customerId       String?           @map("customer_id")
+  brokerId         String?           @map("broker_id")
+  referralId       String?           @map("referral_id")
+  customerName     String            @map("customer_name")
+  phone            String
+  normalizedPhone  String            @map("normalized_phone")
+  email            String?
+  message          String?           @db.Text
+  status           UnitBookingStatus @default(PENDING)
+  expiresAt        DateTime?         @map("expires_at")
+  convertedAt      DateTime?         @map("converted_at")
+  cancelledAt      DateTime?         @map("cancelled_at")
+  cancelReason     String?           @map("cancel_reason")
+  /// Admin / hệ thống ghi nhận ai chuyển cọc thủ công.
+  convertedBy      String?           @map("converted_by")
+  createdAt        DateTime          @default(now()) @map("created_at")
+  updatedAt        DateTime          @updatedAt @map("updated_at")
+
+  project          Project           @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  unit             ProjectUnit       @relation("UnitBookings", fields: [unitId], references: [id], onDelete: Cascade)
+  customer         Customer?         @relation(fields: [customerId], references: [id])
+  broker           Broker?           @relation(fields: [brokerId], references: [id])
+  referral         Referral?         @relation(fields: [referralId], references: [id])
+  depositForUnit   ProjectUnit?      @relation("DepositBooking")
+
+  @@index([unitId, status])
+  @@index([projectId, status])
+  @@index([normalizedPhone])
+  @@map("unit_bookings")
+}
+
+model ProjectLegalDoc {
+  id         String    @id @default(uuid())
+  projectId  String    @map("project_id")
+  docType    String    @map("doc_type")
+  status     String
+  issuedDate DateTime? @map("issued_date")
+  fileUrl    String?   @map("file_url")
+  createdAt  DateTime  @default(now()) @map("created_at")
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@map("project_legal_docs")
+}
+
+model ArticleTag {
+  id          String   @id @default(uuid())
+  slug        String   @unique
+  name        String
+  description String?  @db.Text
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  articles ArticleTagLink[]
+
+  @@map("article_tags")
+}
+
+model Article {
+  id            String        @id @default(uuid())
+  slug          String        @unique
+  title         String
+  excerpt       String?       @db.Text
+  body          String        @db.Text
+  status        ArticleStatus @default(DRAFT)
+  publishedAt   DateTime?     @map("published_at")
+  coverImageUrl String?       @map("cover_image_url")
+  authorName    String?       @map("author_name")
+  seoTitle      String?       @map("seo_title")
+  seoDesc       String?       @map("seo_description")
+  createdAt     DateTime      @default(now()) @map("created_at")
+  updatedAt     DateTime      @updatedAt @map("updated_at")
+
+  tags     ArticleTagLink[]
+  projects ArticleProject[]
+
+  @@index([status, publishedAt])
+  @@map("articles")
+}
+
+model ArticleTagLink {
+  articleId String @map("article_id")
+  tagId     String @map("tag_id")
+
+  article Article    @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  tag     ArticleTag @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@id([articleId, tagId])
+  @@map("article_tag_links")
+}
+
+model ArticleProject {
+  articleId String @map("article_id")
+  projectId String @map("project_id")
+
+  article Article @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@id([articleId, projectId])
+  @@index([projectId])
+  @@map("article_projects")
+}
+
+model Broker {
+  id              String      @id @default(uuid())
+  userAccountId   String      @unique @map("user_account_id")
+  fullName        String      @map("full_name")
+  phone           String
+  licenseNo       String?     @map("license_no")
+  licenseVerified Boolean     @default(false) @map("license_verified")
+  brokerType      BrokerType  @default(FREE) @map("broker_type")
+  /// Mã CTV công khai — chỉ cấp sau khi đơn đăng ký CTV được duyệt.
+  ctvCode         String?     @unique @map("ctv_code")
+  tier            ListingTier @default(FREE)
+  rating          Float?      @default(0)
+  createdAt       DateTime    @default(now()) @map("created_at")
+  updatedAt       DateTime    @updatedAt @map("updated_at")
+
+  userAccount      UserAccount       @relation(fields: [userAccountId], references: [id])
+  listings         Listing[]
+  referrals        Referral[]
+  assignedLeads    Lead[]            @relation("AssignedBroker")
+  commissions      Commission[]
+  attributionLocks AttributionLock[]
+  ctvApplication   CtvApplication?
+  unitBookings     UnitBooking[]
+
+  @@map("brokers")
+}
+
+model Listing {
+  id               String            @id @default(uuid())
+  code             String            @unique
+  brokerId         String            @map("broker_id")
+  projectId        String?           @map("project_id")
+  unitTypeId       String?           @map("unit_type_id")
+  transactionType  TransactionType   @map("transaction_type")
+  propertyType     String            @map("property_type")
+  price            Decimal           @db.Decimal(18, 2)
+  area             Float?
+  address          String?
+  province         String
+  district         String
+  ward             String?
+  lat              Float?
+  lng              Float?
+  description      String?           @db.Text
+  status           ListingStatus     @default(DRAFT)
+  tier             ListingTier       @default(FREE)
+  // ADR-009 — phân loại 3 trục (Source × Verification × Track). Mặc định khớp hiện
+  // trạng: tin do môi giới đăng = quảng cáo, xác minh T0. Backfill an toàn (additive).
+  source           ListingSource     @default(EXTERNAL_AD)
+  verificationTier VerificationTier  @default(T0) @map("verification_tier")
+  track            MonetizationTrack @default(ADVERTISING)
+  verified         Boolean           @default(false) // cờ nhanh; verificationTier là trục chi tiết
+  verifiedAt       DateTime?         @map("verified_at")
+  expireAt         DateTime?         @map("expire_at")
+  // P2 — precomputed quality & ranking signals (cron/hook cập nhật).
+  photoCount       Int               @default(0) @map("photo_count")
+  hasVideo         Boolean           @default(false) @map("has_video")
+  qualityScore     Int               @default(0) @map("quality_score")
+  rankScore        Float             @default(0) @map("rank_score")
+  rankUpdatedAt    DateTime?         @map("rank_updated_at")
+  // P3 — soft delete (giữ lịch sử/attribution, ẩn khỏi public reads).
+  deletedAt        DateTime?         @map("deleted_at")
+  createdAt        DateTime          @default(now()) @map("created_at")
+  updatedAt        DateTime          @updatedAt @map("updated_at")
+
+  broker      Broker              @relation(fields: [brokerId], references: [id])
+  project     Project?            @relation(fields: [projectId], references: [id])
+  unitType    ProjectUnitType?    @relation(fields: [unitTypeId], references: [id])
+  media       ListingMedia[]
+  leads       Lead[]
+  referrals   Referral[]
+  fingerprint ListingFingerprint?
+
+  @@index([province, district, propertyType, transactionType])
+  @@index([status, rankScore])
+  @@index([track, status])
+  @@index([deletedAt])
+  @@map("listings")
+}
+
+model ListingMedia {
+  id           String   @id @default(uuid())
+  listingId    String   @map("listing_id")
+  url          String
+  type         String   @default("image") // image | video
+  position     Int      @default(0)
+  provider     String? // bunny | cloudflare_stream | image_cdn
+  playbackId   String?  @map("playback_id")
+  status       String   @default("READY") // UPLOADING | PROCESSING | READY | REJECTED
+  rejectReason String?  @map("reject_reason")
+  durationSec  Int?     @map("duration_sec")
+  width        Int?
+  height       Int?
+  phash        String?
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  listing Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
+
+  @@index([listingId, status])
+  @@map("listing_media")
+}
+
+enum AuthTokenType {
+  EMAIL_VERIFY
+  PASSWORD_RESET
+}
+
+/// Tài khoản đăng nhập thống nhất — khách hàng (CUSTOMER) hoặc môi giới đăng tin (BROKER).
+model UserAccount {
+  id              String      @id @default(uuid())
+  role            AccountRole
+  name            String
+  phone           String
+  normalizedPhone String      @unique @map("normalized_phone")
+  email           String      @unique
+  emailVerified   Boolean     @default(false) @map("email_verified")
+  emailVerifiedAt DateTime?   @map("email_verified_at")
+  marketingOptIn  Boolean     @default(true) @map("marketing_opt_in")
+  passwordHash    String      @map("password_hash")
+  createdAt       DateTime    @default(now()) @map("created_at")
+  updatedAt       DateTime    @updatedAt @map("updated_at")
+
+  customer   Customer?
+  broker     Broker?
+  authTokens UserAuthToken[]
+
+  @@index([role])
+  @@map("user_accounts")
+}
+
+model Customer {
+  id              String   @id @default(uuid())
+  userAccountId   String?  @unique @map("user_account_id")
+  name            String
+  phone           String
+  normalizedPhone String   @unique @map("normalized_phone")
+  email           String?
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  userAccount     UserAccount?     @relation(fields: [userAccountId], references: [id])
+  leads           Lead[]
+  attributionLock AttributionLock?
+  unitBookings    UnitBooking[]
+
+  @@map("customers")
+}
+
+/// Token một lần: xác nhận email, đặt lại mật khẩu (chỉ lưu hash).
+model UserAuthToken {
+  id            String        @id @default(uuid())
+  userAccountId String        @map("user_account_id")
+  type          AuthTokenType
+  tokenHash     String        @unique @map("token_hash")
+  expiresAt     DateTime      @map("expires_at")
+  usedAt        DateTime?     @map("used_at")
+  createdAt     DateTime      @default(now()) @map("created_at")
+
+  userAccount UserAccount @relation(fields: [userAccountId], references: [id], onDelete: Cascade)
+
+  @@index([userAccountId, type])
+  @@map("user_auth_tokens")
+}
+
+/// Đơn đăng ký CTV — môi giới đã có tài khoản đăng tin, chờ admin duyệt.
+/// Vận hành: duyệt chỉ khi hoàn thành khóa đào tạo hội nhập (LMS — phase sau).
+model CtvApplication {
+  id           String               @id @default(uuid())
+  brokerId     String               @unique @map("broker_id")
+  idNumber     String?              @map("id_number")
+  experience   String?              @db.Text
+  region       String?
+  motivation   String?              @db.Text
+  status       CtvApplicationStatus @default(PENDING)
+  rejectReason String?              @map("reject_reason")
+  reviewedAt   DateTime?            @map("reviewed_at")
+  createdAt    DateTime             @default(now()) @map("created_at")
+  updatedAt    DateTime             @updatedAt @map("updated_at")
+
+  broker Broker @relation(fields: [brokerId], references: [id], onDelete: Cascade)
+
+  @@index([status])
+  @@map("ctv_applications")
+}
+
+model Lead {
+  id               String     @id @default(uuid())
+  customerId       String?    @map("customer_id")
+  listingId        String?    @map("listing_id")
+  projectId        String?    @map("project_id")
+  referralId       String?    @map("referral_id")
+  assignedBrokerId String?    @map("assigned_broker_id")
+  source           String     @default("organic")
+  message          String?    @db.Text
+  status           LeadStatus @default(NEW)
+  createdAt        DateTime   @default(now()) @map("created_at")
+  updatedAt        DateTime   @updatedAt @map("updated_at")
+
+  customer       Customer?   @relation(fields: [customerId], references: [id])
+  listing        Listing?    @relation(fields: [listingId], references: [id])
+  project        Project?    @relation(fields: [projectId], references: [id])
+  referral       Referral?   @relation(fields: [referralId], references: [id])
+  assignedBroker Broker?     @relation("AssignedBroker", fields: [assignedBrokerId], references: [id])
+  commission     Commission?
+
+  @@index([status])
+  @@map("leads")
+}
+
+model Referral {
+  id         String       @id @default(uuid())
+  brokerId   String       @map("broker_id")
+  projectId  String?      @map("project_id")
+  listingId  String?      @map("listing_id")
+  code       String       @unique
+  type       ReferralType
+  clickCount Int          @default(0) @map("click_count")
+  expiresAt  DateTime?    @map("expires_at")
+  createdAt  DateTime     @default(now()) @map("created_at")
+
+  broker      Broker       @relation(fields: [brokerId], references: [id])
+  project     Project?     @relation(fields: [projectId], references: [id])
+  listing     Listing?     @relation(fields: [listingId], references: [id])
+  leads       Lead[]
+  commissions Commission[]
+  unitBookings UnitBooking[]
+
+  @@map("referrals")
+}
+
+model Commission {
+  id         String           @id @default(uuid())
+  leadId     String           @unique @map("lead_id")
+  referralId String?          @map("referral_id")
+  brokerId   String           @map("broker_id")
+  amount     Decimal          @db.Decimal(18, 2)
+  rate       Float?
+  status     CommissionStatus @default(PENDING)
+  paidAt     DateTime?        @map("paid_at")
+  createdAt  DateTime         @default(now()) @map("created_at")
+
+  lead     Lead      @relation(fields: [leadId], references: [id])
+  referral Referral? @relation(fields: [referralId], references: [id])
+  broker   Broker    @relation(fields: [brokerId], references: [id])
+
+  @@map("commissions")
+}
+
+// P1 — Canonical property: gom nhiều tin đăng của cùng 1 BĐS (nhiều broker rao)
+// về một thực thể gốc, tránh loãng SEO + UX rác.
+model CanonicalProperty {
+  id           String   @id @default(uuid())
+  clusterKey   String   @unique @map("cluster_key")
+  projectId    String?  @map("project_id")
+  unitTypeId   String?  @map("unit_type_id")
+  propertyType String   @map("property_type")
+  province     String
+  district     String
+  offerCount   Int      @default(0) @map("offer_count")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  fingerprints ListingFingerprint[]
+
+  @@map("canonical_properties")
+}
+
+// P1 — Fingerprint mỗi listing để chống trùng (hard dupe + near dupe).
+model ListingFingerprint {
+  id          String   @id @default(uuid())
+  listingId   String   @unique @map("listing_id")
+  contentHash String   @map("content_hash") // SimHash hex 64-bit của mô tả chuẩn hoá
+  dupeKey     String   @map("dupe_key") // hard-dupe key (cùng broker + cùng BĐS)
+  imagePhash  String[] @map("image_phash")
+  canonicalId String?  @map("canonical_id")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  listing   Listing            @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  canonical CanonicalProperty? @relation(fields: [canonicalId], references: [id])
+
+  @@index([dupeKey])
+  @@index([canonicalId])
+  @@map("listing_fingerprints")
+}
+
+// P0 — Attribution lock: 1 khách chỉ thuộc 1 broker trong cửa sổ hiệu lực.
+model AttributionLock {
+  id         String   @id @default(uuid())
+  customerId String   @unique @map("customer_id")
+  brokerId   String   @map("broker_id")
+  referralId String?  @map("referral_id")
+  source     String   @default("referral") // referral | first_lead | manual
+  lockedAt   DateTime @default(now()) @map("locked_at")
+  expiresAt  DateTime @map("expires_at")
+
+  customer Customer @relation(fields: [customerId], references: [id])
+  broker   Broker   @relation(fields: [brokerId], references: [id])
+
+  @@index([brokerId])
+  @@index([expiresAt])
+  @@map("attribution_locks")
+}
+
+// P3 — Lịch sử chuyển trạng thái (audit) cho listing/lead/project. Generic để
+// một bảng phục vụ nhiều entity; truy vết "ai đổi gì, khi nào, vì sao".
+model StatusHistory {
+  id         String   @id @default(uuid())
+  entity     String // listing | lead | project
+  entityId   String   @map("entity_id")
+  fromStatus String?  @map("from_status")
+  toStatus   String   @map("to_status")
+  reason     String?
+  actor      String? // brokerId / userId / system
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  @@index([entity, entityId])
+  @@map("status_history")
+}
+
+enum OutboxStatus {
+  PENDING
+  PROCESSING
+  DONE
+  DEAD
+}
+
+// P2 — Transactional outbox: ghi sự kiện CÙNG transaction với thay đổi domain,
+// dispatcher xử lý side-effect (notify n8n…) bất đồng bộ → tách khỏi request,
+// at-least-once + retry/backoff + dead-letter.
+model OutboxEvent {
+  id          String       @id @default(uuid())
+  type        String // lead.won | commission.created | ...
+  payload     Json
+  dedupeKey   String?      @unique @map("dedupe_key")
+  status      OutboxStatus @default(PENDING)
+  attempts    Int          @default(0)
+  maxAttempts Int          @default(8) @map("max_attempts")
+  availableAt DateTime     @default(now()) @map("available_at")
+  lockedAt    DateTime?    @map("locked_at")
+  lastError   String?      @map("last_error") @db.Text
+  createdAt   DateTime     @default(now()) @map("created_at")
+  processedAt DateTime?    @map("processed_at")
+
+  @@index([status, availableAt])
+  @@map("outbox_events")
+}
+
+// P0 — Audit mọi lần gán/tranh chấp quyền sở hữu khách (chống "lộn cò").
+model AttributionEvent {
+  id         String   @id @default(uuid())
+  customerId String   @map("customer_id")
+  fromBroker String?  @map("from_broker")
+  toBroker   String?  @map("to_broker")
+  referralId String?  @map("referral_id")
+  reason     String // first_touch | conflict_kept | expired_reassign | self_referral_blocked
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  @@index([customerId])
+  @@map("attribution_events")
+}

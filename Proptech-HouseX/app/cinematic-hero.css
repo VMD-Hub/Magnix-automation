@@ -1,0 +1,196 @@
+/* Cinematic Hero v7 · ánh sáng tỏa từ góc phải (pha bình minh/hoàng hôn) */
+
+@property --light-r {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 0%;
+}
+
+@property --bloom {
+  syntax: "<number>";
+  inherits: false;
+  initial-value: 0;
+}
+
+.cinematic-hero-bg {
+  isolation: isolate;
+  background: #080c12;
+}
+
+.cinematic-hero-night-stack,
+.cinematic-hero-day-sweep,
+.cinematic-hero-light-bloom {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+.cinematic-hero-frame-img {
+  object-position: 50% 42%;
+}
+
+.cinematic-hero-day-sweep {
+  --light-r: -10%;
+  --bloom: 0;
+  -webkit-mask-image: radial-gradient(
+    ellipse 175% 120% at 90% 12%,
+    #000 0%,
+    #000 var(--light-r),
+    transparent calc(var(--light-r) + 13%)
+  );
+  mask-image: radial-gradient(
+    ellipse 175% 120% at 90% 12%,
+    #000 0%,
+    #000 var(--light-r),
+    transparent calc(var(--light-r) + 13%)
+  );
+  animation: cinematic-light-phase 72s ease-in-out infinite;
+  will-change: mask-image, -webkit-mask-image;
+}
+
+.cinematic-hero-day-sky-depth {
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    rgba(4, 32, 72, 0.55) 0%,
+    rgba(8, 48, 98, 0.38) 14%,
+    rgba(14, 62, 118, 0.22) 26%,
+    rgba(22, 78, 138, 0.1) 36%,
+    transparent 46%
+  );
+  mix-blend-mode: multiply;
+  opacity: 0.88;
+}
+
+.cinematic-hero-day-warmth {
+  pointer-events: none;
+  background:
+    radial-gradient(
+      ellipse 52% 38% at 82% 8%,
+      rgba(255, 230, 180, 0.16) 0%,
+      transparent 58%
+    ),
+    linear-gradient(
+      to bottom,
+      transparent 0%,
+      transparent 36%,
+      rgba(155, 17, 30, 0.04) 42%,
+      rgba(218, 165, 32, 0.09) 48%,
+      rgba(255, 228, 170, 0.07) 54%,
+      transparent 64%
+    ),
+    linear-gradient(
+      to right,
+      rgba(139, 21, 48, 0.04) 0%,
+      rgba(255, 210, 120, 0.07) 42%,
+      rgba(255, 240, 200, 0.05) 58%,
+      rgba(155, 17, 30, 0.03) 100%
+    );
+  mix-blend-mode: soft-light;
+  opacity: 0.68;
+}
+
+.cinematic-hero-light-bloom {
+  --bloom: 0;
+  pointer-events: none;
+  z-index: 1;
+  opacity: var(--bloom);
+  background:
+    radial-gradient(
+      ellipse 55% 45% at 88% 10%,
+      rgba(255, 210, 130, 0.55) 0%,
+      rgba(255, 170, 80, 0.22) 38%,
+      transparent 72%
+    ),
+    radial-gradient(
+      ellipse 90% 35% at 72% 18%,
+      rgba(255, 190, 100, 0.12) 0%,
+      transparent 65%
+    );
+  mix-blend-mode: screen;
+  animation: cinematic-light-bloom 72s ease-in-out infinite;
+}
+
+/*
+ * Chu kỳ 72s:
+ * 0–24s   bình minh: ánh sáng tỏa từ góc phải → phủ khung
+ * 24–26s  giữ ban ngày
+ * 26–50s  hoàng hôn: ánh sáng thu về góc phải
+ * 50–72s  giữ ban đêm
+ */
+@keyframes cinematic-light-phase {
+  0% {
+    --light-r: -10%;
+  }
+  33.33% {
+    --light-r: 94%;
+  }
+  36.11% {
+    --light-r: 94%;
+  }
+  69.44% {
+    --light-r: -10%;
+  }
+  100% {
+    --light-r: -10%;
+  }
+}
+
+@keyframes cinematic-light-bloom {
+  0% {
+    --bloom: 0.18;
+  }
+  14% {
+    --bloom: 0.72;
+  }
+  33.33% {
+    --bloom: 0.08;
+  }
+  36.11% {
+    --bloom: 0;
+  }
+  52% {
+    --bloom: 0.78;
+  }
+  69.44% {
+    --bloom: 0.2;
+  }
+  100% {
+    --bloom: 0.15;
+  }
+}
+
+.cinematic-hero-vignette--text {
+  background:
+    linear-gradient(to right, rgba(16, 12, 14, 0.58) 0%, transparent 50%),
+    linear-gradient(to top, rgba(8, 8, 12, 0.26) 0%, transparent 36%);
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cinematic-hero-day-sweep {
+    animation: none;
+    --light-r: 78%;
+  }
+
+  .cinematic-hero-light-bloom {
+    animation: none;
+    --bloom: 0;
+  }
+}
+
+@media (max-width: 640px) {
+  .cinematic-hero-day-sweep {
+    -webkit-mask-image: radial-gradient(
+      ellipse 190% 130% at 88% 12%,
+      #000 0%,
+      #000 var(--light-r),
+      transparent calc(var(--light-r) + 16%)
+    );
+    mask-image: radial-gradient(
+      ellipse 190% 130% at 88% 12%,
+      #000 0%,
+      #000 var(--light-r),
+      transparent calc(var(--light-r) + 16%)
+    );
+  }
+}

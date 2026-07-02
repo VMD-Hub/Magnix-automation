@@ -1,0 +1,205 @@
+# Reset VPS & deploy HouseX — timnhaxahoi.com
+
+VPS IP hiện tại (DNS iNET): **103.72.99.131** — giữ nguyên record `@` và `www` trỏ A về IP này.
+
+Brand: **HouseX** · Domain: **timnhaxahoi.com**
+
+---
+
+## 0. DNS iNET — giữ / xóa gì
+
+| Record | Hành động |
+|--------|-----------|
+| `@` A → `103.72.99.131` | **Giữ** |
+| `www` A → `103.72.99.131` | **Giữ** |
+| `api` A → `103.72.99.131` | **Xóa** (HouseX dùng `/api/*` trên domain chính) |
+| `dangky` A → `103.72.99.131` | **Xóa** (route mới: `/dang-ky`, `/dang-ky/khach-hang`) |
+| `@` MX, SPF TXT, DKIM, `mail` A | **Giữ** nếu vẫn dùng hộp thư iNET cho `hotro@` |
+
+Không cần trỏ sang Vercel.
+
+---
+
+## 1. Reset VPS (SSH vào server)
+
+```bash
+# Dừng dịch vụ cũ
+sudo systemctl stop nginx apache2 php*-fpm mysql mariadb 2>/dev/null || true
+docker stop $(docker ps -aq) 2>/dev/null || true
+docker rm $(docker ps -aq) 2>/dev/null || true
+
+# Xóa site / app cũ (không có dữ liệu quan trọng)
+sudo rm -rf /var/www/* ~/apps/* ~/www/*
+
+# Dọn config nginx/apache cũ (tuỳ distro)
+sudo rm -f /etc/nginx/sites-enabled/* /etc/nginx/sites-available/default
+```
+
+Cài stack mới (Ubuntu/Debian):
+
+```bash
+sudo apt update && sudo apt upgrade -y
+sudo apt install -y git curl nginx certbot python3-certbot-nginx
+
+# Node 20 LTS
+curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+sudo apt install -y nodejs
+
+# Docker
+curl -fsSL https://get.docker.com | sudo sh
+sudo usermod -aG docker $USER
+# logout/login lại để dùng docker không cần sudo
+
+# PM2
+sudo npm install -g pm2
+```
+
+---
+
+## 2. Clone & cấu hình app
+
+```bash
+sudo mkdir -p /opt/housex
+sudo chown $USER:$USER /opt/housex
+git clone <URL_REPO> /opt/housex
+cd /opt/housex/Proptech-HouseX   # nếu monorepo Magnix
+
+cp .env.example .env
+nano .env
+```
+
+**`.env` production tối thiểu:**
+
+```env
+DATABASE_URL="postgresql://housex:YOUR_DB_PASS@127.0.0.1:5432/housex?schema=public"
+REDIS_URL="redis://127.0.0.1:6379"
+NEXT_PUBLIC_SITE_URL="https://timnhaxahoi.com"
+NEXT_PUBLIC_SUPPORT_EMAIL="hotro@timnhaxahoi.com"
+
+AUTH_SECRET="<openssl rand -base64 32>"
+ADMIN_SECRET="<openssl rand -base64 32>"
+CRON_SECRET="<openssl rand -base64 32>"
+
+SCRAPE_GUARD_ENABLED="true"
+MEDIA_PROVIDER="stub"
+
+# Email — Resend hoặc n8n webhook (xem DEPLOY_TIMNHAXAHOI.md)
+# RESEND_API_KEY=""
+# EMAIL_FROM="HouseX <noreply@timnhaxahoi.com>"
+```
+
+**Postgres + Redis:**
+
+```bash
+echo "POSTGRES_PASSWORD=YOUR_DB_PASS" > .env.prod
+docker compose -f docker-compose.prod.yml --env-file .env.prod up -d
+docker compose -f docker-compose.prod.yml ps
+```
+
+**Build app:**
+
+```bash
+npm ci
+npm run db:deploy          # migration trong prisma/migrations/
+# npm run db:seed         # chỉ staging/demo — bỏ qua prod nếu không cần dữ liệu mẫu
+npm run build
+pm2 start npm --name housex -- start
+pm2 save
+pm2 startup              # chạy lệnh sudo mà PM2 in ra
+```
+
+App lắng nghe **port 3000** (localhost).
+
+---
+
+## 3. Nginx + SSL
+
+```bash
+sudo tee /etc/nginx/sites-available/timnhaxahoi.com <<'EOF'
+server {
+    listen 80;
+    server_name timnhaxahoi.com www.timnhaxahoi.com;
+
+    location / {
+        proxy_pass http://127.0.0.1:3000;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+    }
+}
+EOF
+
+sudo ln -sf /etc/nginx/sites-available/timnhaxahoi.com /etc/nginx/sites-enabled/
+sudo nginx -t && sudo systemctl reload nginx
+sudo certbot --nginx -d timnhaxahoi.com -d www.timnhaxahoi.com
+```
+
+Chọn redirect **www → non-www** (hoặc ngược lại) khi certbot hỏi — khớp `NEXT_PUBLIC_SITE_URL`.
+
+---
+
+## 4. Cron (tuỳ chọn)
+
+```bash
+crontab -e
+```
+
+```cron
+# Hết hạn tin đăng — mỗi giờ
+0 * * * * curl -fsS -H "Authorization: Bearer YOUR_CRON_SECRET" https://timnhaxahoi.com/api/cron/expire-listings >/dev/null
+```
+
+---
+
+## 5. Smoke test
+
+```bash
+export SITE=https://timnhaxahoi.com
+curl -sI "$SITE" | head -5
+curl -s "$SITE/mua-ban" | grep -i "Mua bán"
+curl -s "$SITE/robots.txt"
+curl -s "$SITE/sitemap.xml" | head -10
+```
+
+Trình duyệt: `/du-an`, đăng ký khách, `/admin/ctv`.
+
+---
+
+## 6. Cập nhật phiên bản sau này
+
+```bash
+cd /opt/housex/Proptech-HouseX
+git pull
+npm ci
+npm run db:deploy    # hoặc db:push chỉ khi dev local
+npm run build
+pm2 restart housex
+```
+
+---
+
+## 7. Backup (nên bật sau go-live)
+
+Postgres volume Docker — backup hàng ngày:
+
+```bash
+docker exec housex-postgres pg_dump -U housex housex | gzip > ~/backup/housex-$(date +%F).sql.gz
+```
+
+Hoặc sync JSONL lead lên Google Drive (Magnix) — không coi VPS là store duy nhất cho lead quan trọng.
+
+---
+
+## Kiến trúc trên VPS
+
+```
+Internet → nginx:443 → PM2 (Next.js :3000)
+                              ↓
+                    Postgres + Redis (Docker, localhost only)
+```
+
+Email nhận: iNET MX · Email gửi hệ thống: Resend/n8n (thêm record DNS khi bật).
