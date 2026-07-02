@@ -1,5 +1,13 @@
 import type { ListingCardData } from "@/components/listings/listing-card";
+import type { ListingDetail } from "@/lib/data/listing";
 import { HOUSEX_RIVERSIDE_DEMO_IMAGES } from "@/lib/content/project-landing-demo-images";
+import {
+  Prisma,
+  type BrokerType,
+  type ListingStatus,
+  type ListingTier,
+  type TransactionType,
+} from "@prisma/client";
 
 function u(photoId: string) {
   return `https://images.unsplash.com/${photoId}?w=1200&h=900&fit=crop&q=80&auto=format`;
@@ -63,7 +71,7 @@ export function getDemoListingCard(code: string): ListingCardData | null {
 }
 
 /** Chi tiết tin demo — đủ field cho trang /tin-dang/[code]. */
-export function buildDemoListingDetail(code: string) {
+export function buildDemoListingDetail(code: string): ListingDetail | null {
   const card = getDemoListingCard(code);
   if (!card) return null;
 
@@ -73,9 +81,9 @@ export function buildDemoListingDetail(code: string) {
     id: `demo-${code}`,
     code: card.code,
     title: card.title ?? null,
-    transactionType: card.transactionType,
+    transactionType: card.transactionType as TransactionType,
     propertyType: card.propertyType,
-    price,
+    price: new Prisma.Decimal(price),
     area: card.area ?? null,
     province: card.province,
     district: card.district,
@@ -90,8 +98,8 @@ export function buildDemoListingDetail(code: string) {
         : card.code === "HX-DEMO-S002"
           ? "Nhà phố 1 trệt 2 lầu, hẻm xe hơi, gần chợ. Tin minh hoạ — dữ liệu mẫu trước go-live."
           : "Căn hộ 1 phòng ngủ, phù hợp an cư hoặc cho thuê. Tin minh hoạ HouseX.",
-    status: "ACTIVE",
-    tier: card.verified ? "VIP" : "FREE",
+    status: "ACTIVE" as ListingStatus,
+    tier: (card.verified ? "VIP" : "FREE") as ListingTier,
     verified: card.verified ?? false,
     verifiedAt: card.verified ? new Date() : null,
     hasVideo: false,
@@ -100,7 +108,7 @@ export function buildDemoListingDetail(code: string) {
       id: "demo-broker",
       fullName: "HouseX Demo Broker",
       phone: "0900000000",
-      brokerType: "CTV",
+      brokerType: "CTV" as BrokerType,
       licenseVerified: true,
       rating: null,
     },
@@ -110,7 +118,7 @@ export function buildDemoListingDetail(code: string) {
       ? [{ url: card.imageUrl, type: "image", status: "READY", position: 0 }]
       : [],
     fingerprint: null,
-  };
+  } as unknown as ListingDetail;
 }
 
 export function isDemoListingCode(code: string): boolean {

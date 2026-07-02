@@ -1,3 +1,4 @@
+import type { ListingDetail } from "@/lib/data/listing";
 import { prisma } from "@/lib/prisma";
 import type { ListingCardData } from "@/components/listings/listing-card";
 import type { TransactionType } from "@prisma/client";
@@ -150,7 +151,9 @@ export async function browseListings(
 }
 
 /** Chi tiết tin — DB trước, catalog demo. */
-export async function getPublicListingByCode(code: string) {
+export async function getPublicListingByCode(
+  code: string,
+): Promise<ListingDetail | null> {
   try {
     const fromDb = await getListingByCode(code);
     if (fromDb) return fromDb;
