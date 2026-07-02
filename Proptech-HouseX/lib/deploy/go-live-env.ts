@@ -41,7 +41,8 @@ export function checkGoLiveEnv(): EnvCheck[] {
     ok:
       has("DATABASE_URL") &&
       !process.env.DATABASE_URL!.includes("postgres:postgres@") &&
-      !process.env.DATABASE_URL!.includes("CHANGE_ME"),
+      !process.env.DATABASE_URL!.includes("CHANGE_ME") &&
+      !process.env.DATABASE_URL!.includes("THAY_BANG"),
     level: "required",
     message: "Postgres production (đổi mật khẩu mặc định / CHANGE_ME)",
   });

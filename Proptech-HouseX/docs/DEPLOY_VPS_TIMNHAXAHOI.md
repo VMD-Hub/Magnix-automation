@@ -167,6 +167,28 @@ curl -s "$SITE/sitemap.xml" | head -10
 
 Trình duyệt: `/du-an`, đăng ký khách, `/admin/ctv`.
 
+### Landing Vinhomes / commercial — smoke 7 URL `/du-an/*`
+
+Seed ghi vào Postgres; **PM2 đọc env khác seed CLI** nếu có `.env.production`:
+
+```bash
+npm run db:deploy
+npm run db:seed:vinhomes
+npm run db:seed:commercial
+npm run db:verify:landings          # 7/7 slug trong DB (đọc .env.production merge)
+npm run go-live:check-env-files     # .env vs .env.production — phải ✔
+
+# Nếu fail: thường do .env.production còn CHANGE_ME
+grep DATABASE_URL .env .env.production 2>/dev/null
+# Sửa .env.production cho khớp .env HOẶC: rm .env.production
+
+pm2 restart housex --update-env
+curl -s "https://timnhaxahoi.com/api/projects/vinhomes-saigon-park-hoc-mon" | head -c 200
+# Phải thấy "data" + "Vinhomes Saigon Park", không phải INTERNAL_ERROR
+
+SITE=https://timnhaxahoi.com npm run go-live:smoke
+```
+
 ---
 
 ## 6. Cập nhật phiên bản sau này
@@ -177,7 +199,8 @@ git pull
 npm ci
 npm run db:deploy    # hoặc db:push chỉ khi dev local
 npm run build
-pm2 restart housex
+npm run go-live:check-env-files   # bắt .env.production ghi đè DATABASE_URL
+pm2 restart housex --update-env
 ```
 
 ---
