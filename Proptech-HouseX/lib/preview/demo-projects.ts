@@ -5,6 +5,7 @@ import {
   parseProjectOverview,
   resolveLandingHeroImage,
 } from "@/lib/content/project-landing";
+import { ensureNoxhLandingMedia } from "@/lib/content/noxh-stock-images";
 import { ensureCatalogCoverUrl } from "@/lib/content/catalog-cover-fallback";
 import {
   buildDtaHappyHomeMock,
@@ -211,7 +212,11 @@ export function getDemoListingsForSlug(
 
 function projectToCard(project: ProjectDetail): ProjectCardData {
   const overview = parseProjectOverview(project.overviewData);
-  const hero = resolveLandingHeroImage(overview.landing, project.name);
+  const landing =
+    overview.landing && project.projectType === "NHA_O_XA_HOI"
+      ? ensureNoxhLandingMedia(overview.landing, project.slug)
+      : overview.landing;
+  const hero = resolveLandingHeroImage(landing, project.name);
   const minPrice = project.unitTypes.reduce<number | null>((min, u) => {
     if (u.priceFrom == null) return min;
     const p = Number(u.priceFrom.toString());

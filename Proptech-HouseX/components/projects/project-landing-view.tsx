@@ -1,6 +1,8 @@
 import Link from "next/link";
 import type { ProjectDetail } from "@/lib/data/project";
 import { parseProjectOverview, resolveLandingHeroImage } from "@/lib/content/project-landing";
+import { ensureNoxhLandingMedia } from "@/lib/content/noxh-stock-images";
+import { NOXH_REGION_TAGLINE } from "@/lib/content/messaging/noxh-public";
 import { ProjectLocationSection } from "@/components/projects/project-location-section";
 import { getProjectMarketplaceListings } from "@/lib/data/listing";
 import type { ProjectLandingListingCard } from "@/lib/data/listing";
@@ -71,8 +73,13 @@ export function ProjectLandingContent({
   inventory?: ProjectInventoryPageData | null;
   inventoryFilters?: ProjectInventoryPageFilters;
 }) {
+  const isNoxh = project.projectType === "NHA_O_XA_HOI";
   const overview = parseProjectOverview(project.overviewData);
-  const landing = overview.landing;
+  const landingRaw = overview.landing;
+  const landing =
+    landingRaw && isNoxh
+      ? ensureNoxhLandingMedia(landingRaw, project.slug)
+      : landingRaw;
 
   const stats: { label: string; value: string }[] = [];
   if (overview.totalUnits != null)
@@ -101,7 +108,6 @@ export function ProjectLandingContent({
       ? buildFaqJsonLd(landing.faqs)
       : null;
 
-  const isNoxh = project.projectType === "NHA_O_XA_HOI";
   const heroImage = resolveLandingHeroImage(landing, project.name);
   const minUnitPrice = project.unitTypes.reduce<number | null>((min, u) => {
     if (u.priceFrom == null) return min;
@@ -197,6 +203,11 @@ export function ProjectLandingContent({
           </div>
 
           <div className="mt-6 max-w-3xl">
+            {isNoxh && (
+              <p className="mb-3 text-sm font-semibold uppercase tracking-[0.12em] text-emerald-200/95 sm:text-base">
+                {NOXH_REGION_TAGLINE}
+              </p>
+            )}
             <h1 className="lux-hero-title text-3xl font-bold tracking-tight drop-shadow-sm sm:text-4xl lg:text-5xl lg:leading-[1.1]">
               {project.name}
             </h1>

@@ -2,6 +2,10 @@ import {
   PROJECT_CATALOG_BANNERS,
   type ProjectCatalogBannerVariant,
 } from "@/lib/brand/project-catalog-banners";
+import {
+  NOXH_CATALOG_BANNER_ALT,
+  NOXH_REGION_TAGLINE,
+} from "@/lib/content/messaging/noxh-public";
 
 type Props = {
   variant: ProjectCatalogBannerVariant;
@@ -31,7 +35,7 @@ export function ProjectCatalogBanner({ variant }: Props) {
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={banner.jpgMd}
-            alt={banner.alt}
+            alt={variant === "NHA_O_XA_HOI" ? NOXH_CATALOG_BANNER_ALT : banner.alt}
             fetchPriority="high"
             className="absolute inset-0 h-full w-full object-cover"
             style={{ objectPosition: banner.objectPosition }}
@@ -45,7 +49,12 @@ export function ProjectCatalogBanner({ variant }: Props) {
           className="absolute inset-0 bg-gradient-to-t from-ink-900/55 via-transparent to-ink-900/10"
           aria-hidden
         />
-        <div className="absolute inset-0 flex items-end px-5 pb-5 sm:px-7 sm:pb-6">
+        <div className="absolute inset-0 flex flex-col justify-end px-5 pb-5 sm:px-7 sm:pb-6">
+          {variant === "NHA_O_XA_HOI" && (
+            <p className="mb-2 max-w-2xl text-sm font-medium text-emerald-100/95 sm:text-base">
+              {NOXH_REGION_TAGLINE}
+            </p>
+          )}
           <h1 className="lux-hero-title max-w-2xl text-2xl font-extrabold tracking-tight text-white drop-shadow-sm sm:text-3xl">
             {banner.title}
           </h1>

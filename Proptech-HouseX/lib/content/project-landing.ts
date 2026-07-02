@@ -122,14 +122,33 @@ export function parseProjectOverview(raw: unknown): ProjectOverview {
   if (!raw || typeof raw !== "object" || Array.isArray(raw)) {
     return {};
   }
+
+  const rawLanding = (raw as { landing?: unknown }).landing;
+  const landingParsed = rawLanding
+    ? projectLandingSchema.safeParse(rawLanding)
+    : null;
+  const landing = landingParsed?.success ? landingParsed.data : undefined;
+
   const parsed = projectOverviewSchema.safeParse(raw);
-  if (!parsed.success) return {};
+  if (!parsed.success) {
+    const partial = raw as Record<string, unknown>;
+    return {
+      ...(typeof partial.totalUnits === "number"
+        ? { totalUnits: partial.totalUnits }
+        : {}),
+      ...(typeof partial.blocks === "number" && partial.blocks > 0
+        ? { blocks: partial.blocks }
+        : {}),
+      ...(landing ? { landing } : {}),
+    };
+  }
+
   const data = parsed.data;
   if (data.landing) {
-    const landing = projectLandingSchema.safeParse(data.landing);
-    return { ...data, landing: landing.success ? landing.data : undefined };
+    const nested = projectLandingSchema.safeParse(data.landing);
+    return { ...data, landing: nested.success ? nested.data : landing };
   }
-  return data;
+  return landing ? { ...data, landing } : data;
 }
 
 export function parseProjectLanding(raw: unknown): ProjectLanding | null {

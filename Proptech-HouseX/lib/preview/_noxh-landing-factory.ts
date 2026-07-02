@@ -6,6 +6,7 @@ import {
   type ProjectLanding,
 } from "@/lib/content/project-landing";
 import { attachHousexNoxhServices } from "@/lib/content/noxh-editorial";
+import { ensureNoxhLandingMedia } from "@/lib/content/noxh-stock-images";
 
 const NOW = new Date("2026-06-29T00:00:00.000Z");
 
@@ -62,14 +63,17 @@ function buildLanding(def: NoxhLandingDef): ProjectLanding {
   landing.amenities = def.amenities;
   landing.faqs = def.faqs;
   landing.gallery = def.gallery.map((g) => ({ url: g.url, caption: g.caption }));
-  return attachHousexNoxhServices(landing);
+  return ensureNoxhLandingMedia(
+    attachHousexNoxhServices(landing),
+    def.slug,
+  );
 }
 
 export function buildNoxhMock(def: NoxhLandingDef): ProjectDetail {
   const landing = buildLanding(def);
   const overviewData = buildOverviewData(null, {
     totalUnits: def.totalUnits,
-    blocks: def.blocks,
+    ...(def.blocks != null && def.blocks > 0 ? { blocks: def.blocks } : {}),
     landing,
   });
 

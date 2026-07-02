@@ -1,4 +1,5 @@
 import { HOUSEX_HERO_SLIDES } from "@/lib/brand/hero-assets";
+import { NOXH_CATALOG_TITLE } from "@/lib/content/messaging/noxh-public";
 
 export type ProjectCatalogBannerVariant = "all" | "THUONG_MAI" | "NHA_O_XA_HOI";
 
@@ -38,8 +39,8 @@ export const PROJECT_CATALOG_BANNERS: Record<
     objectPosition: civic.objectPosition,
   },
   NHA_O_XA_HOI: {
-    title: "Nhà ở xã hội (NOXH)",
-    alt: "Khu đô thị — danh mục dự án nhà ở xã hội HouseX",
+    title: NOXH_CATALOG_TITLE,
+    alt: "Khu căn hộ nhà ở xã hội — danh mục dự án miền Nam trên HouseX",
     jpg: civic.jpg,
     webp: civic.webp,
     jpgMd: civic.jpgMd,

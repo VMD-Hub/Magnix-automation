@@ -4,6 +4,11 @@ import { DemoCatalogBanner } from "@/components/projects/demo-catalog-banner";
 import { ProjectCard } from "@/components/projects/project-card";
 import { ProjectCatalogBanner } from "@/components/projects/project-catalog-banner";
 import { projectCatalogBannerVariant } from "@/lib/brand/project-catalog-banners";
+import {
+  NOXH_CATALOG_SEO_DESCRIPTION,
+  NOXH_CATALOG_SEO_TITLE,
+  NOXH_CATALOG_TITLE,
+} from "@/lib/content/messaging/noxh-public";
 import { listProjects } from "@/lib/data/project-list";
 import { PROJECT_TYPE_LABEL } from "@/lib/format";
 import { cn } from "@/lib/ui/cn";
@@ -25,12 +30,12 @@ export async function generateMetadata({
   const isNoxh = sp.projectType === "NHA_O_XA_HOI";
   const isCommercial = sp.projectType === "THUONG_MAI";
   const title = isNoxh
-    ? "Dự án nhà ở xã hội (NOXH)"
+    ? NOXH_CATALOG_SEO_TITLE
     : isCommercial
       ? "Dự án thương mại"
       : "Dự án bất động sản";
   const description = isNoxh
-    ? "Danh sách dự án NOXH tại TP.HCM và các tỉnh thành."
+    ? NOXH_CATALOG_SEO_DESCRIPTION
     : isCommercial
       ? "Khám phá dự án thương mại mới tại TP.HCM và các tỉnh thành."
       : "Danh mục dự án thương mại và NOXH trên HouseX.";
