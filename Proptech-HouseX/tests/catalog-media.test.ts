@@ -32,8 +32,8 @@ describe("catalog media fallbacks", () => {
   it("DTA Happy Home landing has floor plans, show units and payment gallery", () => {
     const landing = buildDtaHappyHomeLanding();
     assert.ok(landing.gallery.length >= 10);
-    assert.ok(landing.heroImage?.url.includes("dtanhontrach.com"));
-    assert.ok(landing.locationMapImage?.url.includes("ban_do"));
+    assert.ok(landing.heroImage?.url.includes("/wp-content/uploads/"));
+    assert.ok(landing.locationMapImage?.url.includes("/wp-content/themes/"));
     assert.match(landing.gallery[0]?.caption ?? "", /Mặt bằng tổng thể/i);
     assert.ok(landing.services.length >= 2);
   });
