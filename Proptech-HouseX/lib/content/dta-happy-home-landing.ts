@@ -92,7 +92,7 @@ export function buildDtaHappyHomeLanding(): ProjectLanding {
     },
     {
       q: "Tiến độ bàn giao DTA Happy Home?",
-      a: "Đã bàn giao 4 block (560 căn); tiếp tục triển khai thêm khoảng 1.600 căn trong tổng 2.192 căn, 16 block cao 5 tầng.",
+      a: "Đã bàn giao 4 block (560 căn); các suất Block A10 và giai đoạn tiếp theo bàn giao dự kiến Quý IV/2027 theo tiến độ CĐT.",
     },
     {
       q: "Diện tích và mặt bằng căn hộ?",

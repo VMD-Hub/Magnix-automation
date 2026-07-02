@@ -9,8 +9,8 @@ import { ensureNoxhLandingMedia } from "@/lib/content/noxh-stock-images";
 import { ensureCatalogCoverUrl } from "@/lib/content/catalog-cover-fallback";
 import {
   buildDtaHappyHomeMock,
-  buildDtaPreviewListings,
 } from "@/lib/preview/dta-happy-home-mock";
+import { buildDtaPreviewListings } from "@/lib/preview/dta-happy-home-listings";
 import {
   buildSolenaGreenTownMock,
   buildSolenaPreviewListings,

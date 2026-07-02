@@ -1,8 +1,6 @@
 import type { ProjectDetail } from "@/lib/data/project";
-import type { ProjectLandingListingCard } from "@/lib/data/listing";
 import {
   DTA_HAPPY_HOME_IMAGES,
-  DTA_HAPPY_HOME_DEMO_IMAGES,
 } from "@/lib/content/dta-happy-home-images";
 import {
   buildDtaHappyHomeOverviewData,
@@ -11,6 +9,9 @@ import {
   DTA_HAPPY_HOME_SLUG,
   DTA_PROJECT_DESCRIPTION,
 } from "@/lib/content/dta-happy-home-landing";
+import { DTA_HAPPY_HOME_HANDOVER_LABEL } from "@/lib/content/dta-happy-home-inventory-a10";
+
+export { buildDtaPreviewListings } from "@/lib/preview/dta-happy-home-listings";
 
 const NOW = new Date("2026-03-29T00:00:00.000Z");
 
@@ -34,12 +35,12 @@ export function buildDtaHappyHomeMock(): ProjectDetail {
     lng: 106.934,
     totalArea: 5.143,
     density: 38,
-    handoverDate: new Date("2026-03-31"),
+    handoverDate: new Date("2027-12-31"),
     overviewData,
     description: DTA_PROJECT_DESCRIPTION,
     seoTitle: "DTA Happy Home Nhơn Trạch — Nhà ở xã hội từ 448 triệu",
     seoDesc:
-      "Nhà ở xã hội Happy Home DTA Nhơn Trạch: 2.192 căn, mặt bằng & nhà mẫu, giá 448–700 triệu/căn. Hỗ trợ vay 70%.",
+      `Nhà ở xã hội Happy Home DTA Nhơn Trạch: 2.192 căn, mặt bằng & nhà mẫu, giá 448–700 triệu/căn. Bàn giao ${DTA_HAPPY_HOME_HANDOVER_LABEL}. Hỗ trợ vay 70%.`,
     deletedAt: null,
     createdAt: NOW,
     updatedAt: NOW,
@@ -127,31 +128,4 @@ export function buildDtaHappyHomeMock(): ProjectDetail {
       },
     ],
   } as unknown as ProjectDetail;
-}
-
-/** Tin ký gửi mẫu — chỉ hiển thị trên trang preview. */
-export function buildDtaPreviewListings(): ProjectLandingListingCard[] {
-  const show = DTA_HAPPY_HOME_DEMO_IMAGES.gallery;
-  return [
-    {
-      id: "preview-listing-1",
-      code: "MX-PREVIEW01",
-      transactionType: "SALE",
-      propertyType: "can_ho",
-      price: 520_000_000,
-      tier: "FREE",
-      broker: { fullName: "Nguyễn Văn A — CTV HouseX" },
-      media: [{ url: show[4]?.url ?? show[0].url }],
-    },
-    {
-      id: "preview-listing-2",
-      code: "MX-PREVIEW02",
-      transactionType: "SALE",
-      propertyType: "can_ho",
-      price: 448_000_000,
-      tier: "VIP",
-      broker: { fullName: "Trần Thị B — Môi giới" },
-      media: [{ url: show[3]?.url ?? show[0].url }],
-    },
-  ];
 }

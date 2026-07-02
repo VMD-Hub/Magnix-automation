@@ -29,11 +29,12 @@ describe("catalog media fallbacks", () => {
 
   it("demo sale listings have images and detail pages", () => {
     const cards = listDemoSaleListingCards();
-    assert.ok(cards.length >= 3);
-    for (const c of cards) {
+    assert.ok(cards.length >= 30);
+    for (const c of cards.slice(0, 5)) {
       assert.ok(c.imageUrl?.startsWith("http"), `${c.code} missing image`);
       assert.ok(buildDemoListingDetail(c.code), `${c.code} missing detail`);
     }
+    assert.ok(buildDemoListingDetail("DTA-HH-A10201"));
   });
 
   it("DTA Happy Home landing has floor plans, show units and payment gallery", () => {

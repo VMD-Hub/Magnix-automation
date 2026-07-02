@@ -2,6 +2,11 @@ import type { ListingCardData } from "@/components/listings/listing-card";
 import type { ListingDetail } from "@/lib/data/listing";
 import { HOUSEX_RIVERSIDE_DEMO_IMAGES } from "@/lib/content/project-landing-demo-images";
 import {
+  buildDtaHappyHomeListingDetail,
+  isDtaHappyHomeListingCode,
+  listDtaHappyHomeListingCards,
+} from "@/lib/preview/dta-happy-home-listings";
+import {
   Prisma,
   type BrokerType,
   type ListingStatus,
@@ -63,15 +68,22 @@ export const DEMO_SALE_LISTING_CARDS: ListingCardData[] = [
 ];
 
 export function listDemoSaleListingCards(): ListingCardData[] {
-  return DEMO_SALE_LISTING_CARDS;
+  return [...DEMO_SALE_LISTING_CARDS, ...listDtaHappyHomeListingCards()];
 }
 
 export function getDemoListingCard(code: string): ListingCardData | null {
+  if (isDtaHappyHomeListingCode(code)) {
+    return listDtaHappyHomeListingCards().find((l) => l.code === code) ?? null;
+  }
   return DEMO_SALE_LISTING_CARDS.find((l) => l.code === code) ?? null;
 }
 
 /** Chi tiết tin demo — đủ field cho trang /tin-dang/[code]. */
 export function buildDemoListingDetail(code: string): ListingDetail | null {
+  if (isDtaHappyHomeListingCode(code)) {
+    return buildDtaHappyHomeListingDetail(code);
+  }
+
   const card = getDemoListingCard(code);
   if (!card) return null;
 
@@ -122,5 +134,5 @@ export function buildDemoListingDetail(code: string): ListingDetail | null {
 }
 
 export function isDemoListingCode(code: string): boolean {
-  return code.startsWith("HX-DEMO-");
+  return code.startsWith("HX-DEMO-") || isDtaHappyHomeListingCode(code);
 }
