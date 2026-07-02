@@ -21,6 +21,36 @@ const articleCardInclude = {
   },
 } as const;
 
+/** Lấy toàn bộ catalog demo để merge với DB (bài editorial chưa seed). */
+const DEMO_CATALOG_PAGE_SIZE = 200;
+
+function sortArticleCards(items: ArticleCardData[]): ArticleCardData[] {
+  return [...items].sort(
+    (a, b) =>
+      (b.publishedAt?.getTime() ?? 0) - (a.publishedAt?.getTime() ?? 0),
+  );
+}
+
+function paginateArticleCards(
+  items: ArticleCardData[],
+  page: number,
+  pageSize: number,
+): { items: ArticleCardData[]; total: number } {
+  const total = items.length;
+  const start = (page - 1) * pageSize;
+  return { items: items.slice(start, start + pageSize), total };
+}
+
+/** DB ưu tiên cùng slug; demo bổ sung bài chưa có trên Postgres. */
+function mergeArticleCards(
+  dbItems: ArticleCardData[],
+  demoItems: ArticleCardData[],
+): ArticleCardData[] {
+  const bySlug = new Map(demoItems.map((a) => [a.slug, a]));
+  for (const a of dbItems) bySlug.set(a.slug, a);
+  return sortArticleCards([...bySlug.values()]);
+}
+
 function mapToCard(row: {
   id: string;
   slug: string;
@@ -90,22 +120,30 @@ export async function listPublishedArticles(params: {
         : {}),
     };
 
-    const [total, rows] = await Promise.all([
-      prisma.article.count({ where }),
+    const [rows, demoAll] = await Promise.all([
       prisma.article.findMany({
         where,
         include: articleCardInclude,
         orderBy: { publishedAt: "desc" },
-        skip: (page - 1) * pageSize,
-        take: pageSize,
       }),
+      Promise.resolve(
+        listDemoArticleCards({
+          ...params,
+          page: 1,
+          pageSize: DEMO_CATALOG_PAGE_SIZE,
+        }),
+      ),
     ]);
 
-    if (total > 0) {
+    const merged = mergeArticleCards(
+      rows.map(mapToCard),
+      demoAll.items,
+    );
+    if (merged.length > 0) {
+      const paged = paginateArticleCards(merged, page, pageSize);
       return {
-        items: rows.map(mapToCard),
-        total,
-        source: "db",
+        ...paged,
+        source: rows.length > 0 ? "db" : "demo",
       };
     }
   } catch {
@@ -144,14 +182,14 @@ export async function getArticlesForProjectSlug(
       },
       include: articleCardInclude,
       orderBy: { publishedAt: "desc" },
-      take: limit,
     });
-    if (rows.length > 0) {
-      return orderProjectRelatedArticles(
-        projectSlug,
-        rows.map(mapToCard),
-        limit,
-      );
+    const demoItems = getDemoArticlesForProject(
+      projectSlug,
+      DEMO_CATALOG_PAGE_SIZE,
+    );
+    const merged = mergeArticleCards(rows.map(mapToCard), demoItems);
+    if (merged.length > 0) {
+      return orderProjectRelatedArticles(projectSlug, merged, limit);
     }
   } catch {
     // demo
@@ -166,54 +204,52 @@ export async function getArticlesForProjectSlug(
 export async function getPublishedTagBySlug(
   slug: string,
 ): Promise<ArticleTagSummary | null> {
-  try {
-    const tag = await prisma.articleTag.findUnique({ where: { slug } });
-    if (tag) {
-      const articleCount = await prisma.article.count({
-        where: {
-          status: "PUBLISHED",
-          tags: { some: { tagId: tag.id } },
-        },
-      });
-      return {
-        slug: tag.slug,
-        name: tag.name,
-        description: tag.description,
-        articleCount,
-      };
-    }
-  } catch {
-    // demo
-  }
+  const tags = await listPublishedTags();
+  const found = tags.find((t) => t.slug === slug);
+  if (found) return found;
   return getDemoTagBySlug(slug);
 }
 
 export async function listPublishedTags(): Promise<ArticleTagSummary[]> {
   try {
-    const tags = await prisma.articleTag.findMany({
-      orderBy: { name: "asc" },
-    });
-    if (tags.length === 0) return listDemoTags();
-
-    const counts = await Promise.all(
-      tags.map(async (t) => ({
-        ...t,
-        articleCount: await prisma.article.count({
-          where: {
-            status: "PUBLISHED",
-            tags: { some: { tagId: t.id } },
-          },
-        }),
-      })),
+    const [rows, demoAll] = await Promise.all([
+      prisma.article.findMany({
+        where: { status: "PUBLISHED" },
+        include: articleCardInclude,
+      }),
+      Promise.resolve(
+        listDemoArticleCards({ page: 1, pageSize: DEMO_CATALOG_PAGE_SIZE }),
+      ),
+    ]);
+    const merged = mergeArticleCards(
+      rows.map(mapToCard),
+      demoAll.items,
     );
-    return counts
+    if (merged.length === 0) return listDemoTags();
+
+    const demoTagMeta = new Map(listDemoTags().map((t) => [t.slug, t]));
+    const counts = new Map<string, ArticleTagSummary>();
+
+    for (const article of merged) {
+      for (const tag of article.tags) {
+        const existing = counts.get(tag.slug);
+        if (existing) {
+          existing.articleCount += 1;
+          continue;
+        }
+        const meta = demoTagMeta.get(tag.slug);
+        counts.set(tag.slug, {
+          slug: tag.slug,
+          name: tag.name,
+          description: meta?.description ?? null,
+          articleCount: 1,
+        });
+      }
+    }
+
+    return [...counts.values()]
       .filter((t) => t.articleCount > 0)
-      .map((t) => ({
-        slug: t.slug,
-        name: t.name,
-        description: t.description,
-        articleCount: t.articleCount,
-      }));
+      .sort((a, b) => a.name.localeCompare(b.name, "vi"));
   } catch {
     return listDemoTags();
   }

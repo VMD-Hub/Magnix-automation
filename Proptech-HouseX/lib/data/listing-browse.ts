@@ -1,4 +1,4 @@
-import type { ListingDetail } from "@/lib/data/listing";
+import type { ListingDetail, PublicListingDetail } from "@/lib/data/listing";
 import { prisma } from "@/lib/prisma";
 import type { ListingCardData } from "@/components/listings/listing-card";
 import type { TransactionType } from "@prisma/client";
@@ -157,16 +157,14 @@ export async function browseListings(
   };
 }
 
-type ListingWithEditorialTitle = ListingDetail & {
-  title?: string | null;
-};
+type ListingWithEditorialTitle = PublicListingDetail;
 
 function mergeDtaEditorialCopy(
   fromDb: ListingDetail,
   code: string,
 ): ListingWithEditorialTitle {
-  const demo = buildDtaHappyHomeListingDetail(code);
-  if (!demo) return fromDb;
+  const demo: PublicListingDetail | null = buildDtaHappyHomeListingDetail(code);
+  if (!demo?.title) return fromDb;
   return {
     ...fromDb,
     title: demo.title,
@@ -190,7 +188,7 @@ export async function getPublicListingByCode(
     // Postgres offline
   }
 
-  return buildDemoListingDetail(code) as ListingWithEditorialTitle | null;
+  return buildDemoListingDetail(code) as PublicListingDetail | null;
 }
 
-export type { ListingDetail } from "@/lib/data/listing";
+export type { ListingDetail, PublicListingDetail } from "@/lib/data/listing";

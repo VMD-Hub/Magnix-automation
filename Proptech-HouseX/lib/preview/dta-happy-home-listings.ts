@@ -1,5 +1,5 @@
 import type { ListingCardData } from "@/components/listings/listing-card";
-import type { ListingDetail } from "@/lib/data/listing";
+import type { ListingDetail, PublicListingDetail } from "@/lib/data/listing";
 import type { ProjectLandingListingCard } from "@/lib/data/listing";
 import { dtaHappyHomeGallery } from "@/lib/content/dta-happy-home-images";
 import {
@@ -59,7 +59,9 @@ export function isDtaHappyHomeListingCode(code: string): boolean {
 }
 
 /** Chi tiết tin đăng suất A10 — trang /tin-dang/[code]. */
-export function buildDtaHappyHomeListingDetail(code: string): ListingDetail | null {
+export function buildDtaHappyHomeListingDetail(
+  code: string,
+): PublicListingDetail | null {
   const unit = findDtaInventoryUnit(code);
   const card = getDtaHappyHomeListingCard(code);
   if (!unit || !card) return null;
@@ -109,7 +111,7 @@ export function buildDtaHappyHomeListingDetail(code: string): ListingDetail | nu
       position: offset,
     })),
     fingerprint: null,
-  } as unknown as ListingDetail;
+  } as PublicListingDetail;
 }
 
 /** Thẻ tin trên landing dự án (giới hạn hiển thị). */

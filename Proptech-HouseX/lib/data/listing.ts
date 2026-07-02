@@ -51,6 +51,11 @@ export type ListingDetail = NonNullable<
   Awaited<ReturnType<typeof getListingByCode>>
 >;
 
+/** Tin public + tiêu đề biên tập (catalog/demo — chưa có cột `title` trong Prisma). */
+export type PublicListingDetail = ListingDetail & {
+  title?: string | null;
+};
+
 /** Dữ liệu tối thiểu để render thẻ tin ký gửi trên landing dự án. */
 export type ProjectLandingListingCard = {
   id: string;

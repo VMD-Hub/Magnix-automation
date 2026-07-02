@@ -1,5 +1,5 @@
 import type { ListingCardData } from "@/components/listings/listing-card";
-import type { ListingDetail } from "@/lib/data/listing";
+import type { PublicListingDetail } from "@/lib/data/listing";
 import { HOUSEX_RIVERSIDE_DEMO_IMAGES } from "@/lib/content/project-landing-demo-images";
 import {
   buildDtaHappyHomeListingDetail,
@@ -79,7 +79,7 @@ export function getDemoListingCard(code: string): ListingCardData | null {
 }
 
 /** Chi tiết tin demo — đủ field cho trang /tin-dang/[code]. */
-export function buildDemoListingDetail(code: string): ListingDetail | null {
+export function buildDemoListingDetail(code: string): PublicListingDetail | null {
   if (isDtaHappyHomeListingCode(code)) {
     return buildDtaHappyHomeListingDetail(code);
   }
@@ -130,7 +130,7 @@ export function buildDemoListingDetail(code: string): ListingDetail | null {
       ? [{ url: card.imageUrl, type: "image", status: "READY", position: 0 }]
       : [],
     fingerprint: null,
-  } as unknown as ListingDetail;
+  } as PublicListingDetail;
 }
 
 export function isDemoListingCode(code: string): boolean {
