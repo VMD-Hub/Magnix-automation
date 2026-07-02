@@ -26,4 +26,14 @@ describe("go-live landing catalog", () => {
     assert.equal(listGoLiveProjectCards({ projectType: "THUONG_MAI" }).length, 7);
     assert.equal(listGoLiveProjectCards({ projectType: "NHA_O_XA_HOI" }).length, 0);
   });
+
+  it("catalog banner variants map from projectType filter", async () => {
+    const { projectCatalogBannerVariant, PROJECT_CATALOG_BANNERS } = await import(
+      "../lib/brand/project-catalog-banners"
+    );
+    assert.equal(projectCatalogBannerVariant(undefined), "all");
+    assert.equal(projectCatalogBannerVariant("THUONG_MAI"), "THUONG_MAI");
+    assert.equal(projectCatalogBannerVariant("NHA_O_XA_HOI"), "NHA_O_XA_HOI");
+    assert.ok(PROJECT_CATALOG_BANNERS.all.jpg.startsWith("/images/hero/"));
+  });
 });

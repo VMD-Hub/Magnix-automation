@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { DemoCatalogBanner } from "@/components/projects/demo-catalog-banner";
 import { ProjectCard } from "@/components/projects/project-card";
-import { LuxPageHeader } from "@/components/ui/lux-page-header";
+import { ProjectCatalogBanner } from "@/components/projects/project-catalog-banner";
+import { projectCatalogBannerVariant } from "@/lib/brand/project-catalog-banners";
 import { listProjects } from "@/lib/data/project-list";
 import { PROJECT_TYPE_LABEL } from "@/lib/format";
 import { cn } from "@/lib/ui/cn";
@@ -22,10 +23,17 @@ export async function generateMetadata({
 }: PageProps): Promise<Metadata> {
   const sp = await searchParams;
   const isNoxh = sp.projectType === "NHA_O_XA_HOI";
-  const title = isNoxh ? "Dự án nhà ở xã hội (NOXH)" : "Dự án bất động sản";
+  const isCommercial = sp.projectType === "THUONG_MAI";
+  const title = isNoxh
+    ? "Dự án nhà ở xã hội (NOXH)"
+    : isCommercial
+      ? "Dự án thương mại"
+      : "Dự án bất động sản";
   const description = isNoxh
-    ? "Danh sách dự án NOXH — pháp lý, giá bán và tin ký gửi từ môi giới."
-    : "Khám phá dự án thương mại mới tại TP.HCM và các tỉnh thành.";
+    ? "Danh sách dự án NOXH tại TP.HCM và các tỉnh thành."
+    : isCommercial
+      ? "Khám phá dự án thương mại mới tại TP.HCM và các tỉnh thành."
+      : "Danh mục dự án thương mại và NOXH trên HouseX.";
 
   return { title, description };
 }
@@ -39,17 +47,7 @@ export default async function DuAnListPage({ searchParams }: PageProps) {
       : undefined;
 
   const { items, pagination, isDemo } = await listProjects({ projectType, page });
-
-  const heading =
-    projectType === "NHA_O_XA_HOI"
-      ? "Dự án nhà ở xã hội (NOXH)"
-      : projectType === "THUONG_MAI"
-        ? "Dự án thương mại"
-        : "Dự án bất động sản";
-  const subheading =
-    projectType === "NHA_O_XA_HOI"
-      ? "Danh sách dự án NOXH — pháp lý, giá bán và tin ký gửi từ môi giới."
-      : "Dự án thương mại và NOXH — pháp lý rõ ràng, tin ký gửi minh bạch.";
+  const bannerVariant = projectCatalogBannerVariant(projectType);
 
   const siteUrl = getSiteUrl();
   const jsonLd = {
@@ -73,11 +71,7 @@ export default async function DuAnListPage({ searchParams }: PageProps) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      <LuxPageHeader
-        kicker="Danh mục dự án"
-        title={heading}
-        subtitle={subheading}
-      />
+      <ProjectCatalogBanner variant={bannerVariant} />
 
       {isDemo && process.env.NODE_ENV !== "production" ? (
         <DemoCatalogBanner />
