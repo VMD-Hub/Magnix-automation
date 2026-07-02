@@ -84,6 +84,8 @@ export default async function ProjectPage({ params, searchParams }: PageProps) {
     inventory = getDemoProjectInventory(slug, inventoryFilters);
   }
 
+  const useLandingContent = source === "demo" || source === "catalog";
+
   return (
     <>
       <script
@@ -93,7 +95,7 @@ export default async function ProjectPage({ params, searchParams }: PageProps) {
       {source === "demo" && process.env.NODE_ENV !== "production" && (
         <DemoCatalogBanner message="Dự án mẫu NOXH — chưa kết nối Postgres. Nội dung dùng để duyệt giao diện trước go-live." />
       )}
-      {source === "demo" ? (
+      {useLandingContent ? (
         <ProjectLandingContent
           project={project}
           marketplaceListings={marketplaceListings}

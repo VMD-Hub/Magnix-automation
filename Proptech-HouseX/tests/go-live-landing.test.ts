@@ -1,0 +1,23 @@
+import assert from "node:assert/strict";
+import { describe, it } from "node:test";
+import { GO_LIVE_LANDING_SLUGS } from "../lib/seed/go-live-landing-slugs";
+import { getDemoProjectBySlug } from "../lib/preview/demo-projects";
+import { VINHOMES_SAIGON_PARK_NAME } from "../lib/preview/vinhomes-saigon-park-mock";
+
+describe("go-live landing catalog", () => {
+  it("lists 7 commercial slugs for smoke test", () => {
+    assert.equal(GO_LIVE_LANDING_SLUGS.length, 7);
+  });
+
+  it("each slug resolves to mock with project name in SSR catalog", () => {
+    for (const slug of GO_LIVE_LANDING_SLUGS) {
+      const project = getDemoProjectBySlug(slug);
+      assert.ok(project, `missing mock for ${slug}`);
+      assert.ok(project.name.length > 2);
+    }
+    assert.equal(
+      getDemoProjectBySlug(GO_LIVE_LANDING_SLUGS[0])?.name,
+      VINHOMES_SAIGON_PARK_NAME,
+    );
+  });
+});

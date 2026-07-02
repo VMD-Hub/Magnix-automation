@@ -2,6 +2,7 @@ import type { ProjectDetail } from "@/lib/data/project";
 import type { ProjectLandingListingCard } from "@/lib/data/listing";
 import { getProjectBySlugOrId } from "@/lib/data/project";
 import { allowDemoProjectFallback } from "@/lib/deploy/demo-fallback";
+import { isGoLiveLandingSlug } from "@/lib/seed/go-live-landing-slugs";
 import {
   getDemoListingsForSlug,
   getDemoProjectBySlug,
@@ -10,10 +11,21 @@ import {
 export type PublicProjectResult = {
   project: ProjectDetail;
   marketplaceListings: ProjectLandingListingCard[];
-  source: "db" | "demo";
+  source: "db" | "catalog" | "demo";
 };
 
-/** Trang công khai — DB trước, fallback demo khi chưa seed / Postgres offline. */
+function getCatalogLanding(slug: string): PublicProjectResult | null {
+  if (!isGoLiveLandingSlug(slug)) return null;
+  const project = getDemoProjectBySlug(slug);
+  if (!project) return null;
+  return {
+    project,
+    marketplaceListings: getDemoListingsForSlug(slug),
+    source: "catalog",
+  };
+}
+
+/** Trang công khai — DB trước, catalog go-live, rồi demo dev. */
 export async function getPublicProjectBySlug(
   slug: string,
 ): Promise<PublicProjectResult | null> {
@@ -23,8 +35,11 @@ export async function getPublicProjectBySlug(
       return { project: fromDb, marketplaceListings: [], source: "db" };
     }
   } catch {
-    // Postgres chưa chạy — dùng demo bên dưới.
+    // Postgres offline — thử catalog go-live bên dưới.
   }
+
+  const catalog = getCatalogLanding(slug);
+  if (catalog) return catalog;
 
   if (!allowDemoProjectFallback()) return null;
 

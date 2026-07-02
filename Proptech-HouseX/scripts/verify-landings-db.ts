@@ -3,15 +3,14 @@
  * Usage: npm run db:verify:landings
  */
 import { PrismaClient } from "@prisma/client";
-import { VINHOMES_PROJECT_SLUGS } from "../lib/seed/vinhomes-projects";
-import { COMMERCIAL_LANDING_SLUGS } from "../lib/seed/commercial-landings";
+import { GO_LIVE_LANDING_SLUGS } from "../lib/seed/go-live-landing-slugs";
 import {
   isPlaceholderDatabaseUrl,
   maskDatabaseUrl,
   resolveProductionEnv,
 } from "../lib/deploy/resolve-production-env";
 
-const REQUIRED = [...VINHOMES_PROJECT_SLUGS, ...COMMERCIAL_LANDING_SLUGS];
+const REQUIRED = [...GO_LIVE_LANDING_SLUGS];
 
 async function main() {
   const prodEnv = resolveProductionEnv();

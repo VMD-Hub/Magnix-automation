@@ -1,7 +1,7 @@
 import { NextRequest } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { handleApiError, fail, ok } from "@/lib/api/http";
-import { getProjectBySlugOrId } from "@/lib/data/project";
+import { getPublicProjectBySlug } from "@/lib/data/project-public";
 import { recordStatusChange } from "@/lib/data/status-history";
 
 const uuidRegex =
@@ -14,13 +14,13 @@ export async function GET(
 ) {
   try {
     const { slug } = await params;
-    const project = await getProjectBySlugOrId(slug);
+    const result = await getPublicProjectBySlug(slug);
 
-    if (!project) {
+    if (!result) {
       return fail(404, "NOT_FOUND", "Không tìm thấy dự án.");
     }
 
-    return ok(project);
+    return ok(result.project);
   } catch (err) {
     return handleApiError(err);
   }
