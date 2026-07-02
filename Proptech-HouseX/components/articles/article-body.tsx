@@ -3,14 +3,16 @@ import type { ReactNode } from "react";
 import type { ArticleCardData } from "@/lib/data/article-types";
 
 const LINK_RE = /\[([^\]]+)\]\(([^)]+)\)/g;
+const BOLD_RE = /\*\*([^*]+)\*\*/g;
 const HEADING_RE = /^##\s+(.+)$/;
 const IMAGE_RE = /^!\[([^\]]*)\]\(([^)]+)\)$/;
 const CAPTION_RE = /^\*([^*]+)\*$/;
 const BLOCKQUOTE_RE = /^>\s?(.+)$/;
+const LIST_ITEM_RE = /^-\s+(.+)$/;
 const TABLE_ROW_RE = /^\|.+\|$/;
 const TABLE_SEP_RE = /^\|[-:\s|]+\|$/;
 
-function renderInline(text: string, keyPrefix: string) {
+function renderLinks(text: string, keyPrefix: string): ReactNode[] {
   const parts: ReactNode[] = [];
   let last = 0;
   let match: RegExpExecArray | null;
@@ -24,7 +26,7 @@ function renderInline(text: string, keyPrefix: string) {
     if (href.startsWith("/")) {
       parts.push(
         <Link
-          key={`${keyPrefix}-${match.index}`}
+          key={`${keyPrefix}-l-${match.index}`}
           href={href}
           className="font-medium text-brand-700 underline decoration-brand-300 underline-offset-2 hover:text-brand-900"
         >
@@ -34,7 +36,7 @@ function renderInline(text: string, keyPrefix: string) {
     } else {
       parts.push(
         <a
-          key={`${keyPrefix}-${match.index}`}
+          key={`${keyPrefix}-l-${match.index}`}
           href={href}
           target="_blank"
           rel="noopener noreferrer"
@@ -47,7 +49,57 @@ function renderInline(text: string, keyPrefix: string) {
     last = match.index + match[0].length;
   }
   if (last < text.length) parts.push(text.slice(last));
-  return parts.length === 1 ? parts[0] : parts;
+  return parts;
+}
+
+function renderInline(text: string, keyPrefix: string): ReactNode {
+  const nodes: ReactNode[] = [];
+  let last = 0;
+  let match: RegExpExecArray | null;
+  BOLD_RE.lastIndex = 0;
+  while ((match = BOLD_RE.exec(text)) !== null) {
+    if (match.index > last) {
+      nodes.push(...renderLinks(text.slice(last, match.index), `${keyPrefix}-t-${last}`));
+    }
+    nodes.push(
+      <strong
+        key={`${keyPrefix}-b-${match.index}`}
+        className="font-semibold text-slate-900"
+      >
+        {renderLinks(match[1], `${keyPrefix}-bs-${match.index}`)}
+      </strong>,
+    );
+    last = match.index + match[0].length;
+  }
+  if (last < text.length) {
+    nodes.push(...renderLinks(text.slice(last), `${keyPrefix}-t-${last}`));
+  }
+  if (nodes.length === 0) return text;
+  if (nodes.length === 1) return nodes[0];
+  return nodes;
+}
+
+function isListBlock(block: string): boolean {
+  const lines = block.trim().split("\n");
+  return lines.length > 0 && lines.every((line) => LIST_ITEM_RE.test(line.trim()));
+}
+
+function renderList(block: string, key: string) {
+  const items = block
+    .trim()
+    .split("\n")
+    .map((line) => LIST_ITEM_RE.exec(line.trim())?.[1] ?? "")
+    .filter(Boolean);
+  return (
+    <ul
+      key={key}
+      className="my-4 list-disc space-y-2 pl-6 text-base leading-[1.75] text-slate-700"
+    >
+      {items.map((item, i) => (
+        <li key={i}>{renderInline(item, `${key}-${i}`)}</li>
+      ))}
+    </ul>
+  );
 }
 
 function renderFigure(
@@ -175,6 +227,12 @@ export function ArticleBody({ body }: { body: string }) {
     flushTable();
 
     const trimmed = block.trim();
+    if (isListBlock(trimmed)) {
+      nodes.push(renderList(trimmed, `ul-${blockIndex}`));
+      blockIndex += 1;
+      continue;
+    }
+
     const image = IMAGE_RE.exec(trimmed);
     if (image) {
       const next = blocks[i + 1]?.trim();
