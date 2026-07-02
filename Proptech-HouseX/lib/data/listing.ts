@@ -57,7 +57,7 @@ export type ProjectLandingListingCard = {
   code: string;
   transactionType: string;
   propertyType: string;
-  price: Prisma.Decimal | number | string;
+  price: Prisma.Decimal | number | string | null;
   tier: string;
   broker: { fullName: string };
   media: { url: string }[];

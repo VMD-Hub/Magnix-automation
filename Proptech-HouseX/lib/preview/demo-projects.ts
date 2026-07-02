@@ -64,6 +64,26 @@ import {
   VINHOMES_GRAND_PARK_SLUG,
 } from "@/lib/preview/vinhomes-grand-park-mock";
 import {
+  buildMonreiSaigonMock,
+  buildMonreiSaigonPreviewListings,
+  MONREI_SAIGON_SLUG,
+} from "@/lib/preview/monrei-saigon-mock";
+import {
+  buildNobleCrystalRiversideMock,
+  buildNobleCrystalRiversidePreviewListings,
+  NOBLE_CRYSTAL_RIVERSIDE_SLUG,
+} from "@/lib/preview/noble-crystal-riverside-mock";
+import {
+  buildGladiaHeightsMock,
+  buildGladiaHeightsPreviewListings,
+  GLADIA_HEIGHTS_SLUG,
+} from "@/lib/preview/gladia-heights-mock";
+import {
+  buildVictoriaVillageMock,
+  buildVictoriaVillagePreviewListings,
+  VICTORIA_VILLAGE_SLUG,
+} from "@/lib/preview/victoria-village-mock";
+import {
   buildNamLong2CanThoMock,
   buildNamLong2PreviewListings,
   NL2_PROJECT_SLUG,
@@ -141,6 +161,22 @@ const DEMO_REGISTRY: Record<string, DemoEntry> = {
   [VINHOMES_GRAND_PARK_SLUG]: {
     build: buildVinhomesGrandParkMock,
     listings: buildVinhomesGrandParkPreviewListings,
+  },
+  [MONREI_SAIGON_SLUG]: {
+    build: buildMonreiSaigonMock,
+    listings: buildMonreiSaigonPreviewListings,
+  },
+  [NOBLE_CRYSTAL_RIVERSIDE_SLUG]: {
+    build: buildNobleCrystalRiversideMock,
+    listings: buildNobleCrystalRiversidePreviewListings,
+  },
+  [GLADIA_HEIGHTS_SLUG]: {
+    build: buildGladiaHeightsMock,
+    listings: buildGladiaHeightsPreviewListings,
+  },
+  [VICTORIA_VILLAGE_SLUG]: {
+    build: buildVictoriaVillageMock,
+    listings: buildVictoriaVillagePreviewListings,
   },
   "iki-village": {
     build: buildIkiVillageMock,

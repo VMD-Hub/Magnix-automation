@@ -16,6 +16,7 @@
     "db:deploy": "prisma migrate deploy",
     "db:seed": "prisma db seed",
     "db:seed:vinhomes": "node --import tsx scripts/seed-vinhomes-projects.ts",
+    "db:seed:commercial": "node --import tsx scripts/seed-commercial-landings.ts",
     "db:setup": "npm run db:up && npm run db:push && npm run db:seed",
     "db:studio": "prisma studio",
     "media:qc": "node --import tsx scripts/media-image-qc.ts",

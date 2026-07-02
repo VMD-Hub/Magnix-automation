@@ -79,7 +79,9 @@ export default async function DuAnListPage({ searchParams }: PageProps) {
         subtitle={subheading}
       />
 
-      {isDemo ? <DemoCatalogBanner /> : null}
+      {isDemo && process.env.NODE_ENV !== "production" ? (
+        <DemoCatalogBanner />
+      ) : null}
 
       <div className="mb-6 flex flex-wrap gap-2">
         <Tab href="/du-an" active={!projectType} label="Tất cả" />

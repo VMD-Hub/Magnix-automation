@@ -7,6 +7,11 @@ import { VINHOMES_PROJECT_SLUGS } from "../lib/seed/vinhomes-projects";
 import { VINHOMES_SAIGON_PARK_NAME } from "../lib/preview/vinhomes-saigon-park-mock";
 import { VINHOMES_GREEN_PARADISE_NAME } from "../lib/preview/vinhomes-green-paradise-mock";
 import { VINHOMES_GRAND_PARK_NAME } from "../lib/preview/vinhomes-grand-park-mock";
+import { COMMERCIAL_LANDING_SLUGS } from "../lib/seed/commercial-landings";
+import { MONREI_SAIGON_NAME } from "../lib/preview/monrei-saigon-mock";
+import { NOBLE_CRYSTAL_RIVERSIDE_NAME } from "../lib/preview/noble-crystal-riverside-mock";
+import { GLADIA_HEIGHTS_NAME } from "../lib/preview/gladia-heights-mock";
+import { VICTORIA_VILLAGE_NAME } from "../lib/preview/victoria-village-mock";
 
 const site = (process.env.SITE ?? process.env.NEXT_PUBLIC_SITE_URL ?? "")
   .trim()
@@ -72,6 +77,26 @@ const cases: Case[] = [
     name: "Vinhomes Grand Park",
     path: `/du-an/${VINHOMES_PROJECT_SLUGS[2]}`,
     expect: new RegExp(VINHOMES_GRAND_PARK_NAME, "i"),
+  },
+  {
+    name: "Monrei Saigon",
+    path: `/du-an/${COMMERCIAL_LANDING_SLUGS[0]}`,
+    expect: new RegExp(MONREI_SAIGON_NAME, "i"),
+  },
+  {
+    name: "Noble Crystal Riverside",
+    path: `/du-an/${COMMERCIAL_LANDING_SLUGS[1]}`,
+    expect: new RegExp(NOBLE_CRYSTAL_RIVERSIDE_NAME.slice(0, 20), "i"),
+  },
+  {
+    name: "Gladia Heights",
+    path: `/du-an/${COMMERCIAL_LANDING_SLUGS[2]}`,
+    expect: new RegExp(GLADIA_HEIGHTS_NAME, "i"),
+  },
+  {
+    name: "Victoria Village",
+    path: `/du-an/${COMMERCIAL_LANDING_SLUGS[3]}`,
+    expect: new RegExp(VICTORIA_VILLAGE_NAME, "i"),
   },
 ];
 

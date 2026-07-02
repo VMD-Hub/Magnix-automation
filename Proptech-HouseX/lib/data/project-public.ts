@@ -1,6 +1,7 @@
 import type { ProjectDetail } from "@/lib/data/project";
 import type { ProjectLandingListingCard } from "@/lib/data/listing";
 import { getProjectBySlugOrId } from "@/lib/data/project";
+import { allowDemoProjectFallback } from "@/lib/deploy/demo-fallback";
 import {
   getDemoListingsForSlug,
   getDemoProjectBySlug,
@@ -24,6 +25,8 @@ export async function getPublicProjectBySlug(
   } catch {
     // Postgres chưa chạy — dùng demo bên dưới.
   }
+
+  if (!allowDemoProjectFallback()) return null;
 
   const demo = getDemoProjectBySlug(slug);
   if (!demo) return null;

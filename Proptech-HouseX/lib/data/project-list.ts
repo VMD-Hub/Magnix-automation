@@ -4,6 +4,7 @@ import {
   parseProjectOverview,
   resolveLandingHeroImage,
 } from "@/lib/content/project-landing";
+import { allowDemoProjectFallback } from "@/lib/deploy/demo-fallback";
 import { listDemoProjectCards } from "@/lib/preview/demo-projects";
 
 export type ProjectListParams = {
@@ -100,7 +101,14 @@ export async function listProjects(
       };
     }
   } catch {
-    // DB offline — fallback demo bên dưới.
+    // DB offline — dev fallback demo bên dưới.
+  }
+
+  if (!allowDemoProjectFallback()) {
+    return {
+      items: [],
+      pagination: { page, pageSize, total: 0, totalPages: 1 },
+    };
   }
 
   const demoItems = listDemoProjectCards({ projectType: params.projectType });

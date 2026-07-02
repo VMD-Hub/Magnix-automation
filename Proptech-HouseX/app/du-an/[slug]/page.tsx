@@ -90,7 +90,7 @@ export default async function ProjectPage({ params, searchParams }: PageProps) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      {source === "demo" && (
+      {source === "demo" && process.env.NODE_ENV !== "production" && (
         <DemoCatalogBanner message="Dự án mẫu NOXH — chưa kết nối Postgres. Nội dung dùng để duyệt giao diện trước go-live." />
       )}
       {source === "demo" ? (

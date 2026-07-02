@@ -36,6 +36,7 @@ import {
 } from "../lib/preview/the-prive-mock";
 import { THE_PRIVE_IMAGES } from "../lib/content/the-prive-images";
 import { seedVinhomesProjects } from "../lib/seed/vinhomes-projects";
+import { seedCommercialLandings } from "../lib/seed/commercial-landings";
 import {
   buildNamLong2SeedLanding,
   NL2_PROJECT_NAME,
@@ -1289,6 +1290,7 @@ Tiện ích ngoại khu DTA City: chợ truyền thống DTA, Bệnh viện Đa 
   });
 
   await seedVinhomesProjects(prisma);
+  await seedCommercialLandings(prisma);
 
   // Căn hộ thương mại — IKI Village (nội dung tham khảo ikivillage.net).
   const akhDeveloper = await prisma.developer.upsert({
