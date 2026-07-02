@@ -81,6 +81,24 @@ const MAGNIX_TABS = {
       'meta',
     ],
   },
+  housex_articles: {
+    headers: [
+      'request_id',
+      'slug',
+      'title',
+      'excerpt',
+      'body',
+      'seo_title',
+      'seo_desc',
+      'tags_json',
+      'project_slugs_json',
+      'status',
+      'qa_tier',
+      'created_at',
+      'source',
+      'meta',
+    ],
+  },
   outreach_queue: {
     headers: [
       'source_normalized_key',

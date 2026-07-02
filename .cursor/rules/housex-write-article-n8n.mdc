@@ -1,0 +1,39 @@
+---
+description: Khi viết bài tin tức HouseX — gọi n8n PR pipeline, không draft thô trong chat
+globs:
+  - Proptech-HouseX/lib/content/articles/**
+  - ai-agents-prompts/housex__website-article-pr.md
+  - n8n-workflows/code/content-housex-article/**
+alwaysApply: false
+---
+
+# HouseX — `/write-article` → n8n
+
+## Khi nào áp dụng
+
+User yêu cầu: viết bài tin tức, bài PR, bài TOD/NOXH cho HouseX `/tin-tuc`.
+
+## Quy trình bắt buộc
+
+1. Thu thập: `topic`, `angle`, `source_refs`, `factsheet` (số liệu CĐT/quy hoạch).
+2. **Không** viết full body markdown trong chat (tránh lệch phong cách).
+3. Chạy:
+
+```bash
+node scripts/trigger-housex-article.mjs --topic "..." --angle tod --project dta-happy-home-nhon-trach
+```
+
+4. Báo user: slug, `sheet_status`, link Sheet `housex_articles` — chờ L3 approve.
+5. Sau L3: copy vào `Proptech-HouseX/lib/content/articles/*.ts` hoặc admin HouseX.
+
+## Phong cách (sync)
+
+- Prompt: `ai-agents-prompts/housex__website-article-pr.md`
+- QA: `Proptech-HouseX/lib/content/articles/article-editorial-voice.ts`
+- Config: `n8n-workflows/housex_editorial_voice.json`
+
+## closing_variant
+
+`quyHoachVen` | `todAnCu` | `todNoiThanhVsVen` | `gaQuyHoach` | `nhonTrachTod`
+
+Chi tiết: `docs/HOUSEX_ARTICLE_N8N.md`

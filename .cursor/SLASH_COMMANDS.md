@@ -13,6 +13,7 @@
 | **Sản xuất Lead Magnet** | `/matrix` `/artifacts` `/deconstruct` | Bảng so sánh, Markdown export, deconstruct cấu trúc tài liệu | L0–L2 + L3 |
 | **Outreach & Copy** | `/ghost` `/brief` | Tin tự nhiên; cold ≤3 dòng | L0 + L1 + L3 |
 | **Kiểm định QA** | `/devil` (+ `/roast` Cursor only) | L2 pháp lý — **không** chạy mọi output | L2 |
+| **HouseX tin tức** | `/write-article` | Webhook n8n PR — **không** draft body trong chat | L0 + L3 |
 
 ---
 
@@ -51,6 +52,15 @@
 | **`/devil`** | Luật sư nghiêm — L2 | n8n content nhạy cảm |
 | **`/roast`** | Khách khó tính — A/B copy | **Cursor only**, không n8n mặc định |
 
+### Nhóm HouseX Editorial (`/write-article`)
+
+| Lệnh | Hành vi |
+|------|---------|
+| **`/write-article`** | Gọi `POST /webhook/magnix/housex-article` — prompt `housex__website-article-pr.md` · L0 voice gate · Sheet `housex_articles` · **L3 trước publish** |
+
+**Cursor:** `node scripts/trigger-housex-article.mjs --topic "..." --angle tod`  
+**Không** viết full body PR trực tiếp trong chat khi user dùng lệnh này.
+
 ---
 
 ## 3. Bốn mạch vận hành
@@ -60,6 +70,7 @@ Mạch 1  UID → classify → PARSE → merge → Google Sheet
 Mạch 2  Segment → [/matrix+/artifacts] → L0–L2 → draft
 Mạch 3  Lead → [/ghost+/brief] → L0–L1 → L3 approve → gửi
 Mạch 4  (L2)  → [/devil] → pass | human_review
+Mạch 5  HouseX → [/write-article] → n8n PR → Sheet → L3 → HouseX /tin-tuc
 ```
 
 | Mạch | Prompt | Parse layer | QA |

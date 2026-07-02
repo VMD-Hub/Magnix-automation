@@ -1,5 +1,6 @@
 /**
  * Giọng biên tập bài PR — tránh prompt/meta heading lộ trong body.
+ * Pipeline n8n: docs/HOUSEX_ARTICLE_N8N.md · prompt housex__website-article-pr.md
  * Dùng cho editorial series và QA tự động trước publish.
  */
 

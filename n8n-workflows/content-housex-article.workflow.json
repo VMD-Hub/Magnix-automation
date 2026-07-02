@@ -1,0 +1,498 @@
+{
+  "name": "Magnix — HouseX Website Article PR (webhook)",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## HouseX Article PR (on-demand)\n- **Webhook:** POST `/webhook/magnix/housex-article`\n- Prompt: `housex__website-article-pr.md`\n- L0: editorial voice + forbidden\n- Output: Sheet `housex_articles` → L3 → HouseX",
+        "height": 180,
+        "width": 460
+      },
+      "id": "hx00note",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -400,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "hx01manual",
+      "name": "When clicking 'Execute workflow'",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "magnix/housex-article",
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "id": "hx02webhook",
+      "name": "Webhook housex-article",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        200
+      ],
+      "webhookId": "magnix-housex-article"
+    },
+    {
+      "parameters": {
+        "jsCode": "const EXPECTED = $env.MAGNIX_WEBHOOK_TOKEN || '';\nconst headers = $input.first().json.headers || {};\nconst auth = headers.authorization || headers.Authorization || '';\nif (EXPECTED && auth !== `Bearer ${EXPECTED}`) {\n  throw new Error('Unauthorized: invalid MAGNIX_WEBHOOK_TOKEN');\n}\nconst raw = $input.first().json;\nconst body = raw.body && typeof raw.body === 'object' ? raw.body : raw;\nreturn [{ json: { triggered: true, source: 'webhook', at: new Date().toISOString(), ...body } }];"
+      },
+      "id": "hx03auth",
+      "name": "Auth Webhook",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        200,
+        200
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{ json: {\n  topic: 'TOD Nhon Trach — ga quy hoach va an cu NOXH',\n  angle: 'tod',\n  project_slug: 'dta-happy-home-nhon-trach',\n  closing_variant: 'gaQuyHoach',\n  segment: 'noxh_income',\n  source_refs: ['https://tienphong.vn/vi-tri-12-nha-ga-cua-tuyen-duong-sat-thu-thiem-long-thanh-tren-dia-ban-tinh-dong-nai-post1684699.tpo'],\n  factsheet: { ga_quy_hoach_km: 5, long_thanh_minutes_cdt: 20, price_from_vnd: 448000000 },\n}}];"
+      },
+      "id": "hx03bdemo",
+      "name": "Manual Demo Payload",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        200,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const BANNED = [\"Liên hệ với\",\"Góc nhìn thực tế:\",\"Góc nhìn người mua nhà:\",\"Gợi ý tra cứu\",\"Hành động tiếp theo trên HouseX\",\"Bước tiếp theo trên HouseX\",\"Kết luận góc nhìn HouseX\",\"buyer-first\"];\nconst DEFAULT_CLOSING = {\"quy_hoach\":\"quyHoachVen\",\"tod\":\"todAnCu\",\"metro\":\"gaQuyHoach\",\"ha_tang\":\"nhonTrachTod\",\"noxh_compare\":\"gaQuyHoach\",\"loan_policy\":\"todAnCu\"};\n\nfunction slugify(input) {\n  return String(input || '')\n    .normalize('NFD')\n    .replace(/\\p{M}/gu, '')\n    .toLowerCase()\n    .replace(/[^a-z0-9]+/g, '-')\n    .replace(/^-+|-+$/g, '')\n    .slice(0, 80);\n}\n\nconst raw = $input.first().json;\nconst body = raw.body && typeof raw.body === 'object' ? raw.body : raw;\n\nconst topic = String(body.topic || body.title_hint || '').trim();\nif (!topic) {\n  return [{ json: { ok: false, error: 'MISSING_TOPIC', message: 'Cần topic hoặc title_hint' } }];\n}\n\nconst angle = String(body.angle || 'tod').trim().toLowerCase();\nconst projectSlug = String(body.project_slug || 'dta-happy-home-nhon-trach').trim();\nconst segment = String(body.segment || 'noxh_income').trim().toLowerCase();\nconst closingVariant =\n  String(body.closing_variant || DEFAULT_CLOSING[angle] || 'gaQuyHoach').trim();\n\nconst requestId =\n  String(body.request_id || `housex-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`);\n\nreturn [{\n  json: {\n    ok: true,\n    request_id: requestId,\n    topic,\n    angle,\n    project_slug: projectSlug,\n    closing_variant: closingVariant,\n    segment,\n    slug_hint: slugify(body.slug_hint || topic),\n    source_refs: Array.isArray(body.source_refs) ? body.source_refs.slice(0, 12) : [],\n    factsheet: body.factsheet && typeof body.factsheet === 'object' ? body.factsheet : {},\n    editorial_brief_v1: body.editorial_brief_v1 || null,\n    legal_retrieval_pack: body.legal_retrieval_pack || null,\n    run_devil: body.run_devil !== false,\n    triggered_at: new Date().toISOString(),\n    source: String(body.source || raw.source || 'webhook'),\n  },\n}];"
+      },
+      "id": "hx04intake",
+      "name": "Parse Webhook Intake",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        440,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "c1",
+              "leftValue": "={{ $json.ok }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "hx05ifintake",
+      "name": "IF Intake OK",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        680,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const MAGNIX_LLM_DEFAULTS = {\"classify\":\"deepseek\",\"editorial_brief\":\"deepseek\",\"outreach\":\"deepseek\",\"video_draft\":\"deepseek\",\"carousel_draft\":\"deepseek\",\"content_draft\":\"anthropic\",\"content_draft_general\":\"deepseek\",\"content_qa\":\"anthropic\",\"housex_article\":\"anthropic\"};\r\n\r\nfunction hasLlmKey(raw) {\r\n  return String(raw || '').trim().length > 12;\r\n}\r\n\r\nfunction envProvider(taskId) {\r\n  const key = `MAGNIX_LLM_${String(taskId || '')\r\n    .toUpperCase()\r\n    .replace(/[^A-Z0-9]/g, '_')}_PROVIDER`;\r\n  const v = String($env[key] || '').trim().toLowerCase();\r\n  if (v === 'deepseek' || v === 'anthropic') return v;\r\n  return null;\r\n}\r\n\r\nfunction resolveProvider(taskId) {\r\n  return envProvider(taskId) || MAGNIX_LLM_DEFAULTS[taskId] || 'deepseek';\r\n}\r\n\r\nfunction hasProvider(provider) {\r\n  if (provider === 'anthropic') return hasLlmKey($env.ANTHROPIC_API_KEY);\r\n  return hasLlmKey($env.DEEPSEEK_API_KEY);\r\n}\r\n\r\nfunction anthropicModelForTask(taskId) {\r\n  if (taskId === 'classify') {\r\n    return $env.ANTHROPIC_CLASSIFY_MODEL || 'claude-haiku-4-5-20251001';\r\n  }\r\n  if (taskId === 'video_draft') {\r\n    return $env.ANTHROPIC_VIDEO_MODEL || $env.ANTHROPIC_DRAFT_MODEL || 'claude-sonnet-4-6';\r\n  }\r\n  return $env.ANTHROPIC_DRAFT_MODEL || $env.ANTHROPIC_MODEL || 'claude-sonnet-4-6';\r\n}\r\n\r\nasync function callDeepSeekLlm(ctx, opts) {\r\n  const {\r\n    system,\r\n    userPayload,\r\n    temperature = 0.35,\r\n    maxTokens = 4096,\r\n    jsonMode = true,\r\n  } = opts;\r\n  return ctx.helpers.httpRequest({\r\n    method: 'POST',\r\n    url: $env.DEEPSEEK_API_URL || 'https://api.deepseek.com/chat/completions',\r\n    headers: {\r\n      Authorization: `Bearer ${$env.DEEPSEEK_API_KEY}`,\r\n      'Content-Type': 'application/json',\r\n    },\r\n    body: {\r\n      model: $env.DEEPSEEK_MODEL || 'deepseek-chat',\r\n      temperature,\r\n      max_tokens: maxTokens,\r\n      ...(jsonMode ? { response_format: { type: 'json_object' } } : {}),\r\n      messages: [\r\n        { role: 'system', content: system },\r\n        { role: 'user', content: userPayload },\r\n      ],\r\n    },\r\n    json: true,\r\n  });\r\n}\r\n\r\nasync function callAnthropicLlm(ctx, opts) {\r\n  const {\r\n    system,\r\n    userPayload,\r\n    temperature = 0.35,\r\n    maxTokens = 4096,\r\n    taskId = 'content_draft',\r\n  } = opts;\r\n  return ctx.helpers.httpRequest({\r\n    method: 'POST',\r\n    url: 'https://api.anthropic.com/v1/messages',\r\n    headers: {\r\n      'x-api-key': $env.ANTHROPIC_API_KEY,\r\n      'anthropic-version': '2023-06-01',\r\n      'Content-Type': 'application/json',\r\n    },\r\n    body: {\r\n      model: anthropicModelForTask(taskId),\r\n      max_tokens: maxTokens,\r\n      temperature,\r\n      system,\r\n      messages: [{ role: 'user', content: userPayload }],\r\n    },\r\n    json: true,\r\n  });\r\n}\r\n\r\nasync function invokeMagnixLlm(ctx, taskId, opts) {\r\n  const primary = resolveProvider(taskId);\r\n  const fallback = primary === 'deepseek' ? 'anthropic' : 'deepseek';\r\n  const errors = [];\r\n\r\n  for (const provider of [primary, fallback]) {\r\n    if (!hasProvider(provider)) continue;\r\n    try {\r\n      if (provider === 'deepseek') {\r\n        return await callDeepSeekLlm(ctx, opts);\r\n      }\r\n      return await callAnthropicLlm(ctx, { ...opts, taskId });\r\n    } catch (e) {\r\n      errors.push(`${provider}: ${e.message}`);\r\n    }\r\n  }\r\n\r\n  if (!hasProvider('deepseek') && !hasProvider('anthropic')) {\r\n    throw new Error('Thiếu DEEPSEEK_API_KEY hoặc ANTHROPIC_API_KEY trên n8n env');\r\n  }\r\n  throw new Error(errors.join(' | ') || 'LLM providers failed');\r\n}\n\nconst intake = $input.first().json;\nif (!intake.ok) return [{ json: intake }];\n\nconst system = `Bạn là biên tập PR BĐS HouseX — Value-First, buyer-first, **không hard sell**.\n\n## Phong cách (bắt buộc)\n\n- Viết như VnExpress / CafeLand / Tuổi Trẻ: câu văn trôi chảy, có số liệu trích nguồn.\n- **Cấm** markdown bold \\`**...**\\` — nhấn mạnh bằng cách diễn đạt, không dùng ký hiệu.\n- **Cấm** heading/meta dạng prompt: «Liên hệ với…», «Góc nhìn thực tế:», «Gợi ý tra cứu», «Hành động tiếp theo trên HouseX», «Bước tiếp theo…», «Kết luận góc nhìn HouseX», «→ [link]».\n- **Cấm** bullet CTA kiểu checklist cuối bài — kết bài bằng 1–2 đoạn văn tự nhiên.\n- H2/H3 là **câu hỏi hoặc nhận định** (Q&A SEO), không phải chỉ dẫn cho người viết.\n- Link nội bộ HouseX: \\`[nhãn](/du-an/slug)\\` hoặc \\`/tin-tuc/slug\\` — không URL tuyệt đối housex.vn trong body.\n- Link ngoài: markdown \\`[Tên báo](https://...)\\` — ưu tiên nguồn user cung cấp trong \\`source_refs\\`.\n- Quy hoạch / ga / metro chưa vận hành: ghi rõ «(quy hoạch)», «tham khảo bản đồ», «theo thông tin CĐT» — không cam kết thời gian cố định mọi khung giờ.\n- Khoảng cách km chỉ khi intake ghi \\`distance_km_ok: true\\`; ưu tiên **phút di chuyển theo CĐT** khi có.\n- Không cam kết duyệt vay, không hứa chắc chắn tăng giá, không lãi suất % tự bịa (chỉ trích văn bản/NHNN/CĐT).\n\n## Legal Gate\n\nChỉ dùng \\`facts[]\\` trong \\`legal_retrieval_pack\\` khi có. \\`source_refs\\` output = claim_id hoặc URL báo chí.\n\n## Kết bài DTA (khi \\`project_slug\\` = dta-happy-home-nhon-trach)\n\nChọn **một** hướng kết (theo \\`closing_variant\\` trong intake) và **viết lại bằng lời mình**, không copy nguyên mẫu:\n\n| closing_variant | Ý chính cần lồng ghép |\n|-----------------|------------------------|\n| \\`quyHoachVen\\` | Vùng ven Nhơn Trạch/Long Thành + hành lang giao thông; DTA City; ga quy hoạch ~5 km; TOD; gia đình trẻ |\n| \\`todAnCu\\` | TOD thực tế cho lao động; ga quy hoạch; giá CĐT từ 448 triệu; Block A10 |\n| \\`todNoiThanhVsVen\\` | TOD nội thành vs vùng ven; DTA 448–700 triệu; hạ tầng cầu/cao tốc |\n| \\`gaQuyHoach\\` | Phước An–Phú Hội; ga S12/S13 quy hoạch; ~5 km; Long Thành ~20 phút (CĐT); TOD kiểu mẫu |\n| \\`nhonTrachTod\\` | Tam giác hạ tầng 10 phút cao tốc / 20 phút sân bay / 5 km ga quy hoạch |\n\n## Cấu trúc body (markdown)\n\n- 3–5 section \\`##\\` — mỗi section 2–4 đoạn.\n- Có thể dùng danh sách \\`-\\` cho số liệu (tối đa 1 list/section).\n- Kết: disclaimer nghiêng một dòng \\`*HouseX tổng hợp…*\\` (không phải công bố NN nếu tổng hợp báo chí).`;\n\nconst userPayload = JSON.stringify({\n  topic: intake.topic,\n  angle: intake.angle,\n  project_slug: intake.project_slug,\n  closing_variant: intake.closing_variant,\n  segment: intake.segment,\n  factsheet: intake.factsheet,\n  source_refs: intake.source_refs,\n  legal_retrieval_pack: intake.legal_retrieval_pack,\n  editorial_brief_v1: intake.editorial_brief_v1,\n});\n\ntry {\n  const llm = await invokeMagnixLlm(this, 'housex_article', {\n    system,\n    userPayload,\n    temperature: 0.4,\n    maxTokens: 8192,\n    jsonMode: true,\n    taskId: 'housex_article',\n  });\n  return [{\n    json: {\n      ...intake,\n      llm_provider: resolveProvider('housex_article'),\n      llm_raw: llm,\n    },\n  }];\n} catch (e) {\n  return [{\n    json: {\n      ...intake,\n      error: true,\n      llm_error: String(e.message || e).slice(0, 500),\n    },\n  }];\n}"
+      },
+      "id": "hx06llm",
+      "name": "LLM HouseX Article",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        920,
+        240
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "c1",
+              "leftValue": "={{ $json.error }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "notEquals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "hx07ifllm",
+      "name": "IF LLM OK",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1160,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "function extractJsonString(raw) {\n  if (raw == null) throw new Error('EMPTY_LLM_OUTPUT');\n  const s = typeof raw === 'string' ? raw : JSON.stringify(raw);\n  const fenced = s.match(/```(?:json)?\\s*([\\s\\S]*?)```/i);\n  return (fenced ? fenced[1] : s).trim();\n}\n\nconst item = $input.first().json;\nif (item.error) {\n  return [{ json: { ok: false, parse_error: item.llm_error || 'LLM_ERROR', request_id: item.request_id } }];\n}\n\nconst raw =\n  item.llm_raw?.content?.[0]?.text ??\n  item.llm_raw?.choices?.[0]?.message?.content ??\n  item.llm_raw;\n\ntry {\n  const parsed = JSON.parse(extractJsonString(raw));\n  const required = ['slug', 'title', 'excerpt', 'body'];\n  for (const k of required) {\n    if (!parsed[k] || !String(parsed[k]).trim()) throw new Error(`MISSING_${k.toUpperCase()}`);\n  }\n  if (!Array.isArray(parsed.tags)) parsed.tags = [];\n  if (!Array.isArray(parsed.project_slugs)) {\n    parsed.project_slugs = item.project_slug ? [item.project_slug] : [];\n  }\n  if (!Array.isArray(parsed.source_refs)) parsed.source_refs = item.source_refs || [];\n\n  return [{\n    json: {\n      ok: true,\n      request_id: item.request_id,\n      topic: item.topic,\n      segment: item.segment,\n      project_slug: item.project_slug,\n      run_devil: item.run_devil,\n      article: {\n        slug: String(parsed.slug).slice(0, 120),\n        title: String(parsed.title).slice(0, 500),\n        excerpt: String(parsed.excerpt).slice(0, 500),\n        body: String(parsed.body).slice(0, 60000),\n        seo_title: parsed.seo_title ? String(parsed.seo_title).slice(0, 500) : null,\n        seo_desc: parsed.seo_desc ? String(parsed.seo_desc).slice(0, 500) : null,\n        tags: parsed.tags.slice(0, 8),\n        project_slugs: parsed.project_slugs.slice(0, 5),\n        source_refs: parsed.source_refs.slice(0, 12),\n      },\n      llm_provider: item.llm_provider,\n    },\n  }];\n} catch (e) {\n  return [{\n    json: {\n      ok: false,\n      request_id: item.request_id,\n      parse_error: e.message,\n      raw_preview: String(raw).slice(0, 300),\n    },\n  }];\n}"
+      },
+      "id": "hx08parse",
+      "name": "Parse Article JSON",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1400,
+        160
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "c1",
+              "leftValue": "={{ $json.ok }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "hx09ifparse",
+      "name": "IF Parse OK",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1640,
+        160
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const BANNED_PHRASES = [\"Liên hệ với\",\"Góc nhìn thực tế:\",\"Góc nhìn người mua nhà:\",\"Gợi ý tra cứu\",\"Hành động tiếp theo trên HouseX\",\"Bước tiếp theo trên HouseX\",\"Kết luận góc nhìn HouseX\",\"buyer-first\"];\n\nconst FORBIDDEN = [\n  /cam kết.*duyệt/i,\n  /đảm bảo.*(vay|duyệt)/i,\n  /100%\\s*(thành công|duyệt)/i,\n  /chắc chắn.*(tăng giá|sinh lời)/i,\n];\n\nconst item = $input.first().json;\nif (!item.ok || !item.article) {\n  return [{ json: { ...item, l0_pass: false, editorial_pass: false } }];\n}\n\nconst text = [\n  item.article.title,\n  item.article.excerpt,\n  item.article.body,\n  item.article.seo_title,\n  item.article.seo_desc,\n].join('\\n');\n\nconst editorialHits = [];\nif (/\\*\\*/.test(text)) editorialHits.push('RAW_MARKDOWN_BOLD');\nfor (const phrase of BANNED_PHRASES) {\n  if (text.toLowerCase().includes(String(phrase).toLowerCase())) {\n    editorialHits.push(`BANNED:${phrase}`);\n  }\n}\nif (/→\\s*\\[/.test(text)) editorialHits.push('ARROW_CTA');\n\nconst forbiddenHits = FORBIDDEN.filter((re) => re.test(text)).map((re) => re.source);\n\nconst pass = editorialHits.length === 0 && forbiddenHits.length === 0;\n\nreturn [{\n  json: {\n    ...item,\n    l0_pass: pass,\n    editorial_pass: editorialHits.length === 0,\n    editorial_hits: editorialHits,\n    l0_hits: forbiddenHits,\n    sheet_status: pass ? 'draft' : 'review',\n    qa_tier: pass ? 'L0' : 'L0_FAIL',\n  },\n}];"
+      },
+      "id": "hx10l0",
+      "name": "L0 Editorial Voice Gate",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1880,
+        80
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const item = $input.first().json;\nif (!item.ok || !item.article) {\n  return [{ json: { ok: false, error: 'MERGE_SKIP', request_id: item.request_id } }];\n}\n\nconst a = item.article;\nconst meta = {\n  topic: item.topic,\n  segment: item.segment,\n  project_slug: item.project_slug,\n  editorial_hits: item.editorial_hits || [],\n  l0_hits: item.l0_hits || [],\n  llm_provider: item.llm_provider,\n  created_at: new Date().toISOString(),\n  pipeline: 'housex-website-article-pr',\n  l3_required: true,\n};\n\nreturn [{\n  json: {\n    ok: true,\n    request_id: item.request_id,\n    sheet_status: item.sheet_status || 'draft',\n    qa_tier: item.qa_tier || 'L0',\n    append_row: [\n      item.request_id,\n      a.slug,\n      a.title,\n      a.excerpt,\n      a.body,\n      a.seo_title || '',\n      a.seo_desc || '',\n      JSON.stringify(a.tags),\n      JSON.stringify(a.project_slugs),\n      item.sheet_status || 'draft',\n      item.qa_tier || 'L0',\n      new Date().toISOString(),\n      'n8n_housex_article',\n      JSON.stringify(meta),\n    ],\n    article: a,\n    meta,\n  },\n}];"
+      },
+      "id": "hx11merge",
+      "name": "Merge Sheet Row",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2120,
+        80
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const item = $input.first().json;\nif (!item.ok || !item.append_row) {\n  return [{ json: item }];\n}\n\nconst sheetId = '1fYB4h_BTiKXa9O3lBah-tQonWpQOQMG2aSkSfPs6yU4';\nconst tab = 'housex_articles';\n\nreturn [{\n  json: {\n    ...item,\n    append_url: `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${encodeURIComponent(`${tab}!A:N`)}:append?valueInputOption=USER_ENTERED&insertDataOption=INSERT_ROWS`,\n  },\n}];"
+      },
+      "id": "hx12prep",
+      "name": "Prepare Sheet Append",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2360,
+        80
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $json.append_url }}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ values: [$json.append_row] }) }}",
+        "options": {}
+      },
+      "id": "hx13append",
+      "name": "HTTP POST housex_articles",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2600,
+        80
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const item = $input.first().json;\nconst article = item.article || $('Merge Sheet Row').first()?.json?.article;\n\nreturn [{\n  json: {\n    ok: item.ok !== false,\n    workflow: 'content-housex-article',\n    request_id: item.request_id,\n    slug: article?.slug || null,\n    title: article?.title || null,\n    sheet_status: item.sheet_status || null,\n    qa_tier: item.qa_tier || null,\n    editorial_hits: item.editorial_hits || [],\n    l0_hits: item.l0_hits || [],\n    hint:\n      item.sheet_status === 'review'\n        ? 'L0 fail — sửa prompt/voice hoặc chạy lại với factsheet rõ hơn'\n        : 'Draft trên Sheet housex_articles — cần L3 approve trước publish HouseX',\n    finished_at: new Date().toISOString(),\n  },\n}];"
+      },
+      "id": "hx14resp",
+      "name": "Build Response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2840,
+        80
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{ json: {\n  ok: false,\n  workflow: 'content-housex-article',\n  error: $input.first().json.error || $input.first().json.parse_error || $input.first().json.llm_error || 'PIPELINE_FAIL',\n  request_id: $input.first().json.request_id || null,\n  finished_at: new Date().toISOString(),\n}}];"
+      },
+      "id": "hx15fail",
+      "name": "Build Fail Response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        920,
+        420
+      ]
+    }
+  ],
+  "connections": {
+    "Webhook housex-article": {
+      "main": [
+        [
+          {
+            "node": "Auth Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Auth Webhook": {
+      "main": [
+        [
+          {
+            "node": "Parse Webhook Intake",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking 'Execute workflow'": {
+      "main": [
+        [
+          {
+            "node": "Manual Demo Payload",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Manual Demo Payload": {
+      "main": [
+        [
+          {
+            "node": "Parse Webhook Intake",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Webhook Intake": {
+      "main": [
+        [
+          {
+            "node": "IF Intake OK",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF Intake OK": {
+      "main": [
+        [
+          {
+            "node": "LLM HouseX Article",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Build Fail Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "LLM HouseX Article": {
+      "main": [
+        [
+          {
+            "node": "IF LLM OK",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF LLM OK": {
+      "main": [
+        [
+          {
+            "node": "Parse Article JSON",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Build Fail Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Article JSON": {
+      "main": [
+        [
+          {
+            "node": "IF Parse OK",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF Parse OK": {
+      "main": [
+        [
+          {
+            "node": "L0 Editorial Voice Gate",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Build Fail Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "L0 Editorial Voice Gate": {
+      "main": [
+        [
+          {
+            "node": "Merge Sheet Row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge Sheet Row": {
+      "main": [
+        [
+          {
+            "node": "Prepare Sheet Append",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Sheet Append": {
+      "main": [
+        [
+          {
+            "node": "HTTP POST housex_articles",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP POST housex_articles": {
+      "main": [
+        [
+          {
+            "node": "Build Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [
+    {
+      "name": "magnix"
+    },
+    {
+      "name": "housex"
+    },
+    {
+      "name": "content-housex-article"
+    }
+  ],
+  "meta": {
+    "templateCredsSetupCompleted": false
+  }
+}

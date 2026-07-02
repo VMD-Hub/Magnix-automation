@@ -14,6 +14,7 @@
 | `content-video-draft` | `content-video-draft.workflow.json` | Cron 9:15 + Manual | L0–L3 | **Consume** | ✅ | Agent 6: video production package (3/batch) | staging |
 | `content-page-publish` | `content-page-publish.workflow.json` | Cron 10/14/18h + Manual | L0 | Consume | — | **Page Publish:** `content_drafts` approved → Graph API feed | staging |
 | `content-page-cover` | `content-page-cover.workflow.json` | Cron 9:30 + Manual | L0 | — | — | **Page Cover:** Gemini image → Drive → `meta.publish_image_url` | staging |
+| `content-housex-article` | `content-housex-article.workflow.json` | Webhook POST + Manual | L0 + voice gate + L3 | **Consume** | ✅ | **HouseX PR:** webhook `/magnix/housex-article` → LLM PR → Sheet `housex_articles` | staging |
 | `content-video-render` | `content-video-render.workflow.json` | Cron 9:45 + Manual | L3 | L0 text | — | Agent 7: assembly/render package (1/batch) | staging v2 |
 | `telegram-notify` | `telegram-notify.workflow.json` | Webhook POST | L0 | Escalate | — | Central notify incl. `legal_source_needed` | staging |
 | `telegram-reminder` | `telegram-reminder.workflow.json` | Cron 30m + Manual | L0 | SLA legal | — | SLA reminder cho approval/render/legal | staging |

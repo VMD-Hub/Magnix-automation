@@ -24,6 +24,7 @@
   "anthropic_model": "claude-sonnet-4-6",
   "anthropic_draft_model": "claude-sonnet-4-6",
   "content_drafts_tab": "content_drafts",
+  "housex_articles_tab": "housex_articles",
   "outreach_queue_tab": "outreach_queue",
   "draft_min_score": 70,
   "content_draft_batch_size": 5,
@@ -47,7 +48,8 @@
     "carousel_draft": "deepseek",
     "content_draft": "anthropic",
     "content_draft_general": "deepseek",
-    "content_qa": "anthropic"
+    "content_qa": "anthropic",
+    "housex_article": "anthropic"
   },
   "schedule_cron_video_render": "45 9 * * *",
   "content_video_render_batch_size": 1,

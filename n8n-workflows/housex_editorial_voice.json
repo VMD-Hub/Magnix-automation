@@ -1,0 +1,29 @@
+{
+  "version": 1,
+  "sync_with": "Proptech-HouseX/lib/content/articles/article-editorial-voice.ts",
+  "banned_body_patterns": [
+    "Liên hệ với",
+    "Góc nhìn thực tế:",
+    "Góc nhìn người mua nhà:",
+    "Gợi ý tra cứu",
+    "Hành động tiếp theo trên HouseX",
+    "Bước tiếp theo trên HouseX",
+    "Kết luận góc nhìn HouseX",
+    "buyer-first"
+  ],
+  "closing_variants": [
+    "quyHoachVen",
+    "todAnCu",
+    "todNoiThanhVsVen",
+    "gaQuyHoach",
+    "nhonTrachTod"
+  ],
+  "default_closing_by_angle": {
+    "quy_hoach": "quyHoachVen",
+    "tod": "todAnCu",
+    "metro": "gaQuyHoach",
+    "ha_tang": "nhonTrachTod",
+    "noxh_compare": "gaQuyHoach",
+    "loan_policy": "todAnCu"
+  }
+}
