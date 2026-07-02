@@ -83,7 +83,7 @@ import {
   buildVictoriaVillagePreviewListings,
   VICTORIA_VILLAGE_SLUG,
 } from "@/lib/preview/victoria-village-mock";
-import { GO_LIVE_LANDING_SLUGS } from "@/lib/seed/go-live-landing-slugs";
+import { getCatalogSlugs } from "@/lib/seed/catalog-project-slugs";
 import {
   buildNamLong2CanThoMock,
   buildNamLong2PreviewListings,
@@ -241,21 +241,30 @@ export function listDemoProjectCards(params: {
     );
 }
 
-/** Thẻ dự án go-live — 7 landing thương mại khi Postgres chưa seed. */
-export function listGoLiveProjectCards(params: {
+/** Thẻ dự án catalog go-live — thương mại + NOXH khi Postgres chưa seed. */
+export function listCatalogProjectCards(params: {
   projectType?: "THUONG_MAI" | "NHA_O_XA_HOI";
   province?: string;
   district?: string;
 } = {}): ProjectCardData[] {
-  return GO_LIVE_LANDING_SLUGS.map((slug) => DEMO_REGISTRY[slug]?.build())
+  return getCatalogSlugs(params.projectType)
+    .map((slug) => DEMO_REGISTRY[slug]?.build())
     .filter((p): p is ProjectDetail => p != null)
     .filter((p) => {
-      if (params.projectType && p.projectType !== params.projectType) return false;
       if (params.province && p.province !== params.province) return false;
       if (params.district && p.district !== params.district) return false;
       return true;
     })
     .map((p) => projectToCard(p));
+}
+
+/** @deprecated Dùng listCatalogProjectCards */
+export function listGoLiveProjectCards(params: {
+  projectType?: "THUONG_MAI" | "NHA_O_XA_HOI";
+  province?: string;
+  district?: string;
+} = {}): ProjectCardData[] {
+  return listCatalogProjectCards(params);
 }
 
 export function listAllDemoProjects(): ProjectDetail[] {

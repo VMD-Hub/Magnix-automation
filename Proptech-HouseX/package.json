@@ -17,6 +17,7 @@
     "db:seed": "prisma db seed",
     "db:seed:vinhomes": "node --env-file=.env --import tsx scripts/seed-vinhomes-projects.ts",
     "db:seed:commercial": "node --env-file=.env --import tsx scripts/seed-commercial-landings.ts",
+    "db:seed:noxh": "node --env-file=.env --import tsx scripts/seed-noxh-long-an.ts",
     "db:verify:landings": "node --env-file=.env --import tsx scripts/verify-landings-db.ts",
     "db:setup": "npm run db:up && npm run db:push && npm run db:seed",
     "db:studio": "prisma studio",

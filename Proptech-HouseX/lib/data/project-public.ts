@@ -2,7 +2,7 @@ import type { ProjectDetail } from "@/lib/data/project";
 import type { ProjectLandingListingCard } from "@/lib/data/listing";
 import { getProjectBySlugOrId } from "@/lib/data/project";
 import { allowDemoProjectFallback } from "@/lib/deploy/demo-fallback";
-import { isGoLiveLandingSlug } from "@/lib/seed/go-live-landing-slugs";
+import { isCatalogProjectSlug } from "@/lib/seed/catalog-project-slugs";
 import {
   getDemoListingsForSlug,
   getDemoProjectBySlug,
@@ -15,7 +15,7 @@ export type PublicProjectResult = {
 };
 
 function getCatalogLanding(slug: string): PublicProjectResult | null {
-  if (!isGoLiveLandingSlug(slug)) return null;
+  if (!isCatalogProjectSlug(slug)) return null;
   const project = getDemoProjectBySlug(slug);
   if (!project) return null;
   return {

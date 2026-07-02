@@ -175,6 +175,7 @@ Seed ghi vào Postgres; **PM2 đọc env khác seed CLI** nếu có `.env.produc
 npm run db:deploy
 npm run db:seed:vinhomes
 npm run db:seed:commercial
+npm run db:seed:noxh          # 6 dự án NOXH Long An (tùy chọn)
 npm run db:verify:landings          # 7/7 slug trong DB (đọc .env.production merge)
 npm run go-live:check-env-files     # .env vs .env.production — phải ✔
 

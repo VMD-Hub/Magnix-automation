@@ -6,8 +6,8 @@ import {
 } from "@/lib/content/project-landing";
 import { allowDemoProjectFallback } from "@/lib/deploy/demo-fallback";
 import {
+  listCatalogProjectCards,
   listDemoProjectCards,
-  listGoLiveProjectCards,
 } from "@/lib/preview/demo-projects";
 
 export type ProjectListParams = {
@@ -129,7 +129,7 @@ export async function listProjects(
     // DB offline — thử catalog go-live bên dưới.
   }
 
-  const catalogItems = listGoLiveProjectCards({
+  const catalogItems = listCatalogProjectCards({
     projectType: params.projectType,
     province: params.province,
     district: params.district,

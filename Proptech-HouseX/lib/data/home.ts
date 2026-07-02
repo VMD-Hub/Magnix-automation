@@ -1,7 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import type { ListingCardData } from "@/components/listings/listing-card";
 import type { ProjectCardData } from "@/components/projects/project-card";
-import { listGoLiveProjectCards } from "@/lib/preview/demo-projects";
+import { listCatalogProjectCards } from "@/lib/preview/demo-projects";
 
 export type HomepageData = {
   ok: boolean;
@@ -65,7 +65,7 @@ export async function getHomepageData(): Promise<HomepageData> {
               listingCount: p._count.listings,
               imageUrl: null,
             }))
-          : listGoLiveProjectCards().slice(0, 6),
+          : listCatalogProjectCards().slice(0, 6),
       saleListings: saleListings.map((l) => ({
         code: l.code,
         propertyType: l.propertyType,
@@ -84,7 +84,7 @@ export async function getHomepageData(): Promise<HomepageData> {
   } catch {
     return {
       ok: false,
-      projects: listGoLiveProjectCards().slice(0, 6),
+      projects: listCatalogProjectCards().slice(0, 6),
       saleListings: [],
     };
   }

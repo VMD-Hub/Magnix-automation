@@ -1,9 +1,18 @@
 import type { MetadataRoute } from "next";
 import { prisma } from "@/lib/prisma";
 import { affiliateSitemapEntries } from "@/lib/content/affiliate-verticals";
+import { getCatalogSlugs } from "@/lib/seed/catalog-project-slugs";
 import { getSiteUrl } from "@/lib/site-config";
 
 const BASE = getSiteUrl();
+
+function catalogProjectSitemapEntries(): MetadataRoute.Sitemap {
+  return getCatalogSlugs().map((slug) => ({
+    url: `${BASE}/du-an/${slug}`,
+    changeFrequency: "weekly" as const,
+    priority: 0.85,
+  }));
+}
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const affiliate = affiliateSitemapEntries(BASE).map((e) => ({
@@ -51,6 +60,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       }),
     ]);
 
+    const projectEntries =
+      projects.length > 0
+        ? projects.map((p) => ({
+            url: `${BASE}/du-an/${p.slug}`,
+            lastModified: p.updatedAt,
+            changeFrequency: "weekly" as const,
+            priority: 0.85,
+          }))
+        : catalogProjectSitemapEntries();
+
     return [
       ...staticRoutes,
       ...listings.map((l) => ({
@@ -59,12 +78,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         changeFrequency: "daily" as const,
         priority: 0.8,
       })),
-      ...projects.map((p) => ({
-        url: `${BASE}/du-an/${p.slug}`,
-        lastModified: p.updatedAt,
-        changeFrequency: "weekly" as const,
-        priority: 0.85,
-      })),
+      ...projectEntries,
       ...articles.map((a) => ({
         url: `${BASE}/tin-tuc/${a.slug}`,
         lastModified: a.updatedAt,
@@ -73,6 +87,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       })),
     ];
   } catch {
-    return staticRoutes;
+    return [...staticRoutes, ...catalogProjectSitemapEntries()];
   }
 }
