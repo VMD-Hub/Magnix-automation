@@ -55,6 +55,8 @@ export type ListingDetail = NonNullable<
 export type ProjectLandingListingCard = {
   id: string;
   code: string;
+  /** Tiêu đề tin đăng (hook SEO) — hiển thị trên thẻ landing dự án. */
+  title?: string | null;
   transactionType: string;
   propertyType: string;
   price: Prisma.Decimal | number | string | null;

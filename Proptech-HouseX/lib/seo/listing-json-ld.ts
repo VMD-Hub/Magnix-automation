@@ -1,4 +1,5 @@
 import type { ListingDetail } from "@/lib/data/listing";
+import { resolveListingDisplayTitle } from "@/lib/content/title";
 import { getSiteUrl } from "@/lib/site-config";
 
 type JsonLdObject = Record<string, unknown>;
@@ -7,16 +8,17 @@ type JsonLdObject = Record<string, unknown>;
  * Structured data cho trang tin đăng. Dùng schema.org `Product` + `Offer`
  * (cách Google khuyến nghị cho rao bán BĐS), map trực tiếp từ dữ liệu Prisma.
  */
-export function buildListingJsonLd(listing: ListingDetail): JsonLdObject {
+export function buildListingJsonLd(
+  listing: ListingDetail & { title?: string | null },
+): JsonLdObject {
   const siteUrl = getSiteUrl();
   const price = Number(listing.price.toString());
+  const displayName = resolveListingDisplayTitle(listing);
 
   const jsonLd: JsonLdObject = {
     "@context": "https://schema.org",
     "@type": "Product",
-    name:
-      listing.project?.name ??
-      `${listing.propertyType} tại ${listing.district}, ${listing.province}`,
+    name: displayName,
     category: listing.propertyType,
     sku: listing.code,
     offers: {

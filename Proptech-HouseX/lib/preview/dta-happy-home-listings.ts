@@ -117,6 +117,7 @@ export function buildDtaPreviewListings(take = 30): ProjectLandingListingCard[] 
   return listDtaHappyHomeListingCards().slice(0, take).map((c, i) => ({
     id: `dta-preview-${c.code}`,
     code: c.code,
+    title: c.title ?? null,
     transactionType: "SALE" as const,
     propertyType: "can_ho" as const,
     price: c.price,
@@ -124,4 +125,15 @@ export function buildDtaPreviewListings(take = 30): ProjectLandingListingCard[] 
     broker: { fullName: "HouseX — Suất bán CĐT DTA" },
     media: [{ url: c.imageUrl ?? imageForIndex(i) }],
   }));
+}
+
+/** Gắn tiêu đề hook từ copy layer khi card/DB chưa có title. */
+export function enrichDtaListingCardTitle(
+  card: ListingCardData,
+): ListingCardData {
+  if (card.title?.trim()) return card;
+  if (!isDtaHappyHomeListingCode(card.code)) return card;
+  const detail = buildDtaHappyHomeListingDetail(card.code);
+  if (!detail?.title) return card;
+  return { ...card, title: detail.title };
 }

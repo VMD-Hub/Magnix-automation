@@ -606,8 +606,9 @@ export function ProjectLandingContent({
                         </span>
                       )}
                     </div>
-                    <p className="mt-2 font-medium text-slate-900">
-                      {propertyTypeLabel(l.propertyType)}
+                    <p className="mt-2 line-clamp-2 text-sm font-semibold leading-snug text-slate-900 group-hover:text-brand-700">
+                      {l.title?.trim() ||
+                        propertyTypeLabel(l.propertyType)}
                     </p>
                     <p className="mt-1 text-lg font-bold text-brand-700">
                       {formatVnd(l.price) ?? "Liên hệ"}

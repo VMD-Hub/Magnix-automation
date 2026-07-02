@@ -6,6 +6,11 @@ import {
   buildDemoListingDetail,
   listDemoSaleListingCards,
 } from "@/lib/preview/demo-listings";
+import {
+  enrichDtaListingCardTitle,
+  isDtaHappyHomeListingCode,
+  buildDtaHappyHomeListingDetail,
+} from "@/lib/preview/dta-happy-home-listings";
 import { getListingByCode } from "@/lib/data/listing";
 
 const listingInclude = {
@@ -47,7 +52,7 @@ function toCard(
     >
   >[number],
 ): ListingCardData {
-  return {
+  return enrichDtaListingCardTitle({
     code: l.code,
     propertyType: l.propertyType,
     transactionType: l.transactionType,
@@ -60,7 +65,7 @@ function toCard(
     photoCount: l.photoCount,
     imageUrl: l.media[0]?.url ?? null,
     offerCount: l.fingerprint?.canonical?.offerCount ?? 0,
-  };
+  });
 }
 
 function filterDemoCards(
@@ -138,7 +143,9 @@ export async function browseListings(
   }
 
   if (params.transactionType === "SALE") {
-    const demo = filterDemoCards(listDemoSaleListingCards(), params);
+    const demo = filterDemoCards(listDemoSaleListingCards(), params).map(
+      enrichDtaListingCardTitle,
+    );
     if (demo.length > 0) {
       return paginateCatalog(demo, page, pageSize);
     }
@@ -150,18 +157,40 @@ export async function browseListings(
   };
 }
 
-/** Chi tiết tin — DB trước, catalog demo. */
+type ListingWithEditorialTitle = ListingDetail & {
+  title?: string | null;
+};
+
+function mergeDtaEditorialCopy(
+  fromDb: ListingDetail,
+  code: string,
+): ListingWithEditorialTitle {
+  const demo = buildDtaHappyHomeListingDetail(code);
+  if (!demo) return fromDb;
+  return {
+    ...fromDb,
+    title: demo.title,
+    description: demo.description ?? fromDb.description,
+  };
+}
+
+/** Chi tiết tin — DB trước, catalog demo; DTA A10 luôn gắn copy biên tập. */
 export async function getPublicListingByCode(
   code: string,
-): Promise<ListingDetail | null> {
+): Promise<ListingWithEditorialTitle | null> {
   try {
     const fromDb = await getListingByCode(code);
-    if (fromDb) return fromDb;
+    if (fromDb) {
+      if (isDtaHappyHomeListingCode(code)) {
+        return mergeDtaEditorialCopy(fromDb, code);
+      }
+      return fromDb;
+    }
   } catch {
     // Postgres offline
   }
 
-  return buildDemoListingDetail(code);
+  return buildDemoListingDetail(code) as ListingWithEditorialTitle | null;
 }
 
 export type { ListingDetail } from "@/lib/data/listing";

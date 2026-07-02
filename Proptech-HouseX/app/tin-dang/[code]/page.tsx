@@ -8,7 +8,10 @@ import {
 } from "@/lib/data/canonical";
 import { buildListingJsonLd } from "@/lib/seo/listing-json-ld";
 import { getSiteUrl } from "@/lib/site-config";
-import { buildListingTitle } from "@/lib/content/title";
+import {
+  resolveListingDisplayTitle,
+  resolveListingMetaTitle,
+} from "@/lib/content/title";
 import { maskPhone } from "@/lib/privacy/phone";
 import { BrokerContactCard } from "@/components/listings/broker-contact-card";
 import { Badge } from "@/components/ui/badge";
@@ -39,9 +42,9 @@ export async function generateMetadata({
     return { title: "Không tìm thấy tin đăng" };
   }
 
-  const title = `${buildListingTitle(listing)} — ${listing.code}`;
+  const title = resolveListingMetaTitle(listing);
   const description =
-    listing.description?.slice(0, 160) ??
+    listing.description?.replace(/^## .+\n/gm, "").slice(0, 160).trim() ||
     `${propertyTypeLabel(listing.propertyType)} ${TRANSACTION_TYPE_LABEL[
       listing.transactionType
     ].toLowerCase()} tại ${listing.district}, ${listing.province}.`;
@@ -90,6 +93,7 @@ export default async function ListingPage({ params, searchParams }: PageProps) {
 
   const jsonLd = buildListingJsonLd(listing);
   const cover = listing.media[0];
+  const headline = resolveListingDisplayTitle(listing);
 
   // P1: các tin khác của cùng 1 BĐS (nhiều broker) — gom theo CanonicalProperty.
   const otherOffers = listing.fingerprint?.canonicalId
@@ -138,9 +142,8 @@ export default async function ListingPage({ params, searchParams }: PageProps) {
             <span className="ml-auto font-mono text-silver-200">{listing.code}</span>
           </div>
 
-          <h1 className="mt-4 max-w-2xl text-3xl font-bold tracking-tight text-white">
-            {propertyTypeLabel(listing.propertyType)} — {listing.district},{" "}
-            {listing.province}
+          <h1 className="mt-4 max-w-3xl text-2xl font-bold tracking-tight text-white sm:text-3xl">
+            {headline}
           </h1>
 
           <p className="lux-price mt-3 text-3xl font-extrabold">

@@ -4,6 +4,7 @@ import { DTA_HAPPY_HOME_INVENTORY_A10 } from "../lib/content/dta-happy-home-inve
 import { buildDtaUnitListingCopy } from "../lib/content/dta-happy-home-listing-copy";
 import {
   buildDtaHappyHomeListingDetail,
+  buildDtaPreviewListings,
   listDtaHappyHomeListingCards,
 } from "../lib/preview/dta-happy-home-listings";
 
@@ -63,5 +64,11 @@ describe("DTA Happy Home A10 listings", () => {
       buildDtaUnitListingCopy(DTA_HAPPY_HOME_INVENTORY_A10[12]!, 12).title,
       /TOD|metro/i,
     );
+  });
+
+  it("preview marketplace cards carry editorial titles", () => {
+    const cards = buildDtaPreviewListings(5);
+    assert.ok(cards.every((c) => c.title && c.title.length > 20));
+    assert.match(cards[0]!.title!, /NOXH|Happy Home|Nhơn Trạch/i);
   });
 });
