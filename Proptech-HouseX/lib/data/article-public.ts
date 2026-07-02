@@ -41,13 +41,15 @@ function paginateArticleCards(
   return { items: items.slice(start, start + pageSize), total };
 }
 
-/** DB ưu tiên cùng slug; demo bổ sung bài chưa có trên Postgres. */
+/** Catalog demo ưu tiên hơn DB cùng slug — tránh bản seed cũ ghi đè bài đã biên tập. */
 function mergeArticleCards(
   dbItems: ArticleCardData[],
   demoItems: ArticleCardData[],
 ): ArticleCardData[] {
   const bySlug = new Map(demoItems.map((a) => [a.slug, a]));
-  for (const a of dbItems) bySlug.set(a.slug, a);
+  for (const a of dbItems) {
+    if (!bySlug.has(a.slug)) bySlug.set(a.slug, a);
+  }
   return sortArticleCards([...bySlug.values()]);
 }
 
@@ -157,6 +159,11 @@ export async function listPublishedArticles(params: {
 export async function getPublishedArticleBySlug(
   slug: string,
 ): Promise<{ article: ArticleDetail; source: "db" | "demo" } | null> {
+  const demo = getDemoArticleBySlug(slug);
+  if (demo) {
+    return { article: applyEditorialMedia(demo), source: "demo" };
+  }
+
   try {
     const row = await fetchPublishedArticleFromDb(slug);
     const article = mapToDetail(row);
@@ -165,9 +172,7 @@ export async function getPublishedArticleBySlug(
     // demo fallback
   }
 
-  const demo = getDemoArticleBySlug(slug);
-  if (!demo) return null;
-  return { article: applyEditorialMedia(demo), source: "demo" };
+  return null;
 }
 
 export async function getArticlesForProjectSlug(

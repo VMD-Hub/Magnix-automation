@@ -124,6 +124,13 @@ export const EDITORIAL_FIGURES = {
     caption: "Quy mô 2.192 căn NOXH — giá CĐT 448–700 triệu/căn",
     source: "CĐT Đệ Tam",
   }),
+  noxhEligibility: editorialFigure({
+    url: HERO.urban,
+    alt: "Minh họa an cư đô thị và nhà ở xã hội",
+    caption:
+      "Khung pháp lý NOXH: Luật Nhà ở 2023, NĐ 100/2024 và NĐ 136/2026 (mức trần thu nhập từ 07/04/2026).",
+    source: "minh họa",
+  }),
   dtaMap: editorialFigure({
     url: DTA_HAPPY_HOME_IMAGES.locationMap.url,
     alt: DTA_HAPPY_HOME_IMAGES.locationMap.alt,

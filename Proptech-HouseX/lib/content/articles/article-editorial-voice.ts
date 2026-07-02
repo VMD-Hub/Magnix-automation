@@ -15,7 +15,22 @@ export const EDITORIAL_BANNED_BODY_PATTERNS: readonly RegExp[] = [
   /Kết luận góc nhìn HouseX/i,
   /buyer-first/i,
   /→\s*\[/,
+  /không thay tư vấn pháp lý/i,
+  /không thay quyết định/i,
+  /không thay thế vai trò/i,
 ];
+
+/**
+ * Giọng chuyên gia: kết bài bằng trích dẫn nguồn + điều hướng đồng hành HouseX.
+ * Tránh disclaimer phủ định — thay bằng giá trị (rà soát, tư vấn miễn phí) và link /lien-he.
+ */
+export const EDITORIAL_CLOSING_GUIDANCE =
+  "Kết: 1 đoạn điều hướng chuyên gia HouseX (rà soát, đồng hành, miễn phí) + link [/lien-he](/lien-he); có thể thêm 1 dòng trích dẫn nguồn pháp lý/báo chí.";
+
+/** Kết bài kiến thức NOXH — điều hướng hỗ trợ, thu thập lead qua /lien-he. */
+export const NOXH_SUPPORT_CLOSING = `## Chuyên gia HouseX hỗ trợ rà soát hồ sơ miễn phí
+
+Tự đối chiếu ba trụ cột pháp lý là bước nên làm — nhưng hồ sơ NOXH còn nhiều chi tiết theo từng đợt mở bán: hệ số thu nhập địa phương, giấy xác nhận đơn vị, cam kết nhà ở cả hộ. Đội ngũ HouseX hỗ trợ miễn phí rà soát điều kiện đối tượng, gợi ý dự án phù hợp mức vay và nhắc lịch mở bán — bạn [để lại thông tin tại đây](/lien-he), chuyên gia sẽ đồng hành từ checklist hồ sơ đến khi chọn được phương án an cư phù hợp.`;
 
 /** Đoạn kết PR — nhúng tự nhiên cuối bài, không làm H2. */
 export const DTA_PR_CLOSINGS = {
@@ -34,6 +49,17 @@ export const DTA_PR_CLOSINGS = {
   nhonTrachTod:
     "Từ góc nhìn người ở thực tế, DTA Happy Home Nhơn Trạch — dự án NOXH trong [DTA City](/du-an/dta-happy-home-nhon-trach) — nằm trong tam giác hạ tầng: cao tốc Biên Hòa – Vũng Tàu khoảng 10 phút, trục 25C hướng sân bay Long Thành khoảng 20 phút (theo CĐT), và vùng ga Nhơn Trạch quy hoạch trong bán kính khoảng 5 km. Đó là mô hình đô thị TOD vệ tinh sân bay — xu hướng định cư của gia đình trẻ làm việc tại KCN Nhơn Trạch, thay vì chịu chi phí thuê trọ và di chuyển dài ngày từ TP.HCM.",
 } as const;
+
+export function getEditorialBodyIssues(body: string): string[] {
+  const text = String(body || "");
+  const issues: string[] = [];
+  if (/\*\*/.test(text)) issues.push("RAW_MARKDOWN_BOLD");
+  for (const pattern of EDITORIAL_BANNED_BODY_PATTERNS) {
+    if (pattern.test(text)) issues.push(`BANNED:${pattern.source}`);
+  }
+  if (/→\s*\[/.test(text)) issues.push("ARROW_CTA");
+  return issues;
+}
 
 export function assertEditorialBodyQuality(body: string, slug: string): void {
   if (/\*\*/.test(body)) {
