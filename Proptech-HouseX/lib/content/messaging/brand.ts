@@ -8,10 +8,10 @@ export const BRAND_TAGLINE =
 
 /** Mô tả thương hiệu — footer, email. */
 export const BRAND_TAGLINE_FOOTER =
-  "Sàn BĐS kiểm duyệt thông tin, xác minh theo quy trình, xử lý báo cáo sai lệch." as const;
+  "Cổng BĐS tìm mua, thuê và khám phá dự án — thông tin rõ, trải nghiệm an toàn." as const;
 
 export const SEO_TITLE_DEFAULT =
-  "House X — Sàn BĐS xác minh thông tin, sản phẩm thật" as const;
+  "House X — Thông tin chuẩn · Sản phẩm thật" as const;
 
 export const SEO_DESCRIPTION_DEFAULT =
-  "House X — sàn bất động sản kiểm duyệt tin đăng, xác minh thông tin và xử lý báo cáo sai lệch. Rada House X quét trước khi duyệt tin — cho người mua và môi giới." as const;
+  "House X — tìm mua, thuê BĐS và khám phá dự án với thông tin rõ ràng, liên hệ an toàn và công cụ hỗ trợ quyết định (vay, định giá, nội thất)." as const;

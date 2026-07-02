@@ -1,9 +1,9 @@
 import { HOUSEX_HERO_SLIDES } from "@/lib/brand/hero-assets";
-import { VERTICAL_VISUALS } from "@/lib/content/housex-services-visuals";
+import { HUB_VERTICAL_CARDS, VERTICAL_VISUALS } from "@/lib/content/housex-services-visuals";
 
-const financeHero = VERTICAL_VISUALS["tai-chinh"].heroImage;
-const valuationHero = VERTICAL_VISUALS["dinh-gia"].heroImage;
-const interiorHero = VERTICAL_VISUALS["noi-that"].heroImage;
+const financeHero = HUB_VERTICAL_CARDS["tai-chinh"].image;
+const valuationHero = HUB_VERTICAL_CARDS["dinh-gia"].image;
+const interiorHero = HUB_VERTICAL_CARDS["noi-that"].image;
 
 /** Banner trang công cụ — rộng, thấp (cùng tỷ lệ catalog /du-an). */
 export const TOOLS_HUB_BANNER = {

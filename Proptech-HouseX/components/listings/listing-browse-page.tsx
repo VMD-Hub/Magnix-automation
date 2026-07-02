@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { ListingCard } from "@/components/listings/listing-card";
+import { ToolsPageHero } from "@/components/tools/tools-page-hero";
+import { ButtonLink } from "@/components/ui/button";
 import {
   PROPERTY_TYPE_FILTER_OPTIONS,
   RENT_PROPERTY_TYPE_FILTER_OPTIONS,
@@ -21,10 +23,22 @@ const HCM_DISTRICTS = [
   "Bình Chánh",
 ];
 
+type BannerProps = {
+  kicker: string;
+  title: string;
+  subtitle: string;
+  image: string;
+  imageWebp?: string;
+  imageAlt: string;
+  objectPosition?: string;
+  badge?: string;
+};
+
 type Props = {
   basePath: "/mua-ban" | "/cho-thue";
   title: string;
   subtitle: string;
+  banner: BannerProps;
   items: React.ComponentProps<typeof ListingCard>["item"][];
   pagination: { page: number; totalPages: number; total: number };
   filters: {
@@ -32,6 +46,15 @@ type Props = {
     propertyType?: string;
     propertyTypeSlug?: string;
   };
+  isCatalog?: boolean;
+  emptyMode?: "no-results" | "coming-soon";
+  comingSoon?: {
+    title: string;
+    body: string;
+    cta: string;
+    ctaHref: string;
+  };
+  catalogNote?: string;
 };
 
 function buildHref(
@@ -50,11 +73,15 @@ function buildHref(
 
 export function ListingBrowsePage({
   basePath,
-  title,
   subtitle,
+  banner,
   items,
   pagination,
   filters,
+  isCatalog,
+  emptyMode = "no-results",
+  comingSoon,
+  catalogNote,
 }: Props) {
   const activeDistrict = filters.district;
   const activeSlug = filters.propertyTypeSlug;
@@ -64,16 +91,41 @@ export function ListingBrowsePage({
       : PROPERTY_TYPE_FILTER_OPTIONS;
 
   return (
-    <div className="mx-auto max-w-7xl py-8 container-px">
-      <header className="mb-8">
-        <h1 className="text-3xl font-extrabold text-slate-900">{title}</h1>
-        <p className="mt-2 text-slate-600">{subtitle}</p>
-        <p className="mt-1 text-sm text-slate-500">
+    <div className="proptech-section-glow mx-auto max-w-7xl py-8 container-px">
+      <ToolsPageHero
+        kicker={banner.kicker}
+        title={banner.title}
+        subtitle={banner.subtitle}
+        image={banner.image}
+        imageWebp={banner.imageWebp}
+        imageAlt={banner.imageAlt}
+        objectPosition={banner.objectPosition}
+      />
+
+      {banner.badge ? (
+        <div className="mb-6 flex justify-center">
+          <span className="rounded-full bg-gold-500/15 px-4 py-1.5 text-sm font-bold uppercase tracking-wider text-gold-800 ring-1 ring-gold-400/40">
+            {banner.badge}
+          </span>
+        </div>
+      ) : null}
+
+      <div className="mb-6 flex flex-wrap items-end justify-between gap-2">
+        <p className="text-sm text-slate-600">{subtitle}</p>
+        <p className="text-sm text-slate-500">
           {pagination.total > 0
             ? `${pagination.total.toLocaleString("vi-VN")} tin đang hiển thị`
-            : "Chưa có tin phù hợp"}
+            : emptyMode === "coming-soon"
+              ? "Đang cập nhật"
+              : "Chưa có tin phù hợp"}
         </p>
-      </header>
+      </div>
+
+      {isCatalog && catalogNote ? (
+        <p className="mb-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-2 text-sm text-amber-900">
+          {catalogNote}
+        </p>
+      ) : null}
 
       <div className="flex flex-col gap-8 lg:flex-row">
         <aside className="shrink-0 lg:w-56">
@@ -167,6 +219,8 @@ export function ListingBrowsePage({
                 <ListingCard key={item.code} item={item} />
               ))}
             </div>
+          ) : emptyMode === "coming-soon" && comingSoon ? (
+            <ComingSoonPanel {...comingSoon} />
           ) : (
             <div className="rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-12 text-center text-slate-500">
               Chưa có tin phù hợp bộ lọc. Thử bỏ bớt điều kiện hoặc quay lại sau.
@@ -195,6 +249,42 @@ export function ListingBrowsePage({
               ) : null}
             </nav>
           ) : null}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ComingSoonPanel({
+  title,
+  body,
+  cta,
+  ctaHref,
+}: {
+  title: string;
+  body: string;
+  cta: string;
+  ctaHref: string;
+}) {
+  return (
+    <div className="overflow-hidden rounded-2xl border border-silver-200 bg-white">
+      <div className="relative h-40 bg-gradient-to-br from-brand-900 via-ink-800 to-brand-700 sm:h-48">
+        <div className="absolute inset-0 flex flex-col items-center justify-center px-6 text-center">
+          <p className="text-xs font-bold uppercase tracking-[0.2em] text-gold-400">
+            Coming Soon
+          </p>
+          <p className="mt-2 text-xl font-extrabold text-white sm:text-2xl">{title}</p>
+        </div>
+      </div>
+      <div className="p-8 text-center">
+        <p className="mx-auto max-w-md text-sm leading-relaxed text-slate-600">{body}</p>
+        <div className="mt-6 flex flex-wrap justify-center gap-3">
+          <ButtonLink href={ctaHref} variant="primary" size="md">
+            {cta}
+          </ButtonLink>
+          <ButtonLink href="/dang-ky/moi-gioi" variant="brand" size="md">
+            Đăng tin cho thuê
+          </ButtonLink>
         </div>
       </div>
     </div>

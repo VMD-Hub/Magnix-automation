@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getListingByCode } from "@/lib/data/listing";
+import { getPublicListingByCode } from "@/lib/data/listing-browse";
 import {
   getCanonicalOffers,
   getCanonicalPrimaryCode,
@@ -33,7 +33,7 @@ export async function generateMetadata({
   params,
 }: PageProps): Promise<Metadata> {
   const { code } = await params;
-  const listing = await getListingByCode(code);
+  const listing = await getPublicListingByCode(code);
 
   if (!listing) {
     return { title: "Không tìm thấy tin đăng" };
@@ -82,7 +82,7 @@ export default async function ListingPage({ params, searchParams }: PageProps) {
   }
   const { code } = await params;
   const { reveal } = await searchParams;
-  const listing = await getListingByCode(code);
+  const listing = await getPublicListingByCode(code);
 
   if (!listing) {
     notFound();

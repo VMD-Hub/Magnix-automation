@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { browseListings } from "@/lib/data/listing-browse";
 import { propertyTypeFromSlug } from "@/lib/content/property-type-slug";
+import { LISTINGS_BROWSE_COPY } from "@/lib/content/listings-browse-copy";
 import {
   ListingBrowsePage,
   buildListingListJsonLd,
@@ -30,7 +31,7 @@ export async function generateMetadata({
   if (dbType) parts.push(propertyTypeLabel(dbType));
   if (sp.district) parts.push(sp.district);
   const title = parts.join(" — ");
-  const description = `Tìm mua ${dbType ? propertyTypeLabel(dbType).toLowerCase() : "nhà đất"}${sp.district ? ` tại ${sp.district}` : " tại TP.HCM"}. Tin đã kiểm duyệt, sắp xếp theo chất lượng.`;
+  const description = `Tìm mua ${dbType ? propertyTypeLabel(dbType).toLowerCase() : "nhà đất"}${sp.district ? ` tại ${sp.district}` : " tại TP.HCM"}. Tin đã kiểm duyệt, dễ so sánh theo khu vực.`;
 
   return {
     title,
@@ -57,8 +58,9 @@ export default async function MuaBanPage({ searchParams }: PageProps) {
   const sp = await searchParams;
   const page = Math.max(1, Number(sp.page) || 1);
   const propertyType = propertyTypeFromSlug(sp.propertyType);
+  const copy = LISTINGS_BROWSE_COPY.sale;
 
-  const { items, pagination } = await browseListings({
+  const { items, pagination, isCatalog } = await browseListings({
     transactionType: "SALE",
     district: sp.district,
     propertyType,
@@ -66,12 +68,12 @@ export default async function MuaBanPage({ searchParams }: PageProps) {
   });
 
   const siteUrl = getSiteUrl();
-  const jsonLd = buildListingListJsonLd(siteUrl, "/mua-ban", "Mua bán bất động sản", items);
+  const jsonLd = buildListingListJsonLd(siteUrl, "/mua-ban", copy.title, items);
 
   const subtitle =
     propertyType || sp.district
       ? `Lọc theo ${[propertyType ? propertyTypeLabel(propertyType) : null, sp.district].filter(Boolean).join(", ")}`
-      : "Căn hộ, nhà phố, đất nền — tin đã kiểm duyệt chất lượng";
+      : copy.subtitle;
 
   return (
     <>
@@ -81,10 +83,21 @@ export default async function MuaBanPage({ searchParams }: PageProps) {
       />
       <ListingBrowsePage
         basePath="/mua-ban"
-        title="Mua bán bất động sản"
+        title={copy.title}
         subtitle={subtitle}
+        banner={{
+          kicker: copy.kicker,
+          title: copy.title,
+          subtitle: copy.subtitle,
+          image: copy.bannerImage,
+          imageWebp: copy.bannerWebp,
+          imageAlt: copy.bannerAlt,
+          objectPosition: copy.objectPosition,
+        }}
         items={items}
         pagination={pagination}
+        isCatalog={isCatalog}
+        catalogNote={isCatalog ? copy.catalogNote : undefined}
         filters={{
           district: sp.district,
           propertyType,

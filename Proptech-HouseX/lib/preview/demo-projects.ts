@@ -5,6 +5,7 @@ import {
   parseProjectOverview,
   resolveLandingHeroImage,
 } from "@/lib/content/project-landing";
+import { ensureCatalogCoverUrl } from "@/lib/content/catalog-cover-fallback";
 import {
   buildDtaHappyHomeMock,
   buildDtaPreviewListings,
@@ -227,7 +228,7 @@ function projectToCard(project: ProjectDetail): ProjectCardData {
     developerName: project.developer?.name ?? null,
     priceFrom: minPrice,
     listingCount: DEMO_REGISTRY[project.slug]?.listings?.().length ?? 0,
-    imageUrl: hero?.url ?? null,
+    imageUrl: hero?.url ?? ensureCatalogCoverUrl(project.slug),
   };
 }
 

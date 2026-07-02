@@ -1,6 +1,11 @@
 import { prisma } from "@/lib/prisma";
 import type { ListingCardData } from "@/components/listings/listing-card";
 import type { TransactionType } from "@prisma/client";
+import {
+  buildDemoListingDetail,
+  listDemoSaleListingCards,
+} from "@/lib/preview/demo-listings";
+import { getListingByCode } from "@/lib/data/listing";
 
 const listingInclude = {
   media: {
@@ -30,6 +35,8 @@ export type ListingBrowseResult = {
     total: number;
     totalPages: number;
   };
+  /** Tin minh hoạ khi Postgres chưa có listing. */
+  isCatalog?: boolean;
 };
 
 function toCard(
@@ -52,6 +59,37 @@ function toCard(
     photoCount: l.photoCount,
     imageUrl: l.media[0]?.url ?? null,
     offerCount: l.fingerprint?.canonical?.offerCount ?? 0,
+  };
+}
+
+function filterDemoCards(
+  cards: ListingCardData[],
+  params: ListingBrowseParams,
+): ListingCardData[] {
+  return cards.filter((c) => {
+    if (params.district && c.district !== params.district) return false;
+    if (params.propertyType && c.propertyType !== params.propertyType) return false;
+    if (params.province && c.province !== params.province) return false;
+    return true;
+  });
+}
+
+function paginateCatalog(
+  cards: ListingCardData[],
+  page: number,
+  pageSize: number,
+): ListingBrowseResult {
+  const total = cards.length;
+  const start = (page - 1) * pageSize;
+  return {
+    items: cards.slice(start, start + pageSize),
+    pagination: {
+      page,
+      pageSize,
+      total,
+      totalPages: Math.max(1, Math.ceil(total / pageSize)),
+    },
+    isCatalog: total > 0,
   };
 }
 
@@ -83,19 +121,44 @@ export async function browseListings(
       prisma.listing.count({ where }),
     ]);
 
-    return {
-      items: rows.map(toCard),
-      pagination: {
-        page,
-        pageSize,
-        total,
-        totalPages: Math.max(1, Math.ceil(total / pageSize)),
-      },
-    };
+    if (total > 0) {
+      return {
+        items: rows.map(toCard),
+        pagination: {
+          page,
+          pageSize,
+          total,
+          totalPages: Math.max(1, Math.ceil(total / pageSize)),
+        },
+      };
+    }
   } catch {
-    return {
-      items: [],
-      pagination: { page, pageSize, total: 0, totalPages: 1 },
-    };
+    // DB offline — thử catalog demo bên dưới.
   }
+
+  if (params.transactionType === "SALE") {
+    const demo = filterDemoCards(listDemoSaleListingCards(), params);
+    if (demo.length > 0) {
+      return paginateCatalog(demo, page, pageSize);
+    }
+  }
+
+  return {
+    items: [],
+    pagination: { page, pageSize, total: 0, totalPages: 1 },
+  };
 }
+
+/** Chi tiết tin — DB trước, catalog demo. */
+export async function getPublicListingByCode(code: string) {
+  try {
+    const fromDb = await getListingByCode(code);
+    if (fromDb) return fromDb;
+  } catch {
+    // Postgres offline
+  }
+
+  return buildDemoListingDetail(code);
+}
+
+export type { ListingDetail } from "@/lib/data/listing";

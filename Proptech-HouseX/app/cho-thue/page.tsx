@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { browseListings } from "@/lib/data/listing-browse";
 import { propertyTypeFromSlug } from "@/lib/content/property-type-slug";
+import { LISTINGS_BROWSE_COPY } from "@/lib/content/listings-browse-copy";
 import {
   ListingBrowsePage,
   buildListingListJsonLd,
@@ -30,7 +31,7 @@ export async function generateMetadata({
   if (dbType) parts.push(propertyTypeLabel(dbType));
   if (sp.district) parts.push(sp.district);
   const title = parts.join(" — ");
-  const description = `Tìm thuê ${dbType ? propertyTypeLabel(dbType).toLowerCase() : "nhà đất"}${sp.district ? ` tại ${sp.district}` : " tại TP.HCM"}. Tin đã kiểm duyệt, sắp xếp theo chất lượng.`;
+  const description = `Tìm thuê ${dbType ? propertyTypeLabel(dbType).toLowerCase() : "nhà đất"}${sp.district ? ` tại ${sp.district}` : " tại TP.HCM"}. Kho tin cho thuê HouseX đang cập nhật.`;
 
   const site = getSiteUrl();
   const q = new URLSearchParams();
@@ -54,6 +55,7 @@ export default async function ChoThuePage({ searchParams }: PageProps) {
   const sp = await searchParams;
   const page = Math.max(1, Number(sp.page) || 1);
   const propertyType = propertyTypeFromSlug(sp.propertyType);
+  const copy = LISTINGS_BROWSE_COPY.rent;
 
   const { items, pagination } = await browseListings({
     transactionType: "RENT",
@@ -63,17 +65,12 @@ export default async function ChoThuePage({ searchParams }: PageProps) {
   });
 
   const siteUrl = getSiteUrl();
-  const jsonLd = buildListingListJsonLd(
-    siteUrl,
-    "/cho-thue",
-    "Cho thuê bất động sản",
-    items,
-  );
+  const jsonLd = buildListingListJsonLd(siteUrl, "/cho-thue", copy.title, items);
 
   const subtitle =
     propertyType || sp.district
       ? `Lọc theo ${[propertyType ? propertyTypeLabel(propertyType) : null, sp.district].filter(Boolean).join(", ")}`
-      : "Căn hộ, CHDV, phòng trọ, shophouse — tin đã kiểm duyệt chất lượng";
+      : copy.subtitle;
 
   return (
     <>
@@ -83,10 +80,27 @@ export default async function ChoThuePage({ searchParams }: PageProps) {
       />
       <ListingBrowsePage
         basePath="/cho-thue"
-        title="Cho thuê bất động sản"
+        title={copy.title}
         subtitle={subtitle}
+        banner={{
+          kicker: copy.kicker,
+          title: copy.title,
+          subtitle: copy.subtitle,
+          image: copy.bannerImage,
+          imageWebp: copy.bannerWebp,
+          imageAlt: copy.bannerAlt,
+          objectPosition: copy.objectPosition,
+          badge: "Coming Soon",
+        }}
         items={items}
         pagination={pagination}
+        emptyMode={items.length === 0 ? "coming-soon" : "no-results"}
+        comingSoon={{
+          title: copy.comingSoonTitle,
+          body: copy.comingSoonBody,
+          cta: copy.comingSoonCta,
+          ctaHref: copy.comingSoonCtaHref,
+        }}
         filters={{
           district: sp.district,
           propertyType,

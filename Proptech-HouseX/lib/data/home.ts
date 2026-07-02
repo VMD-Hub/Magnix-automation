@@ -2,11 +2,14 @@ import { prisma } from "@/lib/prisma";
 import type { ListingCardData } from "@/components/listings/listing-card";
 import type { ProjectCardData } from "@/components/projects/project-card";
 import { listCatalogProjectCards } from "@/lib/preview/demo-projects";
+import { listDemoSaleListingCards } from "@/lib/preview/demo-listings";
 
 export type HomepageData = {
   ok: boolean;
   projects: ProjectCardData[];
   saleListings: ListingCardData[];
+  /** Tin minh hoạ khi Postgres chưa có listing ACTIVE. */
+  listingsAreCatalog?: boolean;
 };
 
 const listingInclude = {
@@ -49,6 +52,24 @@ export async function getHomepageData(): Promise<HomepageData> {
       }),
     ]);
 
+    const mappedListings =
+      saleListings.length > 0
+        ? saleListings.map((l) => ({
+            code: l.code,
+            propertyType: l.propertyType,
+            transactionType: l.transactionType,
+            price: l.price.toString(),
+            area: l.area,
+            province: l.province,
+            district: l.district,
+            verified: l.verified,
+            hasVideo: l.hasVideo,
+            photoCount: l.photoCount,
+            imageUrl: l.media[0]?.url ?? null,
+            offerCount: l.fingerprint?.canonical?.offerCount ?? 0,
+          }))
+        : listDemoSaleListingCards().slice(0, 4);
+
     return {
       ok: true,
       projects:
@@ -66,26 +87,15 @@ export async function getHomepageData(): Promise<HomepageData> {
               imageUrl: null,
             }))
           : listCatalogProjectCards().slice(0, 6),
-      saleListings: saleListings.map((l) => ({
-        code: l.code,
-        propertyType: l.propertyType,
-        transactionType: l.transactionType,
-        price: l.price.toString(),
-        area: l.area,
-        province: l.province,
-        district: l.district,
-        verified: l.verified,
-        hasVideo: l.hasVideo,
-        photoCount: l.photoCount,
-        imageUrl: l.media[0]?.url ?? null,
-        offerCount: l.fingerprint?.canonical?.offerCount ?? 0,
-      })),
+      saleListings: mappedListings,
+      listingsAreCatalog: saleListings.length === 0,
     };
   } catch {
     return {
       ok: false,
       projects: listCatalogProjectCards().slice(0, 6),
-      saleListings: [],
+      saleListings: listDemoSaleListingCards().slice(0, 4),
+      listingsAreCatalog: true,
     };
   }
 }

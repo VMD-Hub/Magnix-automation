@@ -1,14 +1,13 @@
 import type { ComponentType } from "react";
 import { Icon } from "@/components/icons";
-import { RADA_SHORT } from "@/lib/content/messaging/rada";
 
-/** L1 — Trang chủ & quảng bá nền tảng. */
+/** L1 — Trang chủ & quảng bá nền tảng (góc nhìn khách hàng). */
 
 export const PLATFORM_HERO = {
-  kicker: "Sàn bất động sản có quy trình xác minh",
+  kicker: "Cổng BĐS Proptech — ưu tiên người mua nhà",
   h1Line1: "Nơi thông tin chuẩn và",
   h1Accent: "sản phẩm thật được ưu tiên",
-  lead: `House X kiểm duyệt tin đăng, đối chiếu thông tin và xử lý báo cáo sai lệch — để người mua không bị dẫn sai nơi, sai giá; môi giới đăng tin đúng chuẩn thì được tin tưởng. ${RADA_SHORT} Sai lệch có báo cáo — người đăng tin vi phạm chịu cơ chế xử lý của sàn.`,
+  lead: "Tìm căn phù hợp, so sánh dự án và ước tính khoản vay trên một nền tảng — hình ảnh rõ, vị trí minh bạch, liên hệ an toàn khi bạn sẵn sàng trao đổi.",
 } as const;
 
 export type TrustItem = {
@@ -20,30 +19,30 @@ export type TrustItem = {
 export const PLATFORM_TRUST: TrustItem[] = [
   {
     Icon: Icon.BadgeCheck,
-    title: "Tiêu chuẩn duyệt tin",
-    desc: "Địa chỉ, ảnh và mô tả trong quy tắc kiểm duyệt",
+    title: "Tin rõ, dễ so sánh",
+    desc: "Ảnh, vị trí và giá niêm yết được kiểm tra trước khi hiển thị",
   },
   {
     Icon: Icon.FileCheck,
-    title: "Báo cáo tin sai",
-    desc: "Khách báo cáo · xử lý và phạt minh bạch",
+    title: "Phản hồi từ cộng đồng",
+    desc: "Thấy thông tin chưa khớp? Góp ý để chúng tôi cập nhật nhanh",
   },
   {
     Icon: Icon.ShieldCheck,
     title: "Liên hệ an toàn",
-    desc: "Số điện thoại bảo vệ — xem sau xác nhận email",
+    desc: "Số điện thoại được bảo vệ — chỉ hiện khi bạn xác nhận email",
   },
   {
     Icon: Icon.Coins,
-    title: "Công cụ hỗ trợ",
-    desc: "Tính khoản vay, định giá — bổ trợ quyết định",
+    title: "Quyết định có căn cứ",
+    desc: "Tính khoản vay, tham khảo định giá — bổ trợ hành trình chọn nhà",
   },
 ];
 
 export const PLATFORM_BROKER_CTA = {
-  title: "Bạn là môi giới hoặc chủ nhà?",
-  desc: "Đăng tin đúng chuẩn — được ưu tiên; sai lệch bị xử lý theo quy chế sàn.",
+  title: "Có BĐS muốn giới thiệu?",
+  desc: "Đăng tin rõ ràng — tiếp cận khách đã xác nhận liên hệ, để đúng người tìm thấy bạn sớm hơn.",
 } as const;
 
 export const PLATFORM_FOOTER_BLURB =
-  "Sàn BĐS kiểm duyệt thông tin, xác minh theo quy trình — tài chính, thẩm định và nội thất trên cùng nền tảng." as const;
+  "Tìm nhà, khám phá dự án và dùng công cụ vay — tài chính, thẩm định và nội thất trên cùng cổng House X." as const;

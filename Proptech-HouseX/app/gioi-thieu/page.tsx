@@ -1,15 +1,17 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import {
+  ABOUT_GOALS,
+  ABOUT_INTRO,
+  ABOUT_MISSION,
+  ABOUT_VALUES,
+  ABOUT_VISION,
+  TRUST_TECH,
+} from "@/lib/content/messaging/about-public";
+import {
   BRAND_TAGLINE_FOOTER,
   SEO_DESCRIPTION_DEFAULT,
 } from "@/lib/content/messaging/brand";
-import {
-  RADA_ABOUT_BULLETS,
-  RADA_ABOUT_LEAD,
-  RADA_PROGRAM_NAME,
-  RADA_TAGLINE,
-} from "@/lib/content/messaging/rada";
 import { getBrandName } from "@/lib/site-config";
 
 export const metadata: Metadata = {
@@ -23,26 +25,39 @@ export default function GioiThieuPage() {
   return (
     <StaticPage title={`Giới thiệu ${brand}`}>
       <p>
-        {brand} là sàn bất động sản với cam kết{" "}
-        <strong>Thông tin chuẩn · Sản phẩm thật</strong> — kiểm duyệt tin đăng,
-        xác minh theo quy trình và xử lý báo cáo sai lệch cho người mua lẫn môi
-        giới.
+        <strong>{brand}</strong> {ABOUT_INTRO.lead}{" "}
+        Cam kết của chúng tôi:{" "}
+        <strong>{ABOUT_INTRO.promise}</strong>.
       </p>
 
-      <h2>Chúng tôi làm gì?</h2>
+      <h2>{ABOUT_VISION.title}</h2>
+      <p>{ABOUT_VISION.body}</p>
+
+      <h2>{ABOUT_MISSION.title}</h2>
+      <p>{ABOUT_MISSION.body}</p>
+
+      <h2>{ABOUT_GOALS.title}</h2>
       <ul>
-        <li>Kiểm duyệt chất lượng tin đăng (ảnh, mô tả, vị trí, giá niêm yết).</li>
-        <li>Chống tin trùng và gom tin cùng một bất động sản.</li>
-        <li>Bảo vệ số điện thoại môi giới — chỉ khách đã xác nhận email mới xem được.</li>
-        <li>Tiếp nhận báo cáo tin sai — cơ chế xử lý và phạt minh bạch.</li>
-        <li>Công cụ tài chính hỗ trợ quyết định mua nhà (tính vay, định giá).</li>
+        {ABOUT_GOALS.items.map((item) => (
+          <li key={item}>{item}</li>
+        ))}
       </ul>
 
-      <h2>{RADA_PROGRAM_NAME}</h2>
-      <p className="text-sm font-medium text-slate-600">{RADA_TAGLINE}</p>
-      <p>{RADA_ABOUT_LEAD}</p>
+      <h2>{ABOUT_VALUES.title}</h2>
+      <p>{ABOUT_VALUES.intro}</p>
       <ul>
-        {RADA_ABOUT_BULLETS.map((item) => (
+        {ABOUT_VALUES.items.map((item) => (
+          <li key={item.title}>
+            <strong>{item.title}</strong> — {item.desc}
+          </li>
+        ))}
+      </ul>
+
+      <h2>{TRUST_TECH.title}</h2>
+      <p className="text-sm font-medium text-slate-600">{TRUST_TECH.tagline}</p>
+      <p>{TRUST_TECH.lead}</p>
+      <ul>
+        {TRUST_TECH.bullets.map((item) => (
           <li key={item}>{item}</li>
         ))}
       </ul>
@@ -50,7 +65,7 @@ export default function GioiThieuPage() {
       <p className="text-sm text-slate-600">{BRAND_TAGLINE_FOOTER}</p>
 
       <p>
-        Bạn là môi giới?{" "}
+        Bạn là môi giới hoặc chủ nhà?{" "}
         <Link href="/dang-ky/moi-gioi" className="font-semibold text-brand-700 underline">
           Đăng ký đăng tin
         </Link>

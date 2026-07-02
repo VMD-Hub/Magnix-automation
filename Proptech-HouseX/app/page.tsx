@@ -16,7 +16,7 @@ import {
 export const revalidate = 300;
 
 export default async function Home() {
-  const { projects, saleListings } = await getHomepageData();
+  const { projects, saleListings, listingsAreCatalog } = await getHomepageData();
 
   return (
     <>
@@ -60,24 +60,31 @@ export default async function Home() {
             ))}
           </div>
         ) : (
-          <EmptyState label="Chưa có dự án. Hãy seed dữ liệu để hiển thị." />
+          <EmptyState label="Danh sách tin đang cập nhật. Quay lại sau hoặc xem mục Dự án." />
         )}
       </section>
 
       <section className="mx-auto max-w-7xl py-8 container-px">
         <SectionHeading
           title="Bất động sản đang bán"
-          subtitle="Sắp xếp theo điểm chất lượng & độ mới"
+          subtitle="Tin đã kiểm duyệt — sắp xếp để bạn so sánh nhanh"
           href="/mua-ban"
         />
         {saleListings.length > 0 ? (
-          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-            {saleListings.map((l) => (
-              <ListingCard key={l.code} item={l} />
-            ))}
-          </div>
+          <>
+            {listingsAreCatalog ? (
+              <p className="mb-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-2 text-sm text-amber-900">
+                Tin minh hoạ — kho tin thật cập nhật khi môi giới đăng trên HouseX.
+              </p>
+            ) : null}
+            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+              {saleListings.map((l) => (
+                <ListingCard key={l.code} item={l} />
+              ))}
+            </div>
+          </>
         ) : (
-          <EmptyState label="Chưa có tin đăng. Hãy seed dữ liệu để hiển thị." />
+          <EmptyState label="Chưa có tin phù hợp. Xem thêm tại mục Mua bán." />
         )}
       </section>
 
