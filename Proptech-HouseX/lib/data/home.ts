@@ -8,8 +8,6 @@ export type HomepageData = {
   ok: boolean;
   projects: ProjectCardData[];
   saleListings: ListingCardData[];
-  /** Tin minh hoạ khi Postgres chưa có listing ACTIVE. */
-  listingsAreCatalog?: boolean;
 };
 
 const listingInclude = {
@@ -88,14 +86,12 @@ export async function getHomepageData(): Promise<HomepageData> {
             }))
           : listCatalogProjectCards().slice(0, 6),
       saleListings: mappedListings,
-      listingsAreCatalog: saleListings.length === 0,
     };
   } catch {
     return {
       ok: false,
       projects: listCatalogProjectCards().slice(0, 6),
       saleListings: listDemoSaleListingCards().slice(0, 4),
-      listingsAreCatalog: true,
     };
   }
 }

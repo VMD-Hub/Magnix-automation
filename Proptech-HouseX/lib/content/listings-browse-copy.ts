@@ -15,8 +15,7 @@ export const LISTINGS_BROWSE_COPY = {
     bannerWebp: HOUSEX_HERO_SLIDES[0]!.webpMd,
     bannerAlt: "Phối cảnh đô thị — mua bán bất động sản HouseX",
     objectPosition: HOUSEX_HERO_SLIDES[0]!.objectPosition,
-    emptyFilter: "Chưa có tin khớp bộ lọc. Thử bỏ bớt điều kiện hoặc xem tin mẫu bên dưới.",
-    catalogNote: "Đang hiển thị tin minh hoạ — kho tin thật cập nhật liên tục.",
+    emptyFilter: "Chưa có tin khớp bộ lọc. Thử bỏ bớt điều kiện hoặc quay lại sau.",
   },
   rent: {
     kicker: "HouseX · Cho thuê",

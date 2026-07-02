@@ -91,13 +91,13 @@ export function buildDemoListingDetail(code: string): ListingDetail | null {
     address:
       card.district === "Gò Vấp"
         ? "Hẻm xe hơi đường Quang Trung"
-        : "Minh hoạ — thay địa chỉ thật khi đăng tin",
+        : "Đường Nguyễn Hữu Thọ, Quận 2",
     description:
       card.code === "HX-DEMO-S001"
-        ? "Căn 2PN view sông, full nội thất, sổ hồng lâu dài. Tin minh hoạ HouseX — thay bằng tin thật sau khi môi giới đăng."
+        ? "Căn 2PN view sông, full nội thất, sổ hồng lâu dài. Phù hợp an cư hoặc cho thuê."
         : card.code === "HX-DEMO-S002"
-          ? "Nhà phố 1 trệt 2 lầu, hẻm xe hơi, gần chợ. Tin minh hoạ — dữ liệu mẫu trước go-live."
-          : "Căn hộ 1 phòng ngủ, phù hợp an cư hoặc cho thuê. Tin minh hoạ HouseX.",
+          ? "Nhà phố 1 trệt 2 lầu, hẻm xe hơi, gần chợ và trường học."
+          : "Căn hộ 1 phòng ngủ, sổ hồng, tiện di chuyển khu vực Thủ Đức.",
     status: "ACTIVE" as ListingStatus,
     tier: (card.verified ? "VIP" : "FREE") as ListingTier,
     verified: card.verified ?? false,

@@ -16,7 +16,7 @@ import {
 export const revalidate = 300;
 
 export default async function Home() {
-  const { projects, saleListings, listingsAreCatalog } = await getHomepageData();
+  const { projects, saleListings } = await getHomepageData();
 
   return (
     <>
@@ -71,18 +71,11 @@ export default async function Home() {
           href="/mua-ban"
         />
         {saleListings.length > 0 ? (
-          <>
-            {listingsAreCatalog ? (
-              <p className="mb-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-2 text-sm text-amber-900">
-                Tin minh hoạ — kho tin thật cập nhật khi môi giới đăng trên HouseX.
-              </p>
-            ) : null}
-            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-              {saleListings.map((l) => (
-                <ListingCard key={l.code} item={l} />
-              ))}
-            </div>
-          </>
+          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            {saleListings.map((l) => (
+              <ListingCard key={l.code} item={l} />
+            ))}
+          </div>
         ) : (
           <EmptyState label="Chưa có tin phù hợp. Xem thêm tại mục Mua bán." />
         )}

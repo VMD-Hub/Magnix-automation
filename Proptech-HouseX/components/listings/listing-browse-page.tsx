@@ -46,7 +46,6 @@ type Props = {
     propertyType?: string;
     propertyTypeSlug?: string;
   };
-  isCatalog?: boolean;
   emptyMode?: "no-results" | "coming-soon";
   comingSoon?: {
     title: string;
@@ -54,7 +53,6 @@ type Props = {
     cta: string;
     ctaHref: string;
   };
-  catalogNote?: string;
 };
 
 function buildHref(
@@ -78,10 +76,8 @@ export function ListingBrowsePage({
   items,
   pagination,
   filters,
-  isCatalog,
   emptyMode = "no-results",
   comingSoon,
-  catalogNote,
 }: Props) {
   const activeDistrict = filters.district;
   const activeSlug = filters.propertyTypeSlug;
@@ -120,12 +116,6 @@ export function ListingBrowsePage({
               : "Chưa có tin phù hợp"}
         </p>
       </div>
-
-      {isCatalog && catalogNote ? (
-        <p className="mb-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-2 text-sm text-amber-900">
-          {catalogNote}
-        </p>
-      ) : null}
 
       <div className="flex flex-col gap-8 lg:flex-row">
         <aside className="shrink-0 lg:w-56">

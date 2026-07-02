@@ -60,7 +60,7 @@ export default async function MuaBanPage({ searchParams }: PageProps) {
   const propertyType = propertyTypeFromSlug(sp.propertyType);
   const copy = LISTINGS_BROWSE_COPY.sale;
 
-  const { items, pagination, isCatalog } = await browseListings({
+  const { items, pagination } = await browseListings({
     transactionType: "SALE",
     district: sp.district,
     propertyType,
@@ -96,8 +96,6 @@ export default async function MuaBanPage({ searchParams }: PageProps) {
         }}
         items={items}
         pagination={pagination}
-        isCatalog={isCatalog}
-        catalogNote={isCatalog ? copy.catalogNote : undefined}
         filters={{
           district: sp.district,
           propertyType,
