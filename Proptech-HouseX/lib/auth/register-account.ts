@@ -5,6 +5,11 @@ import { normalizeVnPhone, isValidVnPhone } from "@/lib/phone";
 import { normalizeEmail } from "@/lib/email/normalize";
 import { sendVerificationEmail } from "@/lib/email/auth-mailer";
 import type { AuthRegisterInput } from "@/lib/validation/auth";
+import { enqueueEvent } from "@/lib/events/outbox";
+import {
+  buildAccountRegisteredPayload,
+  forwardOutboxEventBestEffort,
+} from "@/lib/events/supply-signup";
 
 export type RegisterInput = AuthRegisterInput & { role: AccountRole };
 
@@ -60,7 +65,7 @@ export async function registerUserAccount(
     };
   }
 
-  const result = await prisma.$transaction(async (tx) => {
+  const { result, eventPayload } = await prisma.$transaction(async (tx) => {
     const account = await tx.userAccount.create({
       data: {
         role: input.role,
@@ -98,7 +103,28 @@ export async function registerUserAccount(
             },
           });
 
-      return { account, customerId: customer.id, brokerId: undefined };
+      const eventPayload = buildAccountRegisteredPayload({
+        userAccountId: account.id,
+        role: "CUSTOMER",
+        name: account.name,
+        phone: account.phone,
+        email,
+        marketingOptIn: account.marketingOptIn,
+        customerId: customer.id,
+        registeredAt: account.createdAt,
+      });
+
+      await enqueueEvent(
+        tx,
+        "account.registered",
+        eventPayload,
+        `account.registered:${account.id}`,
+      );
+
+      return {
+        result: { account, customerId: customer.id, brokerId: undefined },
+        eventPayload,
+      };
     }
 
     const broker = await tx.broker.create({
@@ -111,8 +137,31 @@ export async function registerUserAccount(
       },
     });
 
-    return { account, brokerId: broker.id, customerId: undefined };
+    const eventPayload = buildAccountRegisteredPayload({
+      userAccountId: account.id,
+      role: "BROKER",
+      name: account.name,
+      phone: account.phone,
+      email,
+      marketingOptIn: account.marketingOptIn,
+      brokerId: broker.id,
+      registeredAt: account.createdAt,
+    });
+
+    await enqueueEvent(
+      tx,
+      "account.registered",
+      eventPayload,
+      `account.registered:${account.id}`,
+    );
+
+    return {
+      result: { account, brokerId: broker.id, customerId: undefined },
+      eventPayload,
+    };
   });
+
+  void forwardOutboxEventBestEffort("account.registered", eventPayload);
 
   let emailSent = false;
   try {

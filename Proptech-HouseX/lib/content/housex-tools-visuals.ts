@@ -20,6 +20,13 @@ export const LOAN_CALC_BANNER = {
   alt: "Tư vấn tài chính mua nhà — HouseX",
 };
 
+export const NOXH_CHECK_BANNER = {
+  jpg: HOUSEX_HERO_SLIDES[0]!.jpgMd,
+  webp: HOUSEX_HERO_SLIDES[0]!.webpMd,
+  objectPosition: HOUSEX_HERO_SLIDES[0]!.objectPosition,
+  alt: "Kiểm tra điều kiện mua nhà ở xã hội — HouseX",
+};
+
 /** Ảnh minh hoạ từng thẻ công cụ trên hub. */
 export const TOOL_CARD_IMAGES: Record<string, string> = {
   loan: financeHero,

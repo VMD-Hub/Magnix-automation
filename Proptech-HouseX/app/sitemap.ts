@@ -38,6 +38,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${BASE}/tin-tuc`, changeFrequency: "daily", priority: 0.85 },
     { url: `${BASE}/cong-cu`, changeFrequency: "monthly", priority: 0.65 },
     { url: `${BASE}/cong-cu/tinh-khoan-vay`, changeFrequency: "monthly", priority: 0.7 },
+    { url: `${BASE}/cong-cu/dieu-kien-noxh`, changeFrequency: "monthly", priority: 0.75 },
     ...affiliate,
     { url: `${BASE}/dang-ky/khach-hang`, changeFrequency: "monthly", priority: 0.5 },
     { url: `${BASE}/dang-ky/moi-gioi`, changeFrequency: "monthly", priority: 0.5 },

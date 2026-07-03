@@ -30,6 +30,21 @@ export const LOAN_CALC_COPY = {
   faqHeading: "Câu hỏi thường gặp về vay mua nhà",
 } as const;
 
+export const NOXH_CHECK_COPY = {
+  metaTitle: "Kiểm tra điều kiện mua nhà ở xã hội (NOXH) 2026 | HouseX",
+  metaDescription:
+    "Tự kiểm tra điều kiện mua NOXH theo Luật Nhà ở 2023 và Nghị định 100/2024 (sửa đổi bởi NĐ 136/2026): đối tượng, nhà ở, thu nhập 25/35/50 triệu và khả năng vay. Miễn phí, có kết quả ngay.",
+  kicker: "HouseX · Công cụ",
+  title: "Kiểm tra điều kiện mua nhà ở xã hội",
+  subtitle:
+    "Trả lời vài câu hỏi để biết bạn có đủ điều kiện mua NOXH không, vướng ở đâu và cần làm gì tiếp — theo quy định mới nhất năm 2026.",
+  primaryCta: "Bắt đầu kiểm tra",
+  primaryCtaHref: "#kiem-tra",
+  secondaryCta: "Nhận tư vấn chuyên gia",
+  secondaryCtaHref: "/lien-he",
+  faqHeading: "Câu hỏi thường gặp về điều kiện mua NOXH",
+} as const;
+
 export type ToolCardDef = {
   id: string;
   href: string;
@@ -62,8 +77,9 @@ export const TOOL_HUB_CARDS: ToolCardDef[] = [
     id: "noxh-check",
     href: "/cong-cu/dieu-kien-noxh",
     title: "Kiểm tra điều kiện NOXH",
-    desc: "Checklist thu nhập, cư trú và đối tượng theo Luật Nhà ở.",
-    cta: "Sắp ra mắt",
-    ready: false,
+    desc: "Đối tượng, nhà ở, thu nhập & khả năng vay — theo quy định mới nhất 2026.",
+    cta: "Kiểm tra ngay",
+    ready: true,
+    badge: "Mới",
   },
 ];

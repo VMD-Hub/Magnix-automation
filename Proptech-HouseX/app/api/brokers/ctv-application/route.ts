@@ -3,6 +3,11 @@ import { getSessionUser } from "@/lib/auth/session";
 import { brokerIdForSession } from "@/lib/auth/session-profile";
 import { prisma } from "@/lib/prisma";
 import { ctvApplicationSchema } from "@/lib/validation/auth";
+import { enqueueEvent } from "@/lib/events/outbox";
+import {
+  buildCtvApplicationPayload,
+  forwardOutboxEventBestEffort,
+} from "@/lib/events/supply-signup";
 
 /** Trạng thái đơn đăng ký CTV của môi giới đang đăng nhập. */
 export async function GET() {
@@ -49,7 +54,10 @@ export async function POST(req: Request) {
 
     const broker = await prisma.broker.findUnique({
       where: { id: brokerId },
-      include: { ctvApplication: true },
+      include: {
+        ctvApplication: true,
+        userAccount: { select: { email: true } },
+      },
     });
 
     if (!broker) {
@@ -66,28 +74,54 @@ export async function POST(req: Request) {
 
     const body = ctvApplicationSchema.parse(await req.json());
 
-    const app = await prisma.ctvApplication.upsert({
-      where: { brokerId },
-      create: {
-        brokerId,
+    const { app, eventPayload } = await prisma.$transaction(async (tx) => {
+      const createdApp = await tx.ctvApplication.upsert({
+        where: { brokerId },
+        create: {
+          brokerId,
+          idNumber: body.idNumber,
+          experience: body.experience,
+          region: body.region,
+          motivation: body.motivation,
+          status: "PENDING",
+          rejectReason: null,
+          reviewedAt: null,
+        },
+        update: {
+          idNumber: body.idNumber,
+          experience: body.experience,
+          region: body.region,
+          motivation: body.motivation,
+          status: "PENDING",
+          rejectReason: null,
+          reviewedAt: null,
+        },
+      });
+
+      const eventPayload = buildCtvApplicationPayload({
+        applicationId: createdApp.id,
+        brokerId: broker.id,
+        brokerName: broker.fullName,
+        brokerPhone: broker.phone,
+        brokerEmail: broker.userAccount.email,
         idNumber: body.idNumber,
         experience: body.experience,
         region: body.region,
         motivation: body.motivation,
-        status: "PENDING",
-        rejectReason: null,
-        reviewedAt: null,
-      },
-      update: {
-        idNumber: body.idNumber,
-        experience: body.experience,
-        region: body.region,
-        motivation: body.motivation,
-        status: "PENDING",
-        rejectReason: null,
-        reviewedAt: null,
-      },
+        submittedAt: createdApp.updatedAt,
+      });
+
+      await enqueueEvent(
+        tx,
+        "ctv.application_submitted",
+        eventPayload,
+        `ctv.application_submitted:${createdApp.id}`,
+      );
+
+      return { app: createdApp, eventPayload };
     });
+
+    void forwardOutboxEventBestEffort("ctv.application_submitted", eventPayload);
 
     return created(app);
   } catch (err) {

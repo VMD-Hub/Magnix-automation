@@ -7,6 +7,11 @@ import { resolveAttribution, type ReferralTouch } from "@/lib/rules/attribution-
 import { normalizeVnPhone, isValidVnPhone } from "@/lib/phone";
 import { kv, isRateLimited } from "@/lib/redis";
 import { ipHash } from "@/lib/api/request-meta";
+import { enqueueEvent } from "@/lib/events/outbox";
+import {
+  buildLeadCreatedPayload,
+  forwardLeadCreatedBestEffort,
+} from "@/lib/events/lead-inquiry";
 
 const LEAD_RATE_MAX = Number(process.env.LEAD_RATE_MAX ?? "20");
 const LEAD_RATE_WINDOW_SEC = Number(process.env.LEAD_RATE_WINDOW_SEC ?? "3600");
@@ -59,7 +64,7 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    const lead = await prisma.$transaction(async (tx) => {
+    const { lead, eventPayload } = await prisma.$transaction(async (tx) => {
       // Identity resolution: gộp về customer cũ theo normalizedPhone.
       const customer = await tx.customer.upsert({
         where: { normalizedPhone },
@@ -82,7 +87,7 @@ export async function POST(req: NextRequest) {
         referral: referralTouch,
       });
 
-      return tx.lead.create({
+      const created = await tx.lead.create({
         data: {
           customerId: customer.id,
           listingId: body.listingId,
@@ -93,7 +98,24 @@ export async function POST(req: NextRequest) {
           message: body.message,
         },
       });
+
+      const eventPayload = await buildLeadCreatedPayload(tx, created, {
+        name: body.name,
+        phone: body.phone,
+        email: body.email,
+      });
+
+      await enqueueEvent(
+        tx,
+        "lead.created",
+        eventPayload,
+        `lead.created:${created.id}`,
+      );
+
+      return { lead: created, eventPayload };
     });
+
+    void forwardLeadCreatedBestEffort(eventPayload);
 
     if (idemKey) {
       await kv.set(`idem:lead:${idemKey}`, lead.id, IDEMPOTENCY_TTL_SEC);

@@ -45,6 +45,16 @@ const cases: Case[] = [
     expect: /Dự án/i,
   },
   {
+    name: "Công cụ NOXH",
+    path: "/cong-cu/dieu-kien-noxh",
+    expect: /Kiểm tra điều kiện|điều kiện mua nhà ở xã hội/i,
+  },
+  {
+    name: "Sitemap có trang NOXH",
+    path: "/sitemap.xml",
+    expect: /\/cong-cu\/dieu-kien-noxh/,
+  },
+  {
     name: "robots.txt",
     path: "/robots.txt",
     expect: /Sitemap|User-agent/i,

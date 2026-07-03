@@ -25,6 +25,7 @@ Chi tiết: `docs/NOXH_THREE_CHANNEL_ARCHITECTURE.md` · `buildChannelPack('aio_
 | **Viết tay / nơi cấp / xuống dòng / mục 9** · L3 ✓ 2026-06-26 | `mau-01-handwriting-sample-guide.md` | `mau01_qa_handwriting_place_issue_001` · mẫu: `samples/mau-01-sample-filled-reference.md` |
 | **Số bộ hồ sơ / checklist giấy tờ** · L3 ✓ | `application-dossier-checklist.md` | `mau01_one_dossier_per_project_001`, `mau01_qa_dossier_sets_001` — **số bộ tùy CĐT từng dự án** |
 | Mục 11 thu nhập (11.1 / 11.2) · L3 ✓ | `mau-01-section-11-income.md` | `mau01_section_11_1_k568_001`, `mau01_section_11_2_k7_001` |
+| **Miễn trần thu nhập & LLVT** · L3 ✓ 2026-07-03 | `income-exemption-and-llvt-counseling.md` | `luat78_income_exemption_k1234911_001`, `nd100_llvt_income_special_regime_001` |
 | k7 vs k8, quốc phòng vs CBCCVC · L3 ✓ | `object-classification-cbccvc-hdld.md` | `luat76_k7_vs_k8_distinction_001` |
 | Vợ chồng **khác nhóm** đối tượng — ai đứng đơn · L3 ✓ | `married-mixed-object-counseling.md` | `married_mixed_object_applicant_k7_001`, `mau01_qa_married_mixed_object_001` |
 | Vợ chồng **khác nơi cư trú** — CT07 · L3 ✓ | `spouses-different-residence-counseling.md` | `spouses_different_residence_001`, `mau01_qa_ct07_spouses_residence_001` |

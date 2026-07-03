@@ -42,10 +42,23 @@
 - Một số đối tượng công vụ (Đ.45 k1 b,c,d,đ,e,g): không đang ở nhà công vụ.
 - **Chi tiết:** Chính phủ quy định (NĐ 100 Đ.29; NĐ 54 sửa k1).
 
-**b) Điều kiện thu nhập:**
+**b) Điều kiện thu nhập** (trích nguyên văn cấu trúc Luật):
 
-- Khoản **5, 6, 7, 8** Đ.76 mua/thuê mua: thu nhập theo **quy định Chính phủ** (NĐ 30 → NĐ 54, 136).
-- Khoản **4** Đ.76: thuộc **hộ nghèo, cận nghèo** (chuẩn Chính phủ).
+> **a)** Các đối tượng quy định tại các khoản **5, 6, 7 và 8** Điều 76 phải đáp ứng điều kiện về thu nhập theo quy định của Chính phủ;  
+> **b)** Các đối tượng quy định tại các khoản **1, 2, 3, 4, 9 và 11** Điều 76 thì **không áp dụng điều kiện về thu nhập** (mức trần số tuyệt đối).
+
+**Magnix áp dụng chi tiết (NĐ 100/2024):**
+
+| Nhóm | Cách xét thu nhập |
+|------|-------------------|
+| K1, K9 | Miễn trần — chứng minh đối tượng |
+| K2, K3, K4 | Miễn trần 15/25/30/50 — xét **chuẩn hộ nghèo, cận nghèo** (Đ.30 k3 NĐ 100) |
+| K5, K6, K8 | Trần **Đ.30 k1** NĐ 100 (15/30 → 25/35/50 sau NĐ 136) |
+| K7 | **Không** dùng bảng dân sự — **Đ.30 k4 → Đ.67**, mẫu BQP/BCA |
+| K10 (thu hồi đất) | Miễn trần — Quyết định thu hồi / xác nhận UBND (Luật liệt kê tại k1 đ.a, không thuộc đ.b đ.b) |
+| K11 (HS/SV) | Miễn trần khi **thuê** (Đ.78 k2); mua/thuê mua theo phạm vi Đ.78 k1 |
+
+- Khoản **10** Đ.76 (bị thu hồi đất): điều kiện nhà ở k1 đ.a; **không** dùng Mẫu xác nhận thu nhập dân sự — xem `income-exemption-and-llvt-counseling.md`.
 
 ### Khoản 2 — Thuê NOXH
 

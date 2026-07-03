@@ -219,5 +219,76 @@
       "Cộng dồn nhiều chính sách hỗ trợ nhà ở"
     ],
     "last_checked": "2026-06-26"
+  },
+  {
+    "claim_id": "luat78_income_exemption_k1234911_001",
+    "topic": "noxh_eligibility",
+    "claim": "Theo khoản 1 điểm b Điều 78 Luật Nhà ở 2023: đối tượng khoản 1, 2, 3, 4, 9 và 11 Điều 76 không áp dụng điều kiện về thu nhập (mức trần số tuyệt đối). Khoản 5, 6, 7, 8 phải đáp ứng điều kiện thu nhập theo Chính phủ — trong đó k7 thực hiện qua Đ.30 k4/Đ.67 NĐ 100, không dùng bảng 15/25/30/35/50 triệu dân sự.",
+    "source_refs": [
+      "noxh_luat_nha_o_2023:article_78:k1b",
+      "noxh_nd_100_2024:article_30:k4"
+    ],
+    "effective_from": "2024-08-01",
+    "effective_to": null,
+    "see_also": "income-exemption-and-llvt-counseling.md",
+    "confidence": "verified",
+    "risk_level": "high",
+    "disclaimer_required": true,
+    "usage_rules": [
+      "Phân biệt miễn trần vs xét chuẩn nghèo (k2-k4)",
+      "K10 thu hồi đất miễn trần nhưng cần giấy thu hồi — không nhầm với k11 HS/SV"
+    ],
+    "forbidden_claims": [
+      "Mọi người mua NOXH đều phải đủ 25 triệu",
+      "Quân nhân công an dùng cùng trần với công nhân KCN"
+    ],
+    "last_checked": "2026-07-03"
+  },
+  {
+    "claim_id": "nd100_llvt_income_special_regime_001",
+    "topic": "noxh_income",
+    "claim": "Đối tượng khoản 7 Điều 76 (lực lượng vũ trang đương nhiệm): điều kiện thu nhập theo Điều 30 khoản 4 NĐ 100/2024 — thực hiện theo mẫu biểu Bộ Quốc phòng, Bộ Công an và Điều 67 (mức tham chiếu lương sĩ quan hàm Đại tá). Không áp trần 15/30 hay 25/35/50 triệu như khoản 5, 6, 8. Thủ trưởng đơn vị xác nhận trạng thái công tác, nhà ở và thu nhập nội bộ.",
+    "source_refs": [
+      "noxh_nd_100_2024:article_30:k4",
+      "noxh_nd_100_2024:article_67",
+      "noxh_luat_nha_o_2023:article_76:k7"
+    ],
+    "effective_from": "2024-08-01",
+    "effective_to": null,
+    "see_also": ["mau-01-section-11-income.md", "income-exemption-and-llvt-counseling.md"],
+    "confidence": "verified",
+    "risk_level": "high",
+    "disclaimer_required": true,
+    "usage_rules": [
+      "Phân biệt k7 đương nhiệm vs anh hùng/thương binh/NCC (k1)",
+      "Hồ sơ dùng mục 11.2 Mẫu 01, không Mẫu 03 trần dân sự"
+    ],
+    "forbidden_claims": [
+      "Quân nhân lương 30 triệu chắc chắn không đủ NOXH",
+      "LLVT dùng bảng lương 12 tháng như công nhân KCN"
+    ],
+    "last_checked": "2026-07-03"
+  },
+  {
+    "claim_id": "noxh_dossier_no_mau03_merit_land_001",
+    "topic": "noxh_documents",
+    "claim": "Hồ sơ mua/thuê mua NOXH đứng tên người có công (khoản 1 Đ.76) hoặc hộ bị thu hồi đất, giải tỏa chưa được bồi thường (khoản 10 Đ.76): không cần Mẫu xác nhận thu nhập dân sự (Mẫu số 03 / mục 11.1) — thay bằng giấy chứng nhận người có công hoặc Quyết định thu hồi đất và xác nhận UBND.",
+    "source_refs": [
+      "luat78_income_exemption_k1234911_001",
+      "noxh_nd_100_2024:article_38"
+    ],
+    "effective_from": "2024-08-01",
+    "effective_to": null,
+    "confidence": "verified",
+    "risk_level": "high",
+    "disclaimer_required": true,
+    "usage_rules": [
+      "Chi tiết giấy tờ theo thông báo CĐT từng dự án"
+    ],
+    "forbidden_claims": [
+      "Người có công vẫn phải nộp bảng lương 12 tháng",
+      "Hộ giải tỏa dùng trần 25 triệu"
+    ],
+    "last_checked": "2026-07-03"
   }
 ]

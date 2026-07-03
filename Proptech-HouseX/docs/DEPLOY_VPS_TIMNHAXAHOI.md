@@ -167,7 +167,7 @@ curl -s "$SITE/sitemap.xml" | head -10
 
 Trình duyệt: `/du-an`, đăng ký khách, `/admin/ctv`.
 
-### Landing Vinhomes / commercial — smoke 7 URL `/du-an/*`
+### Landing Vinhomes / commercial — smoke 8 URL `/du-an/*`
 
 Seed ghi vào Postgres; **PM2 đọc env khác seed CLI** nếu có `.env.production`:
 
@@ -176,7 +176,7 @@ npm run db:deploy
 npm run db:seed:vinhomes
 npm run db:seed:commercial
 npm run db:seed:noxh          # 6 dự án NOXH Long An (tùy chọn)
-npm run db:verify:landings          # 7/7 slug trong DB (đọc .env.production merge)
+npm run db:verify:landings          # 8/8 slug trong DB (đọc .env.production merge)
 npm run go-live:check-env-files     # .env vs .env.production — phải ✔
 
 # Nếu fail: thường do .env.production còn CHANGE_ME

@@ -95,5 +95,40 @@
     "safe_cta": "Comment CHECKLIST để nhận hướng dẫn tra cứu quyết định tỉnh.",
     "disclaimer": "Chưa có QĐ tỉnh trong KB thì không tự suy ra mức điều chỉnh.",
     "last_checked": "2026-06-26"
+  },
+  {
+    "qa_id": "noxh_income_qa_exemption_groups_001",
+    "topic": "noxh_eligibility",
+    "question": "Nhóm đối tượng nào được miễn điều kiện thu nhập khi mua NOXH?",
+    "short_answer": "Theo khoản 1 điểm b Điều 78 Luật Nhà ở 2023: khoản 1, 2, 3, 4, 9 và 11 Điều 76 không áp dụng mức trần thu nhập số tuyệt đối. Khoản 5, 6, 7, 8 phải đáp ứng điều kiện thu nhập — riêng k7 (lực lượng vũ trang) theo Điều 67 NĐ 100, không dùng 25/35/50 triệu.",
+    "expanded_answer": "Người có công (k1), hộ nghèo/cận nghèo (k2-k4), người đã trả nhà công vụ (k9), học sinh/sinh viên thuê (k11) không bị xét trần 15/25/30/35/50 triệu. Hộ bị thu hồi đất (k10) nộp Quyết định thu hồi thay Mẫu xác nhận thu nhập dân sự. Công nhân, người thu nhập thấp, CBCCVC (k5, k6, k8) bắt buộc xét trần Điều 30 NĐ 100 (sau NĐ 136: 25/35/50 triệu). Quân nhân, công an đương nhiệm (k7) xác nhận qua đơn vị BQP/BCA theo mức tham chiếu Đại tá.",
+    "source_refs": [
+      "luat78_income_exemption_k1234911_001",
+      "nd100_llvt_income_special_regime_001",
+      "noxh_dossier_no_mau03_merit_land_001"
+    ],
+    "related_questions": [
+      "Người có công có cần xác nhận thu nhập không?",
+      "Quân nhân có áp trần 25 triệu không?",
+      "Hộ giải tỏa cần giấy gì?"
+    ],
+    "safe_cta": "Comment CHECKLIST để nhận bảng miễn trần theo từng khoản Điều 76.",
+    "disclaimer": "Phải xác định đúng số khoản Điều 76 và hình thức mua/thuê mua/thuê trước khi kết luận.",
+    "last_checked": "2026-07-03"
+  },
+  {
+    "qa_id": "noxh_income_qa_llvt_not_civilian_ceiling_001",
+    "topic": "noxh_income",
+    "question": "Quân nhân, công an mua NOXH có áp trần 25/35/50 triệu như người dân không?",
+    "short_answer": "Không. Đối tượng khoản 7 Điều 76 thực hiện điều kiện thu nhập theo Điều 30 k4 và Điều 67 NĐ 100/2024 — mẫu biểu BQP/BCA, mức tham chiếu lương sĩ quan hàm Đại tá, không phải bảng 25/35/50 triệu dành cho k5/k6/k8.",
+    "expanded_answer": "Nghị định 100/2024 giao Bộ Quốc phòng và Bộ Công an ban hành mẫu xác nhận. Thực tế thủ trưởng đơn vị xác nhận trạng thái công tác, nhà ở và thu nhập nội bộ. Mẫu 01 dùng mục 11.2, không mục 11.1. Anh hùng LLVT, thương binh, người có công thuộc khoản 1 — được miễn trần hoàn toàn nếu chọn đúng nhóm.",
+    "source_refs": ["nd100_llvt_income_special_regime_001", "nd136_llvt_income_spouse_001"],
+    "related_questions": [
+      "Vợ chồng một bên là quân nhân tính thu nhập thế nào?",
+      "LLVT cần giấy gì thay bảng lương 12 tháng?"
+    ],
+    "safe_cta": "Comment CHECKLIST để nhận hướng dẫn mục 11.2 Mẫu 01 cho LLVT.",
+    "disclaimer": "Mức Đại tá và phụ cấp cập nhật theo lương hiện hành — cần giấy xác nhận đơn vị.",
+    "last_checked": "2026-07-03"
   }
 ]

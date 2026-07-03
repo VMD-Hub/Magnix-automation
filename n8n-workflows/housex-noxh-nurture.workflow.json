@@ -1,0 +1,462 @@
+{
+  "name": "HouseX — NOXH Nurture Cron",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## HouseX NOXH Nurture Cron\n- **09:00 VN** hàng ngày · max **10** email/lần\n- Input: `noxh_leads_ops` tier **COLD|OUT**, có email, chưa `nurture_sent_at`, tuổi ≥ **24h**\n- Gửi qua **Resend** (`RESEND_API_KEY`, `EMAIL_FROM`)\n- Cập nhật cột **meta** (O) sau gửi thành công",
+        "height": 200,
+        "width": 480
+      },
+      "id": "nxn00",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -480,
+        160
+      ]
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 9 * * *"
+            }
+          ]
+        }
+      },
+      "id": "nxn01",
+      "name": "Schedule Daily Nurture",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "nxn02",
+      "name": "When clicking 'Execute workflow'",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "https://sheets.googleapis.com/v4/spreadsheets/1fYB4h_BTiKXa9O3lBah-tQonWpQOQMG2aSkSfPs6yU4/values/noxh_leads_ops!A%3AO",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleApi",
+        "options": {}
+      },
+      "id": "nxn03",
+      "name": "Fetch noxh_leads_ops",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        240,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const BATCH = 10;\nconst MIN_AGE_HOURS = 24;\nconst BASE_URL = String($env.HOUSEX_PUBLIC_URL || 'https://timnhaxahoi.com').replace(/\\/$/, '');\n\nfunction parseMeta(raw) {\n  if (!raw) return {};\n  try {\n    return typeof raw === 'string' ? JSON.parse(raw) : raw;\n  } catch {\n    return {};\n  }\n}\n\nfunction parseDate(raw) {\n  const t = Date.parse(String(raw || ''));\n  return Number.isFinite(t) ? t : 0;\n}\n\nconst res = $input.first().json;\nconst rows = Array.isArray(res.values) ? res.values : [];\nif (rows.length < 2) {\n  return [{ json: { empty: true, message: 'noxh_leads_ops trống' } }];\n}\n\nconst headers = rows[0].map((x) => String(x ?? '').trim().toLowerCase());\nconst now = Date.now();\nconst minAgeMs = MIN_AGE_HOURS * 3600000;\nconst out = [];\n\nfor (let i = 1; i < rows.length; i++) {\n  const cells = rows[i];\n  if (!cells?.some((c) => String(c ?? '').trim())) continue;\n\n  const row = { sheet_row: i + 1 };\n  headers.forEach((key, j) => {\n    if (key) row[key] = cells[j] ?? '';\n  });\n\n  const tier = String(row.tier || '').trim().toUpperCase();\n  if (tier !== 'COLD' && tier !== 'OUT') continue;\n\n  const email = String(row.contact_email || '').trim();\n  if (!email || !email.includes('@')) continue;\n\n  const meta = parseMeta(row.meta);\n  if (meta.nurture_sent_at) continue;\n\n  const createdAt = parseDate(row.created_at);\n  if (createdAt && now - createdAt < minAgeMs) continue;\n\n  const opsStatus = String(row.ops_status || '').trim().toLowerCase();\n  if (opsStatus && !['nurture', 'new_cold', ''].includes(opsStatus)) continue;\n\n  out.push({\n    json: {\n      ...row,\n      tier,\n      contact_email: email,\n      contact_name: String(row.contact_name || 'Anh/Chị').trim(),\n      reason_codes: String(row.reason_codes || ''),\n      base_url: BASE_URL,\n      meta_parsed: meta,\n    },\n  });\n\n  if (out.length >= BATCH) break;\n}\n\nif (!out.length) {\n  return [{\n    json: {\n      empty: true,\n      message: 'Không có lead COLD/OUT chờ nurture (đã gửi hoặc chưa đủ tuổi)',\n    },\n  }];\n}\n\nreturn out;"
+      },
+      "id": "nxn04",
+      "name": "Parse Filter Nurture",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        480,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "c1",
+              "leftValue": "={{ $json.empty }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "notEquals"
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      },
+      "id": "nxn05",
+      "name": "IF Has Candidates",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        720,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $getWorkflowStaticData('global');\ndata.nxn_stats = { sent: 0, failed: 0, skipped: 0 };\nreturn $input.all();"
+      },
+      "id": "nxn06",
+      "name": "Reset Run Stats",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        960,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "batchSize": 1,
+        "options": {}
+      },
+      "id": "nxn07",
+      "name": "Loop Nurture Leads",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        1200,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const item = $input.first().json;\nconst name = item.contact_name || 'Anh/Chị';\nconst base = item.base_url || 'https://timnhaxahoi.com';\nconst tier = item.tier;\nconst reasons = String(item.reason_codes || '');\n\nconst links = {\n  noxhArticle: `${base}/tin-tuc/dieu-kien-mua-nha-o-xa-hoi-2026-tom-tat`,\n  loanCalc: `${base}/cong-cu/tinh-khoan-vay`,\n  noxhProjects: `${base}/du-an?projectType=NHA_O_XA_HOI`,\n  allProjects: `${base}/du-an`,\n  contact: `${base}/lien-he`,\n  noxhCheck: `${base}/cong-cu/dieu-kien-noxh`,\n};\n\nlet subject;\nlet headline;\nlet bodyHtml;\nlet bodyText;\n\nif (tier === 'OUT') {\n  subject = 'HouseX — Gợi ý lộ trình mua nhà phù hợp với bạn';\n  headline = 'Có thể bạn phù hợp nhà ở thương mại hơn NOXH';\n  bodyHtml = `\n<p>Xin chào ${name},</p>\n<p>Cảm ơn bạn đã dùng công cụ kiểm tra điều kiện NOXH của HouseX. Theo thông tin bạn cung cấp, nhóm đối tượng hiện tại có thể chưa khớp chính sách nhà ở xã hội — nhưng vẫn có nhiều lựa chọn nhà ở thương mại và tư vấn tài chính phù hợp.</p>\n<p><strong>Gợi ý bước tiếp theo:</strong></p>\n<ul>\n  <li><a href=\"${links.allProjects}\">Xem dự án đang mở bán</a></li>\n  <li><a href=\"${links.loanCalc}\">Tính thử khoản vay mua nhà</a></li>\n  <li><a href=\"${links.contact}\">Đặt lịch tư vấn miễn phí với chuyên gia HouseX</a></li>\n</ul>\n<p>Chúng tôi sẵn sàng giải thích rõ hồ sơ và tìm giải pháp phù hợp — không áp lực mua bán.</p>\n<p>Trân trọng,<br/>Đội ngũ HouseX</p>`;\n  bodyText = `Xin chào ${name},\\n\\nCảm ơn bạn đã kiểm tra điều kiện NOXH. Nhóm đối tượng có thể chưa khớp NOXH — bạn có thể xem dự án: ${links.allProjects}\\nTính vay: ${links.loanCalc}\\nTư vấn: ${links.contact}\\n\\nTrân trọng, HouseX`;\n} else {\n  const incomeOver = reasons.includes('income_over_ceiling');\n  const housingFail = reasons.includes('housing_fail');\n  subject = incomeOver\n    ? 'HouseX — Phương án nhà ở khi thu nhập vượt trần NOXH'\n    : 'HouseX — Tài liệu & công cụ hữu ích cho hành trình mua nhà';\n  headline = incomeOver\n    ? 'Thu nhập trên ngưỡng NOXH — vẫn có lộ trình rõ ràng'\n    : 'Chuẩn bị hồ sơ & công cụ cho quyết định mua nhà';\n\n  const extra = incomeOver\n    ? `<p>Thu nhập của bạn có thể vượt trần NOXH theo quy định hiện hành. HouseX gợi ý cân nhắc <a href=\"${links.allProjects}\">nhà ở thương mại</a> hoặc liên hệ chuyên gia để rà soát lại hồ sơ (một số trường hợp vẫn có ngoại lệ cần xác minh).</p>`\n    : housingFail\n      ? `<p>Điều kiện nhà ở hiện tại có thể cần rà soát thêm. Chuyên gia HouseX có thể giúp bạn hiểu rõ quy định trước khi nộp hồ sơ chính thức.</p>`\n      : `<p>Bạn có thể tiếp tục tìm hiểu điều kiện và chuẩn bị hồ sơ qua các tài liệu dưới đây.</p>`;\n\n  bodyHtml = `\n<p>Xin chào ${name},</p>\n<p>Cảm ơn bạn đã sử dụng công cụ <a href=\"${links.noxhCheck}\">Kiểm tra điều kiện NOXH</a> của HouseX.</p>\n${extra}\n<p><strong>Tài liệu & công cụ miễn phí:</strong></p>\n<ul>\n  <li><a href=\"${links.noxhArticle}\">Tóm tắt điều kiện mua NOXH 2026</a></li>\n  <li><a href=\"${links.loanCalc}\">Tính khoản vay mua nhà</a></li>\n  <li><a href=\"${links.noxhProjects}\">Dự án NOXH đang mở bán</a></li>\n  <li><a href=\"${links.contact}\">Đặt lịch tư vấn với chuyên gia</a></li>\n</ul>\n<p>Khi bạn sẵn sàng, chúng tôi sẽ giải thích rõ tình trạng hồ sơ và tìm giải pháp phù hợp.</p>\n<p>Trân trọng,<br/>Đội ngũ HouseX</p>`;\n  bodyText = `Xin chào ${name},\\n\\nCảm ơn bạn đã dùng công cụ NOXH HouseX.\\n\\nBài viết: ${links.noxhArticle}\\nTính vay: ${links.loanCalc}\\nDự án NOXH: ${links.noxhProjects}\\nTư vấn: ${links.contact}\\n\\nTrân trọng, HouseX`;\n}\n\nconst html = `<!DOCTYPE html><html><body style=\"font-family:sans-serif;color:#333;line-height:1.6\"><h2 style=\"color:#b81425\">${headline}</h2>${bodyHtml}<p style=\"font-size:12px;color:#888\">Bạn nhận email vì đã để lại thông tin trên HouseX. Nếu không muốn nhận thêm, trả lời email này.</p></body></html>`;\n\nreturn [{\n  json: {\n    ...item,\n    email_subject: subject,\n    email_html: html,\n    email_text: bodyText.slice(0, 8000),\n  },\n}];"
+      },
+      "id": "nxn08",
+      "name": "Build Nurture Email",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1440,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const item = $input.first().json;\nconst enabled = String($env.NOXH_NURTURE_EMAIL_ENABLED || 'true').toLowerCase() === 'true';\nconst resendKey = $env.RESEND_API_KEY || '';\nconst from = $env.EMAIL_FROM || 'House X <noreply@timnhaxahoi.com>';\n\nif (!enabled) {\n  return [{\n    json: {\n      ...item,\n      email_sent: false,\n      email_skip: 'NOXH_NURTURE_EMAIL_ENABLED=false',\n    },\n  }];\n}\n\nif (!resendKey) {\n  return [{\n    json: {\n      ...item,\n      email_sent: false,\n      email_skip: 'MISSING_RESEND_API_KEY',\n    },\n  }];\n}\n\nlet res;\ntry {\n  res = await this.helpers.httpRequest({\n    method: 'POST',\n    url: 'https://api.resend.com/emails',\n    headers: {\n      authorization: `Bearer ${resendKey}`,\n      'content-type': 'application/json',\n    },\n    body: {\n      from,\n      to: [item.contact_email],\n      subject: item.email_subject,\n      html: item.email_html,\n      text: item.email_text,\n      tags: [{ name: 'noxh_nurture', value: item.tier }],\n    },\n    json: true,\n    timeout: 20000,\n  });\n} catch (e) {\n  return [{\n    json: {\n      ...item,\n      email_sent: false,\n      email_error: (e.message || String(e)).slice(0, 200),\n    },\n  }];\n}\n\nreturn [{\n  json: {\n    ...item,\n    email_sent: !!res?.id,\n    email_provider_id: res?.id || null,\n  },\n}];"
+      },
+      "id": "nxn09",
+      "name": "Send Email Resend",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1680,
+        240
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "c1",
+              "leftValue": "={{ $json.email_sent }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      },
+      "id": "nxn10",
+      "name": "IF Email Sent",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1920,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const item = $input.first().json;\nif (!item.email_sent || !item.sheet_row) {\n  return [{ json: { ...item, sheet_updated: false } }];\n}\n\nconst SHEET_ID = '1fYB4h_BTiKXa9O3lBah-tQonWpQOQMG2aSkSfPs6yU4';\nconst TAB = 'noxh_leads_ops';\nconst row = item.sheet_row;\nconst col = 'O';\n\nconst meta = { ...(item.meta_parsed || {}), nurture_sent_at: new Date().toISOString(), nurture_tier: item.tier };\nconst metaStr = JSON.stringify(meta).slice(0, 45000);\n\nreturn [{\n  json: {\n    ...item,\n    meta_updated: metaStr,\n    put_url: `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent(`${TAB}!${col}${row}`)}?valueInputOption=USER_ENTERED`,\n    put_body: { values: [[metaStr]] },\n  },\n}];"
+      },
+      "id": "nxn11",
+      "name": "Prepare Meta Update",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2160,
+        160
+      ]
+    },
+    {
+      "parameters": {
+        "method": "PUT",
+        "url": "={{ $json.put_url }}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json.put_body) }}",
+        "options": {}
+      },
+      "id": "nxn12",
+      "name": "HTTP PUT meta nurture",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2400,
+        160
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const item = $input.first().json;\nconst sent = item.email_sent === true;\nconst data = $getWorkflowStaticData('global');\nif (!data.nxn_stats) data.nxn_stats = { sent: 0, failed: 0, skipped: 0 };\nif (sent) data.nxn_stats.sent += 1;\nelse if (item.email_skip) data.nxn_stats.skipped += 1;\nelse data.nxn_stats.failed += 1;\n\nreturn [{\n  json: {\n    ...item,\n    sheet_updated: sent && !!item.put_url,\n  },\n}];"
+      },
+      "id": "nxn13",
+      "name": "Track Send",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2640,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $getWorkflowStaticData('global');\nconst stats = data.nxn_stats || { sent: 0, failed: 0, skipped: 0 };\nlet hint = null;\nif (stats.sent === 0 && stats.failed === 0) {\n  hint = 'Không candidate — tier COLD/OUT, có email, chưa nurture_sent_at, đủ tuổi 24h';\n} else if (stats.failed > 0) {\n  hint = 'Một số email fail — kiểm tra RESEND_API_KEY và EMAIL_FROM';\n}\nreturn [{\n  json: {\n    ok: true,\n    workflow: 'housex-noxh-nurture',\n    stats,\n    hint,\n    finished_at: new Date().toISOString(),\n  },\n}];"
+      },
+      "id": "nxn14",
+      "name": "Build Summary",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2880,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $getWorkflowStaticData('global');\nif (!data.nxn_stats) data.nxn_stats = {};\nreturn [{ json: { ok: true, empty: true, message: $input.first()?.json?.message || 'No nurture candidates', finished_at: new Date().toISOString() } }];"
+      },
+      "id": "nxn15",
+      "name": "No Candidates Summary",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        960,
+        420
+      ]
+    }
+  ],
+  "connections": {
+    "Schedule Daily Nurture": {
+      "main": [
+        [
+          {
+            "node": "Fetch noxh_leads_ops",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking 'Execute workflow'": {
+      "main": [
+        [
+          {
+            "node": "Fetch noxh_leads_ops",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch noxh_leads_ops": {
+      "main": [
+        [
+          {
+            "node": "Parse Filter Nurture",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Filter Nurture": {
+      "main": [
+        [
+          {
+            "node": "IF Has Candidates",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF Has Candidates": {
+      "main": [
+        [
+          {
+            "node": "Reset Run Stats",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "No Candidates Summary",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Reset Run Stats": {
+      "main": [
+        [
+          {
+            "node": "Loop Nurture Leads",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Nurture Leads": {
+      "main": [
+        [
+          {
+            "node": "Build Summary",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Build Nurture Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Nurture Email": {
+      "main": [
+        [
+          {
+            "node": "Send Email Resend",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Email Resend": {
+      "main": [
+        [
+          {
+            "node": "IF Email Sent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF Email Sent": {
+      "main": [
+        [
+          {
+            "node": "Prepare Meta Update",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Track Send",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Meta Update": {
+      "main": [
+        [
+          {
+            "node": "HTTP PUT meta nurture",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP PUT meta nurture": {
+      "main": [
+        [
+          {
+            "node": "Track Send",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Track Send": {
+      "main": [
+        [
+          {
+            "node": "Loop Nurture Leads",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "No Candidates Summary": {
+      "main": [
+        [
+          {
+            "node": "Build Summary",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "tags": [
+    {
+      "name": "housex"
+    },
+    {
+      "name": "housex-noxh-nurture"
+    }
+  ],
+  "meta": {
+    "templateCredsSetupCompleted": true
+  }
+}

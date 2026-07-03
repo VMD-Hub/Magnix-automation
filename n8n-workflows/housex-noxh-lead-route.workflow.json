@@ -1,0 +1,1172 @@
+{
+  "name": "HouseX — Events Hub (NOXH + Form liên hệ)",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## HouseX Events Hub\n**Webhook A:** POST `/webhook/magnix/housex-events` ← `EVENTS_WEBHOOK_URL`\n**Webhook B:** POST `/webhook/magnix/housex-noxh-detail` ← `NOXH_DETAIL_WEBHOOK_URL`\n**Events:** `lead.noxh_checked` · `lead.created` · `account.registered` · `ctv.application_submitted`\nAuth: `x-events-secret` = `EVENTS_WEBHOOK_SECRET`",
+        "height": 260,
+        "width": 560
+      },
+      "id": "nx00",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -200,
+        80
+      ]
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "magnix/housex-events",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "nx01",
+      "name": "Webhook housex-events",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        320
+      ],
+      "webhookId": "magnix-housex-events"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "magnix/housex-noxh-detail",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "nx02",
+      "name": "Webhook noxh-detail",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        920
+      ],
+      "webhookId": "magnix-housex-noxh-detail"
+    },
+    {
+      "parameters": {},
+      "id": "nx03",
+      "name": "When clicking 'Execute workflow'",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -200,
+        520
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{ json: {\n  headers: { 'x-events-secret': $env.EVENTS_WEBHOOK_SECRET || '' },\n  body: {\n    type: 'lead.noxh_checked',\n    sentAt: new Date().toISOString(),\n    payload: {\n      leadId: 'manual-test-' + Date.now(),\n      tier: 'HOT',\n      overall: 'ELIGIBLE',\n      creditFlag: 'CLEAN',\n      reasonCodes: ['eligible_ready'],\n      recommendedAction: 'Chuyển chuyên gia tư vấn realtime',\n      rulesVersion: '2026-04-ND136',\n      contact: { name: 'Manual Test', phone: '0901234567', email: 'test@housex.local' },\n    },\n  },\n}}];"
+      },
+      "id": "nx04",
+      "name": "Inject Manual NOXH Event",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        40,
+        480
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{ json: {\n  headers: { 'x-events-secret': $env.EVENTS_WEBHOOK_SECRET || '' },\n  body: {\n    type: 'lead.created',\n    sentAt: new Date().toISOString(),\n    payload: {\n      leadId: 'manual-inquiry-' + Date.now(),\n      source: 'organic',\n      message: 'Muốn tư vấn suất A10',\n      contact: { name: 'Manual Inquiry', phone: '0909999888', email: 'inquiry@housex.local' },\n      context: {\n        kind: 'project',\n        entityId: 'demo-project',\n        entityName: 'DTA Happy Home Nhơn Trạch',\n        slug: 'dta-happy-home-nhon-trach',\n        listingCode: null,\n        projectType: 'NHA_O_XA_HOI',\n        province: 'Đồng Nai',\n        adminUrl: 'https://timnhaxahoi.com/du-an/dta-happy-home-nhon-trach',\n      },\n      assignedBrokerId: null,\n      createdAt: new Date().toISOString(),\n    },\n  },\n}}];"
+      },
+      "id": "nx21",
+      "name": "Inject Manual Inquiry Event",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        40,
+        560
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const SECRET = $env.EVENTS_WEBHOOK_SECRET || '';\nconst headers = $input.first().json.headers || {};\nconst got = headers['x-events-secret'] || headers['X-Events-Secret'] || '';\nif (SECRET && got !== SECRET) {\n  throw new Error('Unauthorized: invalid EVENTS_WEBHOOK_SECRET');\n}\n\nconst raw = $input.first().json;\nconst body = raw.body && typeof raw.body === 'object' ? raw.body : raw;\nconst type = String(body.type || '').trim();\nconst now = body.sentAt || new Date().toISOString();\n\nif (type === 'lead.created') {\n  const p = body.payload || {};\n  const leadId = String(p.leadId || '').trim();\n  if (!leadId) throw new Error('Validation: payload.leadId is required');\n\n  const contact = p.contact || {};\n  const ctx = p.context || {};\n  const projectType = String(ctx.projectType || 'THUONG_MAI').toUpperCase();\n  const slaDue = new Date(Date.now() + 2 * 3600000).toISOString();\n\n  return [{\n    json: {\n      ok: true,\n      skipped: false,\n      event_path: 'inquiry',\n      path: 'events',\n      lead_id: leadId,\n      source: String(p.source || 'organic'),\n      message: String(p.message || '').slice(0, 500),\n      contact_name: String(contact.name || '').slice(0, 80),\n      contact_phone: String(contact.phone || '').slice(0, 20),\n      contact_email: String(contact.email || '').slice(0, 120),\n      kind: String(ctx.kind || 'project'),\n      entity_name: String(ctx.entityName || '').slice(0, 120),\n      slug: String(ctx.slug || ''),\n      listing_code: String(ctx.listingCode || ''),\n      project_type: projectType,\n      province: String(ctx.province || ''),\n      public_url: String(ctx.adminUrl || ''),\n      assigned_broker_id: String(p.assignedBrokerId || ''),\n      ops_status: 'new_inquiry',\n      sla_due_at: slaDue,\n      created_at: String(p.createdAt || now),\n      dedupe_key: `inquiry:${leadId}`,\n    },\n  }];\n}\n\nif (type === 'account.registered') {\n  const p = body.payload || {};\n  const userId = String(p.userAccountId || '').trim();\n  if (!userId) throw new Error('Validation: payload.userAccountId is required');\n\n  const role = String(p.role || 'CUSTOMER').toUpperCase();\n  const supplyKind = role === 'BROKER' ? 'broker' : 'member';\n  const slaHours = role === 'BROKER' ? 24 : 72;\n\n  return [{\n    json: {\n      ok: true,\n      skipped: false,\n      event_path: 'supply',\n      supply_kind: supplyKind,\n      path: 'events',\n      record_id: userId,\n      broker_id: String(p.brokerId || ''),\n      customer_id: String(p.customerId || ''),\n      role,\n      contact_name: String(p.name || '').slice(0, 80),\n      contact_phone: String(p.phone || '').slice(0, 20),\n      contact_email: String(p.email || '').slice(0, 120),\n      marketing_opt_in: p.marketingOptIn === true,\n      detail: role === 'BROKER' ? 'Đăng ký môi giới — chờ onboarding đăng tin' : 'Đăng ký thành viên khách hàng',\n      region: '',\n      public_url: String(p.signupUrl || ''),\n      ops_status: role === 'BROKER' ? 'new_broker' : 'new_member',\n      sla_due_at: new Date(Date.now() + slaHours * 3600000).toISOString(),\n      created_at: String(p.registeredAt || now),\n      dedupe_key: `account:${userId}`,\n    },\n  }];\n}\n\nif (type === 'ctv.application_submitted') {\n  const p = body.payload || {};\n  const appId = String(p.applicationId || '').trim();\n  if (!appId) throw new Error('Validation: payload.applicationId is required');\n\n  return [{\n    json: {\n      ok: true,\n      skipped: false,\n      event_path: 'supply',\n      supply_kind: 'ctv',\n      path: 'events',\n      record_id: appId,\n      broker_id: String(p.brokerId || ''),\n      customer_id: '',\n      role: 'BROKER',\n      contact_name: String(p.brokerName || '').slice(0, 80),\n      contact_phone: String(p.brokerPhone || '').slice(0, 20),\n      contact_email: String(p.brokerEmail || '').slice(0, 120),\n      marketing_opt_in: false,\n      detail: [\n        `CCCD ***${String(p.idNumberLast4 || '')}`,\n        `Kinh nghiệm: ${String(p.experience || '').slice(0, 120)}`,\n        `Lý do: ${String(p.motivation || '').slice(0, 120)}`,\n      ].join(' · '),\n      region: String(p.region || ''),\n      public_url: String(p.adminUrl || ''),\n      ops_status: 'ctv_pending',\n      sla_due_at: new Date(Date.now() + 24 * 3600000).toISOString(),\n      created_at: String(p.submittedAt || now),\n      dedupe_key: `ctv:${appId}`,\n    },\n  }];\n}\n\nif (type !== 'lead.noxh_checked') {\n  return [{ json: { ok: true, skipped: true, event_path: 'none', path: 'events', reason: 'UNSUPPORTED_EVENT', type } }];\n}\n\nconst p = body.payload || {};\nconst leadId = String(p.leadId || '').trim();\nif (!leadId) throw new Error('Validation: payload.leadId is required');\n\nconst tier = String(p.tier || 'WARM').toUpperCase();\nconst contact = p.contact || {};\nconst reasonCodes = Array.isArray(p.reasonCodes) ? p.reasonCodes : [];\n\nconst slaHours = tier === 'HOT' ? 2 : tier === 'WARM' ? 24 : 72;\nconst slaDue = new Date(Date.now() + slaHours * 3600000).toISOString();\n\nreturn [{\n  json: {\n    ok: true,\n    skipped: false,\n    event_path: 'noxh',\n    path: 'events',\n    lead_id: leadId,\n    tier,\n    overall: String(p.overall || ''),\n    credit_flag: String(p.creditFlag || ''),\n    reason_codes: reasonCodes,\n    reason_codes_csv: reasonCodes.join(','),\n    recommended_action: String(p.recommendedAction || ''),\n    rules_version: String(p.rulesVersion || ''),\n    contact_name: String(contact.name || '').slice(0, 80),\n    contact_phone: String(contact.phone || '').slice(0, 20),\n    contact_email: String(contact.email || '').slice(0, 120),\n    ops_status: tier === 'HOT' ? 'new_hot' : tier === 'WARM' ? 'new_warm' : 'nurture',\n    assigned_to: '',\n    sla_due_at: slaDue,\n    created_at: now,\n    dedupe_key: `noxh:${leadId}`,\n    has_credit_blocker: reasonCodes.includes('credit_blocker'),\n    has_credit_caution: reasonCodes.includes('credit_caution'),\n  },\n}];"
+      },
+      "id": "nx05",
+      "name": "Parse HouseX Event",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        280,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "c1",
+              "leftValue": "={{ $json.skipped }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      },
+      "id": "nx06",
+      "name": "Skipped Event?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        520,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "typeValidation": "strict"
+                },
+                "conditions": [
+                  {
+                    "id": "r1",
+                    "leftValue": "={{ $json.event_path }}",
+                    "rightValue": "inquiry",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "inquiry"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "typeValidation": "strict"
+                },
+                "conditions": [
+                  {
+                    "id": "r2",
+                    "leftValue": "={{ $json.event_path }}",
+                    "rightValue": "noxh",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "noxh"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "typeValidation": "strict"
+                },
+                "conditions": [
+                  {
+                    "id": "r3",
+                    "leftValue": "={{ $json.event_path }}",
+                    "rightValue": "supply",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "supply"
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": "extra"
+        }
+      },
+      "id": "nx22",
+      "name": "Route Event Path",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3,
+      "position": [
+        760,
+        480
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const item = $input.first().json;\nif (item.skipped || item.duplicate) {\n  return [{ json: item }];\n}\n\nconst SHEET_ID = '1fYB4h_BTiKXa9O3lBah-tQonWpQOQMG2aSkSfPs6yU4';\nconst TAB = 'housex_leads_inquiry';\n\nconst append_row = [\n  item.lead_id,\n  item.kind,\n  item.project_type,\n  item.entity_name,\n  item.slug || item.listing_code,\n  item.province,\n  item.contact_name,\n  item.contact_phone,\n  item.contact_email,\n  item.message,\n  item.source,\n  item.public_url,\n  item.assigned_broker_id,\n  item.ops_status,\n  item.sla_due_at,\n  item.created_at,\n  JSON.stringify({ dedupe_key: item.dedupe_key }).slice(0, 45000),\n];\n\nreturn [{\n  json: {\n    ...item,\n    append_row,\n    append_url: `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent(`${TAB}!A:Q`)}:append?valueInputOption=USER_ENTERED&insertDataOption=INSERT_ROWS`,\n    append_body: { values: [append_row] },\n  },\n}];"
+      },
+      "id": "nx23",
+      "name": "Prepare Inquiry Append",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1000,
+        360
+      ]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "https://sheets.googleapis.com/v4/spreadsheets/1fYB4h_BTiKXa9O3lBah-tQonWpQOQMG2aSkSfPs6yU4/values/housex_leads_inquiry!A%3AA",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleApi",
+        "options": {}
+      },
+      "id": "nx24",
+      "name": "HTTP GET inquiry dedupe",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1240,
+        360
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const item = $('Prepare Inquiry Append').item?.json || $input.first().json;\nconst getRes = $input.first().json || {};\nconst rows = getRes.values || [];\n\nconst existing = new Set();\nfor (let i = 1; i < rows.length; i++) {\n  const id = String(rows[i][0] || '').trim();\n  if (id) existing.add(id);\n}\n\nif (existing.has(item.lead_id)) {\n  return [{\n    json: {\n      ...item,\n      duplicate: true,\n      skipped: true,\n      ok: true,\n      reason: 'DUPLICATE_LEAD_ID',\n    },\n  }];\n}\n\nreturn [{ json: { ...item, duplicate: false, skipped: false } }];"
+      },
+      "id": "nx25",
+      "name": "Dedupe Inquiry",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1480,
+        360
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "c1",
+              "leftValue": "={{ $json.duplicate }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      },
+      "id": "nx26",
+      "name": "Inquiry Duplicate?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        1720,
+        360
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $json.append_url }}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json.append_body) }}",
+        "options": {}
+      },
+      "id": "nx27",
+      "name": "HTTP POST housex_leads_inquiry",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1960,
+        280
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const item = $input.first().json;\nif (item.skipped || item.duplicate) {\n  return [{ json: { ...item, telegram_skip: item.reason || 'skipped' } }];\n}\n\nconst isNoxh = item.project_type === 'NHA_O_XA_HOI';\nconst chatNoxh = $env.TELEGRAM_CHAT_ID_NOXH_HOT || $env.TELEGRAM_CHAT_ID_LEAD_NOXH || $env.TELEGRAM_CHAT_ID_OPS || '';\nconst chatCommercial = $env.TELEGRAM_CHAT_ID_LEAD_COMMERCIAL || $env.TELEGRAM_CHAT_ID_OPS || $env.TELEGRAM_CHAT_ID_OWNER || '';\n\nconst header = isNoxh\n  ? '📞 [HouseX NOXH — Form dự án] Gọi khách trong 2h'\n  : '📞 [HouseX — Form tư vấn] Gọi khách trong 2h';\n\nconst kindLabel = item.kind === 'listing'\n  ? `Tin đăng ${item.listing_code || item.entity_name}`\n  : `Dự án ${item.entity_name}`;\n\nconst lines = [\n  header,\n  `Lead: ${item.lead_id}`,\n  `${kindLabel}`,\n  `Loại: ${isNoxh ? 'Nhà ở xã hội' : 'Thương mại'}`,\n  item.province ? `Khu vực: ${item.province}` : null,\n  `Khách: ${item.contact_name}`,\n  `SĐT: ${item.contact_phone}`,\n  `Email: ${item.contact_email || '—'}`,\n  item.message ? `Ghi chú: ${item.message}` : null,\n  item.public_url ? `Link: ${item.public_url}` : null,\n  item.assigned_broker_id ? `Broker gán: ${item.assigned_broker_id}` : null,\n  `Hạn SLA: ${item.sla_due_at}`,\n].filter(Boolean);\n\nconst message = lines.join('\\n').slice(0, 3900);\nconst token = $env.TELEGRAM_BOT_TOKEN || '';\nconst chat_id = isNoxh ? chatNoxh : chatCommercial;\nconst enabled = String($env.TELEGRAM_LEAD_INQUIRY_ENABLED || 'true').toLowerCase() === 'true';\n\nreturn [{\n  json: {\n    ...item,\n    telegram_enabled: enabled && !!token && !!chat_id,\n    telegram_chat_id: chat_id,\n    telegram_message: message,\n    telegram_priority: 'urgent',\n  },\n}];"
+      },
+      "id": "nx28",
+      "name": "Format Inquiry Telegram",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2200,
+        280
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const item = $input.first().json;\nif (!item.telegram_enabled) {\n  return [{\n    json: {\n      ...item,\n      telegram_sent: false,\n      telegram_skip: item.telegram_skip || 'TELEGRAM_DISABLED',\n    },\n  }];\n}\n\nconst token = $env.TELEGRAM_BOT_TOKEN || '';\nconst chatId = item.telegram_chat_id || '';\n\nlet tgRes;\ntry {\n  tgRes = await this.helpers.httpRequest({\n    method: 'POST',\n    url: `https://api.telegram.org/bot${token}/sendMessage`,\n    body: {\n      chat_id: chatId,\n      text: item.telegram_message,\n      disable_web_page_preview: true,\n    },\n    json: true,\n    timeout: 15000,\n  });\n} catch (e) {\n  return [{\n    json: {\n      ...item,\n      telegram_sent: false,\n      telegram_error: (e.message || String(e)).slice(0, 200),\n    },\n  }];\n}\n\nreturn [{\n  json: {\n    ...item,\n    telegram_sent: tgRes?.ok === true,\n    telegram_message_id: tgRes?.result?.message_id || null,\n  },\n}];"
+      },
+      "id": "nx29",
+      "name": "Send Inquiry Telegram",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2440,
+        280
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const item = $input.first().json;\nif (item.skipped || item.duplicate) {\n  return [{ json: item }];\n}\n\nconst SHEET_ID = '1fYB4h_BTiKXa9O3lBah-tQonWpQOQMG2aSkSfPs6yU4';\nconst TAB = 'housex_supply_ops';\n\nconst append_row = [\n  item.record_id,\n  item.supply_kind,\n  item.role,\n  item.contact_name,\n  item.contact_phone,\n  item.contact_email,\n  item.broker_id || '',\n  item.customer_id || '',\n  item.region,\n  item.detail,\n  item.public_url,\n  item.ops_status,\n  item.sla_due_at,\n  item.created_at,\n  JSON.stringify({\n    dedupe_key: item.dedupe_key,\n    marketing_opt_in: item.marketing_opt_in === true,\n  }).slice(0, 45000),\n];\n\nreturn [{\n  json: {\n    ...item,\n    append_row,\n    append_url: `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent(`${TAB}!A:O`)}:append?valueInputOption=USER_ENTERED&insertDataOption=INSERT_ROWS`,\n    append_body: { values: [append_row] },\n  },\n}];"
+      },
+      "id": "nx30",
+      "name": "Prepare Supply Append",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1000,
+        680
+      ]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "https://sheets.googleapis.com/v4/spreadsheets/1fYB4h_BTiKXa9O3lBah-tQonWpQOQMG2aSkSfPs6yU4/values/housex_supply_ops!A%3AA",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleApi",
+        "options": {}
+      },
+      "id": "nx31",
+      "name": "HTTP GET supply dedupe",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1240,
+        680
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const item = $('Prepare Supply Append').item?.json || $input.first().json;\nconst getRes = $input.first().json || {};\nconst rows = getRes.values || [];\n\nconst existing = new Set();\nfor (let i = 1; i < rows.length; i++) {\n  const id = String(rows[i][0] || '').trim();\n  if (id) existing.add(id);\n}\n\nif (existing.has(item.record_id)) {\n  return [{\n    json: {\n      ...item,\n      duplicate: true,\n      skipped: true,\n      ok: true,\n      reason: 'DUPLICATE_RECORD_ID',\n    },\n  }];\n}\n\nreturn [{ json: { ...item, duplicate: false, skipped: false } }];"
+      },
+      "id": "nx32",
+      "name": "Dedupe Supply",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1480,
+        680
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "c1",
+              "leftValue": "={{ $json.duplicate }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      },
+      "id": "nx33",
+      "name": "Supply Duplicate?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        1720,
+        680
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $json.append_url }}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json.append_body) }}",
+        "options": {}
+      },
+      "id": "nx34",
+      "name": "HTTP POST housex_supply_ops",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1960,
+        600
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const item = $input.first().json;\nif (item.skipped || item.duplicate) {\n  return [{ json: { ...item, telegram_skip: item.reason || 'skipped' } }];\n}\n\nconst kind = String(item.supply_kind || 'member');\nlet header = '👤 [HouseX — Thành viên mới]';\nlet priority = 'normal';\n\nif (kind === 'broker') {\n  header = '🏢 [HouseX — Môi giới mới đăng tin] Onboarding trong 24h';\n  priority = 'high';\n} else if (kind === 'ctv') {\n  header = '🤝 [HouseX — Đơn CTV chờ duyệt] Xử lý trong 24h';\n  priority = 'high';\n}\n\nconst lines = [\n  header,\n  `ID: ${item.record_id}`,\n  kind === 'ctv' ? `Broker: ${item.broker_id}` : null,\n  `Họ tên: ${item.contact_name}`,\n  `SĐT: ${item.contact_phone}`,\n  `Email: ${item.contact_email || '—'}`,\n  item.region ? `Khu vực: ${item.region}` : null,\n  item.detail ? `Chi tiết: ${item.detail}` : null,\n  item.public_url ? `Link: ${item.public_url}` : null,\n  `Hạn SLA: ${item.sla_due_at}`,\n].filter(Boolean);\n\nconst message = lines.join('\\n').slice(0, 3900);\nconst token = $env.TELEGRAM_BOT_TOKEN || '';\nconst chat_id =\n  kind === 'ctv'\n    ? ($env.TELEGRAM_CHAT_ID_CTV_OPS || $env.TELEGRAM_CHAT_ID_OPS || $env.TELEGRAM_CHAT_ID_OWNER || '')\n    : ($env.TELEGRAM_CHAT_ID_SUPPLY_OPS || $env.TELEGRAM_CHAT_ID_OPS || $env.TELEGRAM_CHAT_ID_OWNER || '');\n\nconst enabled = String($env.TELEGRAM_SUPPLY_ENABLED || 'true').toLowerCase() === 'true';\n\nreturn [{\n  json: {\n    ...item,\n    telegram_enabled: enabled && !!token && !!chat_id,\n    telegram_chat_id: chat_id,\n    telegram_message: message,\n    telegram_priority: priority,\n  },\n}];"
+      },
+      "id": "nx35",
+      "name": "Format Supply Telegram",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2200,
+        600
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const item = $input.first().json;\nif (!item.telegram_enabled) {\n  return [{\n    json: {\n      ...item,\n      telegram_sent: false,\n      telegram_skip: item.telegram_skip || 'TELEGRAM_DISABLED',\n    },\n  }];\n}\n\nconst token = $env.TELEGRAM_BOT_TOKEN || '';\nconst chatId = item.telegram_chat_id || '';\n\nlet tgRes;\ntry {\n  tgRes = await this.helpers.httpRequest({\n    method: 'POST',\n    url: `https://api.telegram.org/bot${token}/sendMessage`,\n    body: {\n      chat_id: chatId,\n      text: item.telegram_message,\n      disable_web_page_preview: true,\n    },\n    json: true,\n    timeout: 15000,\n  });\n} catch (e) {\n  return [{\n    json: {\n      ...item,\n      telegram_sent: false,\n      telegram_error: (e.message || String(e)).slice(0, 200),\n    },\n  }];\n}\n\nreturn [{\n  json: {\n    ...item,\n    telegram_sent: tgRes?.ok === true,\n    telegram_message_id: tgRes?.result?.message_id || null,\n  },\n}];"
+      },
+      "id": "nx36",
+      "name": "Send Supply Telegram",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2440,
+        600
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const item = $input.first().json;\nif (item.skipped || item.duplicate) {\n  return [{ json: item }];\n}\n\nconst SHEET_ID = '1fYB4h_BTiKXa9O3lBah-tQonWpQOQMG2aSkSfPs6yU4';\nconst TAB = 'noxh_leads_ops';\n\nconst append_row = [\n  item.lead_id,\n  item.tier,\n  item.overall,\n  item.credit_flag,\n  item.reason_codes_csv,\n  item.recommended_action,\n  item.rules_version,\n  item.contact_name,\n  item.contact_phone,\n  item.contact_email,\n  item.ops_status,\n  item.assigned_to,\n  item.sla_due_at,\n  item.created_at,\n  JSON.stringify({\n    has_credit_blocker: item.has_credit_blocker,\n    has_credit_caution: item.has_credit_caution,\n    dedupe_key: item.dedupe_key,\n  }).slice(0, 45000),\n];\n\nreturn [{\n  json: {\n    ...item,\n    append_row,\n    append_url: `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent(`${TAB}!A:O`)}:append?valueInputOption=USER_ENTERED&insertDataOption=INSERT_ROWS`,\n    append_body: { values: [append_row] },\n  },\n}];"
+      },
+      "id": "nx07",
+      "name": "Prepare Ops Append",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1000,
+        560
+      ]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "https://sheets.googleapis.com/v4/spreadsheets/1fYB4h_BTiKXa9O3lBah-tQonWpQOQMG2aSkSfPs6yU4/values/noxh_leads_ops!A%3AA",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleApi",
+        "options": {}
+      },
+      "id": "nx08",
+      "name": "HTTP GET ops dedupe",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1240,
+        560
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const item = $('Prepare Ops Append').item?.json || $input.first().json;\nconst getRes = $input.first().json || {};\nconst rows = getRes.values || [];\n\nconst existing = new Set();\nfor (let i = 1; i < rows.length; i++) {\n  const id = String(rows[i][0] || '').trim();\n  if (id) existing.add(id);\n}\n\nif (existing.has(item.lead_id)) {\n  return [{\n    json: {\n      ...item,\n      duplicate: true,\n      skipped: true,\n      ok: true,\n      reason: 'DUPLICATE_LEAD_ID',\n    },\n  }];\n}\n\nreturn [{ json: { ...item, duplicate: false, skipped: false } }];"
+      },
+      "id": "nx09",
+      "name": "Dedupe Ops",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1480,
+        560
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "c1",
+              "leftValue": "={{ $json.duplicate }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      },
+      "id": "nx10",
+      "name": "Duplicate?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        1720,
+        560
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $json.append_url }}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json.append_body) }}",
+        "options": {}
+      },
+      "id": "nx11",
+      "name": "HTTP POST noxh_leads_ops",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1960,
+        480
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const item = $input.first().json;\nif (item.skipped || item.duplicate) {\n  return [{ json: { ...item, telegram_skip: item.reason || 'skipped' } }];\n}\n\nconst tier = item.tier;\nif (tier === 'COLD' || tier === 'OUT') {\n  return [{\n    json: {\n      ...item,\n      telegram_enabled: false,\n      telegram_skip: 'NURTURE_ONLY',\n      nurture_note: tier === 'OUT'\n        ? 'Chuyển nurture dài / gợi ý nhà thương mại — không gọi slot chuyên gia NOXH.'\n        : 'Nurture dài hạn — gửi nội dung + hẹn lại khi sẵn sàng.',\n    },\n  }];\n}\n\nconst chatHot = $env.TELEGRAM_CHAT_ID_NOXH_HOT || $env.TELEGRAM_CHAT_ID_OPS || $env.TELEGRAM_CHAT_ID_OWNER || '';\nconst chatWarm = $env.TELEGRAM_CHAT_ID_NOXH_WARM || $env.TELEGRAM_CHAT_ID_OPS || $env.TELEGRAM_CHAT_ID_OWNER || '';\n\nlet header = '[HouseX NOXH]';\nlet chat_id = chatWarm;\nlet priority = 'normal';\n\nif (tier === 'HOT') {\n  header = '🔥 [HouseX NOXH — HOT] Gọi khách trong 2h';\n  chat_id = chatHot;\n  priority = 'urgent';\n} else if (item.has_credit_blocker) {\n  header = '⚠️ [HouseX NOXH — WARM] Gỡ hồ sơ vay / nợ xấu';\n} else if (item.has_credit_caution) {\n  header = '🟡 [HouseX NOXH — WARM] Cần tư vấn tín dụng';\n} else {\n  header = '🟡 [HouseX NOXH — WARM] Gỡ điều kiện / checklist';\n}\n\nconst lines = [\n  header,\n  `Lead: ${item.lead_id}`,\n  `Kết luận: ${item.overall} · Tín dụng: ${item.credit_flag}`,\n  `Lý do: ${item.reason_codes_csv || '—'}`,\n  `Khách: ${item.contact_name}`,\n  `SĐT: ${item.contact_phone}`,\n  `Email: ${item.contact_email}`,\n  `Hạn SLA: ${item.sla_due_at}`,\n  '',\n  item.recommended_action || 'Để chuyên gia HouseX tư vấn và giải thích rõ hồ sơ.',\n];\n\nconst message = lines.join('\\n').slice(0, 3900);\nconst token = $env.TELEGRAM_BOT_TOKEN || '';\nconst enabled = String($env.TELEGRAM_NOXH_ENABLED || 'true').toLowerCase() === 'true';\n\nreturn [{\n  json: {\n    ...item,\n    telegram_enabled: enabled && !!token && !!chat_id,\n    telegram_chat_id: chat_id,\n    telegram_message: message,\n    telegram_priority: priority,\n  },\n}];"
+      },
+      "id": "nx12",
+      "name": "Format Telegram",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2200,
+        480
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const item = $input.first().json;\nif (!item.telegram_enabled) {\n  return [{\n    json: {\n      ...item,\n      telegram_sent: false,\n      telegram_skip: item.telegram_skip || 'TELEGRAM_DISABLED',\n    },\n  }];\n}\n\nconst token = $env.TELEGRAM_BOT_TOKEN || '';\nconst chatId = item.telegram_chat_id || '';\n\nlet tgRes;\ntry {\n  tgRes = await this.helpers.httpRequest({\n    method: 'POST',\n    url: `https://api.telegram.org/bot${token}/sendMessage`,\n    body: {\n      chat_id: chatId,\n      text: item.telegram_message,\n      disable_web_page_preview: true,\n    },\n    json: true,\n    timeout: 15000,\n  });\n} catch (e) {\n  return [{\n    json: {\n      ...item,\n      telegram_sent: false,\n      telegram_error: (e.message || String(e)).slice(0, 200),\n    },\n  }];\n}\n\nreturn [{\n  json: {\n    ...item,\n    telegram_sent: tgRes?.ok === true,\n    telegram_message_id: tgRes?.result?.message_id || null,\n  },\n}];"
+      },
+      "id": "nx13",
+      "name": "Send Telegram",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2440,
+        480
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const item = $input.first().json;\nreturn [{\n  json: {\n    ok: item.ok !== false,\n    workflow: 'housex-noxh-lead-route',\n    path: item.path || 'events',\n    lead_id: item.lead_id || null,\n    event_path: item.event_path || null,\n    tier: item.tier || null,\n    supply_kind: item.supply_kind || null,\n    duplicate: item.duplicate === true,\n    skipped: item.skipped === true,\n    telegram_sent: item.telegram_sent === true,\n    reason: item.reason || item.telegram_skip || null,\n    finished_at: new Date().toISOString(),\n  },\n}];"
+      },
+      "id": "nx14",
+      "name": "Build Response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2680,
+        520
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json }}",
+        "options": {}
+      },
+      "id": "nx15",
+      "name": "Respond to Webhook",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        2920,
+        520
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const SECRET = $env.EVENTS_WEBHOOK_SECRET || '';\nconst headers = $input.first().json.headers || {};\nconst got = headers['x-events-secret'] || headers['X-Events-Secret'] || '';\nif (SECRET && got !== SECRET) {\n  throw new Error('Unauthorized: invalid EVENTS_WEBHOOK_SECRET');\n}\n\nconst raw = $input.first().json;\nconst body = raw.body && typeof raw.body === 'object' ? raw.body : raw;\nconst type = String(body.type || '').trim();\n\nif (type !== 'lead.noxh_checked.detail') {\n  return [{ json: { ok: true, skipped: true, path: 'detail', reason: 'NOT_DETAIL_EVENT', type } }];\n}\n\nconst p = body.payload || {};\nconst leadId = String(p.leadId || '').trim();\nif (!leadId) throw new Error('Validation: payload.leadId is required');\n\nconst s = p.situation || {};\nconst c = p.contact || {};\nconst now = body.sentAt || new Date().toISOString();\n\nreturn [{\n  json: {\n    ok: true,\n    skipped: false,\n    path: 'detail',\n    lead_id: leadId,\n    tier: String(p.tier || ''),\n    object_group: String(s.objectGroup || ''),\n    marital_status: String(s.maritalStatus || ''),\n    applicant_income: Number(s.applicantMonthlyIncome) || 0,\n    spouse_income: Number(s.spouseMonthlyIncome) || 0,\n    owns_home: s.ownsHomeInProvince === true,\n    area_per_person: s.areaPerPersonSqm,\n    intend_to_borrow: s.intendToBorrow === true,\n    existing_debt: Number(s.existingMonthlyDebtPayment) || 0,\n    card_limit: Number(s.creditCardLimitTotal) || 0,\n    bad_debt: String(s.badDebtSelfOrSpouse || ''),\n    timeframe: String(s.timeframe || ''),\n    dti: s.dti != null ? Number(s.dti) : null,\n    contact_name: String(c.name || '').slice(0, 80),\n    contact_phone: String(c.phone || '').slice(0, 20),\n    contact_email: String(c.email || '').slice(0, 120),\n    evaluation_reasons: JSON.stringify(p.evaluationReasons || []).slice(0, 8000),\n    credit_reasons: JSON.stringify(p.creditReasons || []).slice(0, 8000),\n    next_steps: JSON.stringify(p.nextSteps || []).slice(0, 8000),\n    rules_version: String(p.rulesVersion || ''),\n    created_at: now,\n  },\n}];"
+      },
+      "id": "nx16",
+      "name": "Parse NOXH Detail",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        280,
+        920
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "c1",
+              "leftValue": "={{ $json.skipped }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      },
+      "id": "nx17",
+      "name": "Skipped Detail?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        520,
+        920
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const item = $input.first().json;\nif (item.skipped) return [{ json: item }];\n\nconst SHEET_ID = '1fYB4h_BTiKXa9O3lBah-tQonWpQOQMG2aSkSfPs6yU4';\nconst TAB = 'noxh_leads_detail';\n\nconst append_row = [\n  item.lead_id,\n  item.tier,\n  item.object_group,\n  item.marital_status,\n  item.applicant_income,\n  item.spouse_income,\n  item.owns_home ? 'yes' : 'no',\n  item.area_per_person ?? '',\n  item.intend_to_borrow ? 'yes' : 'no',\n  item.existing_debt,\n  item.card_limit,\n  item.bad_debt,\n  item.timeframe,\n  item.dti ?? '',\n  item.evaluation_reasons,\n  item.credit_reasons,\n  item.next_steps,\n  item.rules_version,\n  item.contact_name,\n  item.contact_phone,\n  item.contact_email,\n  item.created_at,\n];\n\nreturn [{\n  json: {\n    ...item,\n    append_row,\n    append_url: `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent(`${TAB}!A:V`)}:append?valueInputOption=USER_ENTERED&insertDataOption=INSERT_ROWS`,\n    append_body: { values: [append_row] },\n  },\n}];"
+      },
+      "id": "nx18",
+      "name": "Prepare Detail Append",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        760,
+        840
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $json.append_url }}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json.append_body) }}",
+        "options": {}
+      },
+      "id": "nx19",
+      "name": "HTTP POST noxh_leads_detail",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1000,
+        840
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const item = $('Prepare Detail Append').item?.json || $input.first().json;\nreturn [{ json: { ok: true, workflow: 'housex-noxh-lead-route', path: 'detail', lead_id: item.lead_id, tier: item.tier, finished_at: new Date().toISOString() } }];"
+      },
+      "id": "nx20",
+      "name": "Build Detail Response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1240,
+        840
+      ]
+    }
+  ],
+  "connections": {
+    "Webhook housex-events": {
+      "main": [
+        [
+          {
+            "node": "Parse HouseX Event",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking 'Execute workflow'": {
+      "main": [
+        [
+          {
+            "node": "Inject Manual NOXH Event",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Inject Manual Inquiry Event",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Inject Manual NOXH Event": {
+      "main": [
+        [
+          {
+            "node": "Parse HouseX Event",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Inject Manual Inquiry Event": {
+      "main": [
+        [
+          {
+            "node": "Parse HouseX Event",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse HouseX Event": {
+      "main": [
+        [
+          {
+            "node": "Skipped Event?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Skipped Event?": {
+      "main": [
+        [
+          {
+            "node": "Build Response",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Route Event Path",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Route Event Path": {
+      "main": [
+        [
+          {
+            "node": "Prepare Inquiry Append",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Prepare Ops Append",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Prepare Supply Append",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Build Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Inquiry Append": {
+      "main": [
+        [
+          {
+            "node": "HTTP GET inquiry dedupe",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP GET inquiry dedupe": {
+      "main": [
+        [
+          {
+            "node": "Dedupe Inquiry",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Dedupe Inquiry": {
+      "main": [
+        [
+          {
+            "node": "Inquiry Duplicate?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Inquiry Duplicate?": {
+      "main": [
+        [
+          {
+            "node": "Build Response",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "HTTP POST housex_leads_inquiry",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP POST housex_leads_inquiry": {
+      "main": [
+        [
+          {
+            "node": "Format Inquiry Telegram",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format Inquiry Telegram": {
+      "main": [
+        [
+          {
+            "node": "Send Inquiry Telegram",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Inquiry Telegram": {
+      "main": [
+        [
+          {
+            "node": "Build Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Supply Append": {
+      "main": [
+        [
+          {
+            "node": "HTTP GET supply dedupe",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP GET supply dedupe": {
+      "main": [
+        [
+          {
+            "node": "Dedupe Supply",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Dedupe Supply": {
+      "main": [
+        [
+          {
+            "node": "Supply Duplicate?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supply Duplicate?": {
+      "main": [
+        [
+          {
+            "node": "Build Response",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "HTTP POST housex_supply_ops",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP POST housex_supply_ops": {
+      "main": [
+        [
+          {
+            "node": "Format Supply Telegram",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format Supply Telegram": {
+      "main": [
+        [
+          {
+            "node": "Send Supply Telegram",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Supply Telegram": {
+      "main": [
+        [
+          {
+            "node": "Build Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Ops Append": {
+      "main": [
+        [
+          {
+            "node": "HTTP GET ops dedupe",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP GET ops dedupe": {
+      "main": [
+        [
+          {
+            "node": "Dedupe Ops",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Dedupe Ops": {
+      "main": [
+        [
+          {
+            "node": "Duplicate?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Duplicate?": {
+      "main": [
+        [
+          {
+            "node": "Build Response",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "HTTP POST noxh_leads_ops",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP POST noxh_leads_ops": {
+      "main": [
+        [
+          {
+            "node": "Format Telegram",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format Telegram": {
+      "main": [
+        [
+          {
+            "node": "Send Telegram",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Telegram": {
+      "main": [
+        [
+          {
+            "node": "Build Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Response": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook noxh-detail": {
+      "main": [
+        [
+          {
+            "node": "Parse NOXH Detail",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse NOXH Detail": {
+      "main": [
+        [
+          {
+            "node": "Skipped Detail?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Skipped Detail?": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Prepare Detail Append",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Detail Append": {
+      "main": [
+        [
+          {
+            "node": "HTTP POST noxh_leads_detail",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP POST noxh_leads_detail": {
+      "main": [
+        [
+          {
+            "node": "Build Detail Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Detail Response": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "2",
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "tags": [
+    {
+      "name": "housex"
+    },
+    {
+      "name": "housex-noxh-lead-route"
+    },
+    {
+      "name": "housex-lead-inquiry"
+    },
+    {
+      "name": "housex-supply-signup"
+    }
+  ]
+}
