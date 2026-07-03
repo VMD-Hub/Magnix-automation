@@ -9,7 +9,7 @@ export default function DieuKhoanPage() {
   return (
     <article className="mx-auto max-w-2xl py-10 container-px prose prose-slate">
       <h1>Điều khoản sử dụng</h1>
-      <p>Cập nhật lần cuối: {new Date().getFullYear()}</p>
+      <p>Cập nhật lần cuối: 2026</p>
       <h2>1. Phạm vi dịch vụ</h2>
       <p>
         HouseX cung cấp nền tảng đăng tin và tìm kiếm bất động sản. Chúng tôi không
