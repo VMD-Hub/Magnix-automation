@@ -38,7 +38,7 @@ export type CommercialLandingSlug = (typeof COMMERCIAL_LANDING_SLUGS)[number];
  */
 export async function seedCommercialLandings(
   prisma: PrismaClient,
-): Promise<CommercialLandingSlug[]> {
+): Promise<string[]> {
   const monreiDeveloper = await prisma.developer.upsert({
     where: { taxCode: "0301450897" },
     update: {
