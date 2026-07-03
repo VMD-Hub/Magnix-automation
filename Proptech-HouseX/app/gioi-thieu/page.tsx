@@ -94,4 +94,3 @@ function StaticPage({
   );
 }
 
-export { StaticPage };
