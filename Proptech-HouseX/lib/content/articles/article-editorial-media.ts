@@ -91,6 +91,31 @@ export const ARTICLE_EDITORIAL_COVERS: Record<string, EditorialCover> = {
     alt: "Minh họa an cư và nhà ở đô thị",
     caption: "Tóm tắt điều kiện mua nhà ở xã hội theo Luật Nhà ở — cập nhật 2026.",
   },
+  "quy-trinh-mua-thue-mua-noxh-2026": {
+    url: HERO.civic,
+    alt: "Minh họa quy trình hành chính và nhà ở xã hội",
+    caption: "Quy trình mua/thuê mua NOXH — từ đăng ký đến ký hợp đồng.",
+  },
+  "vay-noxh-goi-120000-ty-nhcsxh-2026": {
+    url: DTA_HAPPY_HOME_IMAGES.paymentPlans[1].url,
+    alt: "Minh họa phương thức thanh toán và vay NOXH",
+    caption: "Gói tín dụng 120.000 tỷ NHCSXH — tham chiếu vay mua NOXH.",
+  },
+  "dieu-kien-nha-o-mua-noxh-dieu-77-2026": {
+    url: HERO.urban,
+    alt: "Minh họa điều kiện nhà ở khi mua NOXH",
+    caption: "Điều kiện nhà ở Điều 78 — 15 m²/người, một căn/hộ.",
+  },
+  "phuc-loc-tho-block-c-noxh-gia-ho-so-2026": {
+    url: "https://mogivi.vn/qyobje4c/chung-cu-phuc-loc-tho.jpg",
+    alt: "Chung cư Phúc Lộc Thọ Block C NOXH Thủ Đức",
+    caption: "NOXH Block C — 35 Lê Văn Chí, giá ~35,3 triệu/m².",
+  },
+  "noxh-long-an-6-du-an-mien-nam-2026": {
+    url: HERO.skyline,
+    alt: "Minh họa khu đô thị vùng ven miền Nam",
+    caption: "Danh mục 6 dự án NOXH Long An — vùng đệm TP.HCM.",
+  },
 };
 
 /** Khối markdown ảnh minh hoạ trong thân bài (chuẩn báo chí). */

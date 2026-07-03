@@ -1,6 +1,7 @@
 import type { ArticleCardData, ArticleDetail, ArticleTagSummary } from "@/lib/data/article-types";
 import { applyEditorialMedia, EDITORIAL_FIGURES } from "@/lib/content/articles/article-editorial-media";
 import { NOXH_SUPPORT_CLOSING } from "@/lib/content/articles/article-editorial-voice";
+import { NOXH_KNOWLEDGE_ARTICLES_2026 } from "@/lib/content/articles/noxh-knowledge-series-2026";
 import { NOXH_TREND_ARTICLES_2026 } from "@/lib/content/articles/noxh-trend-series-2026";
 import { TOD_NHON_TRACH_ARTICLES_2026 } from "@/lib/content/articles/tod-nhon-trach-series-2026";
 import { LTK_PROJECT_SLUG } from "@/lib/preview/phu-tho-dmc-mock";
@@ -154,7 +155,7 @@ Nhiều người chỉ đọc tin “mở bán NOXH” rồi nộp hồ sơ — 
 
 1. Đối tượng — thuộc một trong các nhóm tại Điều 76 [Luật Nhà ở 27/2023/QH15](https://vanban.chinhphu.vn/?docid=209627&pageid=27160).
 2. Nhà ở — đáp ứng Điều 77 cùng Luật (chưa mua NOXH, không sở hữu nhà ở vi phạm hoặc diện tích bình quân dưới mức tối thiểu).
-3. Thu nhập — **chỉ** công nhân KCN, CBCCVC, người thu nhập thấp (k5, k6, k8 Đ.76) phải không vượt trần Điều 30; người có công, hộ nghèo, LLVT, hộ giải tỏa có cơ chế riêng hoặc được miễn trần.
+3. Thu nhập — chỉ công nhân KCN, CBCCVC, người thu nhập thấp (k5, k6, k8 Đ.76) phải không vượt trần Điều 30; người có công, hộ nghèo, LLVT, hộ giải tỏa có cơ chế riêng hoặc được miễn trần.
 
 ${EDITORIAL_FIGURES.noxhEligibility}
 
@@ -175,17 +176,17 @@ Tóm tắt chính sách mới: [Chính phủ nâng mức trần thu nhập NOXH 
 
 Điều 76 Luật Nhà ở 2023 liệt kê 12 nhóm. Trong thực tế đăng ký mua căn NOXH thương mại, bốn nhóm hay gặp nhất:
 
-Công nhân, lao động tại KCN (**khoản 6**) — phù hợp dự án vùng ven như [DTA Happy Home Nhơn Trạch](/du-an/dta-happy-home-nhon-trach). Cần xác nhận đang làm việc tại KCN trên địa bàn (hợp đồng lao động, bảng lương).
+Công nhân, lao động tại KCN (khoản 6) — phù hợp dự án vùng ven như [DTA Happy Home Nhơn Trạch](/du-an/dta-happy-home-nhon-trach). Cần xác nhận đang làm việc tại KCN trên địa bàn (hợp đồng lao động, bảng lương).
 
-Cán bộ, công chức, viên chức (**khoản 8**) — áp dụng mức trần thu nhập Điều 30; thu nhập xác nhận qua cơ quan, đơn vị công tác.
+Cán bộ, công chức, viên chức (khoản 8) — áp dụng mức trần thu nhập Điều 30; thu nhập xác nhận qua cơ quan, đơn vị công tác.
 
-Người thu nhập thấp tại đô thị (**khoản 5**) — thường cạnh tranh cao tại NOXH nội thành như [Lý Thường Kiệt](/du-an/nha-o-xa-hoi-ly-thuong-kiet) (>12.000 hồ sơ / 755 suất).
+Người thu nhập thấp tại đô thị (khoản 5) — thường cạnh tranh cao tại NOXH nội thành như [Lý Thường Kiệt](/du-an/nha-o-xa-hoi-ly-thuong-kiet) (>12.000 hồ sơ / 755 suất).
 
-Hộ nghèo, cận nghèo (**khoản 2, 3, 4**) — không dùng bảng 25/35/50 triệu mà phải thuộc hộ nghèo, cận nghèo theo chuẩn Chính phủ (xác nhận qua UBND).
+Hộ nghèo, cận nghèo (khoản 2, 3, 4) — không dùng bảng 25/35/50 triệu mà phải thuộc hộ nghèo, cận nghèo theo chuẩn Chính phủ (xác nhận qua UBND).
 
-Các nhóm **miễn trần thu nhập Điều 30 k1** (khoản 1, 2, 3, 4, 9, 11 Điều 76): người có công, hộ nghèo/cận nghèo, người đã trả nhà công vụ, học sinh/sinh viên (thuê). Hộ **bị thu hồi đất** (khoản 10) không cần Mẫu xác nhận thu nhập dân sự — dùng Quyết định thu hồi đất.
+Các nhóm miễn trần thu nhập Điều 30 k1 (khoản 1, 2, 3, 4, 9, 11 Điều 76): người có công, hộ nghèo/cận nghèo, người đã trả nhà công vụ, học sinh/sinh viên (thuê). Hộ bị thu hồi đất (khoản 10) không cần Mẫu xác nhận thu nhập dân sự — dùng Quyết định thu hồi đất.
 
-Quân nhân, công an đương nhiệm (**khoản 7** Điều 76) áp dụng **Điều 67** NĐ 100/2024 (mức tham chiếu lương Đại tá, mẫu BQP/BCA) — **không** phải bảng 25/35/50 triệu như công nhân hay CBCCVC.
+Quân nhân, công an đương nhiệm (khoản 7 Điều 76) áp dụng Điều 67 NĐ 100/2024 (mức tham chiếu lương Đại tá, mẫu BQP/BCA) — không phải bảng 25/35/50 triệu như công nhân hay CBCCVC.
 
 ## Mức trần thu nhập hiện hành — không còn 20/30/40 triệu
 
@@ -252,8 +253,11 @@ Hồ sơ hợp lệ phải qua cửa điều kiện cần: đúng đối tượn
 Khi ba trụ cột đã vững, bước tiếp theo là chọn dự án và dự trù tài chính cho đúng mức cạnh tranh từng đợt. NOXH nội thành thường đông hồ sơ; vùng ven như [DTA Happy Home Nhơn Trạch](/du-an/dta-happy-home-nhon-trach) thường có quỹ căn mở rộng hơn và tổng vốn thấp hơn — phù hợp công nhân KCN đã rà soát xong điều kiện cần.
 
 - So sánh chiến lược an cư: [Lý Thường Kiệt vs DTA Happy Home](/tin-tuc/so-sanh-gia-noxh-ly-thuong-kiet-dta-happy-home-2026).
-- Ước lượng trả góp: [công cụ tính khoản vay](/cong-cu/tinh-khoan-vay) và lãi suất [NHCSXH 120.000 tỷ](/tin-tuc/lai-suat-vay-noxh-duoi-35-tuoi-nhnn-2026).
-- Theo dõi lịch mở hồ sơ: [công bố giá NOXH nội thành](/tin-tuc/tp-hcm-cong-bo-gia-2-du-an-noxh-ly-thuong-kiet-phu-tho-dmc).
+- Điều kiện nhà ở (Điều 78): [khi nào vẫn mua được dù có nhà](/tin-tuc/dieu-kien-nha-o-mua-noxh-dieu-77-2026).
+- Quy trình thực tế: [7 bước từ đăng ký đến nhận căn](/tin-tuc/quy-trinh-mua-thue-mua-noxh-2026).
+- Vay vốn: [gói 120.000 tỷ NHCSXH](/tin-tuc/vay-noxh-goi-120000-ty-nhcsxh-2026) và [công cụ kiểm tra NOXH](/cong-cu/dieu-kien-noxh).
+- Ước lượng trả góp: [công cụ tính khoản vay](/cong-cu/tinh-khoan-vay) · [lãi suất dưới 35 tuổi](/tin-tuc/lai-suat-vay-noxh-duoi-35-tuoi-nhnn-2026).
+- Theo dõi lịch mở hồ sơ: [công bố giá NOXH nội thành](/tin-tuc/tp-hcm-cong-bo-gia-2-du-an-noxh-ly-thuong-kiet-phu-tho-dmc) · [NOXH Long An](/tin-tuc/noxh-long-an-6-du-an-mien-nam-2026).
 
 ${NOXH_SUPPORT_CLOSING}
 
@@ -275,6 +279,7 @@ ${NOXH_SUPPORT_CLOSING}
     projects: [],
   },
   ...NOXH_TREND_ARTICLES_2026,
+  ...NOXH_KNOWLEDGE_ARTICLES_2026,
   ...TOD_NHON_TRACH_ARTICLES_2026,
 ];
 

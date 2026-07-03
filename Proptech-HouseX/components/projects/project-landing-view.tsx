@@ -13,6 +13,7 @@ import { ProjectInventorySection } from "@/components/projects/project-inventory
 import { LeadContactForm } from "@/components/leads/lead-contact-form";
 import type { ProjectInventoryPageData } from "@/lib/data/project-unit";
 import type { ProjectInventoryPageFilters } from "@/lib/validation/project-unit";
+import { FaqAnswerText } from "@/components/content/faq-answer-body";
 import { buildFaqJsonLd } from "@/lib/seo/affiliate-json-ld";
 import {
   LISTING_TIER_LABEL,
@@ -561,8 +562,8 @@ export function ProjectLandingContent({
                   <dt className="text-base font-semibold text-slate-900 sm:text-lg">
                     {f.q}
                   </dt>
-                  <dd className="mt-2.5 text-sm leading-relaxed text-slate-600">
-                    {f.a}
+                  <dd className="mt-2.5">
+                    <FaqAnswerText text={f.a} />
                   </dd>
                 </div>
               ))}

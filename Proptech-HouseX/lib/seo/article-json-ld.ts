@@ -1,11 +1,50 @@
-import { applyEditorialMedia, absoluteArticleImageUrl } from "@/lib/content/articles/article-editorial-media";
+import { absoluteArticleImageUrl } from "@/lib/content/articles/article-editorial-media";
+import type { LegalSourceRef } from "@/lib/content/editorial-trust";
+import type { EditorialExpert } from "@/lib/content/editorial-trust";
 import type { ArticleDetail } from "@/lib/data/article-types";
-
-import { getSiteUrl, getBrandName } from "@/lib/site-config";
+import { getBrandName, getSiteUrl } from "@/lib/site-config";
 
 const BASE = getSiteUrl();
 
-export function buildArticleJsonLd(article: ArticleDetail) {
+export type ArticleJsonLdOptions = {
+  expert?: EditorialExpert | null;
+  sources?: LegalSourceRef[];
+};
+
+export function buildArticleJsonLd(
+  article: ArticleDetail,
+  options: ArticleJsonLdOptions = {},
+) {
+  const expert = options.expert ?? null;
+  const sources = options.sources ?? [];
+  const publisher = {
+    "@type": "Organization" as const,
+    name: getBrandName(),
+    url: BASE,
+  };
+
+  const author = expert
+    ? {
+        "@type": "Person" as const,
+        name: expert.name,
+        jobTitle: expert.jobTitle,
+        url: `${BASE}/chuyen-gia/${expert.slug}`,
+      }
+    : {
+        "@type": "Organization" as const,
+        name: article.authorName ?? getBrandName(),
+      };
+
+  const isBasedOn =
+    sources.length > 0
+      ? sources.map((s) => ({
+          "@type": "Legislation" as const,
+          name: s.label,
+          url: s.url,
+          description: s.cite,
+        }))
+      : undefined;
+
   return {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
@@ -14,19 +53,13 @@ export function buildArticleJsonLd(article: ArticleDetail) {
     url: `${BASE}/tin-tuc/${article.slug}`,
     datePublished: article.publishedAt?.toISOString(),
     dateModified: article.updatedAt.toISOString(),
-    author: {
-      "@type": "Organization",
-      name: article.authorName ?? getBrandName(),
-    },
-    publisher: {
-      "@type": "Organization",
-      name: getBrandName(),
-      url: BASE,
-    },
+    author,
+    publisher,
     image: article.coverImageUrl
       ? [absoluteArticleImageUrl(article.coverImageUrl, BASE)]
       : undefined,
     mainEntityOfPage: `${BASE}/tin-tuc/${article.slug}`,
+    ...(isBasedOn ? { isBasedOn } : {}),
   };
 }
 

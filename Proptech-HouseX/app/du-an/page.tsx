@@ -3,8 +3,16 @@ import Link from "next/link";
 import { DemoCatalogBanner } from "@/components/projects/demo-catalog-banner";
 import { ProjectCard } from "@/components/projects/project-card";
 import { ProjectCatalogBanner } from "@/components/projects/project-catalog-banner";
-import { projectCatalogBannerVariant } from "@/lib/brand/project-catalog-banners";
 import {
+  buildRichFaqJsonLd,
+  ToolsFaqSection,
+} from "@/components/tools/tools-faq-section";
+import { projectCatalogBannerVariant } from "@/lib/brand/project-catalog-banners";
+import { EditorialTrustPanel } from "@/components/content/editorial-trust-panel";
+import { getNoxhEditorialTrust } from "@/lib/content/editorial-trust";
+import { NOXH_ELIGIBILITY_FAQ } from "@/lib/content/noxh-eligibility-faq";
+import {
+  NOXH_CATALOG_FAQ_HEADING,
   NOXH_CATALOG_SEO_DESCRIPTION,
   NOXH_CATALOG_SEO_TITLE,
   NOXH_CATALOG_TITLE,
@@ -53,13 +61,19 @@ export default async function DuAnListPage({ searchParams }: PageProps) {
 
   const { items, pagination, isDemo } = await listProjects({ projectType, page });
   const bannerVariant = projectCatalogBannerVariant(projectType);
+  const isNoxhCatalog = projectType === "NHA_O_XA_HOI";
+  const showNoxhFaq = isNoxhCatalog && page === 1;
+  const noxhTrust = showNoxhFaq ? getNoxhEditorialTrust() : null;
 
   const siteUrl = getSiteUrl();
+  const catalogUrl = isNoxhCatalog
+    ? `${siteUrl}/du-an?projectType=NHA_O_XA_HOI`
+    : `${siteUrl}/du-an`;
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "ItemList",
-    name: "Dự án bất động sản HouseX",
-    url: `${siteUrl}/du-an`,
+    name: isNoxhCatalog ? NOXH_CATALOG_TITLE : "Dự án bất động sản HouseX",
+    url: catalogUrl,
     numberOfItems: items.length,
     itemListElement: items.map((p, i) => ({
       "@type": "ListItem",
@@ -75,6 +89,14 @@ export default async function DuAnListPage({ searchParams }: PageProps) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
+      {showNoxhFaq ? (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(buildRichFaqJsonLd(NOXH_ELIGIBILITY_FAQ)),
+          }}
+        />
+      ) : null}
 
       <ProjectCatalogBanner variant={bannerVariant} />
 
@@ -122,6 +144,35 @@ export default async function DuAnListPage({ searchParams }: PageProps) {
             />
           ) : null}
         </nav>
+      ) : null}
+
+      {showNoxhFaq ? (
+        <>
+          <ToolsFaqSection
+            className="mt-14 max-w-5xl"
+            heading={NOXH_CATALOG_FAQ_HEADING}
+            items={NOXH_ELIGIBILITY_FAQ}
+          />
+          <p className="mt-6 max-w-5xl text-sm text-slate-600">
+            Tự kiểm tra điều kiện theo hồ sơ của bạn:{" "}
+            <Link
+              href="/cong-cu/dieu-kien-noxh"
+              className="font-semibold text-brand-700 hover:underline"
+            >
+              Công cụ kiểm tra NOXH
+            </Link>
+            .
+          </p>
+          {noxhTrust ? (
+            <EditorialTrustPanel
+              className="max-w-5xl"
+              updatedAt={noxhTrust.updatedAt}
+              sources={noxhTrust.sources}
+              expert={noxhTrust.expert}
+              variant="tool"
+            />
+          ) : null}
+        </>
       ) : null}
     </div>
   );

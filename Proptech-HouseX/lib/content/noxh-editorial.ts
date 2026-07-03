@@ -1,3 +1,5 @@
+import { faqBlocksToPlainText } from "@/lib/content/faq-content";
+import { noxhEligibilityFaqForRegion } from "@/lib/content/noxh-eligibility-faq";
 import type { ProjectLanding } from "@/lib/content/project-landing";
 
 /** Gói dịch vụ HouseX cho landing NOXH — mô hình hành trình trọn vòng đời (tham chiếu Citics Agent). */
@@ -52,10 +54,8 @@ export function housexNoxhServiceFaqs(projectName: string) {
 
 /** FAQ điều kiện NOXH — dùng chung, có tên tỉnh/khu vực. */
 export function noxhEligibilityFaq(regionLabel: string) {
-  return {
-    q: `Ai được mua nhà ở xã hội tại ${regionLabel}?`,
-    a: "Theo Luật Nhà ở 2023, đối tượng gồm người thu nhập thấp, công nhân KCN, cán bộ công chức… kèm điều kiện về nhà ở và thu nhập. Mỗi đợt mở bán có quy định rà soát riêng — nên rà soát sớm qua tư vấn HouseX.",
-  };
+  const item = noxhEligibilityFaqForRegion(regionLabel);
+  return { q: item.q, a: faqBlocksToPlainText(item.blocks) };
 }
 
 /** Gắn gói dịch vụ + CTA chuẩn vào landing NOXH. */

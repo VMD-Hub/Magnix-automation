@@ -1,9 +1,14 @@
 import type { ArticleCardData } from "@/lib/data/article-types";
+import type { EditorialExpert } from "@/lib/content/editorial-trust";
+import { expertProfilePath } from "@/lib/content/editorial-trust";
 import { ArticleTagList } from "@/components/articles/article-body";
+import Link from "next/link";
 
 export function ArticleHero({
   article,
   publishedLabel,
+  updatedLabel,
+  expert,
 }: {
   article: Pick<
     ArticleCardData,
@@ -16,6 +21,8 @@ export function ArticleHero({
     | "tags"
   >;
   publishedLabel: string | null;
+  updatedLabel?: string | null;
+  expert?: EditorialExpert | null;
 }) {
   const alt = article.coverImageAlt ?? article.title;
 
@@ -50,8 +57,41 @@ export function ArticleHero({
           {article.title}
         </h1>
         <p className="mt-4 text-sm text-slate-500">
-          {publishedLabel}
-          {article.authorName ? ` · ${article.authorName}` : ""}
+          {publishedLabel ? (
+            <>
+              <span>Xuất bản {publishedLabel}</span>
+              {updatedLabel ? (
+                <>
+                  <span className="mx-1.5 text-slate-300" aria-hidden>
+                    ·
+                  </span>
+                  <span>Cập nhật {updatedLabel}</span>
+                </>
+              ) : null}
+            </>
+          ) : updatedLabel ? (
+            <span>Cập nhật {updatedLabel}</span>
+          ) : null}
+          {expert ? (
+            <>
+              <span className="mx-1.5 text-slate-300" aria-hidden>
+                ·
+              </span>
+              <Link
+                href={expertProfilePath(expert.slug)}
+                className="font-medium text-brand-700 hover:underline"
+              >
+                {expert.name}
+              </Link>
+            </>
+          ) : article.authorName ? (
+            <>
+              <span className="mx-1.5 text-slate-300" aria-hidden>
+                ·
+              </span>
+              <span>{article.authorName}</span>
+            </>
+          ) : null}
         </p>
         {article.excerpt && (
           <p className="mt-6 border-l-4 border-brand-600 pl-4 text-lg font-medium leading-relaxed text-slate-800">

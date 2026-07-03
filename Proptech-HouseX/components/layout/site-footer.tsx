@@ -150,6 +150,12 @@ export function SiteFooter() {
             <Link href="/gioi-thieu" className="hover:text-gold-400">
               Giới thiệu
             </Link>
+            <Link href="/gioi-thieu/phuong-phap-bien-tap" className="hover:text-gold-400">
+              Phương pháp biên tập
+            </Link>
+            <Link href="/chuyen-gia/noxh-policy" className="hover:text-gold-400">
+              Nguyễn Vũ — NOXH
+            </Link>
             <Link href="/dieu-khoan" className="hover:text-gold-400">
               Điều khoản
             </Link>

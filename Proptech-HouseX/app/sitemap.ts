@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import { prisma } from "@/lib/prisma";
 import { affiliateSitemapEntries } from "@/lib/content/affiliate-verticals";
+import { listExpertSlugs } from "@/lib/content/editorial-trust";
 import { getCatalogSlugs } from "@/lib/seed/catalog-project-slugs";
 import { listDemoSaleListingCards } from "@/lib/preview/demo-listings";
 import { getSiteUrl } from "@/lib/site-config";
@@ -43,6 +44,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${BASE}/dang-ky/khach-hang`, changeFrequency: "monthly", priority: 0.5 },
     { url: `${BASE}/dang-ky/moi-gioi`, changeFrequency: "monthly", priority: 0.5 },
     { url: `${BASE}/gioi-thieu`, changeFrequency: "monthly", priority: 0.4 },
+    { url: `${BASE}/gioi-thieu/phuong-phap-bien-tap`, changeFrequency: "monthly", priority: 0.45 },
+    ...listExpertSlugs().map((slug) => ({
+      url: `${BASE}/chuyen-gia/${slug}`,
+      changeFrequency: "monthly" as const,
+      priority: 0.4,
+    })),
     { url: `${BASE}/lien-he`, changeFrequency: "monthly", priority: 0.5 },
     { url: `${BASE}/dieu-khoan`, changeFrequency: "yearly", priority: 0.3 },
     { url: `${BASE}/bao-mat`, changeFrequency: "yearly", priority: 0.3 },

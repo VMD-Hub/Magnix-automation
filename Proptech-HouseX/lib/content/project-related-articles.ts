@@ -1,6 +1,13 @@
 import type { ArticleCardData } from "@/lib/data/article-types";
 import { DTA_HAPPY_HOME_SLUG } from "@/lib/content/dta-happy-home-landing";
 import { LTK_PROJECT_SLUG } from "@/lib/preview/phu-tho-dmc-mock";
+import {
+  LA_HOME_SLUG,
+  MY_HANH_SLUG,
+  ORI_SLUG,
+} from "@/lib/preview/noxh-long-an-projects";
+
+const PHUC_LOC_THO_SLUG = "chung-cu-phuc-loc-tho-noxh";
 
 /** Thứ tự ưu tiên bài trend trên landing từng dự án. */
 export const PROJECT_FEATURED_ARTICLE_SLUGS: Partial<Record<string, string[]>> =
@@ -9,14 +16,37 @@ export const PROJECT_FEATURED_ARTICLE_SLUGS: Partial<Record<string, string[]>> =
       "tp-hcm-cong-bo-gia-2-du-an-noxh-ly-thuong-kiet-phu-tho-dmc",
       "gia-nha-o-xa-hoi-ly-thuong-kiet-cong-bo-6-2026",
       "so-sanh-gia-noxh-ly-thuong-kiet-dta-happy-home-2026",
+      "dieu-kien-mua-nha-o-xa-hoi-2026-tom-tat",
+      "dieu-kien-nha-o-mua-noxh-dieu-77-2026",
     ],
     [DTA_HAPPY_HOME_SLUG]: [
       "nhon-trach-cu-tang-truong-ha-tang-tod-2026",
       "metro-thu-thiem-long-thanh-175000-ty-khoi-cong-2026",
       "so-sanh-gia-noxh-ly-thuong-kiet-dta-happy-home-2026",
       "lai-suat-vay-noxh-duoi-35-tuoi-nhnn-2026",
+      "vay-noxh-goi-120000-ty-nhcsxh-2026",
+      "quy-trinh-mua-thue-mua-noxh-2026",
       "tod-xuong-song-phat-trien-do-thi-viet-nam-2025-2045",
       "quy-hoach-tong-the-tphcm-tam-nhin-100-nam-sieu-do-thi",
+    ],
+    [PHUC_LOC_THO_SLUG]: [
+      "phuc-loc-tho-block-c-noxh-gia-ho-so-2026",
+      "tp-hcm-cong-bo-gia-2-du-an-noxh-ly-thuong-kiet-phu-tho-dmc",
+      "so-sanh-gia-noxh-ly-thuong-kiet-dta-happy-home-2026",
+      "dieu-kien-mua-nha-o-xa-hoi-2026-tom-tat",
+    ],
+    [LA_HOME_SLUG]: [
+      "noxh-long-an-6-du-an-mien-nam-2026",
+      "dieu-kien-mua-nha-o-xa-hoi-2026-tom-tat",
+      "quy-trinh-mua-thue-mua-noxh-2026",
+    ],
+    [MY_HANH_SLUG]: [
+      "noxh-long-an-6-du-an-mien-nam-2026",
+      "vay-noxh-goi-120000-ty-nhcsxh-2026",
+    ],
+    [ORI_SLUG]: [
+      "noxh-long-an-6-du-an-mien-nam-2026",
+      "so-sanh-gia-noxh-ly-thuong-kiet-dta-happy-home-2026",
     ],
   };
 

@@ -3,9 +3,21 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArticleCard } from "@/components/articles/article-card";
 import {
+  buildRichFaqJsonLd,
+  ToolsFaqSection,
+} from "@/components/tools/tools-faq-section";
+import {
   getPublishedTagBySlug,
   listPublishedArticles,
 } from "@/lib/data/article-public";
+import { EditorialTrustPanel } from "@/components/content/editorial-trust-panel";
+import { getNoxhEditorialTrust } from "@/lib/content/editorial-trust";
+import { NOXH_ELIGIBILITY_FAQ } from "@/lib/content/noxh-eligibility-faq";
+import {
+  NOXH_CATALOG_FAQ_HEADING,
+  NOXH_TOPIC_HUB_INTRO,
+  NOXH_TOPIC_PILLAR_LINKS,
+} from "@/lib/content/messaging/noxh-public";
 import { getSiteUrl } from "@/lib/site-config";
 
 export const revalidate = 300;
@@ -24,8 +36,10 @@ export async function generateMetadata({
 
   const title = `${tag.name} — Tin tức & kiến thức`;
   const description =
-    tag.description ??
-    `Bài viết về ${tag.name.toLowerCase()} — HouseX tin tức bất động sản.`;
+    tagSlug === "noxh"
+      ? NOXH_TOPIC_HUB_INTRO
+      : tag.description ??
+        `Bài viết về ${tag.name.toLowerCase()} — HouseX tin tức bất động sản.`;
 
   return {
     title,
@@ -54,9 +68,19 @@ export default async function TopicHubPage({ params, searchParams }: PageProps) 
   });
 
   const totalPages = Math.max(1, Math.ceil(total / 12));
+  const isNoxhHub = tagSlug === "noxh" && page === 1;
+  const noxhTrust = isNoxhHub ? getNoxhEditorialTrust() : null;
 
   return (
     <div className="bg-slate-50">
+      {isNoxhHub ? (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(buildRichFaqJsonLd(NOXH_ELIGIBILITY_FAQ)),
+          }}
+        />
+      ) : null}
       <div className="border-b border-slate-200 bg-white">
         <div className="mx-auto max-w-6xl px-4 py-10 container-px">
           <nav className="text-sm text-slate-500">
@@ -69,10 +93,26 @@ export default async function TopicHubPage({ params, searchParams }: PageProps) 
           <h1 className="mt-3 text-3xl font-extrabold text-slate-900">
             {tag.name}
           </h1>
-          {tag.description && (
-            <p className="mt-3 max-w-2xl text-slate-600">{tag.description}</p>
-          )}
+          <p className="mt-3 max-w-2xl text-slate-600">
+            {isNoxhHub ? NOXH_TOPIC_HUB_INTRO : tag.description}
+          </p>
           <p className="mt-2 text-sm text-slate-500">{total} bài viết</p>
+          {isNoxhHub ? (
+            <nav
+              aria-label="Bài nền tảng NOXH"
+              className="mt-6 flex flex-wrap gap-2"
+            >
+              {NOXH_TOPIC_PILLAR_LINKS.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className="rounded-xl border border-brand-200 bg-brand-50 px-3 py-1.5 text-sm font-medium text-brand-800 hover:bg-brand-100"
+                >
+                  {link.label}
+                </Link>
+              ))}
+            </nav>
+          ) : null}
         </div>
       </div>
 
@@ -106,6 +146,24 @@ export default async function TopicHubPage({ params, searchParams }: PageProps) 
             )}
           </nav>
         )}
+
+        {isNoxhHub ? (
+          <>
+            <ToolsFaqSection
+              className="mt-14 max-w-4xl"
+              heading={NOXH_CATALOG_FAQ_HEADING}
+              items={NOXH_ELIGIBILITY_FAQ}
+            />
+            {noxhTrust ? (
+              <EditorialTrustPanel
+                className="max-w-4xl"
+                updatedAt={noxhTrust.updatedAt}
+                sources={noxhTrust.sources}
+                expert={noxhTrust.expert}
+              />
+            ) : null}
+          </>
+        ) : null}
       </div>
     </div>
   );

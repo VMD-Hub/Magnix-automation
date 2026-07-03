@@ -65,6 +65,24 @@ export default function GioiThieuPage() {
       <p className="text-sm text-slate-600">{BRAND_TAGLINE_FOOTER}</p>
 
       <p>
+        Cách House X đối chiếu nguồn và cập nhật nội dung:{" "}
+        <Link
+          href="/gioi-thieu/phuong-phap-bien-tap"
+          className="font-semibold text-brand-700 underline"
+        >
+          Phương pháp biên tập
+        </Link>
+        . Chủ đề NOXH do{" "}
+        <Link
+          href="/chuyen-gia/noxh-policy"
+          className="font-semibold text-brand-700 underline"
+        >
+          Nguyễn Vũ
+        </Link>{" "}
+        — Biên tập viên / Luật sư / Chuyên gia Nhà Ở Xã Hội — rà soát.
+      </p>
+
+      <p>
         Bạn là môi giới hoặc chủ nhà?{" "}
         <Link href="/dang-ky/moi-gioi" className="font-semibold text-brand-700 underline">
           Đăng ký đăng tin

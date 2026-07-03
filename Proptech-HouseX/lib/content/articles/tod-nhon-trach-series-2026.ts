@@ -49,6 +49,7 @@ Bài liên quan: [TOD — chiến lược phát triển đô thị Việt Nam](/
     seoDesc:
       "Tổng hợp đề cương quy hoạch TP.HCM 2025–2050: GRDP 1.200 tỷ USD, giao thông đa phương thức, TOD và đô thị vệ tinh.",
     tags: [
+      { slug: "noxh", name: "Nhà ở xã hội" },
       { slug: "goc-chuyen-gia", name: "Góc chuyên gia" },
       { slug: "ha-tang-giao-thong", name: "Hạ tầng & giao thông" },
       { slug: "do-thi-ve-tinh-tod", name: "Đô thị vệ tinh & TOD" },
@@ -96,6 +97,7 @@ Bài liên quan: [5 khu TOD metro số 2 TP.HCM](/tin-tuc/tp-hcm-5-khu-tod-metro
     seoDesc:
       "Phân tích TOD, Luật Đường sắt 2025 và chiến lược đô thị Việt Nam — chọn nơi an cư gần ga quy hoạch.",
     tags: [
+      { slug: "noxh", name: "Nhà ở xã hội" },
       { slug: "goc-chuyen-gia", name: "Góc chuyên gia" },
       { slug: "do-thi-ve-tinh-tod", name: "Đô thị vệ tinh & TOD" },
       { slug: "phap-ly", name: "Pháp lý & chính sách" },
@@ -142,6 +144,7 @@ Bài liên quan: [Quy hoạch 100 năm TP.HCM](/tin-tuc/quy-hoach-tong-the-tphcm
     seoDesc:
       "TP.HCM duyệt 5 khu TOD dọc metro số 2. So sánh TOD nội thành vs vùng ven Nhơn Trạch trên tuyến Thủ Thiêm – Long Thành.",
     tags: [
+      { slug: "noxh", name: "Nhà ở xã hội" },
       { slug: "ha-tang-giao-thong", name: "Hạ tầng & giao thông" },
       { slug: "do-thi-ve-tinh-tod", name: "Đô thị vệ tinh & TOD" },
       { slug: "dau-tu", name: "Kiến thức đầu tư" },
@@ -197,6 +200,7 @@ Bài liên quan: [Nhơn Trạch bứt phá hạ tầng](/tin-tuc/nhon-trach-cu-t
     seoDesc:
       "Tổng hợp tuyến đường sắt Thủ Thiêm – Long Thành: 47,7 km, 19 ga, 7 ga Nhơn Trạch. TOD vùng ven và DTA Happy Home.",
     tags: [
+      { slug: "noxh", name: "Nhà ở xã hội" },
       { slug: "ha-tang-giao-thong", name: "Hạ tầng & giao thông" },
       { slug: "tien-do-du-an", name: "Tiến độ dự án" },
       { slug: "dta-happy-home-nhon-trach", name: "DTA Happy Home" },

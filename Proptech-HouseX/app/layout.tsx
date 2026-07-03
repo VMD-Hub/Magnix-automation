@@ -7,6 +7,7 @@ import { EmailVerificationBanner } from "@/components/layout/header-auth";
 import { ThemeScript } from "@/components/theme/theme-script";
 import { ThemeShell } from "@/components/theme/theme-shell";
 import { getSiteUrl } from "@/lib/site-config";
+import { buildOrganizationJsonLd } from "@/lib/seo/organization-json-ld";
 import {
   SEO_DESCRIPTION_DEFAULT,
   SEO_TITLE_DEFAULT,
@@ -36,6 +37,8 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const organizationJsonLd = buildOrganizationJsonLd();
+
   return (
     <html
       lang="vi"
@@ -43,6 +46,12 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body className="flex min-h-full flex-col bg-[var(--background)] text-[var(--foreground)]">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(organizationJsonLd),
+          }}
+        />
         <ThemeScript />
         <ThemeShell>
           <SiteHeader />

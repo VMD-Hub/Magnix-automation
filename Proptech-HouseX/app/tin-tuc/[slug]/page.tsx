@@ -12,8 +12,15 @@ import {
   getPublishedArticleBySlug,
   listPublishedArticles,
 } from "@/lib/data/article-public";
+import { EditorialTrustPanel } from "@/components/content/editorial-trust-panel";
+import {
+  resolveExpertForTags,
+  resolveSourcesForTags,
+  formatEditorialDate,
+} from "@/lib/content/editorial-trust";
 import { buildArticleJsonLd } from "@/lib/seo/article-json-ld";
 import { buildBreadcrumbJsonLd } from "@/lib/seo/affiliate-json-ld";
+
 import { getSiteUrl } from "@/lib/site-config";
 
 export const revalidate = 300;
@@ -68,20 +75,21 @@ export default async function ArticleDetailPage({ params }: PageProps) {
   });
   const relatedItems = related.items.filter((a) => a.slug !== article.slug).slice(0, 3);
 
+  const tagSlugs = article.tags.map((t) => t.slug);
+  const expert = resolveExpertForTags(tagSlugs);
+  const sources = resolveSourcesForTags(tagSlugs);
+
   const breadcrumb = buildBreadcrumbJsonLd([
     { name: "Trang chủ", path: "/" },
     { name: "Tin tức", path: "/tin-tuc" },
     { name: article.title, path: `/tin-tuc/${article.slug}` },
   ]);
-  const jsonLd = buildArticleJsonLd(article);
+  const jsonLd = buildArticleJsonLd(article, { expert, sources });
 
   const publishedLabel = article.publishedAt
-    ? new Date(article.publishedAt).toLocaleDateString("vi-VN", {
-        day: "numeric",
-        month: "long",
-        year: "numeric",
-      })
+    ? formatEditorialDate(article.publishedAt)
     : null;
+  const updatedLabel = formatEditorialDate(article.updatedAt);
 
   return (
     <>
@@ -106,10 +114,22 @@ export default async function ArticleDetailPage({ params }: PageProps) {
           </nav>
         </div>
 
-        <ArticleHero article={article} publishedLabel={publishedLabel} />
+        <ArticleHero
+          article={article}
+          publishedLabel={publishedLabel}
+          updatedLabel={updatedLabel}
+          expert={expert}
+        />
 
         <div className="mx-auto max-w-3xl px-4 py-10 container-px">
           <ArticleBody body={article.body} />
+
+          <EditorialTrustPanel
+            updatedAt={article.updatedAt}
+            publishedAt={article.publishedAt}
+            sources={sources}
+            expert={expert}
+          />
 
           {article.projects.length > 0 && (
             <div className="mt-10 rounded-xl border border-brand-100 bg-brand-50/50 p-5">
