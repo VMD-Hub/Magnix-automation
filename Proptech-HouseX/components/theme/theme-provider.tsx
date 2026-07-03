@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect } from "react";
-import { usePathname, useSearchParams } from "next/navigation";
 import {
   THEME_PREVIEW_COOKIE,
   THEME_STORAGE_KEY,
@@ -19,18 +18,15 @@ function applyTheme(mode: "light" | "dark") {
 }
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const searchParams = useSearchParams();
-  const pathname = usePathname();
-
   useEffect(() => {
-    const q = searchParams.get("theme");
+    const q = new URLSearchParams(window.location.search).get("theme");
     if (isThemeMode(q)) applyTheme(q);
-  }, [searchParams]);
+  }, []);
 
   useEffect(() => {
-    if (!pathname.startsWith("/preview")) return;
+    if (!window.location.pathname.startsWith("/preview")) return;
     document.cookie = `${THEME_PREVIEW_COOKIE}=1;path=/;max-age=86400;SameSite=Lax`;
-  }, [pathname]);
+  }, []);
 
   return children;
 }
