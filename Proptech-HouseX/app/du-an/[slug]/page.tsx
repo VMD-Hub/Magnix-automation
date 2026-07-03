@@ -72,6 +72,10 @@ export default async function ProjectPage({ params, searchParams }: PageProps) {
   const { project, marketplaceListings, source } = result;
   const relatedArticles = await getArticlesForProjectSlug(project.slug, 6);
   const jsonLd = buildProjectJsonLd(project);
+  const overview = parseProjectOverview(project.overviewData);
+  const hasRichLanding =
+    (overview.landing?.highlights.length ?? 0) > 0 ||
+    (overview.landing?.gallery.length ?? 0) > 0;
 
   let inventory = null;
   if (source === "db") {
@@ -84,7 +88,8 @@ export default async function ProjectPage({ params, searchParams }: PageProps) {
     inventory = getDemoProjectInventory(slug, inventoryFilters);
   }
 
-  const useLandingContent = source === "demo" || source === "catalog";
+  const useDirectLanding =
+    source === "demo" || source === "catalog" || hasRichLanding;
 
   return (
     <>
@@ -95,7 +100,7 @@ export default async function ProjectPage({ params, searchParams }: PageProps) {
       {source === "demo" && process.env.NODE_ENV !== "production" && (
         <DemoCatalogBanner message="Dự án mẫu NOXH — chưa kết nối Postgres. Nội dung dùng để duyệt giao diện trước go-live." />
       )}
-      {useLandingContent ? (
+      {useDirectLanding ? (
         <ProjectLandingContent
           project={project}
           marketplaceListings={marketplaceListings}

@@ -4,14 +4,17 @@ import {
   buildOverviewData,
   defaultProjectLanding,
 } from "@/lib/content/project-landing";
+import { SOLENA_GREEN_TOWN_SLUG } from "@/lib/content/solena-green-town-slug";
 import { SOLENA_PUBLISHED_IMAGES } from "@/lib/content/solena-images";
+
+export { SOLENA_GREEN_TOWN_SLUG };
 
 const NOW = new Date("2026-06-29T00:00:00.000Z");
 
 function buildSolenaLanding() {
   const landing = defaultProjectLanding("Solena Green Town Bình Tân");
   landing.heroSubtitle =
-    "Phân khu Solena (Block B2) — 252 căn, 16 tầng, giá từ 53,9 triệu/m², bàn giao dự kiến Q4/2026";
+    "Booking chỉ từ 50 triệu · Chiết khấu sớm đến 11% · Block B2 — 252 căn, 16 tầng, giá từ 53,9 triệu/m², bàn giao dự kiến Q4/2026";
   landing.heroImage = { ...SOLENA_PUBLISHED_IMAGES.hero };
   landing.locationMapImage = { ...SOLENA_PUBLISHED_IMAGES.locationMap };
   landing.locationNotes = `Phân khu Solena (Block B2 thuộc Green Town Bình Tân) tọa lạc Lô 5, Khu dân cư đô thị Vĩnh Lộc 110ha, phường Bình Hưng Hòa B, Quận Bình Tân, TP.HCM — giao điểm Nguyễn Thị Tú, Lê Trọng Tấn và Quốc lộ 1A.
@@ -49,7 +52,11 @@ Tiện ích ngoại khu (tham khảo website dự án):
     },
     {
       title: "Chính sách thanh toán linh hoạt",
-      text: "Theo website: vốn tự có từ 20–30% ký HĐMB; hỗ trợ vay tới 70%; chiết khấu sớm và ưu đãi theo đợt mở bán — xác nhận chi tiết khi tư vấn.",
+      text: "Theo website: 30% ký HĐMB · 20% cất nóc · 45% bàn giao; hoặc 50% đến nhận nhà; hỗ trợ vay tới 70% và HTLS đến Q1/2029 — xác nhận chi tiết khi tư vấn.",
+    },
+    {
+      title: "Đơn vị thi công SaiGon Cons",
+      text: "CTXD SaiGon Cons thi công Block B2 — đối tác xây dựng có kinh nghiệm tại TP.HCM, đảm bảo tiến độ và chất lượng công trình.",
     },
   ];
   landing.amenities = [
@@ -87,8 +94,12 @@ Tiện ích ngoại khu (tham khảo website dự án):
       a: "Website CĐT ghi đã có quy hoạch 1/500 và Giấy phép xây dựng số 55/QD-SXD-TDDA do Sở Xây dựng TP.HCM cấp. Chi tiết hồ sơ — liên hệ tư vấn để xác minh trước giao dịch.",
     },
     {
+      q: "Booking Solena Green Town bao nhiêu?",
+      a: "Theo website dự án: booking chỉ từ 50 triệu đồng; chiết khấu sớm lên đến 11% tùy thời điểm ký HĐMB. Liên hệ tư vấn để nhận chính sách áp dụng hiện tại.",
+    },
+    {
       q: "Chính sách thanh toán Solena ra sao?",
-      a: "Theo website: thanh toán theo tiến độ (ví dụ 30% ký HĐMB, 20% cất nóc, 45% bàn giao hoặc chính sách 50% đến nhận nhà tùy đợt); hỗ trợ vay tới 70% và chiết khấu sớm. Liên hệ tư vấn để nhận bảng chính sách áp dụng hiện tại.",
+      a: "Theo website: 30% ký HĐMB · 20% cất nóc · 45% bàn giao; hoặc 50% đến nhận nhà tùy đợt; hỗ trợ vay tới 70% và HTLS đến Q1/2029. Liên hệ tư vấn để nhận bảng chính sách áp dụng hiện tại.",
     },
   ];
   landing.gallery = [...SOLENA_PUBLISHED_IMAGES.gallery];
@@ -111,7 +122,7 @@ export function buildSolenaGreenTownMock(): ProjectDetail {
   return {
     id: "preview-solena-green-town",
     developerId: "preview-ide-dev",
-    slug: "solena-green-town-binh-tan",
+    slug: SOLENA_GREEN_TOWN_SLUG,
     name: "Solena Green Town Bình Tân",
     projectType: "THUONG_MAI",
     status: "DANG_BAN",

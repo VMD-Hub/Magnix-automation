@@ -17,6 +17,7 @@ async function main() {
   console.log("Preview (noindex): /preview/du-an/noble-crystal-riverside-quan-7");
   console.log("Preview (noindex): /preview/du-an/gladia-heights-khang-dien-thu-duc");
   console.log("Preview (noindex): /preview/du-an/victoria-village-thanh-my-loi");
+  console.log("Preview (noindex): /preview/du-an/solena-green-town-binh-tan");
 }
 
 main()

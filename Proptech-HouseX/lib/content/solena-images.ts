@@ -30,6 +30,14 @@ export const SOLENA_PUBLISHED_IMAGES = {
       caption: "Layout căn 2 phòng ngủ — 1 WC",
     },
     {
+      url: `${CDN}/layout-can-ho-solena-green-town-binh-tan-2.jpg`,
+      caption: "Layout căn 2 phòng ngủ — 2 WC",
+    },
+    {
+      url: `${CDN}/layout-can-ho-solena-green-town-binh-tan-3.jpg`,
+      caption: "Layout căn 2 phòng ngủ — 2 WC (biến thể)",
+    },
+    {
       url: `${CDN}/layout-can-ho-solena-green-town-binh-tan-4.jpg`,
       caption: "Layout căn 3 phòng ngủ — 2 WC",
     },

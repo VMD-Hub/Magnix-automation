@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import { withDbTimeout } from "@/lib/db/query-timeout";
 import type { ProjectCardData } from "@/components/projects/project-card";
 import {
   parseProjectOverview,
@@ -9,6 +10,7 @@ import {
   listCatalogProjectCards,
   listDemoProjectCards,
 } from "@/lib/preview/demo-projects";
+import { mergeMissingGoLiveCommercialCards } from "@/lib/data/merge-go-live-project-cards";
 
 export type ProjectListParams = {
   province?: string;
@@ -28,7 +30,7 @@ export type ProjectListResult = {
   };
   /** true khi đang hiển thị dự án demo (chưa seed / DB offline). */
   isDemo?: boolean;
-  /** true khi đang hiển thị catalog go-live tĩnh (7 landing thương mại). */
+  /** true khi đang hiển thị catalog go-live tĩnh (8 landing thương mại). */
   isCatalog?: boolean;
 };
 
@@ -95,24 +97,51 @@ export async function listProjects(
   };
 
   try {
-    const [rows, total] = await Promise.all([
-      prisma.project.findMany({
-        where,
-        orderBy: { createdAt: "desc" },
-        skip: (page - 1) * pageSize,
-        take: pageSize,
-        include: {
-          developer: { select: { name: true } },
-          unitTypes: {
-            select: { priceFrom: true },
-            orderBy: { priceFrom: "asc" },
-            take: 1,
+    if (params.projectType === "THUONG_MAI") {
+      const rows = await withDbTimeout(
+        prisma.project.findMany({
+          where,
+          orderBy: { createdAt: "desc" },
+          include: {
+            developer: { select: { name: true } },
+            unitTypes: {
+              select: { priceFrom: true },
+              orderBy: { priceFrom: "asc" },
+              take: 1,
+            },
+            _count: { select: { listings: true } },
           },
-          _count: { select: { listings: true } },
-        },
-      }),
-      prisma.project.count({ where }),
-    ]);
+        }),
+      );
+      const merged = mergeMissingGoLiveCommercialCards(rows.map(rowToCard));
+      return paginateCatalog(
+        merged,
+        page,
+        pageSize,
+        merged.length > rows.length,
+      );
+    }
+
+    const [rows, total] = await withDbTimeout(
+      Promise.all([
+        prisma.project.findMany({
+          where,
+          orderBy: { createdAt: "desc" },
+          skip: (page - 1) * pageSize,
+          take: pageSize,
+          include: {
+            developer: { select: { name: true } },
+            unitTypes: {
+              select: { priceFrom: true },
+              orderBy: { priceFrom: "asc" },
+              take: 1,
+            },
+            _count: { select: { listings: true } },
+          },
+        }),
+        prisma.project.count({ where }),
+      ]),
+    );
 
     if (total > 0) {
       return {

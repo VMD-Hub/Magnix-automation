@@ -6,8 +6,8 @@ import { getDemoProjectBySlug } from "../lib/preview/demo-projects";
 import { VINHOMES_SAIGON_PARK_NAME } from "../lib/preview/vinhomes-saigon-park-mock";
 
 describe("go-live landing catalog", () => {
-  it("lists 7 commercial slugs for smoke test", () => {
-    assert.equal(GO_LIVE_LANDING_SLUGS.length, 7);
+  it("lists 8 commercial slugs for smoke test", () => {
+    assert.equal(GO_LIVE_LANDING_SLUGS.length, 8);
   });
 
   it("lists NOXH slugs for /du-an?projectType=NHA_O_XA_HOI", () => {
@@ -35,9 +35,9 @@ describe("go-live landing catalog", () => {
     );
   });
 
-  it("list cards for commercial filter returns all 7 go-live projects", async () => {
+  it("list cards for commercial filter returns all 8 go-live projects", async () => {
     const { listCatalogProjectCards } = await import("../lib/preview/demo-projects");
-    assert.equal(listCatalogProjectCards({ projectType: "THUONG_MAI" }).length, 7);
+    assert.equal(listCatalogProjectCards({ projectType: "THUONG_MAI" }).length, 8);
     assert.ok(listCatalogProjectCards({ projectType: "NHA_O_XA_HOI" }).length >= 10);
   });
 

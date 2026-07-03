@@ -20,6 +20,8 @@ import {
   buildVictoriaVillageSeedLanding,
   VICTORIA_VILLAGE_SLUG,
 } from "@/lib/preview/victoria-village-mock";
+import { seedSolenaGreenTown } from "./solena-green-town";
+import { SOLENA_GREEN_TOWN_SLUG } from "@/lib/content/solena-green-town-slug";
 
 export const COMMERCIAL_LANDING_SLUGS = [
   MONREI_SAIGON_SLUG,
@@ -415,5 +417,7 @@ export async function seedCommercialLandings(
     },
   });
 
-  return [...COMMERCIAL_LANDING_SLUGS];
+  await seedSolenaGreenTown(prisma);
+
+  return [...COMMERCIAL_LANDING_SLUGS, SOLENA_GREEN_TOWN_SLUG];
 }

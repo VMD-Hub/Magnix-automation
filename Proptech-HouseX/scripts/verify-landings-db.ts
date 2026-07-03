@@ -59,7 +59,7 @@ async function main() {
 
     if (missing) {
       console.error(
-        `\nThiếu ${missing} dự án. Chạy:\n  npm run db:deploy\n  npm run db:seed:vinhomes\n  npm run db:seed:commercial\n  pm2 restart housex --update-env`,
+        `\nThiếu ${missing} dự án. Chạy:\n  npm run db:deploy\n  npm run db:seed:vinhomes\n  npm run db:seed:commercial   # gồm Solena + 4 TM khác\n  pm2 restart housex --update-env`,
       );
       process.exit(1);
     }

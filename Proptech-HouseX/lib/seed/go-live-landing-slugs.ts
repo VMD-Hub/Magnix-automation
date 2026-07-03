@@ -1,3 +1,4 @@
+import { SOLENA_GREEN_TOWN_SLUG } from "@/lib/content/solena-green-town-slug";
 import { VINHOMES_PROJECT_SLUGS } from "./vinhomes-projects";
 import { COMMERCIAL_LANDING_SLUGS } from "./commercial-landings";
 
@@ -5,6 +6,7 @@ import { COMMERCIAL_LANDING_SLUGS } from "./commercial-landings";
 export const GO_LIVE_LANDING_SLUGS = [
   ...VINHOMES_PROJECT_SLUGS,
   ...COMMERCIAL_LANDING_SLUGS,
+  SOLENA_GREEN_TOWN_SLUG,
 ] as const;
 
 export type GoLiveLandingSlug = (typeof GO_LIVE_LANDING_SLUGS)[number];

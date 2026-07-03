@@ -11,6 +11,7 @@ import {
   buildDtaHappyHomeMock,
 } from "@/lib/preview/dta-happy-home-mock";
 import { buildDtaPreviewListings } from "@/lib/preview/dta-happy-home-listings";
+import { SOLENA_GREEN_TOWN_SLUG } from "@/lib/content/solena-green-town-slug";
 import {
   buildSolenaGreenTownMock,
   buildSolenaPreviewListings,
@@ -145,7 +146,7 @@ const DEMO_REGISTRY: Record<string, DemoEntry> = {
     build: buildNamLongHongPhatMock,
     listings: buildNamLongHongPhatPreviewListings,
   },
-  "solena-green-town-binh-tan": {
+  [SOLENA_GREEN_TOWN_SLUG]: {
     build: buildSolenaGreenTownMock,
     listings: buildSolenaPreviewListings,
   },
