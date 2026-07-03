@@ -53,7 +53,7 @@ function enrichProjectFromCatalog(
       totalUnits: current.totalUnits ?? catalogOverview.totalUnits,
       blocks: current.blocks ?? catalogOverview.blocks,
       landing: catalogOverview.landing,
-    }),
+    }) as ProjectDetail["overviewData"],
     description: project.description?.trim() || catalog.description,
     seoTitle: project.seoTitle?.trim() || catalog.seoTitle,
     seoDesc: project.seoDesc?.trim() || catalog.seoDesc,
