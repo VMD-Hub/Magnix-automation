@@ -25,6 +25,7 @@ cd /opt/housex/Proptech-HouseX
 git pull                          # lấy script go-live:p1-vps, go-live:smoke-auth
 npm ci
 npm run go-live:sync-db-url       # DATABASE_URL khớp .env.prod (fix auth fail PM2)
+npm run go-live:verify-db         # test Prisma login thật (khác check-env-files)
 npm run go-live:p1-vps            # db:deploy (Postgres đã chạy trên VPS)
 npm run build
 npm start &                         # hoặc pm2 restart housex — port 3000
