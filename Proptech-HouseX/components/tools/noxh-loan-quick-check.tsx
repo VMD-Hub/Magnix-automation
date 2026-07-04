@@ -302,7 +302,7 @@ export function NoxhLoanAdvisoryForm({
     async (e: React.FormEvent) => {
       e.preventDefault();
       if (!consent) {
-        setError("Vui lòng đồng ý cho phép liên hệ.");
+        setError("Vui lòng đồng ý nhận tư vấn qua email.");
         return;
       }
       setError(null);
@@ -363,7 +363,8 @@ export function NoxhLoanAdvisoryForm({
       <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-6 text-center">
         <p className="font-semibold text-emerald-900">Đã ghi nhận yêu cầu đồng hành</p>
         <p className="mt-2 text-sm text-emerald-800">
-          Chuyên gia HouseX sẽ liên hệ trong giờ hành chính — miễn phí, không cam kết duyệt vay.
+          Chúng tôi sẽ gửi lộ trình và tư vấn chi tiết qua email — miễn phí, không cam kết duyệt
+          vay.
         </p>
       </div>
     );
@@ -377,7 +378,8 @@ export function NoxhLoanAdvisoryForm({
     >
       <h3 className="text-lg font-bold text-slate-900">Nhờ chuyên gia đồng hành rà soát</h3>
       <p className="mt-1 text-sm text-slate-600">
-        Đội tư vấn nội bộ HouseX — giúp tránh đặt cọc khi hồ sơ chưa sẵn sàng.
+        Điền thông tin — chúng tôi gửi phân tích và tư vấn chi tiết qua email, không gọi làm phiền
+        trừ khi bạn chủ động yêu cầu.
       </p>
 
       <div className="mt-5 grid gap-3 sm:grid-cols-2">
@@ -392,6 +394,16 @@ export function NoxhLoanAdvisoryForm({
             type="tel"
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
+            className={inputCls}
+          />
+        </label>
+        <label className="block sm:col-span-2">
+          <span className="text-xs font-medium text-slate-700">Email (để nhận tư vấn) *</span>
+          <input
+            required
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             className={inputCls}
           />
         </label>
@@ -453,7 +465,7 @@ export function NoxhLoanAdvisoryForm({
           className="mt-0.5 rounded border-slate-300"
         />
         <span>
-          Tôi đồng ý HouseX liên hệ tư vấn (
+          Tôi đồng ý HouseX gửi tư vấn qua email (
           <Link href="/bao-mat" className="text-brand-700 underline">
             bảo mật
           </Link>
@@ -464,7 +476,7 @@ export function NoxhLoanAdvisoryForm({
       {error ? <p className="mt-2 text-xs text-red-600">{error}</p> : null}
 
       <Button type="submit" disabled={loading} className="mt-5">
-        {loading ? "Đang gửi…" : "Gửi yêu cầu đồng hành"}
+        {loading ? "Đang gửi…" : "Nhận tư vấn chi tiết qua email"}
       </Button>
     </form>
   );

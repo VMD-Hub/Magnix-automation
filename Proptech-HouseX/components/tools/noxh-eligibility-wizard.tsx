@@ -303,7 +303,7 @@ export function NoxhEligibilityWizard() {
       return;
     }
     if (!consent) {
-      setFormError("Vui lòng đồng ý cho phép HouseX liên hệ tư vấn.");
+      setFormError("Vui lòng đồng ý nhận lộ trình và tư vấn qua email.");
       return;
     }
     setFormError(null);
@@ -743,13 +743,13 @@ export function NoxhEligibilityWizard() {
               className="rounded-2xl border border-brand-200 bg-gradient-to-br from-brand-50 to-white p-5"
             >
               <p className="flex items-center gap-2 text-base font-bold text-slate-900">
-                <Icon.FileCheck className="text-lg text-brand-600" /> Nhận lộ trình
-                chi tiết + checklist hồ sơ (PDF)
+                <Icon.FileCheck className="text-lg text-brand-600" /> Nhận lộ trình chi tiết
+                qua email + checklist hồ sơ (PDF)
               </p>
               <p className="mt-1 text-sm text-slate-600">
-                Để lại thông tin — chúng tôi gửi bản phân tích chi tiết cho trường
-                hợp của bạn và để chuyên gia HouseX tư vấn, giải thích rõ hồ sơ &
-                tìm giải pháp.
+                Để lại thông tin — chúng tôi gửi lộ trình và tư vấn chi tiết qua email cho trường
+                hợp của bạn. Không lo bị gọi làm phiền; ưu tiên trao đổi bằng email để bạn chủ
+                động đọc và phản hồi.
               </p>
               <div className="mt-4 grid gap-3 sm:grid-cols-2">
                 <label className="block">
@@ -791,7 +791,7 @@ export function NoxhEligibilityWizard() {
                   className="mt-0.5 rounded border-slate-300"
                 />
                 <span>
-                  Tôi đồng ý HouseX liên hệ qua điện thoại/email để tư vấn (xem{" "}
+                  Tôi đồng ý HouseX gửi lộ trình và liên hệ tư vấn qua email (xem{" "}
                   <a href="/bao-mat" className="text-brand-700 underline">
                     chính sách bảo mật
                   </a>
@@ -802,7 +802,7 @@ export function NoxhEligibilityWizard() {
                 <p className="mt-2 text-xs text-red-600">{formError}</p>
               )}
               <Button type="submit" disabled={submitting} className="mt-4 w-full">
-                {submitting ? "Đang gửi…" : "Nhận lộ trình chi tiết & tư vấn"}
+                {submitting ? "Đang gửi…" : "Nhận lộ trình và tư vấn chi tiết qua email"}
               </Button>
             </form>
           ) : (
