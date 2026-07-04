@@ -36,6 +36,7 @@
     "go-live:check-env-files": "node --import tsx scripts/check-env-file-conflict.ts",
     "go-live:smoke": "node --import tsx scripts/smoke-test-site.ts",
     "go-live:smoke-auth": "node --import tsx scripts/smoke-test-auth.ts",
+    "go-live:smoke-listings": "node --import tsx scripts/smoke-test-listing-review.ts",
     "go-live:p1-local": "node --import tsx scripts/go-live-p1-local.ts",
     "go-live:p1-vps": "node --import tsx scripts/go-live-p1-vps.ts",
     "go-live:sync-db-url": "node --import tsx scripts/sync-database-url.ts",
