@@ -6,7 +6,61 @@ Tài liệu ưu tiên đưa site lên production sớm. CTV/LMS chi tiết ở p
 
 ---
 
-## Ưu tiên 1 — Go-live (làm lần lượt)
+## Ưu tiên 1 — Go-live auth & DB (đang triển khai)
+
+### Local (Windows / macOS — cần Docker Desktop)
+
+```bash
+npm run go-live:p1-local
+npm run dev
+SITE=http://localhost:3000 npm run go-live:smoke-auth
+```
+
+### VPS Linux (`/opt/housex/Proptech-HouseX`)
+
+> **Lưu ý:** Dùng cú pháp bash, không dùng `$env:SITE=…` (PowerShell).
+
+```bash
+cd /opt/housex/Proptech-HouseX
+git pull                          # lấy script go-live:p1-vps, go-live:smoke-auth
+npm ci
+npm run go-live:p1-vps            # db:deploy (Postgres đã chạy trên VPS)
+npm run build
+npm start &                         # hoặc pm2 restart housex — port 3000
+SITE=http://127.0.0.1:3000 npm run go-live:smoke-auth
+SITE=https://timnhaxahoi.com npm run go-live:smoke
+```
+
+Dev trên VPS (nếu port 3000 bận → Next dùng 3001):
+
+```bash
+npm run dev -- --port 3001
+SITE=http://127.0.0.1:3001 npm run go-live:smoke-auth
+```
+
+| Script | Mục đích |
+|--------|----------|
+| `npm run go-live:secrets` | Sinh `AUTH_SECRET`, `ADMIN_SECRET`, `CRON_SECRET` |
+| `npm run go-live:p1-local` | Docker Postgres + `db:deploy` |
+| `npm run go-live:smoke-auth` | API test: đăng ký khách/MG, verify email, login, logout |
+| `NODE_ENV=production npm run go-live:check-env` | Validate env trước deploy VPS |
+
+Email local: không cần Resend — `[email:dev]` log ra console khi đăng ký.
+
+### Production VPS — checklist
+
+- [ ] Copy `.env.production.example` → `.env` trên VPS (không dùng mật khẩu `postgres:postgres`)
+- [ ] `npm run go-live:secrets` → điền secret vào `.env`
+- [ ] Cấu hình **một** email provider: `RESEND_API_KEY` + `EMAIL_FROM` **hoặc** `EMAIL_WEBHOOK_URL` (n8n)
+- [ ] `REDIS_URL` + `DATABASE_URL` production
+- [ ] `npm run db:deploy` (không `db:push`)
+- [ ] `NODE_ENV=production npm run go-live:check-env`
+- [ ] Smoke: đăng ký khách → email verify thật → reveal SĐT tin đăng
+- [ ] Smoke: đăng ký môi giới → `/moi-gioi/tai-khoan` → nộp CTV → `/admin/ctv`
+
+---
+
+## Ưu tiên 1 — Go-live (lộ trình đầy đủ)
 
 ### Bước 1 — Hạ tầng & env
 
@@ -84,6 +138,9 @@ Kiểm tra thủ công:
 | Lệnh | Mục đích |
 |------|----------|
 | `npm run go-live:secrets` | Sinh AUTH / ADMIN / CRON secret |
+| `npm run go-live:p1-local` | Docker + `db:deploy` (local P1) |
+| `npm run go-live:p1-vps` | `db:deploy` trên VPS (Postgres sẵn) |
+| `npm run go-live:smoke-auth` | Smoke đăng ký khách + môi giới (`SITE=…`) |
 | `npm run go-live:check-env` | Validate env bắt buộc |
 | `npm run go-live:smoke` | SSR smoke test (`SITE=https://...`) |
 | `npm run db:seed:vinhomes` | Seed 3 landing Vinhomes → `/du-an` — xem [DEPLOY_VINHOMES.md](DEPLOY_VINHOMES.md) |

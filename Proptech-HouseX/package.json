@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --webpack",
     "build": "next build --webpack",
     "start": "next start",
     "lint": "eslint",
@@ -35,6 +35,9 @@
     "go-live:check-env": "node --import tsx scripts/check-go-live-env.ts",
     "go-live:check-env-files": "node --import tsx scripts/check-env-file-conflict.ts",
     "go-live:smoke": "node --import tsx scripts/smoke-test-site.ts",
+    "go-live:smoke-auth": "node --import tsx scripts/smoke-test-auth.ts",
+    "go-live:p1-local": "node --import tsx scripts/go-live-p1-local.ts",
+    "go-live:p1-vps": "node --import tsx scripts/go-live-p1-vps.ts",
     "hero:generate-assets": "node --import tsx scripts/generate-cinematic-hero-assets.ts",
     "hero:enhance-assets": "node --import tsx scripts/enhance-cinematic-hero-assets.ts",
     "hero:import-thu-thiem": "node --import tsx scripts/import-housex-hero-thu-thiem.ts",
