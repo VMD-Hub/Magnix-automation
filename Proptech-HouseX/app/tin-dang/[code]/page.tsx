@@ -14,6 +14,7 @@ import {
 } from "@/lib/content/title";
 import { maskPhone } from "@/lib/privacy/phone";
 import { BrokerContactCard } from "@/components/listings/broker-contact-card";
+import { ListingReportForm } from "@/components/listings/listing-report-form";
 import { Badge } from "@/components/ui/badge";
 import { RateLimitNotice } from "@/components/security/rate-limit-notice";
 import { isBrowseRateLimited } from "@/lib/security/browse-rate-limit";
@@ -221,6 +222,10 @@ export default async function ListingPage({ params, searchParams }: PageProps) {
               autoReveal={reveal === "1"}
             />
           </div>
+        </section>
+
+        <section className="mt-8">
+          <ListingReportForm listingCode={listing.code} />
         </section>
 
         {otherOffers.length > 0 && (

@@ -7,7 +7,8 @@ const VERTICAL_OPTIONS = [
   { value: "tai-chinh", label: "Vay vốn / Tài chính ngân hàng" },
   { value: "dinh-gia", label: "Định giá & thẩm định BĐS" },
   { value: "noi-that", label: "Thiết kế & thi công nội thất" },
-  { value: "khac", label: "Khác / Hỗ trợ chung" },
+  { value: "ho-tro", label: "Hỗ trợ / Báo tin sai / Góp ý" },
+  { value: "khac", label: "Khác" },
 ] as const;
 
 const NEED_BY_VERTICAL: Record<string, { value: string; label: string }[]> = {
@@ -26,6 +27,11 @@ const NEED_BY_VERTICAL: Record<string, { value: string; label: string }[]> = {
     { value: "thiet-ke", label: "Thiết kế nội thất" },
     { value: "thi-cong", label: "Thi công trọn gói" },
     { value: "thiet-ke-thi-cong", label: "Thiết kế + thi công" },
+  ],
+  "ho-tro": [
+    { value: "bao-cao-tin", label: "Báo tin sai / lừa đảo" },
+    { value: "gop-y", label: "Góp ý nội dung / biên tập" },
+    { value: "khac-ht", label: "Hỗ trợ khác" },
   ],
 };
 

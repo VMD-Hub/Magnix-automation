@@ -129,9 +129,43 @@ Kiểm tra thủ công:
 
 ### Bước 8 — Cron (sau khi site ổn)
 
+In crontab mẫu (đọc `CRON_SECRET` từ `.env`):
+
+```bash
+npm run go-live:print-cron
+# copy output → crontab -e trên VPS
+```
+
+Hoặc dán thủ công (thay `$CRON_SECRET` và domain):
+
 ```cron
 0 * * * * curl -fsS -H "Authorization: Bearer $CRON_SECRET" https://timnhaxahoi.com/api/cron/expire-listings
+* * * * * curl -fsS -H "Authorization: Bearer $CRON_SECRET" https://timnhaxahoi.com/api/cron/dispatch-events
+0 */6 * * * curl -fsS -H "Authorization: Bearer $CRON_SECRET" https://timnhaxahoi.com/api/cron/recompute-ranking
+15 * * * * curl -fsS -H "Authorization: Bearer $CRON_SECRET" https://timnhaxahoi.com/api/cron/expire-unit-bookings
 ```
+
+`dispatch-events` cần `EVENTS_WEBHOOK_URL` (n8n) — không có thì event chỉ log nội bộ.
+
+### Bước 9 — Email production
+
+**Resend (khuyến nghị):**
+
+1. Tạo API key tại [resend.com](https://resend.com)
+2. Verify domain `timnhaxahoi.com` (SPF + DKIM)
+3. Trên VPS `.env`:
+   ```bash
+   RESEND_API_KEY=re_...
+   EMAIL_FROM="House X <noreply@timnhaxahoi.com>"
+   NEXT_PUBLIC_EDITORIAL_EMAIL="hotro@timnhaxahoi.com"
+   pm2 restart housex --update-env
+   ```
+4. Test:
+   ```bash
+   EMAIL_TEST_TO=your@email.com npm run go-live:smoke-email
+   ```
+
+**n8n webhook (Magnix):** set `EMAIL_WEBHOOK_URL` + `EMAIL_WEBHOOK_SECRET` — payload `{ type: "transactional.email", to, subject, html, text }`.
 
 ---
 
@@ -144,7 +178,9 @@ Kiểm tra thủ công:
 | `npm run go-live:sync-db-url` | Đồng bộ `DATABASE_URL` từ `.env.prod` → `.env` + `.env.production` |
 | `npm run go-live:smoke-auth` | Smoke đăng ký khách + môi giới (`SITE=…`) |
 | `npm run go-live:check-env` | Validate env bắt buộc |
-| `npm run go-live:smoke` | SSR smoke test (`SITE=https://...`) |
+| `npm run go-live:smoke-listings` | Smoke gửi duyệt tin + admin approve |
+| `npm run go-live:smoke-email` | Test email prod (Resend/webhook) |
+| `npm run go-live:print-cron` | In crontab mẫu VPS |
 | `npm run db:seed:vinhomes` | Seed 3 landing Vinhomes → `/du-an` — xem [DEPLOY_VINHOMES.md](DEPLOY_VINHOMES.md) |
 
 ---
@@ -178,10 +214,10 @@ Kiểm tra thủ công:
 
 ## Ưu tiên 2 — Sau launch (copy vs sản phẩm)
 
-- Form **báo cáo tin sai** (copy đã hứa, chưa có UI/API)
+- Form **báo cáo tin sai** — ✅ nút trên `/tin-dang/[code]` + `POST /api/listings/:code/report`
 - Badge **verification tier** T0–T3 trên listing
-- **UI đăng tin** broker — ✅ `/moi-gioi/dang-tin`, `/moi-gioi/tin-cua-toi` (Phase 2a: URL ảnh)
-- Admin **duyệt tin**
+- **UI đăng tin** broker — ✅ `/moi-gioi/dang-tin`, upload ảnh, gửi duyệt
+- Admin **duyệt tin** — ✅ `/admin/listings`
 
 ---
 
