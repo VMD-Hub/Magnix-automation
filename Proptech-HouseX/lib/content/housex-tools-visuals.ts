@@ -20,6 +20,13 @@ export const LOAN_CALC_BANNER = {
   alt: "Tư vấn tài chính mua nhà — HouseX",
 };
 
+export const LOAN_AFFORDABILITY_BANNER = {
+  jpg: financeHero,
+  webp: financeHero,
+  objectPosition: "50% 35%",
+  alt: "Tính hạn mức vay mua nhà theo thu nhập — HouseX",
+};
+
 export const NOXH_CHECK_BANNER = {
   jpg: HOUSEX_HERO_SLIDES[0]!.jpgMd,
   webp: HOUSEX_HERO_SLIDES[0]!.webpMd,

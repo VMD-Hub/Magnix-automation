@@ -85,6 +85,24 @@ export default function Page() {
             </p>
           </Link>
           <Link
+            href="/cong-cu/tinh-han-muc-vay"
+            className="rounded-2xl border border-silver-200 bg-white p-5 transition-colors hover:border-brand-300 hover:bg-brand-50"
+          >
+            <p className="font-bold text-slate-900">Tính hạn mức vay mua nhà</p>
+            <p className="mt-1 text-sm text-slate-600">
+              Biết bạn vay được tối đa bao nhiêu theo thu nhập trước khi chọn căn hộ.
+            </p>
+          </Link>
+          <Link
+            href="/cong-cu/kiem-tra-vay-noxh"
+            className="rounded-2xl border border-silver-200 bg-white p-5 transition-colors hover:border-brand-300 hover:bg-brand-50"
+          >
+            <p className="font-bold text-slate-900">Kiểm tra vay NOXH 60 giây</p>
+            <p className="mt-1 text-sm text-slate-600">
+              Sàng lọc tuổi vay sơ bộ trước khi cọc — chỉ cần năm sinh.
+            </p>
+          </Link>
+          <Link
             href="/du-an?projectType=NHA_O_XA_HOI"
             className="rounded-2xl border border-silver-200 bg-white p-5 transition-colors hover:border-brand-300 hover:bg-brand-50"
           >

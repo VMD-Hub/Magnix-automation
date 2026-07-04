@@ -101,6 +101,30 @@ export default function Page() {
         </div>
       </section>
 
+      <section className="mt-14 print:hidden">
+        <h2 className="text-lg font-bold text-slate-900">Công cụ liên quan</h2>
+        <div className="mt-4 grid gap-3 sm:grid-cols-2">
+          <Link
+            href="/cong-cu/tinh-han-muc-vay"
+            className="rounded-2xl border border-silver-200 bg-white p-5 transition-colors hover:border-brand-300 hover:bg-brand-50"
+          >
+            <p className="font-bold text-slate-900">Tính hạn mức vay mua nhà</p>
+            <p className="mt-1 text-sm text-slate-600">
+              Ước tính số tiền vay tối đa theo thu nhập và nghĩa vụ trả nợ hiện tại.
+            </p>
+          </Link>
+          <Link
+            href="/cong-cu/dieu-kien-noxh"
+            className="rounded-2xl border border-silver-200 bg-white p-5 transition-colors hover:border-brand-300 hover:bg-brand-50"
+          >
+            <p className="font-bold text-slate-900">Kiểm tra điều kiện NOXH</p>
+            <p className="mt-1 text-sm text-slate-600">
+              Kiểm tra đối tượng, thu nhập và khả năng vay theo quy định NOXH 2026.
+            </p>
+          </Link>
+        </div>
+      </section>
+
       <section className="mt-14 max-w-3xl print:hidden">
         <div className="rounded-2xl border border-brand-100 bg-gradient-to-br from-brand-50 to-white p-6 sm:p-8">
           <h2 className="text-lg font-bold text-slate-900">Cần hỗ trợ làm hồ sơ vay?</h2>

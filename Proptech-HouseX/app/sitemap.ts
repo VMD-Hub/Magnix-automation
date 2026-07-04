@@ -44,14 +44,22 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${BASE}/dang-ky/khach-hang`, changeFrequency: "monthly", priority: 0.5 },
     { url: `${BASE}/dang-ky/moi-gioi`, changeFrequency: "monthly", priority: 0.5 },
     { url: `${BASE}/gioi-thieu`, changeFrequency: "monthly", priority: 0.4 },
+    { url: `${BASE}/gioi-thieu/cau-chuyen`, changeFrequency: "monthly", priority: 0.35 },
     { url: `${BASE}/gioi-thieu/phuong-phap-bien-tap`, changeFrequency: "monthly", priority: 0.45 },
+    { url: `${BASE}/doi-ngu`, changeFrequency: "monthly", priority: 0.45 },
+    { url: `${BASE}/chuyen-gia`, changeFrequency: "monthly", priority: 0.4 },
     ...listExpertSlugs().map((slug) => ({
       url: `${BASE}/chuyen-gia/${slug}`,
       changeFrequency: "monthly" as const,
       priority: 0.4,
     })),
+    { url: `${BASE}/hop-tac`, changeFrequency: "monthly", priority: 0.45 },
+    { url: `${BASE}/cau-hoi-thuong-gap`, changeFrequency: "monthly", priority: 0.5 },
     { url: `${BASE}/lien-he`, changeFrequency: "monthly", priority: 0.5 },
     { url: `${BASE}/dieu-khoan`, changeFrequency: "yearly", priority: 0.3 },
+    { url: `${BASE}/dieu-khoan/phu-luc-a`, changeFrequency: "yearly", priority: 0.25 },
+    { url: `${BASE}/dieu-khoan/phu-luc-b`, changeFrequency: "yearly", priority: 0.25 },
+    { url: `${BASE}/chinh-sach-khieu-nai`, changeFrequency: "yearly", priority: 0.35 },
     { url: `${BASE}/bao-mat`, changeFrequency: "yearly", priority: 0.3 },
   ];
 

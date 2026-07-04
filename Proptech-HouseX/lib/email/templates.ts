@@ -15,7 +15,16 @@ function siteUrl(): string {
 const EMAIL_CTA_STYLE =
   "display:inline-block;background:#DAA520;color:#ffffff;padding:12px 24px;border-radius:8px;text-decoration:none;font-weight:bold;border:1px solid #96700a;box-shadow:inset 0 1px 0 rgba(255,255,255,0.35),0 2px 0 #96700a,0 4px 14px rgba(218,165,32,0.35)";
 
-function layout(title: string, body: string): string {
+const DEFAULT_FOOTER_VI = (brand: string) =>
+  `Email tự động từ ${brand} — vui lòng không trả lời trực tiếp.`;
+
+const REPLY_FOOTER_VI = (brand: string) =>
+  `Email tự động từ ${brand} — bạn có thể phản hồi email này nếu cần khiếu nại.`;
+
+const REPLY_FOOTER_EN = (brand: string) =>
+  `Automated message from ${brand} — you may reply to this email to request a review.`;
+
+function layout(title: string, body: string, footerHtml: string): string {
   return `<!DOCTYPE html>
 <html lang="vi">
 <head><meta charset="utf-8"><title>${title}</title></head>
@@ -23,8 +32,21 @@ function layout(title: string, body: string): string {
   <p style="font-size:20px;font-weight:bold;color:#9B111E">House <span style="color:#DAA520">X</span></p>
   ${body}
   <hr style="border:none;border-top:1px solid #e2e8f0;margin:24px 0">
-  <p style="font-size:12px;color:#64748b">Email tự động từ ${getBrandName()} — vui lòng không trả lời trực tiếp.</p>
+  <p style="font-size:12px;color:#64748b">${footerHtml}</p>
 </body></html>`;
+}
+
+/** Layout dùng chung — auth, biên tập, transactional. */
+export function transactionalEmailLayout(
+  title: string,
+  body: string,
+  options?: { allowReply?: boolean },
+): string {
+  const brand = getBrandName();
+  const footer = options?.allowReply
+    ? `${REPLY_FOOTER_VI(brand)}<br><span style="font-size:11px;color:#94a3b8;font-style:italic">${REPLY_FOOTER_EN(brand)}</span>`
+    : DEFAULT_FOOTER_VI(brand);
+  return layout(title, body, footer);
 }
 
 export function verifyEmailEmail(name: string, verifyUrl: string): OutboundEmail {
@@ -39,7 +61,7 @@ Sau khi xác nhận, bạn có thể dùng email này để nhận thông báo t
 
 — ${brand}`;
 
-  const html = layout(
+  const html = transactionalEmailLayout(
     subject,
     `<p>Xin chào <strong>${name}</strong>,</p>
 <p>Cảm ơn bạn đã đăng ký <strong>${brand}</strong>. Nhấn nút bên dưới để xác nhận email (hiệu lực <strong>72 giờ</strong>):</p>
@@ -65,7 +87,7 @@ Nếu bạn không yêu cầu, hãy bỏ qua email này.
 
 — ${brand}`;
 
-  const html = layout(
+  const html = transactionalEmailLayout(
     subject,
     `<p>Xin chào <strong>${name}</strong>,</p>
 <p>Nhấn nút bên dưới để đặt lại mật khẩu (hiệu lực <strong>1 giờ</strong>):</p>

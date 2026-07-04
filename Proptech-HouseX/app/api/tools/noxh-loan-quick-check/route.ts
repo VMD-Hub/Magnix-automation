@@ -1,0 +1,89 @@
+import { NextRequest } from "next/server";
+import { prisma } from "@/lib/prisma";
+import { created, fail, handleApiError } from "@/lib/api/http";
+import { noxhLoanQuickLeadSchema } from "@/lib/validation/noxh-loan-quick-check";
+import { normalizeVnPhone, isValidVnPhone } from "@/lib/phone";
+import { isRateLimited } from "@/lib/redis";
+import { ipHash } from "@/lib/api/request-meta";
+import { enqueueEvent } from "@/lib/events/outbox";
+import { screenLoanAge } from "@/lib/finance/noxh-loan-age-screen";
+import {
+  noxhLoanQuickLeadMessage,
+  quickCheckTier,
+} from "@/lib/finance/noxh-loan-quick-lead";
+
+const RATE_MAX = Number(process.env.LEAD_RATE_MAX ?? "20");
+const RATE_WINDOW = Number(process.env.LEAD_RATE_WINDOW_SEC ?? "3600");
+
+/**
+ * POST /api/tools/noxh-loan-quick-check — lead từ lead magnet kiểm tra vay NOXH 60 giây.
+ * Chỉ lưu tóm tắt (tier, tuổi sơ bộ) vào Postgres; không lưu chi tiết tài chính.
+ */
+export async function POST(req: NextRequest) {
+  try {
+    const body = noxhLoanQuickLeadSchema.parse(await req.json());
+    const normalizedPhone = normalizeVnPhone(body.phone);
+    if (!isValidVnPhone(normalizedPhone)) {
+      return fail(422, "INVALID_PHONE", "Số điện thoại không hợp lệ.");
+    }
+
+    if (await isRateLimited(`noxh-loan-quick:${ipHash(req)}`, RATE_MAX, RATE_WINDOW)) {
+      return fail(429, "RATE_LIMITED", "Quá nhiều yêu cầu. Vui lòng thử lại sau.");
+    }
+
+    const screen = screenLoanAge({
+      birthYear: body.birthYear,
+      salutation: body.salutation,
+    });
+    const tier = quickCheckTier(screen.status);
+    const message = noxhLoanQuickLeadMessage(screen, body);
+
+    const lead = await prisma.$transaction(async (tx) => {
+      const customer = await tx.customer.upsert({
+        where: { normalizedPhone },
+        update: { name: body.name, email: body.email || undefined },
+        create: {
+          name: body.name,
+          phone: body.phone,
+          normalizedPhone,
+          email: body.email || undefined,
+        },
+      });
+
+      const createdLead = await tx.lead.create({
+        data: {
+          customerId: customer.id,
+          source: "tool:noxh-loan-quick-check",
+          message: body.message ? `${message} | Ghi chú: ${body.message}` : message,
+        },
+      });
+
+      await enqueueEvent(
+        tx,
+        "lead.noxh_loan_quick_check",
+        {
+          leadId: createdLead.id,
+          tier,
+          ageStatus: screen.status,
+          currentAge: screen.currentAge,
+          ageAtLoanEnd: screen.ageAtLoanEnd,
+          region: body.region,
+          housingType: body.housingType,
+          incomeBand: body.incomeBand,
+          contact: {
+            name: body.name,
+            phone: body.phone,
+            email: body.email,
+          },
+        },
+        `lead.noxh_loan_quick_check:${createdLead.id}`,
+      );
+
+      return createdLead;
+    });
+
+    return created({ id: lead.id, tier, screen: { status: screen.status } });
+  } catch (err) {
+    return handleApiError(err);
+  }
+}

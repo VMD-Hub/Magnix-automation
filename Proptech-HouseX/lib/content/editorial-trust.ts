@@ -76,7 +76,7 @@ export const HOUSEX_EXPERTS: Record<string, EditorialExpert> = {
       "Điều kiện đối tượng Điều 76",
       "Thủ tục xác nhận đối tượng NOXH",
     ],
-    bio: "Nguyễn Vũ biên tập và rà soát nội dung NOXH trên House X: đối chiếu văn bản tại Cổng Thông tin Chính phủ, thông báo Sở Xây dựng và nguồn báo chí được trích dẫn. Các chủ đề thu nhập, vay, điều kiện đối tượng và thủ tục được cập nhật khi có nghị định mới; nội dung trải qua QA L0 trước khi xuất bản.",
+    bio: "Nguyễn Vũ biên tập và rà soát nội dung NOXH trên House X: đối chiếu văn bản tại Cổng Thông tin Chính phủ, thông báo Sở Xây dựng và nguồn báo chí được trích dẫn. Các chủ đề thu nhập, vay, điều kiện đối tượng và thủ tục được cập nhật khi có nghị định mới; mỗi bài được rà soát giọng văn và nguồn trước khi xuất bản.",
     credentials: [
       "Đối chiếu văn bản tại vanban.chinhphu.vn trước mỗi đợt cập nhật số liệu",
       "Phân tách rõ nội dung tổng hợp và công bố chính thức của cơ quan NN / CĐT",

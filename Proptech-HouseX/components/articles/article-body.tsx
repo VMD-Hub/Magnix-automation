@@ -4,13 +4,18 @@ import type { ArticleCardData } from "@/lib/data/article-types";
 
 const LINK_RE = /\[([^\]]+)\]\(([^)]+)\)/g;
 const BOLD_RE = /\*\*([^*]+)\*\*/g;
-const HEADING_RE = /^##\s+(.+)$/;
+const HEADING2_RE = /^##\s+(.+)$/;
+const HEADING3_RE = /^###\s+(.+)$/;
 const IMAGE_RE = /^!\[([^\]]*)\]\(([^)]+)\)$/;
 const CAPTION_RE = /^\*([^*]+)\*$/;
 const BLOCKQUOTE_RE = /^>\s?(.+)$/;
 const LIST_ITEM_RE = /^-\s+(.+)$/;
 const TABLE_ROW_RE = /^\|.+\|$/;
 const TABLE_SEP_RE = /^\|[-:\s|]+\|$/;
+
+/** Canh đều hai lề — chỉ áp dụng cho khối văn bản (p, li, blockquote). */
+const PROSE_JUSTIFY =
+  "text-justify text-pretty hyphens-auto [text-align-last:left]";
 
 function renderLinks(text: string, keyPrefix: string): ReactNode[] {
   const parts: ReactNode[] = [];
@@ -93,7 +98,7 @@ function renderList(block: string, key: string) {
   return (
     <ul
       key={key}
-      className="my-4 list-disc space-y-2 pl-6 text-base leading-[1.75] text-slate-700"
+      className={`my-4 list-disc space-y-2 pl-6 text-base leading-[1.75] text-slate-700 ${PROSE_JUSTIFY}`}
     >
       {items.map((item, i) => (
         <li key={i}>{renderInline(item, `${key}-${i}`)}</li>
@@ -121,7 +126,7 @@ function renderFigure(
         loading="lazy"
       />
       {caption && (
-        <figcaption className="border-t border-slate-100 bg-slate-50 px-4 py-3 text-sm leading-relaxed text-slate-600">
+        <figcaption className={`border-t border-slate-100 bg-slate-50 px-4 py-3 text-sm leading-relaxed text-slate-600 ${PROSE_JUSTIFY}`}>
           {renderInline(caption, `${key}-cap`)}
         </figcaption>
       )}
@@ -131,14 +136,25 @@ function renderFigure(
 
 function renderParagraph(text: string, key: string) {
   const trimmed = text.trim();
-  const heading = HEADING_RE.exec(trimmed);
-  if (heading) {
+  const heading3 = HEADING3_RE.exec(trimmed);
+  if (heading3) {
+    return (
+      <h3
+        key={key}
+        className="mt-7 scroll-mt-24 text-lg font-semibold leading-snug text-slate-900 sm:text-xl"
+      >
+        {renderInline(heading3[1], key)}
+      </h3>
+    );
+  }
+  const heading2 = HEADING2_RE.exec(trimmed);
+  if (heading2) {
     return (
       <h2
         key={key}
         className="mt-10 scroll-mt-24 border-t border-slate-100 pt-8 text-xl font-bold text-slate-900 first:mt-0 first:border-t-0 first:pt-0 sm:text-2xl"
       >
-        {renderInline(heading[1], key)}
+        {renderInline(heading2[1], key)}
       </h2>
     );
   }
@@ -147,14 +163,14 @@ function renderParagraph(text: string, key: string) {
     return (
       <blockquote
         key={key}
-        className="my-6 border-l-4 border-brand-500 bg-brand-50/40 px-5 py-4 text-base italic leading-relaxed text-slate-800"
+        className={`my-6 border-l-4 border-brand-500 bg-brand-50/40 px-5 py-4 text-base italic leading-relaxed text-slate-800 ${PROSE_JUSTIFY}`}
       >
         {renderInline(quote[1], key)}
       </blockquote>
     );
   }
   return (
-    <p key={key} className="text-base leading-[1.75] text-slate-700">
+    <p key={key} className={`text-base leading-[1.75] text-slate-700 ${PROSE_JUSTIFY}`}>
       {renderInline(trimmed, key)}
     </p>
   );
@@ -190,7 +206,7 @@ function renderTable(rows: string[], key: string) {
           {body.map((row, ri) => (
             <tr key={ri} className="border-b border-slate-100 last:border-0">
               {row.map((cell, ci) => (
-                <td key={ci} className="px-4 py-3 text-slate-700">
+                <td key={ci} className={`px-4 py-3 text-slate-700 ${PROSE_JUSTIFY}`}>
                   {renderInline(cell.replace(/\*\*/g, ""), `${key}-${ri}-${ci}`)}
                 </td>
               ))}

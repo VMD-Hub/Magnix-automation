@@ -1,8 +1,6 @@
 import type { ArticleCardData } from "@/lib/data/article-types";
 import type { EditorialExpert } from "@/lib/content/editorial-trust";
-import { expertProfilePath } from "@/lib/content/editorial-trust";
 import { ArticleTagList } from "@/components/articles/article-body";
-import Link from "next/link";
 
 export function ArticleHero({
   article,
@@ -77,12 +75,7 @@ export function ArticleHero({
               <span className="mx-1.5 text-slate-300" aria-hidden>
                 ·
               </span>
-              <Link
-                href={expertProfilePath(expert.slug)}
-                className="font-medium text-brand-700 hover:underline"
-              >
-                {expert.name}
-              </Link>
+              <span>Biên tập: {expert.name}</span>
             </>
           ) : article.authorName ? (
             <>

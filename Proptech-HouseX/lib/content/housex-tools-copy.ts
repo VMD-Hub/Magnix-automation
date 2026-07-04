@@ -30,6 +30,21 @@ export const LOAN_CALC_COPY = {
   faqHeading: "Câu hỏi thường gặp về vay mua nhà",
 } as const;
 
+export const LOAN_AFFORDABILITY_COPY = {
+  metaTitle: "Tính hạn mức vay mua nhà theo thu nhập 2026 | HouseX",
+  metaDescription:
+    "Ước tính hạn mức vay mua nhà theo thu nhập, DTI, chi phí sinh hoạt/đầu người, đồng vay vợ chồng và CIC — mô phỏng cách ngân hàng thẩm định. Miễn phí.",
+  kicker: "Máy tính hạn mức vay",
+  title: "Tính hạn mức vay mua nhà",
+  subtitle:
+    "Nhập thu nhập, hộ gia đình và nghĩa vụ trả nợ — xem hạn mức vay theo DTI và chi phí sinh hoạt/đầu người, như ngân hàng thẩm định.",
+  primaryCta: "Bắt đầu tính",
+  primaryCtaHref: "#tinh-toan",
+  secondaryCta: "Nhận tư vấn vay",
+  secondaryCtaHref: "/tai-chinh#tu-van",
+  faqHeading: "Câu hỏi thường gặp về hạn mức vay mua nhà",
+} as const;
+
 export const NOXH_CHECK_COPY = {
   metaTitle: "Kiểm tra điều kiện mua nhà ở xã hội (NOXH) 2026 | HouseX",
   metaDescription:
@@ -67,11 +82,20 @@ export const TOOL_HUB_CARDS: ToolCardDef[] = [
   },
   {
     id: "affordability",
-    href: "/cong-cu/kha-nang-vay",
-    title: "Khả năng vay tối đa",
-    desc: "Ước tính hạn mức theo thu nhập và nghĩa vụ trả nợ an toàn.",
-    cta: "Sắp ra mắt",
-    ready: false,
+    href: "/cong-cu/tinh-han-muc-vay",
+    title: "Tính hạn mức vay mua nhà",
+    desc: "Ước tính số tiền vay tối đa theo thu nhập, DTI và hạn mức thẻ — như ngân hàng thẩm định.",
+    cta: "Tính ngay",
+    ready: true,
+  },
+  {
+    id: "noxh-loan-quick",
+    href: "/cong-cu/kiem-tra-vay-noxh",
+    title: "Kiểm tra vay NOXH 60 giây",
+    desc: "Xưng hô + năm sinh — ước tính tuổi vay sơ bộ trước khi cọc. Không thay thế ngân hàng.",
+    cta: "Kiểm tra ngay",
+    ready: true,
+    badge: "NOXH",
   },
   {
     id: "noxh-check",

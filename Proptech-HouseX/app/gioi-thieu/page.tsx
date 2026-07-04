@@ -1,114 +1,154 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { ToolsPageHero } from "@/components/tools/tools-page-hero";
+import { FounderNoteBlock } from "@/components/content/founder-story-sections";
+import { DocPlainBulletList, HOUSEX_PROSE_CLASS } from "@/components/content/document-typography";
 import {
-  ABOUT_GOALS,
-  ABOUT_INTRO,
-  ABOUT_MISSION,
-  ABOUT_VALUES,
-  ABOUT_VISION,
-  TRUST_TECH,
+  MetricsBand,
+  PageCtaBand,
+  ProcessSteps,
+  QuickLinkGrid,
+} from "@/components/content/trust-page-sections";
+import {
+  ABOUT_BUYER_BENEFITS,
+  ABOUT_CORE_VALUES,
+  ABOUT_CTA,
+  ABOUT_HERO,
+  ABOUT_MISSION_VISION,
+  ABOUT_PARTNER_SECTION,
+  ABOUT_PROCESS_STEPS,
+  ABOUT_QUICK_LINKS,
+  ABOUT_SEO,
 } from "@/lib/content/messaging/about-public";
-import {
-  BRAND_TAGLINE_FOOTER,
-  SEO_DESCRIPTION_DEFAULT,
-} from "@/lib/content/messaging/brand";
-import { getBrandName } from "@/lib/site-config";
+import { getPlatformMetrics } from "@/lib/content/platform-metrics";
+import { FOUNDER_NOTE } from "@/lib/content/trust-hub-content";
+import { HOUSEX_HERO_SLIDES } from "@/lib/brand/hero-assets";
+import { getSiteUrl } from "@/lib/site-config";
+import { ButtonLink } from "@/components/ui/button";
 
 export const metadata: Metadata = {
-  title: "Giới thiệu",
-  description: SEO_DESCRIPTION_DEFAULT,
+  title: ABOUT_SEO.metaTitle,
+  description: ABOUT_SEO.metaDescription,
+  alternates: { canonical: `${getSiteUrl()}/gioi-thieu` },
 };
 
 export default function GioiThieuPage() {
-  const brand = getBrandName();
+  const hero = HOUSEX_HERO_SLIDES[0]!;
+  const metrics = getPlatformMetrics();
 
   return (
-    <StaticPage title={`Giới thiệu ${brand}`}>
-      <p>
-        <strong>{brand}</strong> {ABOUT_INTRO.lead}{" "}
-        Cam kết của chúng tôi:{" "}
-        <strong>{ABOUT_INTRO.promise}</strong>.
-      </p>
+    <div className="proptech-section-glow">
+      <div className="mx-auto max-w-4xl py-8 container-px">
+        <ToolsPageHero
+          kicker={ABOUT_HERO.kicker}
+          title={ABOUT_HERO.h1}
+          subtitle={ABOUT_HERO.intro}
+          image={hero.jpgMd}
+          imageWebp={hero.webpMd}
+          imageAlt="House X — cổng Proptech tìm nhà an toàn"
+          objectPosition={hero.objectPosition}
+          primaryCta={{ label: "Tìm nhà ngay", href: "/mua-ban" }}
+          secondaryCta={{ label: "Đăng ký", href: "/dang-ky/khach-hang" }}
+        />
 
-      <h2>{ABOUT_VISION.title}</h2>
-      <p>{ABOUT_VISION.body}</p>
+        <ProcessSteps steps={ABOUT_PROCESS_STEPS} className="mb-10" />
 
-      <h2>{ABOUT_MISSION.title}</h2>
-      <p>{ABOUT_MISSION.body}</p>
+        <section className="mb-12">
+          <h2 className="text-xl font-extrabold text-slate-900">Giá trị cốt lõi</h2>
+          <div className="mt-4 grid gap-3 sm:grid-cols-2">
+            {ABOUT_CORE_VALUES.items.map((item) => (
+              <div
+                key={item.title}
+                className="rounded-xl border border-silver-200 bg-white p-4 shadow-sm"
+              >
+                <h3 className="text-sm font-bold text-slate-900">{item.title}</h3>
+                <p className="mt-1 text-sm leading-relaxed text-slate-600">{item.desc}</p>
+              </div>
+            ))}
+          </div>
+        </section>
 
-      <h2>{ABOUT_GOALS.title}</h2>
-      <ul>
-        {ABOUT_GOALS.items.map((item) => (
-          <li key={item}>{item}</li>
-        ))}
-      </ul>
+        <section className="mb-12 rounded-2xl border border-silver-200 bg-slate-50 p-6 sm:p-8">
+          <h2 className="text-xl font-extrabold text-slate-900">
+            {ABOUT_MISSION_VISION.title}
+          </h2>
+          <dl className="mt-4 space-y-4 text-sm">
+            <div>
+              <dt className="font-bold text-brand-700">Sứ mệnh</dt>
+              <dd className="mt-1 leading-relaxed text-slate-700">
+                {ABOUT_MISSION_VISION.mission}
+              </dd>
+            </div>
+            <div>
+              <dt className="font-bold text-brand-700">Tầm nhìn</dt>
+              <dd className="mt-1 leading-relaxed text-slate-700">
+                {ABOUT_MISSION_VISION.vision}
+              </dd>
+            </div>
+          </dl>
+        </section>
 
-      <h2>{ABOUT_VALUES.title}</h2>
-      <p>{ABOUT_VALUES.intro}</p>
-      <ul>
-        {ABOUT_VALUES.items.map((item) => (
-          <li key={item.title}>
-            <strong>{item.title}</strong> — {item.desc}
-          </li>
-        ))}
-      </ul>
+        <section className="mb-12">
+          <h2 className="text-xl font-extrabold text-slate-900">Con số nổi bật</h2>
+          <MetricsBand metrics={metrics} className="mt-4" />
+        </section>
 
-      <h2>{TRUST_TECH.title}</h2>
-      <p className="text-sm font-medium text-slate-600">{TRUST_TECH.tagline}</p>
-      <p>{TRUST_TECH.lead}</p>
-      <ul>
-        {TRUST_TECH.bullets.map((item) => (
-          <li key={item}>{item}</li>
-        ))}
-      </ul>
+        <section className={`mb-12 ${HOUSEX_PROSE_CLASS}`}>
+          <h2>{ABOUT_BUYER_BENEFITS.title}</h2>
+          <ul>
+            {ABOUT_BUYER_BENEFITS.items.map((item) => (
+              <li key={item}>{item}</li>
+            ))}
+          </ul>
+        </section>
 
-      <p className="text-sm text-slate-600">{BRAND_TAGLINE_FOOTER}</p>
+        <section className="mb-12 rounded-2xl border border-brand-100 bg-brand-50/50 p-6 sm:p-8">
+          <h2 className="doc-h2 !mt-0">{ABOUT_PARTNER_SECTION.title}</h2>
+          <DocPlainBulletList items={ABOUT_PARTNER_SECTION.items} className="mt-4" />
+          <div className="mt-6 flex flex-wrap gap-3">
+            {ABOUT_PARTNER_SECTION.ctas.map((cta, i) => (
+              <ButtonLink
+                key={cta.href}
+                href={cta.href}
+                variant={i === 0 ? "brand" : "outline"}
+                size="sm"
+              >
+                {cta.label}
+              </ButtonLink>
+            ))}
+          </div>
+        </section>
 
-      <p>
-        Cách House X đối chiếu nguồn và cập nhật nội dung:{" "}
-        <Link
-          href="/gioi-thieu/phuong-phap-bien-tap"
-          className="font-semibold text-brand-700 underline"
-        >
-          Phương pháp biên tập
-        </Link>
-        . Chủ đề NOXH do{" "}
-        <Link
-          href="/chuyen-gia/noxh-policy"
-          className="font-semibold text-brand-700 underline"
-        >
-          Nguyễn Vũ
-        </Link>{" "}
-        — Biên tập viên / Luật sư / Chuyên gia Nhà Ở Xã Hội — rà soát.
-      </p>
+        <section className="mb-10">
+          <h2 className="text-xl font-extrabold text-slate-900">{ABOUT_CTA.title}</h2>
+          <p className="mt-2 text-sm text-slate-600">{ABOUT_CTA.body}</p>
+          <PageCtaBand
+            className="mt-4"
+            primary={ABOUT_CTA.primary}
+            secondary={ABOUT_CTA.secondary}
+          />
+        </section>
 
-      <p>
-        Bạn là môi giới hoặc chủ nhà?{" "}
-        <Link href="/dang-ky/moi-gioi" className="font-semibold text-brand-700 underline">
-          Đăng ký đăng tin
-        </Link>
-        . Muốn tham gia chương trình cộng tác viên? Xem{" "}
-        <Link href="/moi-gioi/dang-ky-ctv" className="font-semibold text-brand-700 underline">
-          đăng ký CTV
-        </Link>
-        .
-      </p>
-    </StaticPage>
+        <section className="mb-12">
+          <h2 className="text-xl font-extrabold text-slate-900">Liên kết nhanh</h2>
+          <QuickLinkGrid links={ABOUT_QUICK_LINKS} className="mt-6" />
+        </section>
+
+        <FounderNoteBlock note={FOUNDER_NOTE} teaserParagraphs={1} className="mb-10" />
+
+        <p className="text-sm text-slate-600">
+          <Link href="/gioi-thieu/cau-chuyen" className="font-semibold text-brand-700 underline">
+            Đọc câu chuyện thương hiệu đầy đủ
+          </Link>
+          {" · "}
+          <Link
+            href="/gioi-thieu/phuong-phap-bien-tap"
+            className="font-semibold text-brand-700 underline"
+          >
+            Phương pháp biên tập
+          </Link>
+        </p>
+      </div>
+    </div>
   );
 }
-
-function StaticPage({
-  title,
-  children,
-}: {
-  title: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <article className="mx-auto max-w-2xl py-10 container-px prose prose-slate prose-headings:font-bold prose-a:text-brand-700">
-      <h1>{title}</h1>
-      {children}
-    </article>
-  );
-}
-

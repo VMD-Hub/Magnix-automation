@@ -1,37 +1,66 @@
 import type { Metadata } from "next";
-import { getSupportEmail } from "@/lib/site-config";
+import Link from "next/link";
+import { LegalDocument } from "@/components/content/trust-page-sections";
+import { DocSubheading } from "@/components/content/document-typography";
+import { PRIVACY_CONTENT } from "@/lib/content/trust-hub-content";
+import { getSupportEmail, getSupportPhoneDisplay, getSiteUrl } from "@/lib/site-config";
 
 export const metadata: Metadata = {
-  title: "Chính sách bảo mật",
+  title: PRIVACY_CONTENT.metaTitle,
+  description: PRIVACY_CONTENT.metaDescription,
+  alternates: { canonical: `${getSiteUrl()}/bao-mat` },
 };
 
 export default function BaoMatPage() {
+  const p = PRIVACY_CONTENT;
   const supportEmail = getSupportEmail();
+  const supportPhone = getSupportPhoneDisplay();
 
   return (
-    <article className="mx-auto max-w-2xl py-10 container-px prose prose-slate">
-      <h1>Chính sách bảo mật</h1>
-      <h2>Dữ liệu thu thập</h2>
-      <p>
-        Khi đăng ký, chúng tôi lưu họ tên, số điện thoại, email và mật khẩu (đã mã hóa).
-        Email dùng để xác nhận tài khoản và liên lạc dịch vụ.
-      </p>
-      <h2>Sử dụng dữ liệu</h2>
-      <ul>
-        <li>Xác thực tài khoản và bảo vệ quyền xem thông tin liên hệ.</li>
-        <li>Gửi thông báo liên quan dịch vụ (nếu bạn opt-in marketing).</li>
-        <li>Phân tích chất lượng tin và chống lạm dụng (rate-limit, log kỹ thuật).</li>
-      </ul>
-      <h2>Chia sẻ với bên thứ ba</h2>
-      <p>
-        Chúng tôi không bán dữ liệu cá nhân. Email giao dịch có thể gửi qua nhà cung cấp
-        email hoặc webhook n8n theo cấu hình hệ thống.
-      </p>
-      <h2>Quyền của bạn</h2>
-      <p>
-        Bạn có thể yêu cầu cập nhật hoặc xóa tài khoản qua email{" "}
-        <a href={`mailto:${supportEmail}`}>{supportEmail}</a>.
-      </p>
-    </article>
+    <>
+      <LegalDocument
+        title={p.title}
+        updated={p.updated}
+        intro={p.intro}
+        sections={p.sections}
+      />
+      <div className="mx-auto max-w-2xl space-y-4 pb-10 container-px">
+        <div className="rounded-xl border border-silver-200 bg-slate-50 p-5 not-prose">
+          <DocSubheading vi="Liên hệ về bảo mật dữ liệu" className="!mt-0" />
+          <ul className="doc-bullets mt-3">
+            <li className="doc-body-vi">
+              Email:{" "}
+              <a href={`mailto:${supportEmail}`} className="font-semibold text-brand-700 underline">
+                {supportEmail}
+              </a>
+            </li>
+            <li className="doc-body-vi">
+              Hotline:{" "}
+              <a href={`tel:${supportPhone.replace(/\s/g, "")}`} className="font-semibold text-brand-700">
+                {supportPhone}
+              </a>{" "}
+              (T2–T6, 8:30–17:30)
+            </li>
+            <li className="doc-body-vi">
+              Form yêu cầu:{" "}
+              <Link href="/lien-he" className="font-semibold text-brand-700 underline">
+                Trang Liên hệ
+              </Link>
+            </li>
+          </ul>
+        </div>
+        <p className="text-sm text-slate-500">
+          Xem thêm{" "}
+          <Link href="/gioi-thieu/phuong-phap-bien-tap" className="text-brand-700 underline">
+            Phương pháp biên tập
+          </Link>
+          {" · "}
+          <Link href="/dieu-khoan" className="text-brand-700 underline">
+            Điều khoản sử dụng
+          </Link>
+          .
+        </p>
+      </div>
+    </>
   );
 }

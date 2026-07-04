@@ -2,6 +2,8 @@ import type { ArticleCardData, ArticleDetail, ArticleTagSummary } from "@/lib/da
 import { applyEditorialMedia, EDITORIAL_FIGURES } from "@/lib/content/articles/article-editorial-media";
 import { NOXH_SUPPORT_CLOSING } from "@/lib/content/articles/article-editorial-voice";
 import { NOXH_KNOWLEDGE_ARTICLES_2026 } from "@/lib/content/articles/noxh-knowledge-series-2026";
+import { NOXH_MINDSET_ARTICLES_2026 } from "@/lib/content/articles/noxh-mindset-series-2026";
+import { NOXH_LOAN_ASSESSMENT_ARTICLES_2026 } from "@/lib/content/articles/noxh-loan-assessment-series-2026";
 import { NOXH_TREND_ARTICLES_2026 } from "@/lib/content/articles/noxh-trend-series-2026";
 import { TOD_NHON_TRACH_ARTICLES_2026 } from "@/lib/content/articles/tod-nhon-trach-series-2026";
 import { LTK_PROJECT_SLUG } from "@/lib/preview/phu-tho-dmc-mock";
@@ -10,6 +12,19 @@ import { CS_PROJECT_SLUG } from "@/lib/preview/kdc-chang-song-mock";
 const NOW = new Date("2026-06-29T00:00:00.000Z");
 
 export const DEMO_ARTICLE_TAGS: ArticleTagSummary[] = [
+  {
+    slug: "chon-noxh-dung-cach",
+    name: "Chọn NOXH đúng cách",
+    description:
+      "Định hướng nhận thức: chọn nhà theo năng lực và nhu cầu thật — không theo độ hot hay FOMO.",
+    articleCount: 0,
+  },
+  {
+    slug: "tham-dinh-vay-noxh",
+    name: "Thẩm định vay NOXH",
+    description: "Tự thẩm định khả năng vay, CIC, tuổi và checklist trước cọc NOXH.",
+    articleCount: 0,
+  },
   {
     slug: "noxh",
     name: "Nhà ở xã hội",
@@ -204,6 +219,8 @@ Ví dụ: Công nhân KCN lương 22 triệu/tháng ổn định 12 tháng thì 
 
 Lưu ý địa phương: UBND cấp tỉnh được quyết định hệ số điều chỉnh mức thu nhập (không vượt quá tỷ lệ thu nhập bình quân đầu người địa phương so với cả nước). Trước khi nộp, tra thông báo Sở Xây dựng tỉnh/TP nơi dự án tọa lạc — mức áp dụng có thể khác biệt nhẹ.
 
+**Phân biệt hai lớp thu nhập:** Trần 25/35/50 triệu ở trên là điều kiện **được mua** NOXH — khác với khả năng **vay ngân hàng** và trả góp hàng tháng. Nếu bạn đang hỏi “vay mua NOXH cần thu nhập bao nhiêu”, hãy đọc [bài phân tích hai lớp thu nhập](/tin-tuc/vay-noxh-can-thu-nhap-bao-nhieu) trước khi nộp hồ sơ.
+
 ## Ai ký xác nhận thu nhập và đối tượng?
 
 | Tình huống | Cơ quan xác nhận | Giấy tờ cốt lõi |
@@ -255,7 +272,7 @@ Khi ba trụ cột đã vững, bước tiếp theo là chọn dự án và dự
 - So sánh chiến lược an cư: [Lý Thường Kiệt vs DTA Happy Home](/tin-tuc/so-sanh-gia-noxh-ly-thuong-kiet-dta-happy-home-2026).
 - Điều kiện nhà ở (Điều 78): [khi nào vẫn mua được dù có nhà](/tin-tuc/dieu-kien-nha-o-mua-noxh-dieu-77-2026).
 - Quy trình thực tế: [7 bước từ đăng ký đến nhận căn](/tin-tuc/quy-trinh-mua-thue-mua-noxh-2026).
-- Vay vốn: [gói 120.000 tỷ NHCSXH](/tin-tuc/vay-noxh-goi-120000-ty-nhcsxh-2026) và [công cụ kiểm tra NOXH](/cong-cu/dieu-kien-noxh).
+- Vay vốn: [gói 120.000 tỷ NHCSXH](/tin-tuc/vay-noxh-goi-120000-ty-nhcsxh-2026), [thu nhập vay NOXH — hai lớp cần kiểm tra](/tin-tuc/vay-noxh-can-thu-nhap-bao-nhieu) và [công cụ kiểm tra NOXH](/cong-cu/dieu-kien-noxh).
 - Ước lượng trả góp: [công cụ tính khoản vay](/cong-cu/tinh-khoan-vay) · [lãi suất dưới 35 tuổi](/tin-tuc/lai-suat-vay-noxh-duoi-35-tuoi-nhnn-2026).
 - Theo dõi lịch mở hồ sơ: [công bố giá NOXH nội thành](/tin-tuc/tp-hcm-cong-bo-gia-2-du-an-noxh-ly-thuong-kiet-phu-tho-dmc) · [NOXH Long An](/tin-tuc/noxh-long-an-6-du-an-mien-nam-2026).
 
@@ -280,6 +297,8 @@ ${NOXH_SUPPORT_CLOSING}
   },
   ...NOXH_TREND_ARTICLES_2026,
   ...NOXH_KNOWLEDGE_ARTICLES_2026,
+  ...NOXH_LOAN_ASSESSMENT_ARTICLES_2026,
+  ...NOXH_MINDSET_ARTICLES_2026,
   ...TOD_NHON_TRACH_ARTICLES_2026,
 ];
 

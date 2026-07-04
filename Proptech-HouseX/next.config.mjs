@@ -46,6 +46,11 @@ const nextConfig = {
         destination: "/noi-that/nha-dep",
         permanent: true,
       },
+      {
+        source: "/cong-cu/kha-nang-vay",
+        destination: "/cong-cu/tinh-han-muc-vay",
+        permanent: true,
+      },
     ];
   },
 };

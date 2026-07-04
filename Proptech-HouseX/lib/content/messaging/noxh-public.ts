@@ -26,7 +26,7 @@ export const NOXH_TOPIC_HUB_INTRO =
 export const NOXH_TOPIC_PILLAR_LINKS = [
   {
     href: "/tin-tuc/dieu-kien-mua-nha-o-xa-hoi-2026-tom-tat",
-    label: "Điều kiện mua NOXH 2026 — pillar tổng hợp",
+    label: "Chọn NOXH đúng cách — bài tổng quan",
   },
   {
     href: "/tin-tuc/quy-trinh-mua-thue-mua-noxh-2026",
@@ -39,6 +39,122 @@ export const NOXH_TOPIC_PILLAR_LINKS = [
   {
     href: "/tin-tuc/vay-noxh-goi-120000-ty-nhcsxh-2026",
     label: "Vay gói 120.000 tỷ NHCSXH",
+  },
+  {
+    href: "/tin-tuc/chon-noxh-dung-cach-theo-nang-luc",
+    label: "Chọn NOXH đúng cách — đừng mua theo cảm xúc",
+  },
+  {
+    href: "/tin-tuc/vi-sao-mua-nha-sai-vi-chay-theo-do-hot",
+    label: "Vì sao mua nhà sai vì chạy theo độ hot?",
+  },
+  {
+    href: "/tin-tuc/du-an-hot-suat-nhanh-vi-tri-dep-mat-tinh-tao",
+    label: "Hot, suất nhanh, vị trí đẹp — ba yếu tố mất tỉnh táo",
+  },
+  {
+    href: "/tin-tuc/dung-mua-vi-so-mat-co-hoi",
+    label: "Đừng mua vì sợ mất cơ hội",
+  },
+  {
+    href: "/tin-tuc/gan-trung-tam-chua-chac-tot-nhat-noxh",
+    label: "Gần trung tâm chưa chắc tốt nhất với NOXH",
+  },
+  {
+    href: "/tin-tuc/xa-hon-nhung-di-nhanh-hon-khi-nao-khon-ngoan",
+    label: "Xa hơn nhưng đi nhanh hơn — khi nào khôn ngoan?",
+  },
+  {
+    href: "/tin-tuc/nha-xa-ket-noi-tot-dang-mua-hon",
+    label: "Nhà xa nhưng kết nối tốt — có đáng mua hơn?",
+  },
+  {
+    href: "/tin-tuc/vung-ven-khong-xau-khong-gian-song-noxh",
+    label: "Vùng ven không xấu — không gian sống NOXH",
+  },
+  {
+    href: "/tin-tuc/khi-nao-chon-du-an-hop-tui-tien",
+    label: "Khi nào chọn dự án NOXH hợp túi tiền?",
+  },
+  {
+    href: "/tin-tuc/chon-nha-de-o-khac-chon-nha-giu-suat",
+    label: "Chọn nhà để ở vs giữ suất — khác gì?",
+  },
+  {
+    href: "/tin-tuc/ba-tieu-chuan-moi-chon-noxh",
+    label: "3 tiêu chuẩn mới chọn NOXH",
+  },
+  {
+    href: "/tin-tuc/chi-phi-an-sau-khi-xuong-tien-mua-noxh",
+    label: "Chi phí ẩn sau khi xuống tiền — không chỉ trả tiền nhà",
+  },
+  {
+    href: "/tin-tuc/30-phut-di-chuyen-co-phai-mat-mat-noxh",
+    label: "30 phút di chuyển — có phải mất mát?",
+  },
+  {
+    href: "/tin-tuc/dta-happy-home-nhon-trach-noi-o-de-so-huu",
+    label: "DTA Happy Home Nhơn Trạch — chọn nơi ở dễ sở hữu",
+  },
+  {
+    href: "/tin-tuc/checklist-chot-mua-noxh-tai-chinh-ha-tang-cic",
+    label: "Checklist chốt mua — tài chính, CIC, dự phòng",
+  },
+  {
+    href: "/tin-tuc/lam-sao-khong-bi-roi-khi-tim-mua-noxh",
+    label: "Không bị rối khi tìm mua NOXH — tổng kho HouseX",
+  },
+  {
+    href: "/cong-cu/kiem-tra-vay-noxh",
+    label: "Kiểm tra vay NOXH 60 giây (công cụ)",
+  },
+  {
+    href: "/tin-tuc/kiem-tra-kha-nang-vay-noxh-60-giay",
+    label: "Hướng dẫn kiểm tra vay NOXH trong 60 giây",
+  },
+  {
+    href: "/tin-tuc/tham-dinh-khoan-vay-mua-nha-o-xa-hoi",
+    label: "Thẩm định khoản vay NOXH — tự kiểm tra trước khi nộp hồ sơ",
+  },
+  {
+    href: "/tin-tuc/mua-nha-o-xa-hoi-co-duoc-vay-ngan-hang-khong",
+    label: "NOXH có vay ngân hàng được không?",
+  },
+  {
+    href: "/tin-tuc/cach-tra-cic-an-toan-truoc-khi-vay",
+    label: "Kiểm tra CIC an toàn trước khi vay",
+  },
+  {
+    href: "/tin-tuc/no-xau-nhom-2-vay-mua-nha-o-xa-hoi",
+    label: "Nợ xấu nhóm 2 có vay NOXH được không?",
+  },
+  {
+    href: "/tin-tuc/dieu-kien-vay-noxh-theo-tuoi-hon-nhan",
+    label: "Cách tính tuổi vay — độc thân, kết hôn, có con",
+  },
+  {
+    href: "/tin-tuc/ho-so-vay-mua-nha-o-xa-hoi",
+    label: "Hồ sơ vay NOXH — checklist đầy đủ",
+  },
+  {
+    href: "/tin-tuc/sai-lam-tai-chinh-tuong-du-tien-mua-nha",
+    label: "Sai lầm tài chính — tưởng đủ tiền mua nhà",
+  },
+  {
+    href: "/tin-tuc/checklist-truoc-khi-dat-coc-noxh",
+    label: "Đừng cọc khi chưa kiểm tra vay",
+  },
+  {
+    href: "/tin-tuc/sai-lam-tin-moi-gioi-chac-vay-noxh",
+    label: "Sai lầm khi tin “chắc chắn vay được”",
+  },
+  {
+    href: "/tin-tuc/vay-noxh-can-thu-nhap-bao-nhieu",
+    label: "Thu nhập vay NOXH — bao nhiêu là phù hợp?",
+  },
+  {
+    href: "/tin-tuc/dieu-kien-mua-nha-o-xa-hoi-2026-tom-tat",
+    label: "Điều kiện thu nhập mua NOXH",
   },
   {
     href: "/cong-cu/dieu-kien-noxh",

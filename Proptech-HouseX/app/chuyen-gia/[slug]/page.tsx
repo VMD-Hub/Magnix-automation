@@ -7,6 +7,7 @@ import {
 } from "@/lib/content/editorial-trust";
 import { EDITORIAL_METHODOLOGY_PATH } from "@/lib/content/editorial-trust";
 import { buildPersonJsonLd } from "@/lib/seo/person-json-ld";
+import { HOUSEX_PROSE_CLASS } from "@/components/content/document-typography";
 import { buildBreadcrumbJsonLd } from "@/lib/seo/affiliate-json-ld";
 import { getSiteUrl } from "@/lib/site-config";
 
@@ -53,15 +54,17 @@ export default async function ExpertProfilePage({ params }: PageProps) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(personLd) }}
       />
-      <article className="mx-auto max-w-2xl py-10 container-px prose prose-slate prose-headings:font-bold prose-a:text-brand-700">
+      <article className={`mx-auto max-w-2xl py-10 container-px ${HOUSEX_PROSE_CLASS}`}>
         <nav className="not-prose mb-6 text-sm text-slate-500">
           <Link href="/" className="hover:text-brand-700">
             Trang chủ
           </Link>
           <span className="mx-2">/</span>
-          <Link href="/tin-tuc/chu-de/noxh" className="hover:text-brand-700">
-            Nhà ở xã hội
+          <Link href="/doi-ngu" className="hover:text-brand-700">
+            Đội ngũ & biên tập
           </Link>
+          <span className="mx-2">/</span>
+          <span className="text-slate-800">{expert.name}</span>
         </nav>
 
         <h1>{expert.name}</h1>
@@ -84,7 +87,7 @@ export default async function ExpertProfilePage({ params }: PageProps) {
         </ul>
 
         <p>
-          <Link href={EDITORIAL_METHODOLOGY_PATH}>Phương pháp biên tập House X</Link>
+          <Link href={EDITORIAL_METHODOLOGY_PATH}>Phương pháp biên tập</Link>
           {" · "}
           <Link href="/cong-cu/dieu-kien-noxh">Công cụ kiểm tra NOXH</Link>
           {" · "}

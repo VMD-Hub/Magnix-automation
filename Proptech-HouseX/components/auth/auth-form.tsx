@@ -35,6 +35,7 @@ export function AuthForm({
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [marketingOptIn, setMarketingOptIn] = useState(true);
+  const [termsAccepted, setTermsAccepted] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [registerDone, setRegisterDone] = useState<{
@@ -232,6 +233,26 @@ export function AuthForm({
               <label className="flex items-start gap-2 text-sm text-slate-600">
                 <input
                   type="checkbox"
+                  required
+                  checked={termsAccepted}
+                  onChange={(e) => setTermsAccepted(e.target.checked)}
+                  className="mt-1 accent-brand-600"
+                />
+                <span>
+                  Tôi đã đọc và đồng ý với{" "}
+                  <Link href="/dieu-khoan" className="font-semibold text-brand-700 underline" target="_blank">
+                    Điều khoản sử dụng
+                  </Link>{" "}
+                  và{" "}
+                  <Link href="/bao-mat" className="font-semibold text-brand-700 underline" target="_blank">
+                    Chính sách bảo mật
+                  </Link>
+                  .
+                </span>
+              </label>
+              <label className="flex items-start gap-2 text-sm text-slate-600">
+                <input
+                  type="checkbox"
                   checked={marketingOptIn}
                   onChange={(e) => setMarketingOptIn(e.target.checked)}
                   className="mt-1 accent-brand-600"
@@ -269,7 +290,7 @@ export function AuthForm({
             <p className="rounded-lg bg-rose-50 px-3 py-2 text-sm text-rose-700">{error}</p>
           ) : null}
 
-          <Button type="submit" className="w-full" disabled={loading}>
+          <Button type="submit" className="w-full" disabled={loading || (mode === "register" && !termsAccepted)}>
             {loading ? "Đang xử lý…" : mode === "register" ? "Đăng ký" : "Đăng nhập"}
           </Button>
         </form>

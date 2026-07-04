@@ -14,6 +14,7 @@ const NAV = [
   { label: "Dự án", href: "/du-an" },
   { label: "Dịch vụ", href: "/dich-vu" },
   { label: "Công cụ", href: "/cong-cu" },
+  { label: "Tin tức", href: "/tin-tuc" },
 ];
 
 export function SiteHeader() {

@@ -2,7 +2,6 @@ import Link from "next/link";
 import type { EditorialExpert, LegalSourceRef } from "@/lib/content/editorial-trust";
 import {
   EDITORIAL_METHODOLOGY_PATH,
-  expertProfilePath,
   formatEditorialDate,
 } from "@/lib/content/editorial-trust";
 
@@ -49,14 +48,7 @@ export function EditorialTrustPanel({
         {expert ? (
           <div className="flex flex-wrap gap-x-2">
             <dt className="font-semibold text-slate-700">Biên tập:</dt>
-            <dd>
-              <Link
-                href={expertProfilePath(expert.slug)}
-                className="font-medium text-brand-700 hover:underline"
-              >
-                {expert.name}
-              </Link>
-            </dd>
+            <dd>{expert.name}</dd>
           </div>
         ) : null}
       </dl>
