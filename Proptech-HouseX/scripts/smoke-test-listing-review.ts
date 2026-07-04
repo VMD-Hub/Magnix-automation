@@ -69,10 +69,11 @@ function uniquePhone(suffix: string): string {
 }
 
 async function makeTestJpeg(seed: number): Promise<Buffer> {
+  // Cạnh ngắn phải ≥ MEDIA_MIN_IMAGE_PX (mặc định 1024).
   return sharp({
     create: {
-      width: 1200,
-      height: 800,
+      width: 1280,
+      height: 1024,
       channels: 3,
       background: { r: 40 + seed, g: 80 + seed, b: 120 + seed },
     },
@@ -170,7 +171,10 @@ async function main() {
           }
           const media = json.data?.media as { status?: string } | undefined;
           if (media?.status !== "READY") {
-            throw new Error(`ảnh ${i + 1} status=${media?.status ?? "?"}`);
+            const reason =
+              (json.data?.quality as string[] | undefined)?.join(" ") ??
+              (json.data?.media as { rejectReason?: string } | undefined)?.rejectReason;
+            throw new Error(`ảnh ${i + 1} status=${media?.status ?? "?"}${reason ? ` — ${reason}` : ""}`);
           }
         }
       },
