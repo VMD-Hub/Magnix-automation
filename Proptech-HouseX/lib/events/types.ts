@@ -83,6 +83,25 @@ export interface OutboxPayloads {
     rulesVersion: string;
     contact: { name: string; phone: string; email: string };
   };
+  /**
+   * Lead magnet kiểm tra vay NOXH 60 giây — chỉ tier + tuổi sơ bộ + band thu nhập;
+   * không lưu chi tiết tài chính vào Postgres.
+   */
+  "lead.noxh_loan_quick_check": {
+    leadId: string;
+    tier: "HOT" | "WARM" | "COLD";
+    ageStatus: "PROCEED" | "NEEDS_REVIEW" | "NOT_SUITABLE";
+    currentAge: number;
+    ageAtLoanEnd: number;
+    region: string;
+    housingType: string;
+    incomeBand: string;
+    contact: {
+      name: string;
+      phone: string;
+      email?: string;
+    };
+  };
 }
 
 export type OutboxEventType = keyof OutboxPayloads;

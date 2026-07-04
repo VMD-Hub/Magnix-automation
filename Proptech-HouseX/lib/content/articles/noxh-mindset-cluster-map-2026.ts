@@ -253,8 +253,10 @@ const LAYER_LABEL: Record<MindsetLayer, string> = {
   action: "Kiểm tra trước khi quyết",
 };
 
-const SLUG_META = new Map(
-  NOXH_MINDSET_CLUSTER_SATELLITES.map((a) => [a.slug, a] as const),
+type MindsetSatellite = (typeof NOXH_MINDSET_CLUSTER_SATELLITES)[number];
+
+const SLUG_META = new Map<string, MindsetSatellite>(
+  NOXH_MINDSET_CLUSTER_SATELLITES.map((a) => [a.slug, a]),
 );
 
 function hrefForSlug(slug: string): string {
@@ -722,7 +724,7 @@ const NOXH_MINDSET_RELATED_BLURBS: Partial<
 function mindsetRelatedBlurb(fromSlug: string, toSlug: string): string | undefined {
   return (
     NOXH_MINDSET_RELATED_BLURBS[fromSlug]?.[toSlug] ??
-    RELATED_ARTICLE_BLURBS[toSlug]
+    (RELATED_ARTICLE_BLURBS as Record<string, string>)[toSlug]
   );
 }
 
