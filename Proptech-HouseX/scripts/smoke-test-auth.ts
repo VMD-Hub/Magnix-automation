@@ -7,7 +7,6 @@
  *   npm run dev   # terminal khác
  *   SITE=http://localhost:3000 npm run go-live:smoke-auth
  */
-import { randomBytes } from "node:crypto";
 import { prisma } from "../lib/prisma";
 import { issueUserAuthToken } from "../lib/data/auth-tokens";
 
@@ -27,8 +26,24 @@ if (!process.env.AUTH_SECRET?.trim()) {
   process.exit(1);
 }
 
+type ApiUser = {
+  role?: string;
+  emailVerified?: boolean;
+  brokerId?: string;
+};
+
+type ApiData = {
+  role?: string;
+  customerId?: string;
+  brokerId?: string;
+  userAccountId?: string;
+  verified?: boolean;
+  profile?: unknown;
+  user?: ApiUser;
+};
+
 type JsonBody = {
-  data?: Record<string, unknown>;
+  data?: ApiData;
   error?: { code?: string; message?: string };
 };
 
@@ -50,7 +65,11 @@ async function api(
   headers.set("accept", "application/json");
   if (init.cookie) headers.set("cookie", init.cookie);
 
-  const res = await fetch(`${site}${path}`, { ...init, headers });
+  const res = await fetch(`${site}${path}`, { ...init, headers }).catch((err) => {
+    throw new Error(
+      `fetch failed (${site}${path}) — app có đang chạy? pm2 status / curl ${site}`,
+    );
+  });
   const json = (await res.json().catch(() => ({}))) as JsonBody;
   const newCookie = sessionFromResponse(res) ?? init.cookie ?? null;
   return { res, json, cookie: newCookie };
