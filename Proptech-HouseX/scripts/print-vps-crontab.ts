@@ -6,7 +6,12 @@
 const site = (process.env.NEXT_PUBLIC_SITE_URL ?? "https://timnhaxahoi.com")
   .trim()
   .replace(/\/$/, "");
-const cronSecret = process.env.CRON_SECRET?.trim() ?? "YOUR_CRON_SECRET";
+const cronSecret = process.env.CRON_SECRET?.trim();
+
+if (!cronSecret || cronSecret.length < 16) {
+  console.error("Thiếu CRON_SECRET trong .env (≥16 ký tự) — chạy: npm run go-live:secrets");
+  process.exit(1);
+}
 
 console.log(`# House X — cron VPS (${site})`);
 console.log(`# Đặt CRON_SECRET trong .env trước khi dán — hiện: ${cronSecret.slice(0, 4)}…`);
