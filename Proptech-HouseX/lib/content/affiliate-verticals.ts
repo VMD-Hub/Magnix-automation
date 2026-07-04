@@ -56,6 +56,7 @@ import {
   DING_GIA_HUB_INTRO,
   DING_GIA_SERVICES,
 } from "@/lib/content/dinh-gia-affiliate-content";
+import { INTERIOR_CASE_STUDIES } from "@/lib/content/noi-that-content";
 import { HOUSEX_SERVICE_NOTE } from "@/lib/content/housex-services-copy";
 
 export { HOUSEX_SERVICE_NOTE as AFFILIATE_DISCLAIMER };
@@ -147,30 +148,41 @@ export const AFFILIATE_VERTICALS: AffiliateVertical[] = [
     id: "noi-that",
     path: "/noi-that",
     layout: "promo-hub",
-    title: "Thiết kế nội thất — HouseX",
+    title: "Thiết kế & thi công nội thất | House X",
     metaDescription:
-      "Dịch vụ thiết kế và thi công nội thất trên HouseX. Cảm hứng phong cách, khảo sát hiện trạng và báo giá trọn gói.",
-    h1: "Thiết kế nội thất & không gian sống",
+      "House X kết nối studio thiết kế & thi công nội thất tại TP.HCM. Căn hộ, nhà phố, văn phòng — khảo sát, phối cảnh 3D, báo giá sau khảo sát.",
+    h1: "Thiết kế & thi công nội thất — Trọn gói tại TP.HCM",
     intro:
-      "HouseX cung cấp dịch vụ thiết kế và thi công nội thất — từ cảm hứng phong cách, phối cảnh 3D đến hoàn thiện căn hộ, nhà phố, biệt thự. Gửi yêu cầu để được khảo sát và nhận báo giá chi tiết.",
-    disclaimer: HOUSEX_SERVICE_NOTE,
+      "House X kết nối bạn với studio đối tác uy tín — từ thiết kế concept, phối cảnh 3D đến thi công hoàn thiện căn hộ, nhà phố và văn phòng. Cam kết minh bạch quy trình; báo giá chi tiết sau khảo sát hiện trạng.",
+    disclaimer:
+      "House X là đầu mối tư vấn và kết nối studio triển khai tại TP.HCM & vùng lân cận. Chi phí tham khảo trên website mang tính ước lượng — báo giá chính thức sau khảo sát.",
+    partnerIntro:
+      "House X làm việc với các studio thiết kế & thi công có kinh nghiệm tại TP.HCM — phù hợp từng loại hình và ngân sách.",
     hubFaqs: [
       {
-        q: "HouseX thiết kế nội thất những loại nhà nào?",
-        a: "Căn hộ chung cư, nhà phố, biệt thự và shophouse tại TP.HCM và vùng lân cận — từ thiết kế 2D/3D đến thi công hoàn thiện.",
+        q: "House X thi công trực tiếp hay qua đối tác?",
+        a: "House X kết nối studio đối tác triển khai thiết kế và thi công. Bạn có một đầu mối tư vấn, quy trình và báo giá minh bạch trước khi ký hợp đồng với đơn vị thi công.",
       },
       {
-        q: "Làm sao nhận báo giá thiết kế?",
-        a: "Gửi form liên hệ kèm diện tích, khu vực, phong cách và ngân sách dự kiến. Đội ngũ HouseX sẽ liên hệ khảo sát và báo giá cụ thể.",
+        q: "House X hỗ trợ những loại nhà nào?",
+        a: "Căn hộ chung cư, nhà phố, biệt thự, shophouse và văn phòng tại TP.HCM và vùng lân cận — từ thiết kế 2D/3D đến thi công hoàn thiện.",
       },
       {
-        q: "Thi công có cần xin phép ban quản lý không?",
-        a: "Căn hộ chung cư thường cần đăng ký thi công với ban quản lý. HouseX hỗ trợ checklist giấy tờ khi triển khai.",
+        q: "Làm sao nhận báo giá?",
+        a: "Gửi form liên hệ kèm diện tích, quận/huyện, phong cách và ngân sách dự kiến. House X sắp lịch khảo sát và chuyển báo giá chi tiết — không cam kết giá cố định trên website.",
+      },
+      {
+        q: "Thi công căn hộ có cần đăng ký ban quản lý?",
+        a: "Thường cần đăng ký thi công với ban quản lý chung cư. Studio đối tác hỗ trợ checklist giấy tờ khi triển khai.",
+      },
+      {
+        q: "Chi phí thi công nội thất ước tính thế nào?",
+        a: "Phụ thuộc diện tích, hạng mục và vật liệu. House X cung cấp ước lượng sơ bộ sau khảo sát — mức giá công khai trên web chỉ mang tính tham khảo chung.",
       },
     ],
     showcases: [
       {
-        slug: "phong-cach-hien-dai",
+        slug: "hien-dai",
         title: "Nội thất hiện đại",
         tags: ["Căn hộ", "Nhà phố"],
         metaDescription:
@@ -193,7 +205,7 @@ export const AFFILIATE_VERTICALS: AffiliateVertical[] = [
         ctaLabel: "Tư vấn thiết kế hiện đại",
       },
       {
-        slug: "phong-cach-scandinavian",
+        slug: "scandinavian",
         title: "Scandinavian — Bắc Âu ấm áp",
         tags: ["Căn hộ", "Tone sáng"],
         metaDescription:
@@ -212,7 +224,7 @@ export const AFFILIATE_VERTICALS: AffiliateVertical[] = [
         ctaLabel: "Nhận tư vấn phong cách Scandi",
       },
       {
-        slug: "phong-cach-indochine",
+        slug: "indochine",
         title: "Indochine — Đông Dương đương đại",
         tags: ["Biệt thự", "Nhà phố cổ"],
         metaDescription:
@@ -229,7 +241,7 @@ export const AFFILIATE_VERTICALS: AffiliateVertical[] = [
         ctaLabel: "Tư vấn thiết kế Indochine",
       },
       {
-        slug: "phong-cach-toi-gian",
+        slug: "toi-gian",
         title: "Tối giản (Minimal)",
         tags: ["Căn hộ", "Tiết kiệm"],
         metaDescription:
@@ -244,23 +256,6 @@ export const AFFILIATE_VERTICALS: AffiliateVertical[] = [
           },
         ],
         ctaLabel: "Thiết kế nội thất tối giản",
-      },
-      {
-        slug: "can-ho-dep-y-tuong",
-        title: "Căn hộ đẹp — Gợi ý bố trí",
-        tags: ["SEO", "Căn hộ"],
-        metaDescription:
-          "Ý tưởng căn hộ đẹp TP.HCM: phòng khách, bếp, phòng ngủ master. Dịch vụ thiết kế nội thất HouseX.",
-        h1: "Căn hộ đẹp — Bố trí thông minh từng phòng",
-        intro:
-          "Gợi ý zoning: sảnh–phòng khách–bếp liên thông; phòng ngủ master có walk-in nhỏ; phòng phụ dual-purpose làm workspace. HouseX triển khai 2D/3D theo hiện trạng thực tế.",
-        faqs: [
-          {
-            q: "Thiết kế căn hộ chung cư cần xin phép không?",
-            a: "Thi công hoàn thiện thường cần đăng ký với ban quản lý. HouseX hỗ trợ checklist giấy tờ khi triển khai.",
-          },
-        ],
-        ctaLabel: "Báo giá thiết kế căn hộ",
       },
     ],
     services: [],
@@ -283,6 +278,11 @@ export function getShowcase(verticalId: "noi-that", slug: string) {
   return v.showcases?.find((s) => s.slug === slug);
 }
 
+/** URL trang phong cách (nested). */
+export function showcasePagePath(verticalPath: string, slug: string) {
+  return `${verticalPath}/phong-cach/${slug}`;
+}
+
 export function affiliateSitemapEntries(baseUrl: string) {
   const entries: { url: string; priority: number }[] = [
     { url: `${baseUrl}/dich-vu`, priority: 0.85 },
@@ -295,7 +295,24 @@ export function affiliateSitemapEntries(baseUrl: string) {
         entries.push({ url: `${baseUrl}${v.path}/${s.slug}`, priority: 0.75 });
       }
     }
-    if (v.showcases) {
+    if (v.id === "noi-that") {
+      entries.push({ url: `${baseUrl}/noi-that/nha-dep`, priority: 0.78 });
+      if (v.showcases) {
+        for (const s of v.showcases) {
+          entries.push({
+            url: `${baseUrl}${showcasePagePath(v.path, s.slug)}`,
+            priority: 0.72,
+          });
+        }
+      }
+      // Case studies
+      for (const c of INTERIOR_CASE_STUDIES) {
+        entries.push({
+          url: `${baseUrl}/noi-that/cong-trinh/${c.slug}`,
+          priority: 0.7,
+        });
+      }
+    } else if (v.showcases) {
       for (const s of v.showcases) {
         entries.push({ url: `${baseUrl}${v.path}/${s.slug}`, priority: 0.72 });
       }

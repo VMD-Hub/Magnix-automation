@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { getVertical } from "@/lib/content/affiliate-verticals";
-import { ServiceVerticalLanding } from "@/components/affiliate/service-vertical-landing";
+import { InteriorServiceLanding } from "@/components/affiliate/interior-service-landing";
 
 const vertical = getVertical("noi-that");
 
@@ -11,5 +11,5 @@ export const metadata: Metadata = {
 };
 
 export default function NoiThatPage() {
-  return <ServiceVerticalLanding vertical={vertical} />;
+  return <InteriorServiceLanding vertical={vertical} />;
 }

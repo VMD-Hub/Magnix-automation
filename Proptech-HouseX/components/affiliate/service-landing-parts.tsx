@@ -118,15 +118,21 @@ export function ServiceProcessSteps({
   title,
   steps,
   accentText,
+  columns = 3,
 }: {
   title: string;
   steps: { step: string; title: string; desc: string }[];
   accentText?: string;
+  columns?: 3 | 5;
 }) {
+  const gridClass =
+    columns === 5
+      ? "mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-5"
+      : "mt-8 grid gap-6 md:grid-cols-3";
   return (
     <section className="mx-auto max-w-7xl py-14 container-px">
       <h2 className="text-2xl font-bold text-slate-900">{title}</h2>
-      <ol className="mt-8 grid gap-6 md:grid-cols-3">
+      <ol className={gridClass}>
         {steps.map((s) => (
           <li
             key={s.step}
@@ -215,13 +221,15 @@ export function ServiceImageCard({
 export function ServiceFaqSection({
   title,
   faqs,
+  id,
 }: {
   title: string;
   faqs: AffiliateFaq[];
+  id?: string;
 }) {
   if (!faqs.length) return null;
   return (
-    <section className="mx-auto max-w-3xl py-14 container-px">
+    <section id={id} className="mx-auto max-w-3xl scroll-mt-24 py-14 container-px">
       <h2 className="text-2xl font-bold text-slate-900">{title}</h2>
       <dl className="mt-6 space-y-4">
         {faqs.map((f) => (

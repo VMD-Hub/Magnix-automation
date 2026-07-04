@@ -116,16 +116,21 @@ export function SiteFooter() {
             ))}
           </FooterCol>
 
-          <FooterCol title="Nội thất & nhà đẹp">
+          <FooterCol title="Thiết kế & thi công nội thất">
             <li>
               <Link href={noiThat.path} className="font-medium hover:text-gold-400">
-                {noiThat.h1}
+                Dịch vụ nội thất
+              </Link>
+            </li>
+            <li>
+              <Link href="/noi-that/nha-dep" className="hover:text-gold-400">
+                Nhà đẹp — Ý tưởng
               </Link>
             </li>
             {noiThat.showcases?.map((s) => (
               <li key={s.slug}>
                 <Link
-                  href={`${noiThat.path}/${s.slug}`}
+                  href={`${noiThat.path}/phong-cach/${s.slug}`}
                   className="hover:text-gold-400"
                 >
                   {s.title}
@@ -150,14 +155,26 @@ export function SiteFooter() {
             <Link href="/gioi-thieu" className="hover:text-gold-400">
               Giới thiệu
             </Link>
+            <Link href="/hop-tac" className="hover:text-gold-400">
+              Hợp tác &amp; Đăng tin
+            </Link>
+            <Link href="/cau-hoi-thuong-gap" className="hover:text-gold-400">
+              FAQ
+            </Link>
+            <Link href="/lien-he" className="hover:text-gold-400">
+              Liên hệ
+            </Link>
             <Link href="/gioi-thieu/phuong-phap-bien-tap" className="hover:text-gold-400">
               Phương pháp biên tập
             </Link>
-            <Link href="/chuyen-gia/noxh-policy" className="hover:text-gold-400">
-              Nguyễn Vũ — NOXH
+            <Link href="/doi-ngu" className="hover:text-gold-400">
+              Đội ngũ & biên tập
             </Link>
             <Link href="/dieu-khoan" className="hover:text-gold-400">
               Điều khoản
+            </Link>
+            <Link href="/chinh-sach-khieu-nai" className="hover:text-gold-400">
+              Khiếu nại
             </Link>
             <Link href="/bao-mat" className="hover:text-gold-400">
               Bảo mật

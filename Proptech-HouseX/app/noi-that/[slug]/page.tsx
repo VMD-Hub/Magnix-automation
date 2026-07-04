@@ -1,42 +1,12 @@
-import type { Metadata } from "next";
-import { notFound, redirect } from "next/navigation";
-import { getShowcase, getVertical } from "@/lib/content/affiliate-verticals";
-import { ShowcaseArticlePage } from "@/components/affiliate/showcase-article-page";
-
-const VERTICAL_ID = "noi-that" as const;
+import { permanentRedirect } from "next/navigation";
+import { NOI_THAT_LEGACY_REDIRECTS } from "@/lib/content/noi-that-content";
 
 type Props = { params: Promise<{ slug: string }> };
 
-const LEGACY_REDIRECTS: Record<string, string> = {
-  "thiet-ke-noi-that": "/noi-that/phong-cach-hien-dai",
-  "thi-cong-noi-that": "/noi-that/can-ho-dep-y-tuong",
-};
-
-export function generateStaticParams() {
-  const v = getVertical(VERTICAL_ID);
-  return (v.showcases ?? []).map((s) => ({ slug: s.slug }));
-}
-
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+/** Fallback 301 cho URL phong cách flat cũ (redirect chính trong next.config). */
+export default async function NoiThatLegacySlugPage({ params }: Props) {
   const { slug } = await params;
-  const article = getShowcase(VERTICAL_ID, slug);
-  if (!article) return { title: "Không tìm thấy" };
-  const vertical = getVertical(VERTICAL_ID);
-  return {
-    title: article.title,
-    description: article.metaDescription,
-    alternates: { canonical: `${vertical.path}/${slug}` },
-  };
-}
-
-export default async function NoiThatShowcasePage({ params }: Props) {
-  const { slug } = await params;
-  const legacy = LEGACY_REDIRECTS[slug];
-  if (legacy) redirect(legacy);
-
-  const vertical = getVertical(VERTICAL_ID);
-  const article = getShowcase(VERTICAL_ID, slug);
-  if (!article) notFound();
-
-  return <ShowcaseArticlePage vertical={vertical} article={article} />;
+  const target = NOI_THAT_LEGACY_REDIRECTS[slug];
+  if (target) permanentRedirect(target);
+  permanentRedirect("/noi-that");
 }

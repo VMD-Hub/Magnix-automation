@@ -1,12 +1,20 @@
 import Link from "next/link";
 import type { AffiliateService, AffiliateVertical } from "@/lib/content/affiliate-verticals";
+import { showcasePagePath } from "@/lib/content/affiliate-verticals";
 import { HOUSEX_SERVICES_LABEL } from "@/lib/content/housex-services-copy";
+import {
+  getCaseStudiesByStyle,
+  caseStudyPagePath,
+  STYLE_IMAGE_KEYS,
+  type InteriorStyleSlug,
+} from "@/lib/content/noi-that-content";
 import {
   cardImageForSlug,
   VERTICAL_VISUALS,
 } from "@/lib/content/housex-services-visuals";
 import {
   ServiceFaqSection,
+  ServiceImageCard,
   ServiceLandingHero,
 } from "@/components/affiliate/service-landing-parts";
 import { AffiliateContactForm } from "@/components/affiliate/affiliate-contact-form";
@@ -16,7 +24,7 @@ import {
   buildServiceJsonLd,
 } from "@/lib/seo/affiliate-json-ld";
 
-/** Bài cảm hứng phong cách — dẫn về dịch vụ thiết kế HouseX. */
+/** Bài phong cách — dẫn về dịch vụ thiết kế House X. */
 export function ShowcaseArticlePage({
   vertical,
   article,
@@ -25,12 +33,17 @@ export function ShowcaseArticlePage({
   article: AffiliateService;
 }) {
   const visual = VERTICAL_VISUALS[vertical.id];
-  const heroImage = cardImageForSlug(article.slug);
+  const imageKey =
+    STYLE_IMAGE_KEYS[article.slug as InteriorStyleSlug] ?? article.slug;
+  const heroImage = cardImageForSlug(imageKey);
+  const pagePath = showcasePagePath(vertical.path, article.slug);
+  const relatedProjects = getCaseStudiesByStyle(article.slug as InteriorStyleSlug);
+
   const breadcrumbs = [
     { name: "Trang chủ", path: "/" },
     { name: HOUSEX_SERVICES_LABEL, path: "/dich-vu" },
-    { name: vertical.h1, path: vertical.path },
-    { name: article.title, path: `${vertical.path}/${article.slug}` },
+    { name: "Nội thất", path: vertical.path },
+    { name: article.title, path: pagePath },
   ];
 
   return (
@@ -81,10 +94,29 @@ export function ShowcaseArticlePage({
             <section className="mt-8 rounded-2xl border border-brand-200 bg-gradient-to-br from-brand-50 to-white p-6">
               <p className="text-sm text-slate-700">
                 <strong className="text-slate-900">Thích phong cách này?</strong> Gửi form —
-                đội ngũ thiết kế HouseX khảo sát hiện trạng và báo giá triển khai cho căn nhà
-                của bạn.
+                House X kết nối studio đối tác khảo sát hiện trạng và báo giá sau khảo sát
+                (không cam kết giá online).
               </p>
             </section>
+
+            {relatedProjects.length > 0 ? (
+              <section className="mt-10">
+                <h2 className="text-lg font-bold text-slate-900">Công trình mẫu</h2>
+                <div className="mt-4 grid gap-4 sm:grid-cols-2">
+                  {relatedProjects.map((p) => (
+                    <ServiceImageCard
+                      key={p.slug}
+                      href={caseStudyPagePath(p.slug)}
+                      image={cardImageForSlug(p.imageKey)}
+                      badge={p.district}
+                      title={p.title}
+                      desc={p.summary}
+                      cta="Xem công trình →"
+                    />
+                  ))}
+                </div>
+              </section>
+            ) : null}
 
             <div className="mt-10 lg:hidden">
               <ServiceFaqSection title="Câu hỏi thường gặp" faqs={article.faqs} />
