@@ -485,7 +485,7 @@ export function noxhMindsetClusterRelatedSection(
     .map((s) => {
       const meta = SLUG_META.get(s);
       const title = meta?.title ?? s;
-      const blurb = NOXH_MINDSET_RELATED_BLURBS[slug]?.[s];
+      const blurb = RELATED_ARTICLE_BLURBS[s];
       return blurb
         ? `- [${title}](${hrefForSlug(s)}) — ${blurb}`
         : `- [${title}](${hrefForSlug(s)})`;
@@ -495,20 +495,40 @@ export function noxhMindsetClusterRelatedSection(
   return `## Đọc tiếp các bài liên quan chủ đề chọn NOXH đúng cách\n\n${links.join("\n")}`;
 }
 
-/** Mô tả một dòng sau link — pilot layout bài #17; mở rộng cụm sau khi duyệt. */
-const NOXH_MINDSET_RELATED_BLURBS: Partial<
-  Record<string, Partial<Record<string, string>>>
-> = {
-  "dta-happy-home-nhon-trach-noi-o-de-so-huu": {
-    [NOXH_MINDSET_PILLAR.slug]:
-      "Khung tư duy chọn NOXH theo năng lực thật, không chạy theo độ hot",
-    "30-phut-di-chuyen-co-phai-mat-mat-noxh":
-      "Thời gian đi lại vs áp lực sở hữu — góc nhìn người trẻ",
-    "vung-ven-khong-xau-khong-gian-song-noxh":
-      "Chất lượng sống ở vùng ven, không chỉ mỗi giá rẻ",
-    "khi-nao-chon-du-an-hop-tui-tien":
-      "Khi nào nên chọn căn vừa sức thay vì giữ suất vì sợ lỡ",
-  },
+/** Mô tả một dòng sau link — footer đọc tiếp toàn cụm mindset. */
+const RELATED_ARTICLE_BLURBS: Record<string, string> = {
+  [NOXH_MINDSET_PILLAR.slug]:
+    "Khung tư duy chọn NOXH theo năng lực thật, không chạy theo độ hot",
+  "vi-sao-mua-nha-sai-vi-chay-theo-do-hot":
+    "Vì sao chạy theo độ hot dễ dẫn đến quyết định mua sai",
+  "du-an-hot-suat-nhanh-vi-tri-dep-mat-tinh-tao":
+    "Ba yếu tố hot, suất nhanh, vị trí đẹp dễ làm mất tỉnh táo",
+  "dung-mua-vi-so-mat-co-hoi":
+    "Cách bình tĩnh trước áp lực sợ mất cơ hội (FOMO)",
+  "gan-trung-tam-chua-chac-tot-nhat-noxh":
+    "Gần trung tâm chưa chắc phù hợp với năng lực NOXH của bạn",
+  "xa-hon-nhung-di-nhanh-hon-khi-nao-khon-ngoan":
+    "Khi xa hơn nhưng đi nhanh hơn là lựa chọn khôn ngoan",
+  "nha-xa-ket-noi-tot-dang-mua-hon":
+    "Nhà xa hơn nhưng kết nối tốt có thể đáng mua hơn",
+  "vung-ven-khong-xau-khong-gian-song-noxh":
+    "Vùng ven và không gian sống — góc nhìn thực tế cho người mua ở",
+  "khi-nao-chon-du-an-hop-tui-tien":
+    "Khi nào nên chọn căn vừa sức thay vì giữ suất vì sợ lỡ",
+  "chon-nha-de-o-khac-chon-nha-giu-suat":
+    "Phân biệt mua để ở thật với chọn nhà giữ suất hoặc đầu tư",
+  "ba-tieu-chuan-moi-chon-noxh":
+    "Ba tiêu chuẩn mới để ra quyết định NOXH có căn cứ",
+  "chi-phi-an-sau-khi-xuong-tien-mua-noxh":
+    "Chi phí ẩn sau khi xuống tiền — không chỉ nhìn giá bán",
+  "30-phut-di-chuyen-co-phai-mat-mat-noxh":
+    "Thời gian di chuyển vs áp lực sở hữu — góc nhìn cân bằng",
+  "dta-happy-home-nhon-trach-noi-o-de-so-huu":
+    "Ví dụ DTA Happy Home — dễ sở hữu, dễ sống, có dư địa phát triển",
+  "checklist-chot-mua-noxh-tai-chinh-ha-tang-cic":
+    "Checklist 4 điểm trước khi chốt — tài chính, hạ tầng, CIC, dự phòng",
+  "lam-sao-khong-bi-roi-khi-tim-mua-noxh":
+    "Không bị rối khi tìm mua — bắt đầu tra cứu trên HouseX",
 };
 
 const CLOSING_SOFT = `## HouseX — Đồng hành an cư của người lao động
