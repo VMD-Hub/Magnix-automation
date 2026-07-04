@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import type { AccountRole } from "@prisma/client";
-import { HouseXLogo } from "@/components/brand/housex-logo";
+import { HouseXHeaderLogo } from "@/components/brand/housex-header-logo";
 import { Button } from "@/components/ui/button";
 import { safeNextPath } from "@/lib/auth/redirect";
 import { BUYER_REGISTER } from "@/lib/content/messaging/buyer-discovery";
@@ -156,7 +156,9 @@ export function AuthForm({
     <div className="mx-auto w-full max-w-md">
       <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
         <div className="mb-6 text-center">
-          <HouseXLogo className="mx-auto justify-center" iconClassName="text-3xl" />
+          <div className="flex justify-center">
+            <HouseXHeaderLogo href="/" priority={false} />
+          </div>
           <span className="mt-2 inline-block rounded-full bg-brand-50 px-3 py-1 text-xs font-semibold text-brand-700">
             {copy.badge}
           </span>

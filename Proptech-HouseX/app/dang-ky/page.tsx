@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Icon } from "@/components/icons";
-import { HouseXLogo } from "@/components/brand/housex-logo";
+import { HouseXHeaderLogo } from "@/components/brand/housex-header-logo";
 import { BUYER_REGISTER_CHOOSER } from "@/lib/content/messaging/buyer-discovery";
 import { BROKER_REGISTER_CHOOSER } from "@/lib/content/messaging/broker-supply";
 
@@ -24,7 +24,9 @@ export default function RegisterChooserPage() {
     <div className="bg-slate-50 py-12 container-px sm:py-16">
       <div className="mx-auto max-w-2xl">
         <div className="text-center">
-          <HouseXLogo className="mx-auto justify-center" iconClassName="text-3xl" />
+          <div className="flex justify-center">
+            <HouseXHeaderLogo href="/" priority={false} />
+          </div>
           <h1 className="mt-4 text-3xl font-bold text-slate-900">Chọn loại tài khoản</h1>
           <p className="mt-2 text-slate-600">
             Mọi tài khoản đều yêu cầu <strong>số điện thoại</strong>,{" "}

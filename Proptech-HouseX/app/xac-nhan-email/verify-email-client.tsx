@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { HouseXLogo } from "@/components/brand/housex-logo";
+import { HouseXHeaderLogo } from "@/components/brand/housex-header-logo";
 import { ButtonLink } from "@/components/ui/button";
 
 type Status = "loading" | "ok" | "error";
@@ -41,7 +41,9 @@ export default function VerifyEmailClient() {
   return (
     <div className="mx-auto max-w-md py-16 container-px">
       <div className="rounded-2xl border border-slate-200 bg-white p-8 text-center shadow-sm">
-        <HouseXLogo className="mx-auto justify-center" iconClassName="text-3xl" />
+        <div className="flex justify-center">
+          <HouseXHeaderLogo href="/" priority={false} />
+        </div>
         <h1 className="mt-4 text-2xl font-bold text-slate-900">Xác nhận email</h1>
 
         {status === "loading" ? (

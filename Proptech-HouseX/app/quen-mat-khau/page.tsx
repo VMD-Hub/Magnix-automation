@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { HouseXLogo } from "@/components/brand/housex-logo";
+import { HouseXHeaderLogo } from "@/components/brand/housex-header-logo";
 import { Button } from "@/components/ui/button";
 
 const inputCls =
@@ -41,7 +41,9 @@ export default function ForgotPasswordPage() {
     <div className="bg-slate-50 py-12 container-px sm:py-16">
       <div className="mx-auto w-full max-w-md rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
         <div className="text-center">
-          <HouseXLogo className="mx-auto justify-center" iconClassName="text-3xl" />
+          <div className="flex justify-center">
+            <HouseXHeaderLogo href="/" priority={false} />
+          </div>
           <h1 className="mt-3 text-2xl font-bold text-slate-900">Quên mật khẩu</h1>
           <p className="mt-1 text-sm text-slate-500">
             Nhập email đã đăng ký — chúng tôi gửi link đặt lại mật khẩu (hiệu lực
