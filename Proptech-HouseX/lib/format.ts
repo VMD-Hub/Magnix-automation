@@ -85,6 +85,7 @@ export const PROJECT_UNIT_STATUS_LABEL: Record<string, string> = {
 
 export const LISTING_STATUS_LABEL: Record<string, string> = {
   DRAFT: "Nháp",
+  PENDING_REVIEW: "Chờ duyệt",
   ACTIVE: "Đang hiển thị",
   EXPIRED: "Hết hạn",
   SOLD: "Đã bán",

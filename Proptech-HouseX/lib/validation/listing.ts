@@ -4,6 +4,7 @@ export const transactionTypeEnum = z.enum(["SALE", "RENT"]);
 export const listingTierEnum = z.enum(["FREE", "VIP", "PREMIUM"]);
 export const listingStatusEnum = z.enum([
   "DRAFT",
+  "PENDING_REVIEW",
   "ACTIVE",
   "EXPIRED",
   "SOLD",

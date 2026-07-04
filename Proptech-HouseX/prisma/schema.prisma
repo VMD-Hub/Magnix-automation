@@ -26,6 +26,7 @@ enum TransactionType {
 
 enum ListingStatus {
   DRAFT
+  PENDING_REVIEW
   ACTIVE
   EXPIRED
   SOLD
@@ -392,6 +393,9 @@ model Listing {
   verified         Boolean           @default(false) // cờ nhanh; verificationTier là trục chi tiết
   verifiedAt       DateTime?         @map("verified_at")
   expireAt         DateTime?         @map("expire_at")
+  rejectReason     String?           @map("reject_reason") @db.Text
+  submittedAt      DateTime?         @map("submitted_at")
+  reviewedAt       DateTime?         @map("reviewed_at")
   // P2 — precomputed quality & ranking signals (cron/hook cập nhật).
   photoCount       Int               @default(0) @map("photo_count")
   hasVideo         Boolean           @default(false) @map("has_video")

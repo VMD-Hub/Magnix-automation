@@ -16,7 +16,7 @@ export function AdminShell({
       <header className="border-b border-slate-200 bg-white px-4 py-3 shadow-sm">
         <div className="mx-auto flex max-w-6xl items-center justify-between">
           <div className="flex items-center gap-4">
-            <Link href="/admin/ctv" className="text-lg font-bold text-slate-900">
+            <Link href="/admin/listings" className="text-lg font-bold text-slate-900">
               House<span className="text-brand-600">X</span> Admin
             </Link>
             <span className="hidden rounded-full bg-amber-100 px-2 py-0.5 text-xs font-medium text-amber-800 sm:inline">
@@ -25,8 +25,14 @@ export function AdminShell({
           </div>
           <nav className="flex items-center gap-3 text-sm">
             <Link
-              href="/admin/articles"
+              href="/admin/listings"
               className="font-medium text-brand-700 hover:text-brand-800"
+            >
+              Duyệt tin
+            </Link>
+            <Link
+              href="/admin/articles"
+              className="text-slate-600 hover:text-slate-800"
             >
               Tin tức
             </Link>

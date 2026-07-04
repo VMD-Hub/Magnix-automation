@@ -43,17 +43,24 @@ export default function BrokerAccountPage() {
       <h1 className="text-2xl font-bold text-slate-900">Tài khoản môi giới</h1>
       <p className="mt-1 text-slate-500">Xin chào, {user.name}</p>
 
-      <div className="mt-8 grid gap-4 sm:grid-cols-2">
+      <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         <Link
-          href="/dang-tin"
+          href="/moi-gioi/dang-tin"
           className="rounded-2xl border border-slate-200 bg-white p-5 hover:border-brand-300"
         >
           <Icon.Building className="text-2xl text-brand-600" />
           <p className="mt-2 font-semibold">Đăng tin mới</p>
         </Link>
         <Link
-          href="/moi-gioi/dang-ky-ctv"
+          href="/moi-gioi/tin-cua-toi"
           className="rounded-2xl border border-slate-200 bg-white p-5 hover:border-brand-300"
+        >
+          <Icon.FileCheck className="text-2xl text-brand-600" />
+          <p className="mt-2 font-semibold">Tin của tôi</p>
+        </Link>
+        <Link
+          href="/moi-gioi/dang-ky-ctv"
+          className="rounded-2xl border border-slate-200 bg-white p-5 hover:border-brand-300 sm:col-span-2"
         >
           <Icon.BadgeCheck className="text-2xl text-brand-600" />
           <p className="mt-2 font-semibold">

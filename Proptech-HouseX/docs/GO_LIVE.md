@@ -180,7 +180,7 @@ Kiểm tra thủ công:
 
 - Form **báo cáo tin sai** (copy đã hứa, chưa có UI/API)
 - Badge **verification tier** T0–T3 trên listing
-- **UI đăng tin** broker (API có, form chưa)
+- **UI đăng tin** broker — ✅ `/moi-gioi/dang-tin`, `/moi-gioi/tin-cua-toi` (Phase 2a: URL ảnh)
 - Admin **duyệt tin**
 
 ---

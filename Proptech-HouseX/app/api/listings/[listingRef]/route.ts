@@ -1,6 +1,8 @@
 import { NextRequest } from "next/server";
+import type { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { fail, handleApiError, ok } from "@/lib/api/http";
+import { isAdminAuthorized } from "@/lib/admin/session";
 import { listingPatchSchema } from "@/lib/validation/listing";
 import {
   assertLicenseGate,
@@ -58,6 +60,11 @@ export async function PATCH(
       return fail(404, "NOT_FOUND", "Không tìm thấy tin đăng.");
     }
 
+    const sessionBrokerId = await resolveBrokerId(req);
+    if (sessionBrokerId && sessionBrokerId !== existing.brokerId) {
+      return fail(403, "FORBIDDEN", "Chỉ môi giới đăng tin mới sửa được tin này.");
+    }
+
     if ("tier" in patch && patch.tier) {
       const gate = assertLicenseGate(existing.broker, patch.tier);
       if (!gate.ok) {
@@ -80,7 +87,23 @@ export async function PATCH(
       }
     }
 
-    if (patch.status === "ACTIVE" && existing.status !== "ACTIVE") {
+    if (sessionBrokerId && patch.status === "ACTIVE") {
+      return fail(
+        403,
+        "ADMIN_REVIEW_REQUIRED",
+        "Tin cần được admin duyệt. Hãy gửi duyệt thay vì đăng hiển thị trực tiếp.",
+      );
+    }
+
+    const submitForReview =
+      patch.status === "PENDING_REVIEW" &&
+      existing.status !== "PENDING_REVIEW" &&
+      existing.status !== "ACTIVE";
+
+    if (
+      submitForReview ||
+      (patch.status === "ACTIVE" && existing.status !== "ACTIVE")
+    ) {
       const counts = await mediaCountsFor(prisma, id);
       const effectiveDesc =
         "description" in patch ? patch.description : existing.description;
@@ -95,14 +118,26 @@ export async function PATCH(
       }
     }
 
+    if (patch.status === "ACTIVE" && existing.status !== "ACTIVE" && !isAdminAuthorized(req)) {
+      return fail(403, "ADMIN_REVIEW_REQUIRED", "Chỉ admin mới duyệt hiển thị tin.");
+    }
+
     const contentChanged = CONTENT_FIELDS.some((f) => f in patch);
-    const actorBrokerId =
-      (await resolveBrokerId(req)) ?? existing.brokerId;
+    const actorBrokerId = sessionBrokerId ?? existing.brokerId;
+
+    const updateData: Prisma.ListingUpdateInput = { ...patch };
+    if (submitForReview) {
+      updateData.submittedAt = new Date();
+      if (existing.status === "REJECTED") {
+        updateData.rejectReason = null;
+        updateData.reviewedAt = null;
+      }
+    }
 
     const updated = await prisma.$transaction(async (tx) => {
       const u = await tx.listing.update({
         where: { id },
-        data: patch,
+        data: updateData,
         include: {
           media: { orderBy: { position: "asc" } },
           project: { select: { id: true, slug: true, name: true } },
@@ -185,8 +220,12 @@ export async function DELETE(
       return ok({ id, alreadyDeleted: true });
     }
 
-    const actorBrokerId =
-      (await resolveBrokerId(req)) ?? existing.brokerId;
+    const sessionBrokerId = await resolveBrokerId(req);
+    if (sessionBrokerId && sessionBrokerId !== existing.brokerId) {
+      return fail(403, "FORBIDDEN", "Chỉ môi giới đăng tin mới xóa được tin này.");
+    }
+
+    const actorBrokerId = sessionBrokerId ?? existing.brokerId;
 
     await prisma.$transaction(async (tx) => {
       await tx.listing.update({
