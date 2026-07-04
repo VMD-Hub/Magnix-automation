@@ -3,6 +3,10 @@
  */
 
 import { CURRENT_NOXH_RULES } from "@/lib/finance/noxh-rules";
+import { BRAND_NAME } from "@/lib/site-config";
+
+/** Nhãn tác giả thống nhất trên bài viết & công cụ (không dùng tên cá nhân ở byline). */
+export const EDITORIAL_BYLINE = `Ban biên tập ${BRAND_NAME}` as const;
 
 export type EditorialExpert = {
   slug: string;
@@ -89,6 +93,8 @@ const NOXH_TRUST_TAGS = new Set([
   "noxh",
   "phap-ly",
   "goc-chuyen-gia",
+  "chon-noxh-dung-cach",
+  "tham-dinh-vay-noxh",
   "nha-o-xa-hoi-ly-thuong-kiet",
   "dta-happy-home-nhon-trach",
 ]);

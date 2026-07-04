@@ -1585,7 +1585,7 @@ const MINDSET_ARTICLES_RAW: ArticleDetail[] = [
     publishedAt: PUBLISHED,
     updatedAt: PUBLISHED,
     coverImageUrl: null,
-    authorName: "HouseX Biên tập",
+    authorName: "Ban biên tập House X",
     seoTitle:
       "Chọn nhà ở xã hội đúng cách — theo năng lực, không theo cảm xúc | HouseX",
     seoDesc:
@@ -1604,7 +1604,7 @@ const MINDSET_ARTICLES_RAW: ArticleDetail[] = [
     publishedAt: PUBLISHED,
     updatedAt: PUBLISHED,
     coverImageUrl: null,
-    authorName: "HouseX Biên tập",
+    authorName: "Ban biên tập House X",
     seoTitle:
       "Vì sao mua nhà sai vì chạy theo độ hot? 5 câu hỏi trước khi chốt | HouseX",
     seoDesc:
@@ -1624,7 +1624,7 @@ const MINDSET_ARTICLES_RAW: ArticleDetail[] = [
     publishedAt: PUBLISHED,
     updatedAt: PUBLISHED,
     coverImageUrl: null,
-    authorName: "HouseX Biên tập",
+    authorName: "Ban biên tập House X",
     seoTitle:
       "Dự án hot, suất nhanh, vị trí đẹp — ba yếu tố làm mất tỉnh táo | HouseX",
     seoDesc:
@@ -1643,7 +1643,7 @@ const MINDSET_ARTICLES_RAW: ArticleDetail[] = [
     publishedAt: PUBLISHED,
     updatedAt: PUBLISHED,
     coverImageUrl: null,
-    authorName: "HouseX Biên tập",
+    authorName: "Ban biên tập House X",
     seoTitle:
       "Đừng mua vì sợ mất cơ hội — quyết định NOXH bình tĩnh hơn | HouseX",
     seoDesc:
@@ -1663,7 +1663,7 @@ const MINDSET_ARTICLES_RAW: ArticleDetail[] = [
     publishedAt: PUBLISHED,
     updatedAt: PUBLISHED,
     coverImageUrl: null,
-    authorName: "HouseX Biên tập",
+    authorName: "Ban biên tập House X",
     seoTitle:
       "Gần trung tâm chưa chắc tốt nhất khi mua NOXH | HouseX",
     seoDesc:
@@ -1682,7 +1682,7 @@ const MINDSET_ARTICLES_RAW: ArticleDetail[] = [
     publishedAt: PUBLISHED,
     updatedAt: PUBLISHED,
     coverImageUrl: null,
-    authorName: "HouseX Biên tập",
+    authorName: "Ban biên tập House X",
     seoTitle:
       "Xa hơn nhưng đi nhanh hơn — khi nào khôn ngoan với NOXH? | HouseX",
     seoDesc:
@@ -1701,7 +1701,7 @@ const MINDSET_ARTICLES_RAW: ArticleDetail[] = [
     publishedAt: PUBLISHED,
     updatedAt: PUBLISHED,
     coverImageUrl: null,
-    authorName: "HouseX Biên tập",
+    authorName: "Ban biên tập House X",
     seoTitle:
       "Nhà xa nhưng kết nối tốt — có đáng mua NOXH hơn? | HouseX",
     seoDesc:
@@ -1721,7 +1721,7 @@ const MINDSET_ARTICLES_RAW: ArticleDetail[] = [
     publishedAt: PUBLISHED,
     updatedAt: PUBLISHED,
     coverImageUrl: null,
-    authorName: "HouseX Biên tập",
+    authorName: "Ban biên tập House X",
     seoTitle:
       "Vùng ven không xấu — NOXH và không gian sống đáng giá | HouseX",
     seoDesc:
@@ -1740,7 +1740,7 @@ const MINDSET_ARTICLES_RAW: ArticleDetail[] = [
     publishedAt: PUBLISHED,
     updatedAt: PUBLISHED,
     coverImageUrl: null,
-    authorName: "HouseX Biên tập",
+    authorName: "Ban biên tập House X",
     seoTitle:
       "Chọn dự án NOXH hợp túi tiền thay vì dự án hot | HouseX",
     seoDesc:
@@ -1759,7 +1759,7 @@ const MINDSET_ARTICLES_RAW: ArticleDetail[] = [
     publishedAt: PUBLISHED,
     updatedAt: PUBLISHED,
     coverImageUrl: null,
-    authorName: "HouseX Biên tập",
+    authorName: "Ban biên tập House X",
     seoTitle:
       "Chọn nhà để ở vs giữ suất — mua NOXH đúng mục tiêu | HouseX",
     seoDesc:
@@ -1779,7 +1779,7 @@ const MINDSET_ARTICLES_RAW: ArticleDetail[] = [
     publishedAt: PUBLISHED,
     updatedAt: PUBLISHED,
     coverImageUrl: null,
-    authorName: "HouseX Biên tập",
+    authorName: "Ban biên tập House X",
     seoTitle:
       "3 tiêu chuẩn mới chọn NOXH — tài chính, thời gian, gia đình | HouseX",
     seoDesc:
@@ -1799,7 +1799,7 @@ const MINDSET_ARTICLES_RAW: ArticleDetail[] = [
     publishedAt: PUBLISHED,
     updatedAt: PUBLISHED,
     coverImageUrl: null,
-    authorName: "HouseX Biên tập",
+    authorName: "Ban biên tập House X",
     seoTitle:
       "Chi phí ẩn sau khi mua NOXH — không chỉ trả tiền nhà | HouseX",
     seoDesc:
@@ -1818,7 +1818,7 @@ const MINDSET_ARTICLES_RAW: ArticleDetail[] = [
     publishedAt: PUBLISHED,
     updatedAt: PUBLISHED,
     coverImageUrl: null,
-    authorName: "HouseX Biên tập",
+    authorName: "Ban biên tập House X",
     seoTitle:
       "30 phút di chuyển mua NOXH — có phải mất mát? | HouseX",
     seoDesc:
@@ -1838,7 +1838,7 @@ const MINDSET_ARTICLES_RAW: ArticleDetail[] = [
     publishedAt: PUBLISHED,
     updatedAt: PUBLISHED,
     coverImageUrl: null,
-    authorName: "HouseX Biên tập",
+    authorName: "Ban biên tập House X",
     seoTitle:
       "DTA Happy Home Nhơn Trạch — NOXH dễ sở hữu, dễ sống | HouseX",
     seoDesc:
@@ -1858,7 +1858,7 @@ const MINDSET_ARTICLES_RAW: ArticleDetail[] = [
     publishedAt: PUBLISHED,
     updatedAt: PUBLISHED,
     coverImageUrl: null,
-    authorName: "HouseX Biên tập",
+    authorName: "Ban biên tập House X",
     seoTitle:
       "Checklist chốt mua NOXH — tài chính, hạ tầng, CIC, dự phòng | HouseX",
     seoDesc:
@@ -1877,7 +1877,7 @@ const MINDSET_ARTICLES_RAW: ArticleDetail[] = [
     publishedAt: PUBLISHED,
     updatedAt: PUBLISHED,
     coverImageUrl: null,
-    authorName: "HouseX Biên tập",
+    authorName: "Ban biên tập House X",
     seoTitle:
       "HouseX: Tổng kho nhà ở xã hội kết nối trực tiếp chủ đầu tư | HouseX",
     seoDesc:

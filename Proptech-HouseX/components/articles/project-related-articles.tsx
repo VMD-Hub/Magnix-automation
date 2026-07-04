@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArticleCard } from "@/components/articles/article-card";
 import type { ArticleCardData } from "@/lib/data/article-types";
+import { EDITORIAL_BYLINE } from "@/lib/content/editorial-trust";
 import { projectRelatedArticlesViewMoreHref } from "@/lib/content/project-related-articles";
 
 export function ProjectRelatedArticles({
@@ -27,7 +28,7 @@ export function ProjectRelatedArticles({
       <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.14em] text-brand-600">
-            {isNoxh ? "NOXH · Cập nhật thị trường" : "HouseX Biên tập"}
+            {isNoxh ? "NOXH · Cập nhật thị trường" : EDITORIAL_BYLINE}
           </p>
           <h2
             id="project-related-articles-heading"

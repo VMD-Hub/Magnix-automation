@@ -75,7 +75,7 @@ ${NOXH_SUPPORT_CLOSING}`,
     publishedAt: PUBLISHED,
     updatedAt: UPDATED,
     coverImageUrl: null,
-    authorName: "HouseX Biên tập",
+    authorName: "Ban biên tập House X",
     seoTitle:
       "Quy trình mua NOXH 2026 — 7 bước từ đăng ký đến nhận căn | HouseX",
     seoDesc:
@@ -143,7 +143,7 @@ ${NOXH_SUPPORT_CLOSING}`,
     publishedAt: PUBLISHED,
     updatedAt: UPDATED,
     coverImageUrl: null,
-    authorName: "HouseX Biên tập",
+    authorName: "Ban biên tập House X",
     seoTitle:
       "Vay NOXH gói 120.000 tỷ NHCSXH — 70% giá căn, điều kiện & hồ sơ | HouseX",
     seoDesc:
@@ -208,7 +208,7 @@ ${NOXH_SUPPORT_CLOSING}`,
     publishedAt: PUBLISHED,
     updatedAt: UPDATED,
     coverImageUrl: null,
-    authorName: "HouseX Biên tập",
+    authorName: "Ban biên tập House X",
     seoTitle:
       "Điều kiện nhà ở mua NOXH — Điều 78, 15 m²/người, lỗi hồ sơ | HouseX",
     seoDesc:
@@ -265,7 +265,7 @@ Tra cứu mặt bằng, vị trí và gallery: [/du-an/chung-cu-phuc-loc-tho-nox
     publishedAt: PUBLISHED,
     updatedAt: UPDATED,
     coverImageUrl: null,
-    authorName: "HouseX Biên tập",
+    authorName: "Ban biên tập House X",
     seoTitle:
       "NOXH Phúc Lộc Thọ Block C — giá ~35,3 tr/m², 140 căn | HouseX",
     seoDesc:
@@ -323,7 +323,7 @@ ${NOXH_SUPPORT_CLOSING}`,
     publishedAt: PUBLISHED,
     updatedAt: UPDATED,
     coverImageUrl: null,
-    authorName: "HouseX Biên tập",
+    authorName: "Ban biên tập House X",
     seoTitle:
       "NOXH Long An 2026 — 6 dự án, giá tham chiếu & điều kiện | HouseX",
     seoDesc:

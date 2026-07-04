@@ -1,5 +1,6 @@
 import type { ArticleCardData } from "@/lib/data/article-types";
 import type { EditorialExpert } from "@/lib/content/editorial-trust";
+import { EDITORIAL_BYLINE } from "@/lib/content/editorial-trust";
 import { ArticleTagList } from "@/components/articles/article-body";
 
 export function ArticleHero({
@@ -70,19 +71,12 @@ export function ArticleHero({
           ) : updatedLabel ? (
             <span>Cập nhật {updatedLabel}</span>
           ) : null}
-          {expert ? (
+          {(expert || article.authorName) ? (
             <>
               <span className="mx-1.5 text-slate-300" aria-hidden>
                 ·
               </span>
-              <span>Biên tập: {expert.name}</span>
-            </>
-          ) : article.authorName ? (
-            <>
-              <span className="mx-1.5 text-slate-300" aria-hidden>
-                ·
-              </span>
-              <span>{article.authorName}</span>
+              <span>{EDITORIAL_BYLINE}</span>
             </>
           ) : null}
         </p>

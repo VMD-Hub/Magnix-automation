@@ -54,8 +54,8 @@ export default function Page() {
           href: NOXH_LOAN_QUICK_COPY.heroCtaHref,
         }}
         secondaryCta={{
-          label: "Kiểm tra điều kiện NOXH",
-          href: "/cong-cu/dieu-kien-noxh",
+          label: "Bộ công cụ thẩm định vay",
+          href: "/cong-cu/tham-dinh-vay-noxh",
         }}
       />
 

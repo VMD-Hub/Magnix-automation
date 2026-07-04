@@ -105,7 +105,7 @@ export const PLATFORM_FAQ: RichFaqItem[] = [
     blocks: [
       {
         type: "p",
-        text: "Nội dung NOXH do biên tập viên Nguyễn Vũ rà soát, đối chiếu văn bản tại Cổng Thông tin Chính phủ và thông báo cơ quan NN. Chúng tôi phân tách rõ bài tổng hợp và công bố chính thức của Sở Xây dựng hoặc chủ đầu tư.",
+        text: "Nội dung NOXH do ban biên tập House X rà soát, đối chiếu văn bản tại Cổng Thông tin Chính phủ và thông báo cơ quan NN. Chúng tôi phân tách rõ bài tổng hợp và công bố chính thức của Sở Xây dựng hoặc chủ đầu tư.",
       },
     ],
   },

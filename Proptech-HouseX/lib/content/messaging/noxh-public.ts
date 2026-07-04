@@ -105,6 +105,10 @@ export const NOXH_TOPIC_PILLAR_LINKS = [
     label: "Không bị rối khi tìm mua NOXH — tổng kho HouseX",
   },
   {
+    href: "/cong-cu/tham-dinh-vay-noxh",
+    label: "Bộ công cụ thẩm định vay NOXH",
+  },
+  {
     href: "/cong-cu/kiem-tra-vay-noxh",
     label: "Kiểm tra vay NOXH 60 giây (công cụ)",
   },

@@ -1549,7 +1549,7 @@ Mức giá chính thức: 23.251.398 đồng/m² (đã VAT, chưa gồm 2% phí 
         status: "PUBLISHED",
         publishedAt: new Date("2026-06-28"),
         coverImageUrl: a.coverImageUrl,
-        authorName: "HouseX Biên tập",
+        authorName: "Ban biên tập House X",
       },
       create: {
         slug: a.slug,
@@ -1559,7 +1559,7 @@ Mức giá chính thức: 23.251.398 đồng/m² (đã VAT, chưa gồm 2% phí 
         status: "PUBLISHED",
         publishedAt: new Date("2026-06-28"),
         coverImageUrl: a.coverImageUrl,
-        authorName: "HouseX Biên tập",
+        authorName: "Ban biên tập House X",
       },
     });
     await prisma.articleTagLink.deleteMany({ where: { articleId: art.id } });

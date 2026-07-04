@@ -51,7 +51,7 @@ export const EDITORIAL_METHODOLOGY = {
       bullets: [
         "Rà soát ảnh, mô tả, thông tin pháp lý cơ bản.",
         "Tiêu chí từ chối / ghi chú: thiếu ảnh thật, giá không rõ, địa chỉ mơ hồ, nội dung vi phạm.",
-        "Chủ đề đặc thù (NOXH, pháp lý): rà soát bởi chuyên gia — ví dụ Nguyễn Vũ.",
+        "Chủ đề đặc thù (NOXH, pháp lý): rà soát bởi ban biên tập House X và chuyên gia nội bộ.",
       ],
     },
     {
@@ -124,7 +124,7 @@ export const EDITORIAL_METHODOLOGY = {
   /** Biên tập nội dung NOXH & bài viết — bổ sung cho quy trình tin đăng. */
   noxhEditorial: {
     title: "Biên tập nội dung NOXH & bài viết",
-    lead: "Nguyễn Vũ — Biên tập viên / Luật sư / Chuyên gia Nhà Ở Xã Hội — tổng hợp và đối chiếu nội dung NOXH theo văn bản Cổng Thông tin Chính phủ, thông báo cơ quan NN và nguồn báo chí được trích dẫn.",
+    lead: "Ban biên tập House X tổng hợp và đối chiếu nội dung NOXH theo văn bản Cổng Thông tin Chính phủ, thông báo cơ quan NN và nguồn báo chí được trích dẫn. Chủ đề pháp lý NOXH do chuyên gia nội bộ rà soát — xem hồ sơ tại trang Chuyên gia.",
     sections: [
       {
         heading: "Nguồn được phép trích dẫn",

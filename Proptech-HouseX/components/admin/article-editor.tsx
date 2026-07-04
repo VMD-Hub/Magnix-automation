@@ -33,7 +33,7 @@ const emptyForm = (): ArticleForm => ({
   body: "",
   status: "DRAFT",
   coverImageUrl: "",
-  authorName: "HouseX Biên tập",
+  authorName: "Ban biên tập House X",
   seoTitle: "",
   seoDesc: "",
   tagSlugs: [],

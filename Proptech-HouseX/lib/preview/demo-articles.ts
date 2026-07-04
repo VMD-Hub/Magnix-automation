@@ -108,7 +108,7 @@ Tra cứu mặt bằng và gallery trên trang dự án [/du-an/nha-o-xa-hoi-ly-
     updatedAt: NOW,
     coverImageUrl:
       "https://odt.vn/storage/03-2026/phu-tho-dmc-phoi-canh-1.jpg",
-    authorName: "HouseX Biên tập",
+    authorName: "Ban biên tập House X",
     seoTitle: "Giá NOXH Lý Thường Kiệt 6/2026 — ~23,25 triệu/m²",
     seoDesc:
       "Công bố giá Nhà ở xã hội Lý Thường Kiệt (Phú Thọ DMC): 23,25 tr/m², 755 căn bán, bàn giao 08/2026.",
@@ -145,7 +145,7 @@ Khu vực Phước Tân thuộc vùng công nghiệp phía Nam Biên Hòa — ph
     updatedAt: NOW,
     coverImageUrl:
       "https://khome.asia/wp-content/uploads/2025/12/nxh2-1.webp",
-    authorName: "HouseX Biên tập",
+    authorName: "Ban biên tập House X",
     seoTitle: "Tiến độ NOXH KDC Chàng Sông Phước Tân 2026",
     seoDesc:
       "Cập nhật NOXH KDC Chàng Sông: san lấp, hạ tầng, móng. CĐT Hùng Cường — chưa công bố giá.",
@@ -283,7 +283,7 @@ ${NOXH_SUPPORT_CLOSING}
     publishedAt: new Date("2026-06-20T00:00:00.000Z"),
     updatedAt: NOW,
     coverImageUrl: null,
-    authorName: "HouseX Biên tập",
+    authorName: "Ban biên tập House X",
     seoTitle:
       "Điều kiện mua NOXH 2026 — Thu nhập 25/35/50 triệu, hồ sơ & văn bản CP | HouseX",
     seoDesc:
