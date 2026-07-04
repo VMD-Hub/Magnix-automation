@@ -24,6 +24,7 @@ SITE=http://localhost:3000 npm run go-live:smoke-auth
 cd /opt/housex/Proptech-HouseX
 git pull                          # lấy script go-live:p1-vps, go-live:smoke-auth
 npm ci
+npm run go-live:sync-db-url       # DATABASE_URL khớp .env.prod (fix auth fail PM2)
 npm run go-live:p1-vps            # db:deploy (Postgres đã chạy trên VPS)
 npm run build
 npm start &                         # hoặc pm2 restart housex — port 3000
@@ -139,7 +140,7 @@ Kiểm tra thủ công:
 |------|----------|
 | `npm run go-live:secrets` | Sinh AUTH / ADMIN / CRON secret |
 | `npm run go-live:p1-local` | Docker + `db:deploy` (local P1) |
-| `npm run go-live:p1-vps` | `db:deploy` trên VPS (Postgres sẵn) |
+| `npm run go-live:sync-db-url` | Đồng bộ `DATABASE_URL` từ `.env.prod` → `.env` + `.env.production` |
 | `npm run go-live:smoke-auth` | Smoke đăng ký khách + môi giới (`SITE=…`) |
 | `npm run go-live:check-env` | Validate env bắt buộc |
 | `npm run go-live:smoke` | SSR smoke test (`SITE=https://...`) |
