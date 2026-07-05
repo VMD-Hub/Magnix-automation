@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Icon } from "@/components/icons";
 import { Badge } from "@/components/ui/badge";
+import { FallbackImage } from "@/components/ui/fallback-image";
 import {
   PROJECT_STATUS_LABEL,
   PROJECT_TYPE_LABEL,
@@ -38,8 +39,7 @@ export function ProjectCard({ item }: { item: ProjectCardData }) {
     >
       <div className="relative aspect-[16/10] overflow-hidden">
         {item.imageUrl ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
+          <FallbackImage
             src={item.imageUrl}
             alt={item.name}
             loading="lazy"

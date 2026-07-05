@@ -1,6 +1,13 @@
 import { prisma } from "@/lib/prisma";
 import type { ListingCardData } from "@/components/listings/listing-card";
 import type { ProjectCardData } from "@/components/projects/project-card";
+import {
+  parseProjectOverview,
+  resolveLandingHeroImage,
+} from "@/lib/content/project-landing";
+import { ensureNoxhLandingMedia } from "@/lib/content/noxh-stock-images";
+import { ensureCatalogCoverUrl } from "@/lib/content/catalog-cover-fallback";
+import { isSafeImageUrl } from "@/lib/content/safe-image";
 import { listCatalogProjectCards } from "@/lib/preview/demo-projects";
 import { listDemoSaleListingCards } from "@/lib/preview/demo-listings";
 import {
@@ -25,6 +32,22 @@ const listingInclude = {
     select: { canonical: { select: { offerCount: true } } },
   },
 };
+
+/** Ảnh bìa card dự án: hero landing (NOXH đã sanitize) → fallback catalog cover local. */
+function resolveProjectCardImage(
+  overviewData: unknown,
+  projectType: string,
+  slug: string,
+  name: string,
+): string {
+  const overview = parseProjectOverview(overviewData);
+  const landing =
+    overview.landing && projectType === "NHA_O_XA_HOI"
+      ? ensureNoxhLandingMedia(overview.landing, slug)
+      : overview.landing;
+  const hero = resolveLandingHeroImage(landing, name);
+  return isSafeImageUrl(hero?.url) ? hero!.url : ensureCatalogCoverUrl(slug);
+}
 
 /**
  * Lấy dữ liệu trang chủ. Bọc try/catch để trang vẫn render (empty state)
@@ -101,7 +124,12 @@ export async function getHomepageData(): Promise<HomepageData> {
               developerName: p.developer?.name ?? null,
               priceFrom: p.unitTypes[0]?.priceFrom?.toString() ?? null,
               listingCount: p._count.listings,
-              imageUrl: null,
+              imageUrl: resolveProjectCardImage(
+                p.overviewData,
+                p.projectType,
+                p.slug,
+                p.name,
+              ),
             }))
           : listCatalogProjectCards().slice(0, 6),
       saleListings: mappedListings,

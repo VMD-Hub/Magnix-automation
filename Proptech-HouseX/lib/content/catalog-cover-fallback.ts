@@ -4,12 +4,9 @@ import { getNoxhStockHeroUrl } from "@/lib/content/noxh-stock-images";
 import { getDemoProjectBySlug } from "@/lib/preview/demo-projects";
 import { getCatalogSlugs } from "@/lib/seed/catalog-project-slugs";
 
-function u(photoId: string, w = 800, h = 500) {
-  return `https://images.unsplash.com/${photoId}?w=${w}&h=${h}&fit=crop&q=80&auto=format`;
-}
-
-const GENERIC_NOXH = u("photo-1600585154526-990dced4db0d");
-const GENERIC_COMMERCIAL = u("photo-1613490493576-7fde63acd811");
+// Ảnh bìa generic dùng ảnh LOCAL trong /public (không hotlink Unsplash — nhiều ID đã chết 404).
+const GENERIC_NOXH = "/images/hero/housex-hero-slide-01-civic-center-1920.jpg";
+const GENERIC_COMMERCIAL = "/images/hero/hcmc-skyline-river-day.webp";
 
 /** Ảnh bìa dự phòng khi hero landing thiếu hoặc hotlink lỗi — admin thay sau. */
 const SLUG_OVERRIDES: Record<string, string> = {

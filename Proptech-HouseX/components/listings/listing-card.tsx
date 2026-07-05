@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Icon } from "@/components/icons";
 import { Badge } from "@/components/ui/badge";
+import { FallbackImage } from "@/components/ui/fallback-image";
 import {
   TRANSACTION_TYPE_LABEL,
   formatPricePerM2,
@@ -47,8 +48,7 @@ export function ListingCard({ item }: { item: ListingCardData }) {
     >
       <div className="relative aspect-[4/3] overflow-hidden">
         {item.imageUrl ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
+          <FallbackImage
             src={item.imageUrl}
             alt={title}
             loading="lazy"
