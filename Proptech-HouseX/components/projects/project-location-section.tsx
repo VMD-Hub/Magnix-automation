@@ -1,4 +1,5 @@
 import type { ProjectLandingLocationMap } from "@/lib/content/project-landing";
+import { FallbackImage } from "@/components/ui/fallback-image";
 
 type Props = {
   projectName: string;
@@ -37,8 +38,7 @@ export function ProjectLocationSection({
       >
         {hasMap && mapImage && (
           <figure className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm lg:sticky lg:top-6">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
+            <FallbackImage
               src={mapImage.url}
               alt={mapImage.alt}
               className="aspect-[4/3] w-full bg-slate-50 object-contain"

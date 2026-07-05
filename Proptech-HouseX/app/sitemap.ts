@@ -5,6 +5,11 @@ import { listExpertSlugs } from "@/lib/content/editorial-trust";
 import { getCatalogSlugs } from "@/lib/seed/catalog-project-slugs";
 import { listDemoSaleListingCards } from "@/lib/preview/demo-listings";
 import { getSiteUrl } from "@/lib/site-config";
+import { allowDemoProjectFallback } from "@/lib/deploy/demo-fallback";
+import {
+  INTERNAL_DEMO_LISTING_CODES,
+  INTERNAL_DEMO_PROJECT_SLUGS,
+} from "@/lib/deploy/internal-demo-content";
 
 const BASE = getSiteUrl();
 
@@ -17,6 +22,7 @@ function catalogProjectSitemapEntries(): MetadataRoute.Sitemap {
 }
 
 function catalogListingSitemapEntries(): MetadataRoute.Sitemap {
+  if (!allowDemoProjectFallback()) return [];
   return listDemoSaleListingCards().map((l) => ({
     url: `${BASE}/tin-dang/${l.code}`,
     changeFrequency: "weekly" as const,
@@ -69,13 +75,24 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   try {
     const [listings, projects, articles] = await Promise.all([
       prisma.listing.findMany({
-        where: { status: "ACTIVE", deletedAt: null },
+        where: {
+          status: "ACTIVE",
+          deletedAt: null,
+          code: { notIn: [...INTERNAL_DEMO_LISTING_CODES] },
+          OR: [
+            { projectId: null },
+            { project: { slug: { notIn: [...INTERNAL_DEMO_PROJECT_SLUGS] } } },
+          ],
+        },
         select: { code: true, updatedAt: true },
         orderBy: { updatedAt: "desc" },
         take: 5000,
       }),
       prisma.project.findMany({
-        where: { deletedAt: null },
+        where: {
+          deletedAt: null,
+          slug: { notIn: [...INTERNAL_DEMO_PROJECT_SLUGS] },
+        },
         select: { slug: true, updatedAt: true },
         orderBy: { updatedAt: "desc" },
         take: 500,

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { ArticleCardData } from "@/lib/data/article-types";
+import { ensureArticleCoverUrl } from "@/lib/content/safe-image";
 
 function formatArticleDate(d: Date | null) {
   if (!d) return "";
@@ -11,15 +12,16 @@ function formatArticleDate(d: Date | null) {
 }
 
 export function ArticleCard({ article }: { article: ArticleCardData }) {
+  const coverUrl = ensureArticleCoverUrl(article.coverImageUrl);
   return (
     <Link
       href={`/tin-tuc/${article.slug}`}
       className="group flex h-full flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm transition hover:border-brand-200 hover:shadow-md"
     >
-      {article.coverImageUrl ? (
+      {coverUrl ? (
         // eslint-disable-next-line @next/next/no-img-element
         <img
-          src={article.coverImageUrl}
+          src={coverUrl}
           alt={article.coverImageAlt ?? article.title}
           className="aspect-[16/9] w-full object-cover transition group-hover:scale-[1.02]"
         />
@@ -55,15 +57,16 @@ export function ArticleCard({ article }: { article: ArticleCardData }) {
 }
 
 export function ArticleCardCompact({ article }: { article: ArticleCardData }) {
+  const coverUrl = ensureArticleCoverUrl(article.coverImageUrl);
   return (
     <Link
       href={`/tin-tuc/${article.slug}`}
       className="group flex gap-4 rounded-xl border border-slate-200 bg-white p-4 shadow-sm transition hover:border-brand-200 hover:shadow-md"
     >
-      {article.coverImageUrl ? (
+      {coverUrl ? (
         // eslint-disable-next-line @next/next/no-img-element
         <img
-          src={article.coverImageUrl}
+          src={coverUrl}
           alt=""
           className="h-20 w-28 shrink-0 rounded-lg object-cover"
         />

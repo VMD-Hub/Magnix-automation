@@ -106,8 +106,7 @@ Tra cứu mặt bằng và gallery trên trang dự án [/du-an/nha-o-xa-hoi-ly-
     status: "PUBLISHED",
     publishedAt: new Date("2026-06-28T00:00:00.000Z"),
     updatedAt: NOW,
-    coverImageUrl:
-      "https://odt.vn/storage/03-2026/phu-tho-dmc-phoi-canh-1.jpg",
+    coverImageUrl: "/images/articles/phu-tho-dmc-phoi-canh.jpg",
     authorName: "Ban biên tập House X",
     seoTitle: "Giá NOXH Lý Thường Kiệt 6/2026 — ~23,25 triệu/m²",
     seoDesc:
@@ -143,8 +142,7 @@ Khu vực Phước Tân thuộc vùng công nghiệp phía Nam Biên Hòa — ph
     status: "PUBLISHED",
     publishedAt: new Date("2026-06-25T00:00:00.000Z"),
     updatedAt: NOW,
-    coverImageUrl:
-      "https://khome.asia/wp-content/uploads/2025/12/nxh2-1.webp",
+    coverImageUrl: "/images/articles/kdc-chang-song-noxh.webp",
     authorName: "Ban biên tập House X",
     seoTitle: "Tiến độ NOXH KDC Chàng Sông Phước Tân 2026",
     seoDesc:

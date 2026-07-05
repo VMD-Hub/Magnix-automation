@@ -3,14 +3,20 @@ import { prisma } from "@/lib/prisma";
 import type { ListingCardData } from "@/components/listings/listing-card";
 import type { TransactionType } from "@prisma/client";
 import {
-  buildDemoListingDetail,
-  listDemoSaleListingCards,
-} from "@/lib/preview/demo-listings";
+  INTERNAL_DEMO_LISTING_CODES,
+  INTERNAL_DEMO_PROJECT_SLUGS,
+  isInternalDemoListingCode,
+} from "@/lib/deploy/internal-demo-content";
+import { allowDemoProjectFallback } from "@/lib/deploy/demo-fallback";
 import {
   enrichDtaListingCardTitle,
   isDtaHappyHomeListingCode,
   buildDtaHappyHomeListingDetail,
 } from "@/lib/preview/dta-happy-home-listings";
+import {
+  buildDemoListingDetail,
+  listDemoSaleListingCards,
+} from "@/lib/preview/demo-listings";
 import { getListingByCode } from "@/lib/data/listing";
 
 const listingInclude = {
@@ -109,6 +115,11 @@ export async function browseListings(
   const where = {
     status: "ACTIVE" as const,
     deletedAt: null,
+    code: { notIn: [...INTERNAL_DEMO_LISTING_CODES] },
+    OR: [
+      { projectId: null },
+      { project: { slug: { notIn: [...INTERNAL_DEMO_PROJECT_SLUGS] } } },
+    ],
     transactionType: params.transactionType,
     ...(params.province ? { province: params.province } : {}),
     ...(params.district ? { district: params.district } : {}),
@@ -142,7 +153,7 @@ export async function browseListings(
     // DB offline — thử catalog demo bên dưới.
   }
 
-  if (params.transactionType === "SALE") {
+  if (params.transactionType === "SALE" && allowDemoProjectFallback()) {
     const demo = filterDemoCards(listDemoSaleListingCards(), params).map(
       enrichDtaListingCardTitle,
     );
@@ -176,6 +187,10 @@ function mergeDtaEditorialCopy(
 export async function getPublicListingByCode(
   code: string,
 ): Promise<ListingWithEditorialTitle | null> {
+  if (isInternalDemoListingCode(code) && !allowDemoProjectFallback()) {
+    return null;
+  }
+
   try {
     const fromDb = await getListingByCode(code);
     if (fromDb) {

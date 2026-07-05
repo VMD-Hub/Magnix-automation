@@ -11,8 +11,20 @@ export const projectLandingFaqSchema = z.object({
   a: z.string().min(1),
 });
 
+/**
+ * URL ảnh landing: chấp nhận URL tuyệt đối (http/https) HOẶC đường dẫn /public
+ * bắt đầu bằng "/" (ảnh đã nội bộ hóa trong repo). Trước đây chỉ nhận `.url()`
+ * nên ảnh local bị zod loại bỏ → cả landing bị drop (mất ảnh + text).
+ */
+const landingImageUrlSchema = z
+  .string()
+  .min(1)
+  .refine((v) => /^https?:\/\//i.test(v) || v.startsWith("/"), {
+    message: "URL ảnh phải là http(s) hoặc đường dẫn /public bắt đầu bằng '/'",
+  });
+
 export const projectLandingGallerySchema = z.object({
-  url: z.string().url(),
+  url: landingImageUrlSchema,
   caption: z.string().optional(),
 });
 
@@ -25,7 +37,7 @@ export const projectLandingServiceSchema = z.object({
 
 /** Một ảnh bản đồ / minh hoạ khoảng cách — hiển thị cạnh nội dung text vị trí. */
 export const projectLandingLocationMapSchema = z.object({
-  url: z.string().url(),
+  url: landingImageUrlSchema,
   alt: z.string().min(1),
   caption: z.string().optional(),
 });

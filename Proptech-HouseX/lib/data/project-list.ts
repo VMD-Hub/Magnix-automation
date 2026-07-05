@@ -11,6 +11,7 @@ import {
   listDemoProjectCards,
 } from "@/lib/preview/demo-projects";
 import { mergeMissingGoLiveCommercialCards } from "@/lib/data/merge-go-live-project-cards";
+import { INTERNAL_DEMO_PROJECT_SLUGS } from "@/lib/deploy/internal-demo-content";
 
 export type ProjectListParams = {
   province?: string;
@@ -91,6 +92,7 @@ export async function listProjects(
 
   const where = {
     deletedAt: null,
+    slug: { notIn: [...INTERNAL_DEMO_PROJECT_SLUGS] },
     ...(params.province ? { province: params.province } : {}),
     ...(params.district ? { district: params.district } : {}),
     ...(params.projectType ? { projectType: params.projectType } : {}),

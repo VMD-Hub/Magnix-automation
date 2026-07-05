@@ -6,6 +6,8 @@ import {
   isDtaHappyHomeListingCode,
   listDtaHappyHomeListingCards,
 } from "@/lib/preview/dta-happy-home-listings";
+import { allowDemoProjectFallback } from "@/lib/deploy/demo-fallback";
+import { isInternalDemoListingCode } from "@/lib/deploy/internal-demo-content";
 import {
   Prisma,
   type BrokerType,
@@ -68,7 +70,9 @@ export const DEMO_SALE_LISTING_CARDS: ListingCardData[] = [
 ];
 
 export function listDemoSaleListingCards(): ListingCardData[] {
-  return [...DEMO_SALE_LISTING_CARDS, ...listDtaHappyHomeListingCards()];
+  const generic =
+    allowDemoProjectFallback() ? DEMO_SALE_LISTING_CARDS : [];
+  return [...generic, ...listDtaHappyHomeListingCards()];
 }
 
 export function getDemoListingCard(code: string): ListingCardData | null {
@@ -134,5 +138,6 @@ export function buildDemoListingDetail(code: string): PublicListingDetail | null
 }
 
 export function isDemoListingCode(code: string): boolean {
-  return code.startsWith("HX-DEMO-") || isDtaHappyHomeListingCode(code);
+  if (isInternalDemoListingCode(code)) return true;
+  return isDtaHappyHomeListingCode(code);
 }

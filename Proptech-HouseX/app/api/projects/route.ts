@@ -7,6 +7,7 @@ import {
   projectListQuerySchema,
 } from "@/lib/validation/project";
 import { assertNoxhSaleGate } from "@/lib/rules/project-noxh-gate";
+import { INTERNAL_DEMO_PROJECT_SLUGS } from "@/lib/deploy/internal-demo-content";
 
 // NOTE: Auth/role enforcement (chỉ Developer/Admin được tạo dự án) nằm ngoài
 // phạm vi module này — sẽ do User/Auth service riêng đảm nhiệm.
@@ -23,6 +24,7 @@ export async function GET(req: NextRequest) {
       ...(query.projectType ? { projectType: query.projectType } : {}),
       ...(query.status ? { status: query.status } : {}),
       deletedAt: null,
+      slug: { notIn: [...INTERNAL_DEMO_PROJECT_SLUGS] },
     };
 
     const [items, total] = await Promise.all([

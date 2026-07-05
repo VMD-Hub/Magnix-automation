@@ -3,6 +3,11 @@ import type { ListingCardData } from "@/components/listings/listing-card";
 import type { ProjectCardData } from "@/components/projects/project-card";
 import { listCatalogProjectCards } from "@/lib/preview/demo-projects";
 import { listDemoSaleListingCards } from "@/lib/preview/demo-listings";
+import {
+  INTERNAL_DEMO_LISTING_CODES,
+  INTERNAL_DEMO_PROJECT_SLUGS,
+} from "@/lib/deploy/internal-demo-content";
+import { allowDemoProjectFallback } from "@/lib/deploy/demo-fallback";
 
 export type HomepageData = {
   ok: boolean;
@@ -29,7 +34,10 @@ export async function getHomepageData(): Promise<HomepageData> {
   try {
     const [projects, saleListings] = await Promise.all([
       prisma.project.findMany({
-        where: { deletedAt: null },
+        where: {
+          deletedAt: null,
+          slug: { notIn: [...INTERNAL_DEMO_PROJECT_SLUGS] },
+        },
         orderBy: { createdAt: "desc" },
         take: 6,
         include: {
@@ -43,7 +51,16 @@ export async function getHomepageData(): Promise<HomepageData> {
         },
       }),
       prisma.listing.findMany({
-        where: { status: "ACTIVE", deletedAt: null, transactionType: "SALE" },
+        where: {
+          status: "ACTIVE",
+          deletedAt: null,
+          transactionType: "SALE",
+          code: { notIn: [...INTERNAL_DEMO_LISTING_CODES] },
+          OR: [
+            { projectId: null },
+            { project: { slug: { notIn: [...INTERNAL_DEMO_PROJECT_SLUGS] } } },
+          ],
+        },
         orderBy: [{ rankScore: "desc" }, { createdAt: "desc" }],
         take: 8,
         include: listingInclude,
@@ -66,7 +83,9 @@ export async function getHomepageData(): Promise<HomepageData> {
             imageUrl: l.media[0]?.url ?? null,
             offerCount: l.fingerprint?.canonical?.offerCount ?? 0,
           }))
-        : listDemoSaleListingCards().slice(0, 4);
+        : allowDemoProjectFallback()
+          ? listDemoSaleListingCards().slice(0, 4)
+          : [];
 
     return {
       ok: true,
@@ -91,7 +110,9 @@ export async function getHomepageData(): Promise<HomepageData> {
     return {
       ok: false,
       projects: listCatalogProjectCards().slice(0, 6),
-      saleListings: listDemoSaleListingCards().slice(0, 4),
+      saleListings: allowDemoProjectFallback()
+        ? listDemoSaleListingCards().slice(0, 4)
+        : [],
     };
   }
 }

@@ -1,4 +1,5 @@
 import type { ProjectLanding } from "@/lib/content/project-landing";
+import { isSafeImageUrl } from "@/lib/content/safe-image";
 
 /** Ảnh minh hoạ NOXH host sẵn — Unsplash + hero HouseX (không hotlink CĐT dễ gãy). */
 function u(photoId: string, w: number, h: number) {
@@ -148,30 +149,33 @@ export const NOXH_STOCK_BY_SLUG: Record<string, NoxhStockPack> = {
   ),
 };
 
-/** Host/domain ảnh CĐT thường trả HTML hoặc 404 khi hotlink. */
-const RISKY_IMAGE_PATTERNS = [
-  /^http:\/\//i,
-  /bhsmiennam\.vn/i,
-  /tinbds\.com/i,
-  /khudancuphuanthanh\.com/i,
-  /vin\.city/i,
-  /odt\.vn\/wp-content/i,
-];
-
+/**
+ * Rủi ro = KHÔNG nằm trong allowlist ảnh an toàn (xem `lib/content/safe-image.ts`).
+ * Mọi hotlink CĐT bên thứ ba / http:// / domain lạ đều rủi ro → tự thay bằng stock.
+ */
 export function isRiskyNoxhImageUrl(url: string | undefined): boolean {
-  if (!url?.trim()) return true;
-  return RISKY_IMAGE_PATTERNS.some((re) => re.test(url));
+  return !isSafeImageUrl(url);
 }
 
-/** DTA giữ ảnh CĐT đã xác minh wp-content. */
+/** Bộ ảnh stock mặc định — dùng cho slug NOXH chưa có bộ riêng, để KHÔNG bao giờ mất ảnh. */
+const DEFAULT_NOXH_STOCK: NoxhStockPack = pack(
+  u("photo-1600585154526-990dced4db0d", 1920, 720),
+  "Dự án nhà ở xã hội",
+  [
+    { url: u("photo-1600585154526-990dced4db0d", 1600, 900), caption: "Phối cảnh khu nhà ở xã hội" },
+    { url: u("photo-1600047509800-ba3955280484", 1600, 900), caption: "Không gian sống nội khu" },
+    { url: u("photo-1600566753190-17f0baa2a6a3", 1600, 900), caption: "Block căn hộ NOXH" },
+  ],
+);
+
+/** DTA giữ ảnh đã nội bộ hóa trong /public (không cần thay bằng stock). */
 export function ensureNoxhLandingMedia(
   landing: ProjectLanding,
   slug: string,
 ): ProjectLanding {
   if (slug === "dta-happy-home-nhon-trach") return landing;
 
-  const stock = NOXH_STOCK_BY_SLUG[slug];
-  if (!stock) return landing;
+  const stock = NOXH_STOCK_BY_SLUG[slug] ?? DEFAULT_NOXH_STOCK;
 
   const next: ProjectLanding = { ...landing, gallery: [...landing.gallery] };
 

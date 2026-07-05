@@ -7,6 +7,9 @@ import {
 import { getProjectBySlugOrId } from "@/lib/data/project";
 import { withDbTimeout } from "@/lib/db/query-timeout";
 import { allowDemoProjectFallback } from "@/lib/deploy/demo-fallback";
+import {
+  isInternalDemoProjectSlug,
+} from "@/lib/deploy/internal-demo-content";
 import { isCatalogProjectSlug } from "@/lib/seed/catalog-project-slugs";
 import {
   getDemoListingsForSlug,
@@ -19,25 +22,20 @@ export type PublicProjectResult = {
   source: "db" | "catalog" | "demo";
 };
 
-function landingLooksComplete(project: ProjectDetail): boolean {
-  const landing = parseProjectOverview(project.overviewData).landing;
-  if (!landing) return false;
-  const hasHero = Boolean(landing.heroImage?.url);
-  const hasHighlights = landing.highlights.length >= 3;
-  const hasGallery = landing.gallery.length >= 3;
-  const hasLocation =
-    Boolean(landing.locationMapImage?.url) ||
-    Boolean(landing.locationNotes?.trim());
-  return hasHero && hasHighlights && hasGallery && hasLocation;
-}
-
-/** Gộp landing catalog khi bản ghi DB thiếu overviewData.landing (Solena, Vinhomes, …). */
-function enrichProjectFromCatalog(
+/**
+ * Landing content của các dự án curated (DTA, Solena, Vinhomes, …) là code-authored:
+ * code luôn là nguồn sự thật cho phần landing (ảnh, highlights, gallery, location, FAQ…),
+ * còn DB chỉ giữ dữ liệu vận hành (tồn kho, unitTypes, legalDocs, toạ độ).
+ *
+ * Trước đây hàm này bỏ qua catalog khi bản ghi DB "trông đủ field" (landingLooksComplete),
+ * khiến 1 bản DB cũ/khôi phục từ backup luôn thắng và landing "quay về bản cũ", ảnh mất.
+ * Giờ với mọi slug curated ta luôn overlay landing từ code lên trên dữ liệu DB.
+ */
+export function enrichProjectFromCatalog(
   project: ProjectDetail,
   slug: string,
 ): ProjectDetail {
   if (!isCatalogProjectSlug(slug)) return project;
-  if (landingLooksComplete(project)) return project;
 
   const catalog = getDemoProjectBySlug(slug);
   if (!catalog) return project;
@@ -80,6 +78,8 @@ function getCatalogLanding(slug: string): PublicProjectResult | null {
 export async function getPublicProjectBySlug(
   slug: string,
 ): Promise<PublicProjectResult | null> {
+  if (isInternalDemoProjectSlug(slug)) return null;
+
   try {
     const fromDb = await withDbTimeout(getProjectBySlugOrId(slug));
     if (fromDb) {

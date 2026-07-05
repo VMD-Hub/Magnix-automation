@@ -45,8 +45,7 @@ Người quan tâm NOXH nội thành nhưng chưa chắc trúng suất có thể
     status: "PUBLISHED",
     publishedAt: PUBLISHED,
     updatedAt: UPDATED,
-    coverImageUrl:
-      "https://odt.vn/storage/03-2026/phu-tho-dmc-phoi-canh-1.jpg",
+    coverImageUrl: "/images/articles/phu-tho-dmc-phoi-canh.jpg",
     authorName: "Ban biên tập House X",
     seoTitle:
       "TP.HCM công bố giá NOXH Lý Thường Kiệt Phú Thọ DMC — 23,25 tr/m² | HouseX",
@@ -111,7 +110,7 @@ ${DTA_PR_CLOSINGS.gaQuyHoach}
     publishedAt: new Date("2026-07-01T00:00:00.000Z"),
     updatedAt: UPDATED,
     coverImageUrl:
-      "https://dtanhontrach.com/wp-content/uploads/2018/01/header-bg-1.jpg.webp",
+      "/images/projects/dta-happy-home/hero.webp",
     authorName: "Ban biên tập House X",
     seoTitle:
       "So sánh giá NOXH Lý Thường Kiệt vs DTA Happy Home 2026 | HouseX",
@@ -179,7 +178,7 @@ ${DTA_PR_CLOSINGS.todAnCu}
     publishedAt: new Date("2026-06-30T00:00:00.000Z"),
     updatedAt: UPDATED,
     coverImageUrl:
-      "https://dtanhontrach.com/wp-content/webp-express/webp-images/themes/template/img/pt2.jpg.webp",
+      "/images/projects/dta-happy-home/thanh-toan-2.webp",
     authorName: "Ban biên tập House X",
     seoTitle:
       "Lãi suất vay NOXH dưới 35 tuổi 6,5%/năm & ưu đãi DTA Happy Home | HouseX",

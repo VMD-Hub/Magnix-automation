@@ -6,11 +6,7 @@ import {
   buildOverviewData,
   defaultProjectLanding,
 } from "../lib/content/project-landing";
-import {
-  buildDtaHappyHomeOverviewData,
-  DTA_PROJECT_DESCRIPTION,
-} from "../lib/content/dta-happy-home-landing";
-import { DTA_HAPPY_HOME_IMAGES } from "../lib/content/dta-happy-home-images";
+import { seedDtaHappyHome } from "../lib/seed/dta-happy-home";
 import {
   HOUSEX_RIVERSIDE_DEMO_IMAGES,
 } from "../lib/content/project-landing-demo-images";
@@ -56,6 +52,7 @@ import { seedNoxhLongAnProjects } from "../lib/preview/seed-noxh-long-an";
 import { allNoxhLongAnSlugs } from "../lib/preview/noxh-long-an-projects";
 import { seedHousexRiversideUnits } from "../lib/preview/seed-project-units";
 import { seedHousexRiversideUnitBookings } from "../lib/preview/seed-unit-bookings";
+import { hideInternalDemoContent } from "../lib/seed/hide-internal-demo-content";
 
 const prisma = new PrismaClient();
 
@@ -104,6 +101,9 @@ async function ensureFingerprint(code: string) {
 }
 
 async function main() {
+  const seedDevFixtures = process.env.SEED_DEV_FIXTURES === "1";
+
+  if (seedDevFixtures) {
   const developer = await prisma.developer.upsert({
     where: { taxCode: "0312345678" },
     update: {},
@@ -203,106 +203,42 @@ async function main() {
   await seedHousexRiversideUnits(prisma, riverside.id);
   await seedHousexRiversideUnitBookings(prisma, riverside.id);
 
-  // CĐT thực — mẫu landing NOXH tiêu biểu (nội dung từ dtanhontrach.com).
-  const dtaDeveloper = await prisma.developer.upsert({
-    where: { taxCode: "0314567890" },
-    update: {
-      name: "Công ty Cổ phần Đệ Tam (DTA)",
-      verified: true,
-    },
+  // Dự án NOXH demo nội bộ (giữ làm mẫu tối giản).
+  await prisma.project.upsert({
+    where: { slug: "housex-an-cu" },
+    update: {},
     create: {
-      name: "Công ty Cổ phần Đệ Tam (DTA)",
-      taxCode: "0314567890",
-      verified: true,
-      logoUrl: DTA_HAPPY_HOME_IMAGES.developerLogo,
-    },
-  });
-
-  const dtaOverview = buildDtaHappyHomeOverviewData();
-
-  const dtaHappyHome = await prisma.project.upsert({
-    where: { slug: "dta-happy-home-nhon-trach" },
-    update: {
-      overviewData: dtaOverview as object,
-      description: DTA_PROJECT_DESCRIPTION,
-      seoTitle: "DTA Happy Home Nhơn Trạch — Nhà ở xã hội từ 448 triệu",
-      seoDesc:
-        "Nhà ở xã hội Happy Home DTA Nhơn Trạch: 2.192 căn, 16 block 5 tầng, giá 448–700 triệu/căn. Nguyễn Văn Cừ, Phước An. Hỗ trợ vay 70%.",
-      lat: 10.697,
-      lng: 106.934,
-    },
-    create: {
-      developerId: dtaDeveloper.id,
-      slug: "dta-happy-home-nhon-trach",
-      name: "DTA Happy Home Nhơn Trạch",
+      developerId: developer.id,
+      slug: "housex-an-cu",
+      name: "HouseX An Cư (NOXH)",
       projectType: "NHA_O_XA_HOI",
       status: "DANG_BAN",
-      province: "Đồng Nai",
-      district: "Nhơn Trạch",
-      ward: "Phước An",
-      address: "Đường Nguyễn Văn Cừ, Khu đô thị DTA City",
-      lat: 10.697,
-      lng: 106.934,
-      totalArea: 5.143,
-      density: 38,
-      handoverDate: new Date("2026-03-31"),
-      overviewData: dtaOverview as object,
+      province: "Bình Dương",
+      district: "Dĩ An",
+      ward: "Tân Đông Hiệp",
+      totalArea: 3.2,
+      density: 45,
+      overviewData: { totalUnits: 640 },
       description:
-        "DTA Happy Home là dự án nhà ở xã hội do Công ty Cổ phần Đệ Tam triển khai tại Khu đô thị DTA City Nhơn Trạch, mặt tiền đường Nguyễn Văn Cừ, xã Phước An. 16 block cao 5 tầng, 2.192 căn, 30–52 m². Giá 448–700 triệu/căn; 3 phương thức thanh toán; hỗ trợ vay tới 70%.",
-      seoTitle: "DTA Happy Home Nhơn Trạch — Nhà ở xã hội từ 448 triệu",
-      seoDesc:
-        "Nhà ở xã hội Happy Home DTA Nhơn Trạch: 2.192 căn, 16 block 5 tầng, giá 448–700 triệu/căn. Nguyễn Văn Cừ, Phước An. Hỗ trợ vay 70%.",
+        "Nhà ở xã hội dành cho người thu nhập thấp, hỗ trợ vay gói ưu đãi theo chính sách nhà nước.",
       unitTypes: {
         create: [
-          {
-            name: "Căn 1 phòng ngủ",
-            areaMin: 30,
-            areaMax: 35,
-            bedrooms: 1,
-            priceFrom: 448_000_000,
-          },
-          {
-            name: "Căn 2 phòng ngủ (compact)",
-            areaMin: 32,
-            areaMax: 35,
-            bedrooms: 2,
-            priceFrom: 520_000_000,
-          },
-          {
-            name: "Căn 2 phòng ngủ",
-            areaMin: 48,
-            areaMax: 52,
-            bedrooms: 2,
-            priceFrom: 700_000_000,
-          },
+          { name: "Căn 1PN", areaMin: 38, areaMax: 45, bedrooms: 1, priceFrom: 720_000_000 },
+          { name: "Căn 2PN", areaMin: 55, areaMax: 62, bedrooms: 2, priceFrom: 1_050_000_000 },
         ],
       },
       legalDocs: {
         create: [
-          {
-            docType: "giay_chung_nhan_dau_tu",
-            status: "da_co",
-            issuedDate: new Date("2007-08-06"),
-          },
-          {
-            docType: "quy_hoach_1_500",
-            status: "da_co",
-            issuedDate: new Date("2006-12-19"),
-          },
-          {
-            docType: "chap_thuan_noxh",
-            status: "da_co",
-            issuedDate: new Date("2014-10-14"),
-          },
-          {
-            docType: "dieu_kien_kinh_doanh_bdshtl",
-            status: "da_co",
-            issuedDate: new Date("2025-12-31"),
-          },
+          { docType: "giay_phep_xay_dung", status: "da_co", issuedDate: new Date("2025-01-10") },
         ],
       },
     },
   });
+  }
+
+  // CĐT thực — mẫu landing NOXH tiêu biểu. Landing/ảnh là code-authored
+  // (lib/content/dta-happy-home-*), dùng chung với scripts/seed-dta-happy-home.ts.
+  await seedDtaHappyHome(prisma);
 
   // NOXH — Eco Residence / Nhà ở xã hội Long Bình Tân (tham khảo hpdgroup.vn/eco-residence).
   const cdhDeveloper = await prisma.developer.upsert({
@@ -1212,38 +1148,7 @@ async function main() {
     },
   });
 
-  // Dự án NOXH demo nội bộ (giữ làm mẫu tối giản).
-  await prisma.project.upsert({
-    where: { slug: "housex-an-cu" },
-    update: {},
-    create: {
-      developerId: developer.id,
-      slug: "housex-an-cu",
-      name: "HouseX An Cư (NOXH)",
-      projectType: "NHA_O_XA_HOI",
-      status: "DANG_BAN",
-      province: "Bình Dương",
-      district: "Dĩ An",
-      ward: "Tân Đông Hiệp",
-      totalArea: 3.2,
-      density: 45,
-      overviewData: { totalUnits: 640 },
-      description:
-        "Nhà ở xã hội dành cho người thu nhập thấp, hỗ trợ vay gói ưu đãi theo chính sách nhà nước.",
-      unitTypes: {
-        create: [
-          { name: "Căn 1PN", areaMin: 38, areaMax: 45, bedrooms: 1, priceFrom: 720_000_000 },
-          { name: "Căn 2PN", areaMin: 55, areaMax: 62, bedrooms: 2, priceFrom: 1_050_000_000 },
-        ],
-      },
-      legalDocs: {
-        create: [
-          { docType: "giay_phep_xay_dung", status: "da_co", issuedDate: new Date("2025-01-10") },
-        ],
-      },
-    },
-  });
-
+  if (seedDevFixtures) {
   // --- Phase 2: Brokers (tài khoản môi giới) ---
   const brokerFreeAccount = await prisma.userAccount.upsert({
     where: { normalizedPhone: "+84900000001" },
@@ -1316,6 +1221,9 @@ async function main() {
   });
 
   // --- Phase 2: Listings ---
+  const riverside = await prisma.project.findUniqueOrThrow({
+    where: { slug: "housex-riverside" },
+  });
   const riversideUnit = await prisma.projectUnitType.findFirst({
     where: { projectId: riverside.id },
     orderBy: { priceFrom: "asc" },
@@ -1479,6 +1387,16 @@ async function main() {
       },
     });
   }
+  }
+
+  if (!seedDevFixtures) {
+    const hidden = await hideInternalDemoContent(prisma);
+    if (hidden.projectsHidden > 0 || hidden.listingsHidden > 0) {
+      console.log(
+        `  Đã ẩn demo nội bộ: ${hidden.projectsHidden} dự án, ${hidden.listingsHidden} tin.`,
+      );
+    }
+  }
 
   // --- Tin tức / blog (tags + bài mẫu) ---
   const tagDefs = [
@@ -1590,7 +1508,10 @@ Mức giá chính thức: 23.251.398 đồng/m² (đã VAT, chưa gồm 2% phí 
   console.log("  Thương mại: /du-an/solena-green-town-binh-tan");
   console.log(`  Thương mại: /du-an/${THE_PRIVE_PROJECT_SLUG}`);
   console.log("  Thương mại: /du-an/iki-village");
-  console.log("  Giỏ hàng mẫu: GET /api/projects/housex-riverside/units");
+  if (seedDevFixtures) {
+    console.log("  Dev fixtures: /du-an/housex-riverside, /du-an/housex-an-cu");
+    console.log("  Giỏ hàng mẫu: GET /api/projects/housex-riverside/units");
+  }
   console.log("  Tin tức: /tin-tuc");
   console.log("  Admin tin tức: /admin/articles");
 }

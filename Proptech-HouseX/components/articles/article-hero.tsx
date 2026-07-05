@@ -2,6 +2,7 @@ import type { ArticleCardData } from "@/lib/data/article-types";
 import type { EditorialExpert } from "@/lib/content/editorial-trust";
 import { EDITORIAL_BYLINE } from "@/lib/content/editorial-trust";
 import { ArticleTagList } from "@/components/articles/article-body";
+import { ensureArticleCoverUrl } from "@/lib/content/safe-image";
 
 export function ArticleHero({
   article,
@@ -24,15 +25,16 @@ export function ArticleHero({
   expert?: EditorialExpert | null;
 }) {
   const alt = article.coverImageAlt ?? article.title;
+  const coverUrl = ensureArticleCoverUrl(article.coverImageUrl);
 
   return (
     <header className="border-b border-slate-200 bg-slate-50">
-      {article.coverImageUrl ? (
+      {coverUrl ? (
         <figure className="relative mx-auto max-w-6xl">
           <div className="relative aspect-[21/9] max-h-[420px] w-full overflow-hidden bg-slate-200 sm:aspect-[2.4/1]">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src={article.coverImageUrl}
+              src={coverUrl}
               alt={alt}
               className="h-full w-full object-cover"
             />

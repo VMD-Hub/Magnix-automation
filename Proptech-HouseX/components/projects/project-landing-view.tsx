@@ -9,6 +9,7 @@ import type { ProjectLandingListingCard } from "@/lib/data/listing";
 import type { ArticleCardData } from "@/lib/data/article-types";
 import { getArticlesForProjectSlug } from "@/lib/data/article-public";
 import { ProjectRelatedArticles } from "@/components/articles/project-related-articles";
+import { FallbackImage } from "@/components/ui/fallback-image";
 import { ProjectInventorySection } from "@/components/projects/project-inventory-section";
 import { LeadContactForm } from "@/components/leads/lead-contact-form";
 import type { ProjectInventoryPageData } from "@/lib/data/project-unit";
@@ -133,8 +134,7 @@ export function ProjectLandingContent({
         <div className="lux-hero-mesh" aria-hidden />
         {heroImage && (
           <>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
+            <FallbackImage
               src={heroImage.url}
               alt=""
               aria-hidden
@@ -241,8 +241,7 @@ export function ProjectLandingContent({
             {project.developer && (
               <div className="inline-flex shrink-0 items-center gap-3 rounded-xl border border-white/10 bg-white/10 px-4 py-2.5 backdrop-blur-md">
                 {project.developer.logoUrl && (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img
+                  <FallbackImage
                     src={project.developer.logoUrl}
                     alt=""
                     className="h-10 w-10 rounded-lg bg-white object-contain p-0.5"
@@ -488,8 +487,7 @@ export function ProjectLandingContent({
                   key={`${g.url}-${i}`}
                   className="group overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm"
                 >
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
+                  <FallbackImage
                     src={g.url}
                     alt={g.caption ?? project.name}
                     className="aspect-video w-full object-cover transition duration-300 group-hover:scale-[1.02]"
@@ -587,8 +585,7 @@ export function ProjectLandingContent({
                   className="group overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm transition hover:border-brand-200 hover:shadow-md"
                 >
                   {l.media[0]?.url ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img
+                    <FallbackImage
                       src={l.media[0].url}
                       alt={l.code}
                       className="aspect-video w-full object-cover"

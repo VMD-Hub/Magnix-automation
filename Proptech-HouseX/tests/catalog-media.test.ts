@@ -31,7 +31,10 @@ describe("catalog media fallbacks", () => {
     const cards = listDemoSaleListingCards();
     assert.ok(cards.length >= 30);
     for (const c of cards.slice(0, 5)) {
-      assert.ok(c.imageUrl?.startsWith("http"), `${c.code} missing image`);
+      assert.ok(
+        c.imageUrl?.startsWith("http") || c.imageUrl?.startsWith("/"),
+        `${c.code} missing image`,
+      );
       assert.ok(buildDemoListingDetail(c.code), `${c.code} missing detail`);
     }
     assert.ok(buildDemoListingDetail("DTA-HH-A10201"));
@@ -40,8 +43,10 @@ describe("catalog media fallbacks", () => {
   it("DTA Happy Home landing has floor plans, show units and payment gallery", () => {
     const landing = buildDtaHappyHomeLanding();
     assert.ok(landing.gallery.length >= 10);
-    assert.ok(landing.heroImage?.url.includes("/wp-content/uploads/"));
-    assert.ok(landing.locationMapImage?.url.includes("/wp-content/themes/"));
+    assert.ok(landing.heroImage?.url.startsWith("/images/projects/dta-happy-home/"));
+    assert.ok(
+      landing.locationMapImage?.url.startsWith("/images/projects/dta-happy-home/"),
+    );
     assert.match(landing.gallery[0]?.caption ?? "", /Mặt bằng tổng thể/i);
     assert.ok(landing.services.length >= 2);
   });

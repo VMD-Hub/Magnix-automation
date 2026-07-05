@@ -22,6 +22,10 @@ import { reindexListingSafe } from "@/lib/search/reindex";
 import { assertPublishGate } from "@/lib/rules/listing-publish-gate";
 import { recomputeListingRanking } from "@/lib/data/ranking";
 import { isListingsApiRateLimited } from "@/lib/security/api-rate-limit";
+import {
+  INTERNAL_DEMO_LISTING_CODES,
+  INTERNAL_DEMO_PROJECT_SLUGS,
+} from "@/lib/deploy/internal-demo-content";
 
 export async function GET(req: NextRequest) {
   try {
@@ -43,6 +47,11 @@ export async function GET(req: NextRequest) {
       // Mặc định public chỉ thấy tin ACTIVE; cho phép lọc status tường minh.
       status: query.status ?? "ACTIVE",
       deletedAt: null,
+      code: { notIn: [...INTERNAL_DEMO_LISTING_CODES] },
+      OR: [
+        { projectId: null },
+        { project: { slug: { notIn: [...INTERNAL_DEMO_PROJECT_SLUGS] } } },
+      ],
     };
 
     const [items, total] = await Promise.all([

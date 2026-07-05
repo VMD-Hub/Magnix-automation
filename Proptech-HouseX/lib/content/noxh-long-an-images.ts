@@ -1,22 +1,26 @@
-/** Ảnh minh hoạ NOXH Long An — nguồn website CĐT/báo chí; admin host CDN trước go-live. */
+/**
+ * Ảnh minh hoạ NOXH Long An. Các bộ đã tải về /public (LA Home, Nam Long/Mỹ Hạnh)
+ * dùng đường dẫn local; các bộ chưa tải được vẫn để URL nguồn nhưng được
+ * ensureNoxhLandingMedia tự thay bằng ảnh stock khi render (không bao giờ vỡ ảnh).
+ */
 export const NOXH_LA_IMAGES = {
   hero: {
-    url: "https://khudothilahome.vn/wp-content/uploads/2025/05/chung-cu-nha-o-xa-hoi-phan-khu-la-sol-khu-dp-thi-sinh-thai-lahome-1.jpg",
+    url: "/images/projects/la-home/hero.jpg",
     alt: "Nhà ở xã hội LA Home Bến Lức",
   },
-  logo: "https://khudothilahome.vn/wp-content/uploads/2024/05/LOGO-LAHOME-1024x217.png",
+  logo: "/images/projects/la-home/logo.png",
   map: {
-    url: "https://khudothilahome.vn/wp-content/uploads/2025/05/chung-cu-nha-o-xa-hoi-phan-khu-la-sol-khu-dp-thi-sinh-thai-lahome-6.jpg",
+    url: "/images/projects/la-home/map.jpg",
     alt: "Vị trí NOXH LA Home Lương Hòa",
     caption: "KĐT sinh thái LA Home — cửa ngõ Bến Lức giáp TP.HCM",
   },
   gallery: [
     {
-      url: "https://khudothilahome.vn/wp-content/uploads/2025/05/chung-cu-nha-o-xa-hoi-phan-khu-la-sol-khu-dp-thi-sinh-thai-lahome-2.jpg",
+      url: "/images/projects/la-home/gallery-1.jpg",
       caption: "Block A, B — 8 tầng",
     },
     {
-      url: "https://khudothilahome.vn/wp-content/uploads/2025/05/tien-ich-chung-cu-nha-o-xa-hoi-phan-khu-la-sol-khu-dp-thi-sinh-thai-lahome-2-scaled.jpg",
+      url: "/images/projects/la-home/gallery-2.jpg",
       caption: "Tiện ích KĐT 100 ha",
     },
   ],
@@ -24,18 +28,18 @@ export const NOXH_LA_IMAGES = {
 
 export const NOXH_MY_HANH_IMAGES = {
   hero: {
-    url: "https://namphuoc.net/wp-content/uploads/2022/02/chung-cu-nam-long-can-tho.jpg",
+    url: "/images/projects/nam-long-can-tho/hero.jpg",
     alt: "Nhà ở xã hội Mỹ Hạnh — minh hoạ chung cư NOXH",
   },
   logo: null,
   map: {
-    url: "https://namphuoc.net/wp-content/uploads/2022/02/vi-tri-chung-cu-nam-long-can-tho.jpg",
+    url: "/images/projects/nam-long-can-tho/map.jpg",
     alt: "Khu vực Mỹ Hạnh Nam, Đức Hòa",
     caption: "Gần QL1A — giáp ranh TP.HCM (minh hoạ khu vực)",
   },
   gallery: [
     {
-      url: "https://namphuoc.net/wp-content/uploads/2022/02/thiet-ke-can-ho-chung-cu-nam-long-can-tho.jpg",
+      url: "/images/projects/nam-long-can-tho/layout-1.jpg",
       caption: "Layout căn 1PN ~31–34 m² (tham khảo)",
     },
   ],

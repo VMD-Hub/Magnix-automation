@@ -82,7 +82,7 @@ export const ARTICLE_EDITORIAL_COVERS: Record<string, EditorialCover> = {
       "Nhơn Trạch bứt phá hạ tầng 25B, Vành đai 3 và ga đường sắt quy hoạch — vùng TOD tương lai.",
   },
   "tien-do-noxh-kdc-chang-song-phuoc-tan-2026": {
-    url: "https://khome.asia/wp-content/uploads/2025/12/nxh2-1.webp",
+    url: "/images/articles/kdc-chang-song-noxh.webp",
     alt: "Phối cảnh NOXH KDC Chàng Sông Phước Tân",
     caption: "Dự án NOXH tại Phước Tân, Biên Hòa — giai đoạn hạ tầng và móng.",
   },
@@ -107,7 +107,7 @@ export const ARTICLE_EDITORIAL_COVERS: Record<string, EditorialCover> = {
     caption: "Điều kiện nhà ở Điều 78 — 15 m²/người, một căn/hộ.",
   },
   "phuc-loc-tho-block-c-noxh-gia-ho-so-2026": {
-    url: "https://mogivi.vn/qyobje4c/chung-cu-phuc-loc-tho.jpg",
+    url: HERO.urban,
     alt: "Chung cư Phúc Lộc Thọ Block C NOXH Thủ Đức",
     caption: "NOXH Block C — 35 Lê Văn Chí, giá ~35,3 triệu/m².",
   },

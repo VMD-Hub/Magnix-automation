@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import { isInternalDemoProjectSlug } from "@/lib/deploy/internal-demo-content";
 
 const uuidRegex =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -20,8 +21,11 @@ export async function getProjectBySlugOrId(slugOrId: string) {
       where: { id: slugOrId, deletedAt: null },
       include: projectDetailInclude,
     });
+    if (byId && isInternalDemoProjectSlug(byId.slug)) return null;
     if (byId) return byId;
   }
+
+  if (isInternalDemoProjectSlug(slugOrId)) return null;
 
   return prisma.project.findFirst({
     where: { slug: slugOrId, deletedAt: null },
