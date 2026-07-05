@@ -8,6 +8,7 @@ import {
 } from "../lib/preview/demo-listings";
 import { buildDtaHappyHomeLanding } from "../lib/content/dta-happy-home-landing";
 import { ensureNoxhLandingMedia } from "../lib/content/noxh-stock-images";
+import { isSafeImageUrl } from "../lib/content/safe-image";
 import { NOXH_REGION_TAGLINE } from "../lib/content/messaging/noxh-public";
 import { parseProjectOverview } from "../lib/content/project-landing";
 
@@ -64,8 +65,10 @@ describe("catalog media fallbacks", () => {
       },
       "noxh-phu-an-thanh-ben-luc",
     );
-    assert.ok(risky.heroImage?.url.startsWith("https://images.unsplash.com/"));
+    assert.ok(risky.heroImage?.url.startsWith("/images/"));
+    assert.ok(isSafeImageUrl(risky.heroImage?.url));
     assert.ok(risky.gallery.length >= 2);
+    assert.ok(risky.gallery.every((g) => isSafeImageUrl(g.url)));
   });
 
   it("parseProjectOverview keeps landing when blocks is invalid but landing valid", () => {
