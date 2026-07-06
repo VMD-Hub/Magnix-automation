@@ -1,0 +1,60 @@
+---
+description: House X — không lộ ghi chú nội bộ trên trang legal/trust public
+globs:
+  - Proptech-HouseX/lib/content/**trust*
+  - Proptech-HouseX/lib/content/**legal*
+  - Proptech-HouseX/lib/content/**terms*
+  - Proptech-HouseX/lib/content/**complaint*
+  - Proptech-HouseX/lib/content/**partnership*
+  - Proptech-HouseX/lib/content/**privacy*
+  - Proptech-HouseX/lib/content/**faq*
+  - Proptech-HouseX/components/content/**
+  - Proptech-HouseX/app/dieu-khoan/**
+  - Proptech-HouseX/app/chinh-sach-khieu-nai/**
+  - Proptech-HouseX/app/hop-tac/**
+  - Proptech-HouseX/app/bao-mat/**
+  - Proptech-HouseX/app/cau-hoi-thuong-gap/**
+  - Proptech-HouseX/app/gioi-thieu/**
+  - Proptech-HouseX/app/lien-he/**
+alwaysApply: false
+---
+
+# House X — Nội dung public legal/trust
+
+Áp dụng khi thêm/sửa copy hiển thị trên web (Terms, Privacy, Khiếu nại, Hợp tác, FAQ, About, Liên hệ).
+
+## Chỉ được render cho người dùng
+
+- Copy pháp lý, FAQ, CTA, song ngữ VN/EN (EN là bản dịch public — **không** phải ghi chú dev).
+- Tên trang: “trang Liên hệ”, “Chính sách xử lý khiếu nại” — **không** path thô trong câu.
+
+## Cấm trong string/component render
+
+| Pattern | Ví dụ sai |
+|---------|-----------|
+| Path thô trong prose | `(/lien-he)`, `(/dieu-khoan/phu-luc-a)` |
+| Ghi chú triển khai | “Meta SEO gợi ý”, “Nút CTA đề xuất”, “Gợi ý dùng trên site” |
+| Disclaimer nội bộ | “tham khảo vận hành”, “khuyến nghị luật sư rà soát” |
+| Stack/hệ thống | `n8n`, `webhook`, `Admin duyệt`, `log hệ thống`, `system logs` |
+| Placeholder chưa thay | `[x]`, `[Tên người đăng tin]` (trừ email template builder có type-safe input) |
+
+Ghi chú kỹ thuật → **comment** trong `.ts` hoặc `docs/` — không đưa vào JSX/`paragraphs`/`blocks`.
+
+## VERIFY trước khi xong task
+
+1. `rg` các pattern cấm trong file vừa sửa (và component render tương ứng).
+2. Mở mental preview trang: hero, FAQ, footer — không còn dòng phụ “Suggested…”, labelEn footnote, hay URL trong ngoặc.
+3. Song ngữ: mỗi section có VN + EN **cùng cấp nội dung**; không chèn danh sách EN-only làm chú thích triển khai.
+
+## Sửa nhanh
+
+```text
+❌ form tại trang Liên hệ (/lien-he)
+✅ form tại trang Liên hệ
+
+❌ Khuyến nghị rà soát bởi luật sư…
+✅ Nếu có thắc mắc, liên hệ qua mục Liên hệ…
+
+❌ Webhook n8n xử lý lead…
+✅ Đối tác xử lý yêu cầu tư vấn khi bạn gửi form…
+```
