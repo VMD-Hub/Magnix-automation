@@ -3,7 +3,9 @@
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import { Icon } from "@/components/icons";
+import { PercentInput } from "@/components/tools/percent-input";
 import { cn } from "@/lib/ui/cn";
+import { DEFAULT_LOAN_ANNUAL_RATE } from "@/lib/format/percent";
 import {
   calculateAffordability,
   DTI_PROFILES,
@@ -121,7 +123,7 @@ export function LoanAffordabilityCalculator() {
   const [livingRegion, setLivingRegion] = useState<LivingCostRegion>("URBAN");
   const [customPerCapita, setCustomPerCapita] = useState(4_000_000);
   const [years, setYears] = useState(20);
-  const [rate, setRate] = useState(8.5);
+  const [rate, setRate] = useState(DEFAULT_LOAN_ANNUAL_RATE);
   const [ltvPct, setLtvPct] = useState(70);
   const [method, setMethod] = useState<LoanMethod>("DECLINING");
   const [showAdvanced, setShowAdvanced] = useState(false);
@@ -178,13 +180,13 @@ export function LoanAffordabilityCalculator() {
   const flagStyle = FLAG_STYLE[result.creditAssessment.flag] ?? FLAG_STYLE.CAUTION;
 
   const inputCls =
-    "mt-1.5 w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-900 outline-none transition-colors focus:border-brand-400 focus:ring-2 focus:ring-brand-100";
+    "mt-1.5 w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-base text-slate-900 outline-none transition-colors focus:border-brand-400 focus:ring-2 focus:ring-brand-100 sm:text-sm";
 
   const dtiPct = result.currentDti != null ? Math.round(result.currentDti * 100) : null;
 
   return (
-    <div className="grid gap-6 lg:grid-cols-[380px_1fr]">
-      <div className="space-y-4 rounded-2xl border border-brand-100 bg-gradient-to-br from-brand-50/40 to-white p-5 print:hidden">
+    <div className="grid min-w-0 gap-6 lg:grid-cols-[minmax(0,380px)_minmax(0,1fr)]">
+      <div className="min-w-0 space-y-4 rounded-2xl border border-brand-100 bg-gradient-to-br from-brand-50/40 to-white p-4 sm:p-5 print:hidden">
         <Field
           label="Thu nhập của bạn/tháng"
           hint="Lương + thu nhập chứng minh được (HĐLĐ, sao kê, hợp đồng…)"
@@ -372,7 +374,7 @@ export function LoanAffordabilityCalculator() {
           </select>
         </Field>
 
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
           <Field label="Thời hạn vay">
             <select
               value={years}
@@ -387,13 +389,7 @@ export function LoanAffordabilityCalculator() {
             </select>
           </Field>
           <Field label="Lãi suất (%/năm)">
-            <input
-              type="number"
-              step={0.1}
-              value={rate}
-              onChange={(e) => setRate(Number(e.target.value))}
-              className={inputCls}
-            />
+            <PercentInput value={rate} onChange={setRate} />
           </Field>
         </div>
 
@@ -407,7 +403,8 @@ export function LoanAffordabilityCalculator() {
             onChange={(e) => setLtvPct(Number(e.target.value))}
             className="mt-3 w-full accent-brand-600"
           />
-          <div className="mt-1 flex justify-between text-xs text-slate-400">
+          <div className="mt-1 overflow-x-auto pb-1 [-webkit-overflow-scrolling:touch]">
+            <div className="flex min-w-max justify-between gap-4 px-0.5 text-xs text-slate-400">
             {LTV_OPTIONS.map((v) => (
               <button
                 key={v}
@@ -421,6 +418,7 @@ export function LoanAffordabilityCalculator() {
                 {v}%
               </button>
             ))}
+            </div>
           </div>
         </Field>
 
@@ -464,7 +462,7 @@ export function LoanAffordabilityCalculator() {
         ) : null}
       </div>
 
-      <div className="space-y-5">
+      <div className="min-w-0 space-y-5">
         <div className="rounded-2xl border border-slate-200 bg-white p-5">
           <div className="flex flex-wrap items-start justify-between gap-3">
             <div>
@@ -565,7 +563,7 @@ export function LoanAffordabilityCalculator() {
           </ul>
         </div>
 
-        <div className="grid gap-3 sm:grid-cols-3">
+        <div className="grid min-w-0 gap-3 sm:grid-cols-3">
           {result.scenarios.map((s) => {
             const meta = DTI_PROFILES[s.profile];
             return (

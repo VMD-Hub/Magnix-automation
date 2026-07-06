@@ -3,7 +3,9 @@
 import { useMemo, useState } from "react";
 import { Icon } from "@/components/icons";
 import { Button } from "@/components/ui/button";
+import { PercentInput } from "@/components/tools/percent-input";
 import { cn } from "@/lib/ui/cn";
+import { DEFAULT_LOAN_ANNUAL_RATE } from "@/lib/format/percent";
 import { calculateLoan, type LoanMethod } from "@/lib/finance/loan";
 import { formatVnd } from "@/lib/format";
 
@@ -44,11 +46,11 @@ function Stat({
   accent?: boolean;
 }) {
   return (
-    <div className="rounded-xl border border-slate-200 bg-white p-4">
+    <div className="min-w-0 rounded-xl border border-slate-200 bg-white p-3 sm:p-4">
       <p className="text-xs text-slate-500">{label}</p>
       <p
         className={cn(
-          "mt-1 text-lg font-bold",
+          "mt-1 break-words text-base font-bold leading-snug sm:text-lg",
           accent ? "text-brand-700" : "text-slate-900",
         )}
       >
@@ -64,10 +66,10 @@ export function LoanCalculator() {
   const [price, setPrice] = useState(3_000_000_000);
   const [loanPct, setLoanPct] = useState(70);
   const [years, setYears] = useState(20);
-  const [rate, setRate] = useState(8.5);
+  const [rate, setRate] = useState(DEFAULT_LOAN_ANNUAL_RATE);
   const [method, setMethod] = useState<LoanMethod>("DECLINING");
   const [showAdvanced, setShowAdvanced] = useState(false);
-  const [promoRate, setPromoRate] = useState(6);
+  const [promoRate, setPromoRate] = useState(5.5);
   const [promoMonths, setPromoMonths] = useState(12);
   const [graceMonths, setGraceMonths] = useState(0);
   const [showAllRows, setShowAllRows] = useState(false);
@@ -91,12 +93,12 @@ export function LoanCalculator() {
   const visibleRows = showAllRows ? result.schedule : result.schedule.slice(0, 12);
 
   const inputCls =
-    "mt-1 h-11 w-full rounded-xl border border-slate-200 px-3 text-sm outline-none focus:border-brand-400 focus:ring-2 focus:ring-brand-100";
+    "mt-1 h-11 w-full rounded-xl border border-slate-200 px-3 text-base text-slate-900 outline-none focus:border-brand-400 focus:ring-2 focus:ring-brand-100 sm:text-sm";
 
   return (
-    <div className="grid gap-6 lg:grid-cols-[380px_1fr]">
+    <div className="grid min-w-0 gap-6 lg:grid-cols-[minmax(0,380px)_minmax(0,1fr)]">
       {/* Inputs */}
-      <div className="space-y-4 rounded-2xl border border-brand-100 bg-gradient-to-br from-brand-50/40 to-white p-5 print:hidden">
+      <div className="min-w-0 space-y-4 rounded-2xl border border-brand-100 bg-gradient-to-br from-brand-50/40 to-white p-4 sm:p-5 print:hidden">
         <Field label="Giá trị bất động sản" hint={`${groupVnd(price)} đ`}>
           <input
             inputMode="numeric"
@@ -121,7 +123,7 @@ export function LoanCalculator() {
           />
         </Field>
 
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
           <Field label="Thời hạn vay">
             <select
               value={years}
@@ -136,13 +138,7 @@ export function LoanCalculator() {
             </select>
           </Field>
           <Field label="Lãi suất (%/năm)">
-            <input
-              type="number"
-              step={0.1}
-              value={rate}
-              onChange={(e) => setRate(Number(e.target.value))}
-              className={inputCls}
-            />
+            <PercentInput value={rate} onChange={setRate} />
           </Field>
         </div>
 
@@ -150,7 +146,7 @@ export function LoanCalculator() {
           <span className="text-sm font-medium text-slate-700">
             Phương pháp tính
           </span>
-          <div className="mt-1 grid grid-cols-2 gap-2">
+          <div className="mt-1 grid grid-cols-1 gap-2 min-[400px]:grid-cols-2">
             {(
               [
                 { id: "DECLINING", label: "Dư nợ giảm dần" },
@@ -184,15 +180,9 @@ export function LoanCalculator() {
 
         {showAdvanced ? (
           <div className="space-y-3 rounded-xl border border-slate-200 bg-white p-3">
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
               <Field label="Lãi ưu đãi (%/năm)">
-                <input
-                  type="number"
-                  step={0.1}
-                  value={promoRate}
-                  onChange={(e) => setPromoRate(Number(e.target.value))}
-                  className={inputCls}
-                />
+                <PercentInput value={promoRate} onChange={setPromoRate} />
               </Field>
               <Field label="Số tháng ưu đãi">
                 <input
@@ -216,7 +206,7 @@ export function LoanCalculator() {
       </div>
 
       {/* Results */}
-      <div className="space-y-5">
+      <div className="min-w-0 space-y-5">
         {/* Tiêu đề chỉ hiện khi in/PDF */}
         <div className="hidden print:block">
           <h1 className="text-2xl font-bold text-slate-900">
@@ -228,7 +218,7 @@ export function LoanCalculator() {
           </p>
         </div>
 
-        <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+        <div className="grid grid-cols-1 gap-3 min-[420px]:grid-cols-2 lg:grid-cols-4">
           <Stat label="Số tiền vay" value={formatVnd(principal) ?? "—"} />
           <Stat
             label="Trả tháng đầu"
@@ -242,21 +232,25 @@ export function LoanCalculator() {
           />
         </div>
 
-        <div className="flex items-center justify-between print:hidden">
+        <div className="flex flex-wrap items-center justify-between gap-3 print:hidden">
           <h2 className="text-lg font-bold text-slate-900">Lịch trả nợ chi tiết</h2>
           <Button
             type="button"
             variant="outline"
             size="sm"
             onClick={() => window.print()}
+            className="shrink-0"
           >
             <Icon.FileCheck className="text-base" /> Tải PDF
           </Button>
         </div>
 
-        <div className="overflow-hidden rounded-2xl border border-slate-200">
-          <div className="max-h-[28rem] overflow-auto print:max-h-none print:overflow-visible">
-            <table className="w-full text-right text-sm">
+        <div className="rounded-2xl border border-slate-200">
+          <p className="border-b border-slate-100 px-3 py-2 text-xs text-slate-500 sm:hidden">
+            Vuốt ngang hoặc dọc để xem đủ cột lịch trả nợ
+          </p>
+          <div className="max-h-[28rem] overflow-auto [-webkit-overflow-scrolling:touch] print:max-h-none print:overflow-visible">
+            <table className="w-full min-w-[36rem] text-right text-sm">
               <thead className="sticky top-0 bg-slate-100 text-xs text-slate-600">
                 <tr>
                   <th className="px-3 py-2 text-left">Tháng</th>

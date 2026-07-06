@@ -30,7 +30,7 @@ const FAQ = [
   },
   {
     q: "Lãi suất ưu đãi và ân hạn gốc ảnh hưởng thế nào?",
-    a: "Lãi ưu đãi áp dụng trong N tháng đầu (thường 5–7%/năm) rồi thả nổi 8–12%/năm. Ân hạn gốc cho phép chỉ trả lãi trong giai đoạn đầu, giảm áp lực dòng tiền nhưng làm tăng tổng lãi.",
+    a: "Lãi ưu đãi áp dụng trong N tháng đầu (NOXH người dưới 35 tuổi thường 6,5%/năm 5 năm đầu theo NHNN; CĐT có thể có gói thấp hơn trong giai đoạn ngắn) rồi chuyển lãi thả nổi. Vay thương mại thường 8–12%/năm tùy thời điểm. Ân hạn gốc cho phép chỉ trả lãi trong giai đoạn đầu, giảm áp lực dòng tiền nhưng làm tăng tổng lãi.",
   },
 ];
 
@@ -46,7 +46,7 @@ export default function Page() {
   };
 
   return (
-    <div className="proptech-section-glow mx-auto max-w-7xl py-8 container-px">
+    <div className="proptech-section-glow mx-auto min-w-0 max-w-7xl py-8 container-px">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
@@ -75,11 +75,11 @@ export default function Page() {
         }}
       />
 
-      <div className="mb-8 grid grid-cols-3 gap-3 sm:gap-4 print:hidden">
+      <div className="mb-8 flex gap-3 overflow-x-auto pb-1 [-webkit-overflow-scrolling:touch] sm:grid sm:grid-cols-3 sm:gap-4 sm:overflow-visible sm:pb-0 print:hidden">
         {LOAN_CALC_TRUST_STATS.map((s) => (
           <div
             key={s.label}
-            className="rounded-xl border border-brand-100 bg-brand-50/80 px-3 py-3 text-center sm:px-4 sm:py-4"
+            className="min-w-[8.5rem] shrink-0 rounded-xl border border-brand-100 bg-brand-50/80 px-3 py-3 text-center sm:min-w-0 sm:shrink sm:px-4 sm:py-4"
           >
             <p className="text-lg font-extrabold text-brand-700 sm:text-xl">{s.value}</p>
             <p className="mt-0.5 text-xs text-slate-600 sm:text-sm">{s.label}</p>
@@ -87,7 +87,7 @@ export default function Page() {
         ))}
       </div>
 
-      <section id="tinh-toan" className="scroll-mt-24">
+      <section id="tinh-toan" className="min-w-0 scroll-mt-24">
         <div className="mb-4 flex flex-wrap items-center justify-between gap-3 print:hidden">
           <h2 className="text-lg font-bold text-slate-900">Bảng tính</h2>
           <Link
@@ -97,7 +97,7 @@ export default function Page() {
             ← Tất cả công cụ
           </Link>
         </div>
-        <div className="overflow-hidden rounded-2xl border border-silver-200 bg-white/80 p-1 shadow-sm backdrop-blur-sm sm:p-2">
+        <div className="min-w-0 rounded-2xl border border-silver-200 bg-white/80 p-2 shadow-sm backdrop-blur-sm sm:p-3">
           <LoanCalculator />
         </div>
       </section>
