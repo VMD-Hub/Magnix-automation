@@ -11,7 +11,7 @@ export const TWENTY_FOUR_MOUNTAINS = [
 export const TRIGRAM_HAN: Record<TrigramKey, string> = {
   qian: "乾",
   kun: "坤",
-  kan: "坎",
+  kham: "坎",
   li: "離",
   zhen: "震",
   xun: "巽",
@@ -100,5 +100,5 @@ export const HEXAGRAM_64_LINES: readonly (readonly boolean[])[] = [
 ] as const;
 
 export const EIGHT_TRIGRAMS_ORDER: TrigramKey[] = [
-  "kan", "gen", "zhen", "xun", "li", "kun", "dui", "qian",
+  "kham", "gen", "zhen", "xun", "li", "kun", "dui", "qian",
 ];

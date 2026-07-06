@@ -13,7 +13,7 @@ const TRIGRAM_PATTERNS: Record<
 > = {
   qian: [true, true, true],
   kun: [false, false, false],
-  kan: [false, true, false],
+  kham: [false, true, false],
   li: [true, false, true],
   zhen: [false, false, true],
   xun: [true, true, false],
@@ -22,7 +22,7 @@ const TRIGRAM_PATTERNS: Record<
 };
 
 const OCTAGON: { id: TrigramKey; angle: number }[] = [
-  { id: "kan", angle: 0 },
+  { id: "kham", angle: 0 },
   { id: "gen", angle: 45 },
   { id: "zhen", angle: 90 },
   { id: "xun", angle: 135 },

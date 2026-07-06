@@ -12,7 +12,7 @@ const TRIGRAM_PATTERNS: Record<
 > = {
   qian: [true, true, true],
   kun: [false, false, false],
-  kan: [false, true, false],
+  kham: [false, true, false],
   li: [true, false, true],
   zhen: [false, false, true],
   xun: [true, true, false],
