@@ -10,7 +10,7 @@ export const LISTINGS_BROWSE_COPY = {
     kicker: "HouseX · Mua bán",
     title: "Bất động sản đang bán",
     subtitle:
-      "Căn hộ, nhà phố, đất nền — tin đã kiểm duyệt, dễ so sánh theo khu vực và loại hình.",
+      "Căn hộ, nhà phố, đất nền — tin đã kiểm duyệt tại TP.HCM (gồm Bình Dương, Bà Rịa-Vũng Tàu, Côn Đảo), TP. Đồng Nai (gồm Bình Phước cũ), Tây Ninh (gồm Long An cũ), Cần Thơ (gồm Hậu Giang, Sóc Trăng) và các tỉnh lân cận.",
     bannerImage: HOUSEX_HERO_SLIDES[0]!.jpgMd,
     bannerWebp: HOUSEX_HERO_SLIDES[0]!.webpMd,
     bannerAlt: "Phối cảnh đô thị — mua bán bất động sản HouseX",

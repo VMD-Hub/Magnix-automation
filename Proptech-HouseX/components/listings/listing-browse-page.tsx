@@ -8,20 +8,12 @@ import {
   RENT_PROPERTY_TYPE_FILTER_OPTIONS,
   propertyTypeToSlug,
 } from "@/lib/content/property-type-slug";
+import {
+  formatListingBrowseLocationLabel,
+  getListingBrowseProvinces,
+  type ResolvedListingBrowseLocation,
+} from "@/lib/content/listing-browse-locations";
 import { propertyTypeLabel } from "@/lib/format";
-
-const HCM_DISTRICTS = [
-  "Quận 1",
-  "Quận 2",
-  "Quận 7",
-  "Quận 9",
-  "Bình Thạnh",
-  "Thủ Đức",
-  "Gò Vấp",
-  "Tân Bình",
-  "Nhà Bè",
-  "Bình Chánh",
-];
 
 type BannerProps = {
   kicker: string;
@@ -42,7 +34,7 @@ type Props = {
   items: React.ComponentProps<typeof ListingCard>["item"][];
   pagination: { page: number; totalPages: number; total: number };
   filters: {
-    district?: string;
+    location: ResolvedListingBrowseLocation;
     propertyType?: string;
     propertyTypeSlug?: string;
   };
@@ -60,9 +52,11 @@ function buildHref(
   current: Props["filters"],
   patch: Partial<Props["filters"] & { page?: number }>,
 ) {
-  const next = { ...current, ...patch };
+  const nextLocation = patch.location ?? current.location;
+  const next = { ...current, ...patch, location: nextLocation };
   const q = new URLSearchParams();
-  if (next.district) q.set("district", next.district);
+  if (next.location.provinceSlug) q.set("province", next.location.provinceSlug);
+  if (next.location.district) q.set("district", next.location.district);
   if (next.propertyTypeSlug) q.set("propertyType", next.propertyTypeSlug);
   if (patch.page && patch.page > 1) q.set("page", String(patch.page));
   const qs = q.toString();
@@ -79,8 +73,10 @@ export function ListingBrowsePage({
   emptyMode = "no-results",
   comingSoon,
 }: Props) {
-  const activeDistrict = filters.district;
+  const { location } = filters;
   const activeSlug = filters.propertyTypeSlug;
+  const locationLabel = formatListingBrowseLocationLabel(location);
+  const browseProvinces = getListingBrowseProvinces();
   const typeOptions =
     basePath === "/cho-thue"
       ? RENT_PROPERTY_TYPE_FILTER_OPTIONS
@@ -109,9 +105,10 @@ export function ListingBrowsePage({
       <div className="mb-4 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <ListingBrowseFilters
           basePath={basePath}
-          districts={HCM_DISTRICTS}
+          provinces={browseProvinces}
           typeOptions={typeOptions}
-          activeDistrict={activeDistrict}
+          activeProvinceSlug={location.provinceSlug}
+          activeDistrict={location.district}
           activeTypeSlug={activeSlug}
         />
         <p className="shrink-0 text-sm text-slate-500 sm:pb-0.5">
@@ -124,12 +121,24 @@ export function ListingBrowsePage({
       </div>
 
       <div className="min-w-0">
-        {(activeDistrict || filters.propertyType) && (
+        {(locationLabel || filters.propertyType) && (
           <div className="mb-4 flex flex-wrap gap-2">
-            {activeDistrict ? (
+            {location.provinceSlug && !location.district ? (
               <FilterChip
-                label={activeDistrict}
-                href={buildHref(basePath, filters, { district: undefined, page: 1 })}
+                label={location.provinceLabel ?? location.provinceSlug}
+                href={buildHref(basePath, filters, {
+                  location: { ...location, provinceSlug: undefined, province: undefined, provinceLabel: undefined },
+                  page: 1,
+                })}
+              />
+            ) : null}
+            {location.district ? (
+              <FilterChip
+                label={locationLabel ?? location.district}
+                href={buildHref(basePath, filters, {
+                  location: { ...location, district: undefined },
+                  page: 1,
+                })}
               />
             ) : null}
             {filters.propertyType ? (
@@ -248,7 +257,7 @@ export function buildListingListJsonLd(
   siteUrl: string,
   path: string,
   title: string,
-  items: { code: string; propertyType: string; district: string }[],
+  items: { code: string; propertyType: string; district: string; province?: string }[],
 ) {
   return {
     "@context": "https://schema.org",
@@ -260,7 +269,7 @@ export function buildListingListJsonLd(
       "@type": "ListItem",
       position: i + 1,
       url: `${siteUrl}/tin-dang/${item.code}`,
-      name: `${propertyTypeLabel(item.propertyType)} tại ${item.district}`,
+      name: `${propertyTypeLabel(item.propertyType)} tại ${item.district}${item.province ? `, ${item.province}` : ""}`,
     })),
   };
 }

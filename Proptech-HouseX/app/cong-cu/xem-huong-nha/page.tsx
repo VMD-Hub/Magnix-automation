@@ -5,7 +5,8 @@ import {
   buildRichFaqJsonLd,
   ToolsFaqSection,
 } from "@/components/tools/tools-faq-section";
-import { ToolsBreadcrumb, ToolsPageHero } from "@/components/tools/tools-page-hero";
+import { ToolsBreadcrumb } from "@/components/tools/tools-page-hero";
+import { ToolsPageHeroEastern } from "@/components/tools/tools-page-hero-eastern";
 import {
   BAT_TRACH_COPY,
   BAT_TRACH_INTRO,
@@ -75,7 +76,7 @@ export default function Page() {
         ]}
       />
 
-      <ToolsPageHero
+      <ToolsPageHeroEastern
         kicker={BAT_TRACH_COPY.kicker}
         title={BAT_TRACH_COPY.title}
         subtitle={BAT_TRACH_COPY.subtitle}

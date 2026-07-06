@@ -15,8 +15,10 @@ import {
 } from "@/lib/preview/dta-happy-home-listings";
 import {
   buildDemoListingDetail,
-  listDemoSaleListingCards,
+  DEMO_SALE_LISTING_CARDS,
 } from "@/lib/preview/demo-listings";
+import { listCatalogSaleListingCards } from "@/lib/preview/catalog-listings";
+import { listingMatchesBrowseProvince, provincesMatchingBrowseFilter } from "@/lib/content/mega-province-browse";
 import { getListingByCode } from "@/lib/data/listing";
 
 const listingInclude = {
@@ -81,7 +83,9 @@ function filterDemoCards(
   return cards.filter((c) => {
     if (params.district && c.district !== params.district) return false;
     if (params.propertyType && c.propertyType !== params.propertyType) return false;
-    if (params.province && c.province !== params.province) return false;
+    if (params.province) {
+      if (!listingMatchesBrowseProvince(c.province, params.province)) return false;
+    }
     return true;
   });
 }
@@ -90,6 +94,7 @@ function paginateCatalog(
   cards: ListingCardData[],
   page: number,
   pageSize: number,
+  isCatalog = false,
 ): ListingBrowseResult {
   const total = cards.length;
   const start = (page - 1) * pageSize;
@@ -101,8 +106,38 @@ function paginateCatalog(
       total,
       totalPages: Math.max(1, Math.ceil(total / pageSize)),
     },
-    isCatalog: total > 0,
+    isCatalog: isCatalog || total > 0,
   };
+}
+
+/** Gộp tin DB + catalog go-live (DTA A10, …) — tránh trùng mã tin. */
+function mergeSaleBrowseCards(
+  dbItems: ListingCardData[],
+  params: ListingBrowseParams,
+): ListingCardData[] {
+  const seen = new Set(dbItems.map((c) => c.code));
+  const merged = [...dbItems];
+
+  const catalog = filterDemoCards(
+    listCatalogSaleListingCards().map(enrichDtaListingCardTitle),
+    params,
+  );
+  for (const card of catalog) {
+    if (seen.has(card.code)) continue;
+    seen.add(card.code);
+    merged.push(card);
+  }
+
+  if (allowDemoProjectFallback()) {
+    const devOnly = filterDemoCards(DEMO_SALE_LISTING_CARDS, params);
+    for (const card of devOnly) {
+      if (seen.has(card.code)) continue;
+      seen.add(card.code);
+      merged.push(card);
+    }
+  }
+
+  return merged;
 }
 
 /** Danh sách tin đăng public — SSR trang mua bán / cho thuê. */
@@ -121,45 +156,40 @@ export async function browseListings(
       { project: { slug: { notIn: [...INTERNAL_DEMO_PROJECT_SLUGS] } } },
     ],
     transactionType: params.transactionType,
-    ...(params.province ? { province: params.province } : {}),
+    ...(params.province
+      ? (() => {
+          const expanded = provincesMatchingBrowseFilter(params.province);
+          return expanded
+            ? { province: { in: expanded } }
+            : { province: params.province };
+        })()
+      : {}),
     ...(params.district ? { district: params.district } : {}),
     ...(params.propertyType ? { propertyType: params.propertyType } : {}),
   };
 
-  try {
-    const [rows, total] = await Promise.all([
-      prisma.listing.findMany({
-        where,
-        orderBy: [{ rankScore: "desc" }, { createdAt: "desc" }],
-        skip: (page - 1) * pageSize,
-        take: pageSize,
-        include: listingInclude,
-      }),
-      prisma.listing.count({ where }),
-    ]);
+  let dbItems: ListingCardData[] = [];
 
-    if (total > 0) {
-      return {
-        items: rows.map(toCard),
-        pagination: {
-          page,
-          pageSize,
-          total,
-          totalPages: Math.max(1, Math.ceil(total / pageSize)),
-        },
-      };
-    }
+  try {
+    const rows = await prisma.listing.findMany({
+      where,
+      orderBy: [{ rankScore: "desc" }, { createdAt: "desc" }],
+      include: listingInclude,
+    });
+    dbItems = rows.map(toCard);
   } catch {
-    // DB offline — thử catalog demo bên dưới.
+    // DB offline — dùng catalog go-live bên dưới.
   }
 
-  if (params.transactionType === "SALE" && allowDemoProjectFallback()) {
-    const demo = filterDemoCards(listDemoSaleListingCards(), params).map(
-      enrichDtaListingCardTitle,
-    );
-    if (demo.length > 0) {
-      return paginateCatalog(demo, page, pageSize);
+  if (params.transactionType === "SALE") {
+    const merged = mergeSaleBrowseCards(dbItems, params);
+    if (merged.length > 0) {
+      const usedCatalog = merged.length > dbItems.length || dbItems.length === 0;
+      return paginateCatalog(merged, page, pageSize, usedCatalog);
     }
+  } else if (dbItems.length > 0) {
+    const filtered = filterDemoCards(dbItems, params);
+    return paginateCatalog(filtered, page, pageSize);
   }
 
   return {

@@ -9,12 +9,12 @@ import { ensureNoxhLandingMedia } from "@/lib/content/noxh-stock-images";
 import { ensureCatalogCoverUrl } from "@/lib/content/catalog-cover-fallback";
 import { isSafeImageUrl } from "@/lib/content/safe-image";
 import { listCatalogProjectCards } from "@/lib/preview/demo-projects";
+import { listCatalogSaleListingCards } from "@/lib/preview/catalog-listings";
 import { listDemoSaleListingCards } from "@/lib/preview/demo-listings";
 import {
   INTERNAL_DEMO_LISTING_CODES,
   INTERNAL_DEMO_PROJECT_SLUGS,
 } from "@/lib/deploy/internal-demo-content";
-import { allowDemoProjectFallback } from "@/lib/deploy/demo-fallback";
 
 export type HomepageData = {
   ok: boolean;
@@ -106,9 +106,7 @@ export async function getHomepageData(): Promise<HomepageData> {
             imageUrl: l.media[0]?.url ?? null,
             offerCount: l.fingerprint?.canonical?.offerCount ?? 0,
           }))
-        : allowDemoProjectFallback()
-          ? listDemoSaleListingCards().slice(0, 4)
-          : [];
+        : listCatalogSaleListingCards().slice(0, 4);
 
     return {
       ok: true,
@@ -138,9 +136,7 @@ export async function getHomepageData(): Promise<HomepageData> {
     return {
       ok: false,
       projects: listCatalogProjectCards().slice(0, 6),
-      saleListings: allowDemoProjectFallback()
-        ? listDemoSaleListingCards().slice(0, 4)
-        : [],
+      saleListings: listDemoSaleListingCards().slice(0, 4),
     };
   }
 }

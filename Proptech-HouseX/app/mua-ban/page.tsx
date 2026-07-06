@@ -3,6 +3,10 @@ import { browseListings } from "@/lib/data/listing-browse";
 import { propertyTypeFromSlug } from "@/lib/content/property-type-slug";
 import { LISTINGS_BROWSE_COPY } from "@/lib/content/listings-browse-copy";
 import {
+  formatListingBrowseLocationLabel,
+  resolveListingBrowseLocation,
+} from "@/lib/content/listing-browse-locations";
+import {
   ListingBrowsePage,
   buildListingListJsonLd,
   propertyTypeToSlug,
@@ -16,6 +20,7 @@ export const revalidate = 120;
 
 type PageProps = {
   searchParams: Promise<{
+    province?: string;
     district?: string;
     propertyType?: string;
     page?: string;
@@ -27,11 +32,13 @@ export async function generateMetadata({
 }: PageProps): Promise<Metadata> {
   const sp = await searchParams;
   const dbType = propertyTypeFromSlug(sp.propertyType);
+  const location = resolveListingBrowseLocation(sp);
+  const locationLabel = formatListingBrowseLocationLabel(location);
   const parts = ["Mua bán bất động sản"];
   if (dbType) parts.push(propertyTypeLabel(dbType));
-  if (sp.district) parts.push(sp.district);
+  if (locationLabel) parts.push(locationLabel);
   const title = parts.join(" — ");
-  const description = `Tìm mua ${dbType ? propertyTypeLabel(dbType).toLowerCase() : "nhà đất"}${sp.district ? ` tại ${sp.district}` : " tại TP.HCM"}. Tin đã kiểm duyệt, dễ so sánh theo khu vực.`;
+  const description = `Tìm mua ${dbType ? propertyTypeLabel(dbType).toLowerCase() : "nhà đất"}${locationLabel ? ` tại ${locationLabel}` : " tại TP.HCM và các tỉnh lân cận"}. Tin đã kiểm duyệt, dễ so sánh theo khu vực.`;
 
   return {
     title,
@@ -42,9 +49,14 @@ export async function generateMetadata({
   };
 }
 
-function buildCanonical(sp: { district?: string; propertyType?: string; page?: string }) {
+function buildCanonical(sp: {
+  province?: string;
+  district?: string;
+  propertyType?: string;
+}) {
   const site = getSiteUrl();
   const q = new URLSearchParams();
+  if (sp.province) q.set("province", sp.province);
   if (sp.district) q.set("district", sp.district);
   if (sp.propertyType) q.set("propertyType", sp.propertyType);
   const qs = q.toString();
@@ -58,11 +70,13 @@ export default async function MuaBanPage({ searchParams }: PageProps) {
   const sp = await searchParams;
   const page = Math.max(1, Number(sp.page) || 1);
   const propertyType = propertyTypeFromSlug(sp.propertyType);
+  const location = resolveListingBrowseLocation(sp);
   const copy = LISTINGS_BROWSE_COPY.sale;
 
   const { items, pagination } = await browseListings({
     transactionType: "SALE",
-    district: sp.district,
+    province: location.province,
+    district: location.district,
     propertyType,
     page,
   });
@@ -70,9 +84,10 @@ export default async function MuaBanPage({ searchParams }: PageProps) {
   const siteUrl = getSiteUrl();
   const jsonLd = buildListingListJsonLd(siteUrl, "/mua-ban", copy.title, items);
 
+  const locationLabel = formatListingBrowseLocationLabel(location);
   const subtitle =
-    propertyType || sp.district
-      ? `Lọc theo ${[propertyType ? propertyTypeLabel(propertyType) : null, sp.district].filter(Boolean).join(", ")}`
+    propertyType || locationLabel
+      ? `Lọc theo ${[propertyType ? propertyTypeLabel(propertyType) : null, locationLabel].filter(Boolean).join(", ")}`
       : copy.subtitle;
 
   return (
@@ -97,7 +112,7 @@ export default async function MuaBanPage({ searchParams }: PageProps) {
         items={items}
         pagination={pagination}
         filters={{
-          district: sp.district,
+          location,
           propertyType,
           propertyTypeSlug: propertyType ? propertyTypeToSlug(propertyType) : sp.propertyType,
         }}

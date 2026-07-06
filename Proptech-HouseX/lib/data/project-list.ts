@@ -1,5 +1,8 @@
 import { prisma } from "@/lib/prisma";
-import { withDbTimeout } from "@/lib/db/query-timeout";
+import {
+  LIST_QUERY_TIMEOUT_MS,
+  withDbTimeout,
+} from "@/lib/db/query-timeout";
 import type { ProjectCardData } from "@/components/projects/project-card";
 import {
   parseProjectOverview,
@@ -83,83 +86,14 @@ function paginateCatalog(
   };
 }
 
-/** Danh sách dự án public — SSR trang /du-an. */
-export async function listProjects(
-  params: ProjectListParams = {},
-): Promise<ProjectListResult> {
-  const page = Math.max(1, params.page ?? 1);
-  const pageSize = Math.min(100, Math.max(1, params.pageSize ?? 12));
+/** Sau lần timeout đầu, bỏ qua DB để chuyển trang nhanh (dev / Postgres tắt). */
+let dbReachable: boolean | null = null;
 
-  const where = {
-    deletedAt: null,
-    slug: { notIn: [...INTERNAL_DEMO_PROJECT_SLUGS] },
-    ...(params.province ? { province: params.province } : {}),
-    ...(params.district ? { district: params.district } : {}),
-    ...(params.projectType ? { projectType: params.projectType } : {}),
-  };
-
-  try {
-    if (params.projectType === "THUONG_MAI") {
-      const rows = await withDbTimeout(
-        prisma.project.findMany({
-          where,
-          orderBy: { createdAt: "desc" },
-          include: {
-            developer: { select: { name: true } },
-            unitTypes: {
-              select: { priceFrom: true },
-              orderBy: { priceFrom: "asc" },
-              take: 1,
-            },
-            _count: { select: { listings: true } },
-          },
-        }),
-      );
-      const merged = mergeMissingGoLiveCommercialCards(rows.map(rowToCard));
-      return paginateCatalog(
-        merged,
-        page,
-        pageSize,
-        merged.length > rows.length,
-      );
-    }
-
-    const [rows, total] = await withDbTimeout(
-      Promise.all([
-        prisma.project.findMany({
-          where,
-          orderBy: { createdAt: "desc" },
-          skip: (page - 1) * pageSize,
-          take: pageSize,
-          include: {
-            developer: { select: { name: true } },
-            unitTypes: {
-              select: { priceFrom: true },
-              orderBy: { priceFrom: "asc" },
-              take: 1,
-            },
-            _count: { select: { listings: true } },
-          },
-        }),
-        prisma.project.count({ where }),
-      ]),
-    );
-
-    if (total > 0) {
-      return {
-        items: rows.map(rowToCard),
-        pagination: {
-          page,
-          pageSize,
-          total,
-          totalPages: Math.max(1, Math.ceil(total / pageSize)),
-        },
-      };
-    }
-  } catch {
-    // DB offline — thử catalog go-live bên dưới.
-  }
-
+function catalogFallback(
+  params: ProjectListParams,
+  page: number,
+  pageSize: number,
+): ProjectListResult {
   const catalogItems = listCatalogProjectCards({
     projectType: params.projectType,
     province: params.province,
@@ -187,4 +121,92 @@ export async function listProjects(
     },
     isDemo: demoItems.length > 0,
   };
+}
+
+/** Danh sách dự án public — SSR trang /du-an. */
+export async function listProjects(
+  params: ProjectListParams = {},
+): Promise<ProjectListResult> {
+  const page = Math.max(1, params.page ?? 1);
+  const pageSize = Math.min(100, Math.max(1, params.pageSize ?? 12));
+
+  if (dbReachable === false) {
+    return catalogFallback(params, page, pageSize);
+  }
+
+  const where = {
+    deletedAt: null,
+    slug: { notIn: [...INTERNAL_DEMO_PROJECT_SLUGS] },
+    ...(params.province ? { province: params.province } : {}),
+    ...(params.district ? { district: params.district } : {}),
+    ...(params.projectType ? { projectType: params.projectType } : {}),
+  };
+
+  try {
+    if (params.projectType === "THUONG_MAI") {
+      const rows = await withDbTimeout(
+        prisma.project.findMany({
+          where,
+          orderBy: { createdAt: "desc" },
+          include: {
+            developer: { select: { name: true } },
+            unitTypes: {
+              select: { priceFrom: true },
+              orderBy: { priceFrom: "asc" },
+              take: 1,
+            },
+            _count: { select: { listings: true } },
+          },
+        }),
+        LIST_QUERY_TIMEOUT_MS,
+      );
+      const merged = mergeMissingGoLiveCommercialCards(rows.map(rowToCard));
+      dbReachable = true;
+      return paginateCatalog(
+        merged,
+        page,
+        pageSize,
+        merged.length > rows.length,
+      );
+    }
+
+    const [rows, total] = await withDbTimeout(
+      Promise.all([
+        prisma.project.findMany({
+          where,
+          orderBy: { createdAt: "desc" },
+          skip: (page - 1) * pageSize,
+          take: pageSize,
+          include: {
+            developer: { select: { name: true } },
+            unitTypes: {
+              select: { priceFrom: true },
+              orderBy: { priceFrom: "asc" },
+              take: 1,
+            },
+            _count: { select: { listings: true } },
+          },
+        }),
+        prisma.project.count({ where }),
+      ]),
+      LIST_QUERY_TIMEOUT_MS,
+    );
+
+    if (total > 0) {
+      dbReachable = true;
+      return {
+        items: rows.map(rowToCard),
+        pagination: {
+          page,
+          pageSize,
+          total,
+          totalPages: Math.max(1, Math.ceil(total / pageSize)),
+        },
+      };
+    }
+  } catch {
+    dbReachable = false;
+  }
+
+  return catalogFallback(params, page, pageSize);
 }

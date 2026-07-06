@@ -6,7 +6,8 @@ import {
   buildRichFaqJsonLd,
   ToolsFaqSection,
 } from "@/components/tools/tools-faq-section";
-import { ToolsBreadcrumb, ToolsPageHero } from "@/components/tools/tools-page-hero";
+import { ToolsBreadcrumb } from "@/components/tools/tools-page-hero";
+import { ToolsPageHeroEastern } from "@/components/tools/tools-page-hero-eastern";
 import { listPublishedArticles } from "@/lib/data/article-public";
 import { PHONG_THUY_HUB_FAQ } from "@/lib/content/phong-thuy-hub-faq";
 import {
@@ -82,7 +83,7 @@ export default async function PhongThuyHubPage({ searchParams }: PageProps) {
         />
 
         {showHubExtras ? (
-          <ToolsPageHero
+          <ToolsPageHeroEastern
             kicker={PHONG_THUY_HUB_KICKER}
             title={PHONG_THUY_HUB_TITLE}
             subtitle={PHONG_THUY_HUB_SUBTITLE}

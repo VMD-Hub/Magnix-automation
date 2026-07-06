@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { ButtonLink } from "@/components/ui/button";
+import { PhongThuyVisual } from "@/components/feng-shui/phong-thuy-visual";
+import type { PhongThuyVisualVariant } from "@/lib/content/phong-thuy-visual-variants";
 import { cn } from "@/lib/ui/cn";
 
 type Cta = { label: string; href: string };
@@ -8,24 +10,18 @@ type Props = {
   kicker?: string;
   title: string;
   subtitle: string;
-  image?: string;
-  imageWebp?: string;
-  imageAlt?: string;
-  objectPosition?: string;
+  easternVariant: PhongThuyVisualVariant;
   primaryCta?: Cta;
   secondaryCta?: Cta;
   className?: string;
 };
 
-/** Banner công cụ — rộng, cao ~260px, gradient Ruby/Gold HouseX. */
-export function ToolsPageHero({
+/** Banner công cụ phong thủy — SVG la bàn/bát quái (chỉ trang phong thủy). */
+export function ToolsPageHeroEastern({
   kicker,
   title,
   subtitle,
-  image,
-  imageWebp,
-  imageAlt = "",
-  objectPosition = "50% 40%",
+  easternVariant,
   primaryCta,
   secondaryCta,
   className,
@@ -33,24 +29,19 @@ export function ToolsPageHero({
   return (
     <header
       className={cn(
-        "relative mb-8 overflow-hidden rounded-2xl ring-1 ring-silver-200",
+        "group relative mb-8 overflow-hidden rounded-2xl ring-1 ring-gold-900/30",
         className,
       )}
     >
       <div className="relative h-[240px] w-full sm:h-[260px] lg:h-[280px]">
-        <picture>
-          {imageWebp ? <source srcSet={imageWebp} type="image/webp" /> : null}
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={image}
-            alt={imageAlt}
-            fetchPriority="high"
-            className="absolute inset-0 h-full w-full object-cover"
-            style={{ objectPosition }}
-          />
-        </picture>
+        <PhongThuyVisual
+          variant={easternVariant}
+          size="hero"
+          interactive
+          className="absolute inset-0"
+        />
         <div
-          className="absolute inset-0 bg-gradient-to-r from-ink-900/90 via-ink-900/55 to-brand-900/25"
+          className="absolute inset-0 bg-gradient-to-r from-ink-900/92 via-ink-900/55 to-ink-900/20"
           aria-hidden
         />
         <div

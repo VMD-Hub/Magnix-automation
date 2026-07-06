@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { BuildAgeTool } from "@/components/tools/build-age-tool";
 import { RelatedToolsSection } from "@/components/tools/related-tools-section";
-import { ToolsBreadcrumb, ToolsPageHero } from "@/components/tools/tools-page-hero";
+import { ToolsBreadcrumb } from "@/components/tools/tools-page-hero";
+import { ToolsPageHeroEastern } from "@/components/tools/tools-page-hero-eastern";
 import { BUILD_AGE_COPY } from "@/lib/content/utilities-tools-copy";
 import { PHONG_THUY_TOOL_VISUALS } from "@/lib/content/phong-thuy-visual-variants";
 
@@ -16,7 +17,7 @@ export default function Page() {
   return (
     <div className="proptech-section-glow mx-auto max-w-5xl py-8 container-px">
       <ToolsBreadcrumb items={[{ label: "Trang chủ", href: "/" }, { label: "Công cụ", href: "/cong-cu" }, { label: "Kiểm tra tuổi xây nhà" }]} />
-      <ToolsPageHero
+      <ToolsPageHeroEastern
         kicker="House X · Phong thủy"
         title={BUILD_AGE_COPY.title}
         subtitle={BUILD_AGE_COPY.subtitle}

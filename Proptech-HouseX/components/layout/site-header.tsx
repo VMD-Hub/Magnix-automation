@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Icon } from "@/components/icons";
 import { ButtonLink } from "@/components/ui/button";
 import { HouseXHeaderLogo } from "@/components/brand/housex-header-logo";
@@ -15,10 +16,22 @@ const NAV = [
   { label: "Dịch vụ", href: "/dich-vu" },
   { label: "Công cụ", href: "/cong-cu" },
   { label: "Tin tức", href: "/tin-tuc" },
-];
+] as const;
+
+/** Prefetch các trang catalog chính — phản hồi nhanh khi chuyển tab header. */
+const PREFETCH_HREFS = new Set<string>(["/mua-ban", "/cho-thue", "/du-an", "/cong-cu", "/dich-vu"]);
 
 export function SiteHeader() {
+  const router = useRouter();
   const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    for (const item of NAV) {
+      if (PREFETCH_HREFS.has(item.href)) {
+        router.prefetch(item.href);
+      }
+    }
+  }, [router]);
 
   return (
     <header className="site-header-bar sticky top-0 z-50 border-b border-[color-mix(in_srgb,var(--border)_55%,var(--brand-logo-paper))] print:hidden">
@@ -30,6 +43,7 @@ export function SiteHeader() {
             <Link
               key={item.href}
               href={item.href}
+              prefetch={PREFETCH_HREFS.has(item.href)}
               className="rounded-lg px-3 py-2 text-sm font-medium text-[var(--muted)] hover:bg-[var(--surface)] hover:text-brand-700 dark:hover:bg-white/10 dark:hover:text-brand-300"
             >
               {item.label}
@@ -64,6 +78,7 @@ export function SiteHeader() {
             <Link
               key={item.href}
               href={item.href}
+              prefetch={PREFETCH_HREFS.has(item.href)}
               onClick={() => setOpen(false)}
               className="rounded-lg px-3 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-100"
             >

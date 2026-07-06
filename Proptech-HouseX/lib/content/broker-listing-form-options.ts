@@ -11,6 +11,8 @@ export const BROKER_LISTING_PROVINCES = [
   "Đà Nẵng",
 ] as const;
 
+/** Ghi chú: từ 01/7/2025 Bình Dương + Bà Rịa-Vũng Tàu thuộc TP.HCM; Bình Phước thuộc TP. Đồng Nai; Long An thuộc Tây Ninh; Hậu Giang + Sóc Trăng thuộc Cần Thơ — giữ tên cũ cho tin đăng legacy. */
+
 export const BROKER_PROPERTY_TYPE_OPTIONS = PROPERTY_TYPE_FILTER_OPTIONS;
 
 export const LISTING_GATE_HINT = {

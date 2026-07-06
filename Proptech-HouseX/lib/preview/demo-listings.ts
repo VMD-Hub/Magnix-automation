@@ -8,6 +8,7 @@ import {
 } from "@/lib/preview/dta-happy-home-listings";
 import { allowDemoProjectFallback } from "@/lib/deploy/demo-fallback";
 import { isInternalDemoListingCode } from "@/lib/deploy/internal-demo-content";
+import { listCatalogSaleListingCards } from "@/lib/preview/catalog-listings";
 import {
   Prisma,
   type BrokerType,
@@ -70,9 +71,8 @@ export const DEMO_SALE_LISTING_CARDS: ListingCardData[] = [
 ];
 
 export function listDemoSaleListingCards(): ListingCardData[] {
-  const generic =
-    allowDemoProjectFallback() ? DEMO_SALE_LISTING_CARDS : [];
-  return [...generic, ...listDtaHappyHomeListingCards()];
+  const generic = allowDemoProjectFallback() ? DEMO_SALE_LISTING_CARDS : [];
+  return [...generic, ...listCatalogSaleListingCards()];
 }
 
 export function getDemoListingCard(code: string): ListingCardData | null {
