@@ -14,6 +14,8 @@ import {
   TOOL_SERVICE_IMAGES_WEBP,
   TOOLS_HUB_BANNER,
 } from "@/lib/content/housex-tools-visuals";
+import { PreloadBannerImage } from "@/components/seo/preload-banner-image";
+import { catalogBannerSources } from "@/lib/brand/banner-responsive";
 
 export const metadata: Metadata = {
   title: TOOLS_HUB_COPY.metaTitle,
@@ -26,12 +28,12 @@ export default function CongCuPage() {
 
   return (
     <div className="proptech-section-glow mx-auto max-w-7xl py-8 container-px">
+      <PreloadBannerImage sources={catalogBannerSources(TOOLS_HUB_BANNER.slide)} />
       <ToolsPageHero
         kicker={TOOLS_HUB_COPY.kicker}
         title={TOOLS_HUB_COPY.title}
         subtitle={TOOLS_HUB_COPY.subtitle}
-        image={TOOLS_HUB_BANNER.jpg}
-        imageWebp={TOOLS_HUB_BANNER.webp}
+        bannerSlide={TOOLS_HUB_BANNER.slide}
         imageAlt={TOOLS_HUB_BANNER.alt}
         objectPosition={TOOLS_HUB_BANNER.objectPosition}
         primaryCta={{ label: "Xem hướng nhà", href: "/cong-cu/xem-huong-nha" }}

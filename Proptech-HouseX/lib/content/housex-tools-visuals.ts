@@ -15,12 +15,11 @@ const materials = TOOL_BRAND_IMAGES["construction-materials"];
 const interiorHub = TOOL_BRAND_IMAGES["interior-hub"];
 const valuationHero = HUB_VERTICAL_CARDS["dinh-gia"].image;
 
-/** Banner trang công cụ — rộng, thấp (cùng tỷ lệ catalog /du-an). */
+/** Banner trang công cụ — slide metro, bản 1280/768 cho LCP nhanh. */
 export const TOOLS_HUB_BANNER = {
-  jpg: HOUSEX_HERO_SLIDES[1]!.jpgMd,
-  webp: HOUSEX_HERO_SLIDES[1]!.webpMd,
-  objectPosition: HOUSEX_HERO_SLIDES[1]!.objectPosition,
+  slide: HOUSEX_HERO_SLIDES[1]!,
   alt: "Kết nối đô thị — công cụ mua nhà HouseX",
+  objectPosition: HOUSEX_HERO_SLIDES[1]!.objectPosition,
 };
 
 export const LOAN_CALC_BANNER = {
@@ -66,10 +65,9 @@ export const CONSTRUCTION_MATERIALS_BANNER = {
 };
 
 export const BAT_TRACH_BANNER = {
-  jpg: HOUSEX_HERO_SLIDES[1]!.jpgMd,
-  webp: HOUSEX_HERO_SLIDES[1]!.webpMd,
-  objectPosition: "50% 45%",
+  slide: HOUSEX_HERO_SLIDES[0]!,
   alt: "Xem hướng nhà theo tuổi chuẩn Bát trạch — House X",
+  objectPosition: HOUSEX_HERO_SLIDES[0]!.objectPosition,
 };
 
 /** Ảnh minh hoạ thẻ công cụ — mỗi tool một ảnh thương hiệu. Phong thủy dùng SVG trong ToolHubCard. */

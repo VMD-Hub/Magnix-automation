@@ -3,9 +3,10 @@
 import { useEffect, useState } from "react";
 import {
   HOUSEX_HERO_SLIDES,
-  HOUSEX_HERO_SRCSET_SIZES,
   type HouseXHeroSlideAsset,
 } from "@/lib/brand/hero-assets";
+import { HERO_LCP_SIZES, heroLcpSources } from "@/lib/brand/banner-responsive";
+import { BannerPicture } from "@/components/ui/banner-picture";
 import { cn } from "@/lib/ui/cn";
 
 const SLIDE_MS = 8000;
@@ -16,17 +17,14 @@ type Props = {
   slides?: HouseXHeroSlideAsset[];
 };
 
-function HeroSlideFrame({
+function HeroSlideLayer({
   slide,
   active,
-  priority,
 }: {
   slide: HouseXHeroSlideAsset;
   active: boolean;
-  priority: boolean;
 }) {
-  const webpSrcSet = `${slide.webpMd} 1920w, ${slide.webp} 3840w`;
-  const jpgSrcSet = `${slide.jpgMd} 1920w, ${slide.jpg} 3840w`;
+  const sources = heroLcpSources(slide);
 
   return (
     <div
@@ -36,28 +34,19 @@ function HeroSlideFrame({
       )}
       style={{ transitionDuration: `${FADE_MS}ms` }}
     >
-      <picture className="absolute inset-0 block h-full w-full">
-        <source
-          srcSet={webpSrcSet}
-          sizes={HOUSEX_HERO_SRCSET_SIZES}
-          type="image/webp"
-        />
-        <img
-          src={slide.jpgMd}
-          srcSet={jpgSrcSet}
-          sizes={HOUSEX_HERO_SRCSET_SIZES}
-          alt=""
-          className="hero-slide-img absolute inset-0 h-full w-full object-cover"
-          style={{ objectPosition: slide.objectPosition }}
-          decoding="async"
-          fetchPriority={priority ? "high" : "auto"}
-        />
-      </picture>
+      <BannerPicture
+        sources={sources}
+        sizes={HERO_LCP_SIZES}
+        objectPosition={slide.objectPosition}
+      />
     </div>
   );
 }
 
-/** Hero slide fade — mobile: ảnh tĩnh (LCP); desktop: luân phiên. */
+/**
+ * Luân phiên slide 2+ — slide 0 do HeroLcpPicture (SSR) phủ LCP.
+ * Không preload 3840; chỉ warm slide kế khi idle.
+ */
 export function HeroSlideBackground({ slides = HOUSEX_HERO_SLIDES }: Props) {
   const [active, setActive] = useState(0);
   const [staticMode, setStaticMode] = useState(false);
@@ -72,14 +61,22 @@ export function HeroSlideBackground({ slides = HOUSEX_HERO_SLIDES }: Props) {
   }, []);
 
   useEffect(() => {
-    if (staticMode) return;
-    for (const slide of slides) {
-      for (const src of [slide.jpg, slide.jpgMd, slide.webp, slide.webpMd]) {
-        const img = new Image();
-        img.src = src;
-      }
-    }
-  }, [slides, staticMode]);
+    if (staticMode || count <= 1) return;
+
+    const warmNext = (index: number) => {
+      const slide = slides[index];
+      if (!slide) return;
+      const img = new Image();
+      img.src = slide.webp1280;
+    };
+
+    const idle =
+      typeof requestIdleCallback === "function"
+        ? requestIdleCallback
+        : (cb: () => void) => window.setTimeout(cb, 200);
+
+    idle(() => warmNext(1));
+  }, [slides, staticMode, count]);
 
   useEffect(() => {
     if (staticMode || count <= 1) return;
@@ -89,19 +86,22 @@ export function HeroSlideBackground({ slides = HOUSEX_HERO_SLIDES }: Props) {
     return () => window.clearInterval(id);
   }, [count, staticMode]);
 
-  const visibleSlides = staticMode ? slides.slice(0, 1) : slides;
+  if (staticMode || count <= 1) {
+    return null;
+  }
 
   return (
     <div className="hero-slide-bg absolute inset-0 z-[1]" aria-hidden>
-      {visibleSlides.map((slide, index) => (
-        <HeroSlideFrame
-          key={slide.id}
-          slide={slide}
-          active={staticMode || index === active}
-          priority={index === 0}
-        />
-      ))}
-      <div className="hero-slide-vignette absolute inset-0 z-[2]" />
+      {slides.map((slide, index) => {
+        if (index === 0 && active === 0) return null;
+        return (
+          <HeroSlideLayer
+            key={slide.id}
+            slide={slide}
+            active={index === active}
+          />
+        );
+      })}
     </div>
   );
 }

@@ -34,6 +34,20 @@ const SLIDES = [
 
 const VARIANTS = [
   {
+    suffix: "-768",
+    width: 768,
+    height: 329,
+    webpQuality: 85,
+    jpegQuality: 86,
+  },
+  {
+    suffix: "-1280",
+    width: 1280,
+    height: 549,
+    webpQuality: 88,
+    jpegQuality: 88,
+  },
+  {
     suffix: "-1920",
     width: HOUSEX_HERO_BANNER_WIDTH,
     height: HOUSEX_HERO_BANNER_HEIGHT,

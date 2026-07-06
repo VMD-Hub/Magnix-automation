@@ -48,7 +48,8 @@
     "hero:generate-assets": "node --import tsx scripts/generate-cinematic-hero-assets.ts",
     "hero:enhance-assets": "node --import tsx scripts/enhance-cinematic-hero-assets.ts",
     "hero:import-thu-thiem": "node --import tsx scripts/import-housex-hero-thu-thiem.ts",
-    "hero:import-slides": "node --import tsx scripts/import-housex-hero-slides.ts"
+    "hero:import-slides": "node --import tsx scripts/import-housex-hero-slides.ts",
+    "hero:generate-banner-sizes": "node --import tsx scripts/generate-hero-banner-sizes.ts"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"

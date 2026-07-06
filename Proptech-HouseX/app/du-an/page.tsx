@@ -10,7 +10,9 @@ import {
   buildRichFaqJsonLd,
   ToolsFaqSection,
 } from "@/components/tools/tools-faq-section";
-import { projectCatalogBannerVariant } from "@/lib/brand/project-catalog-banners";
+import { projectCatalogBannerVariant, PROJECT_CATALOG_BANNERS } from "@/lib/brand/project-catalog-banners";
+import { PreloadBannerImage } from "@/components/seo/preload-banner-image";
+import { catalogBannerSources } from "@/lib/brand/banner-responsive";
 import { EditorialTrustPanel } from "@/components/content/editorial-trust-panel";
 import { getNoxhEditorialTrust } from "@/lib/content/editorial-trust";
 import { NOXH_ELIGIBILITY_FAQ } from "@/lib/content/noxh-eligibility-faq";
@@ -65,8 +67,13 @@ export default async function DuAnListPage({ searchParams }: PageProps) {
   const noxhTrust = showNoxhFaq ? getNoxhEditorialTrust() : null;
   const gridKey = `${projectType ?? "all"}-${page}`;
 
+  const bannerPreload = catalogBannerSources(
+    PROJECT_CATALOG_BANNERS[bannerVariant].slide,
+  );
+
   return (
     <div className="proptech-section-glow mx-auto max-w-7xl py-8 container-px">
+      <PreloadBannerImage sources={bannerPreload} />
       {showNoxhFaq ? (
         <script
           type="application/ld+json"

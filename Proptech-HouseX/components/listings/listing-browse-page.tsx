@@ -1,4 +1,5 @@
 import Link from "next/link";
+import type { HouseXHeroSlideAsset } from "@/lib/brand/hero-assets";
 import { ListingCard } from "@/components/listings/listing-card";
 import { ListingBrowseFilters } from "@/components/listings/listing-browse-filters";
 import { ToolsPageHero } from "@/components/tools/tools-page-hero";
@@ -19,6 +20,7 @@ type BannerProps = {
   kicker: string;
   title: string;
   subtitle: string;
+  bannerSlide?: HouseXHeroSlideAsset;
   image: string;
   imageWebp?: string;
   imageAlt: string;
@@ -88,6 +90,7 @@ export function ListingBrowsePage({
         kicker={banner.kicker}
         title={banner.title}
         subtitle={banner.subtitle}
+        bannerSlide={banner.bannerSlide}
         image={banner.image}
         imageWebp={banner.imageWebp}
         imageAlt={banner.imageAlt}

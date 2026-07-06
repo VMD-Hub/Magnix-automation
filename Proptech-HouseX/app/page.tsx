@@ -6,6 +6,10 @@ import { ListingCard } from "@/components/listings/listing-card";
 import { ProjectCard } from "@/components/projects/project-card";
 import { getHomepageData } from "@/lib/data/home";
 import { HeroSlideBackground } from "@/components/home/hero-slide-background";
+import { HeroLcpPicture } from "@/components/home/hero-lcp-picture";
+import { PreloadBannerImage } from "@/components/seo/preload-banner-image";
+import { HOUSEX_HERO_SLIDES } from "@/lib/brand/hero-assets";
+import { heroLcpSources } from "@/lib/brand/banner-responsive";
 import { buildWebSiteJsonLd } from "@/lib/seo/website-json-ld";
 import {
   PLATFORM_BROKER_CTA,
@@ -18,9 +22,11 @@ export const revalidate = 300;
 export default async function Home() {
   const { projects, saleListings } = await getHomepageData();
   const webSiteJsonLd = buildWebSiteJsonLd();
+  const lcpSources = heroLcpSources(HOUSEX_HERO_SLIDES[0]!);
 
   return (
     <>
+      <PreloadBannerImage sources={lcpSources} />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(webSiteJsonLd) }}
@@ -28,6 +34,7 @@ export default async function Home() {
 
       <section className="lux-hero lux-hero--home relative overflow-hidden">
         <div className="lux-hero-mesh" aria-hidden />
+        <HeroLcpPicture />
         <HeroSlideBackground />
         <div className="lux-hero-inner relative z-[2] mx-auto max-w-7xl container-px">
           <p className="lux-hero-kicker proptech-kicker hidden text-gold-400 sm:block">

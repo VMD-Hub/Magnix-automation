@@ -14,7 +14,8 @@ import {
 import { propertyTypeLabel } from "@/lib/format";
 import { isBrowseRateLimited } from "@/lib/security/browse-rate-limit";
 import { RateLimitNotice } from "@/components/security/rate-limit-notice";
-import { getSiteUrl } from "@/lib/site-config";
+import { PreloadBannerImage } from "@/components/seo/preload-banner-image";
+import { catalogBannerSources } from "@/lib/brand/banner-responsive";
 
 export const revalidate = 120;
 
@@ -90,8 +91,13 @@ export default async function MuaBanPage({ searchParams }: PageProps) {
       ? `Lọc theo ${[propertyType ? propertyTypeLabel(propertyType) : null, locationLabel].filter(Boolean).join(", ")}`
       : copy.subtitle;
 
+  const bannerPreload = copy.bannerSlide
+    ? catalogBannerSources(copy.bannerSlide)
+    : null;
+
   return (
     <>
+      {bannerPreload ? <PreloadBannerImage sources={bannerPreload} /> : null}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
@@ -104,6 +110,7 @@ export default async function MuaBanPage({ searchParams }: PageProps) {
           kicker: copy.kicker,
           title: copy.title,
           subtitle: copy.subtitle,
+          bannerSlide: copy.bannerSlide,
           image: copy.bannerImage,
           imageWebp: copy.bannerWebp,
           imageAlt: copy.bannerAlt,

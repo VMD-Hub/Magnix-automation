@@ -1,4 +1,7 @@
-import { HOUSEX_HERO_SLIDES } from "@/lib/brand/hero-assets";
+import {
+  HOUSEX_HERO_SLIDES,
+  type HouseXHeroSlideAsset,
+} from "@/lib/brand/hero-assets";
 import { NOXH_CATALOG_TITLE } from "@/lib/content/messaging/noxh-public";
 
 export type ProjectCatalogBannerVariant = "all" | "THUONG_MAI" | "NHA_O_XA_HOI";
@@ -6,16 +9,13 @@ export type ProjectCatalogBannerVariant = "all" | "THUONG_MAI" | "NHA_O_XA_HOI";
 export type ProjectCatalogBannerConfig = {
   title: string;
   alt: string;
-  jpg: string;
-  webp: string;
-  jpgMd: string;
-  webpMd: string;
+  slide: HouseXHeroSlideAsset;
   objectPosition: string;
 };
 
 const [civic, metro] = HOUSEX_HERO_SLIDES;
 
-/** Banner danh mục /du-an — rộng, thấp hơn hero trang chi tiết dự án. */
+/** Banner danh mục /du-an — dùng bản 1280/768, không bản 3840. */
 export const PROJECT_CATALOG_BANNERS: Record<
   ProjectCatalogBannerVariant,
   ProjectCatalogBannerConfig
@@ -23,28 +23,19 @@ export const PROJECT_CATALOG_BANNERS: Record<
   all: {
     title: "Dự án bất động sản",
     alt: "Toàn cảnh đô thị — danh mục dự án HouseX",
-    jpg: metro.jpg,
-    webp: metro.webp,
-    jpgMd: metro.jpgMd,
-    webpMd: metro.webpMd,
+    slide: metro,
     objectPosition: metro.objectPosition,
   },
   THUONG_MAI: {
     title: "Dự án thương mại",
     alt: "Phối cảnh đô thị thương mại — danh mục dự án HouseX",
-    jpg: civic.jpg,
-    webp: civic.webp,
-    jpgMd: civic.jpgMd,
-    webpMd: civic.webpMd,
+    slide: civic,
     objectPosition: civic.objectPosition,
   },
   NHA_O_XA_HOI: {
     title: NOXH_CATALOG_TITLE,
     alt: "Khu căn hộ nhà ở xã hội — danh mục dự án miền Nam trên HouseX",
-    jpg: civic.jpg,
-    webp: civic.webp,
-    jpgMd: civic.jpgMd,
-    webpMd: civic.webpMd,
+    slide: civic,
     objectPosition: "50% 55%",
   },
 };

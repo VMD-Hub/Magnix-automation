@@ -9,12 +9,18 @@ export const HOUSEX_HERO_BANNER_HEIGHT_2X = 1646;
 export type HouseXHeroSlideAsset = {
   id: string;
   label: string;
-  /** Bản 3840px — màn hình lớn / DPR cao */
+  /** Bản 3840px — chỉ OG/print, không dùng LCP web. */
   jpg: string;
   webp: string;
-  /** Bản 1920px — tablet / tiết kiệm băng thông */
+  /** Bản 1920px — desktop hero. */
   jpgMd: string;
   webpMd: string;
+  /** Bản 1280px — banner catalog/công cụ. */
+  jpg1280: string;
+  webp1280: string;
+  /** Bản 768px — mobile LCP. */
+  jpg768: string;
+  webp768: string;
   objectPosition: string;
 };
 
@@ -36,6 +42,10 @@ export const HOUSEX_HERO_SLIDES: HouseXHeroSlideAsset[] = [
     webp: `/images/hero/${SLIDE_01}.webp`,
     jpgMd: `/images/hero/${SLIDE_01}-1920.jpg`,
     webpMd: `/images/hero/${SLIDE_01}-1920.webp`,
+    jpg1280: `/images/hero/${SLIDE_01}-1280.jpg`,
+    webp1280: `/images/hero/${SLIDE_01}-1280.webp`,
+    jpg768: `/images/hero/${SLIDE_01}-768.jpg`,
+    webp768: `/images/hero/${SLIDE_01}-768.webp`,
     objectPosition: "50% 42%",
   },
   {
@@ -45,6 +55,10 @@ export const HOUSEX_HERO_SLIDES: HouseXHeroSlideAsset[] = [
     webp: `/images/hero/${SLIDE_02}.webp`,
     jpgMd: `/images/hero/${SLIDE_02}-1920.jpg`,
     webpMd: `/images/hero/${SLIDE_02}-1920.webp`,
+    jpg1280: `/images/hero/${SLIDE_02}-1280.jpg`,
+    webp1280: `/images/hero/${SLIDE_02}-1280.webp`,
+    jpg768: `/images/hero/${SLIDE_02}-768.jpg`,
+    webp768: `/images/hero/${SLIDE_02}-768.webp`,
     objectPosition: "50% 38%",
   },
 ];

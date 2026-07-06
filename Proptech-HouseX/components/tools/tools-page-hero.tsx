@@ -1,4 +1,11 @@
 import Link from "next/link";
+import type { HouseXHeroSlideAsset } from "@/lib/brand/hero-assets";
+import {
+  CATALOG_BANNER_SIZES,
+  catalogBannerSources,
+  type ResponsiveBannerSources,
+} from "@/lib/brand/banner-responsive";
+import { BannerPicture } from "@/components/ui/banner-picture";
 import { ButtonLink } from "@/components/ui/button";
 import { cn } from "@/lib/ui/cn";
 
@@ -8,6 +15,9 @@ type Props = {
   kicker?: string;
   title: string;
   subtitle: string;
+  /** Ưu tiên slide responsive — không tải bản 3840. */
+  bannerSlide?: HouseXHeroSlideAsset;
+  bannerSources?: ResponsiveBannerSources;
   image?: string;
   imageWebp?: string;
   imageAlt?: string;
@@ -22,6 +32,8 @@ export function ToolsPageHero({
   kicker,
   title,
   subtitle,
+  bannerSlide,
+  bannerSources,
   image,
   imageWebp,
   imageAlt = "",
@@ -30,6 +42,10 @@ export function ToolsPageHero({
   secondaryCta,
   className,
 }: Props) {
+  const sources =
+    bannerSources ??
+    (bannerSlide ? catalogBannerSources(bannerSlide) : undefined);
+
   return (
     <header
       className={cn(
@@ -38,17 +54,29 @@ export function ToolsPageHero({
       )}
     >
       <div className="relative h-[240px] w-full sm:h-[260px] lg:h-[280px]">
-        <picture>
-          {imageWebp ? <source srcSet={imageWebp} type="image/webp" /> : null}
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={image}
+        {sources ? (
+          <BannerPicture
+            sources={sources}
+            sizes={CATALOG_BANNER_SIZES}
             alt={imageAlt}
-            fetchPriority="high"
-            className="absolute inset-0 h-full w-full object-cover"
-            style={{ objectPosition }}
+            objectPosition={bannerSlide?.objectPosition ?? objectPosition}
+            priority
           />
-        </picture>
+        ) : (
+          <picture>
+            {imageWebp ? <source srcSet={imageWebp} type="image/webp" /> : null}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={image}
+              alt={imageAlt}
+              fetchPriority="high"
+              loading="eager"
+              decoding="sync"
+              className="absolute inset-0 h-full w-full object-cover"
+              style={{ objectPosition }}
+            />
+          </picture>
+        )}
         <div
           className="absolute inset-0 bg-gradient-to-r from-ink-900/90 via-ink-900/55 to-brand-900/25"
           aria-hidden

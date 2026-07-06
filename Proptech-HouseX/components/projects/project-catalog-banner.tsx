@@ -2,6 +2,8 @@ import {
   PROJECT_CATALOG_BANNERS,
   type ProjectCatalogBannerVariant,
 } from "@/lib/brand/project-catalog-banners";
+import { CATALOG_BANNER_SIZES, catalogBannerSources } from "@/lib/brand/banner-responsive";
+import { BannerPicture } from "@/components/ui/banner-picture";
 import {
   NOXH_CATALOG_BANNER_ALT,
   NOXH_REGION_TAGLINE,
@@ -16,31 +18,18 @@ type Props = {
  */
 export function ProjectCatalogBanner({ variant }: Props) {
   const banner = PROJECT_CATALOG_BANNERS[variant];
+  const sources = catalogBannerSources(banner.slide);
 
   return (
     <header className="relative mb-6 overflow-hidden rounded-2xl ring-1 ring-silver-200">
       <div className="relative h-[220px] w-full sm:h-[250px] lg:h-[260px]">
-        <picture>
-          <source
-            media="(min-width: 1024px)"
-            srcSet={`${banner.webp} 1x, ${banner.webp} 2x`}
-            type="image/webp"
-          />
-          <source
-            media="(min-width: 1024px)"
-            srcSet={`${banner.jpg} 1x, ${banner.jpg} 2x`}
-          />
-          <source srcSet={banner.webpMd} type="image/webp" />
-          <source srcSet={banner.jpgMd} />
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={banner.jpgMd}
-            alt={variant === "NHA_O_XA_HOI" ? NOXH_CATALOG_BANNER_ALT : banner.alt}
-            fetchPriority="high"
-            className="absolute inset-0 h-full w-full object-cover"
-            style={{ objectPosition: banner.objectPosition }}
-          />
-        </picture>
+        <BannerPicture
+          sources={sources}
+          sizes={CATALOG_BANNER_SIZES}
+          alt={variant === "NHA_O_XA_HOI" ? NOXH_CATALOG_BANNER_ALT : banner.alt}
+          objectPosition={banner.objectPosition}
+          priority
+        />
         <div
           className="absolute inset-0 bg-gradient-to-r from-ink-900/82 via-ink-900/45 to-ink-900/15"
           aria-hidden

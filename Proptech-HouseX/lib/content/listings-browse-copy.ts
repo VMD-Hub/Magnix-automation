@@ -11,8 +11,9 @@ export const LISTINGS_BROWSE_COPY = {
     title: "Bất động sản đang bán",
     subtitle:
       "Căn hộ, nhà phố, đất nền — tin đã kiểm duyệt tại TP.HCM (gồm Bình Dương, Bà Rịa-Vũng Tàu, Côn Đảo), TP. Đồng Nai (gồm Bình Phước cũ), Tây Ninh (gồm Long An cũ), Cần Thơ (gồm Hậu Giang, Sóc Trăng) và các tỉnh lân cận.",
-    bannerImage: HOUSEX_HERO_SLIDES[0]!.jpgMd,
-    bannerWebp: HOUSEX_HERO_SLIDES[0]!.webpMd,
+    bannerImage: HOUSEX_HERO_SLIDES[0]!.jpg1280,
+    bannerWebp: HOUSEX_HERO_SLIDES[0]!.webp1280,
+    bannerSlide: HOUSEX_HERO_SLIDES[0]!,
     bannerAlt: "Phối cảnh đô thị — mua bán bất động sản HouseX",
     objectPosition: HOUSEX_HERO_SLIDES[0]!.objectPosition,
     emptyFilter: "Chưa có tin khớp bộ lọc. Thử bỏ bớt điều kiện hoặc quay lại sau.",

@@ -48,6 +48,6 @@ describe("go-live landing catalog", () => {
     assert.equal(projectCatalogBannerVariant(undefined), "all");
     assert.equal(projectCatalogBannerVariant("THUONG_MAI"), "THUONG_MAI");
     assert.equal(projectCatalogBannerVariant("NHA_O_XA_HOI"), "NHA_O_XA_HOI");
-    assert.ok(PROJECT_CATALOG_BANNERS.all.jpg.startsWith("/images/hero/"));
+    assert.ok(PROJECT_CATALOG_BANNERS.all.slide.webp1280.startsWith("/images/hero/"));
   });
 });
