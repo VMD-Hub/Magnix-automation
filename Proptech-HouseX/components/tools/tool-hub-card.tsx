@@ -1,26 +1,52 @@
 import Link from "next/link";
+import { PhongThuyVisual } from "@/components/feng-shui/phong-thuy-visual";
 import { cn } from "@/lib/ui/cn";
 import type { ToolCardDef } from "@/lib/content/housex-tools-copy";
-import { TOOL_CARD_IMAGES } from "@/lib/content/housex-tools-visuals";
+import { toolCardImage, toolCardImageWebp } from "@/lib/content/housex-tools-visuals";
+import { phongThuyVisualForTool } from "@/lib/content/phong-thuy-visual-variants";
 
 export function ToolHubCard({ tool }: { tool: ToolCardDef }) {
-  const image = TOOL_CARD_IMAGES[tool.id] ?? TOOL_CARD_IMAGES.loan;
+  const easternVariant = phongThuyVisualForTool(tool.id);
+  const image = toolCardImage(tool.id);
+  const imageWebp = toolCardImageWebp(tool.id) ?? undefined;
 
   const inner = (
     <>
-      <div className="relative aspect-[16/10] overflow-hidden bg-ink-800">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={image}
-          alt=""
-          aria-hidden
+      <div
+        className={cn(
+          "relative aspect-[16/10] overflow-hidden",
+          easternVariant ? "bg-ink-900" : "bg-ink-800",
+        )}
+      >
+        {easternVariant ? (
+          <PhongThuyVisual
+            variant={easternVariant}
+            size="card"
+            interactive
+            className="h-full w-full"
+          />
+        ) : (
+          <picture>
+            {imageWebp ? <source srcSet={imageWebp} type="image/webp" /> : null}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={image}
+              alt=""
+              aria-hidden
+              className={cn(
+                "h-full w-full object-cover transition-transform duration-500",
+                tool.ready && "group-hover:scale-105",
+                !tool.ready && "opacity-60 grayscale-[30%]",
+              )}
+            />
+          </picture>
+        )}
+        <div
           className={cn(
-            "h-full w-full object-cover transition-transform duration-500",
-            tool.ready && "group-hover:scale-105",
-            !tool.ready && "opacity-60 grayscale-[30%]",
+            "absolute inset-0 bg-gradient-to-t from-ink-900/70 via-transparent to-transparent",
+            easternVariant && "from-ink-900/80",
           )}
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-ink-900/70 via-transparent to-transparent" />
         {tool.badge && tool.ready ? (
           <span className="absolute left-3 top-3 rounded-lg bg-gold-500 px-2.5 py-1 text-xs font-bold uppercase tracking-wide text-white shadow-sm">
             {tool.badge}
@@ -73,22 +99,26 @@ type ServiceCardProps = {
   title: string;
   intro: string;
   image: string;
+  imageWebp?: string;
 };
 
-export function ToolServiceCard({ href, title, intro, image }: ServiceCardProps) {
+export function ToolServiceCard({ href, title, intro, image, imageWebp }: ServiceCardProps) {
   return (
     <Link
       href={href}
       className="proptech-card group flex flex-col overflow-hidden p-0 transition-shadow hover:shadow-lg sm:flex-row"
     >
       <div className="relative aspect-[16/10] shrink-0 overflow-hidden sm:aspect-auto sm:h-auto sm:w-40 md:w-48">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={image}
-          alt=""
-          aria-hidden
-          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-        />
+        <picture className="block h-full w-full">
+          {imageWebp ? <source srcSet={imageWebp} type="image/webp" /> : null}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={image}
+            alt=""
+            aria-hidden
+            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+          />
+        </picture>
       </div>
       <div className="flex flex-1 flex-col justify-center p-5">
         <h3 className="font-bold text-slate-900 group-hover:text-brand-700">{title}</h3>

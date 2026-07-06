@@ -10,6 +10,7 @@ import { cn } from "@/lib/ui/cn";
 
 const SLIDE_MS = 8000;
 const FADE_MS = 1200;
+const MOBILE_MAX = 767;
 
 type Props = {
   slides?: HouseXHeroSlideAsset[];
@@ -41,9 +42,8 @@ function HeroSlideFrame({
           sizes={HOUSEX_HERO_SRCSET_SIZES}
           type="image/webp"
         />
-        {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src={slide.jpg}
+          src={slide.jpgMd}
           srcSet={jpgSrcSet}
           sizes={HOUSEX_HERO_SRCSET_SIZES}
           alt=""
@@ -57,35 +57,47 @@ function HeroSlideFrame({
   );
 }
 
-/** Hero slide fade — tối thiểu 2 ảnh, srcset 1920/3840 cho desktop lớn. */
+/** Hero slide fade — mobile: ảnh tĩnh (LCP); desktop: luân phiên. */
 export function HeroSlideBackground({ slides = HOUSEX_HERO_SLIDES }: Props) {
   const [active, setActive] = useState(0);
+  const [staticMode, setStaticMode] = useState(false);
   const count = slides.length;
 
   useEffect(() => {
+    const mq = window.matchMedia(`(max-width: ${MOBILE_MAX}px)`);
+    const sync = () => setStaticMode(mq.matches);
+    sync();
+    mq.addEventListener("change", sync);
+    return () => mq.removeEventListener("change", sync);
+  }, []);
+
+  useEffect(() => {
+    if (staticMode) return;
     for (const slide of slides) {
       for (const src of [slide.jpg, slide.jpgMd, slide.webp, slide.webpMd]) {
         const img = new Image();
         img.src = src;
       }
     }
-  }, [slides]);
+  }, [slides, staticMode]);
 
   useEffect(() => {
-    if (count <= 1) return;
+    if (staticMode || count <= 1) return;
     const id = window.setInterval(() => {
       setActive((i) => (i + 1) % count);
     }, SLIDE_MS);
     return () => window.clearInterval(id);
-  }, [count]);
+  }, [count, staticMode]);
+
+  const visibleSlides = staticMode ? slides.slice(0, 1) : slides;
 
   return (
     <div className="hero-slide-bg absolute inset-0 z-[1]" aria-hidden>
-      {slides.map((slide, index) => (
+      {visibleSlides.map((slide, index) => (
         <HeroSlideFrame
           key={slide.id}
           slide={slide}
-          active={index === active}
+          active={staticMode || index === active}
           priority={index === 0}
         />
       ))}

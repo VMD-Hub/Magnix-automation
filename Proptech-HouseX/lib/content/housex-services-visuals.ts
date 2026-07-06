@@ -23,6 +23,7 @@ export const SERVICES_HUB_VISUAL = {
 
 export type VerticalVisual = {
   heroImage: string;
+  heroImageWebp?: string;
   /** Tailwind gradient classes on hero overlay */
   heroGradient: string;
   accentRing: string;
@@ -35,7 +36,8 @@ export type VerticalVisual = {
 
 export const VERTICAL_VISUALS: Record<ServiceVerticalId, VerticalVisual> = {
   "tai-chinh": {
-    heroImage: u("photo-1554224155-6726b3ff858f", 1920),
+    heroImage: "/images/tools/finance-hub.png",
+    heroImageWebp: "/images/tools/finance-hub.webp",
     heroGradient: "from-amber-950/95 via-ink-900/90 to-brand-900/80",
     accentRing: "ring-amber-200/60",
     accentBg: "bg-amber-50",
@@ -79,7 +81,8 @@ export const VERTICAL_VISUALS: Record<ServiceVerticalId, VerticalVisual> = {
     ],
   },
   "noi-that": {
-    heroImage: u("photo-1616486338812-28d840397daf", 1920),
+    heroImage: "/images/tools/interior-hub.png",
+    heroImageWebp: "/images/tools/interior-hub.webp",
     heroGradient: "from-stone-900/95 via-ink-900/88 to-brand-900/70",
     accentRing: "ring-stone-200/60",
     accentBg: "bg-stone-50",
@@ -106,8 +109,8 @@ export const VERTICAL_VISUALS: Record<ServiceVerticalId, VerticalVisual> = {
 
 /** Ảnh thẻ dịch vụ theo slug hoặc product line id */
 export const SERVICE_CARD_IMAGES: Record<string, string> = {
-  "vay-mua-bds": u("photo-1564013799919-ab600027ffc6"),
-  "vay-sxkd": u("photo-1504384308090-c894fd5f602f"),
+  "vay-mua-bds": "/images/tools/finance-hub.png",
+  "vay-sxkd": "/images/tools/business-loan.png",
   "tra-cuu-gia-chu-nha": u("photo-1564013799919-ab600027ffc6"),
   "tham-dinh-ngan-hang": u("photo-1582405790763-cb34f71e7e3e"),
   "chung-nhan-tham-dinh": u("photo-1450101499163-c8848c66ca85"),
@@ -124,12 +127,18 @@ export const SERVICE_CARD_IMAGES: Record<string, string> = {
   "can-ho-dep-y-tuong": u("photo-1600566753190-17f0baa2a6a3"),
 };
 
+/** WebP cho thẻ dịch vụ có ảnh thương hiệu local. */
+export const SERVICE_CARD_IMAGES_WEBP: Record<string, string> = {
+  "vay-mua-bds": "/images/tools/finance-hub.webp",
+  "vay-sxkd": "/images/tools/business-loan.webp",
+};
+
 export const HUB_VERTICAL_CARDS: Record<
   ServiceVerticalId,
   { image: string; badge: string; cta: string }
 > = {
   "tai-chinh": {
-    image: u("photo-1554224155-6726b3ff858f"),
+    image: "/images/tools/finance-hub.png",
     badge: "Tài chính",
     cta: "Tư vấn vay ngay",
   },
@@ -139,7 +148,7 @@ export const HUB_VERTICAL_CARDS: Record<
     cta: "Yêu cầu định giá",
   },
   "noi-that": {
-    image: u("photo-1616486338812-28d840397daf"),
+    image: "/images/tools/interior-hub.png",
     badge: "Nội thất",
     cta: "Khảo sát thiết kế",
   },
@@ -150,4 +159,8 @@ export function cardImageForSlug(slug: string): string {
     SERVICE_CARD_IMAGES[slug] ??
     u("photo-1560518883-ce09059eeffa")
   );
+}
+
+export function cardWebpForSlug(slug: string): string | undefined {
+  return SERVICE_CARD_IMAGES_WEBP[slug];
 }

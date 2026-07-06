@@ -2,6 +2,10 @@ import type { ArticleCardData } from "@/lib/data/article-types";
 import type { EditorialExpert } from "@/lib/content/editorial-trust";
 import { EDITORIAL_BYLINE } from "@/lib/content/editorial-trust";
 import { ArticleTagList } from "@/components/articles/article-body";
+import {
+  PhongThuyArticleCover,
+  articleHasPhongThuyTag,
+} from "@/components/feng-shui/phong-thuy-article-cover";
 import { ensureArticleCoverUrl } from "@/lib/content/safe-image";
 
 export function ArticleHero({
@@ -26,6 +30,7 @@ export function ArticleHero({
 }) {
   const alt = article.coverImageAlt ?? article.title;
   const coverUrl = ensureArticleCoverUrl(article.coverImageUrl);
+  const usePhongThuyCover = !coverUrl && articleHasPhongThuyTag(article.tags);
 
   return (
     <header className="border-b border-slate-200 bg-slate-50">
@@ -49,6 +54,16 @@ export function ArticleHero({
               {article.coverImageCaption}
             </figcaption>
           )}
+        </figure>
+      ) : usePhongThuyCover ? (
+        <figure className="relative mx-auto max-w-6xl">
+          <div className="relative max-h-[420px] w-full overflow-hidden">
+            <PhongThuyArticleCover title={alt} />
+            <div
+              className="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-950/40 via-transparent to-transparent"
+              aria-hidden
+            />
+          </div>
         </figure>
       ) : null}
 

@@ -1405,6 +1405,7 @@ async function main() {
     { slug: "tien-do-du-an", name: "Tiến độ dự án", description: "Cập nhật giá, khởi công, bàn giao." },
     { slug: "dau-tu", name: "Kiến thức đầu tư", description: "Phân tích NOXH vs thương mại." },
     { slug: "goc-chuyen-gia", name: "Góc chuyên gia", description: "Nhận định thị trường." },
+    { slug: "phong-thuy", name: "Phong thủy nhà ở", description: "Hướng nhà, tuổi xây, màu sơn." },
   ];
   for (const t of tagDefs) {
     await prisma.articleTag.upsert({
@@ -1449,6 +1450,25 @@ Mức giá chính thức: 23.251.398 đồng/m² (đã VAT, chưa gồm 2% phí 
       excerpt: "Đối tượng thu nhập thấp, công nhân, CBCCVC theo Luật Nhà ở.",
       body: `Người mua NOXH phải thuộc nhóm đối tượng quy định và đáp ứng điều kiện thu nhập, nhà ở, cư trú. Hồ sơ gồm đơn đăng ký, giấy tờ chứng minh đối tượng và cam kết theo quy định.`,
       tagSlugs: ["noxh", "phap-ly", "goc-chuyen-gia"],
+      projectId: undefined as string | undefined,
+      coverImageUrl: null as string | null,
+    },
+    {
+      slug: "huong-nha-hop-tuoi-bat-trach-tom-tat",
+      title: "Hướng nhà hợp tuổi theo Bát trạch — tóm tắt cho người mua nhà",
+      excerpt:
+        "Cung mệnh, Đông/Tây tứ mệnh và 4 hướng cát — cách tra cứu nhanh trước khi chọn căn.",
+      body: `Bát trạch xác định cung mệnh từ năm sinh âm lịch và giới tính, suy ra 4 hướng tốt và 4 hướng xấu. Dùng công cụ xem hướng nhà trên House X để tra cứu tức thì.`,
+      tagSlugs: ["phong-thuy", "goc-chuyen-gia"],
+      projectId: undefined as string | undefined,
+      coverImageUrl: null as string | null,
+    },
+    {
+      slug: "kim-lau-hoang-oc-tam-tai-xay-nha-giai-thich",
+      title: "Kim Lâu, Hoang Ốc, Tam Tai khi xây nhà — giải thích ngắn gọn",
+      excerpt: "Tuổi mụ, cách tính phạm và gợi ý chọn năm động thổ.",
+      body: `Tuổi mụ = năm xây − năm sinh + 1. Kim Lâu (chia 9), Hoang Ốc (chia 6), Tam Tai theo tam hợp địa chi — tham khảo trước động thổ.`,
+      tagSlugs: ["phong-thuy", "goc-chuyen-gia"],
       projectId: undefined as string | undefined,
       coverImageUrl: null as string | null,
     },

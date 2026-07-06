@@ -8,6 +8,7 @@ export function ServiceLandingHero({
   title,
   intro,
   heroImage,
+  heroImageWebp,
   heroGradient,
   breadcrumbs,
   primaryCta,
@@ -17,6 +18,7 @@ export function ServiceLandingHero({
   title: string;
   intro: string;
   heroImage: string;
+  heroImageWebp?: string;
   heroGradient: string;
   breadcrumbs?: { name: string; path: string }[];
   primaryCta?: { label: string; href: string };
@@ -24,14 +26,19 @@ export function ServiceLandingHero({
 }) {
   return (
     <section className="relative isolate min-h-[380px] overflow-hidden bg-ink-900 text-white sm:min-h-[440px] lg:min-h-[480px]">
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        src={heroImage}
-        alt=""
-        aria-hidden
-        className="absolute inset-0 h-full w-full object-cover"
-        fetchPriority="high"
-      />
+      <picture className="absolute inset-0 block h-full w-full">
+        {heroImageWebp ? (
+          <source srcSet={heroImageWebp} type="image/webp" />
+        ) : null}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={heroImage}
+          alt=""
+          aria-hidden
+          className="absolute inset-0 h-full w-full object-cover"
+          fetchPriority="high"
+        />
+      </picture>
       <div className={`absolute inset-0 bg-gradient-to-br ${heroGradient}`} aria-hidden />
       <div
         className="absolute inset-0 bg-gradient-to-t from-ink-900/80 via-transparent to-ink-900/30"

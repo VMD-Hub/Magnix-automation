@@ -56,6 +56,12 @@ export const DEMO_ARTICLE_TAGS: ArticleTagSummary[] = [
     articleCount: 1,
   },
   {
+    slug: "phong-thuy",
+    name: "Phong thủy nhà ở",
+    description: "Hướng nhà Bát trạch, tuổi xây, màu sơn và bố trí không gian.",
+    articleCount: 2,
+  },
+  {
     slug: "nha-o-xa-hoi-ly-thuong-kiet",
     name: "NOXH Lý Thường Kiệt",
     description: "Phú Thọ DMC — giá, tiến độ và hồ sơ đăng ký.",
@@ -289,6 +295,87 @@ ${NOXH_SUPPORT_CLOSING}
     tags: [
       { slug: "noxh", name: "Nhà ở xã hội" },
       { slug: "phap-ly", name: "Pháp lý & chính sách" },
+      { slug: "goc-chuyen-gia", name: "Góc chuyên gia" },
+    ],
+    projects: [],
+  },
+  {
+    id: "demo-article-bat-trach-tom-tat",
+    slug: "huong-nha-hop-tuoi-bat-trach-tom-tat",
+    title: "Hướng nhà hợp tuổi theo Bát trạch — tóm tắt cho người mua nhà",
+    excerpt:
+      "Cung mệnh, Đông/Tây tứ mệnh và 4 hướng cát — cách tra cứu nhanh trước khi chọn căn.",
+    body: `## Bát trạch là gì khi xem hướng nhà?
+
+Phong thủy Bát trạch (cung phi bát trạch) xác định **cung mệnh** của gia chủ từ năm sinh âm lịch và giới tính, rồi suy ra **4 hướng tốt** và **4 hướng xấu** trên la bàn 8 hướng.
+
+## Các bước tra cứu nhanh
+
+1. Xác định năm sinh **âm lịch** (sinh trước Tết dương lịch thì lùi 1 năm).
+2. Tính cung mệnh: Càn, Khảm, Cấn, Chấn, Tốn, Ly, Khôn, Đoài.
+3. Phân loại **Đông tứ mệnh** (Khảm, Ly, Chấn, Tốn) hoặc **Tây tứ mệnh** (Càn, Khôn, Cấn, Đoài).
+4. Ưu tiên hướng **Sinh Khí, Thiên Y, Diên Niên, Phục Vị** cho cửa chính, giường, bàn thờ; hướng hung (Họa Hại, Lục Sát, Ngũ Quỷ, Tuyệt Mệnh) thường dùng cho bếp, nhà vệ sinh.
+
+Dùng [công cụ xem hướng nhà](/cong-cu/xem-huong-nha) trên House X để có sơ đồ la bàn tức thì.
+
+## Vợ chồng khác mệnh thì xem theo ai?
+
+Theo thông lệ, **hướng nhà và cửa chính** lấy theo gia chủ (người trụ cột hoặc đứng tên mua nhà). Phòng ngủ, bàn làm việc riêng có thể bố trí theo cung mệnh từng người.
+
+## Lưu ý thực tế
+
+Bát trạch là tham khảo văn hóa — không thay thế pháp lý, ánh sáng, thông gió hay khả năng tài chính. Kết hợp với [chuyên mục phong thủy](/phong-thuy) và [thẩm định vay](/cong-cu/tinh-khoan-vay) trước khi quyết định.`,
+    status: "PUBLISHED",
+    publishedAt: new Date("2026-06-15T00:00:00.000Z"),
+    updatedAt: NOW,
+    coverImageUrl: null,
+    authorName: "Ban biên tập House X",
+    seoTitle: "Hướng nhà hợp tuổi Bát trạch — tóm tắt cho người mua nhà",
+    seoDesc:
+      "Cung mệnh, Đông/Tây tứ mệnh, 4 hướng cát/hung — hướng dẫn tra cứu nhanh và công cụ miễn phí House X.",
+    tags: [
+      { slug: "phong-thuy", name: "Phong thủy nhà ở" },
+      { slug: "goc-chuyen-gia", name: "Góc chuyên gia" },
+    ],
+    projects: [],
+  },
+  {
+    id: "demo-article-kim-lau-hoang-oc",
+    slug: "kim-lau-hoang-oc-tam-tai-xay-nha-giai-thich",
+    title: "Kim Lâu, Hoang Ốc, Tam Tai khi xây nhà — giải thích ngắn gọn",
+    excerpt:
+      "Tuổi mụ, cách tính phạm và gợi ý chọn năm động thổ — kèm công cụ kiểm tra.",
+    body: `## Tuổi mụ là gì?
+
+**Tuổi mụ** = năm xây (âm lịch) − năm sinh (âm lịch) + 1. Đây là cơ sở tính Kim Lâu và Hoang Ốc trong dân gian.
+
+## Kim Lâu
+
+Chia tuổi mụ cho 9; dư **1, 3, 6 hoặc 8** thì coi là phạm Kim Lâu (có luận giải chi tiết theo từng dư). Nhiều gia đình tránh năm phạm để động thổ hoặc mượn tuổi.
+
+## Hoang Ốc
+
+Chia tuổi mụ cho 6. Một số dư được coi là tốt (Nhất Cát, Nhì Nghi, Tứ Tấn Tài tùy trường phái); các dư khác thường được tránh.
+
+## Tam Tai
+
+Tam Tai theo **tam hợp địa chi** — mỗi tuổi có chu kỳ 3 năm liên tiếp phạm trong một vòng 12 năm. Tra cứu theo chi năm sinh.
+
+## Công cụ trên House X
+
+Dùng [kiểm tra tuổi xây/sửa nhà](/cong-cu/kiem-tra-tuoi-xay-nha) để xem năm hiện tại và các năm kế tiếp. Kết quả mang tính tham khảo — quyết định cuối cùng nên cân nhắc hợp đồng dự án và khả năng tài chính.
+
+Xem thêm [chuyên mục phong thủy](/phong-thuy) và [xem hướng nhà](/cong-cu/xem-huong-nha).`,
+    status: "PUBLISHED",
+    publishedAt: new Date("2026-06-10T00:00:00.000Z"),
+    updatedAt: NOW,
+    coverImageUrl: null,
+    authorName: "Ban biên tập House X",
+    seoTitle: "Kim Lâu, Hoang Ốc, Tam Tai — giải thích khi xây nhà",
+    seoDesc:
+      "Tuổi mụ, cách tính Kim Lâu/Hoang Ốc/Tam Tai và công cụ kiểm tra năm động thổ miễn phí trên House X.",
+    tags: [
+      { slug: "phong-thuy", name: "Phong thủy nhà ở" },
       { slug: "goc-chuyen-gia", name: "Góc chuyên gia" },
     ],
     projects: [],

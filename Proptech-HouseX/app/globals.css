@@ -317,9 +317,9 @@ html:not(.dark) .lux-hero .lux-glass {
 
 .housex-header-logo__img {
   display: block;
-  height: 2.85rem;
+  height: 2.25rem;
   width: auto;
-  max-width: min(13.5rem, 52vw);
+  max-width: min(12rem, 48vw);
   object-fit: contain;
   object-position: left center;
   opacity: 1;
@@ -444,6 +444,41 @@ html:not(.dark) .lux-hero .text-slate-100 {
   color: rgba(255, 255, 255, 0.92);
 }
 
+/* Trang chủ — hero compact mobile, full desktop (portal search-first) */
+.lux-hero--home {
+  min-height: auto;
+}
+
+.lux-hero--home .lux-hero-inner {
+  padding-block: 2rem;
+}
+
+@media (max-width: 767px) {
+  .lux-hero--home .lux-hero-inner {
+    padding-block: 1.25rem;
+  }
+
+  .lux-hero--home .lux-hero-mesh {
+    opacity: 0.22;
+  }
+}
+
+@media (min-width: 768px) {
+  .lux-hero--home {
+    min-height: 420px;
+  }
+
+  .lux-hero--home .lux-hero-inner {
+    padding-block: 4rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .lux-hero--home .lux-hero-inner {
+    padding-block: 5rem;
+  }
+}
+
 .lux-hero-mesh {
   position: absolute;
   inset: 0;
@@ -469,6 +504,27 @@ html:not(.dark) .lux-hero .text-slate-100 {
   }
   to {
     background-position: 48px 48px, 48px 48px;
+  }
+}
+
+/* La bàn phong thủy — xoay nhẹ khi hover card/hero */
+.luo-pan-disc-spin {
+  transform-box: fill-box;
+  transform-origin: 0 0;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .group:hover .luo-pan-disc-spin {
+    animation: luo-pan-spin 32s linear infinite;
+  }
+}
+
+@keyframes luo-pan-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
   }
 }
 

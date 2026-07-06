@@ -51,6 +51,16 @@ const nextConfig = {
         destination: "/cong-cu/tinh-han-muc-vay",
         permanent: true,
       },
+      {
+        source: "/tin-tuc/chu-de/phong-thuy",
+        destination: "/phong-thuy",
+        permanent: true,
+      },
+      {
+        source: "/tin-tuc/chu-de/phong-thuy/:path*",
+        destination: "/phong-thuy",
+        permanent: true,
+      },
     ];
   },
 };

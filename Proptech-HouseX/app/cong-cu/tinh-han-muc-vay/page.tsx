@@ -73,6 +73,7 @@ export default function Page() {
         title={LOAN_AFFORDABILITY_COPY.title}
         subtitle={LOAN_AFFORDABILITY_COPY.subtitle}
         image={LOAN_AFFORDABILITY_BANNER.jpg}
+        imageWebp={LOAN_AFFORDABILITY_BANNER.webp}
         imageAlt={LOAN_AFFORDABILITY_BANNER.alt}
         objectPosition={LOAN_AFFORDABILITY_BANNER.objectPosition}
         primaryCta={{

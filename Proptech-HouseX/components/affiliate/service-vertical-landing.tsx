@@ -4,6 +4,7 @@ import { HOUSEX_SERVICES_LABEL } from "@/lib/content/housex-services-copy";
 import {
   VERTICAL_VISUALS,
   cardImageForSlug,
+  cardWebpForSlug,
 } from "@/lib/content/housex-services-visuals";
 import {
   ServiceCtaSection,
@@ -65,6 +66,7 @@ export function ServiceVerticalLanding({ vertical }: { vertical: AffiliateVertic
         title={vertical.h1}
         intro={vertical.intro}
         heroImage={visual.heroImage}
+        heroImageWebp={visual.heroImageWebp}
         heroGradient={visual.heroGradient}
         breadcrumbs={breadcrumbs}
         primaryCta={{ label: "Nhận tư vấn", href: "#tu-van" }}
@@ -90,12 +92,17 @@ export function ServiceVerticalLanding({ vertical }: { vertical: AffiliateVertic
                 className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm"
               >
                 <div className="aspect-[21/9] overflow-hidden">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={cardImageForSlug(p.id)}
-                    alt=""
-                    className="h-full w-full object-cover"
-                  />
+                  <picture className="block h-full w-full">
+                    {cardWebpForSlug(p.id) ? (
+                      <source srcSet={cardWebpForSlug(p.id)} type="image/webp" />
+                    ) : null}
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={cardImageForSlug(p.id)}
+                      alt=""
+                      className="h-full w-full object-cover"
+                    />
+                  </picture>
                 </div>
                 <div className="p-6">
                   <h3 className="text-lg font-bold text-slate-900">{p.title}</h3>

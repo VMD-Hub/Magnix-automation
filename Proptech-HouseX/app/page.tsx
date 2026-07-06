@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { Icon } from "@/components/icons";
 import { SearchHero } from "@/components/home/search-hero";
 import { ProptechTools } from "@/components/home/proptech-tools";
 import { SectionHeading } from "@/components/ui/section-heading";
@@ -7,6 +6,7 @@ import { ListingCard } from "@/components/listings/listing-card";
 import { ProjectCard } from "@/components/projects/project-card";
 import { getHomepageData } from "@/lib/data/home";
 import { HeroSlideBackground } from "@/components/home/hero-slide-background";
+import { buildWebSiteJsonLd } from "@/lib/seo/website-json-ld";
 import {
   PLATFORM_BROKER_CTA,
   PLATFORM_HERO,
@@ -17,37 +17,42 @@ export const revalidate = 300;
 
 export default async function Home() {
   const { projects, saleListings } = await getHomepageData();
+  const webSiteJsonLd = buildWebSiteJsonLd();
 
   return (
     <>
-      <section className="lux-hero relative overflow-hidden">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(webSiteJsonLd) }}
+      />
+
+      <section className="lux-hero lux-hero--home relative overflow-hidden">
         <div className="lux-hero-mesh" aria-hidden />
         <HeroSlideBackground />
-        <div className="relative z-[2] mx-auto max-w-7xl py-16 container-px sm:py-24">
-          <p className="lux-hero-kicker proptech-kicker text-gold-400">
+        <div className="lux-hero-inner relative z-[2] mx-auto max-w-7xl container-px">
+          <p className="lux-hero-kicker proptech-kicker hidden text-gold-400 sm:block">
             {PLATFORM_HERO.kicker}
           </p>
-          <h1 className="lux-hero-title mt-3 max-w-2xl text-4xl font-extrabold leading-tight text-white sm:text-5xl">
-            {PLATFORM_HERO.h1Line1}
-            <br />
-            <span className="lux-hero-title-accent text-brand-300">
-              {PLATFORM_HERO.h1Accent}
+          <h1 className="lux-hero-title mt-0 max-w-2xl text-2xl font-extrabold leading-tight text-white sm:mt-3 sm:text-4xl lg:text-5xl">
+            <span className="sm:hidden">{PLATFORM_HERO.h1Compact}</span>
+            <span className="hidden sm:inline">
+              {PLATFORM_HERO.h1Line1}
+              <br />
+              <span className="lux-hero-title-accent text-brand-300">
+                {PLATFORM_HERO.h1Accent}
+              </span>
             </span>
           </h1>
-          <p className="lux-hero-lead mt-4 max-w-xl text-base text-silver-200">
+          <p className="lux-hero-lead mt-2 hidden max-w-xl text-base text-silver-200 sm:mt-4 sm:block">
             {PLATFORM_HERO.lead}
           </p>
-          <div className="mt-8">
+          <div className="mt-4 sm:mt-8">
             <SearchHero />
           </div>
         </div>
       </section>
 
-      <section className="proptech-section-glow mx-auto max-w-7xl py-8 container-px">
-        <ProptechTools />
-      </section>
-
-      <section className="mx-auto max-w-7xl py-8 container-px">
+      <section className="mx-auto max-w-7xl py-6 container-px sm:py-8">
         <SectionHeading
           title="Dự án nổi bật"
           subtitle="Các dự án mới, pháp lý rõ ràng"
@@ -64,7 +69,7 @@ export default async function Home() {
         )}
       </section>
 
-      <section className="mx-auto max-w-7xl py-8 container-px">
+      <section className="mx-auto max-w-7xl py-6 container-px sm:py-8">
         <SectionHeading
           title="Bất động sản đang bán"
           subtitle="Tin đã kiểm duyệt — sắp xếp để bạn so sánh nhanh"
@@ -79,6 +84,15 @@ export default async function Home() {
         ) : (
           <EmptyState label="Chưa có tin phù hợp. Xem thêm tại mục Mua bán." />
         )}
+      </section>
+
+      <section className="proptech-section-glow mx-auto max-w-7xl py-6 container-px sm:py-8">
+        <SectionHeading
+          title="Công cụ hỗ trợ"
+          subtitle="Vay, định giá, phong thủy và nhiều hơn"
+          href="/cong-cu"
+        />
+        <ProptechTools />
       </section>
 
       <section className="border-y border-[var(--border)] bg-[var(--surface)]">

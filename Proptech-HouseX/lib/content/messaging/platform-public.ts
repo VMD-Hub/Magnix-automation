@@ -5,9 +5,11 @@ import { Icon } from "@/components/icons";
 
 export const PLATFORM_HERO = {
   kicker: "Cổng BĐS Proptech — ưu tiên người mua nhà",
+  /** Mobile — một dòng, intent rõ cho UX/SEO. */
+  h1Compact: "Tìm nhà, so sánh dự án, ước tính vay",
   h1Line1: "Nơi thông tin chuẩn và",
   h1Accent: "sản phẩm thật được ưu tiên",
-  lead: "Tìm căn phù hợp, so sánh dự án và ước tính khoản vay trên một nền tảng — hình ảnh rõ, vị trí minh bạch, liên hệ an toàn khi bạn sẵn sàng trao đổi.",
+  lead: "Tin kiểm duyệt, vị trí minh bạch và công cụ vay — liên hệ an toàn khi bạn sẵn sàng trao đổi.",
 } as const;
 
 export type TrustItem = {

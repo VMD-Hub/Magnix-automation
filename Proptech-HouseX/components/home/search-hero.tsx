@@ -42,19 +42,21 @@ const PRICE_RANGES = [
 
 export function SearchHero() {
   const [tab, setTab] = useState<(typeof TABS)[number]>(TABS[0]);
+  const [filtersOpen, setFiltersOpen] = useState(false);
   const propertyTypes =
     tab.id === "cho-thue" ? RENT_PROPERTY_TYPES : SALE_PROPERTY_TYPES;
+  const showPriceFilter = tab.id !== "du-an";
 
   return (
-    <div className="lux-glass w-full max-w-2xl rounded-2xl p-2">
-      <div className="flex gap-1 px-1 pt-1">
+    <div className="lux-glass w-full max-w-2xl rounded-2xl p-1.5 sm:p-2">
+      <div className="flex gap-0.5 px-0.5 pt-0.5 sm:gap-1 sm:px-1 sm:pt-1">
         {TABS.map((t) => (
           <button
             key={t.id}
             type="button"
             onClick={() => setTab(t)}
             className={cn(
-              "rounded-lg px-4 py-2 text-sm font-semibold transition-colors",
+              "rounded-lg px-2.5 py-1.5 text-xs font-semibold transition-colors sm:px-4 sm:py-2 sm:text-sm",
               tab.id === t.id
                 ? "bg-brand-600 text-white shadow-sm shadow-brand-600/25"
                 : "text-[#555555] hover:bg-white/80",
@@ -65,15 +67,15 @@ export function SearchHero() {
         ))}
       </div>
 
-      <form action={tab.action} method="get" className="p-2">
+      <form action={tab.action} method="get" className="p-1.5 sm:p-2">
         <div className="flex flex-col gap-2 sm:flex-row">
           <label className="flex flex-1 items-center gap-2 rounded-xl border border-slate-200 px-3">
-            <Icon.MapPin className="text-lg text-slate-400" />
+            <Icon.MapPin className="shrink-0 text-lg text-slate-400" />
             <input
               type="text"
               name="q"
-              placeholder="Nhập khu vực, dự án hoặc địa điểm"
-              className="h-11 w-full bg-transparent text-sm outline-none placeholder:text-slate-400"
+              placeholder="Khu vực, dự án hoặc địa điểm"
+              className="h-10 w-full bg-transparent text-sm outline-none placeholder:text-slate-400 sm:h-11"
             />
           </label>
           <Button type="submit" size="md" className="sm:w-auto">
@@ -81,7 +83,31 @@ export function SearchHero() {
           </Button>
         </div>
 
-        <div className="mt-2 grid grid-cols-2 gap-2">
+        <button
+          type="button"
+          onClick={() => setFiltersOpen((v) => !v)}
+          className="mt-2 flex w-full items-center justify-between rounded-xl border border-slate-200 bg-white/90 px-3 py-2 text-sm font-medium text-slate-600 sm:hidden"
+          aria-expanded={filtersOpen}
+        >
+          <span className="inline-flex items-center gap-1.5">
+            <Icon.SlidersHorizontal className="text-base" />
+            Bộ lọc
+          </span>
+          <Icon.ChevronDown
+            className={cn(
+              "text-base transition-transform",
+              filtersOpen && "rotate-180",
+            )}
+          />
+        </button>
+
+        <div
+          className={cn(
+            "mt-2 grid gap-2",
+            showPriceFilter ? "sm:grid-cols-2" : "sm:grid-cols-1",
+            filtersOpen ? "grid" : "hidden sm:grid",
+          )}
+        >
           <select
             name="propertyType"
             className="h-10 rounded-xl border border-slate-200 bg-white px-3 text-sm text-slate-600 outline-none"
@@ -93,17 +119,19 @@ export function SearchHero() {
               </option>
             ))}
           </select>
-          <select
-            name="price"
-            className="h-10 rounded-xl border border-slate-200 bg-white px-3 text-sm text-slate-600 outline-none"
-            defaultValue=""
-          >
-            {PRICE_RANGES.map((o) => (
-              <option key={o.value} value={o.value}>
-                {o.label}
-              </option>
-            ))}
-          </select>
+          {showPriceFilter ? (
+            <select
+              name="price"
+              className="h-10 rounded-xl border border-slate-200 bg-white px-3 text-sm text-slate-600 outline-none"
+              defaultValue=""
+            >
+              {PRICE_RANGES.map((o) => (
+                <option key={o.value} value={o.value}>
+                  {o.label}
+                </option>
+              ))}
+            </select>
+          ) : null}
         </div>
       </form>
     </div>

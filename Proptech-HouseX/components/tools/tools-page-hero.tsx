@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { ButtonLink } from "@/components/ui/button";
+import { PhongThuyVisual } from "@/components/feng-shui/phong-thuy-visual";
+import type { PhongThuyVisualVariant } from "@/lib/content/phong-thuy-visual-variants";
 import { cn } from "@/lib/ui/cn";
 
 type Cta = { label: string; href: string };
@@ -8,10 +10,12 @@ type Props = {
   kicker?: string;
   title: string;
   subtitle: string;
-  image: string;
+  image?: string;
   imageWebp?: string;
-  imageAlt: string;
+  imageAlt?: string;
   objectPosition?: string;
+  /** Thay ảnh hiện đại bằng minh họa phong thủy phương Đông. */
+  easternVariant?: PhongThuyVisualVariant;
   primaryCta?: Cta;
   secondaryCta?: Cta;
   className?: string;
@@ -24,37 +28,58 @@ export function ToolsPageHero({
   subtitle,
   image,
   imageWebp,
-  imageAlt,
+  imageAlt = "",
   objectPosition = "50% 40%",
+  easternVariant,
   primaryCta,
   secondaryCta,
   className,
 }: Props) {
+  const useEastern = Boolean(easternVariant);
+
   return (
     <header
       className={cn(
         "relative mb-8 overflow-hidden rounded-2xl ring-1 ring-silver-200",
+        useEastern && "group ring-gold-900/30",
         className,
       )}
     >
       <div className="relative h-[240px] w-full sm:h-[260px] lg:h-[280px]">
-        <picture>
-          {imageWebp ? (
-            <source srcSet={imageWebp} type="image/webp" />
-          ) : null}
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={image}
-            alt={imageAlt}
-            fetchPriority="high"
-            className="absolute inset-0 h-full w-full object-cover"
-            style={{ objectPosition }}
-          />
-        </picture>
-        <div
-          className="absolute inset-0 bg-gradient-to-r from-ink-900/90 via-ink-900/55 to-brand-900/25"
-          aria-hidden
-        />
+        {useEastern && easternVariant ? (
+          <>
+            <PhongThuyVisual
+              variant={easternVariant}
+              size="hero"
+              interactive
+              className="absolute inset-0"
+            />
+            <div
+              className="absolute inset-0 bg-gradient-to-r from-ink-900/92 via-ink-900/55 to-ink-900/20"
+              aria-hidden
+            />
+          </>
+        ) : (
+          <>
+            <picture>
+              {imageWebp ? (
+                <source srcSet={imageWebp} type="image/webp" />
+              ) : null}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={image}
+                alt={imageAlt}
+                fetchPriority="high"
+                className="absolute inset-0 h-full w-full object-cover"
+                style={{ objectPosition }}
+              />
+            </picture>
+            <div
+              className="absolute inset-0 bg-gradient-to-r from-ink-900/90 via-ink-900/55 to-brand-900/25"
+              aria-hidden
+            />
+          </>
+        )}
         <div
           className="absolute inset-0 bg-gradient-to-t from-ink-900/60 via-transparent to-ink-900/15"
           aria-hidden

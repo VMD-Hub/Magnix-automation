@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ListingCard } from "@/components/listings/listing-card";
+import { ListingBrowseFilters } from "@/components/listings/listing-browse-filters";
 import { ToolsPageHero } from "@/components/tools/tools-page-hero";
 import { ButtonLink } from "@/components/ui/button";
 import {
@@ -8,7 +9,6 @@ import {
   propertyTypeToSlug,
 } from "@/lib/content/property-type-slug";
 import { propertyTypeLabel } from "@/lib/format";
-import { cn } from "@/lib/ui/cn";
 
 const HCM_DISTRICTS = [
   "Quận 1",
@@ -71,7 +71,7 @@ function buildHref(
 
 export function ListingBrowsePage({
   basePath,
-  subtitle,
+  subtitle: _subtitle,
   banner,
   items,
   pagination,
@@ -106,9 +106,15 @@ export function ListingBrowsePage({
         </div>
       ) : null}
 
-      <div className="mb-6 flex flex-wrap items-end justify-between gap-2">
-        <p className="text-sm text-slate-600">{subtitle}</p>
-        <p className="text-sm text-slate-500">
+      <div className="mb-4 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+        <ListingBrowseFilters
+          basePath={basePath}
+          districts={HCM_DISTRICTS}
+          typeOptions={typeOptions}
+          activeDistrict={activeDistrict}
+          activeTypeSlug={activeSlug}
+        />
+        <p className="shrink-0 text-sm text-slate-500 sm:pb-0.5">
           {pagination.total > 0
             ? `${pagination.total.toLocaleString("vi-VN")} tin đang hiển thị`
             : emptyMode === "coming-soon"
@@ -117,129 +123,63 @@ export function ListingBrowsePage({
         </p>
       </div>
 
-      <div className="flex flex-col gap-8 lg:flex-row">
-        <aside className="shrink-0 lg:w-56">
-          <FilterBlock title="Khu vực (TP.HCM)">
-            <Link
-              href={buildHref(basePath, filters, { district: undefined, page: 1 })}
-              className={cn(
-                "block rounded-lg px-3 py-2 text-sm",
-                !activeDistrict
-                  ? "bg-brand-50 font-semibold text-brand-800"
-                  : "text-slate-600 hover:bg-slate-100",
-              )}
-            >
-              Tất cả
-            </Link>
-            {HCM_DISTRICTS.map((d) => (
-              <Link
-                key={d}
-                href={buildHref(basePath, filters, { district: d, page: 1 })}
-                className={cn(
-                  "block rounded-lg px-3 py-2 text-sm",
-                  activeDistrict === d
-                    ? "bg-brand-50 font-semibold text-brand-800"
-                    : "text-slate-600 hover:bg-slate-100",
-                )}
-              >
-                {d}
-              </Link>
-            ))}
-          </FilterBlock>
-
-          <FilterBlock title="Loại hình">
-            <Link
-              href={buildHref(basePath, filters, {
-                propertyTypeSlug: undefined,
-                page: 1,
-              })}
-              className={cn(
-                "block rounded-lg px-3 py-2 text-sm",
-                !activeSlug
-                  ? "bg-brand-50 font-semibold text-brand-800"
-                  : "text-slate-600 hover:bg-slate-100",
-              )}
-            >
-              Tất cả
-            </Link>
-            {typeOptions.map((t) => (
-              <Link
-                key={t.slug}
+      <div className="min-w-0">
+        {(activeDistrict || filters.propertyType) && (
+          <div className="mb-4 flex flex-wrap gap-2">
+            {activeDistrict ? (
+              <FilterChip
+                label={activeDistrict}
+                href={buildHref(basePath, filters, { district: undefined, page: 1 })}
+              />
+            ) : null}
+            {filters.propertyType ? (
+              <FilterChip
+                label={propertyTypeLabel(filters.propertyType)}
                 href={buildHref(basePath, filters, {
-                  propertyTypeSlug: t.slug,
+                  propertyTypeSlug: undefined,
                   page: 1,
                 })}
-                className={cn(
-                  "block rounded-lg px-3 py-2 text-sm",
-                  activeSlug === t.slug
-                    ? "bg-brand-50 font-semibold text-brand-800"
-                    : "text-slate-600 hover:bg-slate-100",
-                )}
-              >
-                {t.label}
-              </Link>
+              />
+            ) : null}
+          </div>
+        )}
+
+        {items.length > 0 ? (
+          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {items.map((item) => (
+              <ListingCard key={item.code} item={item} />
             ))}
-          </FilterBlock>
-        </aside>
+          </div>
+        ) : emptyMode === "coming-soon" && comingSoon ? (
+          <ComingSoonPanel {...comingSoon} />
+        ) : (
+          <div className="rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-12 text-center text-slate-500">
+            Chưa có tin phù hợp bộ lọc. Thử bỏ bớt điều kiện hoặc quay lại sau.
+          </div>
+        )}
 
-        <div className="min-w-0 flex-1">
-          {(activeDistrict || filters.propertyType) && (
-            <div className="mb-4 flex flex-wrap gap-2">
-              {activeDistrict ? (
-                <FilterChip
-                  label={activeDistrict}
-                  href={buildHref(basePath, filters, { district: undefined, page: 1 })}
-                />
-              ) : null}
-              {filters.propertyType ? (
-                <FilterChip
-                  label={propertyTypeLabel(filters.propertyType)}
-                  href={buildHref(basePath, filters, {
-                    propertyTypeSlug: undefined,
-                    page: 1,
-                  })}
-                />
-              ) : null}
-            </div>
-          )}
-
-          {items.length > 0 ? (
-            <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
-              {items.map((item) => (
-                <ListingCard key={item.code} item={item} />
-              ))}
-            </div>
-          ) : emptyMode === "coming-soon" && comingSoon ? (
-            <ComingSoonPanel {...comingSoon} />
-          ) : (
-            <div className="rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-12 text-center text-slate-500">
-              Chưa có tin phù hợp bộ lọc. Thử bỏ bớt điều kiện hoặc quay lại sau.
-            </div>
-          )}
-
-          {pagination.totalPages > 1 ? (
-            <nav
-              className="mt-8 flex items-center justify-center gap-2"
-              aria-label="Phân trang"
-            >
-              {pagination.page > 1 ? (
-                <PageLink
-                  href={buildHref(basePath, filters, { page: pagination.page - 1 })}
-                  label="← Trước"
-                />
-              ) : null}
-              <span className="px-3 text-sm text-slate-600">
-                Trang {pagination.page}/{pagination.totalPages}
-              </span>
-              {pagination.page < pagination.totalPages ? (
-                <PageLink
-                  href={buildHref(basePath, filters, { page: pagination.page + 1 })}
-                  label="Sau →"
-                />
-              ) : null}
-            </nav>
-          ) : null}
-        </div>
+        {pagination.totalPages > 1 ? (
+          <nav
+            className="mt-8 flex items-center justify-center gap-2"
+            aria-label="Phân trang"
+          >
+            {pagination.page > 1 ? (
+              <PageLink
+                href={buildHref(basePath, filters, { page: pagination.page - 1 })}
+                label="← Trước"
+              />
+            ) : null}
+            <span className="px-3 text-sm text-slate-600">
+              Trang {pagination.page}/{pagination.totalPages}
+            </span>
+            {pagination.page < pagination.totalPages ? (
+              <PageLink
+                href={buildHref(basePath, filters, { page: pagination.page + 1 })}
+                label="Sau →"
+              />
+            ) : null}
+          </nav>
+        ) : null}
       </div>
     </div>
   );
@@ -277,21 +217,6 @@ function ComingSoonPanel({
           </ButtonLink>
         </div>
       </div>
-    </div>
-  );
-}
-
-function FilterBlock({
-  title,
-  children,
-}: {
-  title: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <div className="mb-6 rounded-2xl border border-slate-200 bg-white p-4">
-      <h2 className="text-sm font-bold text-slate-900">{title}</h2>
-      <div className="mt-2 space-y-0.5">{children}</div>
     </div>
   );
 }

@@ -7,6 +7,13 @@ import {
 } from "@/lib/data/article-public";
 import { buildArticleHubJsonLd } from "@/lib/seo/article-json-ld";
 import { getSiteUrl } from "@/lib/site-config";
+import { PHONG_THUY_HUB_PATH } from "@/lib/content/messaging/phong-thuy-public";
+
+function topicHubHref(tagSlug: string): string {
+  return tagSlug === "phong-thuy"
+    ? PHONG_THUY_HUB_PATH
+    : `/tin-tuc/chu-de/${tagSlug}`;
+}
 
 export const revalidate = 300;
 
@@ -69,7 +76,7 @@ export default async function TinTucHubPage({ searchParams }: PageProps) {
               {tags.map((t) => (
                 <Link
                   key={t.slug}
-                  href={`/tin-tuc/chu-de/${t.slug}`}
+                  href={topicHubHref(t.slug)}
                   className="rounded-full border border-slate-200 bg-white px-4 py-1.5 text-sm font-medium text-slate-700 shadow-sm hover:border-brand-200 hover:text-brand-700"
                 >
                   {t.name}

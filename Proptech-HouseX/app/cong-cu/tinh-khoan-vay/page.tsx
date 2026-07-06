@@ -65,6 +65,7 @@ export default function Page() {
         title={LOAN_CALC_COPY.title}
         subtitle={LOAN_CALC_COPY.subtitle}
         image={LOAN_CALC_BANNER.jpg}
+        imageWebp={LOAN_CALC_BANNER.webp}
         imageAlt={LOAN_CALC_BANNER.alt}
         objectPosition={LOAN_CALC_BANNER.objectPosition}
         primaryCta={{ label: LOAN_CALC_COPY.primaryCta, href: LOAN_CALC_COPY.primaryCtaHref }}

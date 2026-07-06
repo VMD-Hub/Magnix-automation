@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import { prisma } from "@/lib/prisma";
 import { affiliateSitemapEntries } from "@/lib/content/affiliate-verticals";
+import { toolSitemapPaths } from "@/lib/content/housex-tools-registry";
 import { listExpertSlugs } from "@/lib/content/editorial-trust";
 import { getCatalogSlugs } from "@/lib/seed/catalog-project-slugs";
 import { listDemoSaleListingCards } from "@/lib/preview/demo-listings";
@@ -44,11 +45,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${BASE}/du-an`, changeFrequency: "daily", priority: 0.9 },
     { url: `${BASE}/tin-tuc`, changeFrequency: "daily", priority: 0.85 },
     { url: `${BASE}/cong-cu`, changeFrequency: "monthly", priority: 0.65 },
-    { url: `${BASE}/cong-cu/tinh-khoan-vay`, changeFrequency: "monthly", priority: 0.7 },
-    { url: `${BASE}/cong-cu/tinh-han-muc-vay`, changeFrequency: "monthly", priority: 0.72 },
-    { url: `${BASE}/cong-cu/kiem-tra-vay-noxh`, changeFrequency: "monthly", priority: 0.75 },
-    { url: `${BASE}/cong-cu/tham-dinh-vay-noxh`, changeFrequency: "monthly", priority: 0.78 },
-    { url: `${BASE}/cong-cu/dieu-kien-noxh`, changeFrequency: "monthly", priority: 0.75 },
+    { url: `${BASE}/phong-thuy`, changeFrequency: "weekly", priority: 0.8 },
+    ...toolSitemapPaths().map((path) => ({
+      url: `${BASE}${path}`,
+      changeFrequency: "monthly" as const,
+      priority: path.includes("xem-huong") || path.includes("kiem-tra-tuoi") ? 0.75 : 0.7,
+    })),
     ...affiliate,
     { url: `${BASE}/dang-ky/khach-hang`, changeFrequency: "monthly", priority: 0.5 },
     { url: `${BASE}/dang-ky/moi-gioi`, changeFrequency: "monthly", priority: 0.5 },

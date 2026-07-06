@@ -3,7 +3,7 @@
 export const TOOLS_HUB_COPY = {
   metaTitle: "Công cụ mua nhà — HouseX",
   metaDescription:
-    "Tính khoản vay mua nhà, chuẩn bị hồ sơ và kết nối dịch vụ tài chính, thẩm định trên HouseX — miễn phí.",
+    "12+ công cụ miễn phí: tính vay, NOXH, xem hướng nhà, tuổi xây dựng, dự toán chi phí xây nhà, chọn màu sơn — trên House X.",
   kicker: "HouseX · Công cụ",
   title: "Công cụ mua nhà thông minh",
   subtitle:
@@ -162,13 +162,31 @@ export const TOOL_HUB_CARDS: ToolCardDef[] = [
     ready: true,
   },
   {
-    id: "noxh-loan-quick",
-    href: "/cong-cu/kiem-tra-vay-noxh",
-    title: "Kiểm tra vay NOXH 60 giây",
-    desc: "Xưng hô + năm sinh — ước tính tuổi vay sơ bộ trước khi cọc. Không thay thế ngân hàng.",
-    cta: "Kiểm tra ngay",
+    id: "xem-huong-nha",
+    href: "/cong-cu/xem-huong-nha",
+    title: "Xem hướng nhà theo tuổi",
+    desc: "La bàn Bát trạch: nhập năm sinh âm lịch & giới tính — sơ đồ 8 hướng tốt/xấu.",
+    cta: "Xem hướng ngay",
     ready: true,
-    badge: "NOXH",
+    badge: "Phong thủy",
+  },
+  {
+    id: "kiem-tra-tuoi-xay-nha",
+    href: "/cong-cu/kiem-tra-tuoi-xay-nha",
+    title: "Kiểm tra tuổi xây/sửa nhà",
+    desc: "Tam Tai, Kim Lâu, Hoang Ốc — năm nào nên động thổ.",
+    cta: "Kiểm tra tuổi",
+    ready: true,
+    badge: "Phong thủy",
+  },
+  {
+    id: "uoc-tinh-chi-phi-xay-nha",
+    href: "/cong-cu/uoc-tinh-chi-phi-xay-nha",
+    title: "Ước tính chi phí xây nhà",
+    desc: "Khái toán nhanh theo m² và khu vực.",
+    cta: "Ước tính",
+    ready: true,
+    badge: "Xây dựng",
   },
   {
     id: "noxh-check",

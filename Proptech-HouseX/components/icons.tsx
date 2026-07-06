@@ -113,6 +113,21 @@ export const Icon = {
       <path d="m16.24 7.76-2.12 6.36-6.36 2.12 2.12-6.36 6.36-2.12Z" />
     </Svg>
   ),
+  /** La bàn bát quái — quick link phong thủy. */
+  Bagua: (p: IconProps) => (
+    <Svg {...p} strokeWidth={1.5}>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M12 4.5v15M4.5 12h15" opacity={0.45} />
+      <path d="M6.2 6.2l11.6 11.6M17.8 6.2 6.2 17.8" opacity={0.35} />
+      <circle cx="12" cy="12" r="3.5" />
+      <path
+        d="M12 8.5a3.5 3.5 0 0 1 0 7 3.5 3.5 0 0 0 0-7Z"
+        fill="currentColor"
+        stroke="none"
+        opacity={0.5}
+      />
+    </Svg>
+  ),
   FileCheck: (p: IconProps) => (
     <Svg {...p}>
       <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z" />
@@ -150,6 +165,19 @@ export const Icon = {
   ChevronRight: (p: IconProps) => (
     <Svg {...p}>
       <path d="m9 6 6 6-6 6" />
+    </Svg>
+  ),
+  ChevronDown: (p: IconProps) => (
+    <Svg {...p}>
+      <path d="m6 9 6 6 6-6" />
+    </Svg>
+  ),
+  SlidersHorizontal: (p: IconProps) => (
+    <Svg {...p}>
+      <path d="M21 4H14M10 4H3M21 12h-7M10 12H3M21 20h-9M10 20H3" />
+      <circle cx="12" cy="4" r="2" />
+      <circle cx="17" cy="12" r="2" />
+      <circle cx="14" cy="20" r="2" />
     </Svg>
   ),
   Menu: (p: IconProps) => (

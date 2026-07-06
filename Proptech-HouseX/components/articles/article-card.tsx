@@ -1,5 +1,9 @@
 import Link from "next/link";
 import type { ArticleCardData } from "@/lib/data/article-types";
+import {
+  PhongThuyArticleCover,
+  articleHasPhongThuyTag,
+} from "@/components/feng-shui/phong-thuy-article-cover";
 import { ensureArticleCoverUrl } from "@/lib/content/safe-image";
 
 function formatArticleDate(d: Date | null) {
@@ -13,6 +17,7 @@ function formatArticleDate(d: Date | null) {
 
 export function ArticleCard({ article }: { article: ArticleCardData }) {
   const coverUrl = ensureArticleCoverUrl(article.coverImageUrl);
+  const usePhongThuyCover = !coverUrl && articleHasPhongThuyTag(article.tags);
   return (
     <Link
       href={`/tin-tuc/${article.slug}`}
@@ -25,6 +30,8 @@ export function ArticleCard({ article }: { article: ArticleCardData }) {
           alt={article.coverImageAlt ?? article.title}
           className="aspect-[16/9] w-full object-cover transition group-hover:scale-[1.02]"
         />
+      ) : usePhongThuyCover ? (
+        <PhongThuyArticleCover title={article.title} />
       ) : (
         <div className="aspect-[16/9] w-full bg-gradient-to-br from-brand-50 to-slate-100" />
       )}
@@ -58,6 +65,7 @@ export function ArticleCard({ article }: { article: ArticleCardData }) {
 
 export function ArticleCardCompact({ article }: { article: ArticleCardData }) {
   const coverUrl = ensureArticleCoverUrl(article.coverImageUrl);
+  const usePhongThuyCover = !coverUrl && articleHasPhongThuyTag(article.tags);
   return (
     <Link
       href={`/tin-tuc/${article.slug}`}
@@ -70,6 +78,10 @@ export function ArticleCardCompact({ article }: { article: ArticleCardData }) {
           alt=""
           className="h-20 w-28 shrink-0 rounded-lg object-cover"
         />
+      ) : usePhongThuyCover ? (
+        <div className="h-20 w-28 shrink-0 overflow-hidden rounded-lg">
+          <PhongThuyArticleCover className="aspect-auto h-full w-full" />
+        </div>
       ) : (
         <div className="h-20 w-28 shrink-0 rounded-lg bg-slate-100" />
       )}
