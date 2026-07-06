@@ -1,41 +1,77 @@
 import Link from "next/link";
+import { PhongThuyVisual } from "@/components/feng-shui/phong-thuy-visual";
 import { cn } from "@/lib/ui/cn";
 import type { ToolCardDef } from "@/lib/content/housex-tools-copy";
+import { phongThuyVisualForTool } from "@/lib/content/phong-thuy-visual-variants";
 import { toolCardImage, toolCardImageWebp } from "@/lib/content/housex-tools-visuals";
 
-export function ToolHubCard({ tool }: { tool: ToolCardDef }) {
-  const image = toolCardImage(tool.id);
-  const imageWebp = toolCardImageWebp(tool.id) ?? undefined;
+function ToolCardImage({ tool }: { tool: ToolCardDef }) {
+  const phongThuyVariant = phongThuyVisualForTool(tool.id);
 
+  const media = phongThuyVariant ? (
+    <PhongThuyVisual
+      variant={phongThuyVariant}
+      size="card"
+      interactive={tool.ready}
+      className={cn(
+        "transition-transform duration-700 ease-out",
+        tool.ready && "group-hover:scale-[1.03]",
+        !tool.ready && "opacity-60",
+      )}
+    />
+  ) : (
+    <>
+      <picture>
+        {toolCardImageWebp(tool.id) ? (
+          <source srcSet={toolCardImageWebp(tool.id)!} type="image/webp" />
+        ) : null}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={toolCardImage(tool.id)}
+          alt=""
+          aria-hidden
+          className={cn(
+            "h-full w-full object-cover transition-transform duration-500",
+            tool.ready && "group-hover:scale-105",
+            !tool.ready && "opacity-60 grayscale-[30%]",
+          )}
+        />
+      </picture>
+    </>
+  );
+
+  return (
+    <div
+      className={cn(
+        "relative aspect-[16/10] overflow-hidden",
+        phongThuyVariant ? "bg-[#0c0f14]" : "bg-ink-800",
+      )}
+    >
+      {media}
+      <div
+        className={cn(
+          "pointer-events-none absolute inset-0 bg-gradient-to-t via-transparent to-transparent",
+          phongThuyVariant ? "from-ink-900/75 via-ink-900/10" : "from-ink-900/70",
+        )}
+      />
+      {tool.badge && tool.ready ? (
+        <span className="absolute left-3 top-3 rounded-lg bg-gold-500 px-2.5 py-1 text-xs font-bold uppercase tracking-wide text-white shadow-sm">
+          {tool.badge}
+        </span>
+      ) : null}
+      {!tool.ready ? (
+        <span className="absolute right-3 top-3 rounded-lg bg-white/90 px-2.5 py-1 text-xs font-semibold text-slate-600">
+          Sắp ra mắt
+        </span>
+      ) : null}
+    </div>
+  );
+}
+
+export function ToolHubCard({ tool }: { tool: ToolCardDef }) {
   const inner = (
     <>
-      <div className="relative aspect-[16/10] overflow-hidden bg-ink-800">
-        <picture>
-          {imageWebp ? <source srcSet={imageWebp} type="image/webp" /> : null}
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={image}
-            alt=""
-            aria-hidden
-            className={cn(
-              "h-full w-full object-cover transition-transform duration-500",
-              tool.ready && "group-hover:scale-105",
-              !tool.ready && "opacity-60 grayscale-[30%]",
-            )}
-          />
-        </picture>
-        <div className="absolute inset-0 bg-gradient-to-t from-ink-900/70 via-transparent to-transparent" />
-        {tool.badge && tool.ready ? (
-          <span className="absolute left-3 top-3 rounded-lg bg-gold-500 px-2.5 py-1 text-xs font-bold uppercase tracking-wide text-white shadow-sm">
-            {tool.badge}
-          </span>
-        ) : null}
-        {!tool.ready ? (
-          <span className="absolute right-3 top-3 rounded-lg bg-white/90 px-2.5 py-1 text-xs font-semibold text-slate-600">
-            Sắp ra mắt
-          </span>
-        ) : null}
-      </div>
+      <ToolCardImage tool={tool} />
       <div className="flex flex-1 flex-col p-5">
         <h3 className="text-lg font-bold text-slate-900">{tool.title}</h3>
         <p className="mt-2 flex-1 text-sm leading-relaxed text-slate-600">{tool.desc}</p>

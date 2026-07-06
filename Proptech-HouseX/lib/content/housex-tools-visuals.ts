@@ -72,7 +72,7 @@ export const BAT_TRACH_BANNER = {
   alt: "Xem hướng nhà theo tuổi chuẩn Bát trạch — House X",
 };
 
-/** Ảnh minh hoạ thẻ công cụ — mỗi tool một ảnh thương hiệu. */
+/** Ảnh minh hoạ thẻ công cụ — mỗi tool một ảnh thương hiệu. Phong thủy dùng SVG trong ToolHubCard. */
 export const TOOL_CARD_IMAGES: Record<string, string> = {
   loan: loanCalc.jpg,
   affordability: loanAffordability.jpg,
@@ -80,10 +80,6 @@ export const TOOL_CARD_IMAGES: Record<string, string> = {
   "uoc-tinh-chi-phi-xay-nha": costQuick.jpg,
   "du-toan-xay-nha-chi-tiet": costDetail.jpg,
   "du-tru-vat-lieu-xay-dung": materials.jpg,
-  "xem-huong-nha": BAT_TRACH_BANNER.jpg,
-  "kiem-tra-tuoi-xay-nha": HOUSEX_HERO_SLIDES[0]!.jpgMd,
-  "phong-thuy-van-phong": HOUSEX_HERO_SLIDES[1]!.jpgMd,
-  "chon-mau-son-theo-menh": HOUSEX_HERO_SLIDES[0]!.jpgMd,
 };
 
 export function toolCardImage(toolId: string): string {
