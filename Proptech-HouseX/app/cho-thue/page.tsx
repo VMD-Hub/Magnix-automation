@@ -97,7 +97,6 @@ export default async function ChoThuePage({ searchParams }: PageProps) {
           kicker: copy.kicker,
           title: copy.title,
           subtitle: copy.subtitle,
-          bannerSlide: "bannerSlide" in copy ? copy.bannerSlide : undefined,
           image: copy.bannerImage,
           imageWebp: copy.bannerWebp,
           imageAlt: copy.bannerAlt,

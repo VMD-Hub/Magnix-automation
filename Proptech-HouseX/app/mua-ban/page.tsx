@@ -16,6 +16,7 @@ import { isBrowseRateLimited } from "@/lib/security/browse-rate-limit";
 import { RateLimitNotice } from "@/components/security/rate-limit-notice";
 import { PreloadBannerImage } from "@/components/seo/preload-banner-image";
 import { catalogBannerSources } from "@/lib/brand/banner-responsive";
+import { getSiteUrl } from "@/lib/site-config";
 
 export const revalidate = 120;
 
