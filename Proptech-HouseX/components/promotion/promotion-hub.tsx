@@ -155,11 +155,11 @@ export function PromotionHub({ slug = DEFAULT_PROMOTION_SLUG, preview = false }:
           <strong>Chế độ preview</strong> — vòng quay mô phỏng, không ghi nhận kết quả thật.
         </div>
       ) : null}
-      {data.isDemo ? (
+      {data.isDemo && !preview ? (
         <div className="rounded-xl border border-sky-300 bg-sky-50 px-4 py-3 text-sm text-sky-900">
-          <strong>Chế độ demo (chưa có database).</strong> Bật Docker Desktop rồi chạy{" "}
-          <code className="rounded bg-white px-1">npm run db:setup</code> để lưu kết quả quay
-          thật. Hiện tại bạn vẫn xem và thử quay preview được.
+          <strong>Dữ liệu mô phỏng.</strong> Chương trình chưa có trong database — bạn vẫn
+          quay thử được. Admin chạy <code className="rounded bg-white px-1">npm run db:seed</code>{" "}
+          trên server để bật chế độ thật.
         </div>
       ) : null}
 

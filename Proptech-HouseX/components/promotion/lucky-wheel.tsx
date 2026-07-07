@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { cn } from "@/lib/ui/cn";
-import { spinTargetRotationDeg } from "@/lib/promotion/spin-engine";
+import { spinDeltaDeg } from "@/lib/promotion/spin-engine";
 import type { PromotionPrizePublic } from "@/lib/data/promotion";
 
 /** Cùng giải → cùng màu. ĐB = brand ruby + chữ vàng (may mắn VN). */
@@ -280,18 +280,21 @@ export function LuckyWheel({
 
   async function handleSpin() {
     if (spinning || disabled) return;
-    setSpinning(true);
     setConfetti(false);
+    setSpinning(true);
+
+    const resultPromise = onRequestSpin();
+
+    // Đợi 1 frame để browser gắn transition trước khi đổi góc.
+    await new Promise<void>((resolve) => {
+      requestAnimationFrame(() => requestAnimationFrame(() => resolve()));
+    });
 
     try {
-      const result = await onRequestSpin();
-      const target = spinTargetRotationDeg(
-        result.segmentIndex,
-        segmentCount,
-        5,
+      const result = await resultPromise;
+      setRotation((prev) =>
+        prev + spinDeltaDeg(prev, result.segmentIndex, segmentCount, 5),
       );
-      const base = rotation % 360;
-      setRotation(rotation - base + target);
 
       window.setTimeout(() => {
         setSpinning(false);
@@ -344,8 +347,10 @@ export function LuckyWheel({
           style={{
             transition: spinning
               ? `transform ${spinDurationMs}ms cubic-bezier(0.17, 0.67, 0.12, 0.99)`
-              : undefined,
+              : "none",
             transform: `rotate(${rotation}deg)`,
+            transformOrigin: "50% 50%",
+            willChange: spinning ? "transform" : "auto",
           }}
         >
           <svg viewBox="0 0 200 200" className="h-full w-full" role="img" aria-label="Vòng quay may mắn">

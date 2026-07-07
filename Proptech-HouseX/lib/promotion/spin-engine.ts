@@ -63,3 +63,20 @@ export function spinTargetRotationDeg(
   const target = 360 - (segmentIndex * segmentAngle + centerOffset);
   return extraTurns * 360 + target;
 }
+
+/** Tăng góc từ vị trí hiện tại — luôn quay thuận, animation CSS mượt hơn. */
+export function spinDeltaDeg(
+  currentRotationDeg: number,
+  segmentIndex: number,
+  segmentCount: number,
+  extraTurns = 5,
+): number {
+  const segmentAngle = 360 / segmentCount;
+  const centerOffset = segmentAngle / 2;
+  const targetMod =
+    (360 - (segmentIndex * segmentAngle + centerOffset) + 360) % 360;
+  const currentMod = ((currentRotationDeg % 360) + 360) % 360;
+  let diff = targetMod - currentMod;
+  if (diff <= 0) diff += 360;
+  return extraTurns * 360 + diff;
+}

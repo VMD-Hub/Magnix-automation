@@ -4,6 +4,7 @@ import {
   isPrizeActive,
   pickWeightedPrize,
   segmentIndexForPrize,
+  spinDeltaDeg,
   spinTargetRotationDeg,
 } from "../lib/promotion/spin-engine";
 
@@ -68,4 +69,9 @@ test("segmentIndexForPrize finds layout index", () => {
 test("spinTargetRotationDeg returns positive rotation", () => {
   const deg = spinTargetRotationDeg(3, 12, 4);
   assert.ok(deg > 360 * 4);
+});
+
+test("spinDeltaDeg always adds forward rotation", () => {
+  const delta = spinDeltaDeg(1200, 3, 12, 5);
+  assert.ok(delta >= 360 * 5);
 });
