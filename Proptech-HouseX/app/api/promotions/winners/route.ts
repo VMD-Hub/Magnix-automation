@@ -5,6 +5,7 @@ import {
   listRecentWinners,
 } from "@/lib/data/promotion";
 import { DEFAULT_PROMOTION_SLUG } from "@/lib/promotion/constants";
+import { resolvePromotionPublicWinners } from "@/lib/promotion/seed-winners";
 import {
   allowPromotionPreviewData,
   demoPromotionWinnersResponse,
@@ -32,7 +33,8 @@ export async function GET(req: NextRequest) {
       return fail(404, "NOT_FOUND", "Không tìm thấy chương trình.");
     }
 
-    const winners = await listRecentWinners(campaign.id, limit);
+    const realWinners = await listRecentWinners(campaign.id, limit);
+    const winners = resolvePromotionPublicWinners(realWinners);
     return ok({ winners });
   } catch (err) {
     if (shouldUsePromotionDemo(err)) {

@@ -1,5 +1,6 @@
 import type { PromotionCampaignPublic, WinnerBoardItem } from "@/lib/data/promotion";
 import { DEFAULT_PROMOTION_SLUG, PROMOTION_LIMITS } from "@/lib/promotion/constants";
+import { getPromotionSeedWinners } from "@/lib/promotion/seed-winners";
 import { buildPromotionTermsMarkdown } from "@/lib/content/promotion-terms";
 import {
   pickWeightedPrize,
@@ -157,22 +158,7 @@ export function getDemoPromotionCampaignPublic(): PromotionCampaignPublic {
 }
 
 export function getDemoPromotionWinners(): WinnerBoardItem[] {
-  return [
-    {
-      id: "demo-win-1",
-      displayName: "Nguyễn V***",
-      prizeLabel: "Voucher 500.000đ khấu trừ khi ký HĐMB",
-      prizeTier: "CONSOLATION",
-      wonAt: new Date(Date.now() - 3600000).toISOString(),
-    },
-    {
-      id: "demo-win-2",
-      displayName: "Trần T***",
-      prizeLabel: "3 gói hỗ trợ hồ sơ NOXH 1:1 (trị giá 1,5 triệu)",
-      prizeTier: "THIRD",
-      wonAt: new Date(Date.now() - 7200000).toISOString(),
-    },
-  ];
+  return getPromotionSeedWinners();
 }
 
 export function executeDemoPromotionSpin(isPreview: boolean): SpinResult {

@@ -8,6 +8,7 @@ import {
   toCampaignPublic,
 } from "@/lib/data/promotion";
 import { DEFAULT_PROMOTION_SLUG } from "@/lib/promotion/constants";
+import { resolvePromotionPublicWinners } from "@/lib/promotion/seed-winners";
 import { requireCustomerSessionFromRequest } from "@/lib/auth/require-customer";
 import { prisma } from "@/lib/prisma";
 import {
@@ -35,9 +36,10 @@ export async function GET(req: NextRequest) {
 
     const publicCampaign = toCampaignPublic(campaign);
     const live = isCampaignLive(campaign);
-    const winners = live
+    const realWinners = live
       ? await listRecentWinners(campaign.id, 15)
       : [];
+    const winners = resolvePromotionPublicWinners(realWinners);
 
     let participant = null;
     const session = await requireCustomerSessionFromRequest(req);

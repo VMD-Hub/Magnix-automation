@@ -235,7 +235,11 @@ export function PromotionAdminBoard({ campaignId }: { campaignId: string }) {
               {campaign.wins.length === 0 ? (
                 <tr>
                   <td colSpan={5} className="px-3 py-6 text-center text-slate-500">
-                    Chưa có người trúng.
+                    <p>Chưa có người trúng thật trong hệ thống.</p>
+                    <p className="mt-2 text-xs text-amber-700">
+                      Trang khuyến mãi đang hiển thị 3 người trúng mẫu (dữ liệu seed, tên đã ẩn)
+                      để khuyến khích tham gia — không xuất hiện ở đây.
+                    </p>
                   </td>
                 </tr>
               ) : (
