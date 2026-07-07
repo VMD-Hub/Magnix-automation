@@ -1513,6 +1513,8 @@ Mức giá chính thức: 23.251.398 đồng/m² (đã VAT, chưa gồm 2% phí 
     }
   }
 
+  await seedPromotionCampaign(prisma);
+
   console.log("Seed completed.");
   console.log("  NOXH mẫu: /du-an/dta-happy-home-nhon-trach");
   console.log("  NOXH mẫu: /du-an/eco-residence-long-binh-tan");
@@ -1535,6 +1537,7 @@ Mức giá chính thức: 23.251.398 đồng/m² (đã VAT, chưa gồm 2% phí 
   }
   console.log("  Tin tức: /tin-tuc");
   console.log("  Admin tin tức: /admin/articles");
+  console.log("  Khuyến mãi: /khuyen-mai");
 }
 
 main()
