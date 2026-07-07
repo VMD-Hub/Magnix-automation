@@ -1,6 +1,10 @@
-import type { ArticleDetail } from "@/lib/data/article-types";
+import {
+  NOXH_TAG_CHINH_SACH,
+  NOXH_TAG_DU_AN_GIA,
+} from "@/lib/content/articles/noxh-handbook-tags";
 import { EDITORIAL_FIGURES } from "@/lib/content/articles/article-editorial-media";
 import { NOXH_SUPPORT_CLOSING } from "@/lib/content/articles/article-editorial-voice";
+import type { ArticleDetail } from "@/lib/data/article-types";
 import { DTA_HAPPY_HOME_SLUG } from "@/lib/content/dta-happy-home-landing";
 import {
   HAU_NGHIA_SLUG,
@@ -80,11 +84,7 @@ ${NOXH_SUPPORT_CLOSING}`,
       "Quy trình mua NOXH 2026 — 7 bước từ đăng ký đến nhận căn | HouseX",
     seoDesc:
       "Hướng dẫn quy trình mua/thuê mua nhà ở xã hội: hồ sơ, rà soát, bốc thăm, ký HĐ. Căn cứ Luật Nhà ở 2023 và NĐ 100/2024.",
-    tags: [
-      { slug: "noxh", name: "Nhà ở xã hội" },
-      { slug: "phap-ly", name: "Pháp lý & chính sách" },
-      { slug: "goc-chuyen-gia", name: "Góc chuyên gia" },
-    ],
+    tags: [NOXH_TAG_CHINH_SACH],
     projects: [],
   },
   {
@@ -148,11 +148,7 @@ ${NOXH_SUPPORT_CLOSING}`,
       "Vay NOXH gói 120.000 tỷ NHCSXH — 70% giá căn, điều kiện & hồ sơ | HouseX",
     seoDesc:
       "Hướng dẫn vay mua nhà ở xã hội qua NHCSXH: tỷ lệ 70%, hồ sơ, khác biệt với điều kiện mua. Công cụ tính vay HouseX.",
-    tags: [
-      { slug: "noxh", name: "Nhà ở xã hội" },
-      { slug: "phap-ly", name: "Pháp lý & chính sách" },
-      { slug: "goc-chuyen-gia", name: "Góc chuyên gia" },
-    ],
+    tags: [NOXH_TAG_CHINH_SACH],
     projects: [{ slug: DTA_HAPPY_HOME_SLUG, name: "DTA Happy Home Nhơn Trạch" }],
   },
   {
@@ -213,11 +209,7 @@ ${NOXH_SUPPORT_CLOSING}`,
       "Điều kiện nhà ở mua NOXH — Điều 78, 15 m²/người, lỗi hồ sơ | HouseX",
     seoDesc:
       "Giải thích điều kiện nhà ở khi mua NOXH: chưa có nhà, 15 m²/người, một căn/hộ. Điều 78 Luật Nhà ở 2023.",
-    tags: [
-      { slug: "noxh", name: "Nhà ở xã hội" },
-      { slug: "phap-ly", name: "Pháp lý & chính sách" },
-      { slug: "goc-chuyen-gia", name: "Góc chuyên gia" },
-    ],
+    tags: [NOXH_TAG_CHINH_SACH],
     projects: [],
   },
   {
@@ -270,11 +262,7 @@ Tra cứu mặt bằng, vị trí và gallery: [/du-an/chung-cu-phuc-loc-tho-nox
       "NOXH Phúc Lộc Thọ Block C — giá ~35,3 tr/m², 140 căn | HouseX",
     seoDesc:
       "Phân tích NOXH Phúc Lộc Thọ 35 Lê Văn Chí: giá ~35,3 triệu/m², 140 căn Block C, điều kiện và hồ sơ 2026.",
-    tags: [
-      { slug: "noxh", name: "Nhà ở xã hội" },
-      { slug: "tien-do-du-an", name: "Tiến độ dự án" },
-      { slug: "goc-chuyen-gia", name: "Góc chuyên gia" },
-    ],
+    tags: [NOXH_TAG_DU_AN_GIA],
     projects: [{ slug: PHUC_LOC_THO_SLUG, name: PHUC_LOC_THO_NAME }],
   },
   {
@@ -328,11 +316,7 @@ ${NOXH_SUPPORT_CLOSING}`,
       "NOXH Long An 2026 — 6 dự án, giá tham chiếu & điều kiện | HouseX",
     seoDesc:
       "Danh mục 6 dự án nhà ở xã hội Long An: LA Home, Mỹ Hạnh, The Ori… Giá từ ~14 triệu/m², hướng dẫn đối tượng và hồ sơ.",
-    tags: [
-      { slug: "noxh", name: "Nhà ở xã hội" },
-      { slug: "goc-chuyen-gia", name: "Góc chuyên gia" },
-      { slug: "dau-tu", name: "Kiến thức đầu tư" },
-    ],
+    tags: [NOXH_TAG_DU_AN_GIA],
     projects: [
       { slug: LA_HOME_SLUG, name: "Nhà ở xã hội LA Home" },
       { slug: MY_HANH_SLUG, name: "Nhà ở xã hội Mỹ Hạnh" },

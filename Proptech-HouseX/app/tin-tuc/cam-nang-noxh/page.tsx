@@ -1,11 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ArticleCard } from "@/components/articles/article-card";
-import {
-  listPublishedArticles,
-  listPublishedTags,
-} from "@/lib/data/article-public";
-import { topicPath } from "@/lib/content/article-routes";
+import { NoxhHandbookClusterNav } from "@/components/articles/noxh-handbook-cluster-nav";
+import { listPublishedArticles } from "@/lib/data/article-public";
 import { buildNoxhHandbookHubJsonLd } from "@/lib/seo/article-json-ld";
 import {
   NEWS_HUB_PATH,
@@ -39,10 +36,11 @@ export default async function CamNangNoxhHubPage({ searchParams }: PageProps) {
   const sp = await searchParams;
   const page = Math.max(1, Number(sp.page) || 1);
 
-  const [{ items, total }, tags] = await Promise.all([
-    listPublishedArticles({ page, pageSize: 12 }),
-    listPublishedTags(),
-  ]);
+  const { items, total } = await listPublishedArticles({
+    page,
+    pageSize: 12,
+    handbookOnly: true,
+  });
 
   const totalPages = Math.max(1, Math.ceil(total / 12));
   const jsonLd = buildNoxhHandbookHubJsonLd();
@@ -77,20 +75,11 @@ export default async function CamNangNoxhHubPage({ searchParams }: PageProps) {
         </div>
 
         <div className="mx-auto max-w-6xl px-4 py-10 container-px">
-          {tags.length > 0 && (
-            <div className="mb-8 flex flex-wrap gap-2">
-              {tags.map((t) => (
-                <Link
-                  key={t.slug}
-                  href={topicPath(t.slug)}
-                  className="rounded-full border border-slate-200 bg-white px-4 py-1.5 text-sm font-medium text-slate-700 shadow-sm hover:border-brand-200 hover:text-brand-700"
-                >
-                  {t.name}
-                  <span className="ml-1.5 text-slate-400">({t.articleCount})</span>
-                </Link>
-              ))}
-            </div>
-          )}
+          {page === 1 ? <NoxhHandbookClusterNav /> : null}
+
+          <h2 className="mb-6 text-lg font-semibold text-slate-900">
+            {page === 1 ? "Bài viết mới" : "Bài viết"}
+          </h2>
 
           {items.length === 0 ? (
             <p className="text-slate-600">Chưa có bài viết nào.</p>

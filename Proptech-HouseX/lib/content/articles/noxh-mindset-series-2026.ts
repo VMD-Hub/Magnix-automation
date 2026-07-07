@@ -10,8 +10,9 @@ import {
 } from "@/lib/content/articles/noxh-mindset-cluster-map-2026";
 
 const PUBLISHED = new Date("2026-07-04T00:00:00.000Z");
-const TAG_NOXH = { slug: "noxh", name: "Nhà ở xã hội" };
-const TAG = { slug: NOXH_MINDSET_TAG.slug, name: NOXH_MINDSET_TAG.name };
+import { NOXH_TAG_CHON_NHA } from "@/lib/content/articles/noxh-handbook-tags";
+
+const TAG = NOXH_TAG_CHON_NHA;
 
 function buildPillarBody(published: Set<string>): string {
   const beliefsTable = NOXH_MINDSET_CORE_BELIEFS.map(
@@ -1590,7 +1591,7 @@ const MINDSET_ARTICLES_RAW: ArticleDetail[] = [
       "Chọn nhà ở xã hội đúng cách — theo năng lực, không theo cảm xúc | HouseX",
     seoDesc:
       "Chọn NOXH theo năng lực và nhu cầu thật — không theo độ hot. 4 điểm kiểm tra, quy trình 6 bước và liên kết thẩm định vay trước khi cọc.",
-    tags: [TAG, TAG_NOXH, { slug: "goc-chuyen-gia", name: "Góc chuyên gia" }],
+    tags: [TAG],
     projects: [],
   },
   {
@@ -1609,7 +1610,7 @@ const MINDSET_ARTICLES_RAW: ArticleDetail[] = [
       "Vì sao mua nhà sai vì chạy theo độ hot? 5 câu hỏi trước khi chốt | HouseX",
     seoDesc:
       "Mua NOXH theo độ hot dễ sai: cọc sớm, bỏ qua chi phí, tin môi giới. 3 lý do bị cuốn và 5 câu hỏi kiểm tra trước khi giữ suất.",
-    tags: [TAG, TAG_NOXH, { slug: "goc-chuyen-gia", name: "Góc chuyên gia" }],
+    tags: [TAG],
     projects: [],
   },
   {
@@ -1629,7 +1630,7 @@ const MINDSET_ARTICLES_RAW: ArticleDetail[] = [
       "Dự án hot, suất nhanh, vị trí đẹp — ba yếu tố làm mất tỉnh táo | HouseX",
     seoDesc:
       "Hot + suất nhanh + vị trí đẹp dễ khiến mua NOXH vội. 4 câu hỏi giữ tỉnh táo, checklist tài chính và liên kết thẩm định vay trước khi giữ suất.",
-    tags: [TAG, TAG_NOXH, { slug: "goc-chuyen-gia", name: "Góc chuyên gia" }],
+    tags: [TAG],
     projects: [],
   },
   {
@@ -1648,7 +1649,7 @@ const MINDSET_ARTICLES_RAW: ArticleDetail[] = [
       "Đừng mua vì sợ mất cơ hội — quyết định NOXH bình tĩnh hơn | HouseX",
     seoDesc:
       "FOMO mua NOXH dễ khiến chốt vội. 4 cách bình tĩnh, 5 câu hỏi trước cọc và liên kết kiểm tra tài chính, vay và CIC.",
-    tags: [TAG, TAG_NOXH, { slug: "goc-chuyen-gia", name: "Góc chuyên gia" }],
+    tags: [TAG],
     projects: [],
   },
   {
@@ -1668,7 +1669,7 @@ const MINDSET_ARTICLES_RAW: ArticleDetail[] = [
       "Gần trung tâm chưa chắc tốt nhất khi mua NOXH | HouseX",
     seoDesc:
       "Mua NOXH gần trung tâm có thể thành gánh nặng. So sánh thời gian đi lại thật, TOD, chi phí sống và 5 tiêu chuẩn chọn vị trí dài hạn.",
-    tags: [TAG, TAG_NOXH, { slug: "goc-chuyen-gia", name: "Góc chuyên gia" }],
+    tags: [TAG],
     projects: [],
   },
   {
@@ -1687,7 +1688,7 @@ const MINDSET_ARTICLES_RAW: ArticleDetail[] = [
       "Xa hơn nhưng đi nhanh hơn — khi nào khôn ngoan với NOXH? | HouseX",
     seoDesc:
       "Dự án NOXH xa nhưng kết nối tốt có thể đáng mua hơn gần trung tâm. So sánh thời gian đi lại, áp lực vay, hạ tầng và 5 câu hỏi trước khi chọn.",
-    tags: [TAG, TAG_NOXH, { slug: "goc-chuyen-gia", name: "Góc chuyên gia" }],
+    tags: [TAG],
     projects: [],
   },
   {
@@ -1706,7 +1707,7 @@ const MINDSET_ARTICLES_RAW: ArticleDetail[] = [
       "Nhà xa nhưng kết nối tốt — có đáng mua NOXH hơn? | HouseX",
     seoDesc:
       "Nhà NOXH xa nhưng kết nối tốt có thể tốt hơn gần trung tâm. So sánh chi phí vô hình, thời gian đi lại, 5 ưu tiên an cư và công cụ kiểm tra tài chính.",
-    tags: [TAG, TAG_NOXH, { slug: "goc-chuyen-gia", name: "Góc chuyên gia" }],
+    tags: [TAG],
     projects: [],
   },
   {
@@ -1726,7 +1727,7 @@ const MINDSET_ARTICLES_RAW: ArticleDetail[] = [
       "Vùng ven không xấu — NOXH và không gian sống đáng giá | HouseX",
     seoDesc:
       "NOXH vùng ven có thể cho không gian sống tốt hơn nội thành chật. Định kiến vs thực tế, tiện ích quy hoạch và 5 câu hỏi chọn an cư bền.",
-    tags: [TAG, TAG_NOXH, { slug: "goc-chuyen-gia", name: "Góc chuyên gia" }],
+    tags: [TAG],
     projects: [],
   },
   {
@@ -1745,7 +1746,7 @@ const MINDSET_ARTICLES_RAW: ArticleDetail[] = [
       "Chọn dự án NOXH hợp túi tiền thay vì dự án hot | HouseX",
     seoDesc:
       "Dự án NOXH hot vs hợp túi tiền: 4 tình huống ưu tiên vừa sức, rủi ro suất ngoại giao, 5 câu hỏi phân biệt và công cụ kiểm tra tài chính.",
-    tags: [TAG, TAG_NOXH, { slug: "goc-chuyen-gia", name: "Góc chuyên gia" }],
+    tags: [TAG],
     projects: [],
   },
   {
@@ -1764,7 +1765,7 @@ const MINDSET_ARTICLES_RAW: ArticleDetail[] = [
       "Chọn nhà để ở vs giữ suất — mua NOXH đúng mục tiêu | HouseX",
     seoDesc:
       "Mua NOXH để ở, giữ suất hay đầu tư — tiêu chí khác nhau. So sánh 3 mục tiêu, rủi ro hồ sơ và 5 câu hỏi xác định trước khi chọn căn.",
-    tags: [TAG, TAG_NOXH, { slug: "goc-chuyen-gia", name: "Góc chuyên gia" }],
+    tags: [TAG],
     projects: [],
   },
   {
@@ -1784,7 +1785,7 @@ const MINDSET_ARTICLES_RAW: ArticleDetail[] = [
       "3 tiêu chuẩn mới chọn NOXH — tài chính, thời gian, gia đình | HouseX",
     seoDesc:
       "3 tiêu chuẩn chọn NOXH: tài chính chịu được, thời gian sống hợp lý, phù hợp dài hạn. So sánh tiêu chí cũ/mới và bảng chấm 3 câu hỏi trước khi chốt.",
-    tags: [TAG, TAG_NOXH, { slug: "goc-chuyen-gia", name: "Góc chuyên gia" }],
+    tags: [TAG],
     projects: [],
   },
   {
@@ -1804,7 +1805,7 @@ const MINDSET_ARTICLES_RAW: ArticleDetail[] = [
       "Chi phí ẩn sau khi mua NOXH — không chỉ trả tiền nhà | HouseX",
     seoDesc:
       "Tiền mua nhà chỉ là phần đầu. Chi phí ẩn NOXH: đi lại, sinh hoạt ban đầu, thời gian, quỹ dự phòng. Bảng tự hỏi 4 câu trước khi chốt.",
-    tags: [TAG, TAG_NOXH, { slug: "goc-chuyen-gia", name: "Góc chuyên gia" }],
+    tags: [TAG],
     projects: [],
   },
   {
@@ -1823,7 +1824,7 @@ const MINDSET_ARTICLES_RAW: ArticleDetail[] = [
       "30 phút di chuyển mua NOXH — có phải mất mát? | HouseX",
     seoDesc:
       "30 phút đi làm mỗi ngày có phải lãng phí? Góc nhìn người trẻ mua NOXH: thời gian di chuyển vs áp lực sở hữu. So sánh gần trung tâm và xa hơn.",
-    tags: [TAG, TAG_NOXH, { slug: "goc-chuyen-gia", name: "Góc chuyên gia" }],
+    tags: [TAG],
     projects: [],
   },
   {
@@ -1843,7 +1844,7 @@ const MINDSET_ARTICLES_RAW: ArticleDetail[] = [
       "DTA Happy Home Nhơn Trạch — NOXH dễ sở hữu, dễ sống | HouseX",
     seoDesc:
       "DTA Happy Home Nhơn Trạch: giá 448–700 triệu, gần KCN, hạ tầng Vành đai 3, cộng đồng đã về ở. Ví dụ chọn NOXH vùng ven thông minh.",
-    tags: [TAG, TAG_NOXH, { slug: "goc-chuyen-gia", name: "Góc chuyên gia" }],
+    tags: [TAG],
     projects: [{ slug: "dta-happy-home-nhon-trach", name: "DTA Happy Home Nhơn Trạch" }],
   },
   {
@@ -1863,7 +1864,7 @@ const MINDSET_ARTICLES_RAW: ArticleDetail[] = [
       "Checklist chốt mua NOXH — tài chính, hạ tầng, CIC, dự phòng | HouseX",
     seoDesc:
       "Checklist 4 điểm trước khi chốt NOXH: tài chính, hạ tầng, CIC, quỹ dự phòng. Bảng tự chấm và liên kết kiểm tra 60 giây, CIC, thẩm định vay.",
-    tags: [TAG, TAG_NOXH, { slug: "goc-chuyen-gia", name: "Góc chuyên gia" }],
+    tags: [TAG],
     projects: [],
   },
   {
@@ -1882,7 +1883,7 @@ const MINDSET_ARTICLES_RAW: ArticleDetail[] = [
       "HouseX: Tổng kho nhà ở xã hội kết nối trực tiếp chủ đầu tư | HouseX",
     seoDesc:
       "HouseX hỗ trợ người mua nhà ở xã hội tìm thông tin nhanh, hiểu đúng chính sách và kết nối thuận tiện với chủ đầu tư, sàn giao dịch.",
-    tags: [TAG, TAG_NOXH, { slug: "goc-chuyen-gia", name: "Góc chuyên gia" }],
+    tags: [TAG],
     projects: [],
   },
 ];

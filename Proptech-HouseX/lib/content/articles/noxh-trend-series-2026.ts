@@ -1,3 +1,7 @@
+import {
+  NOXH_TAG_CHINH_SACH,
+  NOXH_TAG_DU_AN_GIA,
+} from "@/lib/content/articles/noxh-handbook-tags";
 import type { ArticleDetail } from "@/lib/data/article-types";
 import { EDITORIAL_FIGURES } from "@/lib/content/articles/article-editorial-media";
 import { DTA_PR_CLOSINGS } from "@/lib/content/articles/article-editorial-voice";
@@ -51,11 +55,7 @@ Người quan tâm NOXH nội thành nhưng chưa chắc trúng suất có thể
       "TP.HCM công bố giá NOXH Lý Thường Kiệt Phú Thọ DMC — 23,25 tr/m² | HouseX",
     seoDesc:
       "Tổng hợp VnExpress: giá NOXH Lý Thường Kiệt 23,25 tr/m², 12.000+ hồ sơ, bàn giao 08/2026. Phân tích & liên kết dự án trên HouseX.",
-    tags: [
-      { slug: "noxh", name: "Nhà ở xã hội" },
-      { slug: "tien-do-du-an", name: "Tiến độ dự án" },
-      { slug: "nha-o-xa-hoi-ly-thuong-kiet", name: "NOXH Lý Thường Kiệt" },
-    ],
+    tags: [NOXH_TAG_DU_AN_GIA],
     projects: [{ slug: LTK_PROJECT_SLUG, name: LTK_PROJECT_NAME }],
   },
   {
@@ -116,12 +116,7 @@ ${DTA_PR_CLOSINGS.gaQuyHoach}
       "So sánh giá NOXH Lý Thường Kiệt vs DTA Happy Home 2026 | HouseX",
     seoDesc:
       "Phân tích 23,25 tr/m² Phú Thọ DMC vs DTA Happy Home 448–700 triệu/căn. An cư cho công nhân & người trẻ NOXH.",
-    tags: [
-      { slug: "noxh", name: "Nhà ở xã hội" },
-      { slug: "dau-tu", name: "Kiến thức đầu tư" },
-      { slug: "nha-o-xa-hoi-ly-thuong-kiet", name: "NOXH Lý Thường Kiệt" },
-      { slug: "dta-happy-home-nhon-trach", name: "DTA Happy Home" },
-    ],
+    tags: [NOXH_TAG_DU_AN_GIA],
     projects: [
       { slug: LTK_PROJECT_SLUG, name: LTK_PROJECT_NAME },
       { slug: DTA_HAPPY_HOME_SLUG, name: "DTA Happy Home Nhơn Trạch" },
@@ -184,12 +179,7 @@ ${DTA_PR_CLOSINGS.todAnCu}
       "Lãi suất vay NOXH dưới 35 tuổi 6,5%/năm & ưu đãi DTA Happy Home | HouseX",
     seoDesc:
       "Phân tích Công văn 5340 NHNN: 6,5%/năm 5 năm đầu. So sánh 5,9% trước đây và gói 5,5% CĐT DTA Happy Home Nhơn Trạch.",
-    tags: [
-      { slug: "noxh", name: "Nhà ở xã hội" },
-      { slug: "phap-ly", name: "Pháp lý & chính sách" },
-      { slug: "goc-chuyen-gia", name: "Góc chuyên gia" },
-      { slug: "dta-happy-home-nhon-trach", name: "DTA Happy Home" },
-    ],
+    tags: [NOXH_TAG_CHINH_SACH],
     projects: [{ slug: DTA_HAPPY_HOME_SLUG, name: "DTA Happy Home Nhơn Trạch" }],
   },
 ];

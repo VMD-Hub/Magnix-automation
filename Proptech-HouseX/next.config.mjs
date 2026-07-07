@@ -71,6 +71,51 @@ const nextConfig = {
         destination: "/phong-thuy",
         permanent: true,
       },
+      {
+        source: "/tin-tuc/cam-nang-noxh/chu-de/noxh",
+        destination: "/tin-tuc/cam-nang-noxh",
+        permanent: true,
+      },
+      {
+        source: "/tin-tuc/cam-nang-noxh/chu-de/goc-chuyen-gia",
+        destination: "/tin-tuc/cam-nang-noxh",
+        permanent: true,
+      },
+      {
+        source: "/tin-tuc/cam-nang-noxh/chu-de/phap-ly",
+        destination: "/tin-tuc/cam-nang-noxh/chu-de/chinh-sach-ho-so-noxh",
+        permanent: true,
+      },
+      {
+        source: "/tin-tuc/cam-nang-noxh/chu-de/tien-do-du-an",
+        destination: "/tin-tuc/cam-nang-noxh/chu-de/du-an-gia-tien-do-noxh",
+        permanent: true,
+      },
+      {
+        source: "/tin-tuc/cam-nang-noxh/chu-de/dau-tu",
+        destination: "/tin-tuc/cam-nang-noxh/chu-de/du-an-gia-tien-do-noxh",
+        permanent: true,
+      },
+      {
+        source: "/tin-tuc/cam-nang-noxh/chu-de/ha-tang-giao-thong",
+        destination: "/tin-tuc/cam-nang-noxh/chu-de/ha-tang-ket-noi-vung",
+        permanent: true,
+      },
+      {
+        source: "/tin-tuc/cam-nang-noxh/chu-de/do-thi-ve-tinh-tod",
+        destination: "/tin-tuc/cam-nang-noxh/chu-de/ha-tang-ket-noi-vung",
+        permanent: true,
+      },
+      {
+        source: "/tin-tuc/cam-nang-noxh/chu-de/nha-o-xa-hoi-ly-thuong-kiet",
+        destination: "/tin-tuc/cam-nang-noxh",
+        permanent: true,
+      },
+      {
+        source: "/tin-tuc/cam-nang-noxh/chu-de/dta-happy-home-nhon-trach",
+        destination: "/tin-tuc/cam-nang-noxh",
+        permanent: true,
+      },
     ];
   },
 };

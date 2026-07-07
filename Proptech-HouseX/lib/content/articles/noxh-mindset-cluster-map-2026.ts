@@ -1,3 +1,4 @@
+import { NOXH_TAG_CHON_NHA } from "@/lib/content/articles/noxh-handbook-tags";
 import { articlePath } from "@/lib/content/article-routes";
 
 /**
@@ -6,8 +7,8 @@ import { articlePath } from "@/lib/content/article-routes";
  */
 
 export const NOXH_MINDSET_TAG = {
-  slug: "chon-noxh-dung-cach",
-  name: "Chọn NOXH đúng cách",
+  slug: NOXH_TAG_CHON_NHA.slug,
+  name: NOXH_TAG_CHON_NHA.name,
   description:
     "Mua nhà để an cư, không phải để đầu cơ. Danh mục này là khoảng lặng cần thiết giúp bạn tách mình ra khỏi những cơn sốt 'chốt cọc' hay áp lực đám đông. Bằng những phân tích thực tế, chúng tôi đồng hành cùng bạn bóc tách năng lực tài chính và nhu cầu cốt lõi của gia đình, đảm bảo mỗi quyết định xuống tiền đều mang lại sự an tâm dài hạn.",
 } as const;

@@ -48,7 +48,7 @@ export function ArticleCard({ article }: { article: ArticleCardData }) {
       ) : null}
       <div className="flex flex-1 flex-col p-4">
         <div className="flex flex-wrap gap-1.5">
-          {article.tags.slice(0, 2).map((t) => (
+          {article.tags.slice(0, 1).map((t) => (
             <span
               key={t.slug}
               className="rounded-full bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-600"

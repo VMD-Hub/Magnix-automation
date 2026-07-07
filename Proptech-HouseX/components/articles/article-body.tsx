@@ -414,9 +414,10 @@ export function ArticleTagList({
   className?: string;
 }) {
   if (tags.length === 0) return null;
+  const primary = tags[0]!;
   return (
     <ul className={`flex flex-wrap gap-2 ${className}`}>
-      {tags.map((t) => (
+      {[primary].map((t) => (
         <li key={t.slug}>
           <a
             href={topicPath(t.slug)}

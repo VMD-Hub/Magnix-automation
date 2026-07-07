@@ -1,4 +1,9 @@
-import { prisma } from "@/lib/prisma";
+import {
+  isNoxhHandbookArticle,
+  NOXH_HANDBOOK_TAG_DESCRIPTIONS,
+  NOXH_HANDBOOK_TAG_SLUGS,
+  PHONG_THUY_ARTICLE_TAG,
+} from "@/lib/content/articles/noxh-handbook-tags";
 import type {
   ArticleCardData,
   ArticleDetail,
@@ -13,6 +18,7 @@ import {
 } from "@/lib/preview/demo-articles";
 import { applyEditorialMedia } from "@/lib/content/articles/article-editorial-media";
 import { orderProjectRelatedArticles } from "@/lib/content/project-related-articles";
+import { prisma } from "@/lib/prisma";
 
 const articleCardInclude = {
   tags: { include: { tag: true } },
@@ -107,9 +113,14 @@ export async function listPublishedArticles(params: {
   pageSize?: number;
   tagSlug?: string;
   projectSlug?: string;
+  /** Chỉ bài thuộc cẩm nang NOXH (loại bài phong thủy-only). */
+  handbookOnly?: boolean;
 } = {}): Promise<{ items: ArticleCardData[]; total: number; source: "db" | "demo" }> {
   const page = Math.max(1, params.page ?? 1);
   const pageSize = Math.min(50, params.pageSize ?? 12);
+  const handbookOnly =
+    params.handbookOnly ??
+    params.tagSlug !== PHONG_THUY_ARTICLE_TAG.slug;
 
   try {
     const where = {
@@ -131,6 +142,7 @@ export async function listPublishedArticles(params: {
       Promise.resolve(
         listDemoArticleCards({
           ...params,
+          handbookOnly,
           page: 1,
           pageSize: DEMO_CATALOG_PAGE_SIZE,
         }),
@@ -141,8 +153,11 @@ export async function listPublishedArticles(params: {
       rows.map(mapToCard),
       demoAll.items,
     );
-    if (merged.length > 0) {
-      const paged = paginateArticleCards(merged, page, pageSize);
+    const scoped = handbookOnly
+      ? merged.filter(isNoxhHandbookArticle)
+      : merged;
+    if (scoped.length > 0) {
+      const paged = paginateArticleCards(scoped, page, pageSize);
       return {
         ...paged,
         source: rows.length > 0 ? "db" : "demo",
@@ -152,7 +167,12 @@ export async function listPublishedArticles(params: {
     // Postgres offline — demo below.
   }
 
-  const demo = listDemoArticleCards({ ...params, page, pageSize });
+  const demo = listDemoArticleCards({
+    ...params,
+    handbookOnly,
+    page,
+    pageSize,
+  });
   return { ...demo, source: "demo" };
 }
 
@@ -246,14 +266,19 @@ export async function listPublishedTags(): Promise<ArticleTagSummary[]> {
         counts.set(tag.slug, {
           slug: tag.slug,
           name: tag.name,
-          description: meta?.description ?? null,
+          description:
+            NOXH_HANDBOOK_TAG_DESCRIPTIONS[
+              tag.slug as keyof typeof NOXH_HANDBOOK_TAG_DESCRIPTIONS
+            ] ??
+            meta?.description ??
+            null,
           articleCount: 1,
         });
       }
     }
 
     return [...counts.values()]
-      .filter((t) => t.articleCount > 0)
+      .filter((t) => t.articleCount > 0 && NOXH_HANDBOOK_TAG_SLUGS.has(t.slug))
       .sort((a, b) => a.name.localeCompare(b.name, "vi"));
   } catch {
     return listDemoTags();

@@ -4,9 +4,10 @@ import {
   NOXH_LOAN_TOOL_60S,
 } from "@/lib/content/articles/noxh-loan-cluster-map-2026";
 
+import { NOXH_TAG_THAM_DINH_VAY } from "@/lib/content/articles/noxh-handbook-tags";
+
 const PUBLISHED = new Date("2026-07-04T00:00:00.000Z");
-const TAG = { slug: "tham-dinh-vay-noxh", name: "Thẩm định vay NOXH" };
-const TAG_NOXH = { slug: "noxh", name: "Nhà ở xã hội" };
+const TAG = NOXH_TAG_THAM_DINH_VAY;
 
 const closing = (slug: string) => noxhLoanClusterClosing(slug);
 
@@ -187,7 +188,7 @@ ${closing("tham-dinh-khoan-vay-mua-nha-o-xa-hoi")}`,
       "Thẩm định khoản vay mua nhà ở xã hội: Tự kiểm tra trước khi nộp hồ sơ | HouseX",
     seoDesc:
       "Tự thẩm định khả năng vay NOXH: tuổi, thu nhập, CIC, nghĩa vụ nợ và checklist trước cọc. Không thay thế ngân hàng — giúp biết mình đang ở đâu.",
-    tags: [TAG, TAG_NOXH, { slug: "goc-chuyen-gia", name: "Góc chuyên gia" }],
+    tags: [TAG],
     projects: [],
   },
   {
@@ -255,7 +256,7 @@ ${closing("kiem-tra-kha-nang-vay-noxh-60-giay")}`,
       "Kiểm tra nhanh thời hạn vay NOXH — vì sao mỗi người khác nhau? | HouseX",
     seoDesc:
       "Môi giới hay nói vay 20–30 năm nhưng mỗi người có thời hạn vay NOXH khác nhau. Giải thích tuổi cuối kỳ vay, vì sao nên kiểm tra trước và bước tiếp theo sau khi biết kết quả sơ bộ.",
-    tags: [TAG, TAG_NOXH, { slug: "goc-chuyen-gia", name: "Góc chuyên gia" }],
+    tags: [TAG],
     projects: [],
   },
   {
@@ -400,7 +401,7 @@ ${closing("mua-nha-o-xa-hoi-co-duoc-vay-ngan-hang-khong")}`,
       "Mua nhà ở xã hội có được vay ngân hàng không? Điều kiện cần biết | HouseX",
     seoDesc:
       "NOXH có vay ngân hàng được không? Điều kiện tuổi, thu nhập, CIC, nghĩa vụ nợ và hồ sơ — đủ điều kiện mua ≠ chắc duyệt vay.",
-    tags: [TAG, TAG_NOXH, { slug: "goc-chuyen-gia", name: "Góc chuyên gia" }],
+    tags: [TAG],
     projects: [],
   },
   {
@@ -551,7 +552,7 @@ ${closing("cach-tra-cic-an-toan-truoc-khi-vay")}`,
     seoTitle: "Kiểm tra CIC an toàn: Người mua nhà cần biết trước khi vay | HouseX",
     seoDesc:
       "Tra CIC qua cic.gov.vn hoặc CIC Credit Connect — kênh chính thống. Tránh trang lạ, biết nợ xấu trước khi vay mua NOXH.",
-    tags: [TAG, TAG_NOXH, { slug: "phap-ly", name: "Pháp lý & chính sách" }],
+    tags: [TAG],
     projects: [],
   },
   {
@@ -689,7 +690,7 @@ ${closing("no-xau-nhom-2-vay-mua-nha-o-xa-hoi")}`,
     seoTitle: "Nợ xấu nhóm 2 có vay mua nhà ở xã hội được không? | HouseX",
     seoDesc:
       "Nợ nhóm 2 và vay NOXH: ngân hàng xét gì, có vay được không, cách xử lý CIC trước khi cọc — không tin lời hứa miệng.",
-    tags: [TAG, TAG_NOXH, { slug: "goc-chuyen-gia", name: "Góc chuyên gia" }],
+    tags: [TAG],
     projects: [],
   },
   {
@@ -720,7 +721,7 @@ ${closing("vay-noxh-vo-chong-dong-vay-cic")}`,
     authorName: "Ban biên tập House X",
     seoTitle: "Vay NOXH vợ chồng — đồng vay & CIC | HouseX",
     seoDesc: "Vay mua nhà ở xã hội khi đã kết hôn: CIC, đồng vay, chi phí hộ gia đình.",
-    tags: [TAG, TAG_NOXH],
+    tags: [TAG],
     projects: [],
   },
   {
@@ -871,7 +872,7 @@ ${closing("dieu-kien-vay-noxh-theo-tuoi-hon-nhan")}`,
       "Cách tính tuổi vay mua nhà: Độc thân, kết hôn, có con | HouseX",
     seoDesc:
       "Tuổi cuối kỳ vay quyết định hạn mức và kỳ hạn NOXH. Độc thân, vợ chồng, con phụ thuộc — cách tự kiểm tra trước khi nộp hồ sơ.",
-    tags: [TAG, TAG_NOXH, { slug: "goc-chuyen-gia", name: "Góc chuyên gia" }],
+    tags: [TAG],
     projects: [],
   },
   {
@@ -1036,7 +1037,7 @@ ${closing("ho-so-vay-mua-nha-o-xa-hoi")}`,
     seoTitle: "Hồ sơ vay mua nhà ở xã hội gồm những gì? Checklist đầy đủ | HouseX",
     seoDesc:
       "5 nhóm giấy tờ hồ sơ vay NOXH: cá nhân, điều kiện mua, thu nhập, HĐ mua, TSĐB. Checklist 12 mục trước khi nộp ngân hàng.",
-    tags: [TAG, TAG_NOXH, { slug: "phap-ly", name: "Pháp lý & chính sách" }],
+    tags: [TAG],
     projects: [],
   },
   {
@@ -1167,7 +1168,7 @@ ${closing("sai-lam-tin-moi-gioi-chac-vay-noxh")}`,
       "Sai lầm tin môi giới “chắc chắn vay được” — 6 điều cần biết | HouseX",
     seoDesc:
       "Đừng tin “chắc vay” trước khi cọc NOXH. 6 sai lầm phổ biến, 5 câu nói cần cảnh giác và checklist tự kiểm tra CIC, tuổi, thu nhập.",
-    tags: [TAG, TAG_NOXH, { slug: "goc-chuyen-gia", name: "Góc chuyên gia" }],
+    tags: [TAG],
     projects: [],
   },
   {
@@ -1313,7 +1314,7 @@ ${closing("checklist-truoc-khi-dat-coc-noxh")}`,
     seoTitle: "Đừng đặt cọc khi chưa kiểm tra khả năng vay mua nhà | HouseX",
     seoDesc:
       "Cọc trước, hỏi vay sau — rủi ro kẹt tiền. Checklist 5 điểm + 7 bước trước khi đặt cọc NOXH; kiểm tra tuổi, CIC, hạn mức trước.",
-    tags: [TAG, TAG_NOXH, { slug: "goc-chuyen-gia", name: "Góc chuyên gia" }],
+    tags: [TAG],
     projects: [],
   },
   {
@@ -1441,7 +1442,7 @@ ${closing("vay-noxh-can-thu-nhap-bao-nhieu")}`,
       "Vay mua nhà ở xã hội cần thu nhập bao nhiêu? 2 lớp cần kiểm tra | HouseX",
     seoDesc:
       "Thu nhập NOXH: trần mua 25/35/50 triệu vs khả năng vay ngân hàng. Link điều kiện thu nhập + công cụ hạn mức vay.",
-    tags: [TAG, TAG_NOXH, { slug: "goc-chuyen-gia", name: "Góc chuyên gia" }],
+    tags: [TAG],
     projects: [],
   },
   {
@@ -1577,7 +1578,7 @@ ${closing("sai-lam-tai-chinh-tuong-du-tien-mua-nha")}`,
       "Sai lầm tài chính tưởng đủ tiền mua nhà — 7 điều cần biết | HouseX",
     seoDesc:
       "Có tiền cọc chưa chắc đủ mua NOXH. 7 sai lầm tài chính cá nhân, quỹ dự phòng, nợ cộng dồn và cách tự kiểm tra trước khi cọc.",
-    tags: [TAG, TAG_NOXH, { slug: "goc-chuyen-gia", name: "Góc chuyên gia" }],
+    tags: [TAG],
     projects: [],
   },
 ];

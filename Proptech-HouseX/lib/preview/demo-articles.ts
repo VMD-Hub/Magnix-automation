@@ -6,83 +6,24 @@ import { NOXH_MINDSET_ARTICLES_2026 } from "@/lib/content/articles/noxh-mindset-
 import { NOXH_LOAN_ASSESSMENT_ARTICLES_2026 } from "@/lib/content/articles/noxh-loan-assessment-series-2026";
 import { NOXH_TREND_ARTICLES_2026 } from "@/lib/content/articles/noxh-trend-series-2026";
 import { TOD_NHON_TRACH_ARTICLES_2026 } from "@/lib/content/articles/tod-nhon-trach-series-2026";
-import { NOXH_MINDSET_TAG } from "@/lib/content/articles/noxh-mindset-cluster-map-2026";
+import {
+  handbookTagSummaries,
+  isNoxhHandbookArticle,
+  NOXH_HANDBOOK_TAG_SLUGS,
+  PHONG_THUY_ARTICLE_TAG,
+} from "@/lib/content/articles/noxh-handbook-tags";
 import { CS_PROJECT_SLUG } from "@/lib/preview/kdc-chang-song-mock";
 import { LTK_PROJECT_SLUG } from "@/lib/preview/phu-tho-dmc-mock";
 
 const NOW = new Date("2026-06-29T00:00:00.000Z");
 
 export const DEMO_ARTICLE_TAGS: ArticleTagSummary[] = [
+  ...handbookTagSummaries(),
   {
-    slug: NOXH_MINDSET_TAG.slug,
-    name: NOXH_MINDSET_TAG.name,
-    description: NOXH_MINDSET_TAG.description,
-    articleCount: 0,
-  },
-  {
-    slug: "tham-dinh-vay-noxh",
-    name: "Thẩm định vay NOXH",
-    description: "Tự kiểm tra khả năng vay NOXH: tuổi, thu nhập, CIC và checklist trước khi đặt cọc.",
-    articleCount: 0,
-  },
-  {
-    slug: "noxh",
-    name: "Nhà ở xã hội",
-    description: "Chính sách, quy trình và cập nhật dự án NOXH.",
-    articleCount: 3,
-  },
-  {
-    slug: "phap-ly",
-    name: "Pháp lý & chính sách",
-    description: "Luật Nhà ở, điều kiện đối tượng và hồ sơ mua NOXH.",
-    articleCount: 2,
-  },
-  {
-    slug: "tien-do-du-an",
-    name: "Tiến độ dự án",
-    description: "Cập nhật giá bán, khởi công, bàn giao và mở hồ sơ.",
-    articleCount: 2,
-  },
-  {
-    slug: "dau-tu",
-    name: "Kiến thức đầu tư",
-    description: "Phân tích NOXH vs thương mại, dòng tiền và an cư.",
-    articleCount: 1,
-  },
-  {
-    slug: "goc-chuyen-gia",
-    name: "Góc chuyên gia",
-    description: "Nhận định thị trường và xu hướng nhà ở.",
-    articleCount: 1,
-  },
-  {
-    slug: "phong-thuy",
-    name: "Phong thủy nhà ở",
-    description: "Hướng nhà Bát trạch, tuổi xây, màu sơn và bố trí không gian.",
-    articleCount: 2,
-  },
-  {
-    slug: "nha-o-xa-hoi-ly-thuong-kiet",
-    name: "NOXH Lý Thường Kiệt",
-    description: "Phú Thọ DMC — giá, tiến độ và hồ sơ đăng ký.",
-    articleCount: 0,
-  },
-  {
-    slug: "dta-happy-home-nhon-trach",
-    name: "DTA Happy Home",
-    description: "NOXH Nhơn Trạch — giá căn, vay và Block A10.",
-    articleCount: 0,
-  },
-  {
-    slug: "ha-tang-giao-thong",
-    name: "Hạ tầng & giao thông",
-    description: "Metro, đường sắt, cao tốc và kết nối vùng ven.",
-    articleCount: 0,
-  },
-  {
-    slug: "do-thi-ve-tinh-tod",
-    name: "Đô thị vệ tinh & TOD",
-    description: "Phát triển đô thị định hướng giao thông công cộng.",
+    slug: PHONG_THUY_ARTICLE_TAG.slug,
+    name: PHONG_THUY_ARTICLE_TAG.name,
+    description:
+      "Hướng nhà Bát trạch, tuổi xây, màu sơn và bố trí không gian — silo /phong-thuy.",
     articleCount: 0,
   },
 ];
@@ -117,11 +58,7 @@ Tra cứu mặt bằng và gallery trên trang dự án [/du-an/nha-o-xa-hoi-ly-
     seoTitle: "Giá NOXH Lý Thường Kiệt 6/2026 — ~23,25 triệu/m²",
     seoDesc:
       "Công bố giá Nhà ở xã hội Lý Thường Kiệt (Phú Thọ DMC): 23,25 tr/m², 755 căn bán, bàn giao 08/2026.",
-    tags: [
-      { slug: "noxh", name: "Nhà ở xã hội" },
-      { slug: "tien-do-du-an", name: "Tiến độ dự án" },
-      { slug: "nha-o-xa-hoi-ly-thuong-kiet", name: "NOXH Lý Thường Kiệt" },
-    ],
+    tags: [{ slug: "du-an-gia-tien-do-noxh", name: "Dự án, giá & tiến độ" }],
     projects: [
       { slug: LTK_PROJECT_SLUG, name: "Nhà ở xã hội Lý Thường Kiệt" },
     ],
@@ -153,10 +90,7 @@ Khu vực Phước Tân thuộc vùng công nghiệp phía Nam Biên Hòa — ph
     seoTitle: "Tiến độ NOXH KDC Chàng Sông Phước Tân 2026",
     seoDesc:
       "Cập nhật NOXH KDC Chàng Sông: san lấp, hạ tầng, móng. CĐT Hùng Cường — chưa công bố giá.",
-    tags: [
-      { slug: "noxh", name: "Nhà ở xã hội" },
-      { slug: "tien-do-du-an", name: "Tiến độ dự án" },
-    ],
+    tags: [{ slug: "du-an-gia-tien-do-noxh", name: "Dự án, giá & tiến độ" }],
     projects: [
       { slug: CS_PROJECT_SLUG, name: "Nhà ở xã hội KDC Chàng Sông" },
     ],
@@ -292,11 +226,7 @@ ${NOXH_SUPPORT_CLOSING}
       "Điều kiện mua NOXH 2026 — Thu nhập 25/35/50 triệu, hồ sơ & văn bản CP | HouseX",
     seoDesc:
       "Hướng dẫn rà soát 3 trụ cột NOXH: đối tượng Đ.76, nhà ở Đ.77, thu nhập NĐ 136/2026. Checklist hồ sơ, lỗi thường gặp — link vanban.chinhphu.vn.",
-    tags: [
-      { slug: "noxh", name: "Nhà ở xã hội" },
-      { slug: "phap-ly", name: "Pháp lý & chính sách" },
-      { slug: "goc-chuyen-gia", name: "Góc chuyên gia" },
-    ],
+    tags: [{ slug: "chinh-sach-ho-so-noxh", name: "Chính sách & hồ sơ NOXH" }],
     projects: [],
   },
   {
@@ -333,10 +263,7 @@ Bát trạch là tham khảo văn hóa — không thay thế pháp lý, ánh sá
     seoTitle: "Hướng nhà hợp tuổi Bát trạch — tóm tắt cho người mua nhà",
     seoDesc:
       "Cung mệnh, Đông/Tây tứ mệnh, 4 hướng cát/hung — hướng dẫn tra cứu nhanh và công cụ miễn phí House X.",
-    tags: [
-      { slug: "phong-thuy", name: "Phong thủy nhà ở" },
-      { slug: "goc-chuyen-gia", name: "Góc chuyên gia" },
-    ],
+    tags: [{ slug: "phong-thuy", name: "Phong thủy nhà ở" }],
     projects: [],
   },
   {
@@ -374,10 +301,7 @@ Xem thêm [chuyên mục phong thủy](/phong-thuy) và [xem hướng nhà](/con
     seoTitle: "Kim Lâu, Hoang Ốc, Tam Tai — giải thích khi xây nhà",
     seoDesc:
       "Tuổi mụ, cách tính Kim Lâu/Hoang Ốc/Tam Tai và công cụ kiểm tra năm động thổ miễn phí trên House X.",
-    tags: [
-      { slug: "phong-thuy", name: "Phong thủy nhà ở" },
-      { slug: "goc-chuyen-gia", name: "Góc chuyên gia" },
-    ],
+    tags: [{ slug: "phong-thuy", name: "Phong thủy nhà ở" }],
     projects: [],
   },
   ...NOXH_TREND_ARTICLES_2026,
@@ -399,10 +323,17 @@ export function listDemoArticleCards(params: {
   pageSize?: number;
   tagSlug?: string;
   projectSlug?: string;
+  handbookOnly?: boolean;
 } = {}): { items: ArticleCardData[]; total: number } {
   const page = params.page ?? 1;
   const pageSize = params.pageSize ?? 12;
+  const handbookOnly =
+    params.handbookOnly ?? params.tagSlug !== PHONG_THUY_ARTICLE_TAG.slug;
   let filtered = DEMO_ARTICLES.filter((a) => a.status === "PUBLISHED");
+
+  if (handbookOnly) {
+    filtered = filtered.filter((a) => isNoxhHandbookArticle(a));
+  }
 
   if (params.tagSlug) {
     filtered = filtered.filter((a) =>
@@ -456,7 +387,11 @@ export function listDemoTags(): ArticleTagSummary[] {
   return DEMO_ARTICLE_TAGS.map((t) => {
     const count = DEMO_ARTICLES.filter(
       (a) =>
-        a.status === "PUBLISHED" && a.tags.some((x) => x.slug === t.slug),
+        a.status === "PUBLISHED" &&
+        a.tags.some((x) => x.slug === t.slug) &&
+        (NOXH_HANDBOOK_TAG_SLUGS.has(t.slug)
+          ? isNoxhHandbookArticle(a)
+          : true),
     ).length;
     return { ...t, articleCount: count };
   }).filter((t) => t.articleCount > 0);
