@@ -215,6 +215,8 @@ export function LuckyWheel({
   const [spinning, setSpinning] = useState(false);
   const [confetti, setConfetti] = useState(false);
   const wheelRef = useRef<HTMLDivElement>(null);
+  const rotationRef = useRef(0);
+  const activeAnimRef = useRef<Animation | null>(null);
   const segmentCount = wheelLayout.length || 12;
   const prizeMap = useMemo(
     () => new Map(prizes.map((p) => [p.id, p])),
@@ -278,39 +280,93 @@ export function LuckyWheel({
     return () => window.clearInterval(id);
   }, [spinning, playTick]);
 
+  useEffect(() => {
+    rotationRef.current = rotation;
+    const el = wheelRef.current;
+    if (!el || spinning) return;
+    el.style.transform = `rotate(${rotation}deg)`;
+  }, [rotation, spinning]);
+
+  useEffect(() => {
+    return () => {
+      activeAnimRef.current?.cancel();
+    };
+  }, []);
+
+  function applyWheelRotation(deg: number) {
+    rotationRef.current = deg;
+    const el = wheelRef.current;
+    if (el) {
+      el.style.transform = `rotate(${deg}deg)`;
+    }
+  }
+
+  function spinDuration(): number {
+    if (typeof window === "undefined") return spinDurationMs;
+    return window.matchMedia("(prefers-reduced-motion: reduce)").matches
+      ? 1200
+      : spinDurationMs;
+  }
+
   async function handleSpin() {
-    if (spinning || disabled) return;
+    const el = wheelRef.current;
+    if (!el || spinning || disabled) return;
     setConfetti(false);
     setSpinning(true);
 
-    const resultPromise = onRequestSpin();
+    const startRot = rotationRef.current;
+    const duration = spinDuration();
 
-    // Đợi 1 frame để browser gắn transition trước khi đổi góc.
-    await new Promise<void>((resolve) => {
-      requestAnimationFrame(() => requestAnimationFrame(() => resolve()));
-    });
+    activeAnimRef.current?.cancel();
+    const loadingAnim = el.animate(
+      [
+        { transform: `rotate(${startRot}deg)` },
+        { transform: `rotate(${startRot + 360}deg)` },
+      ],
+      { duration: 500, iterations: Infinity, easing: "linear" },
+    );
+    activeAnimRef.current = loadingAnim;
 
     try {
-      const result = await resultPromise;
-      setRotation((prev) =>
-        prev + spinDeltaDeg(prev, result.segmentIndex, segmentCount, 5),
-      );
+      const result = await onRequestSpin();
+      loadingAnim.cancel();
 
-      window.setTimeout(() => {
-        setSpinning(false);
-        if (result.won) {
-          playWin();
-          setConfetti(true);
-          window.setTimeout(() => setConfetti(false), 4000);
-        }
-        onSpinComplete?.({
-          segmentIndex: result.segmentIndex,
-          prizeLabel: result.prize.label,
-          won: result.won,
-          redemptionCode: result.redemptionCode,
-        });
-      }, spinDurationMs);
+      const endRot =
+        startRot + spinDeltaDeg(startRot, result.segmentIndex, segmentCount, 5);
+
+      const finalAnim = el.animate(
+        [
+          { transform: `rotate(${startRot}deg)` },
+          { transform: `rotate(${endRot}deg)` },
+        ],
+        {
+          duration,
+          easing: "cubic-bezier(0.17, 0.67, 0.12, 0.99)",
+          fill: "forwards",
+        },
+      );
+      activeAnimRef.current = finalAnim;
+      await finalAnim.finished;
+
+      finalAnim.cancel();
+      applyWheelRotation(endRot);
+      setRotation(endRot);
+      setSpinning(false);
+
+      if (result.won) {
+        playWin();
+        setConfetti(true);
+        window.setTimeout(() => setConfetti(false), 4000);
+      }
+      onSpinComplete?.({
+        segmentIndex: result.segmentIndex,
+        prizeLabel: result.prize.label,
+        won: result.won,
+        redemptionCode: result.redemptionCode,
+      });
     } catch {
+      loadingAnim.cancel();
+      applyWheelRotation(startRot);
       setSpinning(false);
     }
   }
@@ -343,14 +399,10 @@ export function LuckyWheel({
 
         <div
           ref={wheelRef}
-          className="absolute inset-[4%] rounded-full border-[5px] border-brand-900 bg-white shadow-[0_8px_32px_rgba(127,29,29,0.25)]"
+          className="promotion-wheel-disc absolute inset-[4%] rounded-full border-[5px] border-brand-900 bg-white shadow-[0_8px_32px_rgba(127,29,29,0.25)]"
           style={{
-            transition: spinning
-              ? `transform ${spinDurationMs}ms cubic-bezier(0.17, 0.67, 0.12, 0.99)`
-              : "none",
             transform: `rotate(${rotation}deg)`,
-            transformOrigin: "50% 50%",
-            willChange: spinning ? "transform" : "auto",
+            transformOrigin: "center center",
           }}
         >
           <svg viewBox="0 0 200 200" className="h-full w-full" role="img" aria-label="Vòng quay may mắn">
