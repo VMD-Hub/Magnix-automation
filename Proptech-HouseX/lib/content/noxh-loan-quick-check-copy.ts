@@ -1,15 +1,15 @@
-/** Copy landing lead magnet — kiểm tra vay NOXH 60 giây. */
+/** Copy landing lead magnet — kiểm tra nhanh thời hạn vay NOXH. */
 
 import { noxhLoanClusterArticleLinks } from "@/lib/content/articles/noxh-loan-cluster-map-2026";
 
 export const NOXH_LOAN_QUICK_COPY = {
-  metaTitle: "Kiểm tra khả năng vay NOXH trong 60 giây | HouseX",
+  metaTitle: "Kiểm tra nhanh thời hạn vay NOXH | HouseX",
   metaDescription:
-    "Nhập xưng hô và năm sinh — xem sơ bộ tuổi vay, checklist chuẩn bị và cách tra CIC an toàn trước khi đặt cọc mua nhà ở xã hội. Miễn phí, không thay thế ngân hàng.",
+    "Ước tính tuổi cuối kỳ vay theo năm sinh — biết sớm thời hạn vay NOXH có khả thi hay không, trước khi nộp hồ sơ hoặc đặt cọc. Miễn phí, không thay thế ngân hàng.",
   kicker: "HouseX · Kiểm tra sơ bộ",
-  title: "Kiểm tra khả năng vay nhà ở xã hội trong 60 giây",
+  title: "Kiểm tra nhanh thời hạn vay mua nhà ở xã hội",
   subtitle:
-    "Biết sớm mình có phù hợp hay không — trước khi mất thời gian, tiền đặt cọc, hoặc kỳ vọng sai từ môi giới hay chủ đầu tư.",
+    "Biết sớm thời hạn vay áp dụng với bạn — trước khi mất thời gian, tiền đặt cọc, hoặc kỳ vọng sai từ môi giới hay chủ đầu tư.",
   heroCta: "Bắt đầu kiểm tra",
   heroCtaHref: "#kiem-tra",
   faqHeading: "Câu hỏi thường gặp",
@@ -17,8 +17,8 @@ export const NOXH_LOAN_QUICK_COPY = {
 
 export const NOXH_LOAN_QUICK_HELP = [
   {
-    title: "Lọc an toàn trước khi nộp hồ sơ",
-    desc: "Chỉ cần xưng hô và năm sinh — hệ thống ước tính tuổi hiện tại và tuổi cuối kỳ vay theo thông lệ ngân hàng.",
+    title: "Biết sớm thời hạn vay",
+    desc: "Ước tính tuổi hiện tại và tuổi cuối kỳ vay — yếu tố ngân hàng xét rất sớm khi thẩm định hồ sơ.",
   },
   {
     title: "Không phán duyệt — chỉ gợi ý hướng đi",
@@ -31,7 +31,7 @@ export const NOXH_LOAN_QUICK_HELP = [
 ] as const;
 
 export const NOXH_LOAN_QUICK_CHECKLIST = [
-  { item: "Kiểm tra tuổi vay NOXH (60 giây)", href: "/tin-tuc/kiem-tra-kha-nang-vay-noxh-60-giay" },
+  { item: "Kiểm tra nhanh thời hạn vay NOXH", href: "/tin-tuc/kiem-tra-kha-nang-vay-noxh-60-giay" },
   { item: "Điều kiện đối tượng NOXH (Điều 76 Luật Nhà ở 2023)", href: "/cong-cu/dieu-kien-noxh" },
   { item: "Thu nhập và trần NOXH (NĐ 136/2026)", href: "/tin-tuc/vay-noxh-can-thu-nhap-bao-nhieu" },
   { item: "Tra CIC trên cic.gov.vn hoặc CIC Credit Connect", href: "/tin-tuc/cach-tra-cic-an-toan-truoc-khi-vay" },
@@ -47,8 +47,8 @@ export const NOXH_LOAN_QUICK_FAQ = [
     a: "Không. Đây chỉ là sàng lọc sơ bộ về tuổi vay và hướng dẫn chuẩn bị. Ngân hàng còn xét thu nhập, CIC, nghĩa vụ nợ, tài sản đảm bảo và điều kiện NOXH.",
   },
   {
-    q: "Tại sao chỉ hỏi xưng hô và năm sinh?",
-    a: "Hai thông tin này đủ để ước tính tuổi vay — một trong những rào cản sớm và dễ kiểm tra. Các yếu tố khác (thu nhập, CIC…) cần bạn chủ động chuẩn bị hoặc dùng công cụ chuyên sâu hơn.",
+    q: "Tại sao cần kiểm tra thời hạn vay trước?",
+    a: "Mỗi người có tuổi cuối kỳ vay khác nhau — không phải ai cũng vay được 20–30 năm như môi giới thường nói. Biết sớm giúp bạn lập kế hoạch trả góp đúng, tránh đặt cọc khi chưa rõ khung thời gian vay.",
   },
   {
     q: "Tôi sinh năm X, vay được đến bao nhiêu tuổi?",

@@ -77,7 +77,7 @@ export default function Page() {
 
       <section className="proptech-ruby-soft-panel mb-10 p-6">
         <h2 className="text-lg font-bold text-slate-900">
-          Hướng dẫn chi tiết: Kiểm tra trong 60 giây
+          Hướng dẫn chi tiết: Kiểm tra nhanh thời hạn vay
         </h2>
         <p className="mt-2 text-sm leading-relaxed text-slate-600">
           Công cụ phía dưới ước tính tuổi cuối kỳ vay. Bài hướng dẫn giải thích kết quả có ý nghĩa
@@ -88,7 +88,7 @@ export default function Page() {
             href={articlePath("kiem-tra-kha-nang-vay-noxh-60-giay")}
             className="inline-flex text-sm font-semibold text-brand-700 hover:underline"
           >
-            Đọc hướng dẫn 60 giây →
+            Đọc bài giải thích thời hạn vay →
           </Link>
           <Link
             href={articlePath("tham-dinh-khoan-vay-mua-nha-o-xa-hoi")}

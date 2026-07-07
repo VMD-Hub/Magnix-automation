@@ -177,6 +177,65 @@ function renderParagraph(text: string, key: string) {
   );
 }
 
+function extractFaqPair(
+  block: string,
+  nextBlock?: string,
+): { q: string; a: string; consumedNext: boolean } | null {
+  const trimmed = block.trim();
+  const boldOnly = /^\*\*(.+?)\*\*\s*$/.exec(trimmed);
+  if (boldOnly && nextBlock?.trim()) {
+    return {
+      q: boldOnly[1]!.trim(),
+      a: nextBlock.trim(),
+      consumedNext: true,
+    };
+  }
+  const withAnswer = /^\*\*(.+?)\*\*\s*\n+([\s\S]+)$/.exec(trimmed);
+  if (withAnswer) {
+    return {
+      q: withAnswer[1]!.trim(),
+      a: withAnswer[2]!.trim(),
+      consumedNext: false,
+    };
+  }
+  return null;
+}
+
+function isFaqHeading(block: string): boolean {
+  const match = HEADING2_RE.exec(block.trim());
+  return match?.[1]?.trim() === "Câu hỏi thường gặp";
+}
+
+function renderFaqAccordion(items: { q: string; a: string }[], key: string) {
+  return (
+    <section key={key} className="mt-10 scroll-mt-24 border-t border-slate-100 pt-8">
+      <h2 className="text-xl font-bold text-slate-900 sm:text-2xl">
+        Câu hỏi thường gặp
+      </h2>
+      <div className="mt-6 space-y-3">
+        {items.map((f) => (
+          <details
+            key={f.q}
+            className="group rounded-2xl border border-slate-200 bg-white open:border-brand-200 open:shadow-sm"
+          >
+            <summary className="cursor-pointer list-none px-5 py-4 font-semibold text-slate-900 marker:content-none [&::-webkit-details-marker]:hidden">
+              <span className="flex items-start justify-between gap-3">
+                {f.q}
+                <span className="mt-0.5 shrink-0 text-brand-600 transition-transform group-open:rotate-45">
+                  +
+                </span>
+              </span>
+            </summary>
+            <div className={`border-t border-slate-100 px-5 pb-5 pt-3 text-base leading-[1.75] text-slate-700 ${PROSE_JUSTIFY}`}>
+              {renderInline(f.a, `${key}-${f.q}`)}
+            </div>
+          </details>
+        ))}
+      </div>
+    </section>
+  );
+}
+
 function renderTable(rows: string[], key: string) {
   const cells = rows
     .filter((row) => !TABLE_SEP_RE.test(row))
@@ -233,6 +292,30 @@ export function ArticleBody({ body }: { body: string }) {
 
   for (let i = 0; i < blocks.length; i++) {
     const block = blocks[i]!;
+
+    if (isFaqHeading(block)) {
+      flushTable();
+      const faqItems: { q: string; a: string }[] = [];
+      i += 1;
+      while (i < blocks.length) {
+        const faqBlock = blocks[i]!;
+        if (HEADING2_RE.test(faqBlock.trim()) || HEADING3_RE.test(faqBlock.trim())) {
+          i -= 1;
+          break;
+        }
+        const pair = extractFaqPair(faqBlock, blocks[i + 1]);
+        if (!pair) break;
+        faqItems.push({ q: pair.q, a: pair.a });
+        if (pair.consumedNext) i += 1;
+        i += 1;
+      }
+      if (faqItems.length > 0) {
+        nodes.push(renderFaqAccordion(faqItems, `faq-${blockIndex}`));
+        blockIndex += 1;
+      }
+      continue;
+    }
+
     const lines = block.split("\n");
     const isTable = lines.every(
       (line) => TABLE_ROW_RE.test(line.trim()) || TABLE_SEP_RE.test(line.trim()),

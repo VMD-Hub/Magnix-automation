@@ -124,11 +124,11 @@ export const NOXH_TOPIC_PILLAR_LINKS = [
   },
   {
     href: "/cong-cu/kiem-tra-vay-noxh",
-    label: "Kiểm tra vay NOXH 60 giây (công cụ)",
+    label: "Kiểm tra nhanh thời hạn vay NOXH (công cụ)",
   },
   {
     href: articlePath("kiem-tra-kha-nang-vay-noxh-60-giay"),
-    label: "Hướng dẫn kiểm tra vay NOXH trong 60 giây",
+    label: "Vì sao mỗi người có thời hạn vay NOXH khác nhau",
   },
   {
     href: articlePath("tham-dinh-khoan-vay-mua-nha-o-xa-hoi"),

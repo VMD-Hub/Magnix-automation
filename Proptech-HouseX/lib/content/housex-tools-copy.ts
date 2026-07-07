@@ -65,13 +65,13 @@ export const NOXH_CHECK_COPY = {
 export const NOXH_LOAN_ASSESSMENT_HUB_COPY = {
   metaTitle: "Thẩm định vay NOXH — Bộ công cụ miễn phí | House X",
   metaDescription:
-    "Tự thẩm định vay mua nhà ở xã hội: kiểm tra tuổi vay 60 giây, tính hạn mức theo thu nhập, lịch trả nợ — trước khi đặt cọc. Không thay quyết định ngân hàng.",
+    "Tự thẩm định vay mua nhà ở xã hội: kiểm tra nhanh thời hạn vay, tính hạn mức theo thu nhập, lịch trả nợ — trước khi đặt cọc. Không thay quyết định ngân hàng.",
   kicker: "House X · Công cụ NOXH",
   title: "Thẩm định vay mua nhà ở xã hội",
   subtitle:
     "Ba bước sàng lọc sơ bộ trước khi cọc: tuổi vay → hạn mức → khoản trả hàng tháng. Kết quả mang tính tham khảo — ngân hàng mới quyết định duyệt hồ sơ.",
   toolsHeading: "Chọn công cụ phù hợp",
-  toolsIntro: "Bắt đầu từ kiểm tra 60 giây nếu bạn chưa rõ tuổi vay; sau đó tính hạn mức và khoản trả.",
+  toolsIntro: "Bắt đầu từ kiểm tra nhanh thời hạn vay nếu bạn chưa rõ tuổi cuối kỳ vay; sau đó tính hạn mức và khoản trả.",
   articlesHeading: "Hướng dẫn & cụm bài thẩm định vay",
   articlesIntro:
     "Đọc thêm trước khi nộp hồ sơ: CIC, hồ sơ vay, sai lầm thường gặp và checklist trước cọc.",
@@ -81,8 +81,8 @@ export const NOXH_LOAN_ASSESSMENT_HUB_TOOLS: ToolCardDef[] = [
   {
     id: "noxh-loan-quick",
     href: "/cong-cu/kiem-tra-vay-noxh",
-    title: "Kiểm tra vay NOXH 60 giây",
-    desc: "Xưng hô + năm sinh — ước tính tuổi cuối kỳ vay trước khi chọn kỳ hạn.",
+    title: "Kiểm tra nhanh thời hạn vay",
+    desc: "Ước tính tuổi cuối kỳ vay theo năm sinh — trước khi chọn kỳ hạn vay NOXH.",
     cta: "Kiểm tra ngay",
     ready: true,
     badge: "Bước 1",
@@ -114,7 +114,7 @@ export const NOXH_LOAN_ASSESSMENT_HUB_ARTICLES = [
   },
   {
     href: articlePath("kiem-tra-kha-nang-vay-noxh-60-giay"),
-    label: "Hướng dẫn kiểm tra vay trong 60 giây",
+    label: "Vì sao mỗi người có thời hạn vay NOXH khác nhau",
   },
   {
     href: articlePath("cach-tra-cic-an-toan-truoc-khi-vay"),
@@ -141,7 +141,7 @@ export const TOOL_HUB_CARDS: ToolCardDef[] = [
     id: "noxh-loan-hub",
     href: "/cong-cu/tham-dinh-vay-noxh",
     title: "Thẩm định vay NOXH",
-    desc: "Bộ công cụ: kiểm tra tuổi vay 60 giây, hạn mức và khoản trả — trước khi cọc.",
+    desc: "Bộ công cụ: kiểm tra nhanh thời hạn vay, hạn mức và khoản trả — trước khi cọc.",
     cta: "Mở bộ công cụ",
     ready: true,
     badge: "NOXH",

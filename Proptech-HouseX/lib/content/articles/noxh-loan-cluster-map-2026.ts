@@ -18,7 +18,7 @@ export const NOXH_LOAN_CLUSTER_SATELLITES = [
     order: 1,
     slug: "kiem-tra-kha-nang-vay-noxh-60-giay",
     href: articlePath("kiem-tra-kha-nang-vay-noxh-60-giay"),
-    title: "Cách kiểm tra khả năng vay mua nhà ở xã hội trong 60 giây",
+    title: "Kiểm tra nhanh thời hạn vay mua nhà ở xã hội",
     funnel: "tof" as const,
     keywords: [
       "kiểm tra khả năng vay mua nhà ở xã hội",
@@ -195,7 +195,7 @@ const RELATED_SLUGS: Record<string, readonly string[]> = {
 const CTA_BY_SLUG: Record<string, { heading: string; primary: string; href: string }> = {
   "kiem-tra-kha-nang-vay-noxh-60-giay": {
     heading: "Bước tiếp theo",
-    primary: "Kiểm tra khả năng vay sơ bộ",
+    primary: "Kiểm tra nhanh thời hạn vay",
     href: NOXH_LOAN_TOOL_60S,
   },
   "mua-nha-o-xa-hoi-co-duoc-vay-ngan-hang-khong": {
@@ -306,10 +306,10 @@ export function noxhLoanClusterClosing(slug: string): string {
 
   const defaultTools =
     slug === NOXH_LOAN_PILLAR.slug
-      ? `\n\nBắt đầu tự kiểm tra: [kiểm tra vay 60 giây](${NOXH_LOAN_TOOL_60S}) · [hạn mức vay](/cong-cu/tinh-han-muc-vay) · [điều kiện NOXH](/cong-cu/dieu-kien-noxh).`
+      ? `\n\nBắt đầu tự kiểm tra: [kiểm tra nhanh thời hạn vay](${NOXH_LOAN_TOOL_60S}) · [hạn mức vay](/cong-cu/tinh-han-muc-vay) · [điều kiện NOXH](/cong-cu/dieu-kien-noxh).`
       : slug !== "cach-tra-cic-an-toan-truoc-khi-vay" &&
           !CTA_BY_SLUG[slug]
-        ? `\n\nTiếp tục tự kiểm tra: [60 giây](${NOXH_LOAN_TOOL_60S}) · [hạn mức vay](/cong-cu/tinh-han-muc-vay).`
+        ? `\n\nTiếp tục tự kiểm tra: [kiểm tra nhanh thời hạn vay](${NOXH_LOAN_TOOL_60S}) · [hạn mức vay](/cong-cu/tinh-han-muc-vay).`
         : "";
 
   return [related, ctaBlock, CLOSING_BASE + defaultTools]
