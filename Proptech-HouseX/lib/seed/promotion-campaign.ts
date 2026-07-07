@@ -30,7 +30,7 @@ export async function seedPromotionCampaign(prisma: PrismaClient) {
       data: {
         termsMarkdown,
         description:
-          "Vòng quay may mắn dành cho khách hàng đủ điều kiện mua nhà ở xã hội trên HouseX. Quà tặng có giá trị khi giao dịch trực tiếp qua HouseX.vn.",
+          "Vòng quay may mắn dành riêng khách hàng phân hệ nhà ở xã hội (NOXH) trên HouseX. Không áp dụng nhà thương mại hay dịch vụ khác. Quà có giá trị khi giao dịch NOXH trực tiếp qua HouseX.vn.",
       },
     });
     console.log(
@@ -46,7 +46,7 @@ export async function seedPromotionCampaign(prisma: PrismaClient) {
       slug: DEFAULT_PROMOTION_SLUG,
       name: campaignName,
       description:
-        "Vòng quay may mắn dành cho khách hàng đủ điều kiện mua nhà ở xã hội trên HouseX. Quà tặng có giá trị khi giao dịch trực tiếp qua HouseX.vn.",
+        "Vòng quay may mắn dành riêng khách hàng phân hệ nhà ở xã hội (NOXH) trên HouseX. Không áp dụng nhà thương mại hay dịch vụ khác. Quà có giá trị khi giao dịch NOXH trực tiếp qua HouseX.vn.",
       termsMarkdown,
       status: "ACTIVE",
       startAt,

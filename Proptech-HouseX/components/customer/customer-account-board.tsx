@@ -37,6 +37,17 @@ type BookingRow = {
   project: { slug: string; name: string };
 };
 
+type PromotionGiftRow = {
+  id: string;
+  campaignName: string;
+  campaignSlug: string;
+  prizeLabel: string;
+  prizeTier: string;
+  redemptionCode: string;
+  fulfillmentStatus: string;
+  wonAt: string;
+};
+
 function formatDate(iso: string) {
   return new Date(iso).toLocaleString("vi-VN", {
     dateStyle: "short",
@@ -66,10 +77,24 @@ function bookingTone(status: string): "sky" | "emerald" | "slate" | "violet" | "
   return "slate";
 }
 
+function giftFulfillmentLabel(status: string) {
+  switch (status) {
+    case "PENDING_CONTRACT":
+      return "Chờ ký HĐMB NOXH";
+    case "CONTRACT_SIGNED":
+      return "Đã ký HĐMB — chờ trao quà";
+    case "DELIVERED":
+      return "Đã trao quà";
+    default:
+      return status;
+  }
+}
+
 export function CustomerAccountBoard() {
   const [profile, setProfile] = useState<Profile | null | undefined>(undefined);
   const [leads, setLeads] = useState<LeadRow[]>([]);
   const [bookings, setBookings] = useState<BookingRow[]>([]);
+  const [promotionGifts, setPromotionGifts] = useState<PromotionGiftRow[]>([]);
   const [error, setError] = useState<string | null>(null);
 
   const load = useCallback(async () => {
@@ -89,6 +114,7 @@ export function CustomerAccountBoard() {
       setProfile(json.data.profile);
       setLeads(json.data.leads ?? []);
       setBookings(json.data.bookings ?? []);
+      setPromotionGifts(json.data.promotionGifts ?? []);
     } catch {
       setError("Lỗi mạng.");
       setProfile(null);
@@ -153,6 +179,40 @@ export function CustomerAccountBoard() {
           </p>
         )}
       </div>
+
+      <section>
+        <h2 className="text-lg font-bold text-slate-900">Quà tặng (NOXH)</h2>
+        <p className="mt-1 text-sm text-slate-500">
+          Phần thưởng từ vòng quay khuyến mãi — chỉ có giá trị khi ký HĐMB mua NOXH qua HouseX.
+        </p>
+        {promotionGifts.length === 0 ? (
+          <p className="mt-4 text-sm text-slate-500">
+            Chưa có quà tặng.{" "}
+            <Link href="/khuyen-mai" className="font-medium text-brand-700 hover:underline">
+              Tham gia vòng quay NOXH
+            </Link>
+          </p>
+        ) : (
+          <ul className="mt-4 space-y-3">
+            {promotionGifts.map((gift) => (
+              <li
+                key={gift.id}
+                className="rounded-xl border border-emerald-200 bg-emerald-50/50 p-4 shadow-sm"
+              >
+                <p className="font-semibold text-slate-900">{gift.prizeLabel}</p>
+                <p className="mt-1 text-xs text-slate-500">{gift.campaignName}</p>
+                <p className="mt-2 font-mono text-sm font-bold text-brand-800">
+                  {gift.redemptionCode}
+                </p>
+                <p className="mt-2 text-xs text-slate-600">
+                  {giftFulfillmentLabel(gift.fulfillmentStatus)} ·{" "}
+                  {formatDate(gift.wonAt)}
+                </p>
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
 
       {error && (
         <p className="rounded-lg bg-rose-50 px-4 py-3 text-sm text-rose-800">{error}</p>

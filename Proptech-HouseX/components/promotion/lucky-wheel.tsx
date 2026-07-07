@@ -110,7 +110,11 @@ type LuckyWheelProps = {
     prize: { label: string };
     won: boolean;
     redemptionCode: string | null;
+    requiresClaim?: boolean;
+    claimToken?: string | null;
   }>;
+  onSaveToAccount?: (claimToken: string | null) => void;
+  pendingClaimToken?: string | null;
 };
 
 type WheelSegment = {
@@ -214,11 +218,14 @@ export function LuckyWheel({
   disabled,
   onSpinComplete,
   onRequestSpin,
+  onSaveToAccount,
+  pendingClaimToken,
 }: LuckyWheelProps) {
   const [rotation, setRotation] = useState(0);
   const [spinning, setSpinning] = useState(false);
   const [showFireworks, setShowFireworks] = useState(false);
   const [winPopup, setWinPopup] = useState<WinPopupData | null>(null);
+  const [activeClaimToken, setActiveClaimToken] = useState<string | null>(null);
   const wheelRef = useRef<HTMLDivElement>(null);
   const rotationRef = useRef(0);
   const activeAnimRef = useRef<Animation | null>(null);
@@ -362,9 +369,12 @@ export function LuckyWheel({
       if (result.won) {
         playWin();
         setShowFireworks(true);
+        const claimToken = result.claimToken ?? pendingClaimToken ?? null;
+        setActiveClaimToken(result.requiresClaim ? claimToken : null);
         setWinPopup({
           label: result.prize.label,
           code: result.redemptionCode,
+          requiresClaim: Boolean(result.requiresClaim),
         });
         window.setTimeout(() => setShowFireworks(false), 5500);
       }
@@ -394,6 +404,11 @@ export function LuckyWheel({
           showFireworks={showFireworks}
           popup={winPopup}
           onClosePopup={() => setWinPopup(null)}
+          onSaveToAccount={
+            winPopup?.requiresClaim
+              ? () => onSaveToAccount?.(activeClaimToken ?? pendingClaimToken ?? null)
+              : undefined
+          }
         />
 
         <div

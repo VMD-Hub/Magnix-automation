@@ -238,3 +238,38 @@ export async function ensureParticipant(
     update: {},
   });
 }
+
+export type CustomerPromotionGift = {
+  id: string;
+  campaignName: string;
+  campaignSlug: string;
+  prizeLabel: string;
+  prizeTier: PromotionPrize["tier"];
+  redemptionCode: string;
+  fulfillmentStatus: PromotionFulfillmentStatus;
+  wonAt: string;
+};
+
+export async function listCustomerPromotionGifts(
+  customerId: string,
+): Promise<CustomerPromotionGift[]> {
+  const wins = await prisma.promotionWin.findMany({
+    where: { customerId },
+    orderBy: { createdAt: "desc" },
+    include: {
+      prize: { select: { label: true, tier: true } },
+      campaign: { select: { name: true, slug: true } },
+    },
+  });
+
+  return wins.map((w) => ({
+    id: w.id,
+    campaignName: w.campaign.name,
+    campaignSlug: w.campaign.slug,
+    prizeLabel: w.prize.label,
+    prizeTier: w.prize.tier,
+    redemptionCode: w.redemptionCode,
+    fulfillmentStatus: w.fulfillmentStatus,
+    wonAt: w.createdAt.toISOString(),
+  }));
+}

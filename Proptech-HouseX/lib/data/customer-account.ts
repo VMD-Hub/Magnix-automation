@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import { listCustomerPromotionGifts } from "@/lib/data/promotion";
 
 const leadInclude = {
   listing: {
@@ -39,9 +40,10 @@ export async function listCustomerBookings(customerId: string, take = 20) {
 }
 
 export async function getCustomerAccountSummary(customerId: string) {
-  const [leads, bookings] = await Promise.all([
+  const [leads, bookings, promotionGifts] = await Promise.all([
     listCustomerLeads(customerId),
     listCustomerBookings(customerId),
+    listCustomerPromotionGifts(customerId),
   ]);
-  return { leads, bookings };
+  return { leads, bookings, promotionGifts };
 }

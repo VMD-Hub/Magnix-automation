@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { PROMOTION_CLAIM_REQUIREMENTS } from "@/lib/promotion/scope";
 
 const CONFETTI_COLORS = [
   "#b91c1c",
@@ -16,24 +17,27 @@ const CONFETTI_COLORS = [
 export type WinPopupData = {
   label: string;
   code: string | null;
+  requiresClaim?: boolean;
 };
 
 type WheelWinCelebrationProps = {
   showFireworks: boolean;
   popup: WinPopupData | null;
   onClosePopup: () => void;
+  onSaveToAccount?: () => void;
 };
 
 export function WheelWinCelebration({
   showFireworks,
   popup,
   onClosePopup,
+  onSaveToAccount,
 }: WheelWinCelebrationProps) {
   const [saveHint, setSaveHint] = useState<string | null>(null);
 
   useEffect(() => {
     if (popup) setSaveHint(null);
-  }, [popup?.label, popup?.code]);
+  }, [popup?.label, popup?.code, popup?.requiresClaim]);
 
   const pieces = useMemo(
     () =>
@@ -55,6 +59,13 @@ export function WheelWinCelebration({
 
   async function handleSaveResult() {
     if (!popup) return;
+
+    if (popup.requiresClaim && onSaveToAccount) {
+      onSaveToAccount();
+      setSaveHint("Đang chuyển bạn đến bước lưu kết quả…");
+      return;
+    }
+
     const text = popup.code
       ? `HouseX — Trúng giải: ${popup.label}\nMã quà: ${popup.code}`
       : `HouseX — Trúng giải: ${popup.label}`;
@@ -120,6 +131,10 @@ export function WheelWinCelebration({
               <p className="mt-3 rounded-lg border border-amber-200 bg-amber-50/90 px-2 py-1.5 text-xs text-slate-700">
                 Mã quà: <strong className="text-brand-800">{popup.code}</strong>
               </p>
+            ) : popup.requiresClaim ? (
+              <p className="mt-3 text-[11px] leading-relaxed text-slate-600">
+                {PROMOTION_CLAIM_REQUIREMENTS}
+              </p>
             ) : null}
             {saveHint ? (
               <p className="mt-2 text-[11px] font-medium leading-relaxed text-emerald-700">
@@ -132,7 +147,7 @@ export function WheelWinCelebration({
                 onClick={() => void handleSaveResult()}
                 className="w-full rounded-xl border-2 border-brand-700 bg-white px-3 py-2.5 text-sm font-bold text-brand-800 shadow-sm transition hover:bg-brand-50 active:scale-[0.98]"
               >
-                Lưu mã quà
+                {popup.requiresClaim ? "Lưu vào tài khoản" : "Lưu mã quà"}
               </button>
               <button
                 type="button"

@@ -10,6 +10,8 @@ test("buildPromotionTermsMarkdown includes broker exclusion clause", () => {
     endAt: new Date("2026-07-01"),
   });
   assert.match(md, /Loại trừ môi giới/);
+  assert.match(md, /Loại trừ nhà ở thương mại/);
+  assert.match(md, /Phân hệ sản phẩm/);
   assert.match(md, /không có giá trị quy đổi thành tiền mặt/);
   assert.match(md, /30 ngày/);
 });

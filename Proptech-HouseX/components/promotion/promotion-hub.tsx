@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { Icon } from "@/components/icons";
 import { Button, ButtonLink } from "@/components/ui/button";
 import { LuckyWheel } from "@/components/promotion/lucky-wheel";
@@ -14,7 +15,13 @@ import type {
   WinnerBoardItem,
 } from "@/lib/data/promotion";
 import { DEFAULT_PROMOTION_SLUG } from "@/lib/promotion/constants";
+import {
+  PROMOTION_CLAIM_REQUIREMENTS,
+  PROMOTION_SCOPE_BANNER,
+} from "@/lib/promotion/scope";
 import { getSiteUrl } from "@/lib/site-config";
+
+const CLAIM_STORAGE_KEY = "housex_promo_claim";
 
 type CampaignPayload = {
   campaign: PromotionCampaignPublic;
@@ -35,6 +42,7 @@ type PromotionHubProps = {
 };
 
 export function PromotionHub({ slug = DEFAULT_PROMOTION_SLUG, preview = false }: PromotionHubProps) {
+  const searchParams = useSearchParams();
   const [data, setData] = useState<CampaignPayload | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -43,9 +51,12 @@ export function PromotionHub({ slug = DEFAULT_PROMOTION_SLUG, preview = false }:
     won: boolean;
     code: string | null;
   } | null>(null);
+  const [pendingClaimToken, setPendingClaimToken] = useState<string | null>(null);
+  const [claimMsg, setClaimMsg] = useState<string | null>(null);
   const [shareMsg, setShareMsg] = useState<string | null>(null);
   const [shareOpen, setShareOpen] = useState(false);
   const [shareConfirmed, setShareConfirmed] = useState(false);
+  const autoClaimTried = useRef(false);
 
   async function loadCampaign(opts?: { silent?: boolean }) {
     if (!opts?.silent) {
@@ -69,6 +80,31 @@ export function PromotionHub({ slug = DEFAULT_PROMOTION_SLUG, preview = false }:
     }
   }
 
+  const claimPromotion = useCallback(
+    async (token: string) => {
+      setClaimMsg(null);
+      const res = await fetch("/api/promotions/claim", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ claimToken: token }),
+      });
+      const json = await res.json();
+      if (!res.ok) {
+        setClaimMsg(json.error?.message ?? "Không lưu được kết quả.");
+        return null;
+      }
+      sessionStorage.removeItem(CLAIM_STORAGE_KEY);
+      setPendingClaimToken(null);
+      setClaimMsg("Đã lưu vào mục Quà tặng trong tài khoản!");
+      await loadCampaign({ silent: true });
+      return json.data as {
+        redemptionCode: string | null;
+        prize: { label: string };
+      };
+    },
+    [slug],
+  );
+
   useEffect(() => {
     void loadCampaign();
     const previewQ = preview ? "&preview=1" : "";
@@ -85,25 +121,118 @@ export function PromotionHub({ slug = DEFAULT_PROMOTION_SLUG, preview = false }:
     return () => window.clearInterval(id);
   }, [slug, preview]);
 
+  useEffect(() => {
+    if (!data || preview || data.isDemo || autoClaimTried.current) return;
+    const stored = sessionStorage.getItem(CLAIM_STORAGE_KEY);
+    const token = searchParams.get("claim") ?? stored;
+    if (!token) return;
+    setPendingClaimToken(token);
+
+    if (
+      data.auth.loggedIn &&
+      data.auth.emailVerified &&
+      data.participant?.noxhEligible &&
+      !data.participant.hasWon
+    ) {
+      autoClaimTried.current = true;
+      void claimPromotion(token);
+    }
+  }, [data, preview, searchParams, claimPromotion]);
+
   const shareUrl =
     typeof window !== "undefined"
       ? `${window.location.origin}/khuyen-mai?ref=${slug}`
       : `${getSiteUrl()}/khuyen-mai`;
 
+  function usesAuthenticatedSpin(payload: CampaignPayload) {
+    return (
+      !preview &&
+      !payload.isDemo &&
+      payload.auth.loggedIn &&
+      payload.auth.emailVerified &&
+      Boolean(payload.participant?.noxhEligible) &&
+      !payload.participant?.hasWon &&
+      (payload.participant?.spinsRemaining ?? 0) > 0
+    );
+  }
+
   async function requestSpin() {
-    const res = await fetch("/api/promotions/spin", {
+    if (!data) throw new Error("Chưa tải chương trình.");
+
+    if (preview || data.isDemo) {
+      const res = await fetch("/api/promotions/spin", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ slug, preview: true }),
+      });
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.error?.message ?? "Không quay được.");
+      return {
+        segmentIndex: json.data.segmentIndex as number,
+        prize: { label: json.data.prize.label as string },
+        won: json.data.won as boolean,
+        redemptionCode: json.data.redemptionCode as string | null,
+        requiresClaim: false,
+        claimToken: null as string | null,
+      };
+    }
+
+    if (usesAuthenticatedSpin(data)) {
+      const res = await fetch("/api/promotions/spin", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ slug }),
+      });
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.error?.message ?? "Không quay được.");
+      return {
+        segmentIndex: json.data.segmentIndex as number,
+        prize: { label: json.data.prize.label as string },
+        won: json.data.won as boolean,
+        redemptionCode: json.data.redemptionCode as string | null,
+        requiresClaim: false,
+        claimToken: null as string | null,
+      };
+    }
+
+    const res = await fetch("/api/promotions/spin/guest", {
       method: "POST",
       headers: { "content-type": "application/json" },
-      body: JSON.stringify({ slug, preview: preview || data?.isDemo }),
+      body: JSON.stringify({ slug }),
     });
     const json = await res.json();
     if (!res.ok) throw new Error(json.error?.message ?? "Không quay được.");
+    const claimToken = (json.data.claimToken as string | null) ?? null;
+    if (claimToken) {
+      setPendingClaimToken(claimToken);
+      sessionStorage.setItem(CLAIM_STORAGE_KEY, claimToken);
+    }
     return {
       segmentIndex: json.data.segmentIndex as number,
       prize: { label: json.data.prize.label as string },
       won: json.data.won as boolean,
-      redemptionCode: json.data.redemptionCode as string | null,
+      redemptionCode: null,
+      requiresClaim: Boolean(json.data.requiresClaim),
+      claimToken,
     };
+  }
+
+  async function handleSaveToAccount(claimToken: string | null) {
+    if (!claimToken) return;
+    if (!data?.auth.loggedIn) {
+      sessionStorage.setItem(CLAIM_STORAGE_KEY, claimToken);
+      window.location.href = `/dang-nhap?next=${encodeURIComponent("/khuyen-mai")}`;
+      return;
+    }
+    if (!data.auth.emailVerified) {
+      setClaimMsg("Vui lòng xác minh email trước khi lưu kết quả.");
+      return;
+    }
+    if (!data.participant?.noxhEligible) {
+      setClaimMsg(PROMOTION_CLAIM_REQUIREMENTS);
+      return;
+    }
+    await claimPromotion(claimToken);
   }
 
   async function grantShareBonus() {
@@ -167,11 +296,16 @@ export function PromotionHub({ slug = DEFAULT_PROMOTION_SLUG, preview = false }:
           trên server để bật chế độ thật.
         </div>
       ) : null}
+      {!preview && !data.isDemo ? (
+        <div className="rounded-xl border border-brand-200 bg-brand-50/80 px-4 py-3 text-sm text-brand-950">
+          <strong>Phạm vi NOXH.</strong> {PROMOTION_SCOPE_BANNER}
+        </div>
+      ) : null}
 
       <section className="grid gap-8 lg:grid-cols-[1fr_1.1fr] lg:items-start">
         <div className="space-y-4">
           <p className="text-sm font-semibold uppercase tracking-wider text-brand-700">
-            Vòng quay may mắn
+            Vòng quay may mắn · NOXH
           </p>
           <h1 className="text-3xl font-extrabold text-slate-900 sm:text-4xl">{campaign.name}</h1>
           {campaign.description ? (
@@ -191,6 +325,9 @@ export function PromotionHub({ slug = DEFAULT_PROMOTION_SLUG, preview = false }:
                 Trạng thái: {fulfillmentLabel(participant.win.fulfillmentStatus)} — quà có giá trị
                 sau khi ký HĐMB NOXH qua HouseX.
               </p>
+              <ButtonLink href="/khach-hang/tai-khoan" size="sm" className="mt-3">
+                Xem mục Quà tặng
+              </ButtonLink>
             </div>
           ) : null}
 
@@ -205,16 +342,27 @@ export function PromotionHub({ slug = DEFAULT_PROMOTION_SLUG, preview = false }:
             >
               {gate.message}
               {gate.cta ? (
-                <div className="mt-3">
+                <div className="mt-3 flex flex-wrap gap-2">
                   <ButtonLink href={gate.cta.href} size="sm">
                     {gate.cta.label}
                   </ButtonLink>
+                  {!auth.loggedIn ? (
+                    <ButtonLink href="/dang-nhap?next=/khuyen-mai" size="sm" variant="outline">
+                      Đăng nhập
+                    </ButtonLink>
+                  ) : null}
                 </div>
               ) : null}
             </div>
           ) : null}
 
-          {participant && !participant.hasWon && auth.loggedIn ? (
+          {claimMsg ? (
+            <p className="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800">
+              {claimMsg}
+            </p>
+          ) : null}
+
+          {participant && !participant.hasWon && auth.loggedIn && participant.noxhEligible ? (
             <p className="text-sm text-slate-500">
               Còn <strong>{participant.spinsRemaining}</strong> lượt quay · Đã dùng{" "}
               {participant.spinsUsedTotal}/6 (tối đa)
@@ -231,6 +379,7 @@ export function PromotionHub({ slug = DEFAULT_PROMOTION_SLUG, preview = false }:
           {auth.loggedIn &&
           !preview &&
           participant &&
+          participant.noxhEligible &&
           !participant.shareBonusGranted &&
           !participant.hasWon ? (
             <div className="rounded-xl border border-slate-200 bg-white p-4">
@@ -261,13 +410,15 @@ export function PromotionHub({ slug = DEFAULT_PROMOTION_SLUG, preview = false }:
             spinDurationMs={campaign.spinDurationMs}
             disabled={!gate.canSpin}
             onRequestSpin={requestSpin}
+            onSaveToAccount={(token) => void handleSaveToAccount(token)}
+            pendingClaimToken={pendingClaimToken}
             onSpinComplete={(o) => {
               setLastResult({
                 label: o.prizeLabel,
                 won: o.won,
                 code: o.redemptionCode,
               });
-              if (!preview && !data.isDemo) {
+              if (!preview && !data.isDemo && o.redemptionCode) {
                 void loadCampaign({ silent: true });
               }
             }}
@@ -373,43 +524,46 @@ function resolveGate(input: {
       cta: null,
     };
   }
-  if (!input.auth.loggedIn) {
+  if (input.auth.loggedIn && input.participant?.hasWon) {
     return {
       canSpin: false,
-      message: "Đăng nhập tài khoản khách hàng để tham gia vòng quay.",
-      cta: { href: "/dang-nhap?next=/khuyen-mai", label: "Đăng nhập" },
+      message: "Bạn đã trúng phần quà — xem mục Quà tặng trong tài khoản.",
+      cta: { href: "/khach-hang/tai-khoan", label: "Quà tặng" },
     };
   }
-  if (!input.auth.emailVerified) {
-    return {
-      canSpin: false,
-      message: "Vui lòng xác minh email trước khi quay.",
-      cta: null,
-    };
-  }
-  if (!input.participant?.noxhEligible) {
-    return {
-      canSpin: false,
-      message:
-        "Hoàn thành công cụ kiểm tra điều kiện NOXH với kết quả Đủ điều kiện để tham gia.",
-      cta: { href: "/cong-cu/dieu-kien-noxh", label: "Kiểm tra NOXH" },
-    };
-  }
-  if (input.participant.hasWon) {
-    return {
-      canSpin: false,
-      message: "Bạn đã trúng phần quà — xem mục Phần quà của bạn bên trên.",
-      cta: null,
-    };
-  }
-  if (input.participant.spinsRemaining <= 0) {
+  if (
+    input.auth.loggedIn &&
+    input.auth.emailVerified &&
+    input.participant?.noxhEligible &&
+    !input.participant.hasWon &&
+    input.participant.spinsRemaining <= 0
+  ) {
     return {
       canSpin: false,
       message: input.participant.blockReason ?? "Hết lượt quay.",
       cta: null,
     };
   }
-  return { canSpin: true, message: null, cta: null };
+
+  let message =
+    "Bạn có thể quay thử ngay. Lưu kết quả trúng thưởng cần đăng nhập, xác minh email và đủ điều kiện mua NOXH.";
+  let cta: { href: string; label: string } | null = null;
+
+  if (
+    input.auth.loggedIn &&
+    input.auth.emailVerified &&
+    input.participant?.noxhEligible &&
+    !input.participant.hasWon
+  ) {
+    message = "Bạn đủ điều kiện NOXH — kết quả quay sẽ lưu thẳng vào mục Quà tặng.";
+  } else if (input.auth.loggedIn && !input.auth.emailVerified) {
+    message = "Quay thử được ngay. Xác minh email để lưu kết quả vào tài khoản.";
+  } else if (input.auth.loggedIn && !input.participant?.noxhEligible) {
+    message = PROMOTION_CLAIM_REQUIREMENTS;
+    cta = { href: "/cong-cu/dieu-kien-noxh", label: "Kiểm tra NOXH" };
+  }
+
+  return { canSpin: true, message, cta };
 }
 
 function fulfillmentLabel(status: string) {
