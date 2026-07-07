@@ -12,13 +12,14 @@ import { requireCustomerSessionFromRequest } from "@/lib/auth/require-customer";
 import { prisma } from "@/lib/prisma";
 import {
   allowPromotionDemoFallback,
+  allowPromotionPreviewData,
   demoPromotionCampaignResponse,
   isPromotionPrismaReady,
   shouldUsePromotionDemo,
 } from "@/lib/data/promotion-demo-fallback";
 
 export async function GET(req: NextRequest) {
-  if (!isPromotionPrismaReady() && allowPromotionDemoFallback()) {
+  if (!isPromotionPrismaReady() && allowPromotionPreviewData(req)) {
     return ok(demoPromotionCampaignResponse());
   }
 
@@ -26,7 +27,7 @@ export async function GET(req: NextRequest) {
     const slug = req.nextUrl.searchParams.get("slug") ?? DEFAULT_PROMOTION_SLUG;
     const campaign = await getActiveCampaignBySlug(slug);
     if (!campaign) {
-      if (allowPromotionDemoFallback()) {
+      if (allowPromotionPreviewData(req)) {
         return ok(demoPromotionCampaignResponse());
       }
       return fail(404, "NOT_FOUND", "Không tìm thấy chương trình khuyến mãi.");

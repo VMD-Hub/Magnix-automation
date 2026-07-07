@@ -1,3 +1,4 @@
+import type { NextRequest } from "next/server";
 import { allowDemoProjectFallback } from "@/lib/deploy/demo-fallback";
 import { prisma } from "@/lib/prisma";
 import {
@@ -9,6 +10,16 @@ import {
 /** Dev/local: cho phép dùng dữ liệu demo khi Postgres chưa chạy. */
 export function allowPromotionDemoFallback(): boolean {
   return allowDemoProjectFallback();
+}
+
+/** Trang /preview/khuyen-mai — luôn dùng dữ liệu mô phỏng, kể cả production. */
+export function isPromotionPreviewRequest(req: NextRequest): boolean {
+  return req.nextUrl.searchParams.get("preview") === "1";
+}
+
+export function allowPromotionPreviewData(req?: NextRequest): boolean {
+  if (req && isPromotionPreviewRequest(req)) return true;
+  return allowPromotionDemoFallback();
 }
 
 export function shouldUsePromotionDemo(err: unknown): boolean {

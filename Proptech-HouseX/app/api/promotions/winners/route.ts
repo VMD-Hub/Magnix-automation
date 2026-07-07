@@ -6,14 +6,14 @@ import {
 } from "@/lib/data/promotion";
 import { DEFAULT_PROMOTION_SLUG } from "@/lib/promotion/constants";
 import {
-  allowPromotionDemoFallback,
+  allowPromotionPreviewData,
   demoPromotionWinnersResponse,
   isPromotionPrismaReady,
   shouldUsePromotionDemo,
 } from "@/lib/data/promotion-demo-fallback";
 
 export async function GET(req: NextRequest) {
-  if (!isPromotionPrismaReady() && allowPromotionDemoFallback()) {
+  if (!isPromotionPrismaReady() && allowPromotionPreviewData(req)) {
     return ok(demoPromotionWinnersResponse());
   }
 
@@ -26,7 +26,7 @@ export async function GET(req: NextRequest) {
 
     const campaign = await getActiveCampaignBySlug(slug);
     if (!campaign) {
-      if (allowPromotionDemoFallback()) {
+      if (allowPromotionPreviewData(req)) {
         return ok(demoPromotionWinnersResponse());
       }
       return fail(404, "NOT_FOUND", "Không tìm thấy chương trình.");

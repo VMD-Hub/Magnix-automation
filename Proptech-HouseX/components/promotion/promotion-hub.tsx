@@ -51,7 +51,8 @@ export function PromotionHub({ slug = DEFAULT_PROMOTION_SLUG, preview = false }:
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch(`/api/promotions/campaign?slug=${slug}`);
+      const previewQ = preview ? "&preview=1" : "";
+      const res = await fetch(`/api/promotions/campaign?slug=${slug}${previewQ}`);
       const json = await res.json();
       if (!res.ok) throw new Error(json.error?.message ?? "Không tải được chương trình.");
       setData(json.data);
@@ -64,8 +65,9 @@ export function PromotionHub({ slug = DEFAULT_PROMOTION_SLUG, preview = false }:
 
   useEffect(() => {
     void loadCampaign();
+    const previewQ = preview ? "&preview=1" : "";
     const id = window.setInterval(() => {
-      void fetch(`/api/promotions/winners?slug=${slug}`)
+      void fetch(`/api/promotions/winners?slug=${slug}${previewQ}`)
         .then((r) => r.json())
         .then((j) => {
           if (j.data?.winners) {
@@ -75,7 +77,7 @@ export function PromotionHub({ slug = DEFAULT_PROMOTION_SLUG, preview = false }:
         .catch(() => undefined);
     }, 30000);
     return () => window.clearInterval(id);
-  }, [slug]);
+  }, [slug, preview]);
 
   const shareUrl =
     typeof window !== "undefined"
@@ -127,7 +129,18 @@ export function PromotionHub({ slug = DEFAULT_PROMOTION_SLUG, preview = false }:
   if (error || !data) {
     return (
       <div className="rounded-2xl border border-red-200 bg-red-50 p-6 text-center text-red-800">
-        {error ?? "Không tìm thấy chương trình."}
+        <p>{error ?? "Không tìm thấy chương trình."}</p>
+        {!preview ? (
+          <p className="mt-3 text-sm text-red-700">
+            Chương trình chưa được kích hoạt trên server. Admin chạy{" "}
+            <code className="rounded bg-white px-1">npm run db:seed</code> trong thư mục app,
+            hoặc xem thử tại{" "}
+            <Link href="/preview/khuyen-mai" className="font-semibold underline">
+              /preview/khuyen-mai
+            </Link>
+            .
+          </p>
+        ) : null}
       </div>
     );
   }

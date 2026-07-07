@@ -24,7 +24,7 @@ export async function POST(req: NextRequest) {
     const slug = body.slug ?? DEFAULT_PROMOTION_SLUG;
     isPreview = body.preview === true;
 
-    if (isPreview || (!isPromotionPrismaReady() && allowPromotionDemoFallback())) {
+    if (isPreview) {
       if (!isPromotionPrismaReady()) {
         return created(executeDemoPromotionSpin(true));
       }
@@ -38,12 +38,13 @@ export async function POST(req: NextRequest) {
           isPreview: true,
         });
         return created(result);
-      } catch (err) {
-        if (shouldUsePromotionDemo(err)) {
-          return created(executeDemoPromotionSpin(true));
-        }
-        throw err;
+      } catch {
+        return created(executeDemoPromotionSpin(true));
       }
+    }
+
+    if (!isPromotionPrismaReady() && allowPromotionDemoFallback()) {
+      return created(executeDemoPromotionSpin(true));
     }
 
     const session = await requireCustomerSessionFromRequest(req);
