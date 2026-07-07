@@ -15,6 +15,9 @@ import { getNoxhEditorialTrust } from "@/lib/content/editorial-trust";
 import { NOXH_ELIGIBILITY_FAQ } from "@/lib/content/noxh-eligibility-faq";
 import {
   NOXH_CATALOG_FAQ_HEADING,
+  NOXH_HANDBOOK_INTRO,
+  NOXH_HANDBOOK_PATH,
+  NOXH_HANDBOOK_TITLE,
   NOXH_TOPIC_HUB_INTRO,
   NOXH_TOPIC_PILLAR_LINKS,
 } from "@/lib/content/messaging/noxh-public";
@@ -34,12 +37,12 @@ export async function generateMetadata({
   const tag = await getPublishedTagBySlug(tagSlug);
   if (!tag) return { title: "Không tìm thấy chủ đề" };
 
-  const title = `${tag.name} — Tin tức & kiến thức`;
+  const title = `${tag.name} — ${NOXH_HANDBOOK_TITLE}`;
   const description =
     tagSlug === "noxh"
       ? NOXH_TOPIC_HUB_INTRO
       : tag.description ??
-        `Bài viết về ${tag.name.toLowerCase()} — HouseX tin tức bất động sản.`;
+        `Bài viết về ${tag.name.toLowerCase()} — ${NOXH_HANDBOOK_TITLE} HouseX.`;
 
   return {
     title,
@@ -84,8 +87,8 @@ export default async function TopicHubPage({ params, searchParams }: PageProps) 
       <div className="border-b border-slate-200 bg-white">
         <div className="mx-auto max-w-6xl px-4 py-10 container-px">
           <nav className="text-sm text-slate-500">
-            <Link href="/tin-tuc" className="hover:text-brand-700">
-              Tin tức
+            <Link href={NOXH_HANDBOOK_PATH} className="hover:text-brand-700">
+              {NOXH_HANDBOOK_TITLE}
             </Link>
             <span className="mx-2">/</span>
             <span className="text-slate-800">{tag.name}</span>
@@ -93,7 +96,7 @@ export default async function TopicHubPage({ params, searchParams }: PageProps) 
           <h1 className="mt-3 text-3xl font-extrabold text-slate-900">
             {tag.name}
           </h1>
-          <p className="mt-3 max-w-2xl text-slate-600">
+          <p className="mt-3 max-w-3xl leading-relaxed text-slate-600">
             {isNoxhHub ? NOXH_TOPIC_HUB_INTRO : tag.description}
           </p>
           <p className="mt-2 text-sm text-slate-500">{total} bài viết</p>

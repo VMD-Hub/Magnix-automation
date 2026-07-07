@@ -20,6 +20,10 @@ import {
 } from "@/lib/content/editorial-trust";
 import { buildArticleJsonLd } from "@/lib/seo/article-json-ld";
 import { buildBreadcrumbJsonLd } from "@/lib/seo/affiliate-json-ld";
+import {
+  NOXH_HANDBOOK_PATH,
+  NOXH_HANDBOOK_TITLE,
+} from "@/lib/content/messaging/noxh-public";
 
 import { getSiteUrl } from "@/lib/site-config";
 
@@ -81,7 +85,7 @@ export default async function ArticleDetailPage({ params }: PageProps) {
 
   const breadcrumb = buildBreadcrumbJsonLd([
     { name: "Trang chủ", path: "/" },
-    { name: "Tin tức", path: "/tin-tuc" },
+    { name: NOXH_HANDBOOK_TITLE, path: NOXH_HANDBOOK_PATH },
     { name: article.title, path: `/tin-tuc/${article.slug}` },
   ]);
   const jsonLd = buildArticleJsonLd(article, { expert, sources });
@@ -108,8 +112,8 @@ export default async function ArticleDetailPage({ params }: PageProps) {
               Trang chủ
             </Link>
             <span className="mx-2">/</span>
-            <Link href="/tin-tuc" className="hover:text-brand-700">
-              Tin tức
+            <Link href={NOXH_HANDBOOK_PATH} className="hover:text-brand-700">
+              {NOXH_HANDBOOK_TITLE}
             </Link>
           </nav>
         </div>

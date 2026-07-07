@@ -6,17 +6,16 @@ import { NOXH_MINDSET_ARTICLES_2026 } from "@/lib/content/articles/noxh-mindset-
 import { NOXH_LOAN_ASSESSMENT_ARTICLES_2026 } from "@/lib/content/articles/noxh-loan-assessment-series-2026";
 import { NOXH_TREND_ARTICLES_2026 } from "@/lib/content/articles/noxh-trend-series-2026";
 import { TOD_NHON_TRACH_ARTICLES_2026 } from "@/lib/content/articles/tod-nhon-trach-series-2026";
-import { LTK_PROJECT_SLUG } from "@/lib/preview/phu-tho-dmc-mock";
+import { NOXH_MINDSET_TAG } from "@/lib/content/articles/noxh-mindset-cluster-map-2026";
 import { CS_PROJECT_SLUG } from "@/lib/preview/kdc-chang-song-mock";
 
 const NOW = new Date("2026-06-29T00:00:00.000Z");
 
 export const DEMO_ARTICLE_TAGS: ArticleTagSummary[] = [
   {
-    slug: "chon-noxh-dung-cach",
-    name: "Chọn NOXH đúng cách",
-    description:
-      "Định hướng nhận thức: chọn nhà theo năng lực và nhu cầu thật — không theo độ hot hay FOMO.",
+    slug: NOXH_MINDSET_TAG.slug,
+    name: NOXH_MINDSET_TAG.name,
+    description: NOXH_MINDSET_TAG.description,
     articleCount: 0,
   },
   {

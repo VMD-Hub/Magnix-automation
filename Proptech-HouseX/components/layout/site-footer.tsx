@@ -1,6 +1,10 @@
 import Link from "next/link";
 import { AFFILIATE_VERTICALS } from "@/lib/content/affiliate-verticals";
 import { PLATFORM_FOOTER_BLURB } from "@/lib/content/messaging/platform-public";
+import {
+  NOXH_HANDBOOK_PATH,
+  NOXH_HANDBOOK_TITLE,
+} from "@/lib/content/messaging/noxh-public";
 import { RENT_PROPERTY_TYPE_FILTER_OPTIONS } from "@/lib/content/property-type-slug";
 import { getBrandName } from "@/lib/site-config";
 import { HouseXFooterLogo } from "@/components/brand/housex-footer-logo";
@@ -152,8 +156,8 @@ export function SiteFooter() {
             <Link href="/dich-vu" className={FOOTER_LINK}>
               Dịch vụ {getBrandName()}
             </Link>
-            <Link href="/tin-tuc" className={FOOTER_LINK}>
-              Tin tức
+            <Link href={NOXH_HANDBOOK_PATH} className={FOOTER_LINK}>
+              {NOXH_HANDBOOK_TITLE}
             </Link>
             <Link href="/gioi-thieu" className={FOOTER_LINK}>
               Giới thiệu

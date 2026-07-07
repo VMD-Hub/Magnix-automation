@@ -6,6 +6,12 @@ import {
   listPublishedTags,
 } from "@/lib/data/article-public";
 import { buildArticleHubJsonLd } from "@/lib/seo/article-json-ld";
+import {
+  NOXH_HANDBOOK_INTRO,
+  NOXH_HANDBOOK_PATH,
+  NOXH_HANDBOOK_SEO_TITLE,
+  NOXH_HANDBOOK_TITLE,
+} from "@/lib/content/messaging/noxh-public";
 import { getSiteUrl } from "@/lib/site-config";
 import { PHONG_THUY_HUB_PATH } from "@/lib/content/messaging/phong-thuy-public";
 
@@ -23,11 +29,10 @@ type PageProps = {
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
-    title: "Tin tức & kiến thức bất động sản",
-    description:
-      "Cập nhật NOXH, tiến độ dự án, pháp lý nhà ở và kiến thức đầu tư — HouseX.",
+    title: NOXH_HANDBOOK_SEO_TITLE,
+    description: NOXH_HANDBOOK_INTRO,
     alternates: {
-      canonical: `${getSiteUrl()}/tin-tuc`,
+      canonical: `${getSiteUrl()}${NOXH_HANDBOOK_PATH}`,
     },
   };
 }
@@ -58,14 +63,13 @@ export default async function TinTucHubPage({ searchParams }: PageProps) {
                 Trang chủ
               </Link>
               <span className="mx-2">/</span>
-              <span className="text-slate-800">Tin tức</span>
+              <span className="text-slate-800">{NOXH_HANDBOOK_TITLE}</span>
             </nav>
             <h1 className="mt-3 text-3xl font-extrabold text-slate-900 sm:text-4xl">
-              Tin tức & kiến thức
+              {NOXH_HANDBOOK_TITLE}
             </h1>
-            <p className="mt-3 max-w-2xl text-slate-600">
-              Tiến độ dự án NOXH, pháp lý nhà ở, góc chuyên gia và kiến thức
-              đầu tư — cập nhật thường xuyên.
+            <p className="mt-3 max-w-3xl leading-relaxed text-slate-600">
+              {NOXH_HANDBOOK_INTRO}
             </p>
           </div>
         </div>

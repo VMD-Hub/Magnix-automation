@@ -2,6 +2,11 @@ import { absoluteArticleImageUrl } from "@/lib/content/articles/article-editoria
 import type { LegalSourceRef } from "@/lib/content/editorial-trust";
 import type { EditorialExpert } from "@/lib/content/editorial-trust";
 import type { ArticleDetail } from "@/lib/data/article-types";
+import {
+  NOXH_HANDBOOK_INTRO,
+  NOXH_HANDBOOK_PATH,
+  NOXH_HANDBOOK_TITLE,
+} from "@/lib/content/messaging/noxh-public";
 import { getBrandName, getSiteUrl } from "@/lib/site-config";
 
 const BASE = getSiteUrl();
@@ -67,9 +72,8 @@ export function buildArticleHubJsonLd() {
   return {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
-    name: "Tin tức & kiến thức bất động sản",
-    description:
-      `Cập nhật tiến độ dự án NOXH, pháp lý nhà ở, kiến thức đầu tư — ${getBrandName()}.`,
-    url: `${BASE}/tin-tuc`,
+    name: NOXH_HANDBOOK_TITLE,
+    description: NOXH_HANDBOOK_INTRO,
+    url: `${BASE}${NOXH_HANDBOOK_PATH}`,
   };
 }

@@ -18,9 +18,19 @@ export const NOXH_CATALOG_SEO_DESCRIPTION =
 export const NOXH_CATALOG_FAQ_HEADING =
   "Câu hỏi thường gặp về điều kiện mua nhà ở xã hội" as const;
 
-/** Mô tả hub tin tức `/tin-tuc/chu-de/noxh`. */
-export const NOXH_TOPIC_HUB_INTRO =
-  "Kiến thức nhà ở xã hội miền Nam: điều kiện pháp lý (Điều 76–78), quy trình mua, vay NHCSXH, cập nhật giá và phân tích từng dự án — biên tập theo văn bản Chính phủ và nguồn báo chí." as const;
+/** Hub cẩm nang — `/tin-tuc` (giữ URL cũ vì SEO & backlink). */
+export const NOXH_HANDBOOK_TITLE = "Cẩm nang NOXH" as const;
+
+export const NOXH_HANDBOOK_SEO_TITLE =
+  "Cẩm nang NOXH — Mua nhà xã hội minh bạch, an tâm | HouseX" as const;
+
+export const NOXH_HANDBOOK_INTRO =
+  "Mua nhà xã hội không cần phải đoán mò. Chuyên mục này tổng hợp từ tiến độ thực tế, điểm tựa pháp lý đến các phương án tài chính tối ưu từ chuyên gia. Cung cấp kiến thức minh bạch để hành trình sở hữu tổ ấm của bạn an tâm và chủ động hơn." as const;
+
+export const NOXH_HANDBOOK_PATH = "/tin-tuc" as const;
+
+/** Mô tả hub chủ đề `/tin-tuc/chu-de/noxh` — đồng bộ với cẩm nang chính. */
+export const NOXH_TOPIC_HUB_INTRO = NOXH_HANDBOOK_INTRO;
 
 /** Bài pillar & cluster — hiển thị trên hub chủ đề NOXH. */
 export const NOXH_TOPIC_PILLAR_LINKS = [

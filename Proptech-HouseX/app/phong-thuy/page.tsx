@@ -11,6 +11,10 @@ import { ToolsPageHeroEastern } from "@/components/tools/tools-page-hero-eastern
 import { listPublishedArticles } from "@/lib/data/article-public";
 import { PHONG_THUY_HUB_FAQ } from "@/lib/content/phong-thuy-hub-faq";
 import {
+  NOXH_HANDBOOK_PATH,
+  NOXH_HANDBOOK_TITLE,
+} from "@/lib/content/messaging/noxh-public";
+import {
   PHONG_THUY_ARTICLES_HEADING,
   PHONG_THUY_FAQ_HEADING,
   PHONG_THUY_HUB_INTRO,
@@ -162,10 +166,10 @@ export default async function PhongThuyHubPage({ searchParams }: PageProps) {
               <p className="mt-1 text-sm text-slate-500">{total} bài viết</p>
             </div>
             <Link
-              href="/tin-tuc"
+              href={NOXH_HANDBOOK_PATH}
               className="text-sm font-semibold text-brand-700 hover:text-brand-800"
             >
-              Tin tức House X →
+              {NOXH_HANDBOOK_TITLE} →
             </Link>
           </div>
 

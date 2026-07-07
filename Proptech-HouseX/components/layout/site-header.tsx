@@ -7,6 +7,10 @@ import { Icon } from "@/components/icons";
 import { ButtonLink } from "@/components/ui/button";
 import { HouseXHeaderLogo } from "@/components/brand/housex-header-logo";
 import { HeaderAuth } from "@/components/layout/header-auth";
+import {
+  NOXH_HANDBOOK_PATH,
+  NOXH_HANDBOOK_TITLE,
+} from "@/lib/content/messaging/noxh-public";
 import { cn } from "@/lib/ui/cn";
 
 const NAV = [
@@ -16,7 +20,7 @@ const NAV = [
   { label: "Khuyến mãi", href: "/khuyen-mai" },
   { label: "Dịch vụ", href: "/dich-vu" },
   { label: "Công cụ", href: "/cong-cu" },
-  { label: "Tin tức", href: "/tin-tuc" },
+  { label: NOXH_HANDBOOK_TITLE, href: NOXH_HANDBOOK_PATH },
 ] as const;
 
 /** Prefetch các trang catalog chính — phản hồi nhanh khi chuyển tab header. */
