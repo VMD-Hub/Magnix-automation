@@ -13,6 +13,7 @@ const IMAGE_RE = /^!\[([^\]]*)\]\(([^)]+)\)$/;
 const CAPTION_RE = /^\*([^*]+)\*$/;
 const BLOCKQUOTE_RE = /^>\s?(.+)$/;
 const LIST_ITEM_RE = /^-\s+(.+)$/;
+const ORDERED_LIST_ITEM_RE = /^(\d+)\.\s+(.+)$/;
 const TABLE_ROW_RE = /^\|.+\|$/;
 const TABLE_SEP_RE = /^\|[-:\s|]+\|$/;
 
@@ -85,6 +86,46 @@ function renderInline(text: string, keyPrefix: string): ReactNode {
   if (nodes.length === 0) return text;
   if (nodes.length === 1) return nodes[0];
   return nodes;
+}
+
+function isOrderedListBlock(block: string): boolean {
+  const lines = block
+    .trim()
+    .split("\n")
+    .filter((line) => line.trim().length > 0);
+  return (
+    lines.length > 0 &&
+    lines.every((line) => ORDERED_LIST_ITEM_RE.test(line.trim()))
+  );
+}
+
+function renderOrderedList(block: string, key: string) {
+  const items = block
+    .trim()
+    .split("\n")
+    .map((line) => ORDERED_LIST_ITEM_RE.exec(line.trim())?.[2] ?? "")
+    .filter(Boolean);
+
+  return (
+    <ol key={key} className="my-6 list-none space-y-3">
+      {items.map((item, i) => (
+        <li
+          key={i}
+          className="flex gap-3.5 rounded-xl border border-slate-200 bg-white px-4 py-3.5 shadow-sm"
+        >
+          <span
+            aria-hidden
+            className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-brand-100 text-sm font-bold text-brand-800"
+          >
+            {i + 1}
+          </span>
+          <span className="min-w-0 pt-0.5 text-base leading-relaxed text-slate-700">
+            {renderInline(item, `${key}-${i}`)}
+          </span>
+        </li>
+      ))}
+    </ol>
+  );
 }
 
 function isListBlock(block: string): boolean {
@@ -322,6 +363,11 @@ export function ArticleBody({ body }: { body: string }) {
     flushTable();
 
     const trimmed = block.trim();
+    if (isOrderedListBlock(trimmed)) {
+      nodes.push(renderOrderedList(trimmed, `ol-${blockIndex}`));
+      blockIndex += 1;
+      continue;
+    }
     if (isListBlock(trimmed)) {
       nodes.push(renderList(trimmed, `ul-${blockIndex}`));
       blockIndex += 1;

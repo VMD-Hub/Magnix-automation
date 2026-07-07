@@ -344,13 +344,13 @@ Vấn đề không chỉ là “có được vay hay không”, mà còn là “
 
 ## Làm gì trước khi nộp hồ sơ? (7 bước)
 
-1. Xác định độ tuổi và thời hạn vay dự kiến — [kiểm tra nhanh thời hạn vay](/cong-cu/kiem-tra-vay-noxh).
-2. Tính thu nhập thực tế hàng tháng — [hạn mức vay](/cong-cu/tinh-han-muc-vay).
-3. Liệt kê tất cả khoản nợ đang có.
-4. Kiểm tra lịch sử tín dụng trên CIC.
-5. Chuẩn bị giấy tờ cá nhân và chứng minh thu nhập — [hồ sơ vay NOXH](/tin-tuc/ho-so-vay-mua-nha-o-xa-hoi).
-6. Xem kỹ điều kiện dự án NOXH — [kiểm tra NOXH](/cong-cu/dieu-kien-noxh).
-7. Ước tính khoản trả nợ hàng tháng — [tính khoản vay](/cong-cu/tinh-khoan-vay).
+1. **Xác định độ tuổi và thời hạn vay dự kiến** — [kiểm tra nhanh thời hạn vay](/cong-cu/kiem-tra-vay-noxh).
+2. **Tính thu nhập thực tế hàng tháng** — [hạn mức vay](/cong-cu/tinh-han-muc-vay).
+3. **Liệt kê tất cả khoản nợ đang có** — ghi rõ trả góp, thẻ tín dụng, vay tiêu dùng.
+4. **Kiểm tra lịch sử tín dụng trên CIC** — [tra CIC an toàn](/tin-tuc/cach-tra-cic-an-toan-truoc-khi-vay).
+5. **Chuẩn bị giấy tờ cá nhân và chứng minh thu nhập** — [hồ sơ vay NOXH](/tin-tuc/ho-so-vay-mua-nha-o-xa-hoi).
+6. **Xem kỹ điều kiện dự án NOXH** — [kiểm tra NOXH](/cong-cu/dieu-kien-noxh).
+7. **Ước tính khoản trả nợ hàng tháng** — [tính khoản vay](/cong-cu/tinh-khoan-vay).
 
 Nếu bạn làm đủ 7 bước này, khả năng đi đúng hướng sẽ cao hơn rất nhiều so với việc chỉ nghe tư vấn miệng từ người bán hàng.
 
