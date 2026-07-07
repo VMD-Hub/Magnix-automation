@@ -47,9 +47,11 @@ export function PromotionHub({ slug = DEFAULT_PROMOTION_SLUG, preview = false }:
   const [shareOpen, setShareOpen] = useState(false);
   const [shareConfirmed, setShareConfirmed] = useState(false);
 
-  async function loadCampaign() {
-    setLoading(true);
-    setError(null);
+  async function loadCampaign(opts?: { silent?: boolean }) {
+    if (!opts?.silent) {
+      setLoading(true);
+      setError(null);
+    }
     try {
       const previewQ = preview ? "&preview=1" : "";
       const res = await fetch(`/api/promotions/campaign?slug=${slug}${previewQ}`);
@@ -57,9 +59,13 @@ export function PromotionHub({ slug = DEFAULT_PROMOTION_SLUG, preview = false }:
       if (!res.ok) throw new Error(json.error?.message ?? "Không tải được chương trình.");
       setData(json.data);
     } catch (e) {
-      setError(e instanceof Error ? e.message : "Lỗi tải dữ liệu.");
+      if (!opts?.silent) {
+        setError(e instanceof Error ? e.message : "Lỗi tải dữ liệu.");
+      }
     } finally {
-      setLoading(false);
+      if (!opts?.silent) {
+        setLoading(false);
+      }
     }
   }
 
@@ -92,7 +98,6 @@ export function PromotionHub({ slug = DEFAULT_PROMOTION_SLUG, preview = false }:
     });
     const json = await res.json();
     if (!res.ok) throw new Error(json.error?.message ?? "Không quay được.");
-    await loadCampaign();
     return {
       segmentIndex: json.data.segmentIndex as number,
       prize: { label: json.data.prize.label as string },
@@ -270,13 +275,16 @@ export function PromotionHub({ slug = DEFAULT_PROMOTION_SLUG, preview = false }:
             spinDurationMs={campaign.spinDurationMs}
             disabled={!gate.canSpin}
             onRequestSpin={requestSpin}
-            onSpinComplete={(o) =>
+            onSpinComplete={(o) => {
               setLastResult({
                 label: o.prizeLabel,
                 won: o.won,
                 code: o.redemptionCode,
-              })
-            }
+              });
+              if (!preview && !data.isDemo) {
+                void loadCampaign({ silent: true });
+              }
+            }}
           />
           <p className="max-w-sm text-center text-xs leading-relaxed text-slate-500">
             {PROMOTION_SPIN_CONSENT_LINE}{" "}
