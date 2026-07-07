@@ -22,7 +22,7 @@ export const DEMO_ARTICLE_TAGS: ArticleTagSummary[] = [
   {
     slug: "tham-dinh-vay-noxh",
     name: "Thẩm định vay NOXH",
-    description: "Tự thẩm định khả năng vay, CIC, tuổi và checklist trước cọc NOXH.",
+    description: "Tự kiểm tra khả năng vay NOXH: tuổi, thu nhập, CIC và checklist trước khi đặt cọc.",
     articleCount: 0,
   },
   {

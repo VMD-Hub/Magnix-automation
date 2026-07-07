@@ -1,5 +1,6 @@
+import { articlePath } from "@/lib/content/article-routes";
+
 /**
- * SEO content map — cụm thẩm định vay NOXH 2026.
  * Pillar + 10 bài vệ tinh · funnel ToF/MoF/BoF · internal link map · CTA theo ý định.
  */
 
@@ -7,7 +8,7 @@ export const NOXH_LOAN_TOOL_60S = "/cong-cu/kiem-tra-vay-noxh" as const;
 
 export const NOXH_LOAN_PILLAR = {
   slug: "tham-dinh-khoan-vay-mua-nha-o-xa-hoi",
-  href: "/tin-tuc/tham-dinh-khoan-vay-mua-nha-o-xa-hoi",
+  href: articlePath("tham-dinh-khoan-vay-mua-nha-o-xa-hoi"),
   title: "Thẩm định khoản vay mua nhà ở xã hội: Tự kiểm tra trước khi nộp hồ sơ",
 } as const;
 
@@ -16,7 +17,7 @@ export const NOXH_LOAN_CLUSTER_SATELLITES = [
   {
     order: 1,
     slug: "kiem-tra-kha-nang-vay-noxh-60-giay",
-    href: "/tin-tuc/kiem-tra-kha-nang-vay-noxh-60-giay",
+    href: articlePath("kiem-tra-kha-nang-vay-noxh-60-giay"),
     title: "Cách kiểm tra khả năng vay mua nhà ở xã hội trong 60 giây",
     funnel: "tof" as const,
     keywords: [
@@ -28,7 +29,7 @@ export const NOXH_LOAN_CLUSTER_SATELLITES = [
   {
     order: 2,
     slug: "mua-nha-o-xa-hoi-co-duoc-vay-ngan-hang-khong",
-    href: "/tin-tuc/mua-nha-o-xa-hoi-co-duoc-vay-ngan-hang-khong",
+    href: articlePath("mua-nha-o-xa-hoi-co-duoc-vay-ngan-hang-khong"),
     title: "Mua nhà ở xã hội có được vay ngân hàng không? Điều kiện cần biết",
     funnel: "tof" as const,
     keywords: [
@@ -39,7 +40,7 @@ export const NOXH_LOAN_CLUSTER_SATELLITES = [
   {
     order: 3,
     slug: "cach-tra-cic-an-toan-truoc-khi-vay",
-    href: "/tin-tuc/cach-tra-cic-an-toan-truoc-khi-vay",
+    href: articlePath("cach-tra-cic-an-toan-truoc-khi-vay"),
     title: "Kiểm tra CIC an toàn: Người mua nhà cần biết trước khi vay",
     funnel: "tof" as const,
     keywords: ["cách kiểm tra CIC an toàn", "kiểm tra CIC trước khi vay"],
@@ -47,7 +48,7 @@ export const NOXH_LOAN_CLUSTER_SATELLITES = [
   {
     order: 4,
     slug: "no-xau-nhom-2-vay-mua-nha-o-xa-hoi",
-    href: "/tin-tuc/no-xau-nhom-2-vay-mua-nha-o-xa-hoi",
+    href: articlePath("no-xau-nhom-2-vay-mua-nha-o-xa-hoi"),
     title: "Nợ xấu nhóm 2 có vay mua nhà ở xã hội được không?",
     funnel: "mof" as const,
     keywords: ["nợ xấu nhóm 2 có vay được không"],
@@ -55,7 +56,7 @@ export const NOXH_LOAN_CLUSTER_SATELLITES = [
   {
     order: 5,
     slug: "dieu-kien-vay-noxh-theo-tuoi-hon-nhan",
-    href: "/tin-tuc/dieu-kien-vay-noxh-theo-tuoi-hon-nhan",
+    href: articlePath("dieu-kien-vay-noxh-theo-tuoi-hon-nhan"),
     title:
       "Cách tính tuổi vay mua nhà: Độc thân, đã kết hôn, có con nên lưu ý gì",
     funnel: "mof" as const,
@@ -64,7 +65,7 @@ export const NOXH_LOAN_CLUSTER_SATELLITES = [
   {
     order: 6,
     slug: "vay-noxh-can-thu-nhap-bao-nhieu",
-    href: "/tin-tuc/vay-noxh-can-thu-nhap-bao-nhieu",
+    href: articlePath("vay-noxh-can-thu-nhap-bao-nhieu"),
     title: "Vay mua nhà ở xã hội cần thu nhập bao nhiêu là phù hợp?",
     funnel: "mof" as const,
     keywords: [
@@ -75,7 +76,7 @@ export const NOXH_LOAN_CLUSTER_SATELLITES = [
   {
     order: 7,
     slug: "ho-so-vay-mua-nha-o-xa-hoi",
-    href: "/tin-tuc/ho-so-vay-mua-nha-o-xa-hoi",
+    href: articlePath("ho-so-vay-mua-nha-o-xa-hoi"),
     title: "Hồ sơ vay mua nhà ở xã hội gồm những gì? Checklist đầy đủ",
     funnel: "bof" as const,
     keywords: ["hồ sơ vay mua nhà ở xã hội", "checklist hồ sơ vay nhà ở xã hội"],
@@ -83,7 +84,7 @@ export const NOXH_LOAN_CLUSTER_SATELLITES = [
   {
     order: 8,
     slug: "checklist-truoc-khi-dat-coc-noxh",
-    href: "/tin-tuc/checklist-truoc-khi-dat-coc-noxh",
+    href: articlePath("checklist-truoc-khi-dat-coc-noxh"),
     title: "Đừng đặt cọc khi chưa kiểm tra khả năng vay mua nhà",
     funnel: "bof" as const,
     keywords: ["đặt cọc trước khi kiểm tra khả năng vay"],
@@ -91,7 +92,7 @@ export const NOXH_LOAN_CLUSTER_SATELLITES = [
   {
     order: 9,
     slug: "sai-lam-tin-moi-gioi-chac-vay-noxh",
-    href: "/tin-tuc/sai-lam-tin-moi-gioi-chac-vay-noxh",
+    href: articlePath("sai-lam-tin-moi-gioi-chac-vay-noxh"),
     title: "Sai lầm thường gặp khi tin môi giới nói “chắc chắn vay được”",
     funnel: "bof" as const,
     keywords: ["môi giới nói chắc chắn vay được có nên tin không"],
@@ -99,7 +100,7 @@ export const NOXH_LOAN_CLUSTER_SATELLITES = [
   {
     order: 10,
     slug: "sai-lam-tai-chinh-tuong-du-tien-mua-nha",
-    href: "/tin-tuc/sai-lam-tai-chinh-tuong-du-tien-mua-nha",
+    href: articlePath("sai-lam-tai-chinh-tuong-du-tien-mua-nha"),
     title:
       "Sai lầm tài chính cá nhân khiến bạn tưởng đủ tiền mua nhà nhưng thực ra chưa đủ",
     funnel: "bof" as const,
@@ -235,7 +236,7 @@ const SLUG_TITLE = new Map<string, string>([
 
 function linkForSlug(slug: string): string {
   if (slug === NOXH_LOAN_PILLAR.slug) return NOXH_LOAN_PILLAR.href;
-  return `/tin-tuc/${slug}`;
+  return articlePath(slug);
 }
 
 function titleForSlug(slug: string): string {
@@ -269,16 +270,22 @@ ${byFunnel("bof").map(row).join("\n")}
 **Công cụ hỗ trợ:** [Kiểm tra vay NOXH 60 giây](${NOXH_LOAN_TOOL_60S}) · [Tính hạn mức vay](/cong-cu/tinh-han-muc-vay) · [Kiểm tra điều kiện NOXH](/cong-cu/dieu-kien-noxh)`;
 }
 
-/** Block “Đọc tiếp trong cụm” — chèn trước CTA cuối bài */
-export function noxhLoanClusterRelatedSection(slug: string): string {
+/** Block liên kết cuối bài — tối đa 3 bài, không lặp hub funnel. */
+export function noxhLoanClusterRelatedSection(
+  slug: string,
+  maxLinks = 3,
+): string {
+  if (slug === NOXH_LOAN_PILLAR.slug) return "";
+
   const related = RELATED_SLUGS[slug];
   if (!related?.length) return "";
 
   const links = related
+    .slice(0, maxLinks)
     .map((s) => `- [${titleForSlug(s)}](${linkForSlug(s)})`)
     .join("\n");
 
-  return `## Đọc tiếp trong cụm thẩm định vay NOXH
+  return `## Bài liên quan
 
 ${links}`;
 }
@@ -299,7 +306,7 @@ export function noxhLoanClusterClosing(slug: string): string {
 
   const defaultTools =
     slug === NOXH_LOAN_PILLAR.slug
-      ? `\n\nBắt đầu hành trình: [kiểm tra vay 60 giây](${NOXH_LOAN_TOOL_60S}) · [hạn mức vay](/cong-cu/tinh-han-muc-vay) · [điều kiện NOXH](/cong-cu/dieu-kien-noxh).`
+      ? `\n\nBắt đầu tự kiểm tra: [kiểm tra vay 60 giây](${NOXH_LOAN_TOOL_60S}) · [hạn mức vay](/cong-cu/tinh-han-muc-vay) · [điều kiện NOXH](/cong-cu/dieu-kien-noxh).`
       : slug !== "cach-tra-cic-an-toan-truoc-khi-vay" &&
           !CTA_BY_SLUG[slug]
         ? `\n\nTiếp tục tự kiểm tra: [60 giây](${NOXH_LOAN_TOOL_60S}) · [hạn mức vay](/cong-cu/tinh-han-muc-vay).`

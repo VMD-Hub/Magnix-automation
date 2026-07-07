@@ -1,7 +1,6 @@
 import type { ArticleDetail } from "@/lib/data/article-types";
 import {
   noxhLoanClusterClosing,
-  noxhLoanClusterHubSection,
   NOXH_LOAN_TOOL_60S,
 } from "@/lib/content/articles/noxh-loan-cluster-map-2026";
 
@@ -10,7 +9,6 @@ const TAG = { slug: "tham-dinh-vay-noxh", name: "Thẩm định vay NOXH" };
 const TAG_NOXH = { slug: "noxh", name: "Nhà ở xã hội" };
 
 const closing = (slug: string) => noxhLoanClusterClosing(slug);
-const PILLAR_HUB = noxhLoanClusterHubSection();
 
 /** Cluster SEO/AIO — thẩm định khoản vay mua nhà ở xã hội. */
 export const NOXH_LOAN_ASSESSMENT_ARTICLES_2026: ArticleDetail[] = [
@@ -19,10 +17,8 @@ export const NOXH_LOAN_ASSESSMENT_ARTICLES_2026: ArticleDetail[] = [
     slug: "tham-dinh-khoan-vay-mua-nha-o-xa-hoi",
     title: "Thẩm định khoản vay mua nhà ở xã hội: Tự kiểm tra trước khi nộp hồ sơ",
     excerpt:
-      "Mua NOXH không chỉ là chọn giá và suất — thẩm định vay là nền móng. Tự kiểm tra tuổi, thu nhập, CIC và nghĩa vụ nợ trước khi cọc; không thay thế quyết định ngân hàng.",
-    body: `**Tóm tắt:** Thẩm định khoản vay là bước kiểm tra bạn có đủ khả năng vay và trả nợ hay không. Với nhà ở xã hội (NOXH), ngân hàng xét tuổi, thu nhập, lịch sử tín dụng (CIC), nghĩa vụ nợ và hồ sơ pháp lý — tách biệt với điều kiện mua NOXH. Tự kiểm tra trước giúp tránh đặt cọc khi hồ sơ chưa sẵn sàng.
-
-Mua nhà ở xã hội là một quyết định lớn, nhưng nhiều người lại chỉ tập trung vào giá bán và suất mua mà quên mất bước quan trọng nhất: **thẩm định khả năng vay**. Nếu chưa tự kiểm tra trước, bạn rất dễ rơi vào tình huống đặt cọc rồi mới phát hiện hồ sơ không đủ điều kiện, thu nhập chưa phù hợp, hoặc lịch sử tín dụng chưa đạt.
+      "Đủ điều kiện mua NOXH chưa đồng nghĩa được vay. Trước khi cọc, cần tự kiểm tra tuổi, thu nhập, CIC và nghĩa vụ nợ — không thay thế quyết định ngân hàng.",
+    body: `Mua nhà ở xã hội là một quyết định lớn, nhưng nhiều người lại chỉ tập trung vào giá bán và suất mua mà quên mất bước quan trọng nhất: **thẩm định khả năng vay**. Nếu chưa tự kiểm tra trước, bạn rất dễ rơi vào tình huống đặt cọc rồi mới phát hiện hồ sơ không đủ điều kiện, thu nhập chưa phù hợp, hoặc lịch sử tín dụng chưa đạt.
 
 Bài viết này giúp bạn tự đánh giá sơ bộ khả năng vay mua nhà ở xã hội trước khi nộp hồ sơ. Mục tiêu không phải để “phán duyệt” thay ngân hàng, mà để bạn biết mình đang đứng ở đâu, cần chuẩn bị gì, và nên xử lý điểm yếu nào trước khi đi tiếp.
 
@@ -181,8 +177,6 @@ Có. Lịch sử tín dụng là một trong những yếu tố rất quan trọ
 **Người độc thân có vay mua nhà ở xã hội được không?**  
 Có thể, nhưng vẫn phải đáp ứng các điều kiện về tuổi, thu nhập, hồ sơ pháp lý và khả năng trả nợ — đồng thời đủ điều kiện mua NOXH.
 
-${PILLAR_HUB}
-
 ${closing("tham-dinh-khoan-vay-mua-nha-o-xa-hoi")}`,
     status: "PUBLISHED",
     publishedAt: PUBLISHED,
@@ -201,10 +195,8 @@ ${closing("tham-dinh-khoan-vay-mua-nha-o-xa-hoi")}`,
     slug: "kiem-tra-kha-nang-vay-noxh-60-giay",
     title: "Cách kiểm tra khả năng vay mua nhà ở xã hội trong 60 giây",
     excerpt:
-      "Chỉ cần xưng hô và năm sinh — ước tính tuổi cuối kỳ vay NOXH trước khi nộp hồ sơ. Bước sàng lọc nhanh nhất trong cụm thẩm định vay — không thay thế ngân hàng.",
-    body: `**Tóm tắt:** Kiểm tra khả năng vay NOXH trong **60 giây** là bước sàng lọc sơ bộ về **tuổi vay** — chỉ cần xưng hô và năm sinh. Công cụ ước tính tuổi hiện tại và tuổi cuối kỳ vay theo thông lệ ngân hàng (18–75 tuổi), giúp bạn biết nên tiếp tục chuẩn bị hồ sơ hay cần xem lại kỳ hạn trước khi cọc.
-
-Nhiều người mua nhà ở xã hội bỏ qua bước kiểm tra nhanh này và đi thẳng vào đặt cọc. Trong khi đó, **tuổi tại thời điểm kết thúc khoản vay** là một trong những yếu tố ngân hàng xét đầu tiên — nếu vượt ngưỡng, hồ sơ có thể bị từ chối hoặc bị rút ngắn thời hạn vay dù thu nhập tốt.
+      "Chỉ cần xưng hô và năm sinh — ước tính tuổi cuối kỳ vay NOXH trước khi nộp hồ sơ. Bước sàng lọc nhanh, không thay thế thẩm định ngân hàng.",
+    body: `Nhiều người mua nhà ở xã hội bỏ qua bước kiểm tra nhanh này và đi thẳng vào đặt cọc. Trong khi đó, **tuổi tại thời điểm kết thúc khoản vay** là một trong những yếu tố ngân hàng xét đầu tiên — nếu vượt ngưỡng, hồ sơ có thể bị từ chối hoặc bị rút ngắn thời hạn vay dù thu nhập tốt.
 
 Bài viết này giải thích cách tự kiểm tra trong 60 giây, kết quả có ý nghĩa gì, và bước tiếp theo sau khi có kết quả sơ bộ.
 
@@ -294,9 +286,7 @@ ${closing("kiem-tra-kha-nang-vay-noxh-60-giay")}`,
     title: "Mua nhà ở xã hội có được vay ngân hàng không? Điều kiện cần biết",
     excerpt:
       "NOXH vẫn vay được ngân hàng — nhưng không phải ai cũng duyệt ngay. Tuổi, thu nhập, CIC, nghĩa vụ nợ và hồ sơ pháp lý quyết định kết quả, không phải lời hứa từ CĐT.",
-    body: `**Tóm tắt:** Nhà ở xã hội (NOXH) **có thể vay ngân hàng** nếu đáp ứng điều kiện chương trình vay và thẩm định của ngân hàng. Đủ điều kiện mua NOXH ≠ chắc được vay — ngân hàng xét tuổi, thu nhập, CIC, nghĩa vụ nợ và hồ sơ pháp lý trước khi quyết định hạn mức.
-
-Nhiều người nghĩ rằng chỉ cần đủ tiền đặt cọc là có thể mua nhà ở xã hội, nhưng thực tế câu hỏi quan trọng hơn là: **mình có vay ngân hàng được không**. Với đa số người mua, đặc biệt là người có thu nhập trung bình hoặc thấp, khoản vay ngân hàng mới là phần quyết định việc có mua được nhà hay không.
+    body: `Nhiều người nghĩ rằng chỉ cần đủ tiền đặt cọc là có thể mua nhà ở xã hội, nhưng thực tế câu hỏi quan trọng hơn là: **mình có vay ngân hàng được không**. Với đa số người mua, đặc biệt là người có thu nhập trung bình hoặc thấp, khoản vay ngân hàng mới là phần quyết định việc có mua được nhà hay không.
 
 Tin tốt là nhà ở xã hội vẫn có thể vay ngân hàng, nhưng không phải ai cũng được duyệt ngay. Ngân hàng sẽ xem xét nhiều yếu tố như tuổi, thu nhập, lịch sử tín dụng, nghĩa vụ nợ hiện tại và hồ sơ pháp lý của người mua.
 
@@ -439,9 +429,7 @@ ${closing("mua-nha-o-xa-hoi-co-duoc-vay-ngan-hang-khong")}`,
     title: "Kiểm tra CIC an toàn: Người mua nhà cần biết trước khi vay",
     excerpt:
       "CIC là dữ liệu đầu tiên ngân hàng xem khi thẩm định vay. Chỉ tra qua cic.gov.vn hoặc CIC Credit Connect — tránh trang trung gian; kiểm tra sớm trước khi cọc NOXH.",
-    body: `**Tóm tắt:** CIC (Trung tâm Thông tin Tín dụng) lưu lịch sử vay và trả nợ của bạn — ngân hàng tra đây trước khi duyệt hồ sơ. Kiểm tra CIC sớm qua [cic.gov.vn](https://www.cic.gov.vn/) hoặc [CIC Credit Connect](https://creditconnect.vn/) giúp phát hiện nợ quá hạn, khoản cũ chưa tất toán và rủi ro trước khi nộp hồ sơ vay mua nhà.
-
-Khi chuẩn bị vay mua nhà, rất nhiều người chỉ tập trung vào giá bán, khoản trả góp và lãi suất mà quên mất một bước cực kỳ quan trọng: **kiểm tra CIC**. Đây là nơi lưu trữ thông tin tín dụng cá nhân, và cũng là một trong những dữ liệu đầu tiên ngân hàng xem khi thẩm định hồ sơ vay.
+    body: `Khi chuẩn bị vay mua nhà, rất nhiều người chỉ tập trung vào giá bán, khoản trả góp và lãi suất mà quên mất một bước cực kỳ quan trọng: **kiểm tra CIC**. Đây là nơi lưu trữ thông tin tín dụng cá nhân, và cũng là một trong những dữ liệu đầu tiên ngân hàng xem khi thẩm định hồ sơ vay.
 
 Nếu bạn đang mua nhà ở xã hội hoặc nhà thương mại, việc kiểm tra CIC sớm sẽ giúp bạn biết mình có đang có nợ quá hạn, khoản vay cũ chưa tất toán, hay thông tin tín dụng nào có thể làm ảnh hưởng đến hồ sơ hay không. Làm bước này trước khi nộp hồ sơ sẽ giúp bạn tránh bị động, tiết kiệm thời gian và giảm rủi ro bị từ chối.
 
@@ -590,9 +578,7 @@ ${closing("cach-tra-cic-an-toan-truoc-khi-vay")}`,
     title: "Nợ xấu nhóm 2 có vay mua nhà ở xã hội được không?",
     excerpt:
       "Nợ nhóm 2 là tín hiệu rủi ro — vay NOXH có thể rất khó. Kiểm tra CIC, xử lý nợ sớm và chỉ nộp hồ sơ khi lịch sử tín dụng ổn hơn; không tin “vẫn vay được” miệng.",
-    body: `**Tóm tắt:** Nợ xấu nhóm 2 là dấu hiệu cảnh báo trên CIC — ngân hàng thường xem rất chặt. Vay mua nhà ở xã hội **có thể vẫn được xét**, nhưng khó hơn nhiều so với hồ sơ sạch; phụ thuộc khoản nợ đã xử lý chưa, thu nhập và chính sách từng ngân hàng. Kiểm tra [CIC](/tin-tuc/cach-tra-cic-an-toan-truoc-khi-vay) trước khi cọc.
-
-Nợ xấu nhóm 2 là một trong những vấn đề khiến người mua nhà lo nhất khi chuẩn bị vay ngân hàng. Câu trả lời ngắn gọn là: **có thể rất khó**, và bạn nên kiểm tra kỹ trước khi nộp hồ sơ, vì nhóm nợ này là tín hiệu rủi ro mà ngân hàng thường xem rất chặt.
+    body: `Nợ xấu nhóm 2 là một trong những vấn đề khiến người mua nhà lo nhất khi chuẩn bị vay ngân hàng. Câu trả lời ngắn gọn là: **có thể rất khó**, và bạn nên kiểm tra kỹ trước khi nộp hồ sơ, vì nhóm nợ này là tín hiệu rủi ro mà ngân hàng thường xem rất chặt.
 
 Nếu bạn đang muốn mua nhà ở xã hội, việc hiểu rõ nhóm 2 là gì, ngân hàng nhìn nhận ra sao, và cần làm gì trước khi nộp hồ sơ sẽ giúp bạn tránh mất thời gian và tránh kỳ vọng sai.
 
@@ -727,8 +713,8 @@ ${closing("no-xau-nhom-2-vay-mua-nha-o-xa-hoi")}`,
     slug: "vay-noxh-vo-chong-dong-vay-cic",
     title: "Vay NOXH khi đã kết hôn — đồng vay, CIC và chi phí hộ",
     excerpt:
-      "Vợ chồng: ngân hàng tra CIC cả hai, có thể cộng thu nhập đồng vay, chi phí sinh hoạt hộ làm giảm hạn mức.",
-    body: `**Tóm tắt:** Đã kết hôn, ngân hàng thường tra CIC vợ/chồng dù không đồng vay. Đồng vay cộng thu nhập nhưng cũng cộng nợ và nghĩa vụ thẻ.
+      "Đã kết hôn, ngân hàng thường tra CIC cả hai vợ chồng — dù không đồng vay. Đồng vay cộng thu nhập nhưng cũng cộng nợ; chi phí sinh hoạt hộ làm giảm hạn mức.",
+    body: `Kết hôn thay đổi cách ngân hàng nhìn hồ sơ vay NOXH — không chỉ thu nhập cá nhân mà cả lịch sử tín dụng và nghĩa vụ nợ của vợ/chồng.
 
 ## Độc thân vs đã kết hôn — khác gì?
 
@@ -759,9 +745,7 @@ ${closing("vay-noxh-vo-chong-dong-vay-cic")}`,
     title: "Cách tính tuổi vay mua nhà: Độc thân, đã kết hôn, có con nên lưu ý gì",
     excerpt:
       "Ngân hàng xét tuổi cuối kỳ vay, không chỉ tuổi hiện tại. Độc thân, đã kết hôn hay có con — mỗi trường hợp có điểm mạnh/yếu riêng; kiểm tra 60 giây trước khi chọn kỳ hạn.",
-    body: `**Tóm tắt:** Ngân hàng xét **tuổi tại thời điểm kết thúc khoản vay**, không chỉ tuổi hiện tại. Thông lệ phổ biến: từ 18 tuổi và không quá khoảng **75 tuổi** cuối kỳ vay. Độc thân, đã kết hôn hay có con đều ảnh hưởng cách ngân hàng đánh giá sức trả nợ — dùng [kiểm tra 60 giây](/cong-cu/kiem-tra-vay-noxh) trước khi chọn kỳ hạn NOXH.
-
-Tuổi là một trong những yếu tố ngân hàng xem rất kỹ khi xét duyệt khoản vay mua nhà. Nhiều người chỉ nhìn vào thu nhập mà quên mất rằng **độ tuổi tại thời điểm kết thúc khoản vay** cũng có thể quyết định hồ sơ có được duyệt hay không.
+    body: `Tuổi là một trong những yếu tố ngân hàng xem rất kỹ khi xét duyệt khoản vay mua nhà. Nhiều người chỉ nhìn vào thu nhập mà quên mất rằng **độ tuổi tại thời điểm kết thúc khoản vay** cũng có thể quyết định hồ sơ có được duyệt hay không.
 
 Nếu bạn đang mua nhà ở xã hội hoặc nhà thương mại, hiểu cách tính tuổi vay sẽ giúp bạn chọn đúng kỳ hạn, tránh bị giảm thời gian vay, và chuẩn bị hồ sơ hợp lý hơn.
 
@@ -910,9 +894,7 @@ ${closing("dieu-kien-vay-noxh-theo-tuoi-hon-nhan")}`,
     title: "Hồ sơ vay mua nhà ở xã hội gồm những gì? Checklist đầy đủ",
     excerpt:
       "Hồ sơ vay NOXH gồm 5 nhóm: cá nhân, điều kiện mua, thu nhập, khoản vay và TSĐB. Thiếu một giấy tờ có thể làm chậm xét duyệt — checklist trước khi nộp.",
-    body: `**Tóm tắt:** Hồ sơ vay mua nhà ở xã hội chứng minh 3 việc: bạn **đủ điều kiện mua NOXH**, **có khả năng trả nợ**, và **hợp đồng/tài sản hợp lệ**. Thường gồm 5 nhóm giấy tờ — thiếu một mục nhỏ cũng có thể khiến hồ sơ bị chậm hoặc phải bổ sung nhiều lần.
-
-Khi chuẩn bị vay mua nhà ở xã hội, nhiều người thường chỉ quan tâm đến giá bán và khoản trả góp hàng tháng mà quên rằng **hồ sơ đầy đủ mới là thứ quyết định tiến độ xử lý**. Chỉ cần thiếu một giấy tờ nhỏ, hồ sơ của bạn có thể bị chậm, phải bổ sung nhiều lần, hoặc bị đánh giá chưa sẵn sàng để xét duyệt.
+    body: `Khi chuẩn bị vay mua nhà ở xã hội, nhiều người thường chỉ quan tâm đến giá bán và khoản trả góp hàng tháng mà quên rằng **hồ sơ đầy đủ mới là thứ quyết định tiến độ xử lý**. Chỉ cần thiếu một giấy tờ nhỏ, hồ sơ của bạn có thể bị chậm, phải bổ sung nhiều lần, hoặc bị đánh giá chưa sẵn sàng để xét duyệt.
 
 Bài này giúp bạn nắm rõ hồ sơ vay mua nhà ở xã hội thường gồm những gì, cách chuẩn bị ra sao, và checklist nào nên kiểm tra trước khi nộp.
 
@@ -1075,9 +1057,7 @@ ${closing("ho-so-vay-mua-nha-o-xa-hoi")}`,
     title: "Sai lầm thường gặp khi tin môi giới nói “chắc chắn vay được”",
     excerpt:
       "“Ngân hàng sẽ hỗ trợ vay”, “cứ mua đi rồi lo” — chỉ ngân hàng mới quyết định duyệt dựa trên hồ sơ thật. 6 sai lầm phổ biến và cách tự kiểm tra trước khi cọc NOXH.",
-    body: `**Tóm tắt:** Không ai **chắc chắn** hồ sơ vay được duyệt nếu chưa xem tuổi, thu nhập, CIC, nghĩa vụ nợ và điều kiện pháp lý. Môi giới/CĐT có thể hiểu dự án — nhưng **ngân hàng** mới thẩm định thật. Tự kiểm tra qua [kiểm tra vay 60 giây](/cong-cu/kiem-tra-vay-noxh), [tra CIC](/tin-tuc/cach-tra-cic-an-toan-truoc-khi-vay) và [hạn mức vay](/cong-cu/tinh-han-muc-vay) trước khi tin lời hứa miệng.
-
-Rất nhiều người mua nhà, đặc biệt là người mua nhà ở xã hội, dễ tin vào lời khẳng định rằng “ngân hàng sẽ hỗ trợ vay” hoặc “cứ mua đi rồi sẽ lo được”. Cách nghĩ này rất nguy hiểm, vì thực tế ngân hàng chỉ duyệt dựa trên hồ sơ thật, không dựa trên lời hứa của môi giới hay chủ đầu tư.
+    body: `Rất nhiều người mua nhà, đặc biệt là người mua nhà ở xã hội, dễ tin vào lời khẳng định rằng “ngân hàng sẽ hỗ trợ vay” hoặc “cứ mua đi rồi sẽ lo được”. Cách nghĩ này rất nguy hiểm, vì thực tế ngân hàng chỉ duyệt dựa trên hồ sơ thật, không dựa trên lời hứa của môi giới hay chủ đầu tư.
 
 Nếu bạn đang chuẩn bị mua nhà, đây là bài bạn nên đọc kỹ trước khi đặt niềm tin vào bất kỳ cam kết nào — bắt đầu từ [tự thẩm định trước khi nộp hồ sơ](/tin-tuc/tham-dinh-khoan-vay-mua-nha-o-xa-hoi).
 
@@ -1206,9 +1186,7 @@ ${closing("sai-lam-tin-moi-gioi-chac-vay-noxh")}`,
     title: "Đừng đặt cọc khi chưa kiểm tra khả năng vay mua nhà",
     excerpt:
       "Cọc trước, hỏi ngân hàng sau — rủi ro kẹt tiền cọc. Kiểm tra tuổi, thu nhập, CIC, nợ và hồ sơ NOXH trước; chỉ cọc khi 5 điểm đủ an toàn.",
-    body: `**Tóm tắt:** Đặt cọc trước khi kiểm tra khả năng vay là đánh cược tiền thật vào kết quả chưa chắc chắn. Ngân hàng xét thu nhập, CIC, tuổi, nghĩa vụ nợ và hồ sơ pháp lý — không duyệt vì bạn đã thích căn nhà. Kiểm tra trước, cọc sau — bắt đầu từ [kiểm tra vay 60 giây](/cong-cu/kiem-tra-vay-noxh).
-
-Rất nhiều người mua nhà mắc cùng một sai lầm: thấy căn phù hợp là vội đặt cọc, rồi mới bắt đầu hỏi ngân hàng có cho vay không. Cách làm này cực kỳ rủi ro, vì chỉ cần hồ sơ tín dụng, thu nhập hoặc độ tuổi không phù hợp, bạn có thể bị kẹt tiền cọc và mất luôn lợi thế đàm phán.
+    body: `Rất nhiều người mua nhà mắc cùng một sai lầm: thấy căn phù hợp là vội đặt cọc, rồi mới bắt đầu hỏi ngân hàng có cho vay không. Cách làm này cực kỳ rủi ro, vì chỉ cần hồ sơ tín dụng, thu nhập hoặc độ tuổi không phù hợp, bạn có thể bị kẹt tiền cọc và mất luôn lợi thế đàm phán.
 
 Nếu bạn đang mua nhà ở xã hội hoặc nhà thương mại, hãy **kiểm tra khả năng vay trước khi đặt cọc**. Đây là bước đơn giản nhưng có thể cứu bạn khỏi rất nhiều áp lực tài chính sau này.
 
@@ -1352,9 +1330,7 @@ ${closing("checklist-truoc-khi-dat-coc-noxh")}`,
     title: "Vay mua nhà ở xã hội cần thu nhập bao nhiêu là phù hợp?",
     excerpt:
       "Thu nhập NOXH có hai lớp: trần điều kiện mua (25/35/50 triệu) và khả năng trả nợ ngân hàng. Kiểm tra cả hai trước khi nộp hồ sơ — không nhầm “đủ trả góp” với “đủ điều kiện mua”.",
-    body: `**Tóm tắt:** Với NOXH, thu nhập liên quan **hai lớp khác nhau**: (1) **trần thu nhập điều kiện mua** theo Điều 30 NĐ 100/2024 (25/35/50 triệu/tháng từ NĐ 136/2026) — chi tiết tại [điều kiện thu nhập được mua nhà ở xã hội](/tin-tuc/dieu-kien-mua-nha-o-xa-hoi-2026-tom-tat); (2) **khả năng trả nợ** khi vay ngân hàng — dùng [tính hạn mức vay](/cong-cu/tinh-han-muc-vay). Hai lớp liên quan nhưng không giống nhau.
-
-Khi mua nhà ở xã hội, câu hỏi về thu nhập không chỉ là “có đủ trả góp không” mà còn là **có đáp ứng tiêu chuẩn thu nhập theo quy định hay không**. Đây là điểm rất quan trọng vì nhà ở xã hội có điều kiện riêng, khác với nhà thương mại.
+    body: `Khi mua nhà ở xã hội, câu hỏi về thu nhập không chỉ là “có đủ trả góp không” mà còn là **có đáp ứng tiêu chuẩn thu nhập theo quy định hay không**. Đây là điểm rất quan trọng vì nhà ở xã hội có điều kiện riêng, khác với nhà thương mại.
 
 Nếu bạn đang tìm hiểu để nộp hồ sơ, hãy tách rõ hai lớp: một là điều kiện để được xét **mua** NOXH, hai là khả năng tài chính thực tế để **vay** ngân hàng.
 
@@ -1480,9 +1456,7 @@ ${closing("vay-noxh-can-thu-nhap-bao-nhieu")}`,
     title: "Sai lầm tài chính cá nhân khiến bạn tưởng đủ tiền mua nhà nhưng thực ra chưa đủ",
     excerpt:
       "Có tiền cọc ≠ đủ mua nhà. 7 sai lầm phổ biến: quên chi phí sau mua, không có quỹ dự phòng, nợ nhỏ cộng dồn, nhầm “được vay” với “nên vay”. Cách tự kiểm tra trước khi cọc NOXH.",
-    body: `**Tóm tắt:** Nhiều người tưởng đủ tiền mua nhà vì có tích lũy cọc hoặc trả được tháng đầu — nhưng bỏ sót **dòng tiền hàng tháng**, nghĩa vụ nợ khác và **quỹ dự phòng**. Với NOXH, chỉ cần đánh giá sai một chút có thể dẫn tới “có nhà nhưng sống rất áp lực”. Tự kiểm tra qua [tính hạn mức vay](/cong-cu/tinh-han-muc-vay) và [tự thẩm định trước khi nộp hồ sơ](/tin-tuc/tham-dinh-khoan-vay-mua-nha-o-xa-hoi).
-
-Nhiều người nghĩ mình đủ tiền mua nhà chỉ vì có khoản tích lũy ban đầu hoặc đủ khả năng trả góp tháng đầu tiên. Nhưng khi nhìn kỹ, họ thường bỏ sót các chi phí dài hạn, nghĩa vụ nợ khác và quỹ dự phòng, khiến kế hoạch tài chính bị căng ngay sau khi ký hợp đồng.
+    body: `Nhiều người nghĩ mình đủ tiền mua nhà chỉ vì có khoản tích lũy ban đầu hoặc đủ khả năng trả góp tháng đầu tiên. Nhưng khi nhìn kỹ, họ thường bỏ sót các chi phí dài hạn, nghĩa vụ nợ khác và quỹ dự phòng, khiến kế hoạch tài chính bị căng ngay sau khi ký hợp đồng.
 
 Nếu bạn đang chuẩn bị mua nhà ở xã hội, đây là bài rất quan trọng vì chỉ cần đánh giá sai một chút, bạn có thể rơi vào trạng thái “có nhà nhưng sống rất áp lực”.
 

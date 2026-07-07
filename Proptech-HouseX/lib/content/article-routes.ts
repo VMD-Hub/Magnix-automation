@@ -12,7 +12,7 @@ export const NEWS_HUB_SEO_TITLE =
   "Tin tức bất động sản — Kiến thức & cẩm nang | HouseX" as const;
 
 export const NEWS_HUB_INTRO =
-  "Kiến thức bất động sản theo từng chuyên mục: cẩm nang nhà ở xã hội, thị trường và phân tích thực tế — biên tập minh bạch trên HouseX." as const;
+  "Cập nhật biến động thị trường bất động sản, lộ trình mua nhà ở xã hội và phân tích thực tế theo từng chuyên mục — đọc đúng chỗ, quyết định có căn cứ." as const;
 
 /** Segment silo NOXH. */
 export const NOXH_HANDBOOK_SEGMENT = "cam-nang-noxh" as const;
