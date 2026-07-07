@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 const CONFETTI_COLORS = [
   "#b91c1c",
@@ -29,6 +29,12 @@ export function WheelWinCelebration({
   popup,
   onClosePopup,
 }: WheelWinCelebrationProps) {
+  const [saveHint, setSaveHint] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (popup) setSaveHint(null);
+  }, [popup?.label, popup?.code]);
+
   const pieces = useMemo(
     () =>
       Array.from({ length: 96 }, (_, i) => ({
@@ -46,6 +52,20 @@ export function WheelWinCelebration({
       })),
     [],
   );
+
+  async function handleSaveResult() {
+    if (!popup) return;
+    const text = popup.code
+      ? `HouseX — Trúng giải: ${popup.label}\nMã quà: ${popup.code}`
+      : `HouseX — Trúng giải: ${popup.label}`;
+
+    try {
+      await navigator.clipboard.writeText(text);
+      setSaveHint("Đã lưu vào clipboard — dán vào ghi chú hoặc gửi CSKH khi cần.");
+    } catch {
+      setSaveHint("Không copy được — hãy chụp màn hình mã quà để lưu.");
+    }
+  }
 
   return (
     <>
@@ -101,16 +121,27 @@ export function WheelWinCelebration({
                 Mã quà: <strong className="text-brand-800">{popup.code}</strong>
               </p>
             ) : null}
-            <p className="mt-2 text-[10px] leading-relaxed text-slate-500">
-              Quà có giá trị khi ký HĐMB qua HouseX
-            </p>
-            <button
-              type="button"
-              onClick={onClosePopup}
-              className="mt-4 w-full rounded-xl bg-brand-700 px-3 py-2.5 text-sm font-bold text-white shadow-md transition hover:bg-brand-800 active:scale-[0.98]"
-            >
-              Tuyệt vời!
-            </button>
+            {saveHint ? (
+              <p className="mt-2 text-[11px] font-medium leading-relaxed text-emerald-700">
+                {saveHint}
+              </p>
+            ) : null}
+            <div className="mt-4 flex flex-col gap-2">
+              <button
+                type="button"
+                onClick={() => void handleSaveResult()}
+                className="w-full rounded-xl border-2 border-brand-700 bg-white px-3 py-2.5 text-sm font-bold text-brand-800 shadow-sm transition hover:bg-brand-50 active:scale-[0.98]"
+              >
+                Lưu mã quà
+              </button>
+              <button
+                type="button"
+                onClick={onClosePopup}
+                className="w-full rounded-xl bg-brand-700 px-3 py-2.5 text-sm font-bold text-white shadow-md transition hover:bg-brand-800 active:scale-[0.98]"
+              >
+                Tuyệt vời!
+              </button>
+            </div>
           </div>
         </div>
       ) : null}
