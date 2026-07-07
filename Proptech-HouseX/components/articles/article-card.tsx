@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { ArticleCardData } from "@/lib/data/article-types";
+import { ArticleBrandCover } from "@/components/articles/article-brand-cover";
 import {
   PhongThuyArticleCover,
   articleHasPhongThuyTag,
@@ -18,23 +19,32 @@ function formatArticleDate(d: Date | null) {
 export function ArticleCard({ article }: { article: ArticleCardData }) {
   const coverUrl = ensureArticleCoverUrl(article.coverImageUrl);
   const usePhongThuyCover = !coverUrl && articleHasPhongThuyTag(article.tags);
+  const useBrandCover = !coverUrl && !usePhongThuyCover;
+  const titleOnCover = Boolean(coverUrl || useBrandCover);
+
   return (
     <Link
       href={`/tin-tuc/${article.slug}`}
       className="group flex h-full flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm transition hover:border-brand-200 hover:shadow-md"
     >
       {coverUrl ? (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img
-          src={coverUrl}
-          alt={article.coverImageAlt ?? article.title}
-          className="aspect-[16/9] w-full object-cover transition group-hover:scale-[1.02]"
-        />
+        <div className="relative aspect-[16/9] w-full overflow-hidden">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={coverUrl}
+            alt={article.coverImageAlt ?? article.title}
+            className="h-full w-full object-cover transition group-hover:scale-[1.02]"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/25 to-transparent" />
+          <h3 className="absolute inset-x-0 bottom-0 line-clamp-3 px-4 pb-4 pt-8 text-base font-semibold text-white">
+            {article.title}
+          </h3>
+        </div>
       ) : usePhongThuyCover ? (
         <PhongThuyArticleCover title={article.title} />
-      ) : (
-        <div className="aspect-[16/9] w-full bg-gradient-to-br from-brand-50 to-slate-100" />
-      )}
+      ) : useBrandCover ? (
+        <ArticleBrandCover title={article.title} slug={article.slug} />
+      ) : null}
       <div className="flex flex-1 flex-col p-4">
         <div className="flex flex-wrap gap-1.5">
           {article.tags.slice(0, 2).map((t) => (
@@ -46,9 +56,13 @@ export function ArticleCard({ article }: { article: ArticleCardData }) {
             </span>
           ))}
         </div>
-        <h3 className="mt-2 line-clamp-2 text-base font-semibold text-slate-900 group-hover:text-brand-700">
-          {article.title}
-        </h3>
+        {titleOnCover ? (
+          <p className="sr-only">{article.title}</p>
+        ) : (
+          <h3 className="mt-2 line-clamp-2 text-base font-semibold text-slate-900 group-hover:text-brand-700">
+            {article.title}
+          </h3>
+        )}
         {article.excerpt && (
           <p className="mt-2 line-clamp-2 flex-1 text-sm text-slate-600">
             {article.excerpt}
@@ -66,6 +80,8 @@ export function ArticleCard({ article }: { article: ArticleCardData }) {
 export function ArticleCardCompact({ article }: { article: ArticleCardData }) {
   const coverUrl = ensureArticleCoverUrl(article.coverImageUrl);
   const usePhongThuyCover = !coverUrl && articleHasPhongThuyTag(article.tags);
+  const useBrandCover = !coverUrl && !usePhongThuyCover;
+
   return (
     <Link
       href={`/tin-tuc/${article.slug}`}
@@ -82,9 +98,15 @@ export function ArticleCardCompact({ article }: { article: ArticleCardData }) {
         <div className="h-20 w-28 shrink-0 overflow-hidden rounded-lg">
           <PhongThuyArticleCover className="aspect-auto h-full w-full" />
         </div>
-      ) : (
-        <div className="h-20 w-28 shrink-0 rounded-lg bg-slate-100" />
-      )}
+      ) : useBrandCover ? (
+        <ArticleBrandCover
+          title={article.title}
+          slug={article.slug}
+          compact
+          showTitle={false}
+          className="h-20 w-28 shrink-0 rounded-lg"
+        />
+      ) : null}
       <div className="min-w-0 flex-1">
         <h3 className="line-clamp-2 font-semibold text-slate-900 group-hover:text-brand-700">
           {article.title}

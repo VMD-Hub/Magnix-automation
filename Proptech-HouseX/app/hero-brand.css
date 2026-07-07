@@ -201,3 +201,87 @@ html:not(.dark) .lux-hero--brand::before {
 .proptech-catalog-hero--brand .proptech-catalog-hero__content {
   text-shadow: 0 1px 18px rgba(0, 0, 0, 0.4);
 }
+
+/* Thẻ tin tức — hero skyline crop, tiêu đề trên ảnh */
+.article-brand-cover {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  width: 100%;
+  overflow: hidden;
+  isolation: isolate;
+  background-color: var(--color-brand-900);
+}
+
+.article-brand-cover--compact {
+  aspect-ratio: 7 / 5;
+  min-height: 5rem;
+}
+
+.article-brand-cover__bg {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.article-brand-cover__photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scale(1.06);
+}
+
+.article-brand-cover .hero-brand-ruby-tint {
+  opacity: 0.5;
+}
+
+.article-brand-cover .hero-brand-facet {
+  opacity: 0.34;
+}
+
+.article-brand-cover__vignette {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  background: linear-gradient(
+    to top,
+    rgba(26, 4, 8, 0.92) 0%,
+    rgba(42, 5, 8, 0.55) 38%,
+    rgba(61, 7, 12, 0.18) 62%,
+    transparent 78%
+  );
+}
+
+.article-brand-cover__title {
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  z-index: 4;
+  margin: 0;
+  padding: 0.85rem 1rem 1rem;
+  font-size: 0.95rem;
+  font-weight: 700;
+  line-height: 1.35;
+  color: #fff;
+  text-shadow: 0 1px 14px rgba(0, 0, 0, 0.45);
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+}
+
+.article-brand-cover--compact .article-brand-cover__title {
+  padding: 0.5rem 0.65rem 0.6rem;
+  font-size: 0.7rem;
+  line-height: 1.3;
+  -webkit-line-clamp: 4;
+}
+
+@media (min-width: 640px) {
+  .article-brand-cover__title {
+    font-size: 1rem;
+    padding: 1rem 1.1rem 1.1rem;
+  }
+}
