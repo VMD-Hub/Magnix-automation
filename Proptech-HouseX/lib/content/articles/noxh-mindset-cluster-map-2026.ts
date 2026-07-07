@@ -1,5 +1,6 @@
+import { articlePath } from "@/lib/content/article-routes";
+
 /**
- * SEO content map — cụm **định hướng nhận thức** chọn NOXH 2026.
  * Mục tiêu: chuyển đổi qua thay đổi góc nhìn — không dẫn dắt ép buộc.
  * Bài vệ tinh được thêm dần vào `noxh-mindset-series-2026.ts` khi có copy đầy đủ.
  */
@@ -13,7 +14,7 @@ export const NOXH_MINDSET_TAG = {
 
 export const NOXH_MINDSET_PILLAR = {
   slug: "chon-noxh-dung-cach-theo-nang-luc",
-  href: "/tin-tuc/chon-noxh-dung-cach-theo-nang-luc",
+  href: articlePath("chon-noxh-dung-cach-theo-nang-luc"),
   title:
     "Chọn nhà ở xã hội đúng cách: Đừng mua theo cảm xúc, hãy mua theo năng lực và nhu cầu thật",
 } as const;
@@ -230,19 +231,19 @@ export const NOXH_MINDSET_CLUSTER_SATELLITES = [
 export const NOXH_MINDSET_JOURNEY_END = {
   afterChecklistSlug: "checklist-chot-mua-noxh-tai-chinh-ha-tang-cic",
   endpointSlug: "lam-sao-khong-bi-roi-khi-tim-mua-noxh",
-  endpointHref: "/tin-tuc/lam-sao-khong-bi-roi-khi-tim-mua-noxh",
+  endpointHref: articlePath("lam-sao-khong-bi-roi-khi-tim-mua-noxh"),
 } as const;
 
 /** Liên kết sang cụm thẩm định vay — lớp 4 hành động */
 export const NOXH_MINDSET_ACTION_LINKS = {
-  loanPillar: "/tin-tuc/tham-dinh-khoan-vay-mua-nha-o-xa-hoi",
+  loanPillar: articlePath("tham-dinh-khoan-vay-mua-nha-o-xa-hoi"),
   check60s: "/cong-cu/kiem-tra-vay-noxh",
-  check60sArticle: "/tin-tuc/kiem-tra-kha-nang-vay-noxh-60-giay",
+  check60sArticle: articlePath("kiem-tra-kha-nang-vay-noxh-60-giay"),
   hanMucVay: "/cong-cu/tinh-han-muc-vay",
   dieuKienNoxh: "/cong-cu/dieu-kien-noxh",
-  cic: "/tin-tuc/cach-tra-cic-an-toan-truoc-khi-vay",
-  datCoc: "/tin-tuc/checklist-truoc-khi-dat-coc-noxh",
-  taiChinhCaNhan: "/tin-tuc/sai-lam-tai-chinh-tuong-du-tien-mua-nha",
+  cic: articlePath("cach-tra-cic-an-toan-truoc-khi-vay"),
+  datCoc: articlePath("checklist-truoc-khi-dat-coc-noxh"),
+  taiChinhCaNhan: articlePath("sai-lam-tai-chinh-tuong-du-tien-mua-nha"),
   lienHe: "/lien-he",
   duAnNoxh: "/du-an?projectType=NHA_O_XA_HOI",
   dtaHappyHome: "/du-an/dta-happy-home-nhon-trach",
@@ -262,7 +263,7 @@ const SLUG_META = new Map<string, MindsetSatellite>(
 );
 
 function hrefForSlug(slug: string): string {
-  return `/tin-tuc/${slug}`;
+  return articlePath(slug);
 }
 
 /** Hub trên pillar — chỉ link bài đã publish (truyền slugSet) */
@@ -797,18 +798,18 @@ export function noxhMindsetClusterClosing(
                 ? readerToolsBullets("Tổng chi phí sở hữu", [
                     { label: "Tính hạn mức vay", href: NOXH_MINDSET_ACTION_LINKS.hanMucVay },
                     { label: "Sai lầm tài chính khi mua nhà", href: NOXH_MINDSET_ACTION_LINKS.taiChinhCaNhan },
-                    { label: "Checklist trước khi chốt mua", href: "/tin-tuc/checklist-chot-mua-noxh-tai-chinh-ha-tang-cic" },
+                    { label: "Checklist trước khi chốt mua", href: articlePath("checklist-chot-mua-noxh-tai-chinh-ha-tang-cic") },
                   ])
                 : slug === "30-phut-di-chuyen-co-phai-mat-mat-noxh"
                   ? readerToolsBullets("So sánh thêm", [
                       { label: "Tính hạn mức vay", href: NOXH_MINDSET_ACTION_LINKS.hanMucVay },
-                      { label: "Chi phí ẩn sau khi xuống tiền", href: "/tin-tuc/chi-phi-an-sau-khi-xuong-tien-mua-noxh" },
-                      { label: "Xa hơn nhưng đi nhanh hơn — khi nào hợp lý?", href: "/tin-tuc/xa-hon-nhung-di-nhanh-hon-khi-nao-khon-ngoan" },
+                      { label: "Chi phí ẩn sau khi xuống tiền", href: articlePath("chi-phi-an-sau-khi-xuong-tien-mua-noxh") },
+                      { label: "Xa hơn nhưng đi nhanh hơn — khi nào hợp lý?", href: articlePath("xa-hon-nhung-di-nhanh-hon-khi-nao-khon-ngoan") },
                     ])
                   : slug === "dta-happy-home-nhon-trach-noi-o-de-so-huu"
                     ? readerToolsBullets("Tra cứu & công cụ", [
                         { label: "DTA Happy Home trên HouseX", href: NOXH_MINDSET_ACTION_LINKS.dtaHappyHome },
-                        { label: "So sánh NOXH nội thành vs vùng ven", href: "/tin-tuc/so-sanh-gia-noxh-ly-thuong-kiet-dta-happy-home-2026" },
+                        { label: "So sánh NOXH nội thành vs vùng ven", href: articlePath("so-sanh-gia-noxh-ly-thuong-kiet-dta-happy-home-2026") },
                         { label: "Kiểm tra điều kiện NOXH", href: NOXH_MINDSET_ACTION_LINKS.dieuKienNoxh },
                       ])
                     : slug === "checklist-chot-mua-noxh-tai-chinh-ha-tang-cic"

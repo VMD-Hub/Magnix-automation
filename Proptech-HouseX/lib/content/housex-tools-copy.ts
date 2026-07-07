@@ -1,3 +1,5 @@
+import { articlePath } from "@/lib/content/article-routes";
+
 /** Copy trang /cong-cu — ngôn ngữ người mua nhà, không jargon Proptech. */
 
 export const TOOLS_HUB_COPY = {
@@ -107,19 +109,19 @@ export const NOXH_LOAN_ASSESSMENT_HUB_TOOLS: ToolCardDef[] = [
 
 export const NOXH_LOAN_ASSESSMENT_HUB_ARTICLES = [
   {
-    href: "/tin-tuc/tham-dinh-khoan-vay-mua-nha-o-xa-hoi",
+    href: articlePath("tham-dinh-khoan-vay-mua-nha-o-xa-hoi"),
     label: "Thẩm định vay NOXH — bài trụ cột",
   },
   {
-    href: "/tin-tuc/kiem-tra-kha-nang-vay-noxh-60-giay",
+    href: articlePath("kiem-tra-kha-nang-vay-noxh-60-giay"),
     label: "Hướng dẫn kiểm tra vay trong 60 giây",
   },
   {
-    href: "/tin-tuc/cach-tra-cic-an-toan-truoc-khi-vay",
+    href: articlePath("cach-tra-cic-an-toan-truoc-khi-vay"),
     label: "Tra CIC an toàn trước khi vay",
   },
   {
-    href: "/tin-tuc/checklist-truoc-khi-dat-coc-noxh",
+    href: articlePath("checklist-truoc-khi-dat-coc-noxh"),
     label: "Checklist trước khi đặt cọc",
   },
 ] as const;

@@ -5,6 +5,7 @@ import { Icon } from "@/components/icons";
 import { Button, ButtonLink } from "@/components/ui/button";
 import { cn } from "@/lib/ui/cn";
 import { track } from "@/lib/analytics/track";
+import { articlePath } from "@/lib/content/article-routes";
 import { NoxhChecklistPrint } from "@/components/tools/noxh-checklist-print";
 import {
   evaluateNoxhEligibility,
@@ -890,7 +891,7 @@ export function NoxhEligibilityWizard() {
                     Tính khoản vay mua nhà
                   </a>
                   <a
-                    href="/tin-tuc/dieu-kien-mua-nha-o-xa-hoi-2026-tom-tat"
+                    href={articlePath("dieu-kien-mua-nha-o-xa-hoi-2026-tom-tat")}
                     onClick={() => track("noxh_cta_click", { cta: "article" })}
                     className="flex items-center gap-2 rounded-xl border border-slate-200 p-3 text-sm font-medium text-slate-700 transition-colors hover:border-brand-300 hover:bg-brand-50"
                   >

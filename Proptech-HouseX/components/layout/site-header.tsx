@@ -8,9 +8,11 @@ import { ButtonLink } from "@/components/ui/button";
 import { HouseXHeaderLogo } from "@/components/brand/housex-header-logo";
 import { HeaderAuth } from "@/components/layout/header-auth";
 import {
+  NEWS_HUB_PATH,
+  NEWS_HUB_TITLE,
   NOXH_HANDBOOK_PATH,
-  NOXH_HANDBOOK_TITLE,
-} from "@/lib/content/messaging/noxh-public";
+} from "@/lib/content/article-routes";
+import { NOXH_HANDBOOK_TITLE } from "@/lib/content/messaging/noxh-public";
 import { cn } from "@/lib/ui/cn";
 
 const NAV = [

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { articlePath } from "@/lib/content/article-routes";
 import { NoxhLoanQuickCheckSection } from "@/components/tools/noxh-loan-quick-check-section";
 import { ToolsBreadcrumb, ToolsPageHero } from "@/components/tools/tools-page-hero";
 import {
@@ -84,13 +85,13 @@ export default function Page() {
         </p>
         <div className="mt-4 flex flex-wrap gap-4">
           <Link
-            href="/tin-tuc/kiem-tra-kha-nang-vay-noxh-60-giay"
+            href={articlePath("kiem-tra-kha-nang-vay-noxh-60-giay")}
             className="inline-flex text-sm font-semibold text-brand-700 hover:underline"
           >
             Đọc hướng dẫn 60 giây →
           </Link>
           <Link
-            href="/tin-tuc/tham-dinh-khoan-vay-mua-nha-o-xa-hoi"
+            href={articlePath("tham-dinh-khoan-vay-mua-nha-o-xa-hoi")}
             className="inline-flex text-sm font-semibold text-slate-600 hover:underline"
           >
             Bài trụ cột thẩm định vay →

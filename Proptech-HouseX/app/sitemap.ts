@@ -5,6 +5,7 @@ import { toolSitemapPaths } from "@/lib/content/housex-tools-registry";
 import { listExpertSlugs } from "@/lib/content/editorial-trust";
 import { getCatalogSlugs } from "@/lib/seed/catalog-project-slugs";
 import { listDemoSaleListingCards } from "@/lib/preview/demo-listings";
+import { articlePath, NOXH_HANDBOOK_PATH } from "@/lib/content/article-routes";
 import { getSiteUrl } from "@/lib/site-config";
 import { allowDemoProjectFallback } from "@/lib/deploy/demo-fallback";
 import {
@@ -44,6 +45,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${BASE}/cho-thue`, changeFrequency: "hourly", priority: 0.9 },
     { url: `${BASE}/du-an`, changeFrequency: "daily", priority: 0.9 },
     { url: `${BASE}/tin-tuc`, changeFrequency: "daily", priority: 0.85 },
+    { url: `${BASE}${NOXH_HANDBOOK_PATH}`, changeFrequency: "daily", priority: 0.85 },
     { url: `${BASE}/cong-cu`, changeFrequency: "monthly", priority: 0.65 },
     { url: `${BASE}/khuyen-mai`, changeFrequency: "weekly", priority: 0.75 },
     { url: `${BASE}/phong-thuy`, changeFrequency: "weekly", priority: 0.8 },
@@ -133,7 +135,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       ...listingEntries,
       ...projectEntries,
       ...articles.map((a) => ({
-        url: `${BASE}/tin-tuc/${a.slug}`,
+        url: `${BASE}${articlePath(a.slug)}`,
         lastModified: a.updatedAt,
         changeFrequency: "weekly" as const,
         priority: 0.75,

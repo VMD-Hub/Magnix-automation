@@ -1,53 +1,48 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArticleCard } from "@/components/articles/article-card";
 import {
-  listPublishedArticles,
-  listPublishedTags,
-} from "@/lib/data/article-public";
-import { buildArticleHubJsonLd } from "@/lib/seo/article-json-ld";
+  NEWS_HUB_INTRO,
+  NEWS_HUB_PATH,
+  NEWS_HUB_SEO_TITLE,
+  NEWS_HUB_TITLE,
+  NOXH_HANDBOOK_PATH,
+} from "@/lib/content/article-routes";
 import {
   NOXH_HANDBOOK_INTRO,
-  NOXH_HANDBOOK_PATH,
-  NOXH_HANDBOOK_SEO_TITLE,
   NOXH_HANDBOOK_TITLE,
 } from "@/lib/content/messaging/noxh-public";
+import { buildNewsHubJsonLd } from "@/lib/seo/article-json-ld";
 import { getSiteUrl } from "@/lib/site-config";
-import { PHONG_THUY_HUB_PATH } from "@/lib/content/messaging/phong-thuy-public";
-
-function topicHubHref(tagSlug: string): string {
-  return tagSlug === "phong-thuy"
-    ? PHONG_THUY_HUB_PATH
-    : `/tin-tuc/chu-de/${tagSlug}`;
-}
 
 export const revalidate = 300;
 
-type PageProps = {
-  searchParams: Promise<{ page?: string }>;
-};
-
 export async function generateMetadata(): Promise<Metadata> {
   return {
-    title: NOXH_HANDBOOK_SEO_TITLE,
-    description: NOXH_HANDBOOK_INTRO,
+    title: NEWS_HUB_SEO_TITLE,
+    description: NEWS_HUB_INTRO,
     alternates: {
-      canonical: `${getSiteUrl()}${NOXH_HANDBOOK_PATH}`,
+      canonical: `${getSiteUrl()}${NEWS_HUB_PATH}`,
     },
   };
 }
 
-export default async function TinTucHubPage({ searchParams }: PageProps) {
-  const sp = await searchParams;
-  const page = Math.max(1, Number(sp.page) || 1);
+const SECTIONS = [
+  {
+    href: NOXH_HANDBOOK_PATH,
+    title: NOXH_HANDBOOK_TITLE,
+    description: NOXH_HANDBOOK_INTRO,
+    status: "live" as const,
+  },
+  {
+    title: "Kiến thức bất động sản",
+    description:
+      "Phân tích thị trường, mua bán và đầu tư — chuyên mục đang được biên tập, sẽ ra mắt sau.",
+    status: "soon" as const,
+  },
+];
 
-  const [{ items, total }, tags] = await Promise.all([
-    listPublishedArticles({ page, pageSize: 12 }),
-    listPublishedTags(),
-  ]);
-
-  const totalPages = Math.max(1, Math.ceil(total / 12));
-  const jsonLd = buildArticleHubJsonLd();
+export default function TinTucParentHubPage() {
+  const jsonLd = buildNewsHubJsonLd();
 
   return (
     <>
@@ -63,66 +58,57 @@ export default async function TinTucHubPage({ searchParams }: PageProps) {
                 Trang chủ
               </Link>
               <span className="mx-2">/</span>
-              <span className="text-slate-800">{NOXH_HANDBOOK_TITLE}</span>
+              <span className="text-slate-800">{NEWS_HUB_TITLE}</span>
             </nav>
             <h1 className="mt-3 text-3xl font-extrabold text-slate-900 sm:text-4xl">
-              {NOXH_HANDBOOK_TITLE}
+              {NEWS_HUB_TITLE}
             </h1>
             <p className="mt-3 max-w-3xl leading-relaxed text-slate-600">
-              {NOXH_HANDBOOK_INTRO}
+              {NEWS_HUB_INTRO}
             </p>
           </div>
         </div>
 
         <div className="mx-auto max-w-6xl px-4 py-10 container-px">
-          {tags.length > 0 && (
-            <div className="mb-8 flex flex-wrap gap-2">
-              {tags.map((t) => (
+          <div className="grid gap-6 sm:grid-cols-2">
+            {SECTIONS.map((section) =>
+              section.status === "live" ? (
                 <Link
-                  key={t.slug}
-                  href={topicHubHref(t.slug)}
-                  className="rounded-full border border-slate-200 bg-white px-4 py-1.5 text-sm font-medium text-slate-700 shadow-sm hover:border-brand-200 hover:text-brand-700"
+                  key={section.title}
+                  href={section.href!}
+                  className="group rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition hover:border-brand-200 hover:shadow-md"
                 >
-                  {t.name}
-                  <span className="ml-1.5 text-slate-400">({t.articleCount})</span>
+                  <p className="text-xs font-semibold uppercase tracking-wide text-brand-600">
+                    Đang mở
+                  </p>
+                  <h2 className="mt-2 text-xl font-bold text-slate-900 group-hover:text-brand-700">
+                    {section.title}
+                  </h2>
+                  <p className="mt-3 text-sm leading-relaxed text-slate-600">
+                    {section.description}
+                  </p>
+                  <p className="mt-4 text-sm font-semibold text-brand-700">
+                    Xem cẩm nang →
+                  </p>
                 </Link>
-              ))}
-            </div>
-          )}
-
-          {items.length === 0 ? (
-            <p className="text-slate-600">Chưa có bài viết nào.</p>
-          ) : (
-            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {items.map((a) => (
-                <ArticleCard key={a.id} article={a} />
-              ))}
-            </div>
-          )}
-
-          {totalPages > 1 && (
-            <nav className="mt-10 flex justify-center gap-2">
-              {page > 1 && (
-                <Link
-                  href={`/tin-tuc?page=${page - 1}`}
-                  className="rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-medium hover:bg-slate-50"
+              ) : (
+                <div
+                  key={section.title}
+                  className="rounded-2xl border border-dashed border-slate-200 bg-white/80 p-6"
                 >
-                  ← Trước
-                </Link>
-              )}
-              <span className="flex items-center px-3 text-sm text-slate-600">
-                Trang {page}/{totalPages}
-              </span>
-              {page < totalPages && (
-                <Link
-                  href={`/tin-tuc?page=${page + 1}`}
-                  className="rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-medium hover:bg-slate-50"
-                >
-                  Sau →
-                </Link>
-              )}
-            </nav>
-          )}
+                  <p className="text-xs font-semibold uppercase tracking-wide text-slate-400">
+                    Sắp ra mắt
+                  </p>
+                  <h2 className="mt-2 text-xl font-bold text-slate-700">
+                    {section.title}
+                  </h2>
+                  <p className="mt-3 text-sm leading-relaxed text-slate-500">
+                    {section.description}
+                  </p>
+                </div>
+              ),
+            )}
+          </div>
         </div>
       </div>
     </>

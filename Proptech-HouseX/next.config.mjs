@@ -61,6 +61,16 @@ const nextConfig = {
         destination: "/phong-thuy",
         permanent: true,
       },
+      {
+        source: "/tin-tuc/cam-nang-noxh/chu-de/phong-thuy",
+        destination: "/phong-thuy",
+        permanent: true,
+      },
+      {
+        source: "/tin-tuc/cam-nang-noxh/chu-de/phong-thuy/:path*",
+        destination: "/phong-thuy",
+        permanent: true,
+      },
     ];
   },
 };

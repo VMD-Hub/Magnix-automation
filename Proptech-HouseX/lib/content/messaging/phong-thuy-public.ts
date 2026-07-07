@@ -2,6 +2,8 @@
  * Copy công khai hub Phong thủy — SEO + liên kết nội bộ.
  */
 
+import { articlePath, PHONG_THUY_HUB_PATH } from "@/lib/content/article-routes";
+
 export const PHONG_THUY_HUB_KICKER = "Kiến thức & công cụ miễn phí" as const;
 
 export const PHONG_THUY_HUB_TITLE =
@@ -40,11 +42,11 @@ export const PHONG_THUY_PILLAR_LINKS = [
     label: "Kiểm tra tuổi xây/sửa nhà",
   },
   {
-    href: "/tin-tuc/huong-nha-hop-tuoi-bat-trach-tom-tat",
+    href: articlePath("huong-nha-hop-tuoi-bat-trach-tom-tat"),
     label: "Hướng nhà hợp tuổi — tóm tắt Bát trạch",
   },
   {
-    href: "/tin-tuc/kim-lau-hoang-oc-tam-tai-xay-nha-giai-thich",
+    href: articlePath("kim-lau-hoang-oc-tam-tai-xay-nha-giai-thich"),
     label: "Kim Lâu, Hoang Ốc, Tam Tai là gì?",
   },
   {
@@ -57,5 +59,4 @@ export const PHONG_THUY_PILLAR_LINKS = [
   },
 ] as const;
 
-/** URL hub chính thức — dùng cho canonical và liên kết nội bộ. */
-export const PHONG_THUY_HUB_PATH = "/phong-thuy" as const;
+export { PHONG_THUY_HUB_PATH } from "@/lib/content/article-routes";

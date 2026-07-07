@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
+import { rewriteLegacyArticleHref, topicPath } from "@/lib/content/article-routes";
 import type { ArticleCardData } from "@/lib/data/article-types";
 
 const LINK_RE = /\[([^\]]+)\]\(([^)]+)\)/g;
@@ -27,7 +28,7 @@ function renderLinks(text: string, keyPrefix: string): ReactNode[] {
       parts.push(text.slice(last, match.index));
     }
     const label = match[1];
-    const href = match[2];
+    const href = rewriteLegacyArticleHref(match[2]);
     if (href.startsWith("/")) {
       parts.push(
         <Link
@@ -285,7 +286,7 @@ export function ArticleTagList({
       {tags.map((t) => (
         <li key={t.slug}>
           <a
-            href={`/tin-tuc/chu-de/${t.slug}`}
+            href={topicPath(t.slug)}
             className="rounded-full bg-brand-50 px-3 py-1 text-xs font-medium text-brand-800 hover:bg-brand-100"
           >
             {t.name}

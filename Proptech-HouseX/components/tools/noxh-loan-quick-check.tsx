@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useCallback, useEffect, useId, useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
+import { articlePath } from "@/lib/content/article-routes";
 import { cn } from "@/lib/ui/cn";
 import {
   ageScreenStatusLabel,
@@ -199,7 +200,7 @@ function QuickCheckResult({
         <div className="mt-4 flex flex-wrap gap-2">
           <ToolLink href="/cong-cu/dieu-kien-noxh" label="Kiểm tra NOXH" />
           <ToolLink href="/cong-cu/tinh-han-muc-vay" label="Tính hạn mức vay" />
-          <ToolLink href="/tin-tuc/cach-tra-cic-an-toan-truoc-khi-vay" label="Tra CIC" />
+          <ToolLink href={articlePath("cach-tra-cic-an-toan-truoc-khi-vay")} label="Tra CIC" />
         </div>
       </div>
 
