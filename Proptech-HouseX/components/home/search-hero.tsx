@@ -11,6 +11,11 @@ const TABS = [
   { id: "du-an", label: "Dự án", action: "/du-an" },
 ] as const;
 
+type SearchHeroProps = {
+  /** Tab chưa chọn — vàng trên nền hero ruby */
+  tone?: "default" | "rubyHero";
+};
+
 const SALE_PROPERTY_TYPES = [
   { value: "", label: "Loại bất động sản" },
   { value: "can_ho", label: "Căn hộ" },
@@ -40,7 +45,7 @@ const PRICE_RANGES = [
   { value: "10000000000-", label: "Trên 10 tỷ" },
 ];
 
-export function SearchHero() {
+export function SearchHero({ tone = "default" }: SearchHeroProps) {
   const [tab, setTab] = useState<(typeof TABS)[number]>(TABS[0]);
   const [filtersOpen, setFiltersOpen] = useState(false);
   const propertyTypes =
@@ -59,7 +64,9 @@ export function SearchHero() {
               "rounded-lg px-2.5 py-1.5 text-xs font-semibold transition-colors sm:px-4 sm:py-2 sm:text-sm",
               tab.id === t.id
                 ? "bg-brand-600 text-white shadow-sm shadow-brand-600/25"
-                : "text-[#555555] hover:bg-white/80",
+                : tone === "rubyHero"
+                  ? "text-gold-400 hover:bg-white/15 hover:text-gold-300"
+                  : "text-[#555555] hover:bg-white/80",
             )}
           >
             {t.label}

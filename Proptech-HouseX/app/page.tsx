@@ -21,6 +21,13 @@ export default async function Home() {
 
   return (
     <>
+      <link
+        rel="preload"
+        as="image"
+        href="/images/hero/housex-hero-brand-ruby-skyline.webp"
+        type="image/webp"
+        fetchPriority="high"
+      />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(webSiteJsonLd) }}
@@ -30,9 +37,6 @@ export default async function Home() {
         <div className="lux-hero-mesh" aria-hidden />
         <HeroBrandBackground />
         <div className="lux-hero-inner relative z-[2] mx-auto max-w-7xl container-px">
-          <p className="lux-hero-kicker proptech-kicker hidden text-gold-400 sm:block">
-            {PLATFORM_HERO.kicker}
-          </p>
           <h1 className="lux-hero-title mt-0 max-w-2xl text-2xl font-extrabold leading-tight text-white sm:mt-3 sm:text-4xl lg:text-5xl">
             <span className="sm:hidden">{PLATFORM_HERO.h1Compact}</span>
             <span className="hidden sm:inline">
@@ -47,7 +51,7 @@ export default async function Home() {
             {PLATFORM_HERO.lead}
           </p>
           <div className="mt-4 sm:mt-8">
-            <SearchHero />
+            <SearchHero tone="rubyHero" />
           </div>
         </div>
       </section>
