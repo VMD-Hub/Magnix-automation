@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "./hero-slide.css";
+@import "./hero-brand.css";
 
 @custom-variant dark (&:where(.dark, .dark *));
 
@@ -907,35 +908,4 @@ html:not(.dark) .lux-hero .text-slate-100 {
 .housex-prose.prose :where(ol > li) {
   margin-top: 0.5rem;
   line-height: 1.7;
-}
-
-/* Hero brand — cascade cuối: nền Ruby thương hiệu, không light theme */
-.lux-hero--brand {
-  background: var(--color-brand-900);
-}
-
-.lux-hero--brand::before {
-  background: linear-gradient(
-    145deg,
-    var(--color-brand-600) 0%,
-    var(--color-brand-700) 22%,
-    var(--color-brand-800) 48%,
-    var(--color-brand-900) 78%,
-    #1a0608 100%
-  );
-}
-
-html:not(.dark) .lux-hero--brand {
-  background: var(--color-brand-900);
-}
-
-html:not(.dark) .lux-hero--brand::before {
-  background: linear-gradient(
-    145deg,
-    var(--color-brand-600) 0%,
-    var(--color-brand-700) 22%,
-    var(--color-brand-800) 48%,
-    var(--color-brand-900) 78%,
-    #1a0608 100%
-  );
 }
