@@ -1,6 +1,8 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
+import { FaqAccordionSection } from "@/components/content/faq-accordion-section";
 import { rewriteLegacyArticleHref, topicPath } from "@/lib/content/article-routes";
+import { parseArticleFaqSection } from "@/lib/content/article-faq-markdown";
 import type { ArticleCardData } from "@/lib/data/article-types";
 
 const LINK_RE = /\[([^\]]+)\]\(([^)]+)\)/g;
@@ -177,62 +179,26 @@ function renderParagraph(text: string, key: string) {
   );
 }
 
-function extractFaqPair(
-  block: string,
-  nextBlock?: string,
-): { q: string; a: string; consumedNext: boolean } | null {
-  const trimmed = block.trim();
-  const boldOnly = /^\*\*(.+?)\*\*\s*$/.exec(trimmed);
-  if (boldOnly && nextBlock?.trim()) {
-    return {
-      q: boldOnly[1]!.trim(),
-      a: nextBlock.trim(),
-      consumedNext: true,
-    };
-  }
-  const withAnswer = /^\*\*(.+?)\*\*\s*\n+([\s\S]+)$/.exec(trimmed);
-  if (withAnswer) {
-    return {
-      q: withAnswer[1]!.trim(),
-      a: withAnswer[2]!.trim(),
-      consumedNext: false,
-    };
-  }
-  return null;
-}
-
-function isFaqHeading(block: string): boolean {
-  const match = HEADING2_RE.exec(block.trim());
-  return match?.[1]?.trim() === "Câu hỏi thường gặp";
-}
-
-function renderFaqAccordion(items: { q: string; a: string }[], key: string) {
-  return (
-    <section key={key} className="mt-10 scroll-mt-24 border-t border-slate-100 pt-8">
-      <h2 className="text-xl font-bold text-slate-900 sm:text-2xl">
-        Câu hỏi thường gặp
-      </h2>
-      <div className="mt-6 space-y-3">
-        {items.map((f) => (
-          <details
-            key={f.q}
-            className="group rounded-2xl border border-slate-200 bg-white open:border-brand-200 open:shadow-sm"
-          >
-            <summary className="cursor-pointer list-none px-5 py-4 font-semibold text-slate-900 marker:content-none [&::-webkit-details-marker]:hidden">
-              <span className="flex items-start justify-between gap-3">
-                {f.q}
-                <span className="mt-0.5 shrink-0 text-brand-600 transition-transform group-open:rotate-45">
-                  +
-                </span>
-              </span>
-            </summary>
-            <div className={`border-t border-slate-100 px-5 pb-5 pt-3 text-base leading-[1.75] text-slate-700 ${PROSE_JUSTIFY}`}>
-              {renderInline(f.a, `${key}-${f.q}`)}
-            </div>
-          </details>
-        ))}
+function renderFaqAnswer(text: string, keyPrefix: string): ReactNode {
+  const paragraphs = text.split(/\n\n+/).filter(Boolean);
+  if (paragraphs.length <= 1) {
+    return (
+      <div className={PROSE_JUSTIFY}>
+        {renderInline(text.trim(), keyPrefix)}
       </div>
-    </section>
+    );
+  }
+  return (
+    <div className="space-y-3">
+      {paragraphs.map((para, idx) => (
+        <p
+          key={idx}
+          className={`text-base leading-[1.75] text-slate-700 ${PROSE_JUSTIFY}`}
+        >
+          {renderInline(para, `${keyPrefix}-p-${idx}`)}
+        </p>
+      ))}
+    </div>
   );
 }
 
@@ -247,33 +213,66 @@ function renderTable(rows: string[], key: string) {
     );
   if (cells.length === 0) return null;
   const [header, ...body] = cells;
+
+  const renderCell = (text: string, cellKey: string) =>
+    renderInline(text.replace(/\*\*/g, ""), cellKey);
+
   return (
-    <div key={key} className="my-8 overflow-x-auto rounded-xl border border-slate-200">
-      <table className="min-w-full border-collapse text-sm">
-        <thead>
-          <tr className="border-b border-slate-200 bg-slate-50">
-            {header.map((cell, i) => (
-              <th
-                key={i}
-                className="px-4 py-3 text-left font-semibold text-slate-900"
-              >
-                {renderInline(cell.replace(/\*\*/g, ""), `${key}-h-${i}`)}
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {body.map((row, ri) => (
-            <tr key={ri} className="border-b border-slate-100 last:border-0">
+    <div key={key} className="my-8">
+      {/* Mobile: mỗi hàng thành thẻ — tránh cột hẹp và chữ giãn */}
+      <div className="space-y-3 md:hidden">
+        {body.map((row, ri) => (
+          <div
+            key={ri}
+            className="rounded-xl border border-slate-200 bg-white px-4 py-3.5 shadow-sm"
+          >
+            <dl className="space-y-3">
               {row.map((cell, ci) => (
-                <td key={ci} className={`px-4 py-3 text-slate-700 ${PROSE_JUSTIFY}`}>
-                  {renderInline(cell.replace(/\*\*/g, ""), `${key}-${ri}-${ci}`)}
-                </td>
+                <div key={ci}>
+                  <dt className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                    {header[ci]}
+                  </dt>
+                  <dd className="mt-1 text-sm leading-relaxed text-slate-700">
+                    {renderCell(cell, `${key}-m-${ri}-${ci}`)}
+                  </dd>
+                </div>
+              ))}
+            </dl>
+          </div>
+        ))}
+      </div>
+
+      {/* Desktop: bảng ngang */}
+      <div className="hidden overflow-x-auto rounded-xl border border-slate-200 md:block">
+        <table className="min-w-full border-collapse text-sm">
+          <thead>
+            <tr className="border-b border-slate-200 bg-slate-50">
+              {header.map((cell, i) => (
+                <th
+                  key={i}
+                  className="px-4 py-3 text-left align-top font-semibold leading-snug text-slate-900"
+                >
+                  {renderCell(cell, `${key}-h-${i}`)}
+                </th>
               ))}
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {body.map((row, ri) => (
+              <tr key={ri} className="border-b border-slate-100 last:border-0">
+                {row.map((cell, ci) => (
+                  <td
+                    key={ci}
+                    className="px-4 py-3 align-top text-left text-sm leading-relaxed text-slate-700"
+                  >
+                    {renderCell(cell, `${key}-${ri}-${ci}`)}
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }
@@ -293,26 +292,22 @@ export function ArticleBody({ body }: { body: string }) {
   for (let i = 0; i < blocks.length; i++) {
     const block = blocks[i]!;
 
-    if (isFaqHeading(block)) {
+    const faqSection = parseArticleFaqSection(blocks, i);
+    if (faqSection) {
       flushTable();
-      const faqItems: { q: string; a: string }[] = [];
-      i += 1;
-      while (i < blocks.length) {
-        const faqBlock = blocks[i]!;
-        if (HEADING2_RE.test(faqBlock.trim()) || HEADING3_RE.test(faqBlock.trim())) {
-          i -= 1;
-          break;
-        }
-        const pair = extractFaqPair(faqBlock, blocks[i + 1]);
-        if (!pair) break;
-        faqItems.push({ q: pair.q, a: pair.a });
-        if (pair.consumedNext) i += 1;
-        i += 1;
-      }
-      if (faqItems.length > 0) {
-        nodes.push(renderFaqAccordion(faqItems, `faq-${blockIndex}`));
-        blockIndex += 1;
-      }
+      const faqKey = `faq-${blockIndex}`;
+      nodes.push(
+        <FaqAccordionSection
+          key={faqKey}
+          heading={faqSection.heading}
+          items={faqSection.items.map((f) => ({
+            q: f.q,
+            a: renderFaqAnswer(f.a, `${faqKey}-${f.q}`),
+          }))}
+        />,
+      );
+      i = faqSection.endIndex;
+      blockIndex += 1;
       continue;
     }
 
