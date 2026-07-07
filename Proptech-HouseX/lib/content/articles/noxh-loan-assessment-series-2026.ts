@@ -229,7 +229,7 @@ Bạn có thể **ước tính sơ bộ tuổi cuối kỳ vay** theo năm sinh 
 
 Nếu tuổi vay ổn, tiếp tục với [tra CIC an toàn](/tin-tuc/cach-tra-cic-an-toan-truoc-khi-vay), [tính hạn mức vay](/cong-cu/tinh-han-muc-vay) và [checklist hồ sơ vay NOXH](/tin-tuc/ho-so-vay-mua-nha-o-xa-hoi). Nếu sát ngưỡng, đọc thêm [tuổi vay & hôn nhân](/tin-tuc/dieu-kien-vay-noxh-theo-tuoi-hon-nhan) hoặc [checklist trước khi đặt cọc](/tin-tuc/checklist-truoc-khi-dat-coc-noxh) — đừng vội cọc khi chưa rõ khung thời gian vay.
 
-→ **[Ước tính tuổi vay sơ bộ](${NOXH_LOAN_TOOL_60S})** (miễn phí, trên trình duyệt)
+→ **[Ước tính tuổi vay sơ bộ](${NOXH_LOAN_TOOL_60S})**
 
 ## Kết luận
 

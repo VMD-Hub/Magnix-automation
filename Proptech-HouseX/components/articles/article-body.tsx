@@ -21,14 +21,22 @@ const TABLE_SEP_RE = /^\|[-:\s|]+\|$/;
 const PROSE_JUSTIFY =
   "text-justify text-pretty hyphens-auto [text-align-last:left]";
 
+/** Ghi chú biên tập nội bộ — không render cho người đọc bài viết. */
+const ARTICLE_EDITORIAL_NOTE_RE = /\s*\(miễn phí,\s*trên trình duyệt\)/gi;
+
+function stripArticleEditorialNotes(text: string): string {
+  return text.replace(ARTICLE_EDITORIAL_NOTE_RE, "");
+}
+
 function renderLinks(text: string, keyPrefix: string): ReactNode[] {
   const parts: ReactNode[] = [];
   let last = 0;
   let match: RegExpExecArray | null;
   LINK_RE.lastIndex = 0;
-  while ((match = LINK_RE.exec(text)) !== null) {
+  const cleaned = stripArticleEditorialNotes(text);
+  while ((match = LINK_RE.exec(cleaned)) !== null) {
     if (match.index > last) {
-      parts.push(text.slice(last, match.index));
+      parts.push(cleaned.slice(last, match.index));
     }
     const label = match[1];
     const href = rewriteLegacyArticleHref(match[2]);
@@ -57,18 +65,19 @@ function renderLinks(text: string, keyPrefix: string): ReactNode[] {
     }
     last = match.index + match[0].length;
   }
-  if (last < text.length) parts.push(text.slice(last));
+  if (last < cleaned.length) parts.push(cleaned.slice(last));
   return parts;
 }
 
 function renderInline(text: string, keyPrefix: string): ReactNode {
+  const cleaned = stripArticleEditorialNotes(text);
   const nodes: ReactNode[] = [];
   let last = 0;
   let match: RegExpExecArray | null;
   BOLD_RE.lastIndex = 0;
-  while ((match = BOLD_RE.exec(text)) !== null) {
+  while ((match = BOLD_RE.exec(cleaned)) !== null) {
     if (match.index > last) {
-      nodes.push(...renderLinks(text.slice(last, match.index), `${keyPrefix}-t-${last}`));
+      nodes.push(...renderLinks(cleaned.slice(last, match.index), `${keyPrefix}-t-${last}`));
     }
     nodes.push(
       <strong
@@ -80,10 +89,10 @@ function renderInline(text: string, keyPrefix: string): ReactNode {
     );
     last = match.index + match[0].length;
   }
-  if (last < text.length) {
-    nodes.push(...renderLinks(text.slice(last), `${keyPrefix}-t-${last}`));
+  if (last < cleaned.length) {
+    nodes.push(...renderLinks(cleaned.slice(last), `${keyPrefix}-t-${last}`));
   }
-  if (nodes.length === 0) return text;
+  if (nodes.length === 0) return cleaned;
   if (nodes.length === 1) return nodes[0];
   return nodes;
 }
