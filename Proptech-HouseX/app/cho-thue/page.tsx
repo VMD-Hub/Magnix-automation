@@ -14,6 +14,7 @@ import {
 import { propertyTypeLabel } from "@/lib/format";
 import { isBrowseRateLimited } from "@/lib/security/browse-rate-limit";
 import { RateLimitNotice } from "@/components/security/rate-limit-notice";
+import { PreloadHeroBrandSkyline } from "@/components/home/hero-brand-background";
 import { getSiteUrl } from "@/lib/site-config";
 
 export const revalidate = 120;
@@ -75,32 +76,29 @@ export default async function ChoThuePage({ searchParams }: PageProps) {
   });
 
   const siteUrl = getSiteUrl();
-  const jsonLd = buildListingListJsonLd(siteUrl, "/cho-thue", copy.title, items);
+  const jsonLd = buildListingListJsonLd(siteUrl, "/cho-thue", copy.listTitle, items);
 
   const locationLabel = formatListingBrowseLocationLabel(location);
   const subtitle =
     propertyType || locationLabel
       ? `Lọc theo ${[propertyType ? propertyTypeLabel(propertyType) : null, locationLabel].filter(Boolean).join(", ")}`
-      : copy.subtitle;
+      : copy.heroSubtitle;
 
   return (
     <>
+      <PreloadHeroBrandSkyline />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <ListingBrowsePage
         basePath="/cho-thue"
-        title={copy.title}
+        title={copy.listTitle}
         subtitle={subtitle}
         banner={{
           kicker: copy.kicker,
-          title: copy.title,
-          subtitle: copy.subtitle,
-          image: copy.bannerImage,
-          imageWebp: copy.bannerWebp,
-          imageAlt: copy.bannerAlt,
-          objectPosition: copy.objectPosition,
+          title: copy.heroTitle,
+          subtitle: copy.heroSubtitle,
           badge: "Coming Soon",
         }}
         items={items}

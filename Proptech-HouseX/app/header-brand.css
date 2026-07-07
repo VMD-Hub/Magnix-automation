@@ -1,0 +1,168 @@
+/* Header — ruby gradient đồng bộ footer + nav sáng */
+
+.site-header-bar.proptech-header-ruby {
+  position: relative;
+  isolation: isolate;
+  border-bottom: 1px solid rgba(252, 211, 77, 0.28);
+  background-color: var(--color-brand-800);
+  background-image: linear-gradient(
+    90deg,
+    var(--color-brand-800) 0%,
+    color-mix(in srgb, var(--color-brand-800) 55%, var(--color-brand-700) 45%) 22%,
+    var(--color-brand-700) 48%,
+    color-mix(in srgb, var(--color-brand-700) 50%, var(--color-brand-600) 50%) 72%,
+    color-mix(in srgb, var(--color-brand-600) 88%, var(--color-brand-500) 12%) 100%
+  );
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.site-header-bar.proptech-header-ruby::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 50% 120% at 0% 50%, rgba(0, 0, 0, 0.12), transparent 58%),
+    radial-gradient(ellipse 40% 90% at 100% 40%, rgba(252, 211, 77, 0.1), transparent 55%);
+}
+
+.site-header-bar.proptech-header-ruby > * {
+  position: relative;
+  z-index: 1;
+}
+
+.site-header-bar.proptech-header-ruby .housex-header-logo__frame {
+  display: inline-flex;
+  line-height: 0;
+}
+
+.site-header-bar.proptech-header-ruby .housex-header-logo__img {
+  filter: drop-shadow(0 2px 10px rgba(0, 0, 0, 0.28));
+}
+
+/* Chip ruby — logo trên trang auth nền sáng */
+.housex-header-logo__light-pad {
+  display: inline-flex;
+  padding: 0.45rem 0.6rem 0.4rem;
+  border-radius: 0.75rem;
+  background: linear-gradient(
+    145deg,
+    #2a0508 0%,
+    var(--color-brand-900) 40%,
+    var(--color-brand-800) 100%
+  );
+  border: 1px solid rgba(252, 211, 77, 0.28);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
+}
+
+.housex-header-logo__light-pad .housex-header-logo__img {
+  height: 2.35rem;
+  max-width: min(11.5rem, 72vw);
+}
+
+@media (min-width: 640px) {
+  .housex-header-logo__light-pad .housex-header-logo__img {
+    height: 2.65rem;
+    max-width: 13rem;
+  }
+}
+
+.site-header-nav-link {
+  border-radius: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: rgba(235, 235, 237, 0.88);
+  transition: color 0.2s ease, background-color 0.2s ease;
+}
+
+.site-header-nav-link:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--color-gold-300);
+}
+
+.site-header-auth-link {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: rgba(235, 235, 237, 0.9);
+  transition: color 0.2s ease;
+}
+
+.site-header-auth-link:hover {
+  color: var(--color-gold-300);
+}
+
+.site-header-auth-user {
+  max-width: 140px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: rgba(235, 235, 237, 0.9);
+  transition: color 0.2s ease;
+}
+
+.site-header-auth-user:hover {
+  color: var(--color-gold-300);
+}
+
+.site-header-auth-ghost {
+  color: rgba(235, 235, 237, 0.88) !important;
+}
+
+.site-header-auth-ghost:hover {
+  background: rgba(255, 255, 255, 0.1) !important;
+  color: var(--color-gold-300) !important;
+}
+
+.site-header-menu-btn {
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  color: rgba(235, 235, 237, 0.92);
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.site-header-menu-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--color-gold-300);
+}
+
+.site-header-mobile-panel {
+  border-top: 1px solid rgba(252, 211, 77, 0.2);
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--color-brand-800) 80%, var(--color-brand-700) 20%) 0%,
+    var(--color-brand-800) 100%
+  );
+}
+
+.site-header-mobile-link {
+  border-radius: 0.5rem;
+  padding: 0.625rem 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: rgba(235, 235, 237, 0.9);
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.site-header-mobile-link:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--color-gold-300);
+}
+
+.site-header-auth-skeleton {
+  display: none;
+  height: 2.25rem;
+  width: 4rem;
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  border-radius: 0.5rem;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+@media (min-width: 640px) {
+  .site-header-auth-skeleton {
+    display: inline-block;
+  }
+}

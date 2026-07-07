@@ -20,7 +20,7 @@ export function RelatedToolsSection({
           <Link
             key={t.id}
             href={t.href}
-            className="rounded-2xl border border-silver-200 bg-white p-5 transition-colors hover:border-brand-300 hover:bg-brand-50"
+            className="proptech-ruby-link-card p-5"
           >
             <p className="font-bold text-slate-900">{t.title}</p>
             <p className="mt-1 text-sm text-slate-600">{t.desc}</p>

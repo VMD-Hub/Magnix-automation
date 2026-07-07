@@ -59,7 +59,7 @@ export default function ResetPasswordClient() {
       <div className="mx-auto w-full max-w-md rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
         <div className="text-center">
           <div className="flex justify-center">
-            <HouseXHeaderLogo href="/" priority={false} />
+            <HouseXHeaderLogo href="/" priority={false} surface="light" />
           </div>
           <h1 className="mt-3 text-2xl font-bold text-slate-900">Đặt lại mật khẩu</h1>
         </div>

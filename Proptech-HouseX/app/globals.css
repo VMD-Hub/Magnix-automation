@@ -1,6 +1,9 @@
 @import "tailwindcss";
 @import "./hero-slide.css";
 @import "./hero-brand.css";
+@import "./header-brand.css";
+@import "./footer-brand.css";
+@import "./brand-surfaces.css";
 
 @custom-variant dark (&:where(.dark, .dark *));
 
@@ -56,7 +59,8 @@
   --muted: #5c5c5c;
   /* Nền giấy logo — mean pixel PNG + texture tile cùng file gốc */
   --brand-logo-paper: #ebebe6;
-  --header-bar: var(--brand-logo-paper);
+  /* @deprecated — header dùng .proptech-header-ruby */
+  --header-bar: var(--color-brand-800);
   --header-paper-tile: url("/brand/header-paper-tile.webp");
   --ruby-glow: rgba(155, 17, 30, 0.12);
   --gold-glow: rgba(218, 165, 32, 0.18);
@@ -69,7 +73,7 @@
   --surface-muted: #2a2224;
   --border: #3d3032;
   --muted: #a8a0a2;
-  --header-bar: var(--surface);
+  --header-bar: var(--color-brand-800);
   --ruby-glow: rgba(155, 17, 30, 0.38);
   --gold-glow: rgba(218, 165, 32, 0.14);
 }
@@ -102,62 +106,92 @@ body {
 
 .proptech-section-glow {
   background: radial-gradient(
-    ellipse 80% 60% at 50% 0%,
-    color-mix(in srgb, var(--color-brand-400) 8%, transparent),
-    transparent 72%
+    ellipse 85% 65% at 50% 0%,
+    color-mix(in srgb, var(--color-brand-400) 12%, transparent),
+    transparent 74%
   );
 }
 
 .proptech-card {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
   border-radius: 1rem;
-  border: 1px solid color-mix(in srgb, var(--color-brand-400) 10%, #dcdce0);
+  border: 1px solid color-mix(in srgb, var(--color-gold-400) 20%, var(--color-brand-200));
   background: linear-gradient(
-    145deg,
-    rgba(255, 255, 255, 0.96) 0%,
-    rgba(245, 245, 247, 0.88) 100%
+    165deg,
+    rgba(255, 255, 255, 0.98) 0%,
+    color-mix(in srgb, var(--color-brand-50) 42%, #ffffff) 50%,
+    color-mix(in srgb, var(--color-silver-50) 72%, #ffffff) 100%
   );
   box-shadow:
+    0 1px 0 rgba(252, 211, 77, 0.1) inset,
     0 1px 2px rgba(26, 18, 20, 0.04),
-    0 8px 24px rgba(155, 17, 30, 0.05);
+    0 8px 24px rgba(92, 11, 18, 0.06);
   transition:
     border-color 0.25s ease,
     box-shadow 0.25s ease,
     transform 0.25s ease;
 }
 
+.proptech-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    rgba(252, 211, 77, 0.42) 0%,
+    rgba(155, 17, 30, 0.18) 42%,
+    transparent 78%
+  );
+}
+
+.proptech-card::after {
+  content: "";
+  position: absolute;
+  right: 0.55rem;
+  bottom: 0.5rem;
+  z-index: 1;
+  width: 1.35rem;
+  height: 1.35rem;
+  border-right: 1px solid rgba(252, 211, 77, 0.28);
+  border-bottom: 1px solid rgba(252, 211, 77, 0.28);
+  border-radius: 0 0 0.4rem 0;
+  pointer-events: none;
+  opacity: 0.55;
+}
+
 .proptech-card:hover {
-  border-color: color-mix(in srgb, var(--color-brand-400) 28%, var(--border));
+  border-color: color-mix(in srgb, var(--color-gold-400) 32%, var(--color-brand-300));
   box-shadow:
+    0 1px 0 rgba(252, 211, 77, 0.14) inset,
     0 4px 12px rgba(26, 18, 20, 0.06),
-    0 12px 32px rgba(155, 17, 30, 0.1);
+    0 12px 32px rgba(92, 11, 18, 0.1);
   transform: translateY(-2px);
 }
 
 .dark .proptech-card {
-  border-color: color-mix(in srgb, var(--color-brand-400) 22%, var(--border));
+  border-color: color-mix(in srgb, var(--color-gold-400) 18%, var(--color-brand-400));
   background: linear-gradient(
-    145deg,
-    rgba(42, 34, 36, 0.96) 0%,
-    rgba(26, 18, 20, 0.92) 100%
+    155deg,
+    color-mix(in srgb, var(--color-brand-800) 35%, #2a2224) 0%,
+    rgba(26, 18, 20, 0.94) 100%
   );
   box-shadow:
     0 1px 2px rgba(0, 0, 0, 0.2),
-    0 8px 24px rgba(155, 17, 30, 0.12);
+    0 8px 24px rgba(92, 11, 18, 0.18);
 }
 
 .dark .proptech-card:hover {
-  border-color: color-mix(in srgb, var(--color-brand-400) 40%, var(--border));
+  border-color: color-mix(in srgb, var(--color-gold-400) 35%, var(--color-brand-400));
   box-shadow:
     0 4px 12px rgba(0, 0, 0, 0.25),
-    0 12px 32px rgba(155, 17, 30, 0.2);
-}
-
-.proptech-footer-glow {
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
-  background:
-    radial-gradient(ellipse 70% 50% at 50% 0%, var(--ruby-glow), transparent 65%),
-    radial-gradient(ellipse 40% 30% at 90% 20%, var(--gold-glow), transparent 55%),
-    var(--color-ink-900);
+    0 12px 32px rgba(92, 11, 18, 0.24);
 }
 
 /* Gold CTA — nền vàng đồng nhất, chữ trắng, bevel 3D chỉ ở viền */
@@ -319,47 +353,35 @@ html:not(.dark) .lux-hero .lux-glass {
     0 0 0 1px rgba(155, 17, 30, 0.12);
 }
 
-/* Thanh tiêu đề — texture giấy cùng nguồn logo (tránh lệch phẳng vs grain) */
-.site-header-bar {
-  background-color: var(--header-bar);
-  background-image: var(--header-paper-tile);
-  background-repeat: repeat;
-  background-size: 128px 128px;
-}
+/* Thanh tiêu đề — nền ruby: app/header-brand.css */
 
 .housex-header-logo__img {
   display: block;
-  height: 2.25rem;
+  height: 2.5rem;
   width: auto;
-  max-width: min(12rem, 48vw);
+  max-width: min(13.5rem, 52vw);
   object-fit: contain;
   object-position: left center;
-  opacity: 1;
-  filter: none;
-  mix-blend-mode: normal;
 }
 
 .housex-footer-logo__frame {
   display: inline-flex;
-  overflow: hidden;
-  border-radius: 0.75rem;
   line-height: 0;
 }
 
 .housex-footer-logo__img {
   display: block;
-  height: 3.25rem;
+  height: 3rem;
   width: auto;
   max-width: min(15rem, 100%);
   object-fit: contain;
   object-position: left center;
-  border-radius: inherit;
 }
 
 @media (min-width: 640px) {
   .housex-header-logo__img {
-    height: 3rem;
-    max-width: 14.5rem;
+    height: 2.85rem;
+    max-width: 15.5rem;
   }
 
   .housex-footer-logo__img {
@@ -671,15 +693,17 @@ html:not(.dark) .lux-hero .text-slate-100 {
 
 /* Stat / info tile — dùng trang dự án & tin đăng */
 .lux-stat-card {
+  position: relative;
+  overflow: hidden;
   border-radius: 1rem;
-  border: 1px solid color-mix(in srgb, var(--color-brand-400) 8%, var(--border));
+  border: 1px solid color-mix(in srgb, var(--color-gold-400) 18%, var(--color-brand-200));
   border-top: 3px solid var(--color-brand-600);
   background: linear-gradient(
     160deg,
-    color-mix(in srgb, var(--surface) 98%, transparent) 0%,
+    color-mix(in srgb, var(--color-brand-50) 40%, var(--surface)) 0%,
     color-mix(in srgb, var(--surface-muted) 85%, transparent) 100%
   );
-  box-shadow: 0 4px 16px rgba(155, 17, 30, 0.04);
+  box-shadow: 0 4px 16px rgba(92, 11, 18, 0.06);
 }
 
 .dark .lux-stat-card {
@@ -687,10 +711,16 @@ html:not(.dark) .lux-hero .text-slate-100 {
 }
 
 .lux-detail-panel {
+  position: relative;
+  overflow: hidden;
   border-radius: 1rem;
-  border: 1px solid color-mix(in srgb, var(--color-brand-400) 10%, var(--border));
-  background: color-mix(in srgb, var(--surface) 92%, transparent);
-  box-shadow: 0 8px 28px rgba(26, 18, 20, 0.06);
+  border: 1px solid color-mix(in srgb, var(--color-gold-400) 16%, var(--color-brand-200));
+  background: linear-gradient(
+    155deg,
+    color-mix(in srgb, var(--color-brand-50) 28%, var(--surface)) 0%,
+    color-mix(in srgb, var(--surface) 92%, transparent) 100%
+  );
+  box-shadow: 0 8px 28px rgba(92, 11, 18, 0.06);
 }
 
 .dark .lux-detail-panel {

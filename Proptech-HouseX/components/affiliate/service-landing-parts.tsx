@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { AffiliateFaq } from "@/lib/content/affiliate-verticals";
+import { RubySurfaceOrnament } from "@/components/brand/ruby-surface-ornament";
 import { AffiliateContactForm } from "@/components/affiliate/affiliate-contact-form";
 import type { ServiceVerticalId } from "@/lib/content/housex-services-visuals";
 
@@ -9,7 +10,7 @@ export function ServiceLandingHero({
   intro,
   heroImage,
   heroImageWebp,
-  heroGradient,
+  heroGradient: _heroGradient,
   breadcrumbs,
   primaryCta,
   secondaryCta,
@@ -25,7 +26,8 @@ export function ServiceLandingHero({
   secondaryCta?: { label: string; href: string };
 }) {
   return (
-    <section className="relative isolate min-h-[380px] overflow-hidden bg-ink-900 text-white sm:min-h-[440px] lg:min-h-[480px]">
+    <section className="proptech-catalog-hero relative isolate min-h-[380px] overflow-hidden text-white sm:min-h-[440px] lg:min-h-[480px]">
+      <RubySurfaceOrnament variant="holder" />
       <picture className="absolute inset-0 block h-full w-full">
         {heroImageWebp ? (
           <source srcSet={heroImageWebp} type="image/webp" />
@@ -39,13 +41,10 @@ export function ServiceLandingHero({
           fetchPriority="high"
         />
       </picture>
-      <div className={`absolute inset-0 bg-gradient-to-br ${heroGradient}`} aria-hidden />
-      <div
-        className="absolute inset-0 bg-gradient-to-t from-ink-900/80 via-transparent to-ink-900/30"
-        aria-hidden
-      />
+      <div className="proptech-catalog-hero__overlay-h" aria-hidden />
+      <div className="proptech-catalog-hero__overlay-v" aria-hidden />
 
-      <div className="relative mx-auto flex min-h-[380px] max-w-7xl flex-col justify-end px-4 py-10 container-px sm:min-h-[440px] sm:py-14 lg:min-h-[480px]">
+      <div className="proptech-catalog-hero__content relative mx-auto flex min-h-[380px] max-w-7xl flex-col justify-end px-4 py-10 container-px sm:min-h-[440px] sm:py-14 lg:min-h-[480px]">
         {breadcrumbs && breadcrumbs.length > 0 ? (
           <nav aria-label="Breadcrumb" className="text-sm text-slate-300">
             {breadcrumbs.map((item, i) => (
@@ -263,12 +262,13 @@ export function ServiceCtaSection({
   subtitle?: string;
 }) {
   return (
-    <section className="bg-gradient-to-br from-ink-800 via-ink-900 to-brand-900 py-14">
-      <div className="mx-auto grid max-w-7xl gap-10 container-px lg:grid-cols-2 lg:items-center">
+    <section className="proptech-ruby-band py-14">
+      <RubySurfaceOrnament variant="holder" />
+      <div className="relative z-[1] mx-auto grid max-w-7xl gap-10 container-px lg:grid-cols-2 lg:items-center">
         <div className="text-white">
           <h2 className="text-2xl font-bold sm:text-3xl">{title}</h2>
-          <p className="mt-3 text-slate-300">{subtitle}</p>
-          <ul className="mt-6 space-y-2 text-sm text-slate-400">
+          <p className="mt-3 text-silver-200">{subtitle}</p>
+          <ul className="mt-6 space-y-2 text-sm text-silver-200/80">
             <li>✓ Phản hồi nhanh trong giờ làm việc</li>
             <li>✓ Minh bạch quy trình &amp; chi phí</li>
             <li>✓ Đúng quy định pháp luật Việt Nam</li>
@@ -295,7 +295,7 @@ export function ServiceToolLinks({
   if (!links.length) return null;
   return (
     <section className="mx-auto max-w-7xl py-10 container-px">
-      <div className="rounded-2xl border border-brand-200 bg-brand-50/80 p-6">
+      <div className="proptech-ruby-soft-panel p-6">
         <h2 className="text-lg font-bold text-slate-900">Công cụ hỗ trợ</h2>
         {note ? <p className="mt-1 text-sm text-slate-600">{note}</p> : null}
         <div className="mt-4 flex flex-wrap gap-3">

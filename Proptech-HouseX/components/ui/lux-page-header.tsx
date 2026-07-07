@@ -9,7 +9,7 @@ type Props = {
   children?: ReactNode;
 };
 
-/** Header trang catalog — ruby heading + glow Kim. */
+/** Header trang catalog — ruby wash + accent vàng. */
 export function LuxPageHeader({
   kicker,
   title,
@@ -20,7 +20,7 @@ export function LuxPageHeader({
   return (
     <header
       className={cn(
-        "proptech-section-glow mb-8 rounded-2xl border border-silver-200 bg-white/75 p-6 backdrop-blur-sm sm:p-8",
+        "proptech-ruby-page-header proptech-section-glow mb-8 p-6 sm:p-8",
         className,
       )}
     >

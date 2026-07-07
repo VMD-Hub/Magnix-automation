@@ -14,8 +14,7 @@ import {
 import { propertyTypeLabel } from "@/lib/format";
 import { isBrowseRateLimited } from "@/lib/security/browse-rate-limit";
 import { RateLimitNotice } from "@/components/security/rate-limit-notice";
-import { PreloadBannerImage } from "@/components/seo/preload-banner-image";
-import { catalogBannerSources } from "@/lib/brand/banner-responsive";
+import { PreloadHeroBrandSkyline } from "@/components/home/hero-brand-background";
 import { getSiteUrl } from "@/lib/site-config";
 
 export const revalidate = 120;
@@ -84,38 +83,30 @@ export default async function MuaBanPage({ searchParams }: PageProps) {
   });
 
   const siteUrl = getSiteUrl();
-  const jsonLd = buildListingListJsonLd(siteUrl, "/mua-ban", copy.title, items);
+  const jsonLd = buildListingListJsonLd(siteUrl, "/mua-ban", copy.listTitle, items);
 
   const locationLabel = formatListingBrowseLocationLabel(location);
   const subtitle =
     propertyType || locationLabel
       ? `Lọc theo ${[propertyType ? propertyTypeLabel(propertyType) : null, locationLabel].filter(Boolean).join(", ")}`
-      : copy.subtitle;
-
-  const bannerPreload = copy.bannerSlide
-    ? catalogBannerSources(copy.bannerSlide)
-    : null;
+      : copy.heroSubtitle;
 
   return (
     <>
-      {bannerPreload ? <PreloadBannerImage sources={bannerPreload} /> : null}
+      <PreloadHeroBrandSkyline />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <ListingBrowsePage
         basePath="/mua-ban"
-        title={copy.title}
+        title={copy.listTitle}
         subtitle={subtitle}
         banner={{
           kicker: copy.kicker,
-          title: copy.title,
-          subtitle: copy.subtitle,
-          bannerSlide: copy.bannerSlide,
-          image: copy.bannerImage,
-          imageWebp: copy.bannerWebp,
-          imageAlt: copy.bannerAlt,
-          objectPosition: copy.objectPosition,
+          title: copy.heroTitle,
+          subtitle: copy.heroSubtitle,
+          coverageNote: copy.coverageNote,
         }}
         items={items}
         pagination={pagination}

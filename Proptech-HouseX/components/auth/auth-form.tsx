@@ -157,7 +157,7 @@ export function AuthForm({
       <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
         <div className="mb-6 text-center">
           <div className="flex justify-center">
-            <HouseXHeaderLogo href="/" priority={false} />
+            <HouseXHeaderLogo href="/" priority={false} surface="light" />
           </div>
           <span className="mt-2 inline-block rounded-full bg-brand-50 px-3 py-1 text-xs font-semibold text-brand-700">
             {copy.badge}

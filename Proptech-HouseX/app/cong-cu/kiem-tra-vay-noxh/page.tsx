@@ -74,7 +74,7 @@ export default function Page() {
         </div>
       </section>
 
-      <section className="mb-10 rounded-2xl border border-brand-100 bg-gradient-to-br from-brand-50/80 to-white p-6">
+      <section className="proptech-ruby-soft-panel mb-10 p-6">
         <h2 className="text-lg font-bold text-slate-900">
           Hướng dẫn chi tiết: Kiểm tra trong 60 giây
         </h2>

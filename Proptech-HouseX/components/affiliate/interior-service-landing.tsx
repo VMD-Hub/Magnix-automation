@@ -129,7 +129,7 @@ export function InteriorServiceLanding({ vertical }: { vertical: AffiliateVertic
 
       {/* Ước tính chi phí — không bảng giá cam kết */}
       <section className="mx-auto max-w-7xl py-14 container-px">
-        <div className="rounded-2xl border border-brand-200 bg-gradient-to-br from-brand-50 to-white p-8 sm:p-10">
+        <div className="proptech-ruby-soft-panel p-8 sm:p-10">
           <h2 className="text-2xl font-bold text-slate-900">Chi phí tham khảo</h2>
           <p className="mt-3 max-w-2xl text-sm leading-relaxed text-slate-600">
             Chi phí thiết kế và thi công phụ thuộc diện tích, hạng mục và vật liệu — thường

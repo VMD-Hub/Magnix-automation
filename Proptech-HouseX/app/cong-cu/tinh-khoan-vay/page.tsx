@@ -79,7 +79,7 @@ export default function Page() {
         {LOAN_CALC_TRUST_STATS.map((s) => (
           <div
             key={s.label}
-            className="min-w-[8.5rem] shrink-0 rounded-xl border border-brand-100 bg-brand-50/80 px-3 py-3 text-center sm:min-w-0 sm:shrink sm:px-4 sm:py-4"
+            className="min-w-[8.5rem] shrink-0 proptech-ruby-soft-panel rounded-xl px-3 py-3 text-center sm:min-w-0 sm:shrink sm:px-4 sm:py-4"
           >
             <p className="text-lg font-extrabold text-brand-700 sm:text-xl">{s.value}</p>
             <p className="mt-0.5 text-xs text-slate-600 sm:text-sm">{s.label}</p>
@@ -127,7 +127,7 @@ export default function Page() {
       </section>
 
       <section className="mt-14 max-w-3xl print:hidden">
-        <div className="rounded-2xl border border-brand-100 bg-gradient-to-br from-brand-50 to-white p-6 sm:p-8">
+        <div className="proptech-ruby-soft-panel p-6 sm:p-8">
           <h2 className="text-lg font-bold text-slate-900">Cần hỗ trợ làm hồ sơ vay?</h2>
           <p className="mt-2 text-sm leading-relaxed text-slate-600">
             Sau khi có con số sơ bộ, đội ngũ HouseX giúp so sánh gói vay, chuẩn bị hồ sơ và đồng

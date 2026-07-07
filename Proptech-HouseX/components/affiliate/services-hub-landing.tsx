@@ -42,10 +42,10 @@ export function ServicesHubLanding() {
         secondaryCta={{ label: "Tính khoản vay", href: "/cong-cu/tinh-khoan-vay" }}
       />
 
-      <section className="border-b border-slate-200 bg-white">
+      <section className="proptech-trust-band">
         <div className="mx-auto grid max-w-7xl gap-6 py-8 container-px lg:grid-cols-3">
           {SERVICES_HUB_VISUAL.highlights.map((h) => (
-            <div key={h.label} className="rounded-xl bg-slate-50 px-5 py-4">
+            <div key={h.label} className="proptech-ruby-soft-panel px-5 py-4">
               <p className="text-xs font-semibold uppercase tracking-wide text-brand-600">
                 {h.label}
               </p>
@@ -70,7 +70,7 @@ export function ServicesHubLanding() {
               <Link
                 key={v.id}
                 href={v.path}
-                className="group relative overflow-hidden rounded-3xl bg-ink-900 shadow-xl"
+                className="group relative overflow-hidden rounded-3xl border border-[rgba(252,211,77,0.22)] bg-brand-800 shadow-xl"
               >
                 <div className="aspect-[4/5] sm:aspect-[3/4]">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -79,7 +79,8 @@ export function ServicesHubLanding() {
                     alt=""
                     className="absolute inset-0 h-full w-full object-cover opacity-80 transition-transform duration-500 group-hover:scale-105"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-ink-900 via-ink-900/40 to-transparent" />
+                  <div className="proptech-catalog-hero__overlay-h absolute inset-0" />
+                  <div className="proptech-catalog-hero__overlay-v absolute inset-0" />
                 </div>
                 <div className="absolute inset-x-0 bottom-0 p-6 text-white">
                   <span className="rounded-full bg-brand-500/90 px-3 py-1 text-xs font-bold text-white">

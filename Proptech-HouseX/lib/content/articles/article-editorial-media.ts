@@ -61,7 +61,7 @@ export const ARTICLE_EDITORIAL_COVERS: Record<string, EditorialCover> = {
     url: HERO.metroHub,
     alt: "Minh họa trung tâm giao thông công cộng và phát triển đô thị TOD",
     caption:
-      "TOD (Transit-Oriented Development) — mô hình phát triển quanh ga metro, đường sắt.",
+      "TOD (Transit-Oriented Development) — phát triển mật độ cao trong bán kính đi bộ ~1–1,5 km quanh ga.",
   },
   "tp-hcm-5-khu-tod-metro-so-2-ben-thanh-tham-luong": {
     url: HERO.bitexcoMetro,
@@ -79,7 +79,7 @@ export const ARTICLE_EDITORIAL_COVERS: Record<string, EditorialCover> = {
     url: DTA_HAPPY_HOME_IMAGES.hero.url,
     alt: "DTA City Nhơn Trạch — khu đô thị vệ tinh gần hành lang sân bay Long Thành",
     caption:
-      "Nhơn Trạch bứt phá hạ tầng 25B, Vành đai 3 và ga đường sắt quy hoạch — vùng TOD tương lai.",
+      "Nhơn Trạch bứt phá hạ tầng 25B, Vành đai 3 và ga đường sắt quy hoạch — đô thị vệ tinh hưởng lợi giao thông công cộng.",
   },
   "tien-do-noxh-kdc-chang-song-phuoc-tan-2026": {
     url: "/images/articles/kdc-chang-song-noxh.webp",
@@ -170,7 +170,7 @@ export const EDITORIAL_FIGURES = {
   metroHub: editorialFigure({
     url: HERO.metroHub,
     alt: "Minh họa ga metro và trung tâm giao thông",
-    caption: "TOD lấy ga làm trung tâm phát triển dân cư và dịch vụ",
+    caption: "TOD lấy ga làm trung tâm phát triển dân cư mật độ cao trong bán kính đi bộ ~1–1,5 km",
     source: "HouseX",
   }),
   metroViaduct: editorialFigure({

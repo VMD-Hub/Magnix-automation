@@ -159,3 +159,45 @@ html:not(.dark) .lux-hero--brand::before {
     max-width: min(36rem, 40vw);
   }
 }
+
+/* Catalog Mua bán / Cho thuê — cùng layer brand, thấp hơn hero trang chủ */
+.proptech-catalog-hero--brand {
+  background-color: var(--color-brand-900);
+}
+
+.proptech-catalog-hero--brand__frame {
+  position: relative;
+  width: 100%;
+  min-height: 17.5rem;
+  overflow: hidden;
+}
+
+@media (min-width: 640px) {
+  .proptech-catalog-hero--brand__frame {
+    min-height: 18.75rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .proptech-catalog-hero--brand__frame {
+    min-height: 20rem;
+  }
+}
+
+.proptech-catalog-hero--brand__frame::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+  background: linear-gradient(
+    to top,
+    rgba(26, 4, 8, 0.78) 0%,
+    rgba(42, 5, 8, 0.42) 30%,
+    transparent 58%
+  );
+}
+
+.proptech-catalog-hero--brand .proptech-catalog-hero__content {
+  text-shadow: 0 1px 18px rgba(0, 0, 0, 0.4);
+}

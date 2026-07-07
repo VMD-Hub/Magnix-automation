@@ -3,6 +3,7 @@ import {
   type ProjectCatalogBannerVariant,
 } from "@/lib/brand/project-catalog-banners";
 import { CATALOG_BANNER_SIZES, catalogBannerSources } from "@/lib/brand/banner-responsive";
+import { RubySurfaceOrnament } from "@/components/brand/ruby-surface-ornament";
 import { BannerPicture } from "@/components/ui/banner-picture";
 import {
   NOXH_CATALOG_BANNER_ALT,
@@ -13,15 +14,14 @@ type Props = {
   variant: ProjectCatalogBannerVariant;
 };
 
-/**
- * Banner rộng cho /du-an — cao tương đương ảnh thẻ dự án (16:10), thấp hơn hero landing.
- */
+/** Banner /du-an — ruby overlay + ornament đồng bộ catalog. */
 export function ProjectCatalogBanner({ variant }: Props) {
   const banner = PROJECT_CATALOG_BANNERS[variant];
   const sources = catalogBannerSources(banner.slide);
 
   return (
-    <header className="relative mb-6 overflow-hidden rounded-2xl ring-1 ring-silver-200">
+    <header className="proptech-catalog-hero mb-6">
+      <RubySurfaceOrnament variant="holder" />
       <div className="relative h-[220px] w-full sm:h-[250px] lg:h-[260px]">
         <BannerPicture
           sources={sources}
@@ -30,15 +30,9 @@ export function ProjectCatalogBanner({ variant }: Props) {
           objectPosition={banner.objectPosition}
           priority
         />
-        <div
-          className="absolute inset-0 bg-gradient-to-r from-ink-900/82 via-ink-900/45 to-ink-900/15"
-          aria-hidden
-        />
-        <div
-          className="absolute inset-0 bg-gradient-to-t from-ink-900/55 via-transparent to-ink-900/10"
-          aria-hidden
-        />
-        <div className="absolute inset-0 flex flex-col justify-end px-5 pb-5 sm:px-7 sm:pb-6">
+        <div className="proptech-catalog-hero__overlay-h" aria-hidden />
+        <div className="proptech-catalog-hero__overlay-v" aria-hidden />
+        <div className="proptech-catalog-hero__content absolute inset-0 flex flex-col justify-end px-5 pb-5 sm:px-7 sm:pb-6">
           {variant === "NHA_O_XA_HOI" && (
             <p className="mb-2 max-w-2xl text-sm font-medium text-emerald-100/95 sm:text-base">
               {NOXH_REGION_TAGLINE}

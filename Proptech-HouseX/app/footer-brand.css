@@ -1,0 +1,469 @@
+/* Footer — ruby gradient + motif facet depth (gần / giữa / xa) */
+
+.proptech-footer-glow {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  border-top: 1px solid rgba(252, 211, 77, 0.28);
+  background: linear-gradient(
+    90deg,
+    var(--color-brand-800) 0%,
+    color-mix(in srgb, var(--color-brand-800) 55%, var(--color-brand-700) 45%) 22%,
+    var(--color-brand-700) 48%,
+    color-mix(in srgb, var(--color-brand-700) 50%, var(--color-brand-600) 50%) 72%,
+    color-mix(in srgb, var(--color-brand-600) 88%, var(--color-brand-500) 12%) 100%
+  );
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.proptech-footer-glow::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 42% 55% at 90% 38%, rgba(252, 211, 77, 0.16), transparent 58%),
+    radial-gradient(ellipse 38% 45% at 62% 28%, rgba(252, 211, 77, 0.08), transparent 55%),
+    radial-gradient(ellipse 45% 90% at 6% 50%, rgba(0, 0, 0, 0.14), transparent 58%),
+    radial-gradient(ellipse 70% 35% at 50% 0%, rgba(255, 255, 255, 0.05), transparent 68%);
+}
+
+.proptech-footer-glow > :not(.footer-brand-ornament) {
+  position: relative;
+  z-index: 1;
+}
+
+.proptech-footer-glow .footer-brand-ornament {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+/* —— Cụm motif —— */
+.footer-geo-cluster {
+  position: absolute;
+  color: rgba(252, 211, 77, 0.46);
+}
+
+.footer-geo-cluster .footer-geo,
+.footer-geo-cluster .footer-geo-bar,
+.footer-geo-cluster .footer-geo-dot {
+  position: absolute;
+}
+
+/* Facet — layout con dùng chung, vị trí + depth theo modifier */
+.footer-geo-cluster--facet .footer-facet-ring {
+  left: 52%;
+  top: 46%;
+  width: 68%;
+  height: 68%;
+  opacity: 0.38;
+  color: rgba(234, 197, 71, 0.5);
+}
+
+.footer-geo-cluster--facet .footer-facet-hex-main {
+  left: 18%;
+  top: 22%;
+  width: 58%;
+  height: 58%;
+  opacity: 0.58;
+}
+
+.footer-geo-cluster--facet .footer-facet-hex-tr {
+  left: 58%;
+  top: 2%;
+  width: 34%;
+  height: 34%;
+  opacity: 0.48;
+}
+
+.footer-geo-cluster--facet .footer-facet-hex-bl {
+  left: 2%;
+  top: 54%;
+  width: 32%;
+  height: 32%;
+  opacity: 0.42;
+  color: rgba(234, 197, 71, 0.48);
+}
+
+.footer-geo-cluster--facet .footer-facet-hex-br {
+  left: 62%;
+  top: 52%;
+  width: 24%;
+  height: 24%;
+  opacity: 0.36;
+}
+
+.footer-geo-cluster--facet .footer-facet-diamond {
+  left: 30%;
+  top: 34%;
+  width: 38%;
+  height: 38%;
+  opacity: 0.5;
+}
+
+.footer-geo-cluster--facet .footer-facet-tri {
+  left: 6%;
+  top: 8%;
+  width: 26%;
+  height: 26%;
+  opacity: 0.34;
+  transform: rotate(-12deg);
+}
+
+.footer-geo-cluster--facet .footer-facet-bar-a {
+  left: 8%;
+  top: 48%;
+  width: 88%;
+  height: 2px;
+  opacity: 0.38;
+  transform: rotate(-18deg);
+}
+
+.footer-geo-cluster--facet .footer-facet-bar-b {
+  left: 22%;
+  top: 68%;
+  width: 62%;
+  height: 2px;
+  opacity: 0.3;
+  transform: rotate(14deg);
+}
+
+.footer-geo-cluster--facet .footer-facet-bar-c {
+  left: 38%;
+  top: 18%;
+  width: 48%;
+  height: 1.5px;
+  opacity: 0.26;
+  transform: rotate(-32deg);
+}
+
+.footer-geo-cluster--facet .footer-facet-dot-a {
+  left: 54%;
+  top: 18%;
+  width: 5px;
+  height: 5px;
+  opacity: 0.55;
+}
+
+.footer-geo-cluster--facet .footer-facet-dot-b {
+  left: 14%;
+  top: 48%;
+  width: 4px;
+  height: 4px;
+  opacity: 0.45;
+}
+
+.footer-geo-cluster--facet .footer-facet-dot-c {
+  left: 72%;
+  top: 58%;
+  width: 5px;
+  height: 5px;
+  opacity: 0.5;
+}
+
+.footer-geo-cluster--facet .footer-facet-dot-d {
+  left: 42%;
+  top: 72%;
+  width: 3px;
+  height: 3px;
+  opacity: 0.4;
+}
+
+/* Gần — lớn, sắc nét, nổi bật */
+.footer-geo-cluster--facet-near {
+  top: 4%;
+  right: 24%;
+  width: min(15rem, 26vw);
+  height: min(14rem, 24vw);
+  transform: rotate(-9deg);
+  opacity: 0.96;
+  filter: drop-shadow(0 0 14px rgba(252, 211, 77, 0.1));
+  z-index: 2;
+}
+
+.footer-geo-cluster--facet-near .footer-facet-hex-main {
+  opacity: 0.64;
+}
+
+/* Giữa — cỡ vừa, mép phải */
+.footer-geo-cluster--facet-mid {
+  top: 18%;
+  right: 0.75%;
+  width: min(11.5rem, 19vw);
+  height: min(10.5rem, 17vw);
+  transform: rotate(-4deg);
+  opacity: 0.82;
+  z-index: 1;
+}
+
+/* Xa — nhỏ, mờ, blur nhẹ */
+.footer-geo-cluster--facet-far {
+  bottom: 20%;
+  right: 34%;
+  width: min(7.25rem, 13vw);
+  height: min(6.75rem, 12vw);
+  transform: rotate(11deg);
+  opacity: 0.44;
+  filter: blur(0.45px);
+  z-index: 0;
+}
+
+.footer-geo-cluster--facet-far .footer-facet-tri,
+.footer-geo-cluster--facet-far .footer-facet-bar-c,
+.footer-geo-cluster--facet-far .footer-facet-dot-d {
+  display: none;
+}
+
+.footer-geo-cluster--facet-far .footer-facet-ring {
+  opacity: 0.22;
+}
+
+.footer-geo-cluster--facet-far .footer-facet-hex-main {
+  opacity: 0.4;
+}
+
+/* Cụm stamp */
+.footer-geo-cluster--stamp {
+  bottom: 19%;
+  right: 3.5%;
+  width: 4.75rem;
+  height: 4.75rem;
+  opacity: 0.78;
+  transform: rotate(3deg);
+  z-index: 1;
+}
+
+.footer-geo--stamp-bracket {
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.42;
+}
+
+.footer-geo--stamp-hex {
+  left: 22%;
+  top: 20%;
+  width: 58%;
+  height: 58%;
+  opacity: 0.5;
+}
+
+.footer-geo--stamp-diamond {
+  left: 48%;
+  top: 44%;
+  width: 38%;
+  height: 38%;
+  opacity: 0.38;
+}
+
+.footer-geo--stamp-dot {
+  left: 68%;
+  top: 28%;
+  width: 4px;
+  height: 4px;
+  opacity: 0.48;
+}
+
+/* Cụm honeycomb */
+.footer-geo-cluster--honey {
+  left: 1%;
+  bottom: 26%;
+  width: 4.25rem;
+  height: 3.75rem;
+  opacity: 0.55;
+  transform: rotate(-8deg);
+  z-index: 0;
+}
+
+.footer-geo--honey-a {
+  left: 0;
+  top: 18%;
+  width: 52%;
+  height: 52%;
+  opacity: 0.4;
+}
+
+.footer-geo--honey-b {
+  left: 38%;
+  top: 0;
+  width: 48%;
+  height: 48%;
+  opacity: 0.36;
+}
+
+.footer-geo--honey-c {
+  left: 22%;
+  top: 48%;
+  width: 40%;
+  height: 40%;
+  opacity: 0.32;
+  color: rgba(234, 197, 71, 0.45);
+}
+
+.footer-geo--honey-bar {
+  left: 6%;
+  top: 72%;
+  width: 82%;
+  height: 1.5px;
+  opacity: 0.28;
+  transform: rotate(-6deg);
+}
+
+.footer-geo-bar {
+  display: block;
+  border-radius: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(252, 211, 77, 0.55),
+    rgba(234, 197, 71, 0.25),
+    transparent
+  );
+}
+
+.footer-geo-dot {
+  display: block;
+  border-radius: 50%;
+  background: rgba(252, 211, 77, 0.6);
+  box-shadow: 0 0 8px rgba(252, 211, 77, 0.28);
+}
+
+.proptech-footer-divider {
+  border-color: rgba(252, 211, 77, 0.22);
+  background: linear-gradient(
+    90deg,
+    rgba(0, 0, 0, 0.06) 0%,
+    rgba(252, 211, 77, 0.07) 35%,
+    rgba(252, 211, 77, 0.1) 65%,
+    rgba(255, 255, 255, 0.04) 100%
+  );
+}
+
+.proptech-footer-glow .proptech-footer-divider {
+  border-color: rgba(252, 211, 77, 0.22);
+}
+
+/* Logo footer — PNG trong suốt trên nền ruby (không đụng logo header) */
+.proptech-footer-glow .housex-footer-logo__frame {
+  display: inline-flex;
+  line-height: 0;
+}
+
+.proptech-footer-glow .housex-footer-logo__img {
+  filter: drop-shadow(0 2px 12px rgba(0, 0, 0, 0.28));
+}
+
+@media (max-width: 1279px) {
+  .footer-geo-cluster--facet-near {
+    right: 18%;
+    width: min(12.5rem, 28vw);
+    height: min(11.5rem, 26vw);
+  }
+
+  .footer-geo-cluster--facet-far {
+    right: 28%;
+    width: min(6.5rem, 15vw);
+    height: min(6rem, 14vw);
+  }
+}
+
+@media (max-width: 1023px) {
+  .footer-geo-cluster--facet-near {
+    top: 6%;
+    right: 12%;
+    width: min(9.5rem, 30vw);
+    height: min(8.75rem, 28vw);
+    opacity: 0.82;
+  }
+
+  .footer-geo-cluster--facet-mid {
+    width: min(9rem, 22vw);
+    height: min(8.25rem, 20vw);
+    top: 14%;
+  }
+
+  .footer-geo-cluster--facet-mid .footer-facet-tri,
+  .footer-geo-cluster--facet-mid .footer-facet-bar-c,
+  .footer-geo-cluster--facet-mid .footer-facet-dot-d,
+  .footer-geo-cluster--facet-near .footer-facet-bar-c {
+    display: none;
+  }
+
+  .footer-geo-cluster--facet-far {
+    bottom: 14%;
+    right: 22%;
+    opacity: 0.36;
+  }
+
+  .footer-geo-cluster--stamp {
+    width: 3.75rem;
+    height: 3.75rem;
+    bottom: 16%;
+    right: 2%;
+  }
+
+  .footer-geo-cluster--honey {
+    opacity: 0.38;
+    width: 3.5rem;
+    height: 3rem;
+  }
+}
+
+@media (max-width: 767px) {
+  .proptech-footer-glow {
+    background: linear-gradient(
+      90deg,
+      var(--color-brand-800) 0%,
+      var(--color-brand-700) 55%,
+      color-mix(in srgb, var(--color-brand-600) 90%, var(--color-brand-500) 10%) 100%
+    );
+  }
+
+  .footer-geo-cluster--facet-near {
+    display: none;
+  }
+
+  .footer-geo-cluster--facet-mid {
+    width: 7.5rem;
+    height: 7rem;
+    top: 8%;
+    right: -0.5rem;
+    opacity: 0.72;
+  }
+
+  .footer-geo-cluster--facet-mid .footer-facet-ring,
+  .footer-geo-cluster--facet-mid .footer-facet-hex-bl,
+  .footer-geo-cluster--facet-mid .footer-facet-bar-b,
+  .footer-geo-cluster--facet-mid .footer-facet-dot-b,
+  .footer-geo-cluster--facet-mid .footer-facet-dot-c {
+    display: none;
+  }
+
+  .footer-geo-cluster--facet-far {
+    width: 5rem;
+    height: 4.75rem;
+    bottom: 10%;
+    right: 14%;
+    opacity: 0.32;
+    filter: blur(0.35px);
+  }
+
+  .footer-geo-cluster--stamp {
+    width: 3rem;
+    height: 3rem;
+    bottom: 12%;
+    opacity: 0.55;
+  }
+
+  .footer-geo--stamp-diamond {
+    display: none;
+  }
+
+  .footer-geo-cluster--honey {
+    display: none;
+  }
+}

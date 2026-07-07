@@ -51,18 +51,18 @@ describe("DTA Happy Home A10 listings", () => {
     }
   });
 
-  it("includes TOD and future-urban title hooks in the rotation", () => {
-    const todPattern = /TOD|metro|quy hoạch|đô thị tương lai|vệ tinh|ngầm/i;
+  it("includes transit-corridor and future-urban title hooks in the rotation", () => {
+    const transitPattern = /metro|quy hoạch|vệ tinh|hành lang ga|giao thông công cộng/i;
     const titles = DTA_HAPPY_HOME_INVENTORY_A10.map((u, i) =>
       buildDtaUnitListingCopy(u, i).title,
     );
     assert.ok(
-      titles.some((t) => todPattern.test(t)),
-      "expected at least one TOD-themed title",
+      titles.some((t) => transitPattern.test(t)),
+      "expected at least one transit-corridor title",
     );
     assert.match(
       buildDtaUnitListingCopy(DTA_HAPPY_HOME_INVENTORY_A10[12]!, 12).title,
-      /TOD|metro/i,
+      /metro|hành lang ga|vệ tinh/i,
     );
   });
 

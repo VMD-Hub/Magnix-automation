@@ -1,27 +1,27 @@
 import Image from "next/image";
 import Link from "next/link";
 import {
-  HOUSEX_FOOTER_LOGO_DARK_SRC,
   HOUSEX_FOOTER_LOGO_HEIGHT,
+  HOUSEX_FOOTER_LOGO_SRC,
   HOUSEX_FOOTER_LOGO_WIDTH,
   HOUSEX_FOOTER_TAGLINE,
 } from "@/lib/brand/housex-logo-assets";
 import { getBrandName } from "@/lib/site-config";
 import { cn } from "@/lib/ui/cn";
 
-export { HOUSEX_FOOTER_LOGO_DARK_SRC };
+export { HOUSEX_FOOTER_LOGO_SRC };
 
 type Props = {
   href?: string | null;
   className?: string;
 };
 
-/** Logo footer — `housex-footer-logo-dark.png` (nền tối, file gốc brand). */
+/** Logo footer — `housex-footer-logo-transparent.png` (nền trong suốt). */
 export function HouseXFooterLogo({ href = null, className }: Props) {
   const image = (
     <span className="housex-footer-logo__frame">
       <Image
-        src={HOUSEX_FOOTER_LOGO_DARK_SRC}
+        src={HOUSEX_FOOTER_LOGO_SRC}
         alt={`${getBrandName()} — ${HOUSEX_FOOTER_TAGLINE}`}
         width={HOUSEX_FOOTER_LOGO_WIDTH}
         height={HOUSEX_FOOTER_LOGO_HEIGHT}

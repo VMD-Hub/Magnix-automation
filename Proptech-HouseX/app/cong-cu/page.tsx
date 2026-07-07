@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { CatalogPageShell } from "@/components/layout/catalog-page-shell";
 import { ToolHubCard, ToolServiceCard } from "@/components/tools/tool-hub-card";
 import { ToolsPageHero } from "@/components/tools/tools-page-hero";
 import { AFFILIATE_VERTICALS } from "@/lib/content/affiliate-verticals";
@@ -27,7 +28,7 @@ export default function CongCuPage() {
   const sortedCategories = [...TOOL_CATEGORIES].sort((a, b) => a.order - b.order);
 
   return (
-    <div className="proptech-section-glow mx-auto max-w-7xl py-8 container-px">
+    <CatalogPageShell>
       <PreloadBannerImage sources={catalogBannerSources(TOOLS_HUB_BANNER.slide)} />
       <ToolsPageHero
         kicker={TOOLS_HUB_COPY.kicker}
@@ -72,7 +73,7 @@ export default function CongCuPage() {
         );
       })}
 
-      <section className="mt-14 rounded-2xl border border-brand-100 bg-brand-50/30 p-5 sm:p-6">
+      <section className="mt-14 proptech-ruby-soft-panel p-5 sm:p-6">
         <h2 className="text-lg font-bold text-slate-900">Vì sao dùng công cụ House X?</h2>
         <p className="mt-2 text-sm leading-relaxed text-slate-600">
           Bên cạnh tra cứu phong thủy và ước tính chi phí xây dựng, House X tích hợp thẩm định vay NOXH,
@@ -104,6 +105,6 @@ export default function CongCuPage() {
           ))}
         </div>
       </section>
-    </div>
+    </CatalogPageShell>
   );
 }

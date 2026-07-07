@@ -98,7 +98,7 @@ export function LoanCalculator() {
   return (
     <div className="grid min-w-0 gap-6 lg:grid-cols-[minmax(0,380px)_minmax(0,1fr)]">
       {/* Inputs */}
-      <div className="min-w-0 space-y-4 rounded-2xl border border-brand-100 bg-gradient-to-br from-brand-50/40 to-white p-4 sm:p-5 print:hidden">
+      <div className="min-w-0 space-y-4 proptech-ruby-soft-panel p-4 sm:p-5 print:hidden">
         <Field label="Giá trị bất động sản" hint={`${groupVnd(price)} đ`}>
           <input
             inputMode="numeric"

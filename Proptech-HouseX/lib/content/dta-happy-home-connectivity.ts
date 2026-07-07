@@ -93,7 +93,7 @@ export const DTA_CONNECTIVITY_NODES: readonly DtaConnectivityNode[] = [
   {
     id: "metro-thu-thiem-long-thanh",
     name: "Metro / đường sắt Thủ Thiêm – Long Thành",
-    keywords: ["metro", "đường sắt", "TOD", "ga S12", "ga S13"],
+    keywords: ["metro", "đường sắt", "ga S12", "ga S13", "hành lang ga"],
     lat: 10.712,
     lng: 106.918,
     status: "planned",

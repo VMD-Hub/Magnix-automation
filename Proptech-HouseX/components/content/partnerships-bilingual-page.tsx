@@ -117,7 +117,7 @@ export function PartnershipsBilingualPage() {
         <ProcessTimeline steps={p.process.steps} />
       </section>
 
-      <section className="mt-12 rounded-2xl border border-brand-100 bg-brand-50/40 p-6">
+      <section className="mt-12 proptech-ruby-soft-panel p-6">
         <DocSectionHeading vi={p.standards.headingVi} en={p.standards.headingEn} className="!mt-0 !border-0 !pb-0" />
         <DocBilingualParagraph vi={p.standards.introVi} en={p.standards.introEn} className="mt-4" />
         <DocCardBulletList items={p.standards.bullets} />

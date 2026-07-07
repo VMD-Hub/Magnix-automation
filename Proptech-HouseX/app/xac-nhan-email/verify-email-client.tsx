@@ -42,7 +42,7 @@ export default function VerifyEmailClient() {
     <div className="mx-auto max-w-md py-16 container-px">
       <div className="rounded-2xl border border-slate-200 bg-white p-8 text-center shadow-sm">
         <div className="flex justify-center">
-          <HouseXHeaderLogo href="/" priority={false} />
+          <HouseXHeaderLogo href="/" priority={false} surface="light" />
         </div>
         <h1 className="mt-4 text-2xl font-bold text-slate-900">Xác nhận email</h1>
 

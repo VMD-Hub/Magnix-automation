@@ -1,8 +1,9 @@
 import Link from "next/link";
-import type { HouseXHeroSlideAsset } from "@/lib/brand/hero-assets";
+import { RubyHolder } from "@/components/brand/ruby-holder";
+import { ListingBrowseHero } from "@/components/listings/listing-browse-hero";
 import { ListingCard } from "@/components/listings/listing-card";
 import { ListingBrowseFilters } from "@/components/listings/listing-browse-filters";
-import { ToolsPageHero } from "@/components/tools/tools-page-hero";
+import { CatalogPageShell } from "@/components/layout/catalog-page-shell";
 import { ButtonLink } from "@/components/ui/button";
 import {
   PROPERTY_TYPE_FILTER_OPTIONS,
@@ -20,11 +21,7 @@ type BannerProps = {
   kicker: string;
   title: string;
   subtitle: string;
-  bannerSlide?: HouseXHeroSlideAsset;
-  image: string;
-  imageWebp?: string;
-  imageAlt: string;
-  objectPosition?: string;
+  coverageNote?: string;
   badge?: string;
 };
 
@@ -85,27 +82,26 @@ export function ListingBrowsePage({
       : PROPERTY_TYPE_FILTER_OPTIONS;
 
   return (
-    <div className="proptech-section-glow mx-auto max-w-7xl py-8 container-px">
-      <ToolsPageHero
+    <CatalogPageShell>
+      <ListingBrowseHero
         kicker={banner.kicker}
         title={banner.title}
         subtitle={banner.subtitle}
-        bannerSlide={banner.bannerSlide}
-        image={banner.image}
-        imageWebp={banner.imageWebp}
-        imageAlt={banner.imageAlt}
-        objectPosition={banner.objectPosition}
       />
 
       {banner.badge ? (
         <div className="mb-6 flex justify-center">
-          <span className="rounded-full bg-gold-500/15 px-4 py-1.5 text-sm font-bold uppercase tracking-wider text-gold-800 ring-1 ring-gold-400/40">
-            {banner.badge}
-          </span>
+          <span className="proptech-catalog-badge">{banner.badge}</span>
         </div>
       ) : null}
 
-      <div className="mb-4 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+      {banner.coverageNote ? (
+        <p className="mb-4 text-center text-xs leading-relaxed text-slate-500 sm:text-left">
+          {banner.coverageNote}
+        </p>
+      ) : null}
+
+      <div className="proptech-catalog-filters mb-4 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <ListingBrowseFilters
           basePath={basePath}
           provinces={browseProvinces}
@@ -165,7 +161,7 @@ export function ListingBrowsePage({
         ) : emptyMode === "coming-soon" && comingSoon ? (
           <ComingSoonPanel {...comingSoon} />
         ) : (
-          <div className="rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-12 text-center text-slate-500">
+          <div className="proptech-empty-state p-12 text-center">
             Chưa có tin phù hợp bộ lọc. Thử bỏ bớt điều kiện hoặc quay lại sau.
           </div>
         )}
@@ -193,7 +189,7 @@ export function ListingBrowsePage({
           </nav>
         ) : null}
       </div>
-    </div>
+    </CatalogPageShell>
   );
 }
 
@@ -209,17 +205,13 @@ function ComingSoonPanel({
   ctaHref: string;
 }) {
   return (
-    <div className="overflow-hidden rounded-2xl border border-silver-200 bg-white">
-      <div className="relative h-40 bg-gradient-to-br from-brand-900 via-ink-800 to-brand-700 sm:h-48">
-        <div className="absolute inset-0 flex flex-col items-center justify-center px-6 text-center">
-          <p className="text-xs font-bold uppercase tracking-[0.2em] text-gold-400">
-            Coming Soon
-          </p>
-          <p className="mt-2 text-xl font-extrabold text-white sm:text-2xl">{title}</p>
-        </div>
-      </div>
-      <div className="p-8 text-center">
-        <p className="mx-auto max-w-md text-sm leading-relaxed text-slate-600">{body}</p>
+    <RubyHolder className="overflow-hidden p-0">
+      <div className="px-6 py-10 text-center sm:px-8 sm:py-12">
+        <p className="text-xs font-bold uppercase tracking-[0.2em] text-gold-400">
+          Coming Soon
+        </p>
+        <p className="mt-2 text-xl font-extrabold text-white sm:text-2xl">{title}</p>
+        <p className="mx-auto mt-4 max-w-md text-sm leading-relaxed text-silver-200">{body}</p>
         <div className="mt-6 flex flex-wrap justify-center gap-3">
           <ButtonLink href={ctaHref} variant="primary" size="md">
             {cta}
@@ -229,16 +221,13 @@ function ComingSoonPanel({
           </ButtonLink>
         </div>
       </div>
-    </div>
+    </RubyHolder>
   );
 }
 
 function FilterChip({ label, href }: { label: string; href: string }) {
   return (
-    <Link
-      href={href}
-      className="inline-flex items-center gap-1 rounded-full bg-brand-100 px-3 py-1 text-xs font-medium text-brand-800 hover:bg-brand-200"
-    >
+    <Link href={href} className="proptech-catalog-chip">
       {label} ×
     </Link>
   );
@@ -246,10 +235,7 @@ function FilterChip({ label, href }: { label: string; href: string }) {
 
 function PageLink({ href, label }: { href: string; label: string }) {
   return (
-    <Link
-      href={href}
-      className="rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
-    >
+    <Link href={href} className="proptech-ruby-link-card px-4 py-2 text-sm font-medium text-slate-700">
       {label}
     </Link>
   );

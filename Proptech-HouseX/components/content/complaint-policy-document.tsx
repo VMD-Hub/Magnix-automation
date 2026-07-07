@@ -96,7 +96,7 @@ export function ComplaintPolicyDocument() {
         </p>
       </header>
 
-      <section className="not-prose mt-8 rounded-2xl border border-brand-100 bg-brand-50/40 p-6">
+      <section className="not-prose mt-8 proptech-ruby-soft-panel p-6">
         <DocSubheading vi="Tóm tắt — 4 bước xử lý" en="Summary — 4-step handling" className="!mt-0" />
         <div className="mt-4 grid gap-4 sm:grid-cols-2">
           {p.pillars.map((pillar) => (

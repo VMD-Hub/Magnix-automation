@@ -9,7 +9,7 @@ import { SocialConnect } from "@/components/ui/social-connect";
 import { cn } from "@/lib/ui/cn";
 
 type SiteContactProps = {
-  variant?: "light" | "dark";
+  variant?: "light" | "dark" | "footerRuby";
   showSocial?: boolean;
   className?: string;
 };
@@ -23,14 +23,16 @@ function ContactRow({
   icon: ReactNode;
   label: string;
   children: ReactNode;
-  variant: "light" | "dark";
+  variant: "light" | "dark" | "footerRuby";
 }) {
   return (
     <div className="flex items-start gap-3">
       <span
         className={cn(
           "flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-sm",
-          variant === "dark"
+          variant === "footerRuby"
+            ? "bg-gold-500/15 text-gold-400 ring-1 ring-gold-400/35"
+            : variant === "dark"
             ? "bg-white/5 text-brand-300 ring-1 ring-white/10"
             : "bg-brand-50 text-brand-700 ring-1 ring-brand-100",
         )}
@@ -42,7 +44,11 @@ function ContactRow({
         <p
           className={cn(
             "text-[10px] font-semibold uppercase tracking-wider",
-            variant === "dark" ? "text-slate-500" : "text-slate-400",
+            variant === "footerRuby"
+              ? "text-gold-500"
+              : variant === "dark"
+              ? "text-slate-500"
+              : "text-slate-400",
           )}
         >
           {label}
@@ -64,12 +70,16 @@ export function SiteContact({
   const channels = getSocialChannels();
 
   const linkClass =
-    variant === "dark"
+    variant === "footerRuby"
+      ? "font-semibold text-white hover:text-gold-300 transition-colors"
+      : variant === "dark"
       ? "font-semibold text-white hover:text-brand-300 transition-colors"
       : "font-semibold text-slate-900 hover:text-brand-700 transition-colors";
 
   const emailClass =
-    variant === "dark"
+    variant === "footerRuby"
+      ? "text-gold-300 hover:text-gold-200 transition-colors break-all"
+      : variant === "dark"
       ? "text-brand-300 hover:text-brand-200 transition-colors break-all"
       : "text-brand-700 hover:text-brand-800 transition-colors break-all";
 
@@ -87,7 +97,11 @@ export function SiteContact({
       </ContactRow>
 
       {showSocial ? (
-        <SocialConnect channels={channels} variant={variant} className="pt-1" />
+        <SocialConnect
+          channels={channels}
+          variant={variant === "footerRuby" ? "dark" : variant}
+          className="pt-1"
+        />
       ) : null}
     </div>
   );

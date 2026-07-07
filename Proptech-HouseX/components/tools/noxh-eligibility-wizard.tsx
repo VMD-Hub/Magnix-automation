@@ -749,7 +749,7 @@ export function NoxhEligibilityWizard() {
           {!unlocked ? (
             <form
               onSubmit={submitLead}
-              className="rounded-2xl border border-brand-200 bg-gradient-to-br from-brand-50 to-white p-5"
+              className="proptech-ruby-soft-panel p-5"
             >
               <p className="flex items-center gap-2 text-base font-bold text-slate-900">
                 <Icon.FileCheck className="text-lg text-brand-600" /> Nhận lộ trình chi tiết

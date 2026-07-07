@@ -32,9 +32,7 @@ export function HeaderAuth() {
   }
 
   if (user === undefined) {
-    return (
-      <span className="hidden h-9 w-16 animate-pulse rounded-lg bg-slate-100 sm:inline-block" />
-    );
+    return <span className="site-header-auth-skeleton" />;
   }
 
   if (user) {
@@ -42,13 +40,10 @@ export function HeaderAuth() {
       user.role === "BROKER" ? "/moi-gioi/tai-khoan" : "/khach-hang/tai-khoan";
     return (
       <div className="hidden items-center gap-2 sm:flex">
-        <Link
-          href={accountHref}
-          className="max-w-[140px] truncate text-sm font-medium text-slate-700 hover:text-brand-700"
-        >
+        <Link href={accountHref} className="site-header-auth-user">
           {user.name}
         </Link>
-        <Button type="button" variant="ghost" size="sm" onClick={logout}>
+        <Button type="button" variant="ghost" size="sm" className="site-header-auth-ghost" onClick={logout}>
           Thoát
         </Button>
       </div>
@@ -56,10 +51,7 @@ export function HeaderAuth() {
   }
 
   return (
-    <Link
-      href="/dang-nhap"
-      className="hidden text-sm font-semibold text-slate-600 hover:text-slate-900 sm:inline"
-    >
+    <Link href="/dang-nhap" className="site-header-auth-link hidden sm:inline">
       Đăng nhập
     </Link>
   );

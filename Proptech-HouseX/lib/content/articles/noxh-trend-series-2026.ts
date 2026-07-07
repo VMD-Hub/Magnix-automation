@@ -101,7 +101,7 @@ Trang dự án đầy đủ mặt bằng, nhà mẫu, 3 phương thức thanh to
 
 ## Chọn phương án nào?
 
-Người ưu tiên sống nội thành, đủ điều kiện và chấp nhận rủi ro trúng suất nên theo dõi sát [Phú Thọ DMC](/du-an/nha-o-xa-hoi-ly-thuong-kiet). Người cần sở hữu NOXH với tổng vốn dưới 700 triệu, làm việc gần KCN Nhơn Trạch có thể cân nhắc phương án vùng ven — nơi hạ tầng TOD và ga quy hoạch đang hình thành.
+Người ưu tiên sống nội thành, đủ điều kiện và chấp nhận rủi ro trúng suất nên theo dõi sát [Phú Thọ DMC](/du-an/nha-o-xa-hoi-ly-thuong-kiet). Người cần sở hữu NOXH với tổng vốn dưới 700 triệu, làm việc gần KCN Nhơn Trạch có thể cân nhắc phương án vùng ven — nơi hạ tầng ga quy hoạch và đô thị vệ tinh hưởng lợi giao thông công cộng đang hình thành.
 
 ${DTA_PR_CLOSINGS.gaQuyHoach}
 

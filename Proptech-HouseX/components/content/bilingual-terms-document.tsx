@@ -120,7 +120,7 @@ export function BilingualTermsDocument({ terms }: { terms: TermsContent }) {
         </p>
       </header>
 
-      <section className="not-prose mt-8 rounded-2xl border border-brand-100 bg-brand-50/40 p-6">
+      <section className="not-prose mt-8 proptech-ruby-soft-panel p-6">
         <DocSubheading vi={t.plainSummary.headingVi} en={t.plainSummary.headingEn} className="!mt-0" />
         <div className="mt-4 space-y-3">
           {t.plainSummary.paragraphs.map((p) => (

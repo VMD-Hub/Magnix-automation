@@ -25,7 +25,7 @@ export default function RegisterChooserPage() {
       <div className="mx-auto max-w-2xl">
         <div className="text-center">
           <div className="flex justify-center">
-            <HouseXHeaderLogo href="/" priority={false} />
+            <HouseXHeaderLogo href="/" priority={false} surface="light" />
           </div>
           <h1 className="mt-4 text-3xl font-bold text-slate-900">Chọn loại tài khoản</h1>
           <p className="mt-2 text-slate-600">

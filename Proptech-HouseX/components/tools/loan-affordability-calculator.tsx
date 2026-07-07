@@ -186,7 +186,7 @@ export function LoanAffordabilityCalculator() {
 
   return (
     <div className="grid min-w-0 gap-6 lg:grid-cols-[minmax(0,380px)_minmax(0,1fr)]">
-      <div className="min-w-0 space-y-4 rounded-2xl border border-brand-100 bg-gradient-to-br from-brand-50/40 to-white p-4 sm:p-5 print:hidden">
+      <div className="min-w-0 space-y-4 proptech-ruby-soft-panel p-4 sm:p-5 print:hidden">
         <Field
           label="Thu nhập của bạn/tháng"
           hint="Lương + thu nhập chứng minh được (HĐLĐ, sao kê, hợp đồng…)"
@@ -550,7 +550,7 @@ export function LoanAffordabilityCalculator() {
           ) : null}
         </div>
 
-        <div className="rounded-2xl border border-brand-100 bg-brand-50/40 p-4">
+        <div className="proptech-ruby-soft-panel p-4">
           <p className="text-xs font-semibold uppercase tracking-wide text-brand-700">
             Cách ngân hàng thẩm định (sơ bộ)
           </p>

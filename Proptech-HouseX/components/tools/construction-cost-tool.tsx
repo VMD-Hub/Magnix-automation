@@ -57,7 +57,7 @@ export function ConstructionCostTool({ mode }: { mode: Mode }) {
           e.preventDefault();
           setSubmitted(true);
         }}
-        className="rounded-2xl border border-brand-100 bg-gradient-to-br from-brand-50/40 to-white p-5 sm:p-6"
+        className="proptech-ruby-soft-panel p-5 sm:p-6"
       >
         <div className="grid gap-4 sm:grid-cols-2">
           <label>

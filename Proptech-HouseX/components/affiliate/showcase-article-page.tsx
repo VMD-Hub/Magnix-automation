@@ -91,7 +91,7 @@ export function ShowcaseArticlePage({
               </section>
             ) : null}
 
-            <section className="mt-8 rounded-2xl border border-brand-200 bg-gradient-to-br from-brand-50 to-white p-6">
+            <section className="mt-8 proptech-ruby-soft-panel p-6">
               <p className="text-sm text-slate-700">
                 <strong className="text-slate-900">Thích phong cách này?</strong> Gửi form —
                 House X kết nối studio đối tác khảo sát hiện trạng và báo giá sau khảo sát

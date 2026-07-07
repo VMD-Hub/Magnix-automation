@@ -1,32 +1,22 @@
 import type { ListingCardData } from "@/components/listings/listing-card";
-import { HOUSEX_HERO_SLIDES } from "@/lib/brand/hero-assets";
-
-function u(photoId: string) {
-  return `https://images.unsplash.com/${photoId}?w=1920&h=820&fit=crop&q=80&auto=format`;
-}
 
 export const LISTINGS_BROWSE_COPY = {
   sale: {
     kicker: "HouseX · Mua bán",
-    title: "Bất động sản đang bán",
-    subtitle:
-      "Căn hộ, nhà phố, đất nền — tin đã kiểm duyệt tại TP.HCM (gồm Bình Dương, Bà Rịa-Vũng Tàu, Côn Đảo), TP. Đồng Nai (gồm Bình Phước cũ), Tây Ninh (gồm Long An cũ), Cần Thơ (gồm Hậu Giang, Sóc Trăng) và các tỉnh lân cận.",
-    bannerImage: HOUSEX_HERO_SLIDES[0]!.jpg1280,
-    bannerWebp: HOUSEX_HERO_SLIDES[0]!.webp1280,
-    bannerSlide: HOUSEX_HERO_SLIDES[0]!,
-    bannerAlt: "Phối cảnh đô thị — mua bán bất động sản HouseX",
-    objectPosition: HOUSEX_HERO_SLIDES[0]!.objectPosition,
+    heroTitle: "So sánh tin — chọn đúng trước khi đi xem",
+    heroSubtitle:
+      "Ảnh thật, giá niêm yết, vị trí minh bạch — lọc nhanh theo khu vực bạn quan tâm. Liên hệ an toàn khi sẵn sàng xem nhà.",
+    listTitle: "Bất động sản đang bán",
+    coverageNote:
+      "Đang phủ TP.HCM, Đồng Nai, Tây Ninh, Cần Thơ và các tỉnh lân cận — tin đã kiểm duyệt.",
     emptyFilter: "Chưa có tin khớp bộ lọc. Thử bỏ bớt điều kiện hoặc quay lại sau.",
   },
   rent: {
     kicker: "HouseX · Cho thuê",
-    title: "Cho thuê bất động sản",
-    subtitle:
-      "Căn hộ, CHDV, phòng trọ, shophouse — kho tin cho thuê đang được cập nhật.",
-    bannerImage: u("photo-1560448204-e02f11c45748"),
-    bannerWebp: u("photo-1560448204-e02f11c45748"),
-    bannerAlt: "Căn hộ cho thuê — HouseX",
-    objectPosition: "50% 45%",
+    heroTitle: "Thuê nhà — lọc đúng nhu cầu trước khi gọi",
+    heroSubtitle:
+      "Căn hộ, CHDV, phòng trọ — kho tin đang mở rộng. Xem tin mua bán hoặc đăng tin cho thuê sớm.",
+    listTitle: "Cho thuê bất động sản",
     comingSoonTitle: "Kho tin cho thuê đang cập nhật",
     comingSoonBody:
       "HouseX đang mở rộng tin cho thuê tại TP.HCM. Bạn có thể xem tin mua bán hoặc đăng ký nhận thông báo khi có tin mới.",

@@ -35,9 +35,9 @@ export function SiteHeader() {
   }, [router]);
 
   return (
-    <header className="site-header-bar sticky top-0 z-50 border-b border-[color-mix(in_srgb,var(--border)_55%,var(--brand-logo-paper))] print:hidden">
+    <header className="site-header-bar proptech-header-ruby sticky top-0 z-50 print:hidden">
       <div className="mx-auto flex min-h-[4.35rem] max-w-7xl items-center justify-between py-2 container-px">
-        <HouseXHeaderLogo href="/" />
+        <HouseXHeaderLogo href="/" surface="ruby" />
 
         <nav className="hidden items-center gap-1 md:flex">
           {NAV.map((item) => (
@@ -45,7 +45,7 @@ export function SiteHeader() {
               key={item.href}
               href={item.href}
               prefetch={PREFETCH_HREFS.has(item.href)}
-              className="rounded-lg px-3 py-2 text-sm font-medium text-[var(--muted)] hover:bg-[var(--surface)] hover:text-brand-700 dark:hover:bg-white/10 dark:hover:text-brand-300"
+              className="site-header-nav-link"
             >
               {item.label}
             </Link>
@@ -60,7 +60,7 @@ export function SiteHeader() {
           <button
             type="button"
             onClick={() => setOpen((v) => !v)}
-            className="rounded-lg p-2 text-slate-600 hover:bg-slate-100 md:hidden"
+            className="site-header-menu-btn md:hidden"
             aria-label="Mở menu"
           >
             <Icon.Menu className="text-2xl" />
@@ -68,12 +68,7 @@ export function SiteHeader() {
         </div>
       </div>
 
-      <div
-        className={cn(
-          "border-t border-[var(--border)] bg-[var(--surface-muted)] md:hidden",
-          open ? "block" : "hidden",
-        )}
-      >
+      <div className={cn("site-header-mobile-panel md:hidden", open ? "block" : "hidden")}>
         <nav className="mx-auto flex max-w-7xl flex-col py-2 container-px">
           {NAV.map((item) => (
             <Link
@@ -81,7 +76,7 @@ export function SiteHeader() {
               href={item.href}
               prefetch={PREFETCH_HREFS.has(item.href)}
               onClick={() => setOpen(false)}
-              className="rounded-lg px-3 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-100"
+              className="site-header-mobile-link"
             >
               {item.label}
             </Link>
@@ -92,7 +87,7 @@ export function SiteHeader() {
           <Link
             href="/dang-nhap"
             onClick={() => setOpen(false)}
-            className="rounded-lg px-3 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-100"
+            className="site-header-mobile-link mt-1"
           >
             Đăng nhập
           </Link>

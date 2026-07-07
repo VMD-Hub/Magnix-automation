@@ -111,7 +111,7 @@ export function AffiliateServicePage({
             {service.body ? <AffiliateServiceBody body={service.body} /> : null}
 
             {vertical.id === "tai-chinh" && service.slug === "vay-mua-bat-dong-san" ? (
-              <section className="mt-8 overflow-hidden rounded-2xl border border-brand-200 bg-gradient-to-br from-brand-50 to-white p-6">
+              <section className="mt-8 overflow-hidden proptech-ruby-soft-panel p-6">
                 <h2 className="font-bold text-slate-900">Công cụ tính khoản vay</h2>
                 <p className="mt-1 text-sm text-slate-600">
                   Ước lượng tiền trả hàng tháng trước khi làm hồ sơ chính thức.

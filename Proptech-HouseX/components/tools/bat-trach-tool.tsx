@@ -62,7 +62,7 @@ export function BatTrachTool() {
           e.preventDefault();
           setSubmitted(true);
         }}
-        className="rounded-2xl border border-brand-100 bg-gradient-to-br from-brand-50/40 to-white p-5 sm:p-6"
+        className="proptech-ruby-soft-panel p-5 sm:p-6"
         data-track="bat-trach-form"
       >
         <p className="text-sm font-medium text-slate-700">Giới tính gia chủ</p>
@@ -134,7 +134,7 @@ function BatTrachResultView({ result }: { result: BatTrachResult }) {
       data-menh={result.trigram.key}
       data-group={result.group}
     >
-      <div className="rounded-2xl border border-brand-200 bg-gradient-to-br from-brand-50 to-white p-5 sm:p-6">
+      <div className="proptech-ruby-soft-panel p-5 sm:p-6">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div className="flex flex-wrap items-center gap-4">
             <TrigramEmblem trigram={result.trigram} size="lg" active />

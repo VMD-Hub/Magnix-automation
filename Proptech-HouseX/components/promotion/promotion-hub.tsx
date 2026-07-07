@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { Icon } from "@/components/icons";
 import { Button, ButtonLink } from "@/components/ui/button";
+import { RubySurfaceOrnament } from "@/components/brand/ruby-surface-ornament";
 import { LuckyWheel } from "@/components/promotion/lucky-wheel";
 import { PromotionTermsSection } from "@/components/promotion/promotion-terms-section";
 import { PROMOTION_SPIN_CONSENT_LINE } from "@/lib/content/promotion-terms";
@@ -297,21 +298,30 @@ export function PromotionHub({ slug = DEFAULT_PROMOTION_SLUG, preview = false }:
         </div>
       ) : null}
       {!preview && !data.isDemo ? (
-        <div className="rounded-xl border border-brand-200 bg-brand-50/80 px-4 py-3 text-sm text-brand-950">
+        <div className="proptech-ruby-soft-panel px-4 py-3 text-sm text-brand-950">
           <strong>Phạm vi NOXH.</strong> {PROMOTION_SCOPE_BANNER}
         </div>
       ) : null}
 
+      <header className="proptech-catalog-hero proptech-catalog-hero--compact">
+        <RubySurfaceOrnament variant="holder" />
+        <div className="proptech-catalog-hero__body relative">
+          <div className="proptech-catalog-hero__content px-6 py-8 sm:px-8">
+            <p className="proptech-kicker text-gold-400">Vòng quay may mắn · NOXH</p>
+            <h1 className="mt-2 max-w-2xl text-3xl font-extrabold text-white sm:text-4xl">
+              {campaign.name}
+            </h1>
+            {campaign.description ? (
+              <p className="mt-3 max-w-2xl text-sm leading-relaxed text-silver-200 sm:text-base">
+                {campaign.description}
+              </p>
+            ) : null}
+          </div>
+        </div>
+      </header>
+
       <section className="grid gap-8 lg:grid-cols-[1fr_1.1fr] lg:items-start">
         <div className="space-y-4">
-          <p className="text-sm font-semibold uppercase tracking-wider text-brand-700">
-            Vòng quay may mắn · NOXH
-          </p>
-          <h1 className="text-3xl font-extrabold text-slate-900 sm:text-4xl">{campaign.name}</h1>
-          {campaign.description ? (
-            <p className="text-slate-600 leading-relaxed">{campaign.description}</p>
-          ) : null}
-
           {participant?.win ? (
             <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-4">
               <p className="text-sm font-bold text-emerald-900">Phần quà của bạn</p>

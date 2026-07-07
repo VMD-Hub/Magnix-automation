@@ -33,8 +33,7 @@ function buildFilterHref(basePath: string, filters: LocationFilters) {
   return qs ? `${basePath}?${qs}` : basePath;
 }
 
-const selectClass =
-  "h-10 w-full appearance-none rounded-xl border border-slate-200 bg-white py-2 pl-3 pr-9 text-sm text-slate-700 outline-none transition-colors hover:border-brand-200 focus:border-brand-400 focus:ring-2 focus:ring-brand-100";
+const selectClass = "catalog-filter-select";
 
 export function ListingBrowseFilters({
   basePath,

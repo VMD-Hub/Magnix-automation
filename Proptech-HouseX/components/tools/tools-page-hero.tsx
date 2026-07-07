@@ -5,6 +5,7 @@ import {
   catalogBannerSources,
   type ResponsiveBannerSources,
 } from "@/lib/brand/banner-responsive";
+import { RubySurfaceOrnament } from "@/components/brand/ruby-surface-ornament";
 import { BannerPicture } from "@/components/ui/banner-picture";
 import { ButtonLink } from "@/components/ui/button";
 import { cn } from "@/lib/ui/cn";
@@ -27,7 +28,7 @@ type Props = {
   className?: string;
 };
 
-/** Banner công cụ — rộng, cao ~260px, gradient Ruby/Gold HouseX. */
+/** Banner catalog — ruby overlay + ornament, đồng bộ header/footer. */
 export function ToolsPageHero({
   kicker,
   title,
@@ -47,12 +48,8 @@ export function ToolsPageHero({
     (bannerSlide ? catalogBannerSources(bannerSlide) : undefined);
 
   return (
-    <header
-      className={cn(
-        "relative mb-8 overflow-hidden rounded-2xl ring-1 ring-silver-200",
-        className,
-      )}
-    >
+    <header className={cn("proptech-catalog-hero", className)}>
+      <RubySurfaceOrnament variant="holder" />
       <div className="relative h-[240px] w-full sm:h-[260px] lg:h-[280px]">
         {sources ? (
           <BannerPicture
@@ -77,15 +74,9 @@ export function ToolsPageHero({
             />
           </picture>
         )}
-        <div
-          className="absolute inset-0 bg-gradient-to-r from-ink-900/90 via-ink-900/55 to-brand-900/25"
-          aria-hidden
-        />
-        <div
-          className="absolute inset-0 bg-gradient-to-t from-ink-900/60 via-transparent to-ink-900/15"
-          aria-hidden
-        />
-        <div className="absolute inset-0 flex flex-col justify-end px-5 pb-5 sm:px-8 sm:pb-7">
+        <div className="proptech-catalog-hero__overlay-h" aria-hidden />
+        <div className="proptech-catalog-hero__overlay-v" aria-hidden />
+        <div className="proptech-catalog-hero__content absolute inset-0 flex flex-col justify-end px-5 pb-5 sm:px-8 sm:pb-7">
           {kicker ? (
             <p className="proptech-kicker text-gold-400">{kicker}</p>
           ) : null}

@@ -21,7 +21,7 @@ export function ProptechTools() {
           href={t.href}
           className="proptech-card flex items-center gap-3 px-4 py-3 hover:border-brand-200"
         >
-          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-brand-50 text-lg text-brand-600 ring-1 ring-brand-100">
+          <span className="proptech-trust-tile__icon h-9 w-9 text-lg">
             <t.Icon />
           </span>
           <span className="text-sm font-semibold text-[#333333]">{t.label}</span>

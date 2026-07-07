@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
+import { CatalogPageShell } from "@/components/layout/catalog-page-shell";
 import { ProjectCatalogBanner } from "@/components/projects/project-catalog-banner";
 import {
   ProjectCatalogGrid,
@@ -72,7 +73,7 @@ export default async function DuAnListPage({ searchParams }: PageProps) {
   );
 
   return (
-    <div className="proptech-section-glow mx-auto max-w-7xl py-8 container-px">
+    <CatalogPageShell>
       <PreloadBannerImage sources={bannerPreload} />
       {showNoxhFaq ? (
         <script
@@ -136,7 +137,7 @@ export default async function DuAnListPage({ searchParams }: PageProps) {
           ) : null}
         </>
       ) : null}
-    </div>
+    </CatalogPageShell>
   );
 }
 
@@ -154,10 +155,8 @@ function Tab({
       href={href}
       prefetch
       className={cn(
-        "rounded-xl px-4 py-2 text-sm font-medium transition-colors",
-        active
-          ? "bg-brand-600 text-white shadow-sm shadow-brand-600/20"
-          : "bg-white text-[#555555] ring-1 ring-silver-200 hover:bg-silver-50",
+        "proptech-catalog-tab",
+        active ? "proptech-catalog-tab--active" : "proptech-catalog-tab--idle",
       )}
     >
       {label}

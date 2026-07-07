@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
+import { CatalogPageShell } from "@/components/layout/catalog-page-shell";
 import { PromotionHub } from "@/components/promotion/promotion-hub";
 
 export const metadata: Metadata = {
@@ -11,10 +12,10 @@ export const metadata: Metadata = {
 
 export default function KhuyenMaiPage() {
   return (
-    <div className="proptech-section-glow mx-auto max-w-6xl py-8 container-px">
+    <CatalogPageShell maxWidth="max-w-6xl">
       <Suspense fallback={<div className="py-16 text-center text-slate-500">Đang tải…</div>}>
         <PromotionHub />
       </Suspense>
-    </div>
+    </CatalogPageShell>
   );
 }

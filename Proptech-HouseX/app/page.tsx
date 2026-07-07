@@ -4,6 +4,7 @@ import { ProptechTools } from "@/components/home/proptech-tools";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { ListingCard } from "@/components/listings/listing-card";
 import { ProjectCard } from "@/components/projects/project-card";
+import { RubyHolder } from "@/components/brand/ruby-holder";
 import { getHomepageData } from "@/lib/data/home";
 import { HeroBrandBackground } from "@/components/home/hero-brand-background";
 import { buildWebSiteJsonLd } from "@/lib/seo/website-json-ld";
@@ -99,11 +100,11 @@ export default async function Home() {
         <ProptechTools />
       </section>
 
-      <section className="border-y border-[var(--border)] bg-[var(--surface)]">
+      <section className="proptech-trust-band">
         <div className="mx-auto grid max-w-7xl gap-6 py-10 container-px sm:grid-cols-2 lg:grid-cols-4">
           {PLATFORM_TRUST.map((t) => (
             <div key={t.title} className="flex items-start gap-3">
-              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-brand-50 text-xl text-brand-600 ring-1 ring-brand-100">
+              <span className="proptech-trust-tile__icon">
                 <t.Icon />
               </span>
               <div>
@@ -116,16 +117,8 @@ export default async function Home() {
       </section>
 
       <section className="mx-auto max-w-7xl py-14 container-px">
-        <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-ink-900 via-brand-900 to-ink-800 p-8 text-center sm:flex-row sm:text-left">
-          <div
-            className="pointer-events-none absolute inset-0 opacity-40"
-            aria-hidden
-            style={{
-              background:
-                "radial-gradient(ellipse 60% 80% at 100% 0%, rgba(218,165,32,0.15), transparent 50%)",
-            }}
-          />
-          <div className="relative flex flex-col items-center justify-between gap-6 sm:flex-row">
+        <RubyHolder className="p-8">
+          <div className="flex flex-col items-center justify-between gap-6 text-center sm:flex-row sm:text-left">
             <div>
               <h2 className="text-2xl font-bold text-white">
                 {PLATFORM_BROKER_CTA.title}
@@ -139,7 +132,7 @@ export default async function Home() {
               Đăng tin ngay
             </Link>
           </div>
-        </div>
+        </RubyHolder>
       </section>
     </>
   );
@@ -147,7 +140,7 @@ export default async function Home() {
 
 function EmptyState({ label }: { label: string }) {
   return (
-    <div className="rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-10 text-center text-sm text-slate-500">
+    <div className="proptech-empty-state p-10 text-center text-sm">
       {label}
     </div>
   );

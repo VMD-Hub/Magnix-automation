@@ -30,7 +30,7 @@ export function PaintColorTool() {
           e.preventDefault();
           setSubmitted(true);
         }}
-        className="rounded-2xl border border-brand-100 bg-gradient-to-br from-brand-50/40 to-white p-5 sm:p-6"
+        className="proptech-ruby-soft-panel p-5 sm:p-6"
       >
         <label>
           <span className="text-sm font-medium text-slate-700">Năm sinh gia chủ (âm lịch)</span>
