@@ -221,24 +221,10 @@ export function PromotionHub({ slug = DEFAULT_PROMOTION_SLUG, preview = false }:
             </p>
           ) : null}
 
-          {lastResult ? (
-            <div
-              className={cn(
-                "rounded-xl border p-4",
-                lastResult.won
-                  ? "border-emerald-300 bg-emerald-50"
-                  : "border-slate-200 bg-white",
-              )}
-            >
-              <p className="font-bold text-slate-900">
-                {lastResult.won ? "Chúc mừng!" : "Kết quả lượt quay"}
-              </p>
+          {lastResult && !lastResult.won ? (
+            <div className="rounded-xl border border-slate-200 bg-white p-4">
+              <p className="font-bold text-slate-900">Kết quả lượt quay</p>
               <p className="mt-1 text-slate-700">{lastResult.label}</p>
-              {lastResult.code ? (
-                <p className="mt-2 text-sm">
-                  Mã quà: <strong>{lastResult.code}</strong>
-                </p>
-              ) : null}
             </div>
           ) : null}
 

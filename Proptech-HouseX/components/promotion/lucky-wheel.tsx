@@ -4,6 +4,10 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { cn } from "@/lib/ui/cn";
 import { spinDeltaDeg } from "@/lib/promotion/spin-engine";
 import type { PromotionPrizePublic } from "@/lib/data/promotion";
+import {
+  WheelWinCelebration,
+  type WinPopupData,
+} from "@/components/promotion/wheel-win-celebration";
 
 /** Cùng giải → cùng màu. ĐB = brand ruby + chữ vàng (may mắn VN). */
 const TIER_STYLE: Record<
@@ -213,7 +217,8 @@ export function LuckyWheel({
 }: LuckyWheelProps) {
   const [rotation, setRotation] = useState(0);
   const [spinning, setSpinning] = useState(false);
-  const [confetti, setConfetti] = useState(false);
+  const [showFireworks, setShowFireworks] = useState(false);
+  const [winPopup, setWinPopup] = useState<WinPopupData | null>(null);
   const wheelRef = useRef<HTMLDivElement>(null);
   const rotationRef = useRef(0);
   const activeAnimRef = useRef<Animation | null>(null);
@@ -311,7 +316,8 @@ export function LuckyWheel({
   async function handleSpin() {
     const el = wheelRef.current;
     if (!el || spinning || disabled) return;
-    setConfetti(false);
+    setShowFireworks(false);
+    setWinPopup(null);
     setSpinning(true);
 
     const startRot = rotationRef.current;
@@ -355,8 +361,12 @@ export function LuckyWheel({
 
       if (result.won) {
         playWin();
-        setConfetti(true);
-        window.setTimeout(() => setConfetti(false), 4000);
+        setShowFireworks(true);
+        setWinPopup({
+          label: result.prize.label,
+          code: result.redemptionCode,
+        });
+        window.setTimeout(() => setShowFireworks(false), 5500);
       }
       onSpinComplete?.({
         segmentIndex: result.segmentIndex,
@@ -375,27 +385,16 @@ export function LuckyWheel({
 
   return (
     <div className="relative mx-auto w-full max-w-[min(100%,26rem)]">
-      {confetti ? (
-        <div className="pointer-events-none absolute inset-0 z-20 overflow-hidden">
-          {Array.from({ length: 24 }).map((_, i) => (
-            <span
-              key={i}
-              className="absolute h-2 w-2 animate-bounce rounded-full"
-              style={{
-                left: `${(i * 17) % 100}%`,
-                top: `${(i * 13) % 60}%`,
-                backgroundColor: ["#b91c1c", "#f59e0b", "#10b981", "#6366f1"][i % 4],
-                animationDelay: `${(i % 5) * 0.1}s`,
-              }}
-            />
-          ))}
-        </div>
-      ) : null}
-
-      <div className="relative aspect-square">
+      <div className="relative aspect-square overflow-visible">
         <div className="absolute left-1/2 top-0 z-10 -translate-x-1/2 -translate-y-1">
           <div className="h-0 w-0 border-x-[16px] border-x-transparent border-t-[32px] border-t-brand-800 drop-shadow-lg" />
         </div>
+
+        <WheelWinCelebration
+          showFireworks={showFireworks}
+          popup={winPopup}
+          onClosePopup={() => setWinPopup(null)}
+        />
 
         <div
           ref={wheelRef}
