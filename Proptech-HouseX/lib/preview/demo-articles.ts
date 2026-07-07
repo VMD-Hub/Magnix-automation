@@ -8,6 +8,7 @@ import { NOXH_TREND_ARTICLES_2026 } from "@/lib/content/articles/noxh-trend-seri
 import { TOD_NHON_TRACH_ARTICLES_2026 } from "@/lib/content/articles/tod-nhon-trach-series-2026";
 import { NOXH_MINDSET_TAG } from "@/lib/content/articles/noxh-mindset-cluster-map-2026";
 import { CS_PROJECT_SLUG } from "@/lib/preview/kdc-chang-song-mock";
+import { LTK_PROJECT_SLUG } from "@/lib/preview/phu-tho-dmc-mock";
 
 const NOW = new Date("2026-06-29T00:00:00.000Z");
 
