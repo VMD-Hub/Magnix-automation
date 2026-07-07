@@ -304,7 +304,7 @@ Giá trên là tham chiếu công bố Sở Xây dựng/CĐT tại thời điể
 3. Theo dõi Sở Xây dựng Long An và từng CĐT — mỗi dự án mở đợt riêng.
 4. Lập kế hoạch vay: [gói 120.000 tỷ](/tin-tuc/vay-noxh-goi-120000-ty-nhcsxh-2026) + [tính khoản vay](/cong-cu/tinh-khoan-vay).
 
-Danh mục đầy đủ: [/du-an?projectType=NHA_O_XA_HOI](/du-an?projectType=NHA_O_XA_HOI)
+Danh mục đầy đủ: [/du-an/nha-o-xa-hoi](/du-an/nha-o-xa-hoi)
 
 ${NOXH_SUPPORT_CLOSING}`,
     status: "PUBLISHED",

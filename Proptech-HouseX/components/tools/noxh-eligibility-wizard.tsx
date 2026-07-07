@@ -6,6 +6,7 @@ import { Button, ButtonLink } from "@/components/ui/button";
 import { cn } from "@/lib/ui/cn";
 import { track } from "@/lib/analytics/track";
 import { articlePath } from "@/lib/content/article-routes";
+import { NOXH_CATALOG_PATH } from "@/lib/content/project-catalog-routes";
 import { NoxhChecklistPrint } from "@/components/tools/noxh-checklist-print";
 import {
   evaluateNoxhEligibility,
@@ -867,7 +868,7 @@ export function NoxhEligibilityWizard() {
                     Đặt lịch tư vấn
                   </ButtonLink>
                   <ButtonLink
-                    href="/du-an?projectType=NHA_O_XA_HOI"
+                    href={NOXH_CATALOG_PATH}
                     variant="brand"
                     size="md"
                     onClick={() => track("noxh_cta_click", { cta: "du-an-noxh" })}

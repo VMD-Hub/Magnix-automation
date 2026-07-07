@@ -116,6 +116,18 @@ const nextConfig = {
         destination: "/tin-tuc/cam-nang-noxh",
         permanent: true,
       },
+      {
+        source: "/du-an",
+        has: [{ type: "query", key: "projectType", value: "NHA_O_XA_HOI" }],
+        destination: "/du-an/nha-o-xa-hoi",
+        permanent: true,
+      },
+      {
+        source: "/du-an",
+        has: [{ type: "query", key: "projectType", value: "THUONG_MAI" }],
+        destination: "/du-an/thuong-mai",
+        permanent: true,
+      },
     ];
   },
 };

@@ -10,7 +10,7 @@ describe("go-live landing catalog", () => {
     assert.equal(GO_LIVE_LANDING_SLUGS.length, 8);
   });
 
-  it("lists NOXH slugs for /du-an?projectType=NHA_O_XA_HOI", () => {
+  it("lists NOXH slugs for /du-an/nha-o-xa-hoi hub", () => {
     const noxh = getNoxhCatalogSlugs();
     assert.ok(noxh.length >= 10, `expected >=10 NOXH, got ${noxh.length}`);
     assert.ok(noxh.includes("noxh-la-home-luong-hoa-ben-luc"));

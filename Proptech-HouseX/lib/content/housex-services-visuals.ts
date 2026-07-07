@@ -112,9 +112,9 @@ export const SERVICE_CARD_IMAGES: Record<string, string> = {
   "vay-mua-bds": "/images/tools/finance-hub.png",
   "vay-sxkd": "/images/tools/business-loan.png",
   "tra-cuu-gia-chu-nha": u("photo-1564013799919-ab600027ffc6"),
-  "tham-dinh-ngan-hang": u("photo-1582405790763-cb34f71e7e3e"),
+  "tham-dinh-ngan-hang": "/images/tools/finance-hub.png",
   "chung-nhan-tham-dinh": u("photo-1450101499163-c8848c66ca85"),
-  "phan-chia-thua-ke": u("photo-1517045305355-de7f03210f3a"),
+  "phan-chia-thua-ke": "/images/projects/la-home/hero.jpg",
   "chung-minh-tai-san-visa": u("photo-1436491865332-7a61a109cc05"),
   "phong-cach-hien-dai": u("photo-1600210492486-724fe641c782"),
   "hien-dai": u("photo-1600210492486-724fe641c782"),
@@ -131,6 +131,7 @@ export const SERVICE_CARD_IMAGES: Record<string, string> = {
 export const SERVICE_CARD_IMAGES_WEBP: Record<string, string> = {
   "vay-mua-bds": "/images/tools/finance-hub.webp",
   "vay-sxkd": "/images/tools/business-loan.webp",
+  "tham-dinh-ngan-hang": "/images/tools/finance-hub.webp",
 };
 
 export const HUB_VERTICAL_CARDS: Record<

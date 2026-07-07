@@ -7,8 +7,10 @@ import {
   articlePath,
   NOXH_HANDBOOK_PATH,
 } from "@/lib/content/article-routes";
+import { NOXH_CATALOG_PATH } from "@/lib/content/project-catalog-paths";
 
 export { NOXH_HANDBOOK_PATH } from "@/lib/content/article-routes";
+export { NOXH_CATALOG_PATH };
 
 /** Dòng giới thiệu trên banner danh mục & hero từng dự án NOXH. */
 export const NOXH_REGION_TAGLINE =
@@ -179,7 +181,7 @@ export const NOXH_TOPIC_PILLAR_LINKS = [
     label: "Công cụ kiểm tra điều kiện",
   },
   {
-    href: "/du-an?projectType=NHA_O_XA_HOI",
+    href: NOXH_CATALOG_PATH,
     label: "Danh mục dự án NOXH",
   },
 ] as const;

@@ -11,6 +11,7 @@ import { NOXH_CHECK_BANNER } from "@/lib/content/housex-tools-visuals";
 import { NOXH_ELIGIBILITY_FAQ } from "@/lib/content/noxh-eligibility-faq";
 import { EditorialTrustPanel } from "@/components/content/editorial-trust-panel";
 import { getNoxhEditorialTrust } from "@/lib/content/editorial-trust";
+import { NOXH_CATALOG_PATH } from "@/lib/content/project-catalog-routes";
 
 export const metadata: Metadata = {
   title: NOXH_CHECK_COPY.metaTitle,
@@ -103,7 +104,7 @@ export default function Page() {
             </p>
           </Link>
           <Link
-            href="/du-an?projectType=NHA_O_XA_HOI"
+            href={NOXH_CATALOG_PATH}
             className="rounded-2xl border border-silver-200 bg-white p-5 transition-colors hover:border-brand-300 hover:bg-brand-50"
           >
             <p className="font-bold text-slate-900">Dự án nhà ở xã hội</p>

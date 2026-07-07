@@ -2,6 +2,10 @@ import Link from "next/link";
 import { DemoCatalogBanner } from "@/components/projects/demo-catalog-banner";
 import { ProjectCard } from "@/components/projects/project-card";
 import { CatalogGridSkeleton } from "@/components/ui/catalog-page-skeleton";
+import {
+  projectCatalogCanonicalUrl,
+  projectCatalogPageHref,
+} from "@/lib/content/project-catalog-paths";
 import { listProjects } from "@/lib/data/project-list";
 import { getSiteUrl } from "@/lib/site-config";
 import { NOXH_CATALOG_TITLE } from "@/lib/content/messaging/noxh-public";
@@ -20,9 +24,11 @@ export async function ProjectCatalogGrid({
   const { items, pagination, isDemo } = await listProjects({ projectType, page });
 
   const siteUrl = getSiteUrl();
-  const catalogUrl = isNoxhCatalog
-    ? `${siteUrl}/du-an?projectType=NHA_O_XA_HOI`
-    : `${siteUrl}/du-an`;
+  const catalogUrl = projectCatalogCanonicalUrl(
+    isNoxhCatalog ? "NHA_O_XA_HOI" : projectType,
+    page,
+    siteUrl,
+  );
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "ItemList",
@@ -62,7 +68,7 @@ export async function ProjectCatalogGrid({
         <nav className="mt-8 flex justify-center gap-2">
           {page > 1 ? (
             <PageLink
-              href={`/du-an?${new URLSearchParams({ ...(projectType ? { projectType } : {}), page: String(page - 1) }).toString()}`}
+              href={projectCatalogPageHref(projectType, page - 1)}
               label="← Trước"
             />
           ) : null}
@@ -71,7 +77,7 @@ export async function ProjectCatalogGrid({
           </span>
           {page < pagination.totalPages ? (
             <PageLink
-              href={`/du-an?${new URLSearchParams({ ...(projectType ? { projectType } : {}), page: String(page + 1) }).toString()}`}
+              href={projectCatalogPageHref(projectType, page + 1)}
               label="Sau →"
             />
           ) : null}

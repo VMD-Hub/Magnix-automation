@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
 import { DemoCatalogBanner } from "@/components/projects/demo-catalog-banner";
+import {
+  projectCatalogPathForType,
+  projectCatalogTypeFromSegmentSlug,
+} from "@/lib/content/project-catalog-routes";
 import {
   ProjectLandingContent,
   ProjectLandingView,
@@ -62,6 +66,11 @@ export async function generateMetadata({
 
 export default async function ProjectPage({ params, searchParams }: PageProps) {
   const { slug } = await params;
+  const catalogType = projectCatalogTypeFromSegmentSlug(slug);
+  if (catalogType) {
+    permanentRedirect(projectCatalogPathForType(catalogType));
+  }
+
   const inventoryFilters = parseProjectInventoryPageFilters(await searchParams);
   const result = await getPublicProjectBySlug(slug);
 

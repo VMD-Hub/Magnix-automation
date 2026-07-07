@@ -246,7 +246,7 @@ export const NOXH_MINDSET_ACTION_LINKS = {
   datCoc: articlePath("checklist-truoc-khi-dat-coc-noxh"),
   taiChinhCaNhan: articlePath("sai-lam-tai-chinh-tuong-du-tien-mua-nha"),
   lienHe: "/lien-he",
-  duAnNoxh: "/du-an?projectType=NHA_O_XA_HOI",
+  duAnNoxh: "/du-an/nha-o-xa-hoi",
   dtaHappyHome: "/du-an/dta-happy-home-nhon-trach",
 } as const;
 
