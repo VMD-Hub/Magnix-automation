@@ -127,6 +127,36 @@ enum ArticleStatus {
   ARCHIVED
 }
 
+enum PromotionCampaignStatus {
+  DRAFT
+  ACTIVE
+  ENDED
+}
+
+enum PromotionPrizeTier {
+  SPECIAL
+  FIRST
+  SECOND
+  THIRD
+  CONSOLATION
+  EMPTY
+}
+
+enum PromotionPrizeType {
+  PHYSICAL
+  SERVICE
+  VOUCHER
+  EMPTY
+}
+
+enum PromotionFulfillmentStatus {
+  PENDING_CONTRACT
+  CONTRACT_SIGNED
+  DELIVERED
+  EXPIRED
+  VOID
+}
+
 model Developer {
   id        String   @id @default(uuid())
   name      String
@@ -487,6 +517,9 @@ model Customer {
   leads           Lead[]
   attributionLock AttributionLock?
   unitBookings    UnitBooking[]
+  promotionParticipants PromotionParticipant[]
+  promotionSpins        PromotionSpin[]
+  promotionWins         PromotionWin[]
 
   @@map("customers")
 }
@@ -702,4 +735,124 @@ model AttributionEvent {
 
   @@index([customerId])
   @@map("attribution_events")
+}
+
+/// Lucky wheel — chương trình khuyến mãi (1 campaign Phase 1).
+model PromotionCampaign {
+  id                 String                  @id @default(uuid())
+  slug               String                  @unique
+  name               String
+  description        String?                 @db.Text
+  termsMarkdown      String?                 @map("terms_markdown") @db.Text
+  status             PromotionCampaignStatus @default(DRAFT)
+  startAt            DateTime                @map("start_at")
+  endAt              DateTime                @map("end_at")
+  maxSpinsPerAccount Int                     @default(6) @map("max_spins_per_account")
+  maxSpinsPerDay     Int                     @default(3) @map("max_spins_per_day")
+  spinDurationMs     Int                     @default(8000) @map("spin_duration_ms")
+  /// Mảng 12 prizeId — layout ô trên vòng quay.
+  wheelLayout        Json                    @map("wheel_layout")
+  createdAt          DateTime                @default(now()) @map("created_at")
+  updatedAt          DateTime                @updatedAt @map("updated_at")
+
+  prizes       PromotionPrize[]
+  participants PromotionParticipant[]
+  spins        PromotionSpin[]
+  wins         PromotionWin[]
+
+  @@index([status, startAt, endAt])
+  @@map("promotion_campaigns")
+}
+
+model PromotionPrize {
+  id            String             @id @default(uuid())
+  campaignId    String             @map("campaign_id")
+  tier          PromotionPrizeTier
+  prizeType     PromotionPrizeType @map("prize_type")
+  label         String
+  shortLabel    String             @map("short_label")
+  description   String?            @db.Text
+  imageUrl      String?            @map("image_url")
+  weightPercent Float              @map("weight_percent")
+  totalQty      Int                @map("total_qty")
+  remainingQty  Int                @map("remaining_qty")
+  activeFrom    DateTime?          @map("active_from")
+  activeUntil   DateTime?          @map("active_until")
+  sortOrder     Int                @default(0) @map("sort_order")
+  createdAt     DateTime           @default(now()) @map("created_at")
+  updatedAt     DateTime           @updatedAt @map("updated_at")
+
+  campaign PromotionCampaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  spins    PromotionSpin[]
+  wins     PromotionWin[]
+
+  @@index([campaignId])
+  @@map("promotion_prizes")
+}
+
+model PromotionParticipant {
+  id                String    @id @default(uuid())
+  campaignId        String    @map("campaign_id")
+  customerId        String    @map("customer_id")
+  userAccountId     String    @map("user_account_id")
+  noxhEligibleAt    DateTime? @map("noxh_eligible_at")
+  shareBonusGranted Boolean   @default(false) @map("share_bonus_granted")
+  createdAt         DateTime  @default(now()) @map("created_at")
+  updatedAt         DateTime  @updatedAt @map("updated_at")
+
+  campaign PromotionCampaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  customer Customer          @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  spins    PromotionSpin[]
+  win      PromotionWin?
+
+  @@unique([campaignId, customerId])
+  @@index([userAccountId])
+  @@map("promotion_participants")
+}
+
+model PromotionSpin {
+  id            String   @id @default(uuid())
+  campaignId    String   @map("campaign_id")
+  customerId    String   @map("customer_id")
+  participantId String   @map("participant_id")
+  prizeId       String?  @map("prize_id")
+  segmentIndex  Int      @map("segment_index")
+  isPreview     Boolean  @default(false) @map("is_preview")
+  ipHash        String?  @map("ip_hash")
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  campaign    PromotionCampaign    @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  customer    Customer             @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  participant PromotionParticipant @relation(fields: [participantId], references: [id], onDelete: Cascade)
+  prize       PromotionPrize?      @relation(fields: [prizeId], references: [id])
+  win         PromotionWin?
+
+  @@index([campaignId, customerId, createdAt])
+  @@index([createdAt])
+  @@map("promotion_spins")
+}
+
+model PromotionWin {
+  id                String                     @id @default(uuid())
+  campaignId        String                     @map("campaign_id")
+  customerId        String                     @map("customer_id")
+  participantId     String                     @unique @map("participant_id")
+  prizeId           String                     @map("prize_id")
+  spinId            String                     @unique @map("spin_id")
+  redemptionCode    String                     @unique @map("redemption_code")
+  fulfillmentStatus PromotionFulfillmentStatus @default(PENDING_CONTRACT) @map("fulfillment_status")
+  displayName       String                     @map("display_name")
+  fulfilledAt       DateTime?                  @map("fulfilled_at")
+  createdAt         DateTime                   @default(now()) @map("created_at")
+  updatedAt         DateTime                   @updatedAt @map("updated_at")
+
+  campaign    PromotionCampaign    @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  customer    Customer             @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  participant PromotionParticipant @relation(fields: [participantId], references: [id], onDelete: Cascade)
+  prize       PromotionPrize       @relation(fields: [prizeId], references: [id])
+  spin        PromotionSpin        @relation(fields: [spinId], references: [id])
+
+  @@unique([campaignId, customerId])
+  @@index([campaignId, createdAt])
+  @@map("promotion_wins")
 }

@@ -254,6 +254,15 @@ export function NoxhEligibilityWizard() {
     track("noxh_tool_view");
   }, []);
 
+  useEffect(() => {
+    if (step !== 4 || evaluation.overall !== "ELIGIBLE") return;
+    void fetch("/api/promotions/noxh-pass", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ overall: "ELIGIBLE" }),
+    }).catch(() => undefined);
+  }, [step, evaluation.overall]);
+
   function goNext() {
     track("noxh_step_complete", { step: step + 1, stepName: STEP_LABELS[step] });
     const nextStep = Math.min(4, step + 1);
@@ -888,6 +897,16 @@ export function NoxhEligibilityWizard() {
                     <Icon.FileCheck className="text-base text-brand-600" />
                     Đọc chi tiết điều kiện mua NOXH 2026
                   </a>
+                  {evaluation.overall === "ELIGIBLE" ? (
+                    <a
+                      href="/khuyen-mai"
+                      onClick={() => track("noxh_cta_click", { cta: "khuyen-mai" })}
+                      className="flex items-center gap-2 rounded-xl border border-brand-200 bg-brand-50 p-3 text-sm font-semibold text-brand-800 transition-colors hover:border-brand-400"
+                    >
+                      <Icon.BadgeCheck className="text-base text-brand-600" />
+                      Tham gia vòng quay khuyến mãi
+                    </a>
+                  ) : null}
                 </div>
               </div>
             </div>

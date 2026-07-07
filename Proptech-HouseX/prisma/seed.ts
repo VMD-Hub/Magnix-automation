@@ -53,6 +53,7 @@ import { allNoxhLongAnSlugs } from "../lib/preview/noxh-long-an-projects";
 import { seedHousexRiversideUnits } from "../lib/preview/seed-project-units";
 import { seedHousexRiversideUnitBookings } from "../lib/preview/seed-unit-bookings";
 import { hideInternalDemoContent } from "../lib/seed/hide-internal-demo-content";
+import { seedPromotionCampaign } from "../lib/seed/promotion-campaign";
 
 const prisma = new PrismaClient();
 

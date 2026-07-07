@@ -45,6 +45,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${BASE}/du-an`, changeFrequency: "daily", priority: 0.9 },
     { url: `${BASE}/tin-tuc`, changeFrequency: "daily", priority: 0.85 },
     { url: `${BASE}/cong-cu`, changeFrequency: "monthly", priority: 0.65 },
+    { url: `${BASE}/khuyen-mai`, changeFrequency: "weekly", priority: 0.75 },
     { url: `${BASE}/phong-thuy`, changeFrequency: "weekly", priority: 0.8 },
     ...toolSitemapPaths().map((path) => ({
       url: `${BASE}${path}`,

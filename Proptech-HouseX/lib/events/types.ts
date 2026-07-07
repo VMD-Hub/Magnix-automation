@@ -102,6 +102,19 @@ export interface OutboxPayloads {
       email?: string;
     };
   };
+  "promotion.spin_won": {
+    campaignSlug: string;
+    campaignName: string;
+    spinId: string;
+    winId: string;
+    prizeTier: string;
+    prizeLabel: string;
+    prizeType: string;
+    redemptionCode: string;
+    displayName: string;
+    normalizedPhoneHash: string;
+    wonAt: string;
+  };
 }
 
 export type OutboxEventType = keyof OutboxPayloads;

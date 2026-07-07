@@ -49,6 +49,12 @@ export function AdminShell({
               Giữ suất F1
             </Link>
             <Link
+              href="/admin/promotions"
+              className="text-slate-600 hover:text-slate-800"
+            >
+              Khuyến mãi
+            </Link>
+            <Link
               href="/admin/ctv"
               className="text-slate-600 hover:text-slate-800"
             >
