@@ -8,6 +8,8 @@ import { AgentCasesPage } from "@/pages/AgentCasesPage";
 import { AgentCaseDetailPage } from "@/pages/AgentCaseDetailPage";
 import { AgentNotificationsPage } from "@/pages/AgentNotificationsPage";
 import { AgentCommissionsPage } from "@/pages/AgentCommissionsPage";
+import { AgentServicesPage } from "@/pages/AgentServicesPage";
+import { AgentServiceDetailPage } from "@/pages/AgentServiceDetailPage";
 import { ProjectDetailPage } from "@/pages/ProjectDetailPage";
 import { ConsultPage } from "@/pages/ConsultPage";
 import { ToolsHubPage } from "@/pages/ToolsHubPage";
@@ -26,6 +28,11 @@ export default function App() {
             <Route path="cong-cu/mo" element={<ToolViewerPage />} />
             <Route path="tai-khoan" element={<AccountPage />} />
             <Route path="agent" element={<AgentHomePage />} />
+            <Route path="agent/dich-vu" element={<AgentServicesPage />} />
+            <Route
+              path="agent/dich-vu/:code"
+              element={<AgentServiceDetailPage />}
+            />
             <Route path="agent/ho-so" element={<AgentCasesPage />} />
             <Route path="agent/ho-so/:id" element={<AgentCaseDetailPage />} />
             <Route path="agent/thong-bao" element={<AgentNotificationsPage />} />

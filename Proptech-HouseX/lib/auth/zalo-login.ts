@@ -133,6 +133,16 @@ export async function loginOrRegisterWithZalo(input: ZaloAuthInput) {
               : {}),
           },
         });
+        if (bypass) {
+          const { ensureBrokerEntitlements } = await import(
+            "@/lib/data/agent-services"
+          );
+          const broker = await tx.broker.findUniqueOrThrow({
+            where: { userAccountId: created.id },
+            select: { id: true },
+          });
+          await ensureBrokerEntitlements(broker.id, tx);
+        }
       }
 
       return created;

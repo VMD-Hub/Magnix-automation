@@ -3,6 +3,7 @@ import { Link, Navigate } from "react-router-dom";
 import { useAuth } from "@/auth-context";
 import {
   claimCtvCase,
+  listAgentServices,
   listCtvCases,
   type CtvCaseListItem,
 } from "@/services/agent";
@@ -18,12 +19,19 @@ export function AgentCasesPage() {
   const [message, setMessage] = useState("");
   const [busy, setBusy] = useState(false);
   const [claimErr, setClaimErr] = useState<string | null>(null);
+  const [claimUnlocked, setClaimUnlocked] = useState<boolean | null>(null);
 
   const reload = useCallback(async () => {
     setLoading(true);
     setErr(null);
     try {
-      setItems(await listCtvCases());
+      const [cases, services] = await Promise.all([
+        listCtvCases(),
+        listAgentServices().catch(() => null),
+      ]);
+      setItems(cases);
+      const noxh = services?.items.find((s) => s.code === "NOXH_CLAIM");
+      setClaimUnlocked(noxh ? noxh.unlocked : true);
     } catch (e) {
       setErr(e instanceof Error ? e.message : "Không tải được hồ sơ");
     } finally {
@@ -85,6 +93,16 @@ export function AgentCasesPage() {
         </button>
       </div>
 
+      {claimUnlocked === false ? (
+        <div className="card" style={{ marginBottom: 12 }}>
+          <p style={{ margin: 0 }}>
+            Dịch vụ thả lead chưa mở. Đậu khóa{" "}
+            <Link to="/agent/dich-vu/CTV_ONBOARDING">Đào tạo hội nhập CTV</Link>{" "}
+            để unlock.
+          </p>
+        </div>
+      ) : null}
+
       {showClaim ? (
         <form className="card" onSubmit={onClaim}>
           <h2>Thả lead mới</h2>
@@ -97,6 +115,7 @@ export function AgentCasesPage() {
             value={name}
             onChange={(e) => setName(e.target.value)}
             required
+            disabled={claimUnlocked === false}
           />
           <input
             className="input"
@@ -105,6 +124,7 @@ export function AgentCasesPage() {
             onChange={(e) => setPhone(e.target.value)}
             inputMode="tel"
             required
+            disabled={claimUnlocked === false}
           />
           <textarea
             className="input textarea"
@@ -112,9 +132,14 @@ export function AgentCasesPage() {
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             rows={2}
+            disabled={claimUnlocked === false}
           />
           {claimErr ? <p className="err">{claimErr}</p> : null}
-          <button className="btn" type="submit" disabled={busy}>
+          <button
+            className="btn"
+            type="submit"
+            disabled={busy || claimUnlocked === false}
+          >
             {busy ? "Đang gửi…" : "Tạo hồ sơ"}
           </button>
         </form>

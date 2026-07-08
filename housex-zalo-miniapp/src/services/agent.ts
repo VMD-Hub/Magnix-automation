@@ -126,6 +126,98 @@ export async function getCommissions(): Promise<CommissionSummary> {
   return apiFetch("/api/ctv/commissions");
 }
 
+export type AgentServiceCategory = "TRAINING" | "LEGAL" | "PRODUCT";
+
+export type AgentServiceListItem = {
+  id: string;
+  code: string;
+  category: AgentServiceCategory;
+  name: string;
+  description: string;
+  isRequiredForCtv: boolean;
+  requiresCode: string | null;
+  status: "LOCKED" | "ACTIVE" | "EXPIRED" | "REVOKED";
+  unlocked: boolean;
+  activatedAt: string | null;
+  trainingCompletedAt: string | null;
+  hasQuiz: boolean;
+  quizId: string | null;
+  quizTitle: string | null;
+  passScore: number | null;
+};
+
+export type AgentServiceDetail = {
+  id: string;
+  code: string;
+  category: AgentServiceCategory;
+  name: string;
+  description: string;
+  contentMarkdown: string | null;
+  isRequiredForCtv: boolean;
+  requiresCode: string | null;
+  status: string;
+  unlocked: boolean;
+  activatedAt: string | null;
+  quiz: {
+    id: string;
+    title: string;
+    passScore: number;
+    questions: Array<{
+      id: string;
+      prompt: string;
+      options: Array<{ id: string; label: string }>;
+      sortOrder: number;
+    }>;
+  } | null;
+};
+
+export type QuizSubmitResult = {
+  attemptId: string;
+  score: number;
+  passScore: number;
+  passed: boolean;
+  unlockedServiceCodes: string[];
+};
+
+export async function listAgentServices(): Promise<{
+  items: AgentServiceListItem[];
+  byCategory: Record<AgentServiceCategory, AgentServiceListItem[]>;
+}> {
+  return apiFetch("/api/ctv/services");
+}
+
+export async function getAgentService(
+  code: string,
+): Promise<AgentServiceDetail> {
+  return apiFetch(`/api/ctv/services/${encodeURIComponent(code)}`);
+}
+
+export async function submitQuiz(
+  quizId: string,
+  answers: Record<string, string>,
+): Promise<QuizSubmitResult> {
+  return apiFetch("/api/ctv/quizzes/submit", {
+    method: "POST",
+    body: JSON.stringify({ quizId, answers }),
+  });
+}
+
+export function serviceCategoryLabel(cat: AgentServiceCategory) {
+  const map: Record<AgentServiceCategory, string> = {
+    TRAINING: "Đào tạo",
+    LEGAL: "Pháp lý",
+    PRODUCT: "Dịch vụ",
+  };
+  return map[cat] ?? cat;
+}
+
+export function entitlementLabel(status: string, unlocked: boolean) {
+  if (unlocked || status === "ACTIVE") return "Đã mở";
+  if (status === "REVOKED") return "Đã thu hồi";
+  if (status === "EXPIRED") return "Hết hạn";
+  return "Chưa mở";
+}
+
 export function formatCommission(amount: string | number | null | undefined) {
   return formatVnd(amount) ?? "—";
 }

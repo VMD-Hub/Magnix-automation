@@ -11,6 +11,7 @@ import { serializeCaseListItemForCtv } from "@/lib/noxh-case/serialize-ctv";
 import { ctvClaimSchema } from "@/lib/validation/noxh-case";
 import { isValidVnPhone, normalizeVnPhone } from "@/lib/phone";
 import { prisma } from "@/lib/prisma";
+import { isServiceActive } from "@/lib/data/agent-services";
 
 export async function OPTIONS(req: NextRequest) {
   return corsPreflight(req);
@@ -66,6 +67,18 @@ export async function POST(req: NextRequest) {
     if (!broker) {
       return applyApiCors(
         fail(403, "BROKER_NOT_FOUND", "Không tìm thấy hồ sơ môi giới."),
+        req,
+      );
+    }
+
+    const claimUnlocked = await isServiceActive(session.brokerId, "NOXH_CLAIM");
+    if (!claimUnlocked) {
+      return applyApiCors(
+        fail(
+          403,
+          "SERVICE_LOCKED",
+          "Cần đậu «Đào tạo hội nhập CTV» để mở dịch vụ thả lead NOXH.",
+        ),
         req,
       );
     }

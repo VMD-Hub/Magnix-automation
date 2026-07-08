@@ -10,9 +10,9 @@
 │ (default)    │  có quyền BROKER/CTV) │
 ├──────────────┼──────────────────────┤
 │ Home NOXH    │ Hồ sơ NOXH           │
-│ Dự án / tin  │ Thả lead             │
-│ Công cụ vay  │ Thông báo            │
-│ Form tư vấn  │ Hoa hồng             │
+│ Dự án / tin  │ Dịch vụ / Đào tạo    │
+│ Công cụ vay  │ Pháp lý BĐS          │
+│ Form tư vấn  │ Thông báo / Hoa hồng │
 │ Tài khoản    │ Đăng ký CTV / switch │
 └──────────────┴──────────────────────┘
          │ Bearer token
@@ -97,6 +97,18 @@ CORS: `/api/projects`, `/api/projects/:slug`, `/api/leads` dùng `applyApiCors` 
 
 CORS: toàn bộ `/api/ctv/*` dùng `applyApiCors` + `OPTIONS`.  
 Local: login với `preferredRole=BROKER` + `ZALO_AUTH_DEV_BYPASS` (auto `brokerType=CTV` + `ctvCode` DEV*).
+
+## Phase 3 (Đào tạo · Pháp lý · Quản lý dịch vụ)
+
+Catalog `AgentService` (TRAINING / LEGAL / PRODUCT) + `AgentEntitlement` + quiz. Đậu quiz → ACTIVE service đó và auto-unlock product phụ thuộc (`requiresCode`).
+
+| Route | API |
+|-------|-----|
+| `/agent/dich-vu` | `GET /api/ctv/services` (tab `?tab=product\|training\|legal`) |
+| `/agent/dich-vu/:code` | `GET /api/ctv/services/:code` + `POST /api/ctv/quizzes/submit` |
+| Thả lead | `POST /api/ctv/cases` yêu cầu entitlement `NOXH_CLAIM` (sau `CTV_ONBOARDING`) |
+
+Seed: `npm run db:seed:agent-services` — `CTV_ONBOARDING`, `LEGAL_BROKER_BASICS`, `NOXH_CLAIM`, `LISTING_POST`.
 
 ## Repo
 

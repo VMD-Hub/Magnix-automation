@@ -398,6 +398,8 @@ model Broker {
   unitBookings     UnitBooking[]
   noxhCases        NoxhCase[]
   notifications    BrokerNotification[]
+  entitlements     AgentEntitlement[]
+  quizAttempts     QuizAttempt[]
 
   @@map("brokers")
 }
@@ -1055,3 +1057,115 @@ model BrokerNotification {
   @@index([brokerId, createdAt])
   @@map("broker_notifications")
 }
+
+/// ADR-014 Phase 3 — catalog dịch vụ / khóa học Agent (unlock by quiz hoặc admin).
+enum AgentServiceCategory {
+  TRAINING
+  LEGAL
+  PRODUCT
+}
+
+enum AgentEntitlementStatus {
+  LOCKED
+  ACTIVE
+  EXPIRED
+  REVOKED
+}
+
+enum QuizAttemptStatus {
+  IN_PROGRESS
+  PASSED
+  FAILED
+}
+
+model AgentService {
+  id               String               @id @default(uuid())
+  code             String               @unique
+  category         AgentServiceCategory
+  name             String
+  description      String               @db.Text
+  /// Nội dung học / pháp lý (markdown) — đọc trước khi thi.
+  contentMarkdown  String?              @map("content_markdown") @db.Text
+  isRequiredForCtv Boolean              @default(false) @map("is_required_for_ctv")
+  /// Dịch vụ sản phẩm cần pass trainingCode trước (vd. NOXH_CLAIM ← CTV_ONBOARDING).
+  requiresCode     String?              @map("requires_code")
+  sortOrder        Int                  @default(0) @map("sort_order")
+  active           Boolean              @default(true)
+  createdAt        DateTime             @default(now()) @map("created_at")
+  updatedAt        DateTime             @updatedAt @map("updated_at")
+
+  entitlements AgentEntitlement[]
+  quiz         AgentQuiz?
+
+  @@index([category, sortOrder])
+  @@map("agent_services")
+}
+
+model AgentEntitlement {
+  id                  String                 @id @default(uuid())
+  brokerId            String                 @map("broker_id")
+  serviceId           String                 @map("service_id")
+  status              AgentEntitlementStatus @default(LOCKED)
+  source              String                 @default("locked") // locked | quiz_pass | admin | bypass
+  activatedAt         DateTime?              @map("activated_at")
+  trainingCompletedAt DateTime?              @map("training_completed_at")
+  createdAt           DateTime               @default(now()) @map("created_at")
+  updatedAt           DateTime               @updatedAt @map("updated_at")
+
+  broker  Broker       @relation(fields: [brokerId], references: [id], onDelete: Cascade)
+  service AgentService @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+
+  @@unique([brokerId, serviceId])
+  @@index([brokerId, status])
+  @@map("agent_entitlements")
+}
+
+model AgentQuiz {
+  id        String   @id @default(uuid())
+  serviceId String   @unique @map("service_id")
+  title     String
+  passScore Int      @default(70) @map("pass_score")
+  version   Int      @default(1)
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  service   AgentService    @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+  questions AgentQuizQuestion[]
+  attempts  QuizAttempt[]
+
+  @@map("agent_quizzes")
+}
+
+model AgentQuizQuestion {
+  id            String @id @default(uuid())
+  quizId        String @map("quiz_id")
+  prompt        String @db.Text
+  /// [{ "id": "a", "label": "..." }, ...]
+  optionsJson   Json   @map("options_json")
+  correctOption String @map("correct_option")
+  sortOrder     Int    @default(0) @map("sort_order")
+
+  quiz AgentQuiz @relation(fields: [quizId], references: [id], onDelete: Cascade)
+
+  @@index([quizId, sortOrder])
+  @@map("agent_quiz_questions")
+}
+
+model QuizAttempt {
+  id          String            @id @default(uuid())
+  quizId      String            @map("quiz_id")
+  brokerId    String            @map("broker_id")
+  status      QuizAttemptStatus @default(IN_PROGRESS)
+  score       Int?
+  /// { questionId: optionId }
+  answersJson Json?             @map("answers_json")
+  startedAt   DateTime          @default(now()) @map("started_at")
+  completedAt DateTime?         @map("completed_at")
+
+  quiz   AgentQuiz @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  broker Broker    @relation(fields: [brokerId], references: [id], onDelete: Cascade)
+
+  @@index([brokerId, quizId])
+  @@map("quiz_attempts")
+}
+

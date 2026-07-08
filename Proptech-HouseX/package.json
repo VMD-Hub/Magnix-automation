@@ -18,6 +18,7 @@
     "db:seed:vinhomes": "node --env-file=.env --import tsx scripts/seed-vinhomes-projects.ts",
     "db:seed:commercial": "node --env-file=.env --import tsx scripts/seed-commercial-landings.ts",
     "db:seed:noxh": "node --env-file=.env --import tsx scripts/seed-noxh-long-an.ts",
+    "db:seed:agent-services": "node --env-file=.env --import tsx scripts/seed-agent-services.ts",
     "db:seed:promotion": "node --env-file=.env --import tsx scripts/seed-promotion-campaign.ts",
     "db:reseed:dta": "node --env-file=.env --import tsx scripts/seed-dta-happy-home.ts",
     "db:hide-internal-demo": "node --env-file=.env --import tsx scripts/hide-internal-demo-content.ts",
