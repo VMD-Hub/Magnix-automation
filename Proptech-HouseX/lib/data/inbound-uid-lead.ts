@@ -123,10 +123,12 @@ export async function convertInboundUidToPlatformLead(
 
     const ops = readInboundOpsMeta(inbound.meta);
     if (ops.platform_lead_id) {
-      const lead = await tx.lead.findUnique({
+      const existingLead = await tx.lead.findUnique({
         where: { id: ops.platform_lead_id },
       });
-      return { inbound, lead, created: false };
+      if (existingLead) {
+        return { inbound, lead: existingLead, created: false as const };
+      }
     }
 
     const message =
@@ -166,6 +168,6 @@ export async function convertInboundUidToPlatformLead(
       );
     }
 
-    return { inbound: updatedInbound, lead, created: true };
+    return { inbound: updatedInbound, lead, created: true as const };
   });
 }

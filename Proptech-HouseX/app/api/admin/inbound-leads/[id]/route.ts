@@ -104,6 +104,10 @@ export async function POST(
       return fail(404, "NOT_FOUND", "Không tìm thấy inbound lead.");
     }
 
+    if (!result.lead) {
+      return fail(500, "LEAD_MISSING", "Không tạo được lead sàn.");
+    }
+
     return ok({
       created: result.created,
       platformLeadId: result.lead.id,
