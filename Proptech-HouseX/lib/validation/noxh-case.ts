@@ -79,3 +79,14 @@ export const adminDocPatchSchema = z.object({
   rejectReason: z.string().trim().max(500).optional().nullable(),
   opsNote: z.string().trim().max(500).optional(),
 });
+
+export const adminCreateNoxhCaseSchema = z.object({
+  customerName: z.string().trim().min(2).max(120),
+  phone: z.string().trim().min(9).max(20),
+  projectId: z.string().uuid().optional().nullable(),
+  objectGroup: z.enum(NOXH_OBJECT_GROUP_VALUES).optional().default("WORKER"),
+  intendToBorrow: z.boolean().optional().default(false),
+  opsNote: z.string().trim().max(2000).optional(),
+  leadId: z.string().uuid().optional().nullable(),
+  inboundLeadId: z.string().uuid().optional().nullable(),
+});

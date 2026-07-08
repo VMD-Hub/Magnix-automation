@@ -65,6 +65,8 @@ async function main() {
     ['CONTENT_PAGE_COVER_ENABLED', env.CONTENT_PAGE_COVER_ENABLED ? '(set)' : 'false'],
     ['GEMINI_API_KEY', env.GEMINI_API_KEY || env.GOOGLE_GEMINI_API_KEY ? '(set)' : 'MISSING — Page Cover'],
     ['MAGNIX_WEBHOOK_TOKEN', env.MAGNIX_WEBHOOK_TOKEN ? '(set)' : ''],
+    ['HOUSEX_PUBLIC_URL', env.HOUSEX_PUBLIC_URL || 'MISSING'],
+    ['MAGNIX_INGEST_SECRET', env.MAGNIX_INGEST_SECRET ? '(set)' : 'MISSING — uid-ingest → House X fail'],
     ['DEEPSEEK_API_KEY', env.DEEPSEEK_API_KEY ? '(set)' : 'MISSING — Agent 2 dùng Anthropic fallback'],
     ['ANTHROPIC_API_KEY', env.ANTHROPIC_API_KEY ? '(set)' : 'MISSING'],
     ['PEXELS_API_KEY', env.PEXELS_API_KEY ? '(set)' : 'MISSING'],

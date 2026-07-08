@@ -21,6 +21,7 @@ export const INBOUND_MIRROR_HEADERS = [
   "ops_status",
   "ops_note",
   "platform_lead_id",
+  "noxh_case_code",
   "tags",
 ] as const;
 
@@ -66,6 +67,7 @@ export function inboundLeadToMirrorRow(row: InboundUidLead): string[] {
     ops.ops_status,
     ops.ops_note ?? "",
     ops.platform_lead_id ?? "",
+    ops.noxh_case_code ?? "",
     tags,
   ];
 }

@@ -122,6 +122,37 @@ export function checkGoLiveEnv(): EnvCheck[] {
     });
   }
 
+  const mirrorOn = process.env.MAGNIX_SHEET_MIRROR_ENABLED === "true";
+  if (mirrorOn) {
+    checks.push({
+      key: "GOOGLE_SHEET_MIRROR_ID",
+      ok: has("GOOGLE_SHEET_MIRROR_ID"),
+      level: "required",
+      message: "Sheet ID khi MAGNIX_SHEET_MIRROR_ENABLED=true",
+    });
+    checks.push({
+      key: "GOOGLE_SERVICE_ACCOUNT_JSON",
+      ok: has("GOOGLE_SERVICE_ACCOUNT_JSON"),
+      level: "required",
+      message: "Service account JSON/path — share Sheet Editor",
+    });
+  } else {
+    checks.push({
+      key: "SHEET_MIRROR",
+      ok: false,
+      level: "recommended",
+      message: "Sheet mirror tắt — bật MAGNIX_SHEET_MIRROR_ENABLED=true (Phase 3B)",
+    });
+  }
+
+  checks.push({
+    key: "PG_BACKUP",
+    ok: false,
+    level: "recommended",
+    message:
+      "Cron scripts/backup-postgres-vps.sh — xem docs/OPS_BACKUP_MIRROR.md",
+  });
+
   return checks;
 }
 

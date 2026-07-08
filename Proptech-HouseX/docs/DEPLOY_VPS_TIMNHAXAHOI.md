@@ -208,13 +208,19 @@ pm2 restart housex --update-env
 
 ## 7. Backup (nên bật sau go-live)
 
+Chi tiết Phase 3B: [OPS_BACKUP_MIRROR.md](OPS_BACKUP_MIRROR.md)
+
 Postgres volume Docker — backup hàng ngày:
 
 ```bash
-docker exec housex-postgres pg_dump -U housex housex | gzip > ~/backup/housex-$(date +%F).sql.gz
+chmod +x scripts/backup-postgres-vps.sh
+./scripts/backup-postgres-vps.sh
+# Cron: npm run go-live:print-cron
 ```
 
 Hoặc sync JSONL lead lên Google Drive (Magnix) — không coi VPS là store duy nhất cho lead quan trọng.
+
+**Sheet mirror:** `MAGNIX_SHEET_MIRROR_ENABLED=true` + `GOOGLE_SHEET_MIRROR_ID` — tab `ops_mirror`.
 
 ---
 

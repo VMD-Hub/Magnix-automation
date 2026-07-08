@@ -29,6 +29,32 @@ describe("ops sheet mirror rows", () => {
     assert.equal(row[2], "fb_ads:123456789");
   });
 
+  it("includes noxh_case_code from inbound meta", () => {
+    const row = inboundLeadToMirrorRow({
+      id: "1",
+      uid: "999",
+      uidSource: "n8n_manual",
+      normalizedKey: "n8n_manual:999",
+      capturedAt: new Date("2026-07-08T00:00:00.000Z"),
+      text: null,
+      segment: "noxh_income",
+      score: 70,
+      interestKey: null,
+      tags: [],
+      meta: {
+        ops_status: "converted",
+        noxh_case_code: "HX-NOXH-000042",
+      },
+      classifyMethod: "regex",
+      consentBasis: "ads",
+      status: "classified",
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    });
+    const codeIdx = row.indexOf("HX-NOXH-000042");
+    assert.ok(codeIdx >= 0);
+  });
+
   it("builds sheet sections with headers", () => {
     const values = buildOpsMirrorSheetValues({
       syncedAt: "2026-07-08T08:00:00.000Z",

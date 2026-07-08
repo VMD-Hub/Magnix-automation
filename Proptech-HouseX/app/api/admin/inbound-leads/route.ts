@@ -1,16 +1,14 @@
 import type { NextRequest } from "next/server";
 import { fail, handleApiError, ok } from "@/lib/api/http";
 import { isAdminAuthorized } from "@/lib/admin/session";
-import {
-  listInboundUidLeadsForAdmin,
-} from "@/lib/data/inbound-uid-lead";
+import { listInboundUidLeadsForAdmin } from "@/lib/data/inbound-uid-lead";
+import { maskInboundUid, readInboundOpsMeta } from "@/lib/inbound/ops-meta";
+import { OPS_STATUS_LABEL, segmentLabel } from "@/lib/inbound/segment-labels";
+import { inboundLeadListQuerySchema } from "@/lib/validation/inbound-lead";
 
 type InboundLeadRow = Awaited<
   ReturnType<typeof listInboundUidLeadsForAdmin>
 >[number];
-import { maskInboundUid, readInboundOpsMeta } from "@/lib/inbound/ops-meta";
-import { OPS_STATUS_LABEL, segmentLabel } from "@/lib/inbound/segment-labels";
-import { inboundLeadListQuerySchema } from "@/lib/validation/inbound-lead";
 
 export async function GET(req: NextRequest) {
   try {
@@ -49,6 +47,8 @@ export async function GET(req: NextRequest) {
           opsStatusLabel: OPS_STATUS_LABEL[ops.ops_status] ?? ops.ops_status,
           opsNote: ops.ops_note,
           platformLeadId: ops.platform_lead_id,
+          noxhCaseId: ops.noxh_case_id,
+          noxhCaseCode: ops.noxh_case_code,
           capturedAt: row.capturedAt.toISOString(),
           updatedAt: row.updatedAt.toISOString(),
         };

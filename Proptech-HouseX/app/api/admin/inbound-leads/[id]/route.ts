@@ -34,6 +34,8 @@ function serializeInbound(row: NonNullable<Awaited<ReturnType<typeof getInboundU
     opsStatusLabel: OPS_STATUS_LABEL[ops.ops_status] ?? ops.ops_status,
     opsNote: ops.ops_note,
     platformLeadId: ops.platform_lead_id,
+    noxhCaseId: ops.noxh_case_id,
+    noxhCaseCode: ops.noxh_case_code,
     capturedAt: row.capturedAt.toISOString(),
     updatedAt: row.updatedAt.toISOString(),
   };

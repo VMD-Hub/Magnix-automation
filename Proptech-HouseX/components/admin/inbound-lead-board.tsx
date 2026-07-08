@@ -1,8 +1,19 @@
 "use client";
 
+import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
+import { NOXH_OBJECT_GROUPS } from "@/lib/finance/noxh-rules";
+import type { NoxhObjectGroupId } from "@/lib/finance/noxh-rules";
+import { OPS_STATUS_LABEL } from "@/lib/inbound/segment-labels";
 import { cn } from "@/lib/ui/cn";
+
+type ProjectOption = {
+  id: string;
+  name: string;
+  slug: string;
+  projectType: string;
+};
 
 type InboundRow = {
   id: string;
@@ -19,19 +30,29 @@ type InboundRow = {
   opsStatusLabel: string;
   opsNote: string | null;
   platformLeadId: string | null;
+  noxhCaseId: string | null;
+  noxhCaseCode: string | null;
   capturedAt: string;
 };
 
-import { OPS_STATUS_LABEL } from "@/lib/inbound/segment-labels";
+const OBJECT_GROUP_OPTIONS = (
+  Object.keys(NOXH_OBJECT_GROUPS) as NoxhObjectGroupId[]
+).filter((id) => id !== "NONE");
 
 export function InboundLeadBoard() {
   const [items, setItems] = useState<InboundRow[]>([]);
+  const [projects, setProjects] = useState<ProjectOption[]>([]);
   const [selectedId, setSelectedId] = useState<string | null>(null);
-  const [detail, setDetail] = useState<InboundRow & { text: string | null } | null>(
-    null,
-  );
+  const [detail, setDetail] = useState<
+    (InboundRow & { text: string | null }) | null
+  >(null);
   const [opsNote, setOpsNote] = useState("");
   const [opsStatus, setOpsStatus] = useState<string>("pending");
+  const [customerName, setCustomerName] = useState("Khách Magnix");
+  const [phone, setPhone] = useState("");
+  const [projectId, setProjectId] = useState("");
+  const [objectGroup, setObjectGroup] = useState<NoxhObjectGroupId>("WORKER");
+  const [intendToBorrow, setIntendToBorrow] = useState(false);
   const [loading, setLoading] = useState(true);
   const [msg, setMsg] = useState<string | null>(null);
 
@@ -47,6 +68,14 @@ export function InboundLeadBoard() {
     setLoading(false);
   }, []);
 
+  const loadProjects = useCallback(async () => {
+    const res = await fetch("/api/admin/article-tags");
+    if (!res.ok) return;
+    const json = await res.json();
+    const all = (json.data?.projects ?? []) as ProjectOption[];
+    setProjects(all.filter((p) => p.projectType === "NHA_O_XA_HOI"));
+  }, []);
+
   const loadDetail = useCallback(async (id: string) => {
     const res = await fetch(`/api/admin/inbound-leads/${id}`);
     const json = await res.json();
@@ -58,7 +87,8 @@ export function InboundLeadBoard() {
 
   useEffect(() => {
     void load();
-  }, [load]);
+    void loadProjects();
+  }, [load, loadProjects]);
 
   useEffect(() => {
     if (selectedId) void loadDetail(selectedId);
@@ -104,11 +134,46 @@ export function InboundLeadBoard() {
     await loadDetail(selectedId);
   }
 
+  async function createNoxhCase() {
+    if (!selectedId) return;
+    setMsg(null);
+    const res = await fetch("/api/admin/noxh-cases", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        customerName,
+        phone,
+        projectId: projectId || null,
+        objectGroup,
+        intendToBorrow,
+        opsNote: opsNote || undefined,
+        inboundLeadId: selectedId,
+      }),
+    });
+    const json = await res.json();
+    if (!res.ok) {
+      const existingCode = json.error?.details?.caseCode;
+      setMsg(
+        existingCode
+          ? `${json.error?.message ?? "Lỗi"} (${existingCode})`
+          : (json.error?.message ?? "Lỗi tạo hồ sơ"),
+      );
+      return;
+    }
+    setMsg(
+      json.data?.created
+        ? `Đã tạo hồ sơ ${json.data.case.code}`
+        : `Hồ sơ đã tồn tại: ${json.data.case.code}`,
+    );
+    await load();
+    await loadDetail(selectedId);
+  }
+
   return (
     <div className="space-y-4">
       <p className="text-sm text-slate-600">
-        Magnix inbound — lead sàn, không auto-gán CTV. UID được mask; dùng kênh
-        ngoài để liên hệ khách.
+        Magnix inbound → lead sàn → hồ sơ NOXH (không auto-gán CTV). UID được
+        mask; nhập SĐT khách sau khi liên hệ ngoài hệ thống.
       </p>
 
       {msg && (
@@ -158,7 +223,10 @@ export function InboundLeadBoard() {
                   {row.textPreview}
                 </p>
               )}
-              <p className="mt-2 text-xs text-slate-500">{row.opsStatusLabel}</p>
+              <p className="mt-2 text-xs text-slate-500">
+                {row.opsStatusLabel}
+                {row.noxhCaseCode ? ` · ${row.noxhCaseCode}` : ""}
+              </p>
             </button>
           ))}
         </div>
@@ -211,11 +279,88 @@ export function InboundLeadBoard() {
                   Ghi chú Ops
                 </span>
                 <textarea
-                  className="min-h-[100px] w-full rounded-lg border border-slate-300 px-3 py-2"
+                  className="min-h-[80px] w-full rounded-lg border border-slate-300 px-3 py-2"
                   value={opsNote}
                   onChange={(e) => setOpsNote(e.target.value)}
                 />
               </label>
+
+              <div className="rounded-lg border border-dashed border-slate-300 p-4 space-y-3">
+                <h3 className="text-sm font-semibold text-slate-900">
+                  Tạo hồ sơ NOXH (Ops)
+                </h3>
+                <div className="grid gap-3 sm:grid-cols-2">
+                  <label className="block text-sm">
+                    <span className="mb-1 block font-medium text-slate-700">
+                      Họ tên khách
+                    </span>
+                    <input
+                      className="w-full rounded-lg border border-slate-300 px-3 py-2"
+                      value={customerName}
+                      onChange={(e) => setCustomerName(e.target.value)}
+                      disabled={!!detail.noxhCaseId}
+                    />
+                  </label>
+                  <label className="block text-sm">
+                    <span className="mb-1 block font-medium text-slate-700">
+                      SĐT (sau khi liên hệ)
+                    </span>
+                    <input
+                      className="w-full rounded-lg border border-slate-300 px-3 py-2"
+                      value={phone}
+                      onChange={(e) => setPhone(e.target.value)}
+                      placeholder="0901234567"
+                      disabled={!!detail.noxhCaseId}
+                    />
+                  </label>
+                  <label className="block text-sm sm:col-span-2">
+                    <span className="mb-1 block font-medium text-slate-700">
+                      Dự án NOXH (tùy chọn)
+                    </span>
+                    <select
+                      className="w-full rounded-lg border border-slate-300 px-3 py-2"
+                      value={projectId}
+                      onChange={(e) => setProjectId(e.target.value)}
+                      disabled={!!detail.noxhCaseId}
+                    >
+                      <option value="">— Chưa chọn —</option>
+                      {projects.map((p) => (
+                        <option key={p.id} value={p.id}>
+                          {p.name}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                  <label className="block text-sm">
+                    <span className="mb-1 block font-medium text-slate-700">
+                      Nhóm đối tượng
+                    </span>
+                    <select
+                      className="w-full rounded-lg border border-slate-300 px-3 py-2"
+                      value={objectGroup}
+                      onChange={(e) =>
+                        setObjectGroup(e.target.value as NoxhObjectGroupId)
+                      }
+                      disabled={!!detail.noxhCaseId}
+                    >
+                      {OBJECT_GROUP_OPTIONS.map((id) => (
+                        <option key={id} value={id}>
+                          {NOXH_OBJECT_GROUPS[id].label}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                  <label className="flex items-center gap-2 text-sm pt-6">
+                    <input
+                      type="checkbox"
+                      checked={intendToBorrow}
+                      onChange={(e) => setIntendToBorrow(e.target.checked)}
+                      disabled={!!detail.noxhCaseId}
+                    />
+                    <span>Có vay ngân hàng</span>
+                  </label>
+                </div>
+              </div>
 
               <div className="flex flex-wrap gap-2">
                 <Button type="button" onClick={() => void saveOps()}>
@@ -231,11 +376,32 @@ export function InboundLeadBoard() {
                     ? "Đã có lead sàn"
                     : "Tạo lead sàn (không CTV)"}
                 </Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => void createNoxhCase()}
+                  disabled={!!detail.noxhCaseId || !phone.trim()}
+                >
+                  {detail.noxhCaseId
+                    ? "Đã có hồ sơ NOXH"
+                    : "Tạo hồ sơ NOXH"}
+                </Button>
               </div>
 
               {detail.platformLeadId && (
                 <p className="text-xs text-slate-500">
                   Lead sàn ID: {detail.platformLeadId}
+                </p>
+              )}
+              {detail.noxhCaseCode && detail.noxhCaseId && (
+                <p className="text-sm text-slate-700">
+                  Hồ sơ:{" "}
+                  <Link
+                    href={`/admin/noxh-cases?caseId=${detail.noxhCaseId}`}
+                    className="font-medium text-brand-600 hover:underline"
+                  >
+                    {detail.noxhCaseCode}
+                  </Link>
                 </p>
               )}
             </div>

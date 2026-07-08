@@ -5,8 +5,12 @@ import type {
 } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import type { NoxhObjectGroupId } from "@/lib/finance/noxh-rules";
-import { normalizeVnPhone } from "@/lib/phone";
+import { normalizeVnPhone, isValidVnPhone } from "@/lib/phone";
 import { enqueueEvent } from "@/lib/events/outbox";
+import {
+  mergeInboundOpsMeta,
+  readInboundOpsMeta,
+} from "@/lib/inbound/ops-meta";
 import { buildDocumentChecklist, countDocProgress } from "@/lib/noxh-case/doc-catalog";
 import {
   computeClaimLockExpiry,
@@ -37,6 +41,215 @@ export class CtvClaimError extends Error {
     super(message);
     this.name = "CtvClaimError";
   }
+}
+
+export type PlatformNoxhCaseRejectReason =
+  | "INVALID_PHONE"
+  | "INBOUND_NOT_FOUND"
+  | "LEAD_NOT_FOUND"
+  | "CASE_EXISTS";
+
+export class PlatformNoxhCaseError extends Error {
+  constructor(
+    public code: PlatformNoxhCaseRejectReason,
+    message: string,
+    public existingCaseId?: string,
+    public existingCaseCode?: string,
+  ) {
+    super(message);
+    this.name = "PlatformNoxhCaseError";
+  }
+}
+
+/** Ops tạo hồ sơ NOXH từ lead sàn / Magnix inbound — không gán CTV. */
+export async function createPlatformNoxhCase(params: {
+  customerName: string;
+  phone: string;
+  projectId?: string | null;
+  objectGroup?: NoxhObjectGroupId;
+  intendToBorrow?: boolean;
+  opsNote?: string;
+  leadId?: string | null;
+  inboundLeadId?: string | null;
+}) {
+  const normalizedPhone = normalizeVnPhone(params.phone);
+  if (!isValidVnPhone(normalizedPhone)) {
+    throw new PlatformNoxhCaseError(
+      "INVALID_PHONE",
+      "Số điện thoại không hợp lệ.",
+    );
+  }
+
+  const objectGroup = params.objectGroup ?? "WORKER";
+  const intendToBorrow = params.intendToBorrow ?? false;
+
+  return prisma.$transaction(async (tx) => {
+    let inbound: Awaited<ReturnType<typeof tx.inboundUidLead.findUnique>> = null;
+    if (params.inboundLeadId) {
+      inbound = await tx.inboundUidLead.findUnique({
+        where: { id: params.inboundLeadId },
+      });
+      if (!inbound) {
+        throw new PlatformNoxhCaseError(
+          "INBOUND_NOT_FOUND",
+          "Không tìm thấy inbound lead.",
+        );
+      }
+
+      const inboundOps = readInboundOpsMeta(inbound.meta);
+      if (inboundOps.noxh_case_id) {
+        const existing = await tx.noxhCase.findUnique({
+          where: { id: inboundOps.noxh_case_id },
+          include: caseInclude,
+        });
+        if (existing) {
+          return { case: existing, created: false as const, inbound };
+        }
+      }
+    }
+
+    let leadId = params.leadId ?? null;
+    if (!leadId && inbound) {
+      const inboundOps = readInboundOpsMeta(inbound.meta);
+      leadId = inboundOps.platform_lead_id;
+    }
+
+    let lead = leadId
+      ? await tx.lead.findUnique({ where: { id: leadId } })
+      : null;
+    if (leadId && !lead) {
+      throw new PlatformNoxhCaseError("LEAD_NOT_FOUND", "Không tìm thấy lead sàn.");
+    }
+
+    if (lead) {
+      const existingByLead = await tx.noxhCase.findUnique({
+        where: { leadId: lead.id },
+        include: caseInclude,
+      });
+      if (existingByLead) {
+        throw new PlatformNoxhCaseError(
+          "CASE_EXISTS",
+          `Lead đã có hồ sơ ${existingByLead.code}.`,
+          existingByLead.id,
+          existingByLead.code,
+        );
+      }
+    }
+
+    const customer = await tx.customer.upsert({
+      where: { normalizedPhone },
+      update: { name: params.customerName, phone: params.phone },
+      create: {
+        name: params.customerName,
+        phone: params.phone,
+        normalizedPhone,
+      },
+    });
+
+    if (!lead) {
+      const message =
+        inbound?.text ??
+        `[Ops NOXH] ${params.customerName}`;
+      const source = inbound
+        ? `magnix:${inbound.uidSource}`
+        : "ops_noxh";
+
+      lead = await tx.lead.create({
+        data: {
+          customerId: customer.id,
+          projectId: params.projectId ?? undefined,
+          source,
+          message,
+          status: "CONTACTED",
+        },
+      });
+    } else {
+      lead = await tx.lead.update({
+        where: { id: lead.id },
+        data: {
+          customerId: customer.id,
+          projectId: params.projectId ?? lead.projectId ?? undefined,
+          status: lead.status === "NEW" ? "CONTACTED" : lead.status,
+        },
+      });
+    }
+
+    const code = await generateNoxhCaseCodeInTx(tx);
+    const now = new Date();
+
+    const noxhCase = await tx.noxhCase.create({
+      data: {
+        code,
+        customerName: params.customerName,
+        phone: params.phone,
+        normalizedPhone,
+        brokerId: null,
+        leadId: lead.id,
+        projectId: params.projectId ?? lead.projectId ?? undefined,
+        objectGroup,
+        intendToBorrow,
+        milestone: "M1_RECEIVED",
+        milestoneSub: "M1_SCHEDULED",
+        firstContactedAt: now,
+        opsNote: params.opsNote ?? null,
+      },
+      include: caseInclude,
+    });
+
+    const checklist = buildDocumentChecklist({ objectGroup, intendToBorrow });
+    await tx.caseDocument.createMany({
+      data: checklist.map((d) => ({
+        caseId: noxhCase.id,
+        docType: d.docType,
+        status: d.initialStatus,
+        ctvActionHint: d.ctvActionHint,
+      })),
+    });
+
+    await tx.caseMilestoneEvent.create({
+      data: {
+        caseId: noxhCase.id,
+        toMilestone: "M1_RECEIVED",
+        milestoneSub: "M1_SCHEDULED",
+        actor: "admin",
+        opsNote: params.opsNote ?? undefined,
+      },
+    });
+
+    await enqueueEvent(
+      tx,
+      "noxh_case.created",
+      {
+        caseId: noxhCase.id,
+        caseCode: code,
+        brokerId: null,
+        milestone: "M1_RECEIVED",
+        customerName: params.customerName,
+        normalizedPhone,
+      },
+      `noxh_case.created:${noxhCase.id}`,
+    );
+
+    if (inbound) {
+      const meta = mergeInboundOpsMeta(inbound.meta, {
+        ops_status: "converted",
+        platform_lead_id: lead.id,
+        noxh_case_id: noxhCase.id,
+        noxh_case_code: code,
+      });
+      await tx.inboundUidLead.update({
+        where: { id: inbound.id },
+        data: { meta: meta as Prisma.InputJsonValue },
+      });
+    }
+
+    const withDocs = await tx.noxhCase.findUniqueOrThrow({
+      where: { id: noxhCase.id },
+      include: caseInclude,
+    });
+
+    return { case: withDocs, created: true as const, inbound };
+  });
 }
 
 export async function createCtvClaim(params: {

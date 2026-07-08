@@ -46,8 +46,12 @@ if (fs.existsSync(dfPath)) {
 
 const lines = [
   '# Magnix n8n VPS — generated, do not commit',
-  `MAGNIX_STORAGE_MODE=${local.MAGNIX_STORAGE_MODE || 'google_sheet_primary_drive_archive'}`,
+  `MAGNIX_STORAGE_MODE=${local.MAGNIX_STORAGE_MODE || 'postgres_primary_drive_archive'}`,
   `MAGNIX_DRIVE_BACKUP=${local.MAGNIX_DRIVE_BACKUP || 'true'}`,
+  '',
+  '# House X — UID ingest store of record (ADR-013; secret khớp Proptech-HouseX .env)',
+  `HOUSEX_PUBLIC_URL=${local.HOUSEX_PUBLIC_URL || 'https://timnhaxahoi.com'}`,
+  `MAGNIX_INGEST_SECRET=${local.MAGNIX_INGEST_SECRET || ''}`,
   '',
   'N8N_BLOCK_ENV_ACCESS_IN_NODE=false',
   'GENERIC_TIMEZONE=Asia/Ho_Chi_Minh',

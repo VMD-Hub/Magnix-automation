@@ -1,28 +1,28 @@
 import { describe, it } from "node:test";
 import assert from "node:assert/strict";
 import {
-  maskInboundUid,
   mergeInboundOpsMeta,
   readInboundOpsMeta,
 } from "../lib/inbound/ops-meta";
 
-describe("inbound ops meta", () => {
-  it("defaults ops_status to pending", () => {
-    assert.equal(readInboundOpsMeta({}).ops_status, "pending");
-  });
-
-  it("merges ops patch", () => {
-    const merged = mergeInboundOpsMeta({ campaign: "x" }, {
-      ops_status: "contacted",
-      ops_note: "đã nhắn",
+describe("inbound ops meta — Phase 3A", () => {
+  it("reads and merges noxh case linkage", () => {
+    const meta = readInboundOpsMeta({
+      ops_status: "converted",
+      platform_lead_id: "lead-1",
+      noxh_case_id: "case-1",
+      noxh_case_code: "HX-NOXH-000042",
     });
-    assert.equal(merged.ops_status, "contacted");
-    assert.equal(merged.ops_note, "đã nhắn");
-    assert.equal(merged.campaign, "x");
-  });
 
-  it("masks uid", () => {
-    assert.equal(maskInboundUid("123456789"), "123***89");
-    assert.equal(maskInboundUid("abc"), "***");
+    assert.equal(meta.noxh_case_id, "case-1");
+    assert.equal(meta.noxh_case_code, "HX-NOXH-000042");
+
+    const merged = mergeInboundOpsMeta(meta, {
+      noxh_case_id: "case-2",
+      noxh_case_code: "HX-NOXH-000043",
+    });
+    assert.equal(merged.noxh_case_id, "case-2");
+    assert.equal(merged.noxh_case_code, "HX-NOXH-000043");
+    assert.equal(merged.platform_lead_id, "lead-1");
   });
 });

@@ -12,6 +12,8 @@ export type InboundOpsMeta = {
   ops_status: InboundOpsStatus;
   ops_note: string | null;
   platform_lead_id: string | null;
+  noxh_case_id: string | null;
+  noxh_case_code: string | null;
 };
 
 export function readInboundOpsMeta(meta: unknown): InboundOpsMeta {
@@ -30,6 +32,10 @@ export function readInboundOpsMeta(meta: unknown): InboundOpsMeta {
     ops_note: typeof m.ops_note === "string" ? m.ops_note : null,
     platform_lead_id:
       typeof m.platform_lead_id === "string" ? m.platform_lead_id : null,
+    noxh_case_id:
+      typeof m.noxh_case_id === "string" ? m.noxh_case_id : null,
+    noxh_case_code:
+      typeof m.noxh_case_code === "string" ? m.noxh_case_code : null,
   };
 }
 
@@ -46,6 +52,12 @@ export function mergeInboundOpsMeta(
   if (patch.ops_note !== undefined) base.ops_note = patch.ops_note;
   if (patch.platform_lead_id !== undefined) {
     base.platform_lead_id = patch.platform_lead_id;
+  }
+  if (patch.noxh_case_id !== undefined) {
+    base.noxh_case_id = patch.noxh_case_id;
+  }
+  if (patch.noxh_case_code !== undefined) {
+    base.noxh_case_code = patch.noxh_case_code;
   }
 
   return base;

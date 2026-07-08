@@ -51,3 +51,10 @@ console.log(
   `0 */6 * * * curl -fsS -H "Authorization: Bearer ${cronSecret}" ${site}/api/cron/sheet-mirror`,
 );
 console.log("");
+console.log("# Postgres backup — hàng ngày 02:15 (ADR-013)");
+console.log(
+  `15 2 * * * /opt/housex/Proptech-HouseX/scripts/backup-postgres-vps.sh >> /var/log/housex-backup.log 2>&1`,
+);
+console.log("");
+console.log("# Chi tiết: docs/OPS_BACKUP_MIRROR.md");
+console.log("");

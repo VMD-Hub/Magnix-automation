@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/ui/cn";
 
@@ -55,6 +56,7 @@ const DOC_STATUSES = [
 ] as const;
 
 export function NoxhCaseBoard() {
+  const searchParams = useSearchParams();
   const [items, setItems] = useState<AdminCaseRow[]>([]);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [docs, setDocs] = useState<AdminDoc[]>([]);
@@ -98,6 +100,11 @@ export function NoxhCaseBoard() {
   useEffect(() => {
     void load();
   }, [load]);
+
+  useEffect(() => {
+    const caseId = searchParams.get("caseId");
+    if (caseId) setSelectedId(caseId);
+  }, [searchParams]);
 
   useEffect(() => {
     if (selectedId) void loadDetail(selectedId);
