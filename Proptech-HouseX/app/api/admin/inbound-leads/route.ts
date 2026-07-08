@@ -1,4 +1,5 @@
 import type { NextRequest } from "next/server";
+import type { InboundUidLead } from "@prisma/client";
 import { fail, handleApiError, ok } from "@/lib/api/http";
 import { isAdminAuthorized } from "@/lib/admin/session";
 import { listInboundUidLeadsForAdmin } from "@/lib/data/inbound-uid-lead";
@@ -25,7 +26,7 @@ export async function GET(req: NextRequest) {
     });
 
     return ok({
-      items: rows.map((row) => {
+      items: rows.map((row: InboundUidLead) => {
         const ops = readInboundOpsMeta(row.meta);
         return {
           id: row.id,
@@ -49,8 +50,8 @@ export async function GET(req: NextRequest) {
       }),
       counts: {
         total: rows.length,
-        hot: rows.filter((r) => r.score >= 70).length,
-        review: rows.filter((r) => r.status === "review").length,
+        hot: rows.filter((r: InboundUidLead) => r.score >= 70).length,
+        review: rows.filter((r: InboundUidLead) => r.status === "review").length,
       },
     });
   } catch (err) {
