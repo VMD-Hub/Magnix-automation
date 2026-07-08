@@ -6,6 +6,8 @@ import { AccountPage } from "@/pages/AccountPage";
 import { AgentHomePage } from "@/pages/AgentHomePage";
 import { ProjectDetailPage } from "@/pages/ProjectDetailPage";
 import { ConsultPage } from "@/pages/ConsultPage";
+import { ToolsHubPage } from "@/pages/ToolsHubPage";
+import { ToolViewerPage } from "@/pages/ToolViewerPage";
 
 export default function App() {
   return (
@@ -16,6 +18,8 @@ export default function App() {
             <Route index element={<HomePage />} />
             <Route path="du-an/:slug" element={<ProjectDetailPage />} />
             <Route path="tu-van" element={<ConsultPage />} />
+            <Route path="cong-cu" element={<ToolsHubPage />} />
+            <Route path="cong-cu/mo" element={<ToolViewerPage />} />
             <Route path="tai-khoan" element={<AccountPage />} />
             <Route path="agent" element={<AgentHomePage />} />
             <Route path="*" element={<Navigate to="/" replace />} />

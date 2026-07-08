@@ -11,8 +11,8 @@ export function AgentHomePage() {
           HouseX Agent
         </h1>
         <p className="lead">
-          Tab này dành cho môi giới / CTV. Đăng nhập tài khoản BROKER hoặc đăng
-          ký CTV trên web.
+          Khu vực dành cho môi giới / CTV đã được duyệt. Đăng nhập tài khoản
+          môi giới để xem hồ sơ và hoa hồng.
         </p>
         <Link className="btn" to="/tai-khoan">
           Tới Tài khoản
@@ -29,15 +29,15 @@ export function AgentHomePage() {
       </h1>
       <div className="card">
         <h2>Hồ sơ NOXH</h2>
-        <p>GET /api/ctv/cases — Phase 2.</p>
+        <p>Theo dõi tiến độ hồ sơ bạn giới thiệu.</p>
       </div>
       <div className="card">
         <h2>Thông báo</h2>
-        <p>GET /api/ctv/notifications — Phase 2.</p>
+        <p>Cập nhật mốc, SLA và kết quả thẩm định.</p>
       </div>
       <div className="card">
         <h2>Hoa hồng</h2>
-        <p>GET /api/ctv/commissions — Phase 2.</p>
+        <p>Xem số tiền đã ghi nhận và kỳ chi.</p>
       </div>
     </div>
   );

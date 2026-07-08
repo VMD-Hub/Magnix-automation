@@ -49,16 +49,11 @@ export function HomePage() {
       <div className="card" style={{ marginBottom: 16 }}>
         <h2>Công cụ</h2>
         <p className="muted" style={{ marginBottom: 10 }}>
-          Kiểm tra điều kiện / khả năng vay trên web (Phase sau sẽ nhúng Mini App).
+          Kiểm tra điều kiện / khả năng vay — mở trong Mini App.
         </p>
-        <a
-          className="btn secondary"
-          href="https://timnhaxahoi.com/cong-cu/dieu-kien-noxh"
-          target="_blank"
-          rel="noreferrer"
-        >
-          Điều kiện NOXH
-        </a>
+        <Link className="btn secondary" to="/cong-cu">
+          Điều kiện NOXH & công cụ
+        </Link>
       </div>
 
       <div className="section-head">
@@ -72,7 +67,7 @@ export function HomePage() {
       {err ? <p className="err">{err}</p> : null}
       {!loading && !err && items.length === 0 ? (
         <div className="card">
-          <p>Chưa có dự án hiển thị. Kiểm tra API House X đang chạy.</p>
+          <p>Chưa có dự án để hiển thị. Vui lòng thử lại sau.</p>
         </div>
       ) : null}
 

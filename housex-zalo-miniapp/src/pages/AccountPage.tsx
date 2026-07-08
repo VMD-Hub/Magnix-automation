@@ -1,23 +1,37 @@
 import { useState, type FormEvent } from "react";
+import { Link } from "react-router-dom";
 import { useAuth } from "@/auth-context";
 import { AUTH_DEV_BYPASS } from "@/config";
 import { loginWithZaloDev } from "@/services/api";
 
 export function AccountPage() {
-  const { user, loading, logout, setUser, canAgent } = useAuth();
-  const [phone, setPhone] = useState("0901234567");
+  const { user, loading, logout, setUser, canAgent, refresh } = useAuth();
+  const [phone, setPhone] = useState("");
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);
 
   async function onDevLogin(e: FormEvent) {
     e.preventDefault();
     setErr(null);
+
+    const trimmed = phone.trim();
+    if (!/^0\d{9}$/.test(trimmed) && !/^\+84\d{9}$/.test(trimmed)) {
+      setErr("Nhập số điện thoại Việt Nam hợp lệ (10 số, bắt đầu bằng 0).");
+      return;
+    }
+
     setBusy(true);
     try {
-      const u = await loginWithZaloDev(phone, `dev-${phone}`);
+      const u = await loginWithZaloDev(trimmed, `dev-${trimmed}`);
       setUser(u);
+      await refresh();
     } catch (ex) {
-      setErr(ex instanceof Error ? ex.message : "Đăng nhập thất bại");
+      const msg = ex instanceof Error ? ex.message : "Đăng nhập thất bại";
+      setErr(
+        msg.includes("accessToken") || msg.includes("Token")
+          ? "Máy chủ chưa bật đăng nhập thử nghiệm. Thêm ZALO_AUTH_DEV_BYPASS=true vào .env API rồi chạy lại npm run dev."
+          : msg,
+      );
     } finally {
       setBusy(false);
     }
@@ -36,14 +50,18 @@ export function AccountPage() {
         </h1>
         <div className="card">
           <p>
-            Vai trò: <strong>{user.role}</strong>
-            {canAgent ? " · có tab Agent" : ""}
+            {canAgent ? "Tài khoản môi giới / CTV" : "Tài khoản khách hàng"}
           </p>
           <p className="muted" style={{ marginTop: 8 }}>
             SĐT: {user.phoneMasked}
-            {user.ctvCode ? ` · CTV ${user.ctvCode}` : ""}
+            {user.ctvCode ? ` · Mã CTV ${user.ctvCode}` : ""}
           </p>
         </div>
+        {canAgent ? (
+          <Link className="btn" to="/agent" style={{ marginBottom: 10 }}>
+            Vào HouseX Agent
+          </Link>
+        ) : null}
         <button type="button" className="btn secondary" onClick={logout}>
           Đăng xuất
         </button>
@@ -53,37 +71,38 @@ export function AccountPage() {
 
   return (
     <div>
-      <p className="muted">ĐĂNG NHẬP</p>
+      <p className="muted">TÀI KHOẢN</p>
       <h1 className="brand" style={{ fontSize: 22 }}>
         Kết nối House X
       </h1>
       <p className="lead">
-        Trong Zalo sẽ dùng getAccessToken + SĐT. Local: mock qua API bypass.
+        Đăng nhập bằng số điện thoại để lưu hồ sơ và nhận tư vấn.
       </p>
 
       {AUTH_DEV_BYPASS ? (
         <form onSubmit={onDevLogin} className="card">
           <label className="muted" htmlFor="phone">
-            SĐT (dev)
+            Số điện thoại
           </label>
           <input
             id="phone"
             className="input"
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
+            placeholder="09xxxxxxxx"
             inputMode="tel"
+            autoComplete="tel"
+            required
           />
           {err ? <p className="err">{err}</p> : null}
-          <button className="btn" type="submit" disabled={busy}>
-            {busy ? "Đang đăng nhập…" : "Login mock → API"}
+          <button className="btn" type="submit" disabled={busy || !phone.trim()}>
+            {busy ? "Đang đăng nhập…" : "Đăng nhập"}
           </button>
         </form>
       ) : (
         <div className="card">
           <p>
-            Bật <code>VITE_AUTH_DEV_BYPASS=true</code> +{" "}
-            <code>ZALO_AUTH_DEV_BYPASS=true</code> trên API local để test, hoặc
-            chạy trong Zalo Simulator với accessToken thật.
+            Mở House X trong Zalo để đăng nhập bằng tài khoản Zalo của bạn.
           </p>
         </div>
       )}
