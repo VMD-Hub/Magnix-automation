@@ -1,15 +1,20 @@
 import { NextRequest } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { handleApiError, fail, ok } from "@/lib/api/http";
+import { applyApiCors, corsPreflight } from "@/lib/api/cors";
 import { getPublicProjectBySlug } from "@/lib/data/project-public";
 import { recordStatusChange } from "@/lib/data/status-history";
 
 const uuidRegex =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
-// GET /api/projects/:slug — chi tiết dự án + unitTypes + legalDocs (cho SSR).
+export async function OPTIONS(req: NextRequest) {
+  return corsPreflight(req);
+}
+
+// GET /api/projects/:slug — chi tiết dự án + unitTypes + legalDocs (cho SSR / Mini App).
 export async function GET(
-  _req: NextRequest,
+  req: NextRequest,
   { params }: { params: Promise<{ slug: string }> },
 ) {
   try {
@@ -17,12 +22,15 @@ export async function GET(
     const result = await getPublicProjectBySlug(slug);
 
     if (!result) {
-      return fail(404, "NOT_FOUND", "Không tìm thấy dự án.");
+      return applyApiCors(
+        fail(404, "NOT_FOUND", "Không tìm thấy dự án."),
+        req,
+      );
     }
 
-    return ok(result.project);
+    return applyApiCors(ok(result.project), req);
   } catch (err) {
-    return handleApiError(err);
+    return applyApiCors(handleApiError(err), req);
   }
 }
 

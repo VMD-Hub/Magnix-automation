@@ -2,6 +2,7 @@ import { NextRequest } from "next/server";
 import { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { created, fail, handleApiError, ok } from "@/lib/api/http";
+import { applyApiCors, corsPreflight } from "@/lib/api/cors";
 import {
   projectCreateSchema,
   projectListQuerySchema,
@@ -11,6 +12,10 @@ import { INTERNAL_DEMO_PROJECT_SLUGS } from "@/lib/deploy/internal-demo-content"
 
 // NOTE: Auth/role enforcement (chỉ Developer/Admin được tạo dự án) nằm ngoài
 // phạm vi module này — sẽ do User/Auth service riêng đảm nhiệm.
+
+export async function OPTIONS(req: NextRequest) {
+  return corsPreflight(req);
+}
 
 export async function GET(req: NextRequest) {
   try {
@@ -41,17 +46,20 @@ export async function GET(req: NextRequest) {
       prisma.project.count({ where }),
     ]);
 
-    return ok({
-      items,
-      pagination: {
-        page: query.page,
-        pageSize: query.pageSize,
-        total,
-        totalPages: Math.ceil(total / query.pageSize),
-      },
-    });
+    return applyApiCors(
+      ok({
+        items,
+        pagination: {
+          page: query.page,
+          pageSize: query.pageSize,
+          total,
+          totalPages: Math.ceil(total / query.pageSize),
+        },
+      }),
+      req,
+    );
   } catch (err) {
-    return handleApiError(err);
+    return applyApiCors(handleApiError(err), req);
   }
 }
 

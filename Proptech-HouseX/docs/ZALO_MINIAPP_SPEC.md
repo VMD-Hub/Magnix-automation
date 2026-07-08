@@ -78,10 +78,12 @@ Mini App                  House X API              Zalo Graph
 
 | Route (Mini) | API |
 |--------------|-----|
-| `/` Home | `GET /api/projects` (hoặc danh sách tĩnh SSR không — gọi API) |
-| `/du-an/:slug` | project detail API |
-| `/tu-van` | `POST /api/leads` |
-| `/tai-khoan` | `GET /api/auth/me` |
+| `/` Home | `GET /api/projects?projectType=NHA_O_XA_HOI&status=DANG_BAN` |
+| `/du-an/:slug` | `GET /api/projects/:slug` + form `POST /api/leads` |
+| `/tu-van` | `POST /api/leads` ( chọn `projectId` ) |
+| `/tai-khoan` | `GET /api/auth/me` · `POST /api/auth/zalo` |
+
+CORS: `/api/projects`, `/api/projects/:slug`, `/api/leads` dùng `applyApiCors` + `OPTIONS`.
 
 ## Phase 2 (Agent)
 

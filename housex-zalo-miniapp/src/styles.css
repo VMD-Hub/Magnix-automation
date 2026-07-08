@@ -159,7 +159,122 @@ a {
   margin: 8px 0;
 }
 
+.ok {
+  color: #86efac;
+  font-size: 13px;
+  margin: 8px 0;
+}
+
 .muted {
   color: var(--hx-muted);
   font-size: 12px;
+}
+
+.section-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin: 8px 0 12px;
+}
+
+.section-title {
+  margin: 0;
+  font-size: 16px;
+}
+
+.project-card {
+  display: block;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid var(--hx-border);
+  background: var(--hx-surface);
+  margin-bottom: 12px;
+  color: inherit;
+}
+
+.project-card-media {
+  height: 140px;
+  background:
+    linear-gradient(135deg, rgba(225, 29, 72, 0.35), rgba(15, 23, 42, 0.9)),
+    #1e293b;
+  background-size: cover;
+  background-position: center;
+}
+
+.project-card-body {
+  padding: 12px 14px 14px;
+}
+
+.project-card-body h2 {
+  margin: 6px 0 4px;
+  font-size: 16px;
+  color: var(--hx-text);
+}
+
+.project-card-body p {
+  margin: 0;
+  color: var(--hx-muted);
+  font-size: 12px;
+}
+
+.chip {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #fecdd3;
+  background: rgba(225, 29, 72, 0.2);
+  border-radius: 999px;
+  padding: 2px 8px;
+}
+
+.detail-hero {
+  height: 180px;
+  border-radius: 14px;
+  margin: 12px 0;
+  background:
+    linear-gradient(135deg, rgba(56, 189, 248, 0.2), rgba(15, 23, 42, 0.95)),
+    #1e293b;
+  background-size: cover;
+  background-position: center;
+  border: 1px solid var(--hx-border);
+}
+
+.price {
+  font-size: 18px;
+  font-weight: 700;
+  color: #fda4af;
+  margin: 6px 0 10px;
+}
+
+.unit-list {
+  list-style: none;
+  margin: 8px 0 0;
+  padding: 0;
+}
+
+.unit-list li {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 8px 0;
+  border-top: 1px solid var(--hx-border);
+  font-size: 13px;
+  color: var(--hx-muted);
+}
+
+.unit-list li strong {
+  color: var(--hx-text);
+}
+
+.textarea {
+  min-height: 80px;
+  padding: 10px 12px;
+  resize: vertical;
+  font-family: inherit;
+}
+
+select.input {
+  appearance: none;
 }

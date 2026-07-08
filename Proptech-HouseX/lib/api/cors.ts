@@ -24,7 +24,7 @@ export function applyApiCors(res: NextResponse, req: NextRequest): NextResponse 
   );
   res.headers.set(
     "Access-Control-Allow-Headers",
-    "Content-Type, Authorization",
+    "Content-Type, Authorization, Idempotency-Key",
   );
   res.headers.set("Access-Control-Max-Age", "86400");
   return res;

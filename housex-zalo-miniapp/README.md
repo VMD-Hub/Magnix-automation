@@ -44,12 +44,12 @@ ZALO_OA_ID=
 AUTH_SECRET=   # bắt buộc production
 ```
 
-## Structure
+## Phase 1 (Khách) — đã scaffold
 
-```
-src/
-  pages/      # Khách + Agent shells
-  services/   # API client + auth
-  components/
-  config.ts
-```
+| Route | API |
+|-------|-----|
+| `/` | `GET /api/projects` (ưu tiên NOXH đang bán) |
+| `/du-an/:slug` | `GET /api/projects/:slug` + `POST /api/leads` |
+| `/tu-van` | `POST /api/leads` (chọn dự án) |
+
+CORS: projects + leads đã `applyApiCors` trên House X API.

@@ -1,6 +1,7 @@
 import { NextRequest } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { created, fail, handleApiError, ok } from "@/lib/api/http";
+import { applyApiCors, corsPreflight } from "@/lib/api/cors";
 import { leadCreateSchema } from "@/lib/validation/lead";
 import { REFERRAL_COOKIE } from "@/lib/rules/referral-attribution";
 import { resolveAttribution, type ReferralTouch } from "@/lib/rules/attribution-lock";
@@ -17,6 +18,10 @@ const LEAD_RATE_MAX = Number(process.env.LEAD_RATE_MAX ?? "20");
 const LEAD_RATE_WINDOW_SEC = Number(process.env.LEAD_RATE_WINDOW_SEC ?? "3600");
 const IDEMPOTENCY_TTL_SEC = 24 * 3600;
 
+export async function OPTIONS(req: NextRequest) {
+  return corsPreflight(req);
+}
+
 // POST /api/leads — khách submit form liên hệ.
 // P0: identity resolution (normalizedPhone) + attribution lock (chống lộn cò)
 //     + idempotency key + rate limit theo IP.
@@ -26,13 +31,19 @@ export async function POST(req: NextRequest) {
 
     const normalizedPhone = normalizeVnPhone(body.phone);
     if (!isValidVnPhone(normalizedPhone)) {
-      return fail(422, "INVALID_PHONE", "Số điện thoại không hợp lệ.");
+      return applyApiCors(
+        fail(422, "INVALID_PHONE", "Số điện thoại không hợp lệ."),
+        req,
+      );
     }
 
     // Rate limit theo IP (chống bơm lead).
     const ip = ipHash(req);
     if (await isRateLimited(`lead:${ip}`, LEAD_RATE_MAX, LEAD_RATE_WINDOW_SEC)) {
-      return fail(429, "RATE_LIMITED", "Quá nhiều yêu cầu, vui lòng thử lại sau.");
+      return applyApiCors(
+        fail(429, "RATE_LIMITED", "Quá nhiều yêu cầu, vui lòng thử lại sau."),
+        req,
+      );
     }
 
     // Idempotency: cùng Idempotency-Key trả lại lead đã tạo, không nhân đôi.
@@ -43,7 +54,7 @@ export async function POST(req: NextRequest) {
         const existingLead = await prisma.lead.findUnique({
           where: { id: existingLeadId },
         });
-        if (existingLead) return ok(existingLead);
+        if (existingLead) return applyApiCors(ok(existingLead), req);
       }
     }
 
@@ -121,8 +132,8 @@ export async function POST(req: NextRequest) {
       await kv.set(`idem:lead:${idemKey}`, lead.id, IDEMPOTENCY_TTL_SEC);
     }
 
-    return created(lead);
+    return applyApiCors(created(lead), req);
   } catch (err) {
-    return handleApiError(err);
+    return applyApiCors(handleApiError(err), req);
   }
 }
