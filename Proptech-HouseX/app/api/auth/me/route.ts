@@ -1,13 +1,23 @@
+import type { NextRequest } from "next/server";
 import { ok } from "@/lib/api/http";
-import { getSessionUser } from "@/lib/auth/session";
+import { applyApiCors, corsPreflight } from "@/lib/api/cors";
+import {
+  getSessionUser,
+  getSessionUserFromRequest,
+} from "@/lib/auth/session";
 import { loadSessionProfile } from "@/lib/auth/session-profile";
 
-export async function GET() {
-  const session = await getSessionUser();
+export async function OPTIONS(req: NextRequest) {
+  return corsPreflight(req);
+}
+
+export async function GET(req: NextRequest) {
+  const session =
+    getSessionUserFromRequest(req) ?? (await getSessionUser());
   if (!session) {
-    return ok({ user: null });
+    return applyApiCors(ok({ user: null }), req);
   }
 
   const profile = await loadSessionProfile(session);
-  return ok({ user: profile });
+  return applyApiCors(ok({ user: profile }), req);
 }

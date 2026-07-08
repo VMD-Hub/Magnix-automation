@@ -48,8 +48,10 @@ Magnix **orchestrate** qua n8n; logic nặng có thể gọi HTTP sang service t
               (draft → review → publish)
                       │
                       ▼
-         [Đích: Page, Zalo OA, email, CRM...]
+         [Đích: Page, Zalo OA / Mini App, email, CRM...]
 ```
+
+> **Zalo Mini App (ADR-014):** frontend `housex-zalo-miniapp/` · auth `POST /api/auth/zalo` trên Proptech-HouseX · Postgres SoR. Spec: `Proptech-HouseX/docs/ZALO_MINIAPP_SPEC.md`.
 
 ---
 
@@ -60,6 +62,8 @@ magnix-automation/
 ├── .cursor/                 # Rule & hướng dẫn Subagent riêng Magnix
 ├── ai-agents-prompts/       # Prompt thô — không chứa secret
 ├── n8n-workflows/           # Export JSON workflow
+├── housex-zalo-miniapp/     # Zalo Mini App (Khách + Agent) — ADR-014
+├── Proptech-HouseX/         # Next.js web + API (Postgres SoR)
 ├── webhooks/                # Mini HTTP server (validate, transform, proxy)
 ├── tests/fixtures/          # Golden test UID (calibrate classify/parse)
 ├── .cursorrules             # Quy tắc cốt lõi

@@ -498,6 +498,8 @@ model UserAccount {
   emailVerifiedAt DateTime?   @map("email_verified_at")
   marketingOptIn  Boolean     @default(true) @map("marketing_opt_in")
   passwordHash    String      @map("password_hash")
+  /// Zalo user id (Mini App / OA) — ADR-014
+  zaloUserId      String?     @unique @map("zalo_user_id")
   createdAt       DateTime    @default(now()) @map("created_at")
   updatedAt       DateTime    @updatedAt @map("updated_at")
 

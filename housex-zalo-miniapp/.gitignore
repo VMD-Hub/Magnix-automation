@@ -1,0 +1,9 @@
+# Dependencies
+node_modules/
+www/
+dist/
+.DS_Store
+*.local
+.env
+.env.*
+!.env.example

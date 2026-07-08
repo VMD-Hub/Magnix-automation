@@ -1,0 +1,14 @@
+{
+  "app": {
+    "title": "House X",
+    "headerTitle": "House X",
+    "headerColor": "#0f172a",
+    "textColor": "white",
+    "statusBarColor": "#0f172a",
+    "leftButton": "none",
+    "selfDefense": false
+  },
+  "listCSS": [],
+  "listSyncJS": [],
+  "listAsyncJS": []
+}

@@ -23,8 +23,24 @@ export async function getSessionUser(): Promise<SessionUser | null> {
   return parse(store.get(SESSION_COOKIE)?.value);
 }
 
-/** Dùng khi đã có NextRequest (middleware / một số route). */
+/**
+ * Authorization: Bearer <token> — Mini App (ADR-014).
+ * Cookie hx_session vẫn dùng cho web.
+ */
+export function getBearerToken(req: NextRequest): string | null {
+  const h = req.headers.get("authorization") ?? req.headers.get("Authorization");
+  if (!h) return null;
+  const m = /^Bearer\s+(\S+)/i.exec(h.trim());
+  return m?.[1] ?? null;
+}
+
+/** Dùng khi đã có NextRequest (middleware / một số route). Bearer trước, cookie sau. */
 export function getSessionUserFromRequest(req: NextRequest): SessionUser | null {
+  const bearer = getBearerToken(req);
+  if (bearer) {
+    const fromBearer = parse(bearer);
+    if (fromBearer) return fromBearer;
+  }
   return parse(req.cookies.get(SESSION_COOKIE)?.value);
 }
 

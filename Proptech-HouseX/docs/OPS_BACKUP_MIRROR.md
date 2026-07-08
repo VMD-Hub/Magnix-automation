@@ -64,30 +64,99 @@ gunzip -c ~/backup/housex/housex-YYYY-MM-DD_HHMM.sql.gz | \
 
 ### Upload service account lên VPS (không dùng nano paste JSON)
 
-Paste trực tiếp JSON vào `nano` thường **làm hỏng** trường `private_key` → `không parse được`.
+Paste trực tiếp JSON vào `nano` thường **làm hỏng** trường `private_key` → `không parse được` / file rỗng.
 
-**Windows (PowerShell)** — copy base64 1 dòng:
+**QUY TẮC:** lệnh `PowerShell` / đường dẫn `C:\Users\...` chỉ chạy trên **Windows**.  
+Lệnh `bash` / `/opt/housex/...` chỉ chạy trên **VPS Linux** (console iNET).
+
+#### Cách A — `scp` trực tiếp (khuyến nghị nếu SSH cổng 24700 mở)
+
+**Windows PowerShell:**
 
 ```powershell
-$p = "C:\Users\nguye\Magnix-automation\n8n-workflows\credentials\google-service-account.json"
-[Convert]::ToBase64String([IO.File]::ReadAllBytes($p)) | Set-Clipboard
-Write-Host "Base64 copied — paste on VPS"
+scp -P 24700 "C:\Users\nguye\Magnix-automation\n8n-workflows\credentials\google-service-account.json" root@103.72.99.131:/opt/housex/secrets/google-sa.json
+ssh -p 24700 root@103.72.99.131 "chmod 600 /opt/housex/secrets/google-sa.json && python3 -m json.tool /opt/housex/secrets/google-sa.json >/dev/null && echo JSON_OK"
 ```
 
-**VPS** — decode (dán 1 dòng base64, Enter, Ctrl+D):
+#### Cách B — base64 qua console (khi không dùng được scp)
+
+#### Bước W1 — Windows PowerShell (máy bạn)
+
+```powershell
+cd C:\Users\nguye\Magnix-automation\Proptech-HouseX
+.\scripts\export-google-sa-base64.ps1
+notepad C:\Users\nguye\Magnix-automation\n8n-workflows\credentials\google-sa.b64.txt
+```
+
+Trong Notepad: `Ctrl+A` → `Ctrl+C` (copy **một dòng** base64).
+
+#### Bước L1 — VPS Linux (console iNET / SSH)
+
+```bash
+nano /tmp/sa.b64
+```
+
+Paste **một dòng** (chuột phải hoặc Shift+Insert) → `Ctrl+O` → Enter → `Ctrl+X`
+
+Kiểm tra file base64 **không rỗng**:
+
+```bash
+wc -c /tmp/sa.b64
+# kỳ vọng: ~3100–3300 (không được 0)
+head -c 20 /tmp/sa.b64
+# kỳ vọng: bắt đầu bằng eyJ (base64 của "{")
+```
+
+#### Bước L2 — Decode trên VPS
 
 ```bash
 cd /opt/housex/Proptech-HouseX
 chmod +x scripts/decode-google-sa.sh
-# dán base64 rồi Ctrl+D:
-./scripts/decode-google-sa.sh
-# hoặc:
-# echo 'PASTE_BASE64_HERE' | base64 -d > /opt/housex/secrets/google-sa.json
-chmod 600 /opt/housex/secrets/google-sa.json
+rm -f /opt/housex/secrets/google-sa.json
+./scripts/decode-google-sa.sh /tmp/sa.b64
+rm -f /tmp/sa.b64
+```
+
+Kỳ vọng:
+
+```text
+OK → /opt/housex/secrets/google-sa.json
+"client_email": "bds-pipeline@gpl-automation.iam.gserviceaccount.com"
+```
+
+Xác nhận JSON (~2364 bytes):
+
+```bash
+wc -c /opt/housex/secrets/google-sa.json
 python3 -m json.tool /opt/housex/secrets/google-sa.json >/dev/null && echo JSON_OK
 ```
 
-Share Sheet **Editor** cho `client_email` in trong file (vd. `bds-pipeline@gpl-automation.iam.gserviceaccount.com`).
+#### Bước L3 — Share Sheet + tab
+
+1. Mở Google Sheet ID `GOOGLE_SHEET_MIRROR_ID`
+2. **Share → Editor** cho `bds-pipeline@gpl-automation.iam.gserviceaccount.com`
+3. Tạo tab tên **`ops_mirror`** (đúng chữ thường)
+
+#### Bước L4 — Test mirror
+
+```bash
+cd /opt/housex/Proptech-HouseX
+npm run go-live:check-sheet-mirror
+pm2 restart housex --update-env
+SITE=https://timnhaxahoi.com npm run go-live:smoke-sheet-mirror
+```
+
+Kỳ vọng smoke: `OK — tab=ops_mirror inbound=... noxh=...`
+
+#### Lỗi thường gặp
+
+| Triệu chứng | Nguyên nhân | Sửa |
+|-------------|-------------|-----|
+| `Expecting value: line 1 column 1` | File JSON **rỗng** | Làm lại W1→L2; `wc -c` phải > 2000 |
+| `Unexpected end of JSON input` | Base64 cắt ngắn / thiếu ký tự | Copy lại **cả dòng** từ `.b64.txt` |
+| `Unexpected token 'y', "y…"` | Paste **JSON thô** vào `.b64` hoặc decode hỏng | Xóa file, dùng **Cách A scp** hoặc copy đúng `.b64.txt` |
+| `syntax error` với `[IO.File]` | Chạy PowerShell **trên VPS** | Chỉ chạy W1 trên Windows |
+| HTTP 500 smoke | SA hỏng hoặc Sheet chưa share | JSON_OK trước; share Editor + tab |
 
 ### Env House X (`.env` trên VPS)
 
