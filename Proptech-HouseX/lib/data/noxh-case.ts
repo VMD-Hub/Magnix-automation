@@ -7,7 +7,7 @@ import { prisma } from "@/lib/prisma";
 import type { NoxhObjectGroupId } from "@/lib/finance/noxh-rules";
 import { normalizeVnPhone } from "@/lib/phone";
 import { enqueueEvent } from "@/lib/events/outbox";
-import { buildDocumentChecklist } from "@/lib/noxh-case/doc-catalog";
+import { buildDocumentChecklist, countDocProgress } from "@/lib/noxh-case/doc-catalog";
 import {
   computeClaimLockExpiry,
   evaluateCtvClaim,

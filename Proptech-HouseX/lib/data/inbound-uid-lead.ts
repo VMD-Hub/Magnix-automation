@@ -12,7 +12,7 @@ const ingestSchema = z.object({
   score: z.number().int().min(0).max(100).default(0),
   interest_key: z.string().optional().nullable(),
   tags: z.array(z.string()).optional().default([]),
-  meta: z.record(z.unknown()).optional().default({}),
+  meta: z.record(z.string(), z.unknown()).optional().default({}),
   classify_method: z.enum(["regex", "llm"]).default("regex"),
   consent_basis: z.string().optional().nullable(),
   status: z

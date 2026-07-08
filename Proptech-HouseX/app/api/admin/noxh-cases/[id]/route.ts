@@ -1,4 +1,5 @@
 import type { NextRequest } from "next/server";
+import type { CaseDocument } from "@prisma/client";
 import { fail, handleApiError, ok } from "@/lib/api/http";
 import { isAdminAuthorized } from "@/lib/admin/session";
 import {
@@ -27,7 +28,7 @@ export async function GET(
     return ok({
       ...row,
       milestoneLabel: MILESTONE_LABEL[row.milestone],
-      documents: row.documents.map((d) => ({
+      documents: row.documents.map((d: CaseDocument) => ({
         ...d,
         statusLabel: DOC_STATUS_LABEL[d.status],
       })),
