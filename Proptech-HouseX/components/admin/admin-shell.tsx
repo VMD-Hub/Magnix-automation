@@ -55,6 +55,12 @@ export function AdminShell({
               Khuyến mãi
             </Link>
             <Link
+              href="/admin/inbound-leads"
+              className="text-slate-600 hover:text-slate-800"
+            >
+              Magnix inbound
+            </Link>
+            <Link
               href="/admin/noxh-cases"
               className="text-slate-600 hover:text-slate-800"
             >
