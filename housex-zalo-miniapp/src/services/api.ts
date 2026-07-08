@@ -61,16 +61,24 @@ export async function apiFetch<T>(
   return json.data;
 }
 
-export async function loginWithZaloDev(phone: string, zaloUserId: string) {
+export async function loginWithZaloDev(
+  phone: string,
+  zaloUserId: string,
+  preferredRole: "CUSTOMER" | "BROKER" = "CUSTOMER",
+) {
   const data = await apiFetch<{ token: string; user: HouseXUser }>(
     "/api/auth/zalo",
     {
       method: "POST",
       body: JSON.stringify({
-        zaloUserId,
+        zaloUserId:
+          preferredRole === "BROKER" ? `broker-${zaloUserId}` : zaloUserId,
         phone,
-        preferredRole: "CUSTOMER",
-        name: "House X (dev)",
+        preferredRole,
+        name:
+          preferredRole === "BROKER"
+            ? "HouseX Agent (dev)"
+            : "House X (dev)",
       }),
     },
   );

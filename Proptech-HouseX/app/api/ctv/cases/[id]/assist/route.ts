@@ -1,8 +1,13 @@
 import type { NextRequest } from "next/server";
 import { fail, handleApiError, created } from "@/lib/api/http";
+import { applyApiCors, corsPreflight } from "@/lib/api/cors";
 import { requireBrokerSessionFromRequest } from "@/lib/auth/require-broker";
 import { createCaseAssistLog, getNoxhCaseForBroker } from "@/lib/data/noxh-case";
 import { assistLogSchema } from "@/lib/validation/noxh-case";
+
+export async function OPTIONS(req: NextRequest) {
+  return corsPreflight(req);
+}
 
 /** CTV — ghi nhận đã hỗ trợ khách ngoài đời. */
 export async function POST(
@@ -12,7 +17,10 @@ export async function POST(
   try {
     const session = await requireBrokerSessionFromRequest(req);
     if (!session.ok) {
-      return fail(session.status, session.code, session.message);
+      return applyApiCors(
+        fail(session.status, session.code, session.message),
+        req,
+      );
     }
 
     const { id } = await params;
@@ -20,7 +28,10 @@ export async function POST(
 
     const row = await getNoxhCaseForBroker(id, session.brokerId);
     if (!row) {
-      return fail(404, "NOT_FOUND", "Không tìm thấy hồ sơ.");
+      return applyApiCors(
+        fail(404, "NOT_FOUND", "Không tìm thấy hồ sơ."),
+        req,
+      );
     }
 
     const log = await createCaseAssistLog({
@@ -30,8 +41,8 @@ export async function POST(
       message: body.message,
     });
 
-    return created({ id: log.id });
+    return applyApiCors(created({ id: log.id }), req);
   } catch (err) {
-    return handleApiError(err);
+    return applyApiCors(handleApiError(err), req);
   }
 }

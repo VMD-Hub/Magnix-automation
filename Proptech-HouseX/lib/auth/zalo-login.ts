@@ -115,11 +115,22 @@ export async function loginOrRegisterWithZalo(input: ZaloAuthInput) {
           },
         });
       } else {
+        // Dev Mini App Agent: BROKER mới qua bypass → CTV để test claim.
+        const bypass =
+          process.env.ZALO_AUTH_DEV_BYPASS === "true" &&
+          process.env.NODE_ENV !== "production";
+        const suffix = zaloUserId.replace(/[^a-zA-Z0-9]/g, "").slice(-6).toUpperCase();
         await tx.broker.create({
           data: {
             userAccountId: created.id,
             fullName: name,
             phone: created.phone,
+            ...(bypass
+              ? {
+                  brokerType: "CTV" as const,
+                  ctvCode: `DEV${suffix || "000000"}`,
+                }
+              : {}),
           },
         });
       }

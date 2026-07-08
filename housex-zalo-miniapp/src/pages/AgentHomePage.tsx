@@ -1,8 +1,18 @@
 import { Link } from "react-router-dom";
 import { useAuth } from "@/auth-context";
+import { useEffect, useState } from "react";
+import { listNotifications } from "@/services/agent";
 
 export function AgentHomePage() {
   const { canAgent, user } = useAuth();
+  const [unread, setUnread] = useState(0);
+
+  useEffect(() => {
+    if (!canAgent) return;
+    void listNotifications()
+      .then((d) => setUnread(d.unreadCount))
+      .catch(() => setUnread(0));
+  }, [canAgent]);
 
   if (!canAgent) {
     return (
@@ -11,8 +21,8 @@ export function AgentHomePage() {
           HouseX Agent
         </h1>
         <p className="lead">
-          Khu vực dành cho môi giới / CTV đã được duyệt. Đăng nhập tài khoản
-          môi giới để xem hồ sơ và hoa hồng.
+          Khu vực dành cho môi giới / CTV. Đăng nhập tài khoản môi giới để xem
+          hồ sơ và hoa hồng.
         </p>
         <Link className="btn" to="/tai-khoan">
           Tới Tài khoản
@@ -27,18 +37,29 @@ export function AgentHomePage() {
       <h1 className="brand" style={{ fontSize: 22 }}>
         Xin chào, {user?.name}
       </h1>
-      <div className="card">
+      {user?.ctvCode ? (
+        <p className="muted" style={{ marginBottom: 16 }}>
+          Mã CTV {user.ctvCode}
+        </p>
+      ) : null}
+
+      <Link to="/agent/ho-so" className="card tool-card">
         <h2>Hồ sơ NOXH</h2>
-        <p>Theo dõi tiến độ hồ sơ bạn giới thiệu.</p>
-      </div>
-      <div className="card">
-        <h2>Thông báo</h2>
-        <p>Cập nhật mốc, SLA và kết quả thẩm định.</p>
-      </div>
-      <div className="card">
+        <p>Theo dõi tiến độ · thả lead mới</p>
+        <span className="tool-card-cta">Mở hồ sơ →</span>
+      </Link>
+
+      <Link to="/agent/thong-bao" className="card tool-card">
+        <h2>Thông báo {unread > 0 ? `(${unread})` : ""}</h2>
+        <p>Cập nhật mốc, SLA và hoa hồng</p>
+        <span className="tool-card-cta">Xem thông báo →</span>
+      </Link>
+
+      <Link to="/agent/hoa-hong" className="card tool-card">
         <h2>Hoa hồng</h2>
-        <p>Xem số tiền đã ghi nhận và kỳ chi.</p>
-      </div>
+        <p>Số tiền đã ghi nhận và kỳ chi</p>
+        <span className="tool-card-cta">Xem hoa hồng →</span>
+      </Link>
     </div>
   );
 }

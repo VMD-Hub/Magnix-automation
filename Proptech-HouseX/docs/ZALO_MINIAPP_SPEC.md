@@ -85,13 +85,18 @@ Mini App                  House X API              Zalo Graph
 
 CORS: `/api/projects`, `/api/projects/:slug`, `/api/leads` dùng `applyApiCors` + `OPTIONS`.
 
-## Phase 2 (Agent)
+## Phase 2 (Agent) — scaffolded
 
 | Route | API |
 |-------|-----|
-| `/agent/ho-so` | `GET/POST /api/ctv/cases` |
+| `/agent` | Hub Agent |
+| `/agent/ho-so` | `GET/POST /api/ctv/cases` (+ form thả lead) |
+| `/agent/ho-so/:id` | `GET /api/ctv/cases/:id` + `POST .../nudge` |
 | `/agent/thong-bao` | `GET/PATCH /api/ctv/notifications` |
 | `/agent/hoa-hong` | `GET /api/ctv/commissions` |
+
+CORS: toàn bộ `/api/ctv/*` dùng `applyApiCors` + `OPTIONS`.  
+Local: login với `preferredRole=BROKER` + `ZALO_AUTH_DEV_BYPASS` (auto `brokerType=CTV` + `ctvCode` DEV*).
 
 ## Repo
 

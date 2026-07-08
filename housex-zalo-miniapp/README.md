@@ -44,12 +44,14 @@ ZALO_OA_ID=
 AUTH_SECRET=   # bắt buộc production
 ```
 
-## Phase 1 (Khách) — đã scaffold
+## Phase 2 (Agent) — đã scaffold
 
 | Route | API |
 |-------|-----|
-| `/` | `GET /api/projects` (ưu tiên NOXH đang bán) |
-| `/du-an/:slug` | `GET /api/projects/:slug` + `POST /api/leads` |
-| `/tu-van` | `POST /api/leads` (chọn dự án) |
+| `/agent` | Hub + unread notifications |
+| `/agent/ho-so` | `GET/POST /api/ctv/cases` |
+| `/agent/ho-so/:id` | `GET .../cases/:id` + nudge |
+| `/agent/thong-bao` | `GET/PATCH /api/ctv/notifications` |
+| `/agent/hoa-hong` | `GET /api/ctv/commissions` |
 
-CORS: projects + leads đã `applyApiCors` trên House X API.
+Local test: Tài khoản → tick **Đăng nhập Agent (CTV thử nghiệm)** (cần `ZALO_AUTH_DEV_BYPASS` trên API).

@@ -1,5 +1,6 @@
 import type { NextRequest } from "next/server";
 import { fail, handleApiError, ok, created } from "@/lib/api/http";
+import { applyApiCors, corsPreflight } from "@/lib/api/cors";
 import { requireBrokerSessionFromRequest } from "@/lib/auth/require-broker";
 import {
   createCtvClaim,
@@ -11,20 +12,30 @@ import { ctvClaimSchema } from "@/lib/validation/noxh-case";
 import { isValidVnPhone, normalizeVnPhone } from "@/lib/phone";
 import { prisma } from "@/lib/prisma";
 
+export async function OPTIONS(req: NextRequest) {
+  return corsPreflight(req);
+}
+
 /** CTV — danh sách hồ sơ NOXH (Contact Firewall: mask SĐT). */
 export async function GET(req: NextRequest) {
   try {
     const session = await requireBrokerSessionFromRequest(req);
     if (!session.ok) {
-      return fail(session.status, session.code, session.message);
+      return applyApiCors(
+        fail(session.status, session.code, session.message),
+        req,
+      );
     }
 
     const cases = await listNoxhCasesForBroker(session.brokerId);
-    return ok({
-      items: cases.map(serializeCaseListItemForCtv),
-    });
+    return applyApiCors(
+      ok({
+        items: cases.map(serializeCaseListItemForCtv),
+      }),
+      req,
+    );
   } catch (err) {
-    return handleApiError(err);
+    return applyApiCors(handleApiError(err), req);
   }
 }
 
@@ -33,13 +44,19 @@ export async function POST(req: NextRequest) {
   try {
     const session = await requireBrokerSessionFromRequest(req);
     if (!session.ok) {
-      return fail(session.status, session.code, session.message);
+      return applyApiCors(
+        fail(session.status, session.code, session.message),
+        req,
+      );
     }
 
     const body = ctvClaimSchema.parse(await req.json());
     const normalizedPhone = normalizeVnPhone(body.phone);
     if (!isValidVnPhone(normalizedPhone)) {
-      return fail(422, "INVALID_PHONE", "Số điện thoại không hợp lệ.");
+      return applyApiCors(
+        fail(422, "INVALID_PHONE", "Số điện thoại không hợp lệ."),
+        req,
+      );
     }
 
     const broker = await prisma.broker.findUnique({
@@ -47,7 +64,10 @@ export async function POST(req: NextRequest) {
       select: { phone: true },
     });
     if (!broker) {
-      return fail(403, "BROKER_NOT_FOUND", "Không tìm thấy hồ sơ môi giới.");
+      return applyApiCors(
+        fail(403, "BROKER_NOT_FOUND", "Không tìm thấy hồ sơ môi giới."),
+        req,
+      );
     }
 
     const noxhCase = await createCtvClaim({
@@ -62,11 +82,11 @@ export async function POST(req: NextRequest) {
     });
 
     const { serializeCaseForCtv } = await import("@/lib/noxh-case/serialize-ctv");
-    return created(serializeCaseForCtv(noxhCase));
+    return applyApiCors(created(serializeCaseForCtv(noxhCase)), req);
   } catch (err) {
     if (err instanceof CtvClaimError) {
-      return fail(409, err.code, err.message);
+      return applyApiCors(fail(409, err.code, err.message), req);
     }
-    return handleApiError(err);
+    return applyApiCors(handleApiError(err), req);
   }
 }

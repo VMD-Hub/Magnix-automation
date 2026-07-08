@@ -7,6 +7,7 @@ import { loginWithZaloDev } from "@/services/api";
 export function AccountPage() {
   const { user, loading, logout, setUser, canAgent, refresh } = useAuth();
   const [phone, setPhone] = useState("");
+  const [asAgent, setAsAgent] = useState(false);
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);
 
@@ -22,7 +23,11 @@ export function AccountPage() {
 
     setBusy(true);
     try {
-      const u = await loginWithZaloDev(trimmed, `dev-${trimmed}`);
+      const u = await loginWithZaloDev(
+        trimmed,
+        `dev-${trimmed}`,
+        asAgent ? "BROKER" : "CUSTOMER",
+      );
       setUser(u);
       await refresh();
     } catch (ex) {
@@ -94,6 +99,22 @@ export function AccountPage() {
             autoComplete="tel"
             required
           />
+          <label
+            className="muted"
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 8,
+              marginBottom: 12,
+            }}
+          >
+            <input
+              type="checkbox"
+              checked={asAgent}
+              onChange={(e) => setAsAgent(e.target.checked)}
+            />
+            Đăng nhập Agent (CTV thử nghiệm)
+          </label>
           {err ? <p className="err">{err}</p> : null}
           <button className="btn" type="submit" disabled={busy || !phone.trim()}>
             {busy ? "Đang đăng nhập…" : "Đăng nhập"}

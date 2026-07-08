@@ -1,8 +1,13 @@
 import type { NextRequest } from "next/server";
 import { fail, handleApiError, created } from "@/lib/api/http";
+import { applyApiCors, corsPreflight } from "@/lib/api/cors";
 import { requireBrokerSessionFromRequest } from "@/lib/auth/require-broker";
 import { createCtvNudge } from "@/lib/data/noxh-case";
 import { nudgeSchema } from "@/lib/validation/noxh-case";
+
+export async function OPTIONS(req: NextRequest) {
+  return corsPreflight(req);
+}
 
 /** CTV — nhắc khách qua hệ thống (Ops gọi hộ). */
 export async function POST(
@@ -12,7 +17,10 @@ export async function POST(
   try {
     const session = await requireBrokerSessionFromRequest(req);
     if (!session.ok) {
-      return fail(session.status, session.code, session.message);
+      return applyApiCors(
+        fail(session.status, session.code, session.message),
+        req,
+      );
     }
 
     const { id } = await params;
@@ -26,14 +34,20 @@ export async function POST(
     });
 
     if (!log) {
-      return fail(404, "NOT_FOUND", "Không tìm thấy hồ sơ.");
+      return applyApiCors(
+        fail(404, "NOT_FOUND", "Không tìm thấy hồ sơ."),
+        req,
+      );
     }
 
-    return created({
-      id: log.id,
-      message: "Đã gửi yêu cầu nhắc — chuyên viên HouseX sẽ liên hệ khách.",
-    });
+    return applyApiCors(
+      created({
+        id: log.id,
+        message: "Đã gửi yêu cầu nhắc — chuyên viên HouseX sẽ liên hệ khách.",
+      }),
+      req,
+    );
   } catch (err) {
-    return handleApiError(err);
+    return applyApiCors(handleApiError(err), req);
   }
 }
