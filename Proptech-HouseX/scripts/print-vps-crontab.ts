@@ -46,3 +46,8 @@ console.log(
   `0 8 5,20 * * curl -fsS -H "Authorization: Bearer ${cronSecret}" ${site}/api/cron/commission-payouts`,
 );
 console.log("");
+console.log("# Sheet ops_mirror — Postgres → Google Sheet (mỗi 6 giờ, bật MAGNIX_SHEET_MIRROR_ENABLED=true)");
+console.log(
+  `0 */6 * * * curl -fsS -H "Authorization: Bearer ${cronSecret}" ${site}/api/cron/sheet-mirror`,
+);
+console.log("");
