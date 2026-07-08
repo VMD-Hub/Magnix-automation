@@ -116,6 +116,8 @@ enum ReferralType {
 
 enum CommissionStatus {
   PENDING
+  ACCRUED
+  PAYABLE
   APPROVED
   PAID
   REJECTED
@@ -204,6 +206,7 @@ model Project {
   articles  ArticleProject[]
   units     ProjectUnit[]
   unitBookings UnitBooking[]
+  noxhCases NoxhCase[]
 
   @@index([province, district])
   @@index([deletedAt])
@@ -291,6 +294,7 @@ model UnitBooking {
   broker           Broker?           @relation(fields: [brokerId], references: [id])
   referral         Referral?         @relation(fields: [referralId], references: [id])
   depositForUnit   ProjectUnit?      @relation("DepositBooking")
+  noxhCase         NoxhCase?
 
   @@index([unitId, status])
   @@index([projectId, status])
@@ -392,6 +396,8 @@ model Broker {
   attributionLocks AttributionLock[]
   ctvApplication   CtvApplication?
   unitBookings     UnitBooking[]
+  noxhCases        NoxhCase[]
+  notifications    BrokerNotification[]
 
   @@map("brokers")
 }
@@ -580,6 +586,7 @@ model Lead {
   referral       Referral?   @relation(fields: [referralId], references: [id])
   assignedBroker Broker?     @relation("AssignedBroker", fields: [assignedBrokerId], references: [id])
   commission     Commission?
+  noxhCases      NoxhCase[]
 
   @@index([status])
   @@map("leads")
@@ -614,13 +621,20 @@ model Commission {
   amount     Decimal          @db.Decimal(18, 2)
   rate       Float?
   status     CommissionStatus @default(PENDING)
-  paidAt     DateTime?        @map("paid_at")
-  createdAt  DateTime         @default(now()) @map("created_at")
+  /// NOXH pipeline — thời điểm ký HĐMB (ghi nhận ACCRUED).
+  signedAt         DateTime? @map("signed_at")
+  accruedAt        DateTime? @map("accrued_at")
+  payableAt        DateTime? @map("payable_at")
+  expectedPayDate  DateTime? @map("expected_pay_date") @db.Date
+  paidAt           DateTime? @map("paid_at")
+  createdAt        DateTime  @default(now()) @map("created_at")
 
   lead     Lead      @relation(fields: [leadId], references: [id])
   referral Referral? @relation(fields: [referralId], references: [id])
   broker   Broker    @relation(fields: [brokerId], references: [id])
 
+  @@index([brokerId, status])
+  @@index([status, expectedPayDate])
   @@map("commissions")
 }
 
@@ -855,4 +869,187 @@ model PromotionWin {
   @@unique([campaignId, customerId])
   @@index([campaignId, createdAt])
   @@map("promotion_wins")
+}
+
+// --- Phase 0: NOXH Case pipeline (CTV + Ops) — ADR-013 Postgres SoR ---
+
+enum NoxhMilestone {
+  M1_RECEIVED
+  M2_DOCUMENTS
+  M3_SUBMITTED
+  M4_APPROVED
+  M5_SIGNED
+}
+
+enum NoxhCaseStatus {
+  ACTIVE
+  UNREACHABLE
+  DECLINED
+  COMPLETED
+  RELEASED
+}
+
+enum NoxhDocType {
+  DOC_ID
+  DOC_MARRIAGE
+  DOC_RESIDENCE
+  DOC_OBJECT
+  DOC_HOUSING
+  DOC_INCOME
+  DOC_APPLICATION
+  DOC_DEPOSIT_PROOF
+  DOC_CIC
+  DOC_BANK_INCOME
+  DOC_LOAN_APP
+}
+
+enum NoxhDocStatus {
+  NOT_REQUIRED
+  MISSING
+  RECEIVED
+  REVIEWING
+  PASSED
+  REJECTED
+  EXPIRED
+}
+
+enum CtvAssistType {
+  NUDGE
+  ESCORT
+  NOTE
+}
+
+/// Hồ sơ NOXH — 1 khách (SĐT) trong một chu kỳ xử lý; CTV theo dõi qua portal.
+model NoxhCase {
+  id                String         @id @default(uuid())
+  code              String         @unique
+  customerName      String         @map("customer_name")
+  phone             String
+  normalizedPhone   String         @map("normalized_phone")
+  brokerId          String?        @map("broker_id")
+  leadId            String?        @unique @map("lead_id")
+  projectId         String?        @map("project_id")
+  unitBookingId     String?        @unique @map("unit_booking_id")
+  objectGroup       String         @default("WORKER") @map("object_group")
+  intendToBorrow    Boolean        @default(false) @map("intend_to_borrow")
+  milestone         NoxhMilestone  @default(M1_RECEIVED)
+  milestoneSub      String?        @map("milestone_sub")
+  caseStatus        NoxhCaseStatus @default(ACTIVE) @map("case_status")
+  opsNote           String?        @db.Text @map("ops_note")
+  attributionLockedAt DateTime?    @map("attribution_locked_at")
+  lockExpiresAt     DateTime?      @map("lock_expires_at")
+  claimedAt         DateTime       @default(now()) @map("claimed_at")
+  firstContactedAt  DateTime?      @map("first_contacted_at")
+  completedAt       DateTime?      @map("completed_at")
+  createdAt         DateTime       @default(now()) @map("created_at")
+  updatedAt         DateTime       @updatedAt @map("updated_at")
+
+  broker       Broker?              @relation(fields: [brokerId], references: [id])
+  lead         Lead?                @relation(fields: [leadId], references: [id])
+  project      Project?             @relation(fields: [projectId], references: [id])
+  unitBooking  UnitBooking?         @relation(fields: [unitBookingId], references: [id])
+  documents    CaseDocument[]
+  assistLogs   CaseAssistLog[]
+  milestoneEvents CaseMilestoneEvent[]
+
+  @@index([brokerId, caseStatus])
+  @@index([normalizedPhone, caseStatus])
+  @@index([milestone])
+  @@index([lockExpiresAt])
+  @@map("noxh_cases")
+}
+
+model CaseDocument {
+  id            String        @id @default(uuid())
+  caseId        String        @map("case_id")
+  docType       NoxhDocType   @map("doc_type")
+  status        NoxhDocStatus @default(MISSING)
+  receivedAt    DateTime?     @map("received_at")
+  reviewedAt    DateTime?     @map("reviewed_at")
+  passedAt      DateTime?     @map("passed_at")
+  rejectReason  String?       @map("reject_reason") @db.Text
+  ctvActionHint String?       @map("ctv_action_hint") @db.Text
+  expiresAt     DateTime?     @map("expires_at")
+  updatedBy     String?       @map("updated_by")
+  createdAt     DateTime      @default(now()) @map("created_at")
+  updatedAt     DateTime      @updatedAt @map("updated_at")
+
+  noxhCase NoxhCase @relation(fields: [caseId], references: [id], onDelete: Cascade)
+
+  @@unique([caseId, docType])
+  @@index([caseId, status])
+  @@map("case_documents")
+}
+
+model CaseAssistLog {
+  id         String        @id @default(uuid())
+  caseId     String        @map("case_id")
+  brokerId   String        @map("broker_id")
+  assistType CtvAssistType @map("assist_type")
+  message    String        @db.Text
+  createdAt  DateTime      @default(now()) @map("created_at")
+
+  noxhCase NoxhCase @relation(fields: [caseId], references: [id], onDelete: Cascade)
+
+  @@index([caseId])
+  @@index([brokerId])
+  @@map("case_assist_logs")
+}
+
+model CaseMilestoneEvent {
+  id            String        @id @default(uuid())
+  caseId        String        @map("case_id")
+  fromMilestone NoxhMilestone? @map("from_milestone")
+  toMilestone   NoxhMilestone @map("to_milestone")
+  milestoneSub  String?       @map("milestone_sub")
+  opsNote       String?       @db.Text @map("ops_note")
+  actor         String?
+  createdAt     DateTime      @default(now()) @map("created_at")
+
+  noxhCase NoxhCase @relation(fields: [caseId], references: [id], onDelete: Cascade)
+
+  @@index([caseId])
+  @@map("case_milestone_events")
+}
+
+/// Magnix inbound UID — store of record (ADR-013). Dedupe `normalized_key`.
+model InboundUidLead {
+  id              String   @id @default(uuid())
+  uid             String
+  uidSource       String   @map("uid_source")
+  normalizedKey   String   @unique @map("normalized_key")
+  capturedAt      DateTime @map("captured_at")
+  text            String?  @db.Text
+  segment         String   @default("unclassified")
+  score           Int      @default(0)
+  interestKey     String?  @map("interest_key")
+  tags            Json     @default("[]")
+  meta            Json     @default("{}")
+  classifyMethod  String   @default("regex") @map("classify_method")
+  consentBasis    String?  @map("consent_basis")
+  status          String   @default("classified")
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  @@index([uidSource, capturedAt])
+  @@index([segment, score])
+  @@map("inbound_uid_leads")
+}
+
+/// Thông báo in-app cho CTV/môi giới.
+model BrokerNotification {
+  id        String    @id @default(uuid())
+  brokerId  String    @map("broker_id")
+  type      String
+  title     String
+  body      String    @db.Text
+  caseId    String?   @map("case_id")
+  readAt    DateTime? @map("read_at")
+  createdAt DateTime  @default(now()) @map("created_at")
+
+  broker Broker @relation(fields: [brokerId], references: [id], onDelete: Cascade)
+
+  @@index([brokerId, readAt])
+  @@index([brokerId, createdAt])
+  @@map("broker_notifications")
 }

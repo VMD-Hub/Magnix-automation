@@ -1,6 +1,6 @@
-# Magnix — Go-live n8n VPS (Google Sheet Primary)
+# Magnix — Go-live n8n VPS (Postgres primary — ADR-013)
 
-> Google Sheet là store-of-record và ops queue/review. Drive là archive JSONL.
+> House X Postgres là store-of-record cho UID ingest. Google Sheet = mirror/content ops. Drive = archive JSONL.
 
 ## Checklist
 
@@ -32,7 +32,9 @@ Biến tối thiểu:
 ```bash
 N8N_BLOCK_ENV_ACCESS_IN_NODE=false
 
-MAGNIX_STORAGE_MODE=google_sheet_primary_drive_archive
+MAGNIX_STORAGE_MODE=postgres_primary_drive_archive
+HOUSEX_PUBLIC_URL=https://timnhaxahoi.com
+MAGNIX_INGEST_SECRET=
 GOOGLE_SHEET_DATABASE_ID=
 GOOGLE_SHEET_UID_TAB=uid_leads
 GOOGLE_SHEET_CONTENT_QUEUE_TAB=content_queue

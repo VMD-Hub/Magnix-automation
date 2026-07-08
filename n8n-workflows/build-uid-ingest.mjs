@@ -19,10 +19,9 @@ const codes = {
   parseLlm: read('04-parse-llm-json.js'),
   merge: read('05-merge-uid-record.js'),
   deadLetter: read('06-dead-letter-parse.js'),
-  sheetUpsert: read('07-sheet-upsert-uid-leads.js')
-    .replace(/__GOOGLE_SHEET_ID__/g, PUBLIC.google_sheet_id)
-    .replace(/__UID_LEADS_TAB__/g, PUBLIC.uid_leads_tab || 'uid_leads'),
+  housexIngest: read('09-housex-postgres-ingest.js'),
   driveBackup: read('08-prepare-drive-backup.js'),
+  buildResponse: read('10-build-webhook-response.js'),
 };
 
 const systemPrompt =
@@ -43,20 +42,20 @@ const llmJsonBody = `={{ JSON.stringify({
   ],
 }) }}`;
 
-const responseCode = `const sheet = $input.first().json;
-return [{
-  json: {
-    ok: sheet.ok === true,
-    storage: 'google_sheet_primary',
-    sheet_action: sheet.action,
-    sheet_row: sheet.sheet_row,
-    record: sheet.record,
-    error: sheet.ok ? undefined : sheet.error,
-    message: sheet.ok ? undefined : sheet.message,
-  },
-}];`;
-
 const nodes = [
+  {
+    parameters: {
+      content:
+        '## UID Ingest — ADR-013\n**Webhook:** POST `/webhook/magnix/uid-ingest`\n**Store:** House X Postgres `POST /api/ingest/magnix-lead`\n**Archive:** Google Drive JSONL (best-effort)\n**Env:** `MAGNIX_INGEST_SECRET` = `MAGNIX_INGEST_SECRET` trên HouseX · `HOUSEX_PUBLIC_URL`',
+      height: 200,
+      width: 520,
+    },
+    id: 'a0sticky01',
+    name: 'Sticky Note',
+    type: 'n8n-nodes-base.stickyNote',
+    typeVersion: 1,
+    position: [-40, 80],
+  },
   {
     parameters: {
       httpMethod: 'POST',
@@ -187,6 +186,14 @@ const nodes = [
     position: [1680, 300],
   },
   {
+    parameters: { jsCode: codes.housexIngest },
+    id: 'a11housex01',
+    name: 'HouseX Postgres Ingest',
+    type: 'n8n-nodes-base.code',
+    typeVersion: 2,
+    position: [1920, 300],
+  },
+  {
     parameters: { jsCode: codes.driveBackup },
     id: 'a15driveprep',
     name: 'Prepare Drive Backup',
@@ -224,20 +231,12 @@ const nodes = [
     },
   },
   {
-    parameters: { jsCode: codes.sheetUpsert },
-    id: 'a11sheetup1',
-    name: 'Sheet Upsert uid_leads',
-    type: 'n8n-nodes-base.code',
-    typeVersion: 2,
-    position: [1920, 300],
-  },
-  {
-    parameters: { jsCode: responseCode },
+    parameters: { jsCode: codes.buildResponse },
     id: 'a13wrapresp',
     name: 'Build Webhook Response',
     type: 'n8n-nodes-base.code',
     typeVersion: 2,
-    position: [2160, 200],
+    position: [2160, 300],
   },
   {
     parameters: {
@@ -249,7 +248,7 @@ const nodes = [
     name: 'Respond to Webhook',
     type: 'n8n-nodes-base.respondToWebhook',
     typeVersion: 1.1,
-    position: [2400, 200],
+    position: [2400, 300],
   },
 ];
 
@@ -287,23 +286,18 @@ const connections = {
   'Merge UID Record': {
     main: [
       [
-        { node: 'Sheet Upsert uid_leads', type: 'main', index: 0 },
+        { node: 'HouseX Postgres Ingest', type: 'main', index: 0 },
         { node: 'Prepare Drive Backup', type: 'main', index: 0 },
       ],
     ],
   },
   'Dead Letter Parse Fail': {
-    main: [
-      [
-        { node: 'Sheet Upsert uid_leads', type: 'main', index: 0 },
-        { node: 'Prepare Drive Backup', type: 'main', index: 0 },
-      ],
-    ],
+    main: [[{ node: 'Build Webhook Response', type: 'main', index: 0 }]],
   },
   'Prepare Drive Backup': {
     main: [[{ node: 'Drive Backup Upload', type: 'main', index: 0 }]],
   },
-  'Sheet Upsert uid_leads': {
+  'HouseX Postgres Ingest': {
     main: [[{ node: 'Build Webhook Response', type: 'main', index: 0 }]],
   },
   'Build Webhook Response': {
@@ -321,7 +315,7 @@ const workflow = {
   tags: [
     { name: 'magnix' },
     { name: 'circuit-1' },
-    { name: 'google-sheet-primary' },
+    { name: 'postgres-primary' },
   ],
   meta: { templateCredsSetupCompleted: false },
 };

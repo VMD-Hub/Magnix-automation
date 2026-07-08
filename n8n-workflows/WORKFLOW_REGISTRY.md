@@ -2,7 +2,7 @@
 
 | Slug | File | Trigger | QA tiers | Legal gate | Parse | Mô tả | Trạng thái |
 |------|------|---------|----------|------------|-------|-------|------------|
-| `uid-ingest` | `uid-ingest.workflow.json` | Webhook POST | L0 | Route (classify) | ✅ | Google Sheet `uid_leads` upsert by `normalized_key` + Drive JSONL archive | staging |
+| `uid-ingest` | `uid-ingest.workflow.json` | Webhook POST | L0 | Route (classify) | ✅ | House X Postgres `POST /api/ingest/magnix-lead` (dedupe `normalized_key`) + Drive JSONL archive | staging |
 | `content-scorecard` | `content-scorecard.workflow.json` | Cron 10h + Manual | L0 | Audit refs | — | Sheet metrics → score.mjs logic → Sheet `content_scorecard` | staging |
 | `social-listening` | `social-listening.workflow.json` | Cron Mon 7h + Manual | L0 | Tag | ✅ | TikTok weekly → Claude → Sheet content_queue + dedupe | staging |
 | `social-listening-facebook` | `social-listening-facebook.workflow.json` | Cron Wed 7h + Manual | L0 | Tag | ✅ | Facebook page/group weekly → Claude → content_queue | staging |
@@ -34,7 +34,7 @@
 - **Parse layer:** có/không — bắt buộc nếu có LLM node
 - **Notification:** workflow có approve / legal source needed / render review / blocked human action phải gửi Telegram theo `docs/TELEGRAM_APPROVAL_NOTIFICATIONS.md`
 - **LLM provider:** DeepSeek / Anthropic theo task — xem `docs/LLM_PROVIDER_POLICY.md`
-- **Credential:** `uid-ingest` — `googleApi`/Google Sheets credential + Drive credential. Agent 1 — `googleApi`, Drive SA, Apify, Anthropic. Agent 2 — `googleApi` + `DEEPSEEK_API_KEY` (ưu tiên) hoặc `ANTHROPIC_API_KEY`. Workflow content dùng Google Sheets làm ops queue/review.
+- **Credential:** `uid-ingest` — `MAGNIX_INGEST_SECRET` + `HOUSEX_PUBLIC_URL` (Postgres ingest); Drive credential cho archive. Agent 1 — `googleApi`, Drive SA, Apify, Anthropic. Agent 2 — `googleApi` + `DEEPSEEK_API_KEY` (ưu tiên) hoặc `ANTHROPIC_API_KEY`. Workflow content dùng Google Sheets làm ops queue/review.
 - **Go-live:** YYYY-MM-DD hoặc `staging`
 
 ## Import lên n8n

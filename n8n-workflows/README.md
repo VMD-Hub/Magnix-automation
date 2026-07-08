@@ -5,25 +5,27 @@
 | | |
 |---|---|
 | **File** | `uid-ingest.workflow.json` |
-| **Storage** | Google Sheet `uid_leads` upsert + Google Drive JSONL archive |
+| **Storage** | House X Postgres (`POST /api/ingest/magnix-lead`) + Google Drive JSONL archive |
 | **Webhook** | `POST /webhook/magnix/uid-ingest` |
 
 ### Luồng
 
 ```
 Webhook → classify → merge
-    ├─ Google Sheet Upsert (dedupe normalized_key) ← store of record
-    └─ Drive Backup Upload (.jsonl file)           ← archive, không block webhook
+    ├─ HouseX Postgres Ingest (dedupe normalized_key) ← store of record (ADR-013)
+    └─ Drive Backup Upload (.jsonl file)              ← archive, không block webhook
 → Respond
 ```
 
 ### Setup (3 bước)
 
-1. **Google Sheet database** — tạo tab `uid_leads` theo `ARCHITECTURE_MAGNIX.md` §3.1
+1. **House X** — deploy API + `MAGNIX_INGEST_SECRET` trong `.env` (cùng giá trị n8n)
 2. **Google Drive** — [`DRIVE_BACKUP_SETUP.md`](./DRIVE_BACKUP_SETUP.md)  
-3. **n8n env** — copy [`.env.example`](./.env.example)
+3. **n8n env** — copy [`.env.example`](./.env.example) (`HOUSEX_PUBLIC_URL`, `MAGNIX_INGEST_SECRET`)
 
-Import workflow → gán Google Sheets/Drive OAuth → Activate → curl test.
+Import workflow → gán Drive OAuth (archive) → Activate → curl test.
+
+> Sheet `uid_leads` không còn là SoR — chỉ dùng mirror/ops nếu bật sau (Phase 2).
 
 ### Rebuild sau khi sửa code
 
@@ -31,7 +33,7 @@ Import workflow → gán Google Sheets/Drive OAuth → Activate → curl test.
 node n8n-workflows/build-uid-ingest.mjs
 ```
 
-### Test curl
+### Test curl (n8n webhook)
 
 ```bash
 curl -X POST "https://n8n.vmd.asia/webhook/magnix/uid-ingest" \
@@ -40,7 +42,16 @@ curl -X POST "https://n8n.vmd.asia/webhook/magnix/uid-ingest" \
   -d @tests/fixtures/uid-classify/input_001.json
 ```
 
-Kỳ vọng: `ok: true`, `storage: "google_sheet_primary"`, row create/update trong Sheet và file `{normalized_key}.jsonl` trên Drive.
+Kỳ vọng: `ok: true`, `storage: "postgres_housex"`, row trong `inbound_uid_leads` (House X), file `{normalized_key}.jsonl` trên Drive.
+
+### Test trực tiếp House X API (bypass n8n)
+
+```bash
+curl -X POST "https://timnhaxahoi.com/api/ingest/magnix-lead" \
+  -H "Content-Type: application/json" \
+  -H "x-magnix-ingest-secret: YOUR_MAGNIX_INGEST_SECRET" \
+  -d '{"uid":"123","uid_source":"fb_ads","normalized_key":"fb_ads:123","captured_at":"2026-07-08T00:00:00.000Z","segment":"noxh_income","score":72,"status":"classified"}'
+```
 
 ---
 

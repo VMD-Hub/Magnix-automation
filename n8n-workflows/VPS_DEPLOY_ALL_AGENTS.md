@@ -39,7 +39,9 @@ N8N_BLOCK_ENV_ACCESS_IN_NODE=false
 TZ=Asia/Ho_Chi_Minh
 GENERIC_TIMEZONE=Asia/Ho_Chi_Minh
 
-MAGNIX_STORAGE_MODE=google_sheet_primary_drive_archive
+MAGNIX_STORAGE_MODE=postgres_primary_drive_archive
+HOUSEX_PUBLIC_URL=https://timnhaxahoi.com
+MAGNIX_INGEST_SECRET=
 GOOGLE_SHEET_CONTENT_METRICS_ID=1fYB4h_BTiKXa9O3lBah-tQonWpQOQMG2aSkSfPs6yU4
 GOOGLE_DRIVE_ARCHIVE_FOLDER_ID=1iBjsrXLYmHfOHMQaAfLmZGug2kN0314D
 
@@ -90,7 +92,7 @@ GitHub Actions (`.github/workflows/magnix-deploy-workflows.yml`) tự rebuild + 
 
 | # | File | Agent |
 |---|------|-------|
-| 0 | `uid-ingest.workflow.json` | Mạch 1 UID ingest → Google Sheet |
+| 0 | `uid-ingest.workflow.json` | Mạch 1 UID ingest → House X Postgres |
 | 1 | `social-listening.workflow.json` | Agent 1 TikTok |
 | 2 | `social-listening-facebook.workflow.json` | Agent 1 Facebook |
 | 3 | `content-classify.workflow.json` | Agent 2 |
@@ -132,7 +134,7 @@ GitHub Actions (`.github/workflows/magnix-deploy-workflows.yml`) tự rebuild + 
 
 | Agent | Pass criteria |
 |-------|----------------|
-| UID ingest | curl webhook trả `storage=google_sheet_primary`, Sheet create/update đúng `normalized_key`, Drive có `.jsonl` |
+| UID ingest | curl webhook trả `storage=postgres_housex`, row trong `inbound_uid_leads`, Drive có `.jsonl` |
 | 1 TikTok | `Build Summary` → `stats.sheet_ok > 0` hoặc hint rõ |
 | 1 Facebook | idem |
 | 2 | `stats.sheet_ok > 0` trên pending classify |

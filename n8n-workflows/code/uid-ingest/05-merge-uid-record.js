@@ -39,4 +39,4 @@ const record = {
   l0_forbidden_hits: l0_hits,
 };
 
-return [{ json: { ok: true, data: record } }];
+return [{ json: { ok: true, data: record, record } }];

@@ -1,4 +1,5 @@
-// n8n Code: Google Sheet upsert tab uid_leads (dedupe normalized_key)
+// n8n Code: Google Sheet upsert tab uid_leads (LEGACY mirror — optional)
+// Store of record: House X Postgres via 09-housex-postgres-ingest.js (ADR-013)
 // Gán credential googleApi trên node này.
 
 const SHEET_ID = $env.GOOGLE_SHEET_DATABASE_ID || '__GOOGLE_SHEET_ID__';
