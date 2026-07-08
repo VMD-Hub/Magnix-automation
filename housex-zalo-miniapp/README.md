@@ -2,38 +2,45 @@
 
 Frontend riêng cho Zalo Mini App: **Tab Khách** + **Tab Agent**.
 
-Docs: `../Proptech-HouseX/docs/ZALO_MINIAPP_SPEC.md` · ADR: `../.cursor/ADR-014-zalo-miniapp.md`
+Docs: `../Proptech-HouseX/docs/ZALO_MINIAPP_SPEC.md` · ADR: `../.cursor/ADR-014-zalo-miniapp.md` · DNA: `../Proptech-HouseX/docs/DNA_COMPLETION.md`
 
 ## Setup
 
 ```bash
 cd housex-zalo-miniapp
 npm install
+cp .env.example .env
 ```
 
-Sửa `src/config.ts`:
-
-- `HOUSEX_API_BASE` → `https://timnhaxahoi.com` (prod) hoặc `http://localhost:3000`
-- `app-config.json` → gắn **Mini App ID** khi Zalo cấp (qua ZMP Extension / CLI)
+- `VITE_HOUSEX_API_BASE` → local `http://localhost:3000` · prod `https://timnhaxahoi.com`
+- `app-config.json` → **`appId` chờ mai** khi Zalo cấp Mini App ID
 
 ## Dev (browser / Vite)
 
 ```bash
 # Terminal 1 — House X API (Proptech-HouseX)
-# .env: ZALO_AUTH_DEV_BYPASS=true (chỉ local)
+# .env: ZALO_AUTH_DEV_BYPASS=true (chỉ local, NODE_ENV≠production)
 
 # Terminal 2
 npm run dev
 ```
 
-Login mock: màn **Tài khoản** → nhập SĐT → gọi `POST /api/auth/zalo` với `zaloUserId` (dev bypass).
+Login mock: **Tài khoản** → SĐT → `POST /api/auth/zalo` với `zaloUserId` (dev bypass).
 
-## Zalo Simulator
+## Phase đã có
 
-1. VS Code extension **Zalo Mini App**
-2. Mở folder này, gắn Mini App ID
-3. Run → Simulator
-4. Tắt `ZALO_AUTH_DEV_BYPASS` trên VPS; dùng `getAccessToken` + `getPhoneNumber` thật
+| Phase | Routes |
+|-------|--------|
+| Khách | `/`, `/du-an/:slug`, `/tu-van`, `/cong-cu` |
+| Agent | `/agent`, hồ sơ, thông báo, hoa hồng |
+| LMS | `/agent/dich-vu`, `/agent/dich-vu/:code` (đào tạo · pháp lý · dịch vụ) |
+
+## Mai — OA / Mini App thật (chờ xác nhận)
+
+1. Điền Mini App ID vào `app-config.json`
+2. VPS: `ZALO_APP_ID` / `ZALO_APP_SECRET` / `ZALO_OA_ID` — **tắt** `ZALO_AUTH_DEV_BYPASS`
+3. Build: `VITE_HOUSEX_API_BASE=https://timnhaxahoi.com`, không bypass
+4. Simulator + Graph token thật → smoke `/api/auth/me`
 
 ## Env API (VPS Proptech-HouseX)
 
@@ -41,17 +48,6 @@ Login mock: màn **Tài khoản** → nhập SĐT → gọi `POST /api/auth/zalo
 ZALO_APP_ID=
 ZALO_APP_SECRET=
 ZALO_OA_ID=
-AUTH_SECRET=   # bắt buộc production
+AUTH_SECRET=
+# KHÔNG: ZALO_AUTH_DEV_BYPASS=true
 ```
-
-## Phase 2 (Agent) — đã scaffold
-
-| Route | API |
-|-------|-----|
-| `/agent` | Hub + unread notifications |
-| `/agent/ho-so` | `GET/POST /api/ctv/cases` |
-| `/agent/ho-so/:id` | `GET .../cases/:id` + nudge |
-| `/agent/thong-bao` | `GET/PATCH /api/ctv/notifications` |
-| `/agent/hoa-hong` | `GET /api/ctv/commissions` |
-
-Local test: Tài khoản → tick **Đăng nhập Agent (CTV thử nghiệm)** (cần `ZALO_AUTH_DEV_BYPASS` trên API).

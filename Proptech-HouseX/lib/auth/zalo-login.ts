@@ -25,6 +25,16 @@ async function resolveZaloUserId(input: ZaloAuthInput): Promise<{
   zaloUserId: string;
   displayName?: string;
 }> {
+  if (
+    process.env.ZALO_AUTH_DEV_BYPASS === "true" &&
+    process.env.NODE_ENV === "production"
+  ) {
+    throw new ZaloAuthError(
+      "ZALO_BYPASS_FORBIDDEN",
+      "ZALO_AUTH_DEV_BYPASS không được bật trên production.",
+    );
+  }
+
   const bypass =
     process.env.ZALO_AUTH_DEV_BYPASS === "true" &&
     process.env.NODE_ENV !== "production";

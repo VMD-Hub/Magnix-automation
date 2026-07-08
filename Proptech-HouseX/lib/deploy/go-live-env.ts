@@ -153,6 +153,26 @@ export function checkGoLiveEnv(): EnvCheck[] {
       "Cron scripts/backup-postgres-vps.sh — xem docs/OPS_BACKUP_MIRROR.md",
   });
 
+  // ADR-014 — Zalo Mini App (recommended đến khi OA publish; required nếu bật Mini App traffic)
+  const zaloConfigured = has("ZALO_APP_ID") && has("ZALO_APP_SECRET");
+  checks.push({
+    key: "ZALO_APP",
+    ok: zaloConfigured,
+    level: "recommended",
+    message:
+      "ZALO_APP_ID + ZALO_APP_SECRET trên VPS trước khi publish Mini App (mai xác nhận OA)",
+  });
+
+  const bypassOn = process.env.ZALO_AUTH_DEV_BYPASS === "true";
+  checks.push({
+    key: "ZALO_AUTH_DEV_BYPASS",
+    ok: !bypassOn || process.env.NODE_ENV !== "production",
+    level: bypassOn && process.env.NODE_ENV === "production" ? "required" : "warn",
+    message: bypassOn
+      ? "Tắt ZALO_AUTH_DEV_BYPASS trên production"
+      : "OK — bypass tắt",
+  });
+
   return checks;
 }
 

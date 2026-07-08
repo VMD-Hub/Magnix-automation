@@ -33,6 +33,11 @@ export async function approveCtvApplication(
     }),
   ]);
 
+  // Bootstrap catalog entitlement (LOCKED + default PRODUCT ACTIVE).
+  // NOXH_CLAIM vẫn khóa đến khi đậu CTV_ONBOARDING trên Mini App / Agent.
+  const { ensureBrokerEntitlements } = await import("@/lib/data/agent-services");
+  await ensureBrokerEntitlements(app.brokerId);
+
   return { ctvCode, brokerId: app.brokerId };
 }
 

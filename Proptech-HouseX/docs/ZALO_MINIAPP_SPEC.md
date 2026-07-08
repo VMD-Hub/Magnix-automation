@@ -121,8 +121,16 @@ magnix-automation/
 
 ## Checklist trước publish
 
+### Code / DB (làm trước — không cần OA)
+
+- [x] Phase 1–3a Mini App + LMS unlock (`DNA_COMPLETION.md`)
+- [ ] VPS: `db:deploy` + `db:seed:agent-services` + `db:bootstrap:agent-entitlements`
+- [x] Production chặn `ZALO_AUTH_DEV_BYPASS`
+
+### Mai — OA / Mini App thật (chờ xác nhận)
+
 - [ ] Mini App xác thực OA
-- [ ] `ZALO_APP_ID` / `ZALO_APP_SECRET` trên VPS
-- [ ] Migrate `zalo_user_id` đã apply
-- [ ] Smoke: Simulator login → Bearer → `/api/auth/me`
+- [ ] Mini App ID trong `app-config.json`
+- [ ] `ZALO_APP_ID` / `ZALO_APP_SECRET` / `ZALO_OA_ID` trên VPS
+- [ ] Smoke: Simulator login Graph → Bearer → `/api/auth/me`
 - [ ] Không hứa duyệt vay trên UI Mini App

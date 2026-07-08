@@ -108,6 +108,15 @@ export async function POST(req: NextRequest) {
       return fail(404, "BROKER_NOT_FOUND", "Không tìm thấy broker.");
     }
 
+    const { isServiceActive } = await import("@/lib/data/agent-services");
+    if (!(await isServiceActive(broker.id, "LISTING_POST"))) {
+      return fail(
+        403,
+        "SERVICE_LOCKED",
+        "Dịch vụ đăng tin chưa mở. Hoàn thành mục liên quan trong HouseX Agent hoặc liên hệ Ops.",
+      );
+    }
+
     const tier = body.tier ?? "FREE";
 
     // Rule #2 — license gate

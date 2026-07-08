@@ -7,7 +7,11 @@ type Tx = Prisma.TransactionClient | typeof prisma;
 export async function ensureBrokerEntitlements(brokerId: string, db: Tx = prisma) {
   const services = await db.agentService.findMany({
     where: { active: true },
-    select: { id: true },
+    select: {
+      id: true,
+      requiresCode: true,
+      quiz: { select: { active: true } },
+    },
   });
   for (const s of services) {
     await db.agentEntitlement.upsert({
@@ -23,6 +27,24 @@ export async function ensureBrokerEntitlements(brokerId: string, db: Tx = prisma
       update: {},
     });
   }
+
+  // PRODUCT không quiz / không prereq (vd. LISTING_POST) → ACTIVE mặc định.
+  const now = new Date();
+  for (const s of services) {
+    if (s.requiresCode || s.quiz?.active) continue;
+    await db.agentEntitlement.updateMany({
+      where: {
+        brokerId,
+        serviceId: s.id,
+        status: "LOCKED",
+      },
+      data: {
+        status: "ACTIVE",
+        source: "default",
+        activatedAt: now,
+      },
+    });
+  }
 }
 
 /** Kiểm tra broker đã ACTIVE một mã dịch vụ (vd. NOXH_CLAIM). */
@@ -30,12 +52,19 @@ export async function isServiceActive(
   brokerId: string,
   serviceCode: string,
 ): Promise<boolean> {
+  const service = await prisma.agentService.findFirst({
+    where: { code: serviceCode, active: true },
+    select: { id: true },
+  });
+  // Catalog chưa seed — không chặn luồng cũ (graceful).
+  if (!service) return true;
+
   await ensureBrokerEntitlements(brokerId);
   const row = await prisma.agentEntitlement.findFirst({
     where: {
       brokerId,
+      serviceId: service.id,
       status: "ACTIVE",
-      service: { code: serviceCode, active: true },
     },
     select: { id: true },
   });

@@ -1,6 +1,6 @@
 # Go-live House X — Checklist nội dung & vận hành
 
-Tài liệu ưu tiên đưa site lên production sớm. CTV/LMS chi tiết ở phase sau.
+Tài liệu ưu tiên đưa site lên production sớm. LMS Agent: Mini App Phase 3 — xem [DNA_COMPLETION.md](DNA_COMPLETION.md) · [ZALO_MINIAPP_SPEC.md](ZALO_MINIAPP_SPEC.md).
 
 **Domain tạm:** `timnhaxahoi.com` · Brand: **House X** · Deploy chi tiết: [DEPLOY_TIMNHAXAHOI.md](DEPLOY_TIMNHAXAHOI.md) · VPS: [DEPLOY_VPS_TIMNHAXAHOI.md](DEPLOY_VPS_TIMNHAXAHOI.md)
 
@@ -59,6 +59,8 @@ Email local: không cần Resend — `[email:dev]` log ra console khi đăng ký
 - [ ] `NODE_ENV=production npm run go-live:check-env`
 - [ ] Smoke: đăng ký khách → email verify thật → reveal SĐT tin đăng
 - [ ] Smoke: đăng ký môi giới → `/moi-gioi/tai-khoan` → nộp CTV → `/admin/ctv`
+- [ ] Sau pull LMS: `npm run db:seed:agent-services` + `npm run db:bootstrap:agent-entitlements`
+- [ ] **Mai:** điền `ZALO_APP_*` + Mini App ID (không bật `ZALO_AUTH_DEV_BYPASS`) — [DNA_COMPLETION.md](DNA_COMPLETION.md)
 
 ---
 
@@ -182,18 +184,23 @@ Hoặc dán thủ công (thay `$CRON_SECRET` và domain):
 | `npm run go-live:smoke-email` | Test email prod (Resend/webhook) |
 | `npm run go-live:print-cron` | In crontab mẫu VPS |
 | `npm run db:seed:vinhomes` | Seed 3 landing Vinhomes → `/du-an` — xem [DEPLOY_VINHOMES.md](DEPLOY_VINHOMES.md) |
+| `npm run db:seed:agent-services` | Catalog + quiz Agent (đào tạo / pháp lý / dịch vụ) |
+| `npm run db:bootstrap:agent-entitlements` | Gắn entitlement cho mọi CTV đã duyệt |
 
 ---
 
-## Quy tắc CTV (đã ghi nhận — triển khai LMS sau)
+## Quy tắc CTV + LMS Agent
 
 | Bước | Trạng thái |
 |------|------------|
-| Môi giới có tài khoản đăng tin | ✅ API |
+| Môi giới có tài khoản đăng tin | ✅ API + entitlement `LISTING_POST` (mặc định ACTIVE) |
 | Nộp đơn CTV (`/moi-gioi/dang-ky-ctv`) | ✅ |
-| **Khóa đào tạo hội nhập** | 🔜 Phase sau |
-| Admin duyệt + cấp `HX-CTV-xxxxxx` | ✅ |
-| LMS → `trainingCompletedAt` | 🔜 |
+| Admin duyệt + cấp `HX-CTV-xxxxxx` | ✅ + `ensureBrokerEntitlements` |
+| **Khóa đào tạo hội nhập** | ✅ Mini App `/agent/dich-vu` · quiz `CTV_ONBOARDING` |
+| LMS → `trainingCompletedAt` | ✅ trên `AgentEntitlement` khi đậu quiz |
+| Thả lead NOXH | ✅ cần `NOXH_CLAIM` (auto sau đậu hội nhập) |
+
+**Chờ mai (OA):** secrets Mini App + duyệt Zalo — không chặn LMS local/code.
 
 ---
 

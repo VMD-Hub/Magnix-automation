@@ -47,12 +47,13 @@
 
 ## Phases
 
-| Phase | Scope |
-|-------|-------|
-| **0 (now)** | ADR + scaffold Mini App + `POST /api/auth/zalo` + `zaloUserId` |
-| **1** | Tab Khách: home, dự án, lead form |
-| **2** | Tab Agent: cases, notifications, commissions |
-| **3** | OA deep link + ZNS push (sau approve) |
+| Phase | Scope | Status |
+|-------|--------|--------|
+| **0** | ADR + scaffold + `POST /api/auth/zalo` + `zaloUserId` | ✅ |
+| **1** | Tab Khách: home, dự án, lead, tools | ✅ |
+| **2** | Tab Agent: cases, notifications, commissions | ✅ |
+| **3a** | Đào tạo / pháp lý / quản lý dịch vụ + quiz unlock | ✅ |
+| **3b** | OA deep link + ZNS push (sau approve OA) | 🔜 chờ mai |
 
 ## Env
 
@@ -61,5 +62,6 @@ ZALO_APP_ID=
 ZALO_APP_SECRET=
 ZALO_OA_ID=
 # Client Mini App:
-# app-config.json → app.appId = Mini App ID
+# app-config.json → app.appId = Mini App ID (điền khi Zalo cấp — mai)
+# Production: KHÔNG bật ZALO_AUTH_DEV_BYPASS
 ```
