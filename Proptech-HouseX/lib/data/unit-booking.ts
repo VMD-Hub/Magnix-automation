@@ -1,5 +1,6 @@
 import type { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
+import { freezeNoxhCaseOnDeposit } from "@/lib/data/noxh-case";
 import { getProjectUnitByRef } from "@/lib/data/project-unit";
 import { recordStatusChange } from "@/lib/data/status-history";
 import {
@@ -189,6 +190,8 @@ export async function convertUnitBookingToDeposit(
         cancelReason: "other_customer_deposited",
       },
     });
+
+    await freezeNoxhCaseOnDeposit(tx, booking.normalizedPhone, bookingId);
 
     return winner;
   });

@@ -130,6 +130,8 @@ export function legalDocLabel(docType: string): string {
 
 export const COMMISSION_STATUS_LABEL: Record<string, string> = {
   PENDING: "Chờ duyệt",
+  ACCRUED: "Chờ chi (đã ký HĐMB)",
+  PAYABLE: "Sắp chi — kỳ 05/20",
   APPROVED: "Đã duyệt",
   PAID: "Đã chi trả",
   REJECTED: "Từ chối",

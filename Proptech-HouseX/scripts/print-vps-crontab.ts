@@ -36,3 +36,13 @@ console.log(
   `15 * * * * curl -fsS -H "Authorization: Bearer ${cronSecret}" ${site}/api/cron/expire-unit-bookings`,
 );
 console.log("");
+console.log("# NOXH case — release lock 20 ngày LV + SLA (mỗi giờ)");
+console.log(
+  `30 * * * * curl -fsS -H "Authorization: Bearer ${cronSecret}" ${site}/api/cron/noxh-case-maintenance`,
+);
+console.log("");
+console.log("# Chi hoa hồng PAYABLE — ngày 05 & 20 hàng tháng lúc 8:00");
+console.log(
+  `0 8 5,20 * * curl -fsS -H "Authorization: Bearer ${cronSecret}" ${site}/api/cron/commission-payouts`,
+);
+console.log("");

@@ -115,6 +115,33 @@ export interface OutboxPayloads {
     normalizedPhoneHash: string;
     wonAt: string;
   };
+  /** Phase 0 — CTV thả lead NOXH. */
+  "noxh_case.created": {
+    caseId: string;
+    caseCode: string;
+    brokerId: string | null;
+    milestone: string;
+    customerName: string;
+    normalizedPhone: string;
+  };
+  /** Ops đổi mốc pipeline — notify CTV. */
+  "noxh_case.milestone_changed": {
+    caseId: string;
+    caseCode: string;
+    brokerId: string | null;
+    fromMilestone: string;
+    toMilestone: string;
+    milestoneSub: string | null;
+    opsNote: string | null;
+  };
+  /** CTV nhắc qua hệ thống — Ops queue. */
+  "noxh_case.ctv_nudge": {
+    caseId: string;
+    caseCode: string;
+    brokerId: string;
+    docType: string | null;
+    message: string;
+  };
 }
 
 export type OutboxEventType = keyof OutboxPayloads;

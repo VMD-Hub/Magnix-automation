@@ -20,7 +20,7 @@ export default async function BrokerCommissionPage({ params }: PageProps) {
     notFound();
   }
 
-  const statuses = ["PENDING", "APPROVED", "PAID", "REJECTED"] as const;
+  const statuses = ["PENDING", "ACCRUED", "PAYABLE", "APPROVED", "PAID", "REJECTED"] as const;
 
   return (
     <main className="min-h-screen bg-slate-50 text-slate-900">
@@ -30,7 +30,7 @@ export default async function BrokerCommissionPage({ params }: PageProps) {
           Môi giới: <strong>{summary.broker.fullName}</strong>
         </p>
 
-        <section className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-5">
+        <section className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
           <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-4">
             <div className="text-xs uppercase text-emerald-700">Tổng</div>
             <div className="mt-1 text-lg font-bold text-emerald-800">

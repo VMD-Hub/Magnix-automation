@@ -55,6 +55,12 @@ export function AdminShell({
               Khuyến mãi
             </Link>
             <Link
+              href="/admin/noxh-cases"
+              className="text-slate-600 hover:text-slate-800"
+            >
+              Hồ sơ NOXH
+            </Link>
+            <Link
               href="/admin/ctv"
               className="text-slate-600 hover:text-slate-800"
             >

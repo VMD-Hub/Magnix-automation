@@ -59,6 +59,14 @@ export default function BrokerAccountPage() {
           <p className="mt-2 font-semibold">Tin của tôi</p>
         </Link>
         <Link
+          href="/moi-gioi/ho-so"
+          className="rounded-2xl border border-slate-200 bg-white p-5 hover:border-brand-300"
+        >
+          <Icon.FileCheck className="text-2xl text-brand-600" />
+          <p className="mt-2 font-semibold">Hồ sơ NOXH (CTV)</p>
+          <p className="text-xs text-slate-500">Thả lead & theo dõi pipeline</p>
+        </Link>
+        <Link
           href="/moi-gioi/dang-ky-ctv"
           className="rounded-2xl border border-slate-200 bg-white p-5 hover:border-brand-300 sm:col-span-2"
         >

@@ -35,7 +35,7 @@ Magnix **orchestrate** qua n8n; logic nặng có thể gọi HTTP sang service t
          └────────────┴────────────┘
                       ▼
         [Kho dữ liệu off-VPS]
-        Google Sheet (store/ops) + Drive JSONL (archive)
+        Postgres House X (store/ops) + Drive JSONL + pg_dump (archive)
                       │
          ┌────────────┴────────────┐
          ▼                         ▼
@@ -72,9 +72,9 @@ magnix-automation/
 
 #### Schema thống nhất — bản ghi lead (store of record)
 
-Mọi sink (Google Sheet / Drive archive) dùng **cùng contract** này. Chi tiết lựa chọn sink: `.cursor/STORAGE_OPTIONS.md`.
+Mọi sink (Postgres / Drive archive) dùng **cùng contract** này. Chi tiết: `.cursor/STORAGE_OPTIONS.md` · **ADR-013**.
 
-**Mặc định Magnix:** Google Sheet = store of record + ops queue/review · Google Drive JSONL = archive · VPS = n8n only.
+**Mặc định (ADR-013):** Postgres House X = store of record · Google Sheet = mirror/content editorial · Drive JSONL + pg_dump = archive.
 
 | Trường | Nguồn | Mô tả |
 |--------|-------|-------|
@@ -98,7 +98,7 @@ Mọi sink (Google Sheet / Drive archive) dùng **cùng contract** này. Chi ti�
 { "segment": "noxh_income", "score": 82, "interest_key": "thu_nhap_vay_noxh" }
 ```
 
-**Bản ghi đầy đủ mẫu** (sau merge Code node, trước Google Sheet upsert):
+**Bản ghi đầy đủ mẫu** (sau merge Code node, trước Postgres upsert):
 
 ```json
 {
@@ -118,7 +118,7 @@ Mọi sink (Google Sheet / Drive archive) dùng **cùng contract** này. Chi ti�
 }
 ```
 
-Luồng n8n: **Webhook → normalize/enrich skeleton → classify (regex | LLM) → parse JSON → merge full record → Google Sheet upsert/dedupe → Drive JSONL archive**.
+Luồng n8n: **Webhook → normalize/enrich skeleton → classify (regex | LLM) → parse JSON → merge full record → House X API / Postgres upsert/dedupe → Drive JSONL archive**.
 
 ### 3.2 Inbound content production
 
