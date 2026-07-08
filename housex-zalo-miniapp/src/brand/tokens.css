@@ -1,0 +1,47 @@
+/**
+ * House X brand tokens — đồng bộ Proptech-HouseX/app/globals.css (Ruby Fire + Gold CTA).
+ * KHÔNG dùng palette cũ (#e11d48 / cyan accent).
+ */
+:root {
+  /* Ruby Fire */
+  --hx-brand-50: #fdf2f3;
+  --hx-brand-200: #f9c8cc;
+  --hx-brand-300: #f0959c;
+  --hx-brand-400: #d6404f;
+  --hx-brand-500: #b81425;
+  --hx-brand-600: #9b111e;
+  --hx-brand-700: #7a0e18;
+  --hx-brand-800: #5c0b12;
+  --hx-brand-900: #3d070c;
+
+  /* Gold accent (ornament + CTA bevel) */
+  --hx-gold-400: #e8c547;
+  --hx-gold-500: #daa520;
+  --hx-gold-glow: rgba(252, 211, 77, 0.38);
+
+  /* Ink dark shell */
+  --hx-ink-900: #1a1214;
+  --hx-ink-800: #2a2224;
+
+  /* Semantic — map tên cũ sang brand mới */
+  --hx-bg: var(--hx-ink-900);
+  --hx-surface: var(--hx-ink-800);
+  --hx-text: #f5f5f7;
+  --hx-muted: #a8a0a2;
+  --hx-accent: var(--hx-brand-600);
+  --hx-accent-hover: var(--hx-brand-500);
+  --hx-accent-soft: var(--hx-brand-300);
+  --hx-link: var(--hx-gold-400);
+  --hx-border: rgba(252, 211, 77, 0.14);
+  --hx-border-ruby: rgba(155, 17, 30, 0.45);
+  --hx-ruby-glow: rgba(155, 17, 30, 0.22);
+  --hx-shadow-ruby: 0 12px 32px rgba(92, 11, 18, 0.28);
+
+  --hx-ruby-gradient: linear-gradient(
+    90deg,
+    var(--hx-brand-800) 0%,
+    var(--hx-brand-700) 48%,
+    #9b111e 72%,
+    #b81425 100%
+  );
+}

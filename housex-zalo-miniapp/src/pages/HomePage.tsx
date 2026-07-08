@@ -1,6 +1,15 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { ProjectCardView } from "@/components/ProjectCardView";
+import { HomeBrandHeader } from "@/components/HomeBrandHeader";
+import { HomeBannerCarousel } from "@/components/HomeBannerCarousel";
+import { HomeInsightsSection } from "@/components/HomeInsightsSection";
+import { ProjectGridCard } from "@/components/ProjectGridCard";
+import { ShortcutGrid } from "@/components/ShortcutGrid";
+import {
+  HOME_BANNERS,
+  HOME_INSIGHTS,
+  HOME_SHORTCUTS,
+} from "@/data/home-content";
 import { listProjects, type ProjectCard } from "@/services/projects";
 
 export function HomePage() {
@@ -39,41 +48,45 @@ export function HomePage() {
   }, []);
 
   return (
-    <div>
-      <p className="muted">HOUSE X</p>
-      <h1 className="brand">House X</h1>
-      <p className="lead">
-        Tìm nhà ở xã hội trên Zalo — dữ liệu đồng bộ timnhaxahoi.com.
-      </p>
+    <div className="home-page">
+      <HomeBrandHeader />
 
-      <div className="card" style={{ marginBottom: 16 }}>
-        <h2>Công cụ</h2>
-        <p className="muted" style={{ marginBottom: 10 }}>
-          Kiểm tra điều kiện / khả năng vay — mở trong Mini App.
-        </p>
-        <Link className="btn secondary" to="/cong-cu">
-          Điều kiện NOXH & công cụ
-        </Link>
-      </div>
+      <HomeBannerCarousel banners={HOME_BANNERS} />
+      <ShortcutGrid items={HOME_SHORTCUTS} />
 
-      <div className="section-head">
-        <h2 className="section-title">Dự án nổi bật</h2>
-        <Link to="/tu-van" className="muted">
-          Tư vấn nhanh
-        </Link>
-      </div>
-
-      {loading ? <p className="muted">Đang tải dự án…</p> : null}
-      {err ? <p className="err">{err}</p> : null}
-      {!loading && !err && items.length === 0 ? (
-        <div className="card">
-          <p>Chưa có dự án để hiển thị. Vui lòng thử lại sau.</p>
+      <section id="projects" className="home-projects" aria-labelledby="projects-title">
+        <div className="section-head">
+          <h2 id="projects-title" className="section-title">
+            Dự án nổi bật
+          </h2>
+          <Link to="/tu-van" className="muted">
+            Tư vấn ngay
+          </Link>
         </div>
-      ) : null}
+        <p className="muted" style={{ margin: "0 0 12px" }}>
+          Sản phẩm trung tâm — chọn dự án để xem landing đầy đủ.
+        </p>
 
-      {items.map((p) => (
-        <ProjectCardView key={p.id} project={p} />
-      ))}
+        {loading ? <p className="muted">Đang tải dự án…</p> : null}
+        {err ? <p className="err">{err}</p> : null}
+        {!loading && !err && items.length === 0 ? (
+          <div className="card">
+            <p>Chưa có dự án. Vui lòng thử lại sau.</p>
+          </div>
+        ) : null}
+
+        <div className="project-grid">
+          {items.map((p) => (
+            <ProjectGridCard key={p.id} project={p} />
+          ))}
+        </div>
+      </section>
+
+      <HomeInsightsSection items={HOME_INSIGHTS} />
+
+      <p className="home-foot muted">
+        House X · timnhaxahoi.com · Kết quả công cụ mang tính tham khảo.
+      </p>
     </div>
   );
 }

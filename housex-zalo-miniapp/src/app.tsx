@@ -14,6 +14,7 @@ import { ProjectDetailPage } from "@/pages/ProjectDetailPage";
 import { ConsultPage } from "@/pages/ConsultPage";
 import { ToolsHubPage } from "@/pages/ToolsHubPage";
 import { ToolViewerPage } from "@/pages/ToolViewerPage";
+import { WebViewPage } from "@/pages/WebViewPage";
 
 export default function App() {
   return (
@@ -26,6 +27,7 @@ export default function App() {
             <Route path="tu-van" element={<ConsultPage />} />
             <Route path="cong-cu" element={<ToolsHubPage />} />
             <Route path="cong-cu/mo" element={<ToolViewerPage />} />
+            <Route path="mo" element={<WebViewPage />} />
             <Route path="tai-khoan" element={<AccountPage />} />
             <Route path="agent" element={<AgentHomePage />} />
             <Route path="agent/dich-vu" element={<AgentServicesPage />} />

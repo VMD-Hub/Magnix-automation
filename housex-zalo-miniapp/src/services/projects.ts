@@ -12,8 +12,22 @@ export type ProjectCard = {
   unitTypeCount: number;
 };
 
+export type ProjectLandingView = {
+  heroSubtitle: string | null;
+  highlights: Array<{ title: string; text: string }>;
+  amenities: string[];
+  locationNotes: string | null;
+  faqs: Array<{ q: string; a: string }>;
+  gallery: Array<{ url: string; caption: string | null }>;
+  services: Array<{ title: string; text: string }>;
+  ctaLabel: string | null;
+  ctaSubtext: string | null;
+};
+
 export type ProjectDetail = ProjectCard & {
   overviewText: string | null;
+  description: string | null;
+  landing: ProjectLandingView | null;
   unitTypes: Array<{
     id: string;
     name: string;
@@ -27,8 +41,16 @@ export type ProjectDetail = ProjectCard & {
 type OverviewLanding = {
   landing?: {
     heroImage?: { url?: string; alt?: string };
-    gallery?: Array<{ url?: string }>;
+    heroSubtitle?: string;
+    gallery?: Array<{ url?: string; caption?: string }>;
     shortDescription?: string;
+    highlights?: Array<{ title: string; text: string }>;
+    amenities?: string[];
+    locationNotes?: string;
+    faqs?: Array<{ q: string; a: string }>;
+    services?: Array<{ title: string; text: string }>;
+    ctaLabel?: string;
+    ctaSubtext?: string;
   };
   shortDescription?: string;
 };
@@ -81,11 +103,33 @@ export function mapProjectCard(raw: ProjectRaw): ProjectCard {
   };
 }
 
+function pickLanding(overviewData: unknown): ProjectLandingView | null {
+  const o = overviewData as OverviewLanding | null;
+  const l = o?.landing;
+  if (!l) return null;
+  return {
+    heroSubtitle: l.heroSubtitle ?? null,
+    highlights: l.highlights ?? [],
+    amenities: l.amenities ?? [],
+    locationNotes: l.locationNotes ?? null,
+    faqs: l.faqs ?? [],
+    gallery: (l.gallery ?? [])
+      .filter((g) => g.url)
+      .map((g) => ({ url: g.url!, caption: g.caption ?? null })),
+    services: l.services ?? [],
+    ctaLabel: l.ctaLabel ?? null,
+    ctaSubtext: l.ctaSubtext ?? null,
+  };
+}
+
 export function mapProjectDetail(raw: ProjectRaw): ProjectDetail {
   const card = mapProjectCard(raw);
+  const rawAny = raw as { description?: string | null };
   return {
     ...card,
     overviewText: pickOverviewText(raw.overviewData),
+    description: rawAny.description?.trim() || pickOverviewText(raw.overviewData),
+    landing: pickLanding(raw.overviewData),
     developerName: raw.developer?.name ?? null,
     unitTypes: (raw.unitTypes ?? []).map((u) => ({
       id: u.id,

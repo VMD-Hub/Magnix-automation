@@ -21,6 +21,7 @@ export function ProjectDetailPage() {
   const [busy, setBusy] = useState(false);
   const [okMsg, setOkMsg] = useState<string | null>(null);
   const [formErr, setFormErr] = useState<string | null>(null);
+  const [showForm, setShowForm] = useState(false);
 
   useEffect(() => {
     if (user?.name) setName(user.name);
@@ -67,8 +68,9 @@ export function ProjectDetailPage() {
         projectId: project.id,
         message: message.trim() || undefined,
       });
-      setOkMsg("Đã gửi yêu cầu tư vấn. House X sẽ liên hệ sớm.");
+      setOkMsg("Đã gửi yêu cầu. Chuyên viên House X sẽ liên hệ sớm.");
       setMessage("");
+      setShowForm(false);
     } catch (ex) {
       setFormErr(ex instanceof Error ? ex.message : "Gửi thất bại");
     } finally {
@@ -90,83 +92,180 @@ export function ProjectDetailPage() {
 
   const img = mediaUrl(project.heroImageUrl);
   const loc = [project.district, project.province].filter(Boolean).join(", ");
+  const landing = project.landing;
+  const intro =
+    landing?.heroSubtitle ||
+    project.description ||
+    project.overviewText;
 
   return (
-    <div>
+    <div className="project-landing">
       <Link to="/" className="muted">
         ← Dự án
       </Link>
-      <div
-        className="detail-hero"
-        style={img ? { backgroundImage: `url(${img})` } : undefined}
-      />
-      <h1 className="brand" style={{ fontSize: 22 }}>
-        {project.name}
-      </h1>
-      {loc ? <p className="muted">{loc}</p> : null}
-      {minPrice ? <p className="price">Từ {minPrice}</p> : null}
-      {project.developerName ? (
-        <p className="muted">CĐT: {project.developerName}</p>
-      ) : null}
-      {project.overviewText ? (
-        <p className="lead">{project.overviewText}</p>
-      ) : null}
 
-      {project.unitTypes.length > 0 ? (
-        <div className="card">
-          <h2>Loại căn</h2>
-          <ul className="unit-list">
-            {project.unitTypes.map((u) => (
-              <li key={u.id}>
-                <strong>{u.name}</strong>
-                <span>
-                  {[
-                    u.bedrooms != null ? `${u.bedrooms} PN` : null,
-                    u.areaMin != null ? `${u.areaMin} m²` : null,
-                    formatVnd(u.priceFrom),
-                  ]
-                    .filter(Boolean)
-                    .join(" · ")}
-                </span>
-              </li>
-            ))}
-          </ul>
+      <div
+        className="landing-hero"
+        style={img ? { backgroundImage: `url(${img})` } : undefined}
+      >
+        <div className="landing-hero-overlay">
+          <span className="chip">NOXH</span>
+          <h1>{project.name}</h1>
+          {loc ? <p>{loc}</p> : null}
+        </div>
+      </div>
+
+      <div className="landing-intro card">
+        {minPrice ? <p className="price">Giá từ {minPrice}</p> : null}
+        {project.developerName ? (
+          <p className="muted">Chủ đầu tư: {project.developerName}</p>
+        ) : null}
+        {intro ? <p className="lead landing-lead">{intro}</p> : null}
+      </div>
+
+      {landing && landing.highlights.length > 0 ? (
+        <div className="landing-block">
+          <h2 className="section-title">Điểm nổi bật</h2>
+          {landing.highlights.map((h) => (
+            <div key={h.title} className="card landing-highlight">
+              <h3>{h.title}</h3>
+              <p>{h.text}</p>
+            </div>
+          ))}
         </div>
       ) : null}
 
-      <form className="card" onSubmit={onSubmit}>
-        <h2>Nhận tư vấn</h2>
-        <p className="muted" style={{ marginBottom: 10 }}>
-          Không cam kết duyệt vay — chuyên viên House X sẽ tư vấn theo hồ sơ thật.
-        </p>
-        <input
-          className="input"
-          placeholder="Họ tên"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          required
-        />
-        <input
-          className="input"
-          placeholder="Số điện thoại"
-          value={phone}
-          onChange={(e) => setPhone(e.target.value)}
-          inputMode="tel"
-          required
-        />
-        <textarea
-          className="input textarea"
-          placeholder="Nội dung"
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-          rows={3}
-        />
-        {formErr ? <p className="err">{formErr}</p> : null}
-        {okMsg ? <p className="ok">{okMsg}</p> : null}
-        <button className="btn" type="submit" disabled={busy}>
-          {busy ? "Đang gửi…" : "Gửi yêu cầu"}
+      {project.unitTypes.length > 0 ? (
+        <div className="landing-block">
+          <h2 className="section-title">Loại căn & giá tham khảo</h2>
+          <div className="card">
+            <ul className="unit-list">
+              {project.unitTypes.map((u) => (
+                <li key={u.id}>
+                  <strong>{u.name}</strong>
+                  <span>
+                    {[
+                      u.bedrooms != null ? `${u.bedrooms} PN` : null,
+                      u.areaMin != null ? `${u.areaMin} m²` : null,
+                      formatVnd(u.priceFrom),
+                    ]
+                      .filter(Boolean)
+                      .join(" · ")}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      ) : null}
+
+      {landing && landing.amenities.length > 0 ? (
+        <div className="landing-block">
+          <h2 className="section-title">Tiện ích</h2>
+          <div className="amenity-row">
+            {landing.amenities.map((a) => (
+              <span key={a} className="amenity-chip">
+                {a}
+              </span>
+            ))}
+          </div>
+        </div>
+      ) : null}
+
+      {landing && landing.gallery.length > 1 ? (
+        <div className="landing-block">
+          <h2 className="section-title">Hình ảnh</h2>
+          <div className="gallery-scroll">
+            {landing.gallery.map((g) => {
+              const u = mediaUrl(g.url);
+              return u ? (
+                <div
+                  key={g.url}
+                  className="gallery-thumb"
+                  style={{ backgroundImage: `url(${u})` }}
+                  title={g.caption ?? undefined}
+                />
+              ) : null;
+            })}
+          </div>
+        </div>
+      ) : null}
+
+      {landing?.locationNotes ? (
+        <div className="landing-block card">
+          <h2 className="section-title">Vị trí & kết nối</h2>
+          <p style={{ margin: 0, lineHeight: 1.5 }}>{landing.locationNotes}</p>
+        </div>
+      ) : null}
+
+      {landing && landing.faqs.length > 0 ? (
+        <div className="landing-block">
+          <h2 className="section-title">Hỏi & đáp</h2>
+          {landing.faqs.map((f) => (
+            <details key={f.q} className="card faq-item">
+              <summary>{f.q}</summary>
+              <p>{f.a}</p>
+            </details>
+          ))}
+        </div>
+      ) : null}
+
+      <div className="landing-cta-spacer" />
+
+      {showForm ? (
+        <form className="card landing-form-panel" onSubmit={onSubmit}>
+          <h2>{landing?.ctaLabel ?? "Để lại SĐT tư vấn"}</h2>
+          <p className="muted" style={{ marginBottom: 10 }}>
+            {landing?.ctaSubtext ??
+              "Không cam kết duyệt vay — chuyên viên House X tư vấn theo hồ sơ thật."}
+          </p>
+          <input
+            className="input"
+            placeholder="Họ tên"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
+          />
+          <input
+            className="input"
+            placeholder="Số điện thoại"
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
+            inputMode="tel"
+            required
+          />
+          <textarea
+            className="input textarea"
+            placeholder="Nội dung (tuỳ chọn)"
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            rows={2}
+          />
+          {formErr ? <p className="err">{formErr}</p> : null}
+          {okMsg ? <p className="ok">{okMsg}</p> : null}
+          <button className="btn" type="submit" disabled={busy}>
+            {busy ? "Đang gửi…" : "Gửi yêu cầu tư vấn"}
+          </button>
+          <button
+            type="button"
+            className="btn secondary"
+            style={{ marginTop: 8 }}
+            onClick={() => setShowForm(false)}
+          >
+            Đóng
+          </button>
+        </form>
+      ) : null}
+
+      <div className="landing-sticky-cta">
+        <button
+          type="button"
+          className="btn"
+          onClick={() => setShowForm(true)}
+        >
+          {landing?.ctaLabel ?? "Liên hệ tư vấn ngay"}
         </button>
-      </form>
+      </div>
     </div>
   );
 }
