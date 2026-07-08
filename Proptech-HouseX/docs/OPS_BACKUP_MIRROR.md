@@ -60,7 +60,34 @@ gunzip -c ~/backup/housex/housex-YYYY-MM-DD_HHMM.sql.gz | \
 1. Dùng Sheet Magnix hiện có **hoặc** tạo Sheet mới `HouseX_ops_mirror`
 2. Tạo tab tên **`ops_mirror`** (đúng chữ, hoặc đổi `GOOGLE_SHEET_MIRROR_TAB`)
 3. Copy **Sheet ID** từ URL → `GOOGLE_SHEET_MIRROR_ID`
-4. Service Account JSON (cùng SA Magnix nếu có) — **Editor** trên Sheet
+4. Service Account JSON — **Editor** trên Sheet
+
+### Upload service account lên VPS (không dùng nano paste JSON)
+
+Paste trực tiếp JSON vào `nano` thường **làm hỏng** trường `private_key` → `không parse được`.
+
+**Windows (PowerShell)** — copy base64 1 dòng:
+
+```powershell
+$p = "C:\Users\nguye\Magnix-automation\n8n-workflows\credentials\google-service-account.json"
+[Convert]::ToBase64String([IO.File]::ReadAllBytes($p)) | Set-Clipboard
+Write-Host "Base64 copied — paste on VPS"
+```
+
+**VPS** — decode (dán 1 dòng base64, Enter, Ctrl+D):
+
+```bash
+cd /opt/housex/Proptech-HouseX
+chmod +x scripts/decode-google-sa.sh
+# dán base64 rồi Ctrl+D:
+./scripts/decode-google-sa.sh
+# hoặc:
+# echo 'PASTE_BASE64_HERE' | base64 -d > /opt/housex/secrets/google-sa.json
+chmod 600 /opt/housex/secrets/google-sa.json
+python3 -m json.tool /opt/housex/secrets/google-sa.json >/dev/null && echo JSON_OK
+```
+
+Share Sheet **Editor** cho `client_email` in trong file (vd. `bds-pipeline@gpl-automation.iam.gserviceaccount.com`).
 
 ### Env House X (`.env` trên VPS)
 

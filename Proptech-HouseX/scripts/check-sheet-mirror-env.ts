@@ -49,9 +49,13 @@ function main() {
           console.log(`\n  SA email: ${sa.client_email}`);
           console.log("  → Share Sheet Editor cho email này + tạo tab:", tab);
         }
-      } catch {
+      } catch (err) {
         failed += 1;
-        console.error("✖ GOOGLE_SERVICE_ACCOUNT_JSON không parse được");
+        const msg = err instanceof Error ? err.message : String(err);
+        console.error("✖ GOOGLE_SERVICE_ACCOUNT_JSON không parse được:", msg);
+        console.error(
+          "  → Paste nano hay làm hỏng private_key. Dùng base64 — xem docs/OPS_BACKUP_MIRROR.md § SA",
+        );
       }
     }
   }
