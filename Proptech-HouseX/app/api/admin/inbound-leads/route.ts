@@ -1,8 +1,13 @@
 import type { NextRequest } from "next/server";
-import type { InboundUidLead } from "@prisma/client";
 import { fail, handleApiError, ok } from "@/lib/api/http";
 import { isAdminAuthorized } from "@/lib/admin/session";
-import { listInboundUidLeadsForAdmin } from "@/lib/data/inbound-uid-lead";
+import {
+  listInboundUidLeadsForAdmin,
+} from "@/lib/data/inbound-uid-lead";
+
+type InboundLeadRow = Awaited<
+  ReturnType<typeof listInboundUidLeadsForAdmin>
+>[number];
 import { maskInboundUid, readInboundOpsMeta } from "@/lib/inbound/ops-meta";
 import { OPS_STATUS_LABEL, segmentLabel } from "@/lib/inbound/segment-labels";
 import { inboundLeadListQuerySchema } from "@/lib/validation/inbound-lead";
@@ -26,7 +31,7 @@ export async function GET(req: NextRequest) {
     });
 
     return ok({
-      items: rows.map((row: InboundUidLead) => {
+      items: rows.map((row: InboundLeadRow) => {
         const ops = readInboundOpsMeta(row.meta);
         return {
           id: row.id,
@@ -50,8 +55,9 @@ export async function GET(req: NextRequest) {
       }),
       counts: {
         total: rows.length,
-        hot: rows.filter((r: InboundUidLead) => r.score >= 70).length,
-        review: rows.filter((r: InboundUidLead) => r.status === "review").length,
+        hot: rows.filter((r: InboundLeadRow) => r.score >= 70).length,
+        review: rows.filter((r: InboundLeadRow) => r.status === "review")
+          .length,
       },
     });
   } catch (err) {
