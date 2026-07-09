@@ -9,12 +9,50 @@
  */
 import { isZaloOaNotifyEnabled, sendOaCsText } from "../lib/zalo/oa";
 
+function isPlaceholderToken(value: string | undefined): boolean {
+  const v = value?.trim() ?? "";
+  if (!v) return true;
+  return (
+    v.startsWith("<") ||
+    v.includes("token từ") ||
+    v.includes("API Explorer") ||
+    v === "..."
+  );
+}
+
+function diagnoseZaloOaEnv(): string[] {
+  const issues: string[] = [];
+  if (process.env.ZALO_OA_NOTIFY_ENABLED?.trim().toLowerCase() === "false") {
+    issues.push("ZALO_OA_NOTIFY_ENABLED đang false");
+  }
+  if (!process.env.ZALO_APP_ID?.trim()) {
+    issues.push("Thiếu ZALO_APP_ID");
+  }
+  if (!process.env.ZALO_APP_SECRET?.trim()) {
+    issues.push("Thiếu ZALO_APP_SECRET");
+  }
+  const refresh = process.env.ZALO_OA_REFRESH_TOKEN?.trim();
+  const access = process.env.ZALO_OA_ACCESS_TOKEN?.trim();
+  if (!refresh && !access) {
+    issues.push("Thiếu ZALO_OA_ACCESS_TOKEN hoặc ZALO_OA_REFRESH_TOKEN");
+  } else if (
+    (!refresh || isPlaceholderToken(refresh)) &&
+    (!access || isPlaceholderToken(access))
+  ) {
+    issues.push(
+      "ZALO_OA_ACCESS_TOKEN / REFRESH_TOKEN vẫn là placeholder — paste token thật từ API Explorer",
+    );
+  }
+  return issues;
+}
+
 async function main() {
   if (!isZaloOaNotifyEnabled()) {
     console.error("FAIL — ZALO_OA chưa sẵn sàng.");
-    console.error("  ZALO_OA_NOTIFY_ENABLED=true");
-    console.error("  ZALO_APP_ID + ZALO_APP_SECRET");
-    console.error("  ZALO_OA_ACCESS_TOKEN (API Explorer) hoặc ZALO_OA_REFRESH_TOKEN");
+    for (const issue of diagnoseZaloOaEnv()) {
+      console.error(`  • ${issue}`);
+    }
+    console.error("\nVPS: nano /opt/housex/Proptech-HouseX/.env rồi pm2 restart housex --update-env");
     process.exit(1);
   }
 

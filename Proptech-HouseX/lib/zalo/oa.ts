@@ -20,10 +20,11 @@ export function isZaloOaNotifyEnabled(): boolean {
   const appId = process.env.ZALO_APP_ID?.trim();
   const secret = process.env.ZALO_APP_SECRET?.trim();
   if (!appId || !secret) return false;
-  return !!(
-    process.env.ZALO_OA_REFRESH_TOKEN?.trim() ||
-    process.env.ZALO_OA_ACCESS_TOKEN?.trim()
-  );
+  const refresh = process.env.ZALO_OA_REFRESH_TOKEN?.trim();
+  const access = process.env.ZALO_OA_ACCESS_TOKEN?.trim();
+  const validRefresh = Boolean(refresh && !refresh.startsWith("<"));
+  const validAccess = Boolean(access && !access.startsWith("<") && !access.includes("token từ"));
+  return validRefresh || validAccess;
 }
 
 /** Mã lỗi Zalo OA — user chưa quan tâm OA → không retry outbox. */
