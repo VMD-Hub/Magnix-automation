@@ -31,6 +31,17 @@ async function main() {
     `ZALO_OA_TOKEN_MODE: ${process.env.ZALO_OA_TOKEN_MODE ?? "(default)"}`,
   );
 
+  if (
+    /paste_/i.test(process.env.ZALO_APP_SECRET ?? "") ||
+    /paste_/i.test(process.env.ZALO_OA_REFRESH_TOKEN ?? "") ||
+    /paste_/i.test(process.env.ZALO_OA_ACCESS_TOKEN ?? "")
+  ) {
+    console.error(
+      "\nLỖI: .env vẫn chứa placeholder paste_* — phải dán TOKEN THẬT từ API Explorer, không gõ lệnh vào terminal.",
+    );
+    process.exit(1);
+  }
+
   try {
     const { accessToken, meta } = await refreshOaAccessToken();
     console.log(

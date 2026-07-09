@@ -7,7 +7,10 @@ const DEFAULT_FILE = ".zalo-oa-refresh";
 export function normalizeOaToken(value: string | undefined | null): string | null {
   const t = value?.trim();
   if (!t || t.startsWith("<")) return null;
-  return t.replace(/^["']|["']$/g, "");
+  const stripped = t.replace(/^["']|["']$/g, "");
+  if (/paste_(secret|refresh|access)/i.test(stripped)) return null;
+  if (stripped.includes("token từ") || stripped.includes("API Explorer")) return null;
+  return stripped;
 }
 
 function tokenFilePath(): string {
