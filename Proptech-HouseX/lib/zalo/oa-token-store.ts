@@ -3,6 +3,13 @@ import { join } from "path";
 
 const DEFAULT_FILE = ".zalo-oa-refresh";
 
+/** Bỏ quote thừa khi copy từ .env. */
+export function normalizeOaToken(value: string | undefined | null): string | null {
+  const t = value?.trim();
+  if (!t || t.startsWith("<")) return null;
+  return t.replace(/^["']|["']$/g, "");
+}
+
 function tokenFilePath(): string {
   return (
     process.env.ZALO_OA_REFRESH_TOKEN_FILE?.trim() ||
@@ -12,8 +19,8 @@ function tokenFilePath(): string {
 
 /** Đọc refresh token: env trước, fallback file (sau lần rotate). */
 export function readOaRefreshToken(): string | null {
-  const fromEnv = process.env.ZALO_OA_REFRESH_TOKEN?.trim();
-  if (fromEnv && !fromEnv.startsWith("<")) return fromEnv;
+  const fromEnv = normalizeOaToken(process.env.ZALO_OA_REFRESH_TOKEN);
+  if (fromEnv) return fromEnv;
 
   const path = tokenFilePath();
   if (!existsSync(path)) return null;

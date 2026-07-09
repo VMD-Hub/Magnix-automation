@@ -1,4 +1,5 @@
 import { createHmac } from "crypto";
+import { normalizeOaToken } from "@/lib/zalo/oa-token-store";
 
 /** SHA256 HMAC(access_token, app_secret) — bắt buộc khi bật app secret proof trên developers. */
 export function buildAppSecretProof(accessToken: string, appSecret: string): string {
@@ -6,7 +7,7 @@ export function buildAppSecretProof(accessToken: string, appSecret: string): str
 }
 
 export function buildOaOpenApiHeaders(accessToken: string): Record<string, string> {
-  const secret = process.env.ZALO_APP_SECRET?.trim();
+  const secret = normalizeOaToken(process.env.ZALO_APP_SECRET);
   const headers: Record<string, string> = {
     access_token: accessToken,
   };

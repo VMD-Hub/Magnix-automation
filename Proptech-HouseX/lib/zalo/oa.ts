@@ -3,7 +3,7 @@
  * Không log token / refresh_token.
  */
 
-import { readOaRefreshToken, writeOaRefreshToken } from "@/lib/zalo/oa-token-store";
+import { readOaRefreshToken, writeOaRefreshToken, normalizeOaToken } from "@/lib/zalo/oa-token-store";
 import { buildOaOpenApiHeaders } from "@/lib/zalo/oa-api-headers";
 
 export type OaSendResult =
@@ -21,12 +21,12 @@ export function isZaloOaNotifyEnabled(): boolean {
     return false;
   }
   const appId = process.env.ZALO_APP_ID?.trim();
-  const secret = process.env.ZALO_APP_SECRET?.trim();
+  const secret = normalizeOaToken(process.env.ZALO_APP_SECRET);
   if (!appId || !secret) return false;
   const refresh = readOaRefreshToken();
-  const access = process.env.ZALO_OA_ACCESS_TOKEN?.trim();
+  const access = normalizeOaToken(process.env.ZALO_OA_ACCESS_TOKEN);
   const validRefresh = Boolean(refresh);
-  const validAccess = Boolean(access && !access.startsWith("<") && !access.includes("token từ"));
+  const validAccess = Boolean(access);
   return validRefresh || validAccess;
 }
 
@@ -36,21 +36,40 @@ function isPermanentOaRecipientError(code: number | string | undefined): boolean
   return n === -213 || n === -216 || n === -217;
 }
 
-async function getOaAccessToken(): Promise<string> {
-  const staticToken = process.env.ZALO_OA_ACCESS_TOKEN?.trim();
+export type OaTokenRefreshResult =
+  | { ok: true; source: "refresh" | "static" | "cache"; expiresIn?: number }
+  | { ok: false; error: string };
+
+/** Refresh hoặc đọc access token — dùng cho API + diagnose. */
+export async function refreshOaAccessToken(): Promise<{
+  accessToken: string;
+  meta: OaTokenRefreshResult;
+}> {
+  const staticToken = normalizeOaToken(process.env.ZALO_OA_ACCESS_TOKEN);
   const refresh = readOaRefreshToken();
   const appId = process.env.ZALO_APP_ID?.trim();
-  const secret = process.env.ZALO_APP_SECRET?.trim();
+  const secret = normalizeOaToken(process.env.ZALO_APP_SECRET);
 
   if (!appId || !secret) {
     throw new Error("ZALO_APP_ID / ZALO_APP_SECRET required for OA notify");
   }
 
-  if (!refresh && staticToken) return staticToken;
+  const accessOnly =
+    process.env.ZALO_OA_TOKEN_MODE?.trim().toLowerCase() === "access_only";
+  if (accessOnly && staticToken) {
+    return { accessToken: staticToken, meta: { ok: true, source: "static" } };
+  }
+
+  if (!refresh && staticToken) {
+    return { accessToken: staticToken, meta: { ok: true, source: "static" } };
+  }
 
   const now = Date.now();
   if (tokenCache && tokenCache.expiresAt > now + 60_000) {
-    return tokenCache.token;
+    return {
+      accessToken: tokenCache.token,
+      meta: { ok: true, source: "cache" },
+    };
   }
 
   if (!refresh) {
@@ -80,20 +99,12 @@ async function getOaAccessToken(): Promise<string> {
   };
 
   if (!data.access_token) {
-    const staticFallback = process.env.ZALO_OA_ACCESS_TOKEN?.trim();
-    if (
-      staticFallback &&
-      !staticFallback.startsWith("<") &&
-      /invalid refresh token/i.test(
-        data.error_description ?? data.error_name ?? "",
-      )
-    ) {
-      return staticFallback;
-    }
-    throw new Error(
+    const err =
       data.error_description ??
-        data.error_name ??
-        `OA access_token failed (${res.status})`,
+      data.error_name ??
+      `OA access_token failed (${res.status})`;
+    throw new Error(
+      `${err} — lấy token mới từ API Explorer, cập nhật .env (hoặc ZALO_OA_TOKEN_MODE=access_only + ACCESS_TOKEN).`,
     );
   }
 
@@ -105,7 +116,15 @@ async function getOaAccessToken(): Promise<string> {
     token: data.access_token,
     expiresAt: now + (data.expires_in ?? 3600) * 1000,
   };
-  return data.access_token;
+  return {
+    accessToken: data.access_token,
+    meta: { ok: true, source: "refresh", expiresIn: data.expires_in },
+  };
+}
+
+async function getOaAccessToken(): Promise<string> {
+  const { accessToken } = await refreshOaAccessToken();
+  return accessToken;
 }
 
 /** Dùng cho script ops (list followers, v.v.). */
