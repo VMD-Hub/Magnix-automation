@@ -33,6 +33,8 @@ export async function seedSolenaGreenTown(
   await prisma.project.upsert({
     where: { slug: SOLENA_GREEN_TOWN_SLUG },
     update: {
+      status: "DANG_BAN",
+      projectType: "THUONG_MAI",
       overviewData: solenaOverview as object,
       description:
         "Solena là phân khu Block B2 thuộc Green Town Bình Tân do Tập đoàn IDE Việt Nam phát triển tại KDC Vĩnh Lộc, Quận Bình Tân. 252 căn, 16 tầng, giá tham chiếu 53,9 triệu/m².",

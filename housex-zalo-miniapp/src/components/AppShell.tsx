@@ -1,5 +1,6 @@
-import { NavLink, Outlet } from "react-router-dom";
+import { NavLink, Outlet, useLocation } from "react-router-dom";
 import { useAuth } from "@/auth-context";
+import { useHomeTabPath } from "@/components/LaneSwitcher";
 
 /**
  * 3 tab cố định — không trùng "Đăng nhập" với "Tài khoản".
@@ -8,6 +9,14 @@ import { useAuth } from "@/auth-context";
  */
 export function AppShell() {
   const { canAgent } = useAuth();
+  const homePath = useHomeTabPath();
+  const location = useLocation();
+  const homeActive =
+    location.pathname === "/" ||
+    location.pathname === "/noxh" ||
+    location.pathname === "/cctm" ||
+    location.pathname === "/kham-pha" ||
+    location.pathname.startsWith("/du-an/");
 
   return (
     <div className="shell">
@@ -15,13 +24,11 @@ export function AppShell() {
         <Outlet />
       </main>
       <nav className="tabbar" aria-label="Chính">
-        <NavLink to="/" end>
-          {({ isActive }) => (
-            <>
-              <span className={`dot${isActive ? " on" : ""}`} />
-              Tìm nhà
-            </>
-          )}
+        <NavLink to={homePath} className={homeActive ? "active" : undefined}>
+          <>
+            <span className={`dot${homeActive ? " on" : ""}`} />
+            Tìm nhà
+          </>
         </NavLink>
         {canAgent ? (
           <NavLink to="/agent">

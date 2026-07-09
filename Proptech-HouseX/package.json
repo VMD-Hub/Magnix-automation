@@ -22,6 +22,7 @@
     "db:bootstrap:agent-entitlements": "node --env-file=.env --import tsx scripts/bootstrap-agent-entitlements.ts",
     "db:seed:promotion": "node --env-file=.env --import tsx scripts/seed-promotion-campaign.ts",
     "db:reseed:dta": "node --env-file=.env --import tsx scripts/seed-dta-happy-home.ts",
+    "db:seed:priority": "node --env-file=.env --import tsx scripts/seed-priority-miniapp-projects.ts",
     "db:hide-internal-demo": "node --env-file=.env --import tsx scripts/hide-internal-demo-content.ts",
     "db:verify:landings": "node --env-file=.env --import tsx scripts/verify-landings-db.ts",
     "db:setup": "npm run db:up && npm run db:push && npm run db:seed",

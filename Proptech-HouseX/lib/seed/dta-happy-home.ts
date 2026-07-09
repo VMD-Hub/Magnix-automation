@@ -40,6 +40,8 @@ export async function seedDtaHappyHome(prisma: PrismaClient) {
   const project = await prisma.project.upsert({
     where: { slug: DTA_HAPPY_HOME_SLUG },
     update: {
+      status: "DANG_BAN",
+      projectType: "NHA_O_XA_HOI",
       overviewData: dtaOverview as object,
       description: DTA_PROJECT_DESCRIPTION,
       seoTitle: DTA_SEO_TITLE,

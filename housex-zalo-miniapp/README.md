@@ -2,7 +2,7 @@
 
 Frontend riêng cho Zalo Mini App: **Tab Khách** + **Tab Agent**.
 
-Docs: `../Proptech-HouseX/docs/ZALO_MINIAPP_SPEC.md` · ADR: `../.cursor/ADR-014-zalo-miniapp.md` · DNA: `../Proptech-HouseX/docs/DNA_COMPLETION.md`
+Docs: `../Proptech-HouseX/docs/ZALO_MINIAPP_SPEC.md` · **Two Lanes:** `../Proptech-HouseX/docs/MINIAPP_TWO_LANES.md` · ADR: `../.cursor/ADR-014-zalo-miniapp.md`
 
 ## Setup
 
@@ -31,7 +31,7 @@ Login mock: **Tài khoản** → SĐT → `POST /api/auth/zalo` với `zaloUserI
 
 | Phase | Routes |
 |-------|--------|
-| Khách | `/`, `/du-an/:slug`, `/tu-van`, `/cong-cu` |
+| Khách (two lanes) | `/start`, `/noxh`, `/cctm`, `/kham-pha`, `/du-an/:slug`, `/tu-van`, `/cong-cu` |
 | Agent | `/agent`, hồ sơ, thông báo, hoa hồng |
 | LMS | `/agent/dich-vu`, `/agent/dich-vu/:code` (đào tạo · pháp lý · dịch vụ) |
 

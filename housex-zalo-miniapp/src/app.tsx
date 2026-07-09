@@ -1,7 +1,6 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { AuthProvider } from "@/auth-context";
 import { AppShell } from "@/components/AppShell";
-import { HomePage } from "@/pages/HomePage";
 import { AccountPage } from "@/pages/AccountPage";
 import { AgentHomePage } from "@/pages/AgentHomePage";
 import { AgentCasesPage } from "@/pages/AgentCasesPage";
@@ -10,8 +9,12 @@ import { AgentNotificationsPage } from "@/pages/AgentNotificationsPage";
 import { AgentCommissionsPage } from "@/pages/AgentCommissionsPage";
 import { AgentServicesPage } from "@/pages/AgentServicesPage";
 import { AgentServiceDetailPage } from "@/pages/AgentServiceDetailPage";
+import { ExploreHubPage } from "@/pages/ExploreHubPage";
+import { HomeGatePage } from "@/pages/HomeGatePage";
+import { LaneHomePage } from "@/pages/LaneHomePage";
 import { ProjectDetailPage } from "@/pages/ProjectDetailPage";
 import { ConsultPage } from "@/pages/ConsultPage";
+import { StartPage } from "@/pages/StartPage";
 import { ToolsHubPage } from "@/pages/ToolsHubPage";
 import { ToolViewerPage } from "@/pages/ToolViewerPage";
 import { WebViewPage } from "@/pages/WebViewPage";
@@ -21,8 +24,12 @@ export default function App() {
     <AuthProvider>
       <BrowserRouter>
         <Routes>
+          <Route path="/start" element={<StartPage />} />
           <Route element={<AppShell />}>
-            <Route index element={<HomePage />} />
+            <Route index element={<HomeGatePage />} />
+            <Route path="noxh" element={<LaneHomePage lane="noxh" />} />
+            <Route path="cctm" element={<LaneHomePage lane="cctm" />} />
+            <Route path="kham-pha" element={<ExploreHubPage />} />
             <Route path="du-an/:slug" element={<ProjectDetailPage />} />
             <Route path="tu-van" element={<ConsultPage />} />
             <Route path="cong-cu" element={<ToolsHubPage />} />

@@ -1,15 +1,30 @@
 import { useState, type FormEvent } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/auth-context";
 import { AUTH_DEV_BYPASS } from "@/config";
 import { loginWithZaloDev } from "@/services/api";
+import {
+  getPreferredLane,
+  laneHomePath,
+  LANE_LABELS,
+  setPreferredLane,
+  type UserLane,
+} from "@/services/lane";
 
 export function AccountPage() {
   const { user, loading, logout, setUser, canAgent, refresh } = useAuth();
+  const navigate = useNavigate();
   const [phone, setPhone] = useState("");
   const [asAgent, setAsAgent] = useState(false);
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);
+  const [lane, setLane] = useState<UserLane | null>(() => getPreferredLane());
+
+  function pickLane(next: UserLane) {
+    setPreferredLane(next);
+    setLane(next);
+    navigate(laneHomePath(next));
+  }
 
   async function onDevLogin(e: FormEvent) {
     e.preventDefault();
@@ -61,6 +76,23 @@ export function AccountPage() {
             SĐT: {user.phoneMasked}
             {user.ctvCode ? ` · Mã CTV ${user.ctvCode}` : ""}
           </p>
+        </div>
+        <div className="card account-lane-pick">
+          <p className="muted" style={{ marginBottom: 8 }}>
+            Mục tiêu mua nhà
+          </p>
+          <div className="account-lane-row">
+            {(["noxh", "cctm"] as const).map((id) => (
+              <button
+                key={id}
+                type="button"
+                className={`chip${lane === id ? " chip-active" : ""}`}
+                onClick={() => pickLane(id)}
+              >
+                {LANE_LABELS[id]}
+              </button>
+            ))}
+          </div>
         </div>
         {canAgent ? (
           <Link className="btn" to="/agent" style={{ marginBottom: 10 }}>

@@ -1,15 +1,17 @@
 # House X — Zalo Mini App Spec (ADR-014)
 
-## IA — 2 lớp
+## IA — 2 lớp + Two Lanes (Khách)
+
+> **Chi tiết:** [MINIAPP_TWO_LANES.md](MINIAPP_TWO_LANES.md) — one brand, two lanes (NOXH / CCTM).
 
 ```
 ┌─────────────────────────────────────┐
 │ House X Mini App                    │
 ├──────────────┬──────────────────────┤
-│ Tab Khách    │ Tab Agent (ẩn nếu chưa│
-│ (default)    │  có quyền BROKER/CTV) │
+│ /start → lane│ Tab Agent (ẩn nếu chưa│
+│ /noxh | /cctm│  có quyền BROKER/CTV) │
 ├──────────────┼──────────────────────┤
-│ Home NOXH    │ Hồ sơ NOXH           │
+│ Home theo lane│ Hồ sơ NOXH           │
 │ Dự án / tin  │ Dịch vụ / Đào tạo    │
 │ Công cụ vay  │ Pháp lý BĐS          │
 │ Form tư vấn  │ Thông báo / Hoa hồng │
@@ -19,6 +21,8 @@
          ▼
    https://timnhaxahoi.com/api/*
 ```
+
+## IA — 2 lớp (legacy diagram)
 
 ## Auth flow
 
@@ -74,14 +78,20 @@ Mini App                  House X API              Zalo Graph
 2. Nếu không: tìm theo `normalizedPhone` → gắn `zaloUserId`.
 3. Nếu không: tạo account mới (CUSTOMER hoặc BROKER theo `preferredRole`), `passwordHash` random unusable, email placeholder `zalo_<id>@users.housex.local`.
 
-## MVP màn hình Phase 1 (Khách)
+## MVP màn hình Phase 1 (Khách) — Two Lanes
 
-| Route (Mini) | API |
-|--------------|-----|
-| `/` Home | `GET /api/projects?projectType=NHA_O_XA_HOI&status=DANG_BAN` |
-| `/du-an/:slug` | `GET /api/projects/:slug` + form `POST /api/leads` |
-| `/tu-van` | `POST /api/leads` ( chọn `projectId` ) |
-| `/tai-khoan` | `GET /api/auth/me` · `POST /api/auth/zalo` |
+| Route (Mini) | API / hành vi |
+|--------------|---------------|
+| `/` | Redirect → remember lane / `/start` / `?lane=noxh\|cctm` |
+| `/start` | Chọn lane (không tabbar) |
+| `/noxh` | `GET /api/projects?projectType=NHA_O_XA_HOI&status=DANG_BAN` |
+| `/cctm` | `GET /api/projects?projectType=THUONG_MAI&status=DANG_BAN` |
+| `/kham-pha` | Hub khi user chưa chắc |
+| `/du-an/:slug` | `GET /api/projects/:slug` + `POST /api/leads` |
+| `/tu-van` | `POST /api/leads` |
+| `/tai-khoan` | Auth + đổi lane |
+
+Chi tiết UX: [MINIAPP_TWO_LANES.md](MINIAPP_TWO_LANES.md).
 
 CORS: `/api/projects`, `/api/projects/:slug`, `/api/leads` dùng `applyApiCors` + `OPTIONS`.
 
@@ -124,6 +134,7 @@ magnix-automation/
 ### Code / DB (làm trước — không cần OA)
 
 - [x] Phase 1–3a Mini App + LMS unlock (`DNA_COMPLETION.md`)
+- [x] Two Lanes NOXH/CCTM (`MINIAPP_TWO_LANES.md`)
 - [ ] VPS: `db:deploy` + `db:seed:agent-services` + `db:bootstrap:agent-entitlements`
 - [x] Production chặn `ZALO_AUTH_DEV_BYPASS`
 
