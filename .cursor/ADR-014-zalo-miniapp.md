@@ -53,7 +53,7 @@
 | **1** | Tab Khách: home, dự án, lead, tools | ✅ |
 | **2** | Tab Agent: cases, notifications, commissions | ✅ |
 | **3a** | Đào tạo / pháp lý / quản lý dịch vụ + quiz unlock | ✅ |
-| **3b** | OA deep link + ZNS push (sau approve OA) | 🔜 chờ mai |
+| **3b** | OA CS milestone notify CTV (DNA-D) + deep link/ZNS (sau) | ✅ CS / 🔜 ZNS |
 
 ## Env
 

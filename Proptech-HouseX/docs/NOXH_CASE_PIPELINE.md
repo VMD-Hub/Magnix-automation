@@ -171,9 +171,16 @@ cd Proptech-HouseX && npm run go-live:print-cron
 
 | Batch | Trạng thái |
 |-------|------------|
-| **DNA-C** | n8n Telegram `noxh_case.*` — [HOUSEX_NOXH_LEAD_ROUTING.md](../../n8n-workflows/HOUSEX_NOXH_LEAD_ROUTING.md) § Luồng F |
-| **DNA-D** | Zalo OA notify CTV (chưa code) |
+| **DNA-D** | Zalo OA CS → CTV khi milestone (outbox `noxh_case.milestone_changed`) |
+| **P4** | Subdomain campaign links (Mini App two lanes) |
+
+### C — Zalo OA (DNA-D)
+
+1. CTV login Mini App → có `zaloUserId` + follow OA
+2. Admin đổi milestone hồ sơ có `brokerId`
+3. Outbox `noxh_case.milestone_changed` → n8n Telegram (Ops) + Zalo OA CS (CTV)
+4. CTV nhận tin Zalo + in-app notification
 
 ---
 
-*Cập nhật: 2026-07-09 — DNA-A doc + DNA-B wizard HOT auto-case.*
+*Cập nhật: 2026-07-09 — DNA-A/B/C/D.*

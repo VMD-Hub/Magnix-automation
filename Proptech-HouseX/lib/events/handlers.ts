@@ -7,7 +7,10 @@
 
 export type EventHandler = (payload: unknown) => Promise<void>;
 
-async function forwardToWebhook(type: string, payload: unknown): Promise<void> {
+export async function forwardEventToWebhook(
+  type: string,
+  payload: unknown,
+): Promise<void> {
   const url = process.env.EVENTS_WEBHOOK_URL;
   if (!url) {
     console.log(`[outbox] (no EVENTS_WEBHOOK_URL) ${type}`, payload);
@@ -28,8 +31,27 @@ async function forwardToWebhook(type: string, payload: unknown): Promise<void> {
   }
 }
 
-// Registry: cho phép gắn handler chuyên biệt theo type sau này.
+function registerWebhookPlusHandler(
+  type: string,
+  extra?: EventHandler,
+): void {
+  handlers[type] = async (payload) => {
+    await forwardEventToWebhook(type, payload);
+    if (extra) await extra(payload);
+  };
+}
+
+// Registry: handler chuyên biệt theo type (mặc định chỉ forward webhook).
 const handlers: Record<string, EventHandler> = {};
+
+registerWebhookPlusHandler("noxh_case.milestone_changed", async (payload) => {
+  const { notifyBrokerMilestoneZaloOa } = await import(
+    "@/lib/zalo/broker-oa-notify"
+  );
+  await notifyBrokerMilestoneZaloOa(
+    payload as import("@/lib/events/types").OutboxPayloads["noxh_case.milestone_changed"],
+  );
+});
 
 export async function handleEvent(
   type: string,
@@ -40,7 +62,7 @@ export async function handleEvent(
     await specific(payload);
     return;
   }
-  await forwardToWebhook(type, payload);
+  await forwardEventToWebhook(type, payload);
 }
 
 /** Backoff luỹ thừa (giây) có trần — pure, test được. */

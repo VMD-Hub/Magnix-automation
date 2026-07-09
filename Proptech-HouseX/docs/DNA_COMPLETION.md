@@ -14,6 +14,7 @@ Mục tiêu: đóng DNA product/ops trong repo — CTV pipeline, LMS, Zalo Mini 
 | **DNA-A** | Doc ops `NOXH_CASE_PIPELINE.md` |
 | **DNA-B** | Wizard tier **HOT** → auto `NoxhCase` platform (`NOXH_WIZARD_HOT_AUTO_CASE`, mặc định `true`) |
 | **DNA-C** | n8n Telegram `noxh_case.*` — `housex-noxh-lead-route` |
+| **DNA-D** | Zalo OA CS notify CTV khi `noxh_case.milestone_changed` (outbox handler) |
 | **P1 CTV ↔ LMS** | `approveCtvApplication` → `ensureBrokerEntitlements`; `LISTING_POST` ACTIVE mặc định |
 | **P2 Gate đăng tin** | `POST /api/listings` kiểm `LISTING_POST` |
 | **P3 Anti-bypass** | `ZALO_AUTH_DEV_BYPASS` forbidden trên production |
@@ -49,8 +50,19 @@ CTV_CLAIM_LOCK_BUSINESS_DAYS=20
 
 - [x] Mini App ID trong `housex-zalo-miniapp/app-config.json`
 - [ ] `ZALO_APP_ID` / `ZALO_APP_SECRET` / `ZALO_OA_ID` trên VPS — **tắt** `ZALO_AUTH_DEV_BYPASS` production
+- [ ] `ZALO_OA_REFRESH_TOKEN` (DNA-D push milestone CTV) — lấy sau khi OA authorize
 - [ ] Build Mini App prod + smoke Simulator
 - [ ] OA menu public (chờ duyệt Zalo)
+
+**DNA-D env:**
+
+```env
+ZALO_OA_NOTIFY_ENABLED=true
+ZALO_OA_REFRESH_TOKEN=<từ Zalo OA authorize>
+# Hoặc dev ngắn hạn: ZALO_OA_ACCESS_TOKEN=
+```
+
+CTV cần **đã follow OA** và login Mini App ít nhất một lần (`UserAccount.zaloUserId`).
 
 ---
 
@@ -69,4 +81,4 @@ Chi tiết: [NOXH_CASE_PIPELINE.md](NOXH_CASE_PIPELINE.md) §9.
 
 | Batch | Việc |
 |-------|------|
-| **DNA-D** | Zalo OA notify CTV milestone |
+| **P4 Mini App** | Subdomain campaign `noxh.*` / `cctm.*` — [MINIAPP_TWO_LANES.md](MINIAPP_TWO_LANES.md) |
