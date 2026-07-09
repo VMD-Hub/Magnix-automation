@@ -13,7 +13,7 @@ cp .env.example .env
 ```
 
 - `VITE_HOUSEX_API_BASE` → local `http://localhost:3000` · prod `https://timnhaxahoi.com`
-- `app-config.json` → **`appId` chờ mai** khi Zalo cấp Mini App ID
+- `app-config.json` → `app.appId` = `1554712272702750699` (House X Mini App)
 
 ## Dev (browser / Vite)
 

@@ -1,10 +1,11 @@
 {
   "app": {
+    "appId": "1554712272702750699",
     "title": "House X",
     "headerTitle": "House X",
-    "headerColor": "#0f172a",
+    "headerColor": "#1a1214",
     "textColor": "white",
-    "statusBarColor": "#0f172a",
+    "statusBarColor": "#1a1214",
     "leftButton": "none",
     "selfDefense": false
   },
