@@ -4,6 +4,7 @@
  */
 
 import { readOaRefreshToken, writeOaRefreshToken } from "@/lib/zalo/oa-token-store";
+import { buildOaOpenApiHeaders } from "@/lib/zalo/oa-api-headers";
 
 export type OaSendResult =
   | { ok: true }
@@ -129,7 +130,7 @@ export async function sendOaCsText(params: {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        access_token: accessToken,
+        ...buildOaOpenApiHeaders(accessToken),
       },
       body: JSON.stringify({
         recipient: { user_id: userId },

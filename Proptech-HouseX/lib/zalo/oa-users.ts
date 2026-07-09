@@ -1,4 +1,5 @@
 import { fetchOaAccessToken } from "./oa";
+import { buildOaOpenApiHeaders } from "./oa-api-headers";
 
 type ZaloOaListResult =
   | { ok: true; users: { userId: string; displayName?: string }[] }
@@ -14,7 +15,7 @@ async function oaGetJson<T>(
 
   const res = await fetch(url.toString(), {
     method: "GET",
-    headers: { access_token: accessToken },
+    headers: buildOaOpenApiHeaders(accessToken),
     cache: "no-store",
   });
 
