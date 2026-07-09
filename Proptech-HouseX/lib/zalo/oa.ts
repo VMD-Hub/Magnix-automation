@@ -3,6 +3,8 @@
  * Không log token / refresh_token.
  */
 
+import { readOaRefreshToken, writeOaRefreshToken } from "@/lib/zalo/oa-token-store";
+
 export type OaSendResult =
   | { ok: true }
   | { ok: false; error: string; skipPermanent?: boolean };
@@ -20,9 +22,9 @@ export function isZaloOaNotifyEnabled(): boolean {
   const appId = process.env.ZALO_APP_ID?.trim();
   const secret = process.env.ZALO_APP_SECRET?.trim();
   if (!appId || !secret) return false;
-  const refresh = process.env.ZALO_OA_REFRESH_TOKEN?.trim();
+  const refresh = readOaRefreshToken();
   const access = process.env.ZALO_OA_ACCESS_TOKEN?.trim();
-  const validRefresh = Boolean(refresh && !refresh.startsWith("<"));
+  const validRefresh = Boolean(refresh);
   const validAccess = Boolean(access && !access.startsWith("<") && !access.includes("token từ"));
   return validRefresh || validAccess;
 }
@@ -35,7 +37,7 @@ function isPermanentOaRecipientError(code: number | string | undefined): boolean
 
 async function getOaAccessToken(): Promise<string> {
   const staticToken = process.env.ZALO_OA_ACCESS_TOKEN?.trim();
-  const refresh = process.env.ZALO_OA_REFRESH_TOKEN?.trim();
+  const refresh = readOaRefreshToken();
   const appId = process.env.ZALO_APP_ID?.trim();
   const secret = process.env.ZALO_APP_SECRET?.trim();
 
@@ -70,12 +72,23 @@ async function getOaAccessToken(): Promise<string> {
 
   const data = (await res.json()) as {
     access_token?: string;
+    refresh_token?: string;
     expires_in?: number;
     error_name?: string;
     error_description?: string;
   };
 
   if (!data.access_token) {
+    const staticFallback = process.env.ZALO_OA_ACCESS_TOKEN?.trim();
+    if (
+      staticFallback &&
+      !staticFallback.startsWith("<") &&
+      /invalid refresh token/i.test(
+        data.error_description ?? data.error_name ?? "",
+      )
+    ) {
+      return staticFallback;
+    }
     throw new Error(
       data.error_description ??
         data.error_name ??
@@ -83,11 +96,20 @@ async function getOaAccessToken(): Promise<string> {
     );
   }
 
+  if (data.refresh_token) {
+    writeOaRefreshToken(data.refresh_token);
+  }
+
   tokenCache = {
     token: data.access_token,
     expiresAt: now + (data.expires_in ?? 3600) * 1000,
   };
   return data.access_token;
+}
+
+/** Dùng cho script ops (list followers, v.v.). */
+export async function fetchOaAccessToken(): Promise<string> {
+  return getOaAccessToken();
 }
 
 /** Gửi tin tư vấn (CS) tới user đã quan tâm OA. */

@@ -1,59 +1,14 @@
-/**
- * Zalo OA — liệt kê user_id (followers / recent chat). Không log token.
- */
+import { fetchOaAccessToken } from "./oa";
 
 type ZaloOaListResult =
   | { ok: true; users: { userId: string; displayName?: string }[] }
   | { ok: false; error: string };
 
-async function getOaAccessToken(): Promise<string> {
-  const staticToken = process.env.ZALO_OA_ACCESS_TOKEN?.trim();
-  const refresh = process.env.ZALO_OA_REFRESH_TOKEN?.trim();
-  const appId = process.env.ZALO_APP_ID?.trim();
-  const secret = process.env.ZALO_APP_SECRET?.trim();
-
-  if (!appId || !secret) {
-    throw new Error("ZALO_APP_ID / ZALO_APP_SECRET required");
-  }
-
-  if (!refresh && staticToken) return staticToken;
-  if (!refresh) {
-    throw new Error("ZALO_OA_REFRESH_TOKEN or ZALO_OA_ACCESS_TOKEN required");
-  }
-
-  const res = await fetch("https://oauth.zaloapp.com/v4/oa/access_token", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/x-www-form-urlencoded",
-      secret_key: secret,
-    },
-    body: new URLSearchParams({
-      app_id: appId,
-      grant_type: "refresh_token",
-      refresh_token: refresh,
-    }),
-    cache: "no-store",
-  });
-
-  const data = (await res.json()) as {
-    access_token?: string;
-    error_description?: string;
-    error_name?: string;
-  };
-
-  if (!data.access_token) {
-    throw new Error(
-      data.error_description ?? data.error_name ?? `token refresh ${res.status}`,
-    );
-  }
-  return data.access_token;
-}
-
 async function oaGetJson<T>(
   path: string,
   payload: Record<string, unknown>,
 ): Promise<T> {
-  const accessToken = await getOaAccessToken();
+  const accessToken = await fetchOaAccessToken();
   const url = new URL(`https://openapi.zalo.me/v2.0/oa/${path}`);
   url.searchParams.set("data", JSON.stringify(payload));
 

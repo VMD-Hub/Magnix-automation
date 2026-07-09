@@ -43,3 +43,6 @@ next-env.d.ts
 
 # broker listing uploads (VPS local — migrate CDN sau)
 /public/uploads/
+
+# Zalo OA refresh token sau rotate (auto-write, không commit)
+.zalo-oa-refresh
