@@ -13,26 +13,42 @@ import {
 } from "../lib/zalo/oa-token-store";
 import { refreshOaAccessToken } from "../lib/zalo/oa";
 
-type GetProfileBody = {
+type ZaloOaApiBody = {
   error?: number;
   message?: string;
-  data?: { name?: string };
+  data?: { name?: string; oa_id?: string; description?: string };
 };
 
-async function callGetProfile(
+async function callGetOa(
   accessToken: string,
   withProof: boolean,
-): Promise<GetProfileBody & { status: number }> {
+): Promise<ZaloOaApiBody & { status: number }> {
   const headers: Record<string, string> = { access_token: accessToken };
   if (withProof) {
     Object.assign(headers, buildOaOpenApiHeaders(accessToken));
   }
 
-  const res = await fetch("https://openapi.zalo.me/v2.0/oa/getprofile", {
+  const res = await fetch("https://openapi.zalo.me/v3.0/oa/getoa", {
     headers,
     cache: "no-store",
   });
-  const body = (await res.json()) as GetProfileBody;
+  const body = (await res.json()) as ZaloOaApiBody;
+  return { ...body, status: res.status };
+}
+
+/** getprofile cần user_id — dùng khi có ZALO_OA_TEST_USER_ID. */
+async function callGetFollowerProfile(
+  accessToken: string,
+  userId: string,
+): Promise<ZaloOaApiBody & { status: number }> {
+  const url = new URL("https://openapi.zalo.me/v2.0/oa/getprofile");
+  url.searchParams.set("data", JSON.stringify({ user_id: userId }));
+
+  const res = await fetch(url.toString(), {
+    headers: buildOaOpenApiHeaders(accessToken),
+    cache: "no-store",
+  });
+  const body = (await res.json()) as ZaloOaApiBody;
   return { ...body, status: res.status };
 }
 
@@ -75,6 +91,8 @@ function explainError(code: number | undefined): string {
   switch (code) {
     case -125:
       return "appsecret_proof thiếu/sai";
+    case -201:
+      return "thiếu tham số bắt buộc (getprofile cần user_id)";
     case -216:
       return "token không phải OA token, không thuộc app này, hoặc hết hạn";
     case -217:
@@ -184,15 +202,23 @@ async function main() {
       );
     }
 
-    const withProof = await callGetProfile(accessToken, true);
-    const withoutProof = await callGetProfile(accessToken, false);
+    const withProof = await callGetOa(accessToken, true);
+    const withoutProof = await callGetOa(accessToken, false);
 
     console.log(
-      `\ngetprofile (có proof): ${withProof.error === 0 ? `OK — "${withProof.data?.name ?? "?"}"` : `FAIL ${withProof.error} — ${withProof.message ?? ""}`}`,
+      `\ngetoa (có proof): ${withProof.error === 0 ? `OK — "${withProof.data?.name ?? "?"}"` : `FAIL ${withProof.error} — ${withProof.message ?? ""}`}`,
     );
     console.log(
-      `getprofile (không proof): ${withoutProof.error === 0 ? "OK" : `FAIL ${withoutProof.error} — ${withoutProof.message ?? ""}`}`,
+      `getoa (không proof): ${withoutProof.error === 0 ? "OK" : `FAIL ${withoutProof.error} — ${withoutProof.message ?? ""}`}`,
     );
+
+    const testUserId = process.env.ZALO_OA_TEST_USER_ID?.trim();
+    if (testUserId && withProof.error === 0) {
+      const follower = await callGetFollowerProfile(accessToken, testUserId);
+      console.log(
+        `getprofile user ${testUserId}: ${follower.error === 0 ? `OK — "${follower.data?.name ?? follower.data?.description ?? "?"}"` : `FAIL ${follower.error} — ${follower.message ?? ""}`}`,
+      );
+    }
 
     if (withProof.error !== 0) {
       console.log(`  → Mã ${withProof.error}: ${explainError(withProof.error)}`);
@@ -226,13 +252,13 @@ async function main() {
             "  Cả access + refresh đều lỗi → lấy bộ OA token mới từ Explorer (dropdown OA Access Token).",
           );
         } else {
-          const rp = await callGetProfile(refreshed.accessToken, true);
+          const rp = await callGetOa(refreshed.accessToken, true);
           console.log(
             `  Refresh: OK — access len=${refreshed.accessToken.length}` +
               (refreshed.expiresIn ? `, expires_in=${refreshed.expiresIn}s` : ""),
           );
           console.log(
-            `  getprofile sau refresh: ${rp.error === 0 ? `OK — "${rp.data?.name ?? "?"}"` : `FAIL ${rp.error} — ${rp.message ?? ""}`}`,
+            `  getoa sau refresh: ${rp.error === 0 ? `OK — "${rp.data?.name ?? "?"}"` : `FAIL ${rp.error} — ${rp.message ?? ""}`}`,
           );
           if (rp.error === 0) {
             console.log(
@@ -248,7 +274,8 @@ async function main() {
         }
       }
     } else if (withProof.error === 0) {
-      console.log("\nKết luận: Zalo OA API hoạt động. Tiếp: npm run go-live:zalo-oa-list-users");
+      console.log("\nKết luận: Zalo OA API hoạt động.");
+      console.log("Tiếp: ZALO_OA_TEST_USER_ID=... npm run go-live:smoke-zalo-oa");
     }
   } catch (err) {
     console.error(`\nToken: FAIL — ${err instanceof Error ? err.message : err}`);
