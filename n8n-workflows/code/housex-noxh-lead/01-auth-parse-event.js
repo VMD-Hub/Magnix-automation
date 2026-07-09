@@ -1,5 +1,5 @@
 // Parse envelope từ HouseX EVENTS_WEBHOOK_URL: { type, payload, sentAt }
-// Hỗ trợ: lead.noxh_checked · lead.created · account.registered · ctv.application_submitted
+// Hỗ trợ: lead.noxh_checked · lead.created · noxh_case.* · account.registered · ctv.application_submitted
 
 const SECRET = $env.EVENTS_WEBHOOK_SECRET || '';
 const headers = $input.first().json.headers || {};
@@ -18,6 +18,12 @@ function resolveInquirySegment(payload, ctx) {
   if (explicit === 'noxh' || explicit === 'cctm') return explicit;
   const projectType = String(ctx.projectType || 'THUONG_MAI').toUpperCase();
   return projectType === 'NHA_O_XA_HOI' ? 'noxh' : 'cctm';
+}
+
+function maskNormalizedPhone(normalized) {
+  const digits = String(normalized || '').replace(/\D/g, '');
+  if (digits.length < 7) return '***';
+  return `${digits.slice(0, 4)}***${digits.slice(-3)}`;
 }
 
 if (type === 'lead.created') {
@@ -127,6 +133,73 @@ if (type === 'ctv.application_submitted') {
       sla_due_at: new Date(Date.now() + 24 * 3600000).toISOString(),
       created_at: String(p.submittedAt || now),
       dedupe_key: `ctv:${appId}`,
+    },
+  }];
+}
+
+if (type === 'noxh_case.created') {
+  const p = body.payload || {};
+  const caseId = String(p.caseId || '').trim();
+  if (!caseId) throw new Error('Validation: payload.caseId is required');
+
+  return [{
+    json: {
+      ok: true,
+      skipped: false,
+      event_path: 'noxh_case',
+      path: 'events',
+      noxh_case_event: type,
+      case_id: caseId,
+      case_code: String(p.caseCode || '').slice(0, 32),
+      broker_id: p.brokerId != null && p.brokerId !== '' ? String(p.brokerId) : null,
+      milestone: String(p.milestone || 'M1_RECEIVED'),
+      customer_name: String(p.customerName || '').slice(0, 80),
+      phone_masked: maskNormalizedPhone(p.normalizedPhone),
+      created_at: now,
+    },
+  }];
+}
+
+if (type === 'noxh_case.milestone_changed') {
+  const p = body.payload || {};
+  const caseId = String(p.caseId || '').trim();
+  if (!caseId) throw new Error('Validation: payload.caseId is required');
+
+  return [{
+    json: {
+      ok: true,
+      skipped: false,
+      event_path: 'noxh_case',
+      path: 'events',
+      noxh_case_event: type,
+      case_id: caseId,
+      case_code: String(p.caseCode || '').slice(0, 32),
+      broker_id: p.brokerId != null && p.brokerId !== '' ? String(p.brokerId) : null,
+      from_milestone: String(p.fromMilestone || ''),
+      to_milestone: String(p.toMilestone || ''),
+      milestone_sub: p.milestoneSub ? String(p.milestoneSub) : null,
+      ops_note: p.opsNote ? String(p.opsNote).slice(0, 500) : null,
+    },
+  }];
+}
+
+if (type === 'noxh_case.ctv_nudge') {
+  const p = body.payload || {};
+  const caseId = String(p.caseId || '').trim();
+  if (!caseId) throw new Error('Validation: payload.caseId is required');
+
+  return [{
+    json: {
+      ok: true,
+      skipped: false,
+      event_path: 'noxh_case',
+      path: 'events',
+      noxh_case_event: type,
+      case_id: caseId,
+      case_code: String(p.caseCode || '').slice(0, 32),
+      broker_id: String(p.brokerId || '').trim() || null,
+      doc_type: p.docType ? String(p.docType) : null,
+      nudge_message: String(p.message || '').slice(0, 500),
     },
   }];
 }

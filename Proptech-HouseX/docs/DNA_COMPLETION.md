@@ -13,6 +13,7 @@ Mục tiêu: đóng DNA product/ops trong repo — CTV pipeline, LMS, Zalo Mini 
 | **Phase 0 NOXH Case** | Schema M1–M5, checklist, CTV claim fairplay, Contact Firewall, Admin + Mini App Agent |
 | **DNA-A** | Doc ops `NOXH_CASE_PIPELINE.md` |
 | **DNA-B** | Wizard tier **HOT** → auto `NoxhCase` platform (`NOXH_WIZARD_HOT_AUTO_CASE`, mặc định `true`) |
+| **DNA-C** | n8n Telegram `noxh_case.*` — `housex-noxh-lead-route` |
 | **P1 CTV ↔ LMS** | `approveCtvApplication` → `ensureBrokerEntitlements`; `LISTING_POST` ACTIVE mặc định |
 | **P2 Gate đăng tin** | `POST /api/listings` kiểm `LISTING_POST` |
 | **P3 Anti-bypass** | `ZALO_AUTH_DEV_BYPASS` forbidden trên production |
@@ -68,5 +69,4 @@ Chi tiết: [NOXH_CASE_PIPELINE.md](NOXH_CASE_PIPELINE.md) §9.
 
 | Batch | Việc |
 |-------|------|
-| **DNA-C** | n8n Telegram `noxh_case.*` events |
 | **DNA-D** | Zalo OA notify CTV milestone |

@@ -51,6 +51,8 @@ const codes = {
   dedupeSupply: replaceSheet(read('supply-03-dedupe.js')),
   formatSupplyTg: replaceSheet(read('supply-04-format-telegram.js')),
   sendSupplyTg: replaceSheet(read('supply-05-send-telegram.js')),
+  formatNoxhCaseTg: replaceSheet(read('noxh-case-04-format-telegram.js')),
+  sendNoxhCaseTg: replaceSheet(read('noxh-case-05-send-telegram.js')),
 };
 
 const manualEvent = `return [{ json: {
@@ -125,6 +127,39 @@ const manualInquiryCctm = `return [{ json: {
   },
 }}];`;
 
+const manualNoxhCaseCreated = `return [{ json: {
+  headers: { 'x-events-secret': $env.EVENTS_WEBHOOK_SECRET || '' },
+  body: {
+    type: 'noxh_case.created',
+    sentAt: new Date().toISOString(),
+    payload: {
+      caseId: 'manual-case-' + Date.now(),
+      caseCode: 'HX-NOXH-MANUAL',
+      brokerId: null,
+      milestone: 'M1_RECEIVED',
+      customerName: 'Manual Wizard HOT',
+      normalizedPhone: '0901234567',
+    },
+  },
+}}];`;
+
+const manualNoxhCaseMilestone = `return [{ json: {
+  headers: { 'x-events-secret': $env.EVENTS_WEBHOOK_SECRET || '' },
+  body: {
+    type: 'noxh_case.milestone_changed',
+    sentAt: new Date().toISOString(),
+    payload: {
+      caseId: 'manual-case-milestone-' + Date.now(),
+      caseCode: 'HX-NOXH-MANUAL',
+      brokerId: 'broker-demo',
+      fromMilestone: 'M2_DOCUMENTS',
+      toMilestone: 'M5_SIGNED',
+      milestoneSub: null,
+      opsNote: 'Test DNA-C milestone Telegram',
+    },
+  },
+}}];`;
+
 const pos = (x, y) => [x, y];
 const nid = (prefix, n) => `${prefix}${String(n).padStart(2, '0')}`;
 
@@ -132,7 +167,7 @@ const nodes = [
   {
     parameters: {
       content:
-        '## HouseX Events Hub\n**Webhook A:** POST `/webhook/magnix/housex-events` ← `EVENTS_WEBHOOK_URL`\n**Webhook B:** POST `/webhook/magnix/housex-noxh-detail` ← `NOXH_DETAIL_WEBHOOK_URL`\n**Events:** `lead.noxh_checked` · `lead.created` · `account.registered` · `ctv.application_submitted`\nAuth: `x-events-secret` = `EVENTS_WEBHOOK_SECRET`',
+        '## HouseX Events Hub\n**Webhook A:** POST `/webhook/magnix/housex-events` ← `EVENTS_WEBHOOK_URL`\n**Webhook B:** POST `/webhook/magnix/housex-noxh-detail` ← `NOXH_DETAIL_WEBHOOK_URL`\n**Events:** `lead.noxh_checked` · `lead.created` · `noxh_case.*` · `account.registered` · `ctv.application_submitted`\nAuth: `x-events-secret` = `EVENTS_WEBHOOK_SECRET`',
       height: 260,
       width: 560,
     },
@@ -193,6 +228,22 @@ const nodes = [
     position: pos(40, 640),
   },
   {
+    parameters: { jsCode: manualNoxhCaseCreated },
+    id: nid('nx', 45),
+    name: 'Inject Manual Noxh Case',
+    type: 'n8n-nodes-base.code',
+    typeVersion: 2,
+    position: pos(40, 720),
+  },
+  {
+    parameters: { jsCode: manualNoxhCaseMilestone },
+    id: nid('nx', 46),
+    name: 'Inject Manual Case Milestone',
+    type: 'n8n-nodes-base.code',
+    typeVersion: 2,
+    position: pos(40, 800),
+  },
+  {
     parameters: { jsCode: codes.parseEvent },
     id: nid('nx', 5),
     name: 'Parse HouseX Event',
@@ -244,6 +295,15 @@ const nodes = [
             },
             renameOutput: true,
             outputKey: 'supply',
+          },
+          {
+            conditions: {
+              options: { caseSensitive: true, typeValidation: 'strict' },
+              conditions: [{ id: 'r4', leftValue: '={{ $json.event_path }}', rightValue: 'noxh_case', operator: { type: 'string', operation: 'equals' } }],
+              combinator: 'and',
+            },
+            renameOutput: true,
+            outputKey: 'noxh_case',
           },
         ],
       },
@@ -414,6 +474,22 @@ const nodes = [
     position: pos(2440, 600),
   },
   {
+    parameters: { jsCode: codes.formatNoxhCaseTg },
+    id: nid('nx', 47),
+    name: 'Format Noxh Case Telegram',
+    type: 'n8n-nodes-base.code',
+    typeVersion: 2,
+    position: pos(1000, 820),
+  },
+  {
+    parameters: { jsCode: codes.sendNoxhCaseTg },
+    id: nid('nx', 48),
+    name: 'Send Noxh Case Telegram',
+    type: 'n8n-nodes-base.code',
+    typeVersion: 2,
+    position: pos(1240, 820),
+  },
+  {
     parameters: { jsCode: codes.prepareOps },
     id: nid('nx', 7),
     name: 'Prepare Ops Append',
@@ -576,11 +652,15 @@ const connections = {
       [{ node: 'Inject Manual NOXH Event', type: 'main', index: 0 }],
       [{ node: 'Inject Manual Inquiry Event', type: 'main', index: 0 }],
       [{ node: 'Inject Manual CCTM Inquiry', type: 'main', index: 0 }],
+      [{ node: 'Inject Manual Noxh Case', type: 'main', index: 0 }],
+      [{ node: 'Inject Manual Case Milestone', type: 'main', index: 0 }],
     ],
   },
   'Inject Manual NOXH Event': { main: [[{ node: 'Parse HouseX Event', type: 'main', index: 0 }]] },
   'Inject Manual Inquiry Event': { main: [[{ node: 'Parse HouseX Event', type: 'main', index: 0 }]] },
   'Inject Manual CCTM Inquiry': { main: [[{ node: 'Parse HouseX Event', type: 'main', index: 0 }]] },
+  'Inject Manual Noxh Case': { main: [[{ node: 'Parse HouseX Event', type: 'main', index: 0 }]] },
+  'Inject Manual Case Milestone': { main: [[{ node: 'Parse HouseX Event', type: 'main', index: 0 }]] },
   'Parse HouseX Event': { main: [[{ node: 'Skipped Event?', type: 'main', index: 0 }]] },
   'Skipped Event?': {
     main: [
@@ -593,6 +673,7 @@ const connections = {
       [{ node: 'Prepare Inquiry Append', type: 'main', index: 0 }],
       [{ node: 'Prepare Ops Append', type: 'main', index: 0 }],
       [{ node: 'Prepare Supply Append', type: 'main', index: 0 }],
+      [{ node: 'Format Noxh Case Telegram', type: 'main', index: 0 }],
       [{ node: 'Build Response', type: 'main', index: 0 }],
     ],
   },
@@ -620,6 +701,8 @@ const connections = {
   'HTTP POST housex_supply_ops': { main: [[{ node: 'Format Supply Telegram', type: 'main', index: 0 }]] },
   'Format Supply Telegram': { main: [[{ node: 'Send Supply Telegram', type: 'main', index: 0 }]] },
   'Send Supply Telegram': { main: [[{ node: 'Build Response', type: 'main', index: 0 }]] },
+  'Format Noxh Case Telegram': { main: [[{ node: 'Send Noxh Case Telegram', type: 'main', index: 0 }]] },
+  'Send Noxh Case Telegram': { main: [[{ node: 'Build Response', type: 'main', index: 0 }]] },
   'Prepare Ops Append': { main: [[{ node: 'HTTP GET ops dedupe', type: 'main', index: 0 }]] },
   'HTTP GET ops dedupe': { main: [[{ node: 'Dedupe Ops', type: 'main', index: 0 }]] },
   'Dedupe Ops': { main: [[{ node: 'Duplicate?', type: 'main', index: 0 }]] },
@@ -654,7 +737,7 @@ const workflow = {
   settings: { executionOrder: 'v1' },
   versionId: '2',
   meta: { templateCredsSetupCompleted: true },
-  tags: [{ name: 'housex' }, { name: 'housex-noxh-lead-route' }, { name: 'housex-lead-inquiry' }, { name: 'housex-supply-signup' }],
+  tags: [{ name: 'housex' }, { name: 'housex-noxh-lead-route' }, { name: 'housex-lead-inquiry' }, { name: 'housex-supply-signup' }, { name: 'housex-noxh-case' }],
 };
 
 const out = path.join(__dirname, 'housex-noxh-lead-route.workflow.json');

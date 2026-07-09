@@ -207,6 +207,46 @@ evaluation_reasons | credit_reasons | next_steps | rules_version | contact_* | c
 
 ---
 
+## Luồng F — NOXH Case pipeline (DNA-C)
+
+Postgres `noxh_cases` là SoR. Outbox → cùng webhook `housex-events` → Telegram Ops (không ghi Sheet).
+
+| Event | Khi nào | Telegram |
+|---|---|---|
+| `noxh_case.created` | Wizard HOT / inbound / CTV thả lead | Ops — hồ sơ M1 mới |
+| `noxh_case.milestone_changed` | Admin đổi M1–M5 | Ops — tiến độ; **M5** = kiểm tra hoa hồng |
+| `noxh_case.ctv_nudge` | CTV «Nhắc khách» qua hệ thống | Ops — xử lý nhắc |
+
+Envelope mẫu:
+
+```json
+{
+  "type": "noxh_case.created",
+  "payload": {
+    "caseId": "uuid",
+    "caseCode": "HX-NOXH-000042",
+    "brokerId": null,
+    "milestone": "M1_RECEIVED",
+    "customerName": "Nguyễn A",
+    "normalizedPhone": "0903123456"
+  },
+  "sentAt": "2026-07-09T..."
+}
+```
+
+**n8n env (thêm):**
+
+| Biến | Mục đích |
+|---|---|
+| `TELEGRAM_NOXH_CASE_ENABLED` | `true` (mặc định) |
+| `TELEGRAM_CHAT_ID_NOXH_CASE_OPS` | Chat pipeline case — fallback `NOXH_HOT` → `OPS` |
+
+**Test:** Execute workflow → **Inject Manual Noxh Case** hoặc **Inject Manual Case Milestone**.
+
+Chi tiết Ops: `Proptech-HouseX/docs/NOXH_CASE_PIPELINE.md`.
+
+---
+
 ## Biến môi trường n8n (VPS)
 
 ```env
@@ -215,6 +255,8 @@ TELEGRAM_BOT_TOKEN=<bot Magnix L3 / ops>
 TELEGRAM_NOXH_ENABLED=true
 TELEGRAM_CHAT_ID_NOXH_HOT=<chat chuyên gia NOXH realtime>
 TELEGRAM_CHAT_ID_NOXH_WARM=<chat gỡ hồ sơ / nurture ngắn>
+TELEGRAM_NOXH_CASE_ENABLED=true
+TELEGRAM_CHAT_ID_NOXH_CASE_OPS=<chat pipeline NOXH case — optional>
 # Fallback nếu chưa tách chat:
 TELEGRAM_CHAT_ID_OPS=<chat ops chung>
 ```

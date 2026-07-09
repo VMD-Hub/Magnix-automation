@@ -167,12 +167,12 @@ cd Proptech-HouseX && npm run go-live:print-cron
 
 ---
 
-## 10. Lộ trình DNA tiếp (chưa code)
+## 10. Lộ trình DNA tiếp
 
-| Batch | Việc |
-|-------|------|
-| **DNA-C** | n8n Telegram `noxh_case.created` / milestone |
-| **DNA-D** | Zalo OA notify CTV (sau OA duyệt) |
+| Batch | Trạng thái |
+|-------|------------|
+| **DNA-C** | n8n Telegram `noxh_case.*` — [HOUSEX_NOXH_LEAD_ROUTING.md](../../n8n-workflows/HOUSEX_NOXH_LEAD_ROUTING.md) § Luồng F |
+| **DNA-D** | Zalo OA notify CTV (chưa code) |
 
 ---
 
