@@ -145,7 +145,7 @@ export async function sendOaCsText(params: {
 
   try {
     const accessToken = await getOaAccessToken();
-    const res = await fetch("https://openapi.zalo.me/v2.0/oa/message/cs", {
+    const res = await fetch("https://openapi.zalo.me/v3.0/oa/message/cs", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -167,7 +167,10 @@ export async function sendOaCsText(params: {
       return { ok: true };
     }
 
-    const errMsg = data.message ?? `OA CS ${res.status}`;
+    const errMsg =
+      data.error != null
+        ? `${data.message ?? "OA CS failed"} (error=${data.error})`
+        : (data.message ?? `OA CS ${res.status}`);
     if (isPermanentOaRecipientError(data.error)) {
       return { ok: false, error: errMsg, skipPermanent: true };
     }

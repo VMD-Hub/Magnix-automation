@@ -6,8 +6,82 @@
 import { existsSync } from "fs";
 import { join } from "path";
 import { buildOaOpenApiHeaders } from "../lib/zalo/oa-api-headers";
-import { readOaRefreshToken } from "../lib/zalo/oa-token-store";
+import {
+  normalizeOaToken,
+  readOaRefreshToken,
+} from "../lib/zalo/oa-token-store";
 import { refreshOaAccessToken } from "../lib/zalo/oa";
+
+type GetProfileBody = {
+  error?: number;
+  message?: string;
+  data?: { name?: string };
+};
+
+async function callGetProfile(
+  accessToken: string,
+  withProof: boolean,
+): Promise<GetProfileBody & { status: number }> {
+  const headers: Record<string, string> = { access_token: accessToken };
+  if (withProof) {
+    Object.assign(headers, buildOaOpenApiHeaders(accessToken));
+  }
+
+  const res = await fetch("https://openapi.zalo.me/v2.0/oa/getprofile", {
+    headers,
+    cache: "no-store",
+  });
+  const body = (await res.json()) as GetProfileBody;
+  return { ...body, status: res.status };
+}
+
+/** Gửi refresh token giả — không đốt token thật; chỉ kiểm tra secret_key. */
+async function probeRefreshSecret(): Promise<string> {
+  const appId = process.env.ZALO_APP_ID?.trim();
+  const secret = normalizeOaToken(process.env.ZALO_APP_SECRET);
+  if (!appId || !secret) return "SKIP — thiếu app_id/secret";
+
+  const res = await fetch("https://oauth.zaloapp.com/v4/oa/access_token", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+      secret_key: secret,
+    },
+    body: new URLSearchParams({
+      app_id: appId,
+      grant_type: "refresh_token",
+      refresh_token: "__housex_secret_probe__",
+    }),
+    cache: "no-store",
+  });
+
+  const data = (await res.json()) as {
+    error_name?: string;
+    error_description?: string;
+  };
+  const msg = (data.error_description ?? data.error_name ?? "").toLowerCase();
+
+  if (msg.includes("refresh")) {
+    return "OK — secret_key được Zalo chấp nhận (lỗi refresh là đúng kỳ vọng)";
+  }
+  if (msg.includes("secret") || msg.includes("app")) {
+    return "FAIL — ZALO_APP_SECRET có thể SAI (copy lại tab Cài đặt developers)";
+  }
+  return `? — ${data.error_description ?? data.error_name ?? res.status}`;
+}
+
+function explainError(code: number | undefined): string {
+  switch (code) {
+    case -125:
+      return "appsecret_proof thiếu/sai";
+    case -216:
+      return "access token hết hạn hoặc không thuộc app này";
+    case -217:
+      return "refresh token không hợp lệ";
+    default:
+      return "xem tài liệu Zalo OA";
+  }
+}
 
 async function main() {
   console.log("=== Zalo OA diagnose ===\n");
@@ -18,18 +92,20 @@ async function main() {
   console.log(`appsecret_proof code: ${hasProof ? "OK" : "THIẾU — git pull"}`);
 
   const appId = process.env.ZALO_APP_ID?.trim();
-  const secretLen = process.env.ZALO_APP_SECRET?.trim().length ?? 0;
+  const secretLen = normalizeOaToken(process.env.ZALO_APP_SECRET)?.length ?? 0;
   const refreshLen = readOaRefreshToken()?.length ?? 0;
-  const accessLen = process.env.ZALO_OA_ACCESS_TOKEN?.trim().length ?? 0;
+  const accessLen = normalizeOaToken(process.env.ZALO_OA_ACCESS_TOKEN)?.length ?? 0;
   const refreshFile = existsSync(join(process.cwd(), ".zalo-oa-refresh"));
+  const accessOnly =
+    process.env.ZALO_OA_TOKEN_MODE?.trim().toLowerCase() === "access_only";
 
   console.log(`ZALO_APP_ID: ${appId ? "set" : "MISSING"}`);
   console.log(`ZALO_APP_SECRET length: ${secretLen}`);
-  console.log(`refresh token length: ${refreshLen} (file .zalo-oa-refresh: ${refreshFile})`);
-  console.log(`access token length: ${accessLen}`);
   console.log(
-    `ZALO_OA_TOKEN_MODE: ${process.env.ZALO_OA_TOKEN_MODE ?? "(default)"}`,
+    `refresh token length: ${refreshLen} (file .zalo-oa-refresh: ${refreshFile})`,
   );
+  console.log(`access token length: ${accessLen}`);
+  console.log(`ZALO_OA_TOKEN_MODE: ${process.env.ZALO_OA_TOKEN_MODE ?? "(default)"}`);
 
   if (
     /paste_/i.test(process.env.ZALO_APP_SECRET ?? "") ||
@@ -37,53 +113,70 @@ async function main() {
     /paste_/i.test(process.env.ZALO_OA_ACCESS_TOKEN ?? "")
   ) {
     console.error(
-      "\nLỖI: .env vẫn chứa placeholder paste_* — phải dán TOKEN THẬT từ API Explorer, không gõ lệnh vào terminal.",
+      "\nLỖI: .env vẫn chứa placeholder paste_* — dán TOKEN THẬT trong nano .env.",
     );
     process.exit(1);
   }
+
+  console.log(`\nSecret probe: ${await probeRefreshSecret()}`);
 
   try {
     const { accessToken, meta } = await refreshOaAccessToken();
     console.log(
       `\nToken: OK — source=${meta.ok ? meta.source : "?"} len=${accessToken.length}`,
     );
+    if (accessOnly || meta.ok && meta.source === "static") {
+      console.log(
+        "Lưu ý: access token Explorer hết hạn ~1h — copy xong chạy diagnose trong 2 phút.",
+      );
+    }
 
-    const headers = buildOaOpenApiHeaders(accessToken);
+    const withProof = await callGetProfile(accessToken, true);
+    const withoutProof = await callGetProfile(accessToken, false);
+
     console.log(
-      `Headers: access_token + appsecret_proof=${headers.appsecret_proof ? "yes" : "NO (thiếu secret)"}`,
+      `\ngetprofile (có proof): ${withProof.error === 0 ? `OK — "${withProof.data?.name ?? "?"}"` : `FAIL ${withProof.error} — ${withProof.message ?? ""}`}`,
+    );
+    console.log(
+      `getprofile (không proof): ${withoutProof.error === 0 ? "OK" : `FAIL ${withoutProof.error} — ${withoutProof.message ?? ""}`}`,
     );
 
-    const url = new URL("https://openapi.zalo.me/v2.0/oa/getprofile");
-    const res = await fetch(url.toString(), {
-      headers,
-      cache: "no-store",
-    });
-    const body = (await res.json()) as {
-      error?: number;
-      message?: string;
-      data?: { name?: string };
-    };
+    if (withProof.error !== 0) {
+      console.log(`  → Mã ${withProof.error}: ${explainError(withProof.error)}`);
+    }
 
-    if (body.error === 0 || body.data?.name) {
-      console.log(`API getprofile: OK — OA "${body.data?.name ?? "?"}"`);
-    } else {
+    if (withProof.error === -216 && withoutProof.error === -125) {
       console.log(
-        `API getprofile: FAIL — error=${body.error ?? res.status} ${body.message ?? ""}`,
+        "\nKết luận: secret/proof OK — chỉ access token trong .env đã HẾT HẠN.",
       );
-      if (body.message?.toLowerCase().includes("access token")) {
-        console.log(
-          "\nGợi ý: 1) Lấy token MỚI từ API Explorer (cùng app 1837365611738849660)",
-        );
-        console.log(
-          "       2) Kiểm tra ZALO_APP_SECRET khớp tab Cài đặt developers",
-        );
-        console.log(
-          "       3) Thử: ZALO_OA_TOKEN_MODE=access_only + chỉ ACCESS_TOKEN mới",
-        );
-      }
+      console.log(
+        "Sửa: API Explorer → OA Access Token → copy ACCESS_TOKEN mới → nano .env → chạy lại ngay.",
+      );
+    } else if (withProof.error === -125) {
+      console.log(
+        "\nKết luận: ZALO_APP_SECRET không khớp app (proof sai). Copy Secret Key tab Cài đặt.",
+      );
+    } else if (withProof.error === -216 && withoutProof.error === -216) {
+      console.log(
+        "\nKết luận: token không hợp lệ — lấy bộ mới từ Explorer app 1837365611738849660.",
+      );
+      console.log(
+        "Hoặc tắt tạm 「Yêu cầu kiểm tra app secret proof」 trên developers để loại trừ proof.",
+      );
+    } else if (withProof.error === 0) {
+      console.log("\nKết luận: Zalo OA API hoạt động. Tiếp: npm run go-live:zalo-oa-list-users");
     }
   } catch (err) {
     console.error(`\nToken: FAIL — ${err instanceof Error ? err.message : err}`);
+    if (accessOnly) {
+      console.error(
+        "access_only: chỉ cần ZALO_OA_ACCESS_TOKEN mới từ Explorer (comment REFRESH_TOKEN).",
+      );
+    } else {
+      console.error(
+        "Refresh token Zalo dùng 1 lần — mỗi lần refresh đốt token cũ. Lấy bộ mới từ Explorer.",
+      );
+    }
     process.exit(1);
   }
 }

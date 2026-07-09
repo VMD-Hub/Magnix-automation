@@ -74,6 +74,9 @@ async function main() {
 
   if (!result.ok) {
     console.error(`FAIL send — ${result.error}`);
+    console.error(
+      "Gợi ý: user_id từ Explorer (Access Token info), đã quan tâm OA + nhắn OA trong 7 ngày.",
+    );
     process.exit(1);
   }
 
