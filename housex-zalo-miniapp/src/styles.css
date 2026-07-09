@@ -391,6 +391,64 @@ button.chip-active {
   margin-bottom: 20px;
 }
 
+.promo-teaser {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  margin-bottom: 14px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  border: 1px solid rgba(252, 211, 77, 0.28);
+  background: var(--hx-ruby-gradient);
+  box-shadow: var(--hx-shadow-ruby);
+  cursor: pointer;
+  text-align: left;
+  color: inherit;
+  font-family: inherit;
+}
+
+.promo-teaser-body {
+  flex: 1;
+  min-width: 0;
+  position: relative;
+  z-index: 1;
+}
+
+.promo-teaser-kicker {
+  margin: 0 0 2px;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--hx-gold-400);
+}
+
+.promo-teaser-title {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 800;
+  color: #fff;
+}
+
+.promo-teaser-desc {
+  margin: 4px 0 0;
+  font-size: 11px;
+  line-height: 1.35;
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.promo-teaser-cta {
+  flex-shrink: 0;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--hx-gold-400);
+  position: relative;
+  z-index: 1;
+}
+
 .shortcut-item {
   display: flex;
   flex-direction: column;

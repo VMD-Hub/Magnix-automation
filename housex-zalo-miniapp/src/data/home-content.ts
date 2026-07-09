@@ -67,6 +67,14 @@ export const HOME_SHORTCUTS: HomeShortcut[] = [
     kind: "webview",
   },
   {
+    id: "khuyen-mai",
+    label: "Vòng quay",
+    icon: "🎡",
+    tone: "#daa520",
+    to: "/khuyen-mai",
+    kind: "webview",
+  },
+  {
     id: "dieu-kien",
     label: "Điều kiện",
     icon: "✓",
@@ -126,6 +134,12 @@ export const HOME_SHORTCUTS: HomeShortcut[] = [
 ];
 
 export const HOME_INSIGHTS: HomeInsightLink[] = [
+  {
+    id: "promo",
+    title: "Vòng quay may mắn NOXH",
+    desc: "Khuyến mãi House X — quà tặng sau HĐMB NOXH",
+    path: "/khuyen-mai",
+  },
   {
     id: "news",
     title: "Tin tức & thị trường",

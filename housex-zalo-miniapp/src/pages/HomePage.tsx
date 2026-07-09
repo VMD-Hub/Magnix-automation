@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { HomeBrandHeader } from "@/components/HomeBrandHeader";
 import { HomeBannerCarousel } from "@/components/HomeBannerCarousel";
+import { PromoTeaser } from "@/components/PromoTeaser";
 import { HomeInsightsSection } from "@/components/HomeInsightsSection";
 import { ProjectGridCard } from "@/components/ProjectGridCard";
 import { ShortcutGrid } from "@/components/ShortcutGrid";
@@ -52,6 +53,7 @@ export function HomePage() {
       <HomeBrandHeader />
 
       <HomeBannerCarousel banners={HOME_BANNERS} />
+      <PromoTeaser />
       <ShortcutGrid items={HOME_SHORTCUTS} />
 
       <section id="projects" className="home-projects" aria-labelledby="projects-title">

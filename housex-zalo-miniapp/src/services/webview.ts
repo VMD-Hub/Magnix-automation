@@ -3,6 +3,7 @@ import { HOUSEX_API_BASE } from "../config";
 const ALLOWED_PREFIXES = [
   "/cong-cu/",
   "/tin-tuc",
+  "/khuyen-mai",
   "/dieu-khoan",
   "/chinh-sach",
   "/quy-dinh",
