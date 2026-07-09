@@ -13,6 +13,13 @@ const body = raw.body && typeof raw.body === 'object' ? raw.body : raw;
 const type = String(body.type || '').trim();
 const now = body.sentAt || new Date().toISOString();
 
+function resolveInquirySegment(payload, ctx) {
+  const explicit = String(payload.segment || '').trim().toLowerCase();
+  if (explicit === 'noxh' || explicit === 'cctm') return explicit;
+  const projectType = String(ctx.projectType || 'THUONG_MAI').toUpperCase();
+  return projectType === 'NHA_O_XA_HOI' ? 'noxh' : 'cctm';
+}
+
 if (type === 'lead.created') {
   const p = body.payload || {};
   const leadId = String(p.leadId || '').trim();
@@ -21,6 +28,7 @@ if (type === 'lead.created') {
   const contact = p.contact || {};
   const ctx = p.context || {};
   const projectType = String(ctx.projectType || 'THUONG_MAI').toUpperCase();
+  const segment = resolveInquirySegment(p, ctx);
   const slaDue = new Date(Date.now() + 2 * 3600000).toISOString();
 
   return [{
@@ -31,6 +39,8 @@ if (type === 'lead.created') {
       path: 'events',
       lead_id: leadId,
       source: String(p.source || 'organic'),
+      segment,
+      intent_lane: segment,
       message: String(p.message || '').slice(0, 500),
       contact_name: String(contact.name || '').slice(0, 80),
       contact_phone: String(contact.phone || '').slice(0, 20),
@@ -43,7 +53,7 @@ if (type === 'lead.created') {
       province: String(ctx.province || ''),
       public_url: String(ctx.adminUrl || ''),
       assigned_broker_id: String(p.assignedBrokerId || ''),
-      ops_status: 'new_inquiry',
+      ops_status: segment === 'noxh' ? 'new_inquiry_noxh' : 'new_inquiry_cctm',
       sla_due_at: slaDue,
       created_at: String(p.createdAt || now),
       dedupe_key: `inquiry:${leadId}`,

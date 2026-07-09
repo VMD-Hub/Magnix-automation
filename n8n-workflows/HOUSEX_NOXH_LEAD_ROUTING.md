@@ -29,7 +29,7 @@ flowchart LR
     OB --> WH[Webhook housex-events]
     RT --> WH
     WH --> INQ[(Sheet housex_leads_inquiry)]
-    WH --> TG[Telegram\nNOXH vs Thương mại]
+    WH --> TG[Telegram\nsegment NOXH vs CCTM]
   end
 ```
 
@@ -42,7 +42,8 @@ Envelope `lead.created`:
   "type": "lead.created",
   "payload": {
     "leadId": "uuid",
-    "source": "organic",
+    "source": "zalo_miniapp",
+    "segment": "noxh",
     "message": "Muốn tư vấn suất A10",
     "contact": { "name": "...", "phone": "...", "email": "..." },
     "context": {
@@ -60,15 +61,19 @@ Envelope `lead.created`:
 }
 ```
 
+**Segment routing (P3):** n8n ưu tiên `payload.segment` (`noxh` | `cctm`). Nếu thiếu, suy ra từ `context.projectType` (`NHA_O_XA_HOI` → `noxh`, còn lại → `cctm`). Telegram và Sheet dùng segment — không chỉ `project_type`.
+
 **Telegram env (n8n):**
 
 | Biến | Mục đích |
 |---|---|
-| `TELEGRAM_CHAT_ID_NOXH_HOT` / `TELEGRAM_CHAT_ID_LEAD_NOXH` | Form dự án NOXH |
-| `TELEGRAM_CHAT_ID_LEAD_COMMERCIAL` / `TELEGRAM_CHAT_ID_OPS` | Form thương mại / tin đăng |
+| `TELEGRAM_CHAT_ID_NOXH_HOT` / `TELEGRAM_CHAT_ID_LEAD_NOXH` | `segment=noxh` (form / Mini App lane NOXH) |
+| `TELEGRAM_CHAT_ID_LEAD_COMMERCIAL` / `TELEGRAM_CHAT_ID_OPS` | `segment=cctm` (lane CCTM / thương mại) |
 | `TELEGRAM_LEAD_INQUIRY_ENABLED` | `true` (mặc định) — tắt ping khi test |
 
 **Sheet tab:** `housex_leads_inquiry` — chạy `node scripts/init-magnix-sheet.mjs` nếu tab chưa có.
+
+**Cột mới (P3):** `segment` (sau `project_type`). Tab đã tồn tại: chèn cột D `segment` trên Google Sheet hoặc chạy lại init trên tab trống — append workflow ghi `A:R`.
 
 ---
 

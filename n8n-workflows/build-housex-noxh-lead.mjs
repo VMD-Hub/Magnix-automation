@@ -77,10 +77,11 @@ const manualInquiry = `return [{ json: {
     type: 'lead.created',
     sentAt: new Date().toISOString(),
     payload: {
-      leadId: 'manual-inquiry-' + Date.now(),
-      source: 'organic',
+      leadId: 'manual-inquiry-noxh-' + Date.now(),
+      source: 'zalo_miniapp',
+      segment: 'noxh',
       message: 'Muốn tư vấn suất A10',
-      contact: { name: 'Manual Inquiry', phone: '0909999888', email: 'inquiry@housex.local' },
+      contact: { name: 'Manual Inquiry NOXH', phone: '0909999888', email: 'inquiry@housex.local' },
       context: {
         kind: 'project',
         entityId: 'demo-project',
@@ -90,6 +91,33 @@ const manualInquiry = `return [{ json: {
         projectType: 'NHA_O_XA_HOI',
         province: 'Đồng Nai',
         adminUrl: 'https://timnhaxahoi.com/du-an/dta-happy-home-nhon-trach',
+      },
+      assignedBrokerId: null,
+      createdAt: new Date().toISOString(),
+    },
+  },
+}}];`;
+
+const manualInquiryCctm = `return [{ json: {
+  headers: { 'x-events-secret': $env.EVENTS_WEBHOOK_SECRET || '' },
+  body: {
+    type: 'lead.created',
+    sentAt: new Date().toISOString(),
+    payload: {
+      leadId: 'manual-inquiry-cctm-' + Date.now(),
+      source: 'zalo_miniapp',
+      segment: 'cctm',
+      message: 'Muốn xem căn 2PN Solena',
+      contact: { name: 'Manual Inquiry CCTM', phone: '0908888777', email: 'cctm@housex.local' },
+      context: {
+        kind: 'project',
+        entityId: 'demo-cctm',
+        entityName: 'Solena Green Town Bình Tân',
+        slug: 'solena-green-town-binh-tan',
+        listingCode: null,
+        projectType: 'THUONG_MAI',
+        province: 'TP.HCM',
+        adminUrl: 'https://timnhaxahoi.com/du-an/solena-green-town-binh-tan',
       },
       assignedBrokerId: null,
       createdAt: new Date().toISOString(),
@@ -155,6 +183,14 @@ const nodes = [
     type: 'n8n-nodes-base.code',
     typeVersion: 2,
     position: pos(40, 560),
+  },
+  {
+    parameters: { jsCode: manualInquiryCctm },
+    id: nid('nx', 22),
+    name: 'Inject Manual CCTM Inquiry',
+    type: 'n8n-nodes-base.code',
+    typeVersion: 2,
+    position: pos(40, 640),
   },
   {
     parameters: { jsCode: codes.parseEvent },
@@ -539,10 +575,12 @@ const connections = {
     main: [
       [{ node: 'Inject Manual NOXH Event', type: 'main', index: 0 }],
       [{ node: 'Inject Manual Inquiry Event', type: 'main', index: 0 }],
+      [{ node: 'Inject Manual CCTM Inquiry', type: 'main', index: 0 }],
     ],
   },
   'Inject Manual NOXH Event': { main: [[{ node: 'Parse HouseX Event', type: 'main', index: 0 }]] },
   'Inject Manual Inquiry Event': { main: [[{ node: 'Parse HouseX Event', type: 'main', index: 0 }]] },
+  'Inject Manual CCTM Inquiry': { main: [[{ node: 'Parse HouseX Event', type: 'main', index: 0 }]] },
   'Parse HouseX Event': { main: [[{ node: 'Skipped Event?', type: 'main', index: 0 }]] },
   'Skipped Event?': {
     main: [

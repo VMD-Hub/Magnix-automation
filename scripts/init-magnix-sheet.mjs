@@ -149,6 +149,7 @@ const MAGNIX_TABS = {
       'lead_id',
       'kind',
       'project_type',
+      'segment',
       'entity_name',
       'slug_or_code',
       'province',

@@ -91,7 +91,7 @@ cd Proptech-HouseX && npm run db:seed:priority
 |-------|------|
 | **P1 (code)** | Lane Mini App + `segment` trên `POST /api/leads` |
 | **P2** | `Lead.segment` DB + event `lead.created.segment` |
-| **P3** | n8n branch + Magnix lead-scoring theo segment |
+| **P3** | n8n branch Telegram + Sheet theo `lead.created.segment` |
 | **P4** | Subdomain marketing `noxh.*` / `cctm.*` — webview chung Mini App |
 
 ## 9. Lane thứ 3 — Agent (đã có)
@@ -105,7 +105,7 @@ cd Proptech-HouseX && npm run db:seed:priority
 - [x] `/start`, `/noxh`, `/cctm`, `HomeGate`, remember lane
 - [x] `LaneSwitcher` + `CrossLaneTeaser`
 - [x] `Lead.segment` + Mini App gửi segment (P2)
-- [ ] n8n branch theo `lead.created.segment` (P3)
+- [x] n8n branch theo `lead.created.segment` (P3) — `housex-noxh-lead-route`, rebuild + re-import n8n
 - [ ] Subdomain campaign links (P4)
 
 ---
