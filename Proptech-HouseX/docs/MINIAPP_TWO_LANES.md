@@ -89,8 +89,8 @@ cd Proptech-HouseX && npm run db:seed:priority
 
 | Phase | Việc |
 |-------|------|
-| **P1 (code)** | Lane trong Mini App; `source: zalo_miniapp` + ghi lane vào `message` hoặc field tạm |
-| **P2** | `Lead.segment` enum `noxh` \| `cctm` — bắt buộc từ Mini App form |
+| **P1 (code)** | Lane Mini App + `segment` trên `POST /api/leads` |
+| **P2** | `Lead.segment` DB + event `lead.created.segment` |
 | **P3** | n8n branch + Magnix lead-scoring theo segment |
 | **P4** | Subdomain marketing `noxh.*` / `cctm.*` — webview chung Mini App |
 
@@ -104,8 +104,8 @@ cd Proptech-HouseX && npm run db:seed:priority
 - [x] Doc kiến trúc (file này)
 - [x] `/start`, `/noxh`, `/cctm`, `HomeGate`, remember lane
 - [x] `LaneSwitcher` + `CrossLaneTeaser`
-- [ ] `Lead.segment` API (P2)
-- [ ] Filter CCTM nâng cao (ROI, tiến độ TT) (P2)
+- [x] `Lead.segment` + Mini App gửi segment (P2)
+- [ ] n8n branch theo `lead.created.segment` (P3)
 - [ ] Subdomain campaign links (P4)
 
 ---

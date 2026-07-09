@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { leadSegmentInputSchema } from "@/lib/rules/lead-segment";
 
 export const leadStatusEnum = z.enum([
   "NEW",
@@ -20,6 +21,8 @@ export const leadCreateSchema = z
     listingId: z.string().uuid().optional(),
     projectId: z.string().uuid().optional(),
     source: z.string().optional(),
+    /** Intent lane — Mini App gửi `noxh` | `cctm`; server suy ra từ project nếu thiếu. */
+    segment: leadSegmentInputSchema.optional(),
   })
   .refine((d) => !!d.listingId || !!d.projectId, {
     message: "Lead cần gắn với ít nhất listingId hoặc projectId.",

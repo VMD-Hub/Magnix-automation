@@ -175,6 +175,7 @@ export async function createProjectLead(input: {
   phone: string;
   projectId: string;
   message?: string;
+  segment?: "noxh" | "cctm";
 }): Promise<{ id: string }> {
   const idem =
     typeof crypto !== "undefined" && "randomUUID" in crypto
@@ -190,6 +191,7 @@ export async function createProjectLead(input: {
       projectId: input.projectId,
       message: input.message,
       source: "zalo_miniapp",
+      ...(input.segment ? { segment: input.segment } : {}),
     }),
   });
 }

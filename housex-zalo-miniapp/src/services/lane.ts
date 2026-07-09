@@ -48,3 +48,16 @@ export function projectTypeForLane(lane: UserLane): "NHA_O_XA_HOI" | "THUONG_MAI
 export function oppositeLane(lane: UserLane): UserLane {
   return lane === "noxh" ? "cctm" : "noxh";
 }
+
+/** Gửi kèm POST /api/leads — khớp LeadSegment API. */
+export function segmentForLane(lane: UserLane): UserLane {
+  return lane;
+}
+
+export function segmentFromProjectType(
+  projectType: string,
+): UserLane | null {
+  if (projectType === "NHA_O_XA_HOI") return "noxh";
+  if (projectType === "THUONG_MAI") return "cctm";
+  return null;
+}

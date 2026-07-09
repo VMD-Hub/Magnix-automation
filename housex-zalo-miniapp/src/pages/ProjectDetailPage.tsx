@@ -7,6 +7,11 @@ import {
   type ProjectDetail,
 } from "@/services/projects";
 import { formatVnd, mediaUrl } from "@/utils/media";
+import {
+  getPreferredLane,
+  segmentForLane,
+  segmentFromProjectType,
+} from "@/services/lane";
 
 export function ProjectDetailPage() {
   const { slug = "" } = useParams();
@@ -67,6 +72,9 @@ export function ProjectDetailPage() {
         phone: phone.trim(),
         projectId: project.id,
         message: message.trim() || undefined,
+        segment:
+          segmentFromProjectType(project.projectType) ??
+          segmentForLane(getPreferredLane() ?? "noxh"),
       });
       setOkMsg("Đã gửi yêu cầu. Chuyên viên House X sẽ liên hệ sớm.");
       setMessage("");

@@ -13,6 +13,7 @@ import {
   buildLeadCreatedPayload,
   forwardLeadCreatedBestEffort,
 } from "@/lib/events/lead-inquiry";
+import { resolveLeadSegmentPrisma } from "@/lib/rules/lead-segment-resolve";
 
 const LEAD_RATE_MAX = Number(process.env.LEAD_RATE_MAX ?? "20");
 const LEAD_RATE_WINDOW_SEC = Number(process.env.LEAD_RATE_WINDOW_SEC ?? "3600");
@@ -98,6 +99,8 @@ export async function POST(req: NextRequest) {
         referral: referralTouch,
       });
 
+      const segment = await resolveLeadSegmentPrisma(tx, body);
+
       const created = await tx.lead.create({
         data: {
           customerId: customer.id,
@@ -106,6 +109,7 @@ export async function POST(req: NextRequest) {
           referralId: attribution.referralId,
           assignedBrokerId: attribution.assignedBrokerId,
           source: attribution.assignedBrokerId ? "referral" : body.source ?? "organic",
+          segment,
           message: body.message,
         },
       });

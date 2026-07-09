@@ -1,6 +1,7 @@
 import type { Prisma } from "@prisma/client";
 import { getSiteUrl } from "@/lib/site-config";
 import type { LeadCreatedPayload } from "@/lib/events/types";
+import { fromPrismaLeadSegment } from "@/lib/rules/lead-segment";
 
 type Tx = Prisma.TransactionClient;
 
@@ -9,6 +10,7 @@ export async function buildLeadCreatedPayload(
   lead: {
     id: string;
     source: string;
+    segment?: import("@prisma/client").LeadSegment | null;
     message: string | null;
     assignedBrokerId: string | null;
     createdAt: Date;
@@ -36,6 +38,7 @@ export async function buildLeadCreatedPayload(
     return {
       leadId: lead.id,
       source: lead.source,
+      segment: fromPrismaLeadSegment(lead.segment),
       message: lead.message,
       contact: {
         name: contact.name,
@@ -82,6 +85,7 @@ export async function buildLeadCreatedPayload(
     return {
       leadId: lead.id,
       source: lead.source,
+      segment: fromPrismaLeadSegment(lead.segment),
       message: lead.message,
       contact: {
         name: contact.name,

@@ -2,30 +2,45 @@ import { useEffect, useState, type FormEvent } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/auth-context";
 import { apiFetch } from "@/services/api";
+import {
+  getPreferredLane,
+  laneHomePath,
+  projectTypeForLane,
+  segmentForLane,
+} from "@/services/lane";
 import { listProjects } from "@/services/projects";
 
 /**
- * Form tư vấn nhanh — cần chọn dự án (lead API bắt buộc projectId hoặc listingId).
+ * Form tư vấn nhanh — lọc dự án theo lane đang nhớ, gửi segment cho CRM.
  */
 export function ConsultPage() {
   const { user } = useAuth();
+  const lane = getPreferredLane() ?? "noxh";
   const [projects, setProjects] = useState<Array<{ id: string; name: string }>>(
     [],
   );
   const [projectId, setProjectId] = useState("");
   const [name, setName] = useState(user?.name ?? "");
   const [phone, setPhone] = useState("");
-  const [message, setMessage] = useState("Tôi muốn được tư vấn NOXH.");
+  const [message, setMessage] = useState(
+    lane === "cctm"
+      ? "Tôi muốn được tư vấn căn hộ thương mại."
+      : "Tôi muốn được tư vấn NOXH.",
+  );
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);
   const [ok, setOk] = useState<string | null>(null);
 
   useEffect(() => {
-    void listProjects({ pageSize: 30 }).then((d) => {
+    void listProjects({
+      projectType: projectTypeForLane(lane),
+      status: "DANG_BAN",
+      pageSize: 30,
+    }).then((d) => {
       setProjects(d.items.map((p) => ({ id: p.id, name: p.name })));
       if (d.items[0]) setProjectId(d.items[0].id);
     });
-  }, []);
+  }, [lane]);
 
   useEffect(() => {
     if (user?.name) setName(user.name);
@@ -50,6 +65,7 @@ export function ConsultPage() {
           projectId,
           message: message.trim(),
           source: "zalo_miniapp",
+          segment: segmentForLane(lane),
         }),
       });
       setOk("Đã gửi. Chúng tôi sẽ liên hệ sớm.");
@@ -62,7 +78,7 @@ export function ConsultPage() {
 
   return (
     <div>
-      <Link to="/" className="muted">
+      <Link to={laneHomePath(lane)} className="muted">
         ← Trang chủ
       </Link>
       <h1 className="brand" style={{ fontSize: 22 }}>

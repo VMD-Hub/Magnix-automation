@@ -109,6 +109,12 @@ enum LeadStatus {
   LOST
 }
 
+/** Phân khúc intent Khách — two lanes Mini App / CRM. */
+enum LeadSegment {
+  NOXH
+  CCTM
+}
+
 enum ReferralType {
   CTV_PROJECT
   SHARE_LISTING
@@ -577,9 +583,10 @@ model Lead {
   listingId        String?    @map("listing_id")
   projectId        String?    @map("project_id")
   referralId       String?    @map("referral_id")
-  assignedBrokerId String?    @map("assigned_broker_id")
-  source           String     @default("organic")
-  message          String?    @db.Text
+  assignedBrokerId String?     @map("assigned_broker_id")
+  source           String      @default("organic")
+  segment          LeadSegment? @map("segment")
+  message          String?     @db.Text
   status           LeadStatus @default(NEW)
   createdAt        DateTime   @default(now()) @map("created_at")
   updatedAt        DateTime   @updatedAt @map("updated_at")
@@ -593,6 +600,7 @@ model Lead {
   noxhCases      NoxhCase[]
 
   @@index([status])
+  @@index([segment])
   @@map("leads")
 }
 
