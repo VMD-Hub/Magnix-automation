@@ -13,6 +13,10 @@ import {
   toLeadSummary,
   noxhLeadMessage,
 } from "@/lib/finance/noxh-lead";
+import {
+  ensurePlatformNoxhCaseFromWizardHot,
+  shouldAutoCreatePlatformCaseForWizardTier,
+} from "@/lib/noxh-case/wizard-hot-case";
 
 const RATE_MAX = Number(process.env.LEAD_RATE_MAX ?? "20");
 const RATE_WINDOW = Number(process.env.LEAD_RATE_WINDOW_SEC ?? "3600");
@@ -51,7 +55,8 @@ async function forwardNoxhDetail(payload: unknown): Promise<void> {
 /**
  * POST /api/tools/noxh-eligibility — nhận lead từ công cụ kiểm tra điều kiện NOXH.
  * Server TÍNH LẠI điều kiện (anti-tamper), tạo Lead (source=tool:noxh-check),
- * enqueue outbox định tuyến theo tier, và forward chi tiết tài chính tới n8n.
+ * enqueue outbox định tuyến theo tier, forward chi tiết tài chính tới n8n,
+ * và tier HOT tự tạo NoxhCase platform (DNA-B — xem NOXH_CASE_PIPELINE.md).
  */
 export async function POST(req: NextRequest) {
   try {
@@ -114,6 +119,7 @@ export async function POST(req: NextRequest) {
         data: {
           customerId: customer.id,
           source: "tool:noxh-check",
+          segment: "NOXH",
           message: noxhLeadMessage(summary),
         },
       });
@@ -142,6 +148,28 @@ export async function POST(req: NextRequest) {
       return createdLead;
     });
 
+    let noxhCaseCode: string | undefined;
+    if (shouldAutoCreatePlatformCaseForWizardTier(classification.tier)) {
+      try {
+        const caseResult = await ensurePlatformNoxhCaseFromWizardHot({
+          leadId: lead.id,
+          customerName: body.name,
+          phone: body.phone,
+          objectGroup: i.objectGroup,
+          intendToBorrow: i.intendToBorrow,
+          reasonCodes: classification.reasonCodes,
+          recommendedAction: classification.recommendedAction,
+          rulesVersion: classification.rulesVersion,
+        });
+        noxhCaseCode = caseResult.case.code;
+      } catch (err) {
+        console.error(
+          "[noxh] wizard HOT auto-case failed:",
+          err instanceof Error ? err.message : err,
+        );
+      }
+    }
+
     // Chi tiết tài chính → n8n/Google Sheet (best-effort, không lưu Postgres).
     await forwardNoxhDetail({
       leadId: lead.id,
@@ -167,7 +195,11 @@ export async function POST(req: NextRequest) {
       rulesVersion: evaluation.rulesVersion,
     });
 
-    return created({ id: lead.id, tier: classification.tier });
+    return created({
+      id: lead.id,
+      tier: classification.tier,
+      ...(noxhCaseCode ? { noxhCaseCode } : {}),
+    });
   } catch (err) {
     return handleApiError(err);
   }
