@@ -9,6 +9,7 @@ import { buildOaOpenApiHeaders } from "../lib/zalo/oa-api-headers";
 import {
   normalizeOaToken,
   readOaRefreshToken,
+  writeOaRefreshToken,
 } from "../lib/zalo/oa-token-store";
 import { refreshOaAccessToken } from "../lib/zalo/oa";
 
@@ -75,12 +76,64 @@ function explainError(code: number | undefined): string {
     case -125:
       return "appsecret_proof thiếu/sai";
     case -216:
-      return "access token hết hạn hoặc không thuộc app này";
+      return "token không phải OA token, không thuộc app này, hoặc hết hạn";
     case -217:
       return "refresh token không hợp lệ";
     default:
       return "xem tài liệu Zalo OA";
   }
+}
+
+/** Refresh thật — bỏ qua access_only; rotate refresh token nếu Zalo trả mới. */
+async function tryRefreshAccessToken(): Promise<
+  | { ok: true; accessToken: string; expiresIn?: number }
+  | { ok: false; error: string }
+> {
+  const appId = process.env.ZALO_APP_ID?.trim();
+  const secret = normalizeOaToken(process.env.ZALO_APP_SECRET);
+  const refresh = readOaRefreshToken();
+  if (!appId || !secret || !refresh) {
+    return { ok: false, error: "thiếu app_id/secret/refresh_token" };
+  }
+
+  const res = await fetch("https://oauth.zaloapp.com/v4/oa/access_token", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+      secret_key: secret,
+    },
+    body: new URLSearchParams({
+      app_id: appId,
+      grant_type: "refresh_token",
+      refresh_token: refresh,
+    }),
+    cache: "no-store",
+  });
+
+  const data = (await res.json()) as {
+    access_token?: string;
+    refresh_token?: string;
+    expires_in?: number;
+    error_name?: string;
+    error_description?: string;
+  };
+
+  if (!data.access_token) {
+    return {
+      ok: false,
+      error: data.error_description ?? data.error_name ?? `HTTP ${res.status}`,
+    };
+  }
+
+  if (data.refresh_token) {
+    writeOaRefreshToken(data.refresh_token);
+  }
+
+  return {
+    ok: true,
+    accessToken: data.access_token,
+    expiresIn: data.expires_in,
+  };
 }
 
 async function main() {
@@ -158,11 +211,42 @@ async function main() {
       );
     } else if (withProof.error === -216 && withoutProof.error === -216) {
       console.log(
-        "\nKết luận: token không hợp lệ — lấy bộ mới từ Explorer app 1837365611738849660.",
+        "\nKết luận: access token hiện tại không hợp lệ cho OA API.",
       );
       console.log(
-        "Hoặc tắt tạm 「Yêu cầu kiểm tra app secret proof」 trên developers để loại trừ proof.",
+        "Thường gặp: dán nhầm **User Access Token** (Explorer) thay vì **OA Access Token**.",
       );
+
+      if (refreshLen > 0) {
+        console.log("\n→ Thử luồng refresh (bỏ qua access_only)...");
+        const refreshed = await tryRefreshAccessToken();
+        if (!refreshed.ok) {
+          console.log(`  Refresh: FAIL — ${refreshed.error}`);
+          console.log(
+            "  Cả access + refresh đều lỗi → lấy bộ OA token mới từ Explorer (dropdown OA Access Token).",
+          );
+        } else {
+          const rp = await callGetProfile(refreshed.accessToken, true);
+          console.log(
+            `  Refresh: OK — access len=${refreshed.accessToken.length}` +
+              (refreshed.expiresIn ? `, expires_in=${refreshed.expiresIn}s` : ""),
+          );
+          console.log(
+            `  getprofile sau refresh: ${rp.error === 0 ? `OK — "${rp.data?.name ?? "?"}"` : `FAIL ${rp.error} — ${rp.message ?? ""}`}`,
+          );
+          if (rp.error === 0) {
+            console.log(
+              "\n✓ Refresh token ĐÚNG — ZALO_OA_ACCESS_TOKEN trong .env SAI (User token hoặc token cũ).",
+            );
+            console.log(
+              "Sửa .env: comment/xóa ZALO_OA_TOKEN_MODE=access_only và ZALO_OA_ACCESS_TOKEN.",
+            );
+            console.log(
+              "Giữ ZALO_OA_REFRESH_TOKEN (đã rotate vào .zalo-oa-refresh nếu có).",
+            );
+          }
+        }
+      }
     } else if (withProof.error === 0) {
       console.log("\nKết luận: Zalo OA API hoạt động. Tiếp: npm run go-live:zalo-oa-list-users");
     }
