@@ -74,9 +74,19 @@ async function main() {
 
   if (!result.ok) {
     console.error(`FAIL send — ${result.error}`);
-    console.error(
-      "Gợi ý: user_id từ Explorer (Access Token info), đã quan tâm OA + nhắn OA trong 7 ngày.",
-    );
+    if (result.error.includes("error=-209") || result.error.includes("not been approved")) {
+      console.error(
+        "\n→ App chưa được Zalo duyệt quyền OA API. Làm trên developers.zalo.me:",
+      );
+      console.error("  1. Kích hoạt ứng dụng House X Platform (điền phone, email, icon)");
+      console.error("  2. Sản phẩm → Official Account → Quản lý OA → Liên kết OA House X");
+      console.error("  3. Sản phẩm → Official Account → Thiết lập chung → chọn quyền API → Gửi xét duyệt");
+      console.error("  4. Sau khi duyệt: lấy OA token mới từ API Explorer → cập nhật .env");
+    } else {
+      console.error(
+        "Gợi ý: user_id từ Explorer, đã quan tâm OA + nhắn OA trong 7 ngày.",
+      );
+    }
     process.exit(1);
   }
 
