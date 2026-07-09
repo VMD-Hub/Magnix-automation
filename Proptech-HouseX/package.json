@@ -47,6 +47,7 @@
     "go-live:check-sheet-mirror": "node --env-file=.env --import tsx scripts/check-sheet-mirror-env.ts",
     "go-live:smoke-sheet-mirror": "node --env-file=.env --import tsx scripts/smoke-test-sheet-mirror.ts",
     "go-live:smoke-email": "node --env-file=.env --import tsx scripts/smoke-test-email.ts",
+    "go-live:smoke-zalo-oa": "node --env-file=.env --import tsx scripts/smoke-test-zalo-oa.ts",
     "go-live:print-cron": "node --env-file=.env --import tsx scripts/print-vps-crontab.ts",
     "go-live:p1-local": "node --import tsx scripts/go-live-p1-local.ts",
     "go-live:p1-vps": "node --import tsx scripts/go-live-p1-vps.ts",

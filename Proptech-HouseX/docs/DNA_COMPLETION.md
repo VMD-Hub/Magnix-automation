@@ -25,6 +25,8 @@ Mục tiêu: đóng DNA product/ops trong repo — CTV pipeline, LMS, Zalo Mini 
 
 ## Việc VPS (Ops)
 
+**Runbook đầy đủ (không cần Callback):** [DEPLOY_DNA_NO_CALLBACK.md](DEPLOY_DNA_NO_CALLBACK.md)
+
 ```bash
 cd /opt/housex/Proptech-HouseX
 git pull
@@ -33,6 +35,8 @@ npx prisma generate
 npm run db:deploy
 npm run db:seed:agent-services
 npm run db:bootstrap:agent-entitlements
+npm run build
+npm run go-live:smoke-zalo-oa   # sau khi set ZALO_OA_ACCESS_TOKEN
 npm run go-live:print-cron   # bật noxh-case-maintenance + commission-payouts
 pm2 restart housex --update-env
 ```
@@ -50,7 +54,7 @@ CTV_CLAIM_LOCK_BUSINESS_DAYS=20
 
 - [x] Mini App ID trong `housex-zalo-miniapp/app-config.json`
 - [ ] `ZALO_APP_ID` / `ZALO_APP_SECRET` / `ZALO_OA_ID` trên VPS — **tắt** `ZALO_AUTH_DEV_BYPASS` production
-- [ ] `ZALO_OA_REFRESH_TOKEN` (DNA-D push milestone CTV) — lấy sau khi OA authorize
+- [ ] `ZALO_OA_REFRESH_TOKEN` (DNA-D) — xem **Lấy token OA** bên dưới
 - [ ] Build Mini App prod + smoke Simulator
 - [ ] OA menu public (chờ duyệt Zalo)
 
@@ -61,6 +65,21 @@ ZALO_OA_NOTIFY_ENABLED=true
 ZALO_OA_REFRESH_TOKEN=<từ Zalo OA authorize>
 # Hoặc dev ngắn hạn: ZALO_OA_ACCESS_TOKEN=
 ```
+
+### Lấy token OA (DNA-D)
+
+**Callback URL** (đăng ký trên `developers.zalo.me` → Sản phẩm → Official Account → Thiết lập chung):
+
+```text
+https://timnhaxahoi.com/api/zalo/oa/callback
+```
+
+Nếu UI Zalo không hiện ô Callback: dùng **Cách B** trước, rồi thử OAuth sau khi deploy route.
+
+| Cách | Bước |
+|------|------|
+| **A — OAuth (lâu dài)** | 1. Deploy route `/api/zalo/oa/*` · 2. Dán Callback URL trên developers · 3. Đăng nhập `/admin/login` · 4. Mở `/api/zalo/oa/authorize` · 5. Copy `ZALO_OA_REFRESH_TOKEN` từ trang callback vào VPS `.env` |
+| **B — API Explorer (MVP)** | `developers.zalo.me` → app `1837365611738849660` → **Công cụ** / **API Explorer** → **OA Access Token** → copy vào `ZALO_OA_ACCESS_TOKEN` (~25h) |
 
 CTV cần **đã follow OA** và login Mini App ít nhất một lần (`UserAccount.zaloUserId`).
 

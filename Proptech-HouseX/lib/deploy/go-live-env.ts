@@ -173,6 +173,19 @@ export function checkGoLiveEnv(): EnvCheck[] {
       : "OK — bypass tắt",
   });
 
+  const oaNotifyOn = process.env.ZALO_OA_NOTIFY_ENABLED?.trim().toLowerCase() !== "false";
+  if (oaNotifyOn) {
+    const hasOaToken =
+      has("ZALO_OA_REFRESH_TOKEN") || has("ZALO_OA_ACCESS_TOKEN");
+    checks.push({
+      key: "ZALO_OA_TOKEN",
+      ok: zaloConfigured && hasOaToken,
+      level: "recommended",
+      message:
+        "DNA-D: ZALO_OA_ACCESS_TOKEN (API Explorer) hoặc ZALO_OA_REFRESH_TOKEN",
+    });
+  }
+
   return checks;
 }
 

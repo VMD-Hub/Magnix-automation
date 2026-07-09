@@ -106,7 +106,7 @@ cd Proptech-HouseX && npm run db:seed:priority
 - [x] `LaneSwitcher` + `CrossLaneTeaser`
 - [x] `Lead.segment` + Mini App gửi segment (P2)
 - [x] n8n branch theo `lead.created.segment` (P3) — `housex-noxh-lead-route`, rebuild + re-import n8n
-- [ ] Subdomain campaign links (P4)
+- [x] Subdomain campaign redirect code (P4) — `noxh.*` / `cctm.*` → hub web; cần DNS + nginx VPS
 
 ---
 
