@@ -1,25 +1,7 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { buildCampaignLaneRedirectUrl } from "@/lib/miniapp/campaign-lane-host";
-import {
-  defaultAdminHome,
-  isSuperAdminOnlyApi,
-  isSuperAdminOnlyPage,
-} from "@/lib/admin/roles";
-import { getAdminSessionFromRequest } from "@/lib/admin/session";
 import { isBlockedScraperUserAgent } from "@/lib/security/scrape-guard";
-
-function adminForbiddenApi() {
-  return NextResponse.json(
-    {
-      error: {
-        code: "FORBIDDEN",
-        message: "Chỉ chủ quản (Super Admin) mới truy cập mục này.",
-      },
-    },
-    { status: 403 },
-  );
-}
 
 function forwardWithPathname(req: NextRequest) {
   const requestHeaders = new Headers(req.headers);
@@ -42,35 +24,8 @@ export function middleware(req: NextRequest) {
     });
   }
 
-  const pathname = req.nextUrl.pathname;
-  const session = getAdminSessionFromRequest(req);
-
-  if (pathname.startsWith("/api/admin") && isSuperAdminOnlyApi(pathname)) {
-    if (!session) {
-      return NextResponse.json(
-        { error: { code: "FORBIDDEN", message: "Không có quyền truy cập admin." } },
-        { status: 403 },
-      );
-    }
-    if (session.role === "ops") {
-      return adminForbiddenApi();
-    }
-  }
-
-  if (
-    pathname.startsWith("/admin") &&
-    pathname !== "/admin/login" &&
-    isSuperAdminOnlyPage(pathname)
-  ) {
-    if (!session) {
-      const login = new URL("/admin/login", req.url);
-      login.searchParams.set("next", pathname);
-      return NextResponse.redirect(login);
-    }
-    if (session.role === "ops") {
-      return NextResponse.redirect(new URL(defaultAdminHome("ops"), req.url));
-    }
-  }
+  // Auth admin: (dashboard)/layout + route handlers (Node có ADMIN_SECRET).
+  // Không verify cookie ở middleware — Edge runtime VPS thường thiếu secret → redirect loop.
 
   return forwardWithPathname(req);
 }
