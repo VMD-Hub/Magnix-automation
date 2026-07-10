@@ -1,4 +1,4 @@
-import type { Lead, LeadSegment, LeadStatus, Prisma } from "@prisma/client";
+import type { LeadSegment, LeadStatus, Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { LEAD_SOURCE } from "@/lib/leads/source";
 import {
@@ -45,21 +45,15 @@ export type OpsLeadListFilters = {
   segment?: LeadSegment;
 };
 
-type LeadWithCustomer = Lead & {
-  customer: {
-    name: string;
-    phone: string;
-    email: string | null;
-  } | null;
-  project: { name: string; slug: string } | null;
-  listing: { title: string; slug: string } | null;
-};
-
 const leadListInclude = {
   customer: { select: { name: true, phone: true, email: true } },
   project: { select: { name: true, slug: true } },
-  listing: { select: { title: true, slug: true } },
+  listing: { select: { code: true, propertyType: true } },
 } satisfies Prisma.LeadInclude;
+
+export type OpsLeadWithRelations = Prisma.LeadGetPayload<{
+  include: typeof leadListInclude;
+}>;
 
 function opsLeadWhere(filters: OpsLeadListFilters): Prisma.LeadWhereInput {
   return {
@@ -71,7 +65,9 @@ function opsLeadWhere(filters: OpsLeadListFilters): Prisma.LeadWhereInput {
   };
 }
 
-export async function listOpsLeadsForAdmin(filters: OpsLeadListFilters = {}) {
+export async function listOpsLeadsForAdmin(
+  filters: OpsLeadListFilters = {},
+): Promise<OpsLeadWithRelations[]> {
   return prisma.lead.findMany({
     where: opsLeadWhere(filters),
     include: leadListInclude,
@@ -80,7 +76,9 @@ export async function listOpsLeadsForAdmin(filters: OpsLeadListFilters = {}) {
   });
 }
 
-export async function getOpsLeadForAdmin(id: string) {
+export async function getOpsLeadForAdmin(
+  id: string,
+): Promise<OpsLeadWithRelations | null> {
   return prisma.lead.findFirst({
     where: {
       id,
@@ -114,7 +112,10 @@ export class OpsLeadPatchError extends Error {
   }
 }
 
-export async function patchOpsLeadForAdmin(id: string, patch: OpsLeadPatchInput) {
+export async function patchOpsLeadForAdmin(
+  id: string,
+  patch: OpsLeadPatchInput,
+): Promise<OpsLeadWithRelations | null> {
   return prisma.$transaction(async (tx) => {
     const lead = await tx.lead.findFirst({
       where: {
@@ -210,7 +211,7 @@ export async function patchOpsLeadForAdmin(id: string, patch: OpsLeadPatchInput)
   });
 }
 
-export function serializeOpsLeadListItem(row: LeadWithCustomer) {
+export function serializeOpsLeadListItem(row: OpsLeadWithRelations) {
   const ops = readLeadOpsMeta(row.opsMeta);
   const script = getNurtureScript(ops.nurtureScriptId);
   const phone =
@@ -228,7 +229,7 @@ export function serializeOpsLeadListItem(row: LeadWithCustomer) {
     nurtureScriptId: ops.nurtureScriptId,
     nurtureScriptLabel: script?.label ?? null,
     projectName: row.project?.name ?? null,
-    listingTitle: row.listing?.title ?? null,
+    listingTitle: row.listing?.code ?? null,
     messagePreview: row.message
       ? row.message.length > 120
         ? `${row.message.slice(0, 120)}…`
@@ -238,7 +239,7 @@ export function serializeOpsLeadListItem(row: LeadWithCustomer) {
   };
 }
 
-export function serializeOpsLeadDetail(row: LeadWithCustomer) {
+export function serializeOpsLeadDetail(row: OpsLeadWithRelations) {
   const ops = readLeadOpsMeta(row.opsMeta);
   const script = getNurtureScript(ops.nurtureScriptId);
 
