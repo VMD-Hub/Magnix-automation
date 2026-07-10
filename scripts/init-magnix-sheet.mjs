@@ -166,6 +166,27 @@ const MAGNIX_TABS = {
       'meta',
     ],
   },
+  housex_leads_nurture: {
+    headers: [
+      'dedupe_key',
+      'lead_id',
+      'nurture_script_id',
+      'script_label',
+      'channel',
+      'trigger',
+      'segment',
+      'source',
+      'contact_name',
+      'contact_phone',
+      'contact_email',
+      'ops_note',
+      'ops_status',
+      'channel_action',
+      'script_description',
+      'created_at',
+      'meta',
+    ],
+  },
   housex_supply_ops: {
     headers: [
       'record_id',

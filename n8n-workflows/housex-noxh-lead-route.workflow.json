@@ -3,7 +3,7 @@
   "nodes": [
     {
       "parameters": {
-        "content": "## HouseX Events Hub\n**Webhook A:** POST `/webhook/magnix/housex-events` ← `EVENTS_WEBHOOK_URL`\n**Webhook B:** POST `/webhook/magnix/housex-noxh-detail` ← `NOXH_DETAIL_WEBHOOK_URL`\n**Events:** `lead.noxh_checked` · `lead.created` · `noxh_case.*` · `account.registered` · `ctv.application_submitted`\nAuth: `x-events-secret` = `EVENTS_WEBHOOK_SECRET`",
+        "content": "## HouseX Events Hub\n**Webhook A:** POST `/webhook/magnix/housex-events` ← `EVENTS_WEBHOOK_URL`\n**Webhook B:** POST `/webhook/magnix/housex-noxh-detail` ← `NOXH_DETAIL_WEBHOOK_URL`\n**Events:** `lead.noxh_checked` · `lead.created` · `lead.nurture` · `noxh_case.*` · `account.registered` · `ctv.application_submitted`\nAuth: `x-events-secret` = `EVENTS_WEBHOOK_SECRET`",
         "height": 260,
         "width": 560
       },
@@ -128,7 +128,20 @@
     },
     {
       "parameters": {
-        "jsCode": "const SECRET = $env.EVENTS_WEBHOOK_SECRET || '';\nconst headers = $input.first().json.headers || {};\nconst got = headers['x-events-secret'] || headers['X-Events-Secret'] || '';\nif (SECRET && got !== SECRET) {\n  throw new Error('Unauthorized: invalid EVENTS_WEBHOOK_SECRET');\n}\n\nconst raw = $input.first().json;\nconst body = raw.body && typeof raw.body === 'object' ? raw.body : raw;\nconst type = String(body.type || '').trim();\nconst now = body.sentAt || new Date().toISOString();\n\nfunction resolveInquirySegment(payload, ctx) {\n  const explicit = String(payload.segment || '').trim().toLowerCase();\n  if (explicit === 'noxh' || explicit === 'cctm') return explicit;\n  const projectType = String(ctx.projectType || 'THUONG_MAI').toUpperCase();\n  return projectType === 'NHA_O_XA_HOI' ? 'noxh' : 'cctm';\n}\n\nfunction maskNormalizedPhone(normalized) {\n  const digits = String(normalized || '').replace(/\\D/g, '');\n  if (digits.length < 7) return '***';\n  return `${digits.slice(0, 4)}***${digits.slice(-3)}`;\n}\n\nif (type === 'lead.created') {\n  const p = body.payload || {};\n  const leadId = String(p.leadId || '').trim();\n  if (!leadId) throw new Error('Validation: payload.leadId is required');\n\n  const contact = p.contact || {};\n  const ctx = p.context || {};\n  const projectType = String(ctx.projectType || 'THUONG_MAI').toUpperCase();\n  const segment = resolveInquirySegment(p, ctx);\n  const slaDue = new Date(Date.now() + 2 * 3600000).toISOString();\n\n  return [{\n    json: {\n      ok: true,\n      skipped: false,\n      event_path: 'inquiry',\n      path: 'events',\n      lead_id: leadId,\n      source: String(p.source || 'organic'),\n      segment,\n      intent_lane: segment,\n      message: String(p.message || '').slice(0, 500),\n      contact_name: String(contact.name || '').slice(0, 80),\n      contact_phone: String(contact.phone || '').slice(0, 20),\n      contact_email: String(contact.email || '').slice(0, 120),\n      kind: String(ctx.kind || 'project'),\n      entity_name: String(ctx.entityName || '').slice(0, 120),\n      slug: String(ctx.slug || ''),\n      listing_code: String(ctx.listingCode || ''),\n      project_type: projectType,\n      province: String(ctx.province || ''),\n      public_url: String(ctx.adminUrl || ''),\n      assigned_broker_id: String(p.assignedBrokerId || ''),\n      ops_status: segment === 'noxh' ? 'new_inquiry_noxh' : 'new_inquiry_cctm',\n      sla_due_at: slaDue,\n      created_at: String(p.createdAt || now),\n      dedupe_key: `inquiry:${leadId}`,\n    },\n  }];\n}\n\nif (type === 'account.registered') {\n  const p = body.payload || {};\n  const userId = String(p.userAccountId || '').trim();\n  if (!userId) throw new Error('Validation: payload.userAccountId is required');\n\n  const role = String(p.role || 'CUSTOMER').toUpperCase();\n  const supplyKind = role === 'BROKER' ? 'broker' : 'member';\n  const slaHours = role === 'BROKER' ? 24 : 72;\n\n  return [{\n    json: {\n      ok: true,\n      skipped: false,\n      event_path: 'supply',\n      supply_kind: supplyKind,\n      path: 'events',\n      record_id: userId,\n      broker_id: String(p.brokerId || ''),\n      customer_id: String(p.customerId || ''),\n      role,\n      contact_name: String(p.name || '').slice(0, 80),\n      contact_phone: String(p.phone || '').slice(0, 20),\n      contact_email: String(p.email || '').slice(0, 120),\n      marketing_opt_in: p.marketingOptIn === true,\n      detail: role === 'BROKER' ? 'Đăng ký môi giới — chờ onboarding đăng tin' : 'Đăng ký thành viên khách hàng',\n      region: '',\n      public_url: String(p.signupUrl || ''),\n      ops_status: role === 'BROKER' ? 'new_broker' : 'new_member',\n      sla_due_at: new Date(Date.now() + slaHours * 3600000).toISOString(),\n      created_at: String(p.registeredAt || now),\n      dedupe_key: `account:${userId}`,\n    },\n  }];\n}\n\nif (type === 'ctv.application_submitted') {\n  const p = body.payload || {};\n  const appId = String(p.applicationId || '').trim();\n  if (!appId) throw new Error('Validation: payload.applicationId is required');\n\n  return [{\n    json: {\n      ok: true,\n      skipped: false,\n      event_path: 'supply',\n      supply_kind: 'ctv',\n      path: 'events',\n      record_id: appId,\n      broker_id: String(p.brokerId || ''),\n      customer_id: '',\n      role: 'BROKER',\n      contact_name: String(p.brokerName || '').slice(0, 80),\n      contact_phone: String(p.brokerPhone || '').slice(0, 20),\n      contact_email: String(p.brokerEmail || '').slice(0, 120),\n      marketing_opt_in: false,\n      detail: [\n        `CCCD ***${String(p.idNumberLast4 || '')}`,\n        `Kinh nghiệm: ${String(p.experience || '').slice(0, 120)}`,\n        `Lý do: ${String(p.motivation || '').slice(0, 120)}`,\n      ].join(' · '),\n      region: String(p.region || ''),\n      public_url: String(p.adminUrl || ''),\n      ops_status: 'ctv_pending',\n      sla_due_at: new Date(Date.now() + 24 * 3600000).toISOString(),\n      created_at: String(p.submittedAt || now),\n      dedupe_key: `ctv:${appId}`,\n    },\n  }];\n}\n\nif (type === 'noxh_case.created') {\n  const p = body.payload || {};\n  const caseId = String(p.caseId || '').trim();\n  if (!caseId) throw new Error('Validation: payload.caseId is required');\n\n  return [{\n    json: {\n      ok: true,\n      skipped: false,\n      event_path: 'noxh_case',\n      path: 'events',\n      noxh_case_event: type,\n      case_id: caseId,\n      case_code: String(p.caseCode || '').slice(0, 32),\n      broker_id: p.brokerId != null && p.brokerId !== '' ? String(p.brokerId) : null,\n      milestone: String(p.milestone || 'M1_RECEIVED'),\n      customer_name: String(p.customerName || '').slice(0, 80),\n      phone_masked: maskNormalizedPhone(p.normalizedPhone),\n      created_at: now,\n    },\n  }];\n}\n\nif (type === 'noxh_case.milestone_changed') {\n  const p = body.payload || {};\n  const caseId = String(p.caseId || '').trim();\n  if (!caseId) throw new Error('Validation: payload.caseId is required');\n\n  return [{\n    json: {\n      ok: true,\n      skipped: false,\n      event_path: 'noxh_case',\n      path: 'events',\n      noxh_case_event: type,\n      case_id: caseId,\n      case_code: String(p.caseCode || '').slice(0, 32),\n      broker_id: p.brokerId != null && p.brokerId !== '' ? String(p.brokerId) : null,\n      from_milestone: String(p.fromMilestone || ''),\n      to_milestone: String(p.toMilestone || ''),\n      milestone_sub: p.milestoneSub ? String(p.milestoneSub) : null,\n      ops_note: p.opsNote ? String(p.opsNote).slice(0, 500) : null,\n    },\n  }];\n}\n\nif (type === 'noxh_case.ctv_nudge') {\n  const p = body.payload || {};\n  const caseId = String(p.caseId || '').trim();\n  if (!caseId) throw new Error('Validation: payload.caseId is required');\n\n  return [{\n    json: {\n      ok: true,\n      skipped: false,\n      event_path: 'noxh_case',\n      path: 'events',\n      noxh_case_event: type,\n      case_id: caseId,\n      case_code: String(p.caseCode || '').slice(0, 32),\n      broker_id: String(p.brokerId || '').trim() || null,\n      doc_type: p.docType ? String(p.docType) : null,\n      nudge_message: String(p.message || '').slice(0, 500),\n    },\n  }];\n}\n\nif (type !== 'lead.noxh_checked') {\n  return [{ json: { ok: true, skipped: true, event_path: 'none', path: 'events', reason: 'UNSUPPORTED_EVENT', type } }];\n}\n\nconst p = body.payload || {};\nconst leadId = String(p.leadId || '').trim();\nif (!leadId) throw new Error('Validation: payload.leadId is required');\n\nconst tier = String(p.tier || 'WARM').toUpperCase();\nconst contact = p.contact || {};\nconst reasonCodes = Array.isArray(p.reasonCodes) ? p.reasonCodes : [];\n\nconst slaHours = tier === 'HOT' ? 2 : tier === 'WARM' ? 24 : 72;\nconst slaDue = new Date(Date.now() + slaHours * 3600000).toISOString();\n\nreturn [{\n  json: {\n    ok: true,\n    skipped: false,\n    event_path: 'noxh',\n    path: 'events',\n    lead_id: leadId,\n    tier,\n    overall: String(p.overall || ''),\n    credit_flag: String(p.creditFlag || ''),\n    reason_codes: reasonCodes,\n    reason_codes_csv: reasonCodes.join(','),\n    recommended_action: String(p.recommendedAction || ''),\n    rules_version: String(p.rulesVersion || ''),\n    contact_name: String(contact.name || '').slice(0, 80),\n    contact_phone: String(contact.phone || '').slice(0, 20),\n    contact_email: String(contact.email || '').slice(0, 120),\n    ops_status: tier === 'HOT' ? 'new_hot' : tier === 'WARM' ? 'new_warm' : 'nurture',\n    assigned_to: '',\n    sla_due_at: slaDue,\n    created_at: now,\n    dedupe_key: `noxh:${leadId}`,\n    has_credit_blocker: reasonCodes.includes('credit_blocker'),\n    has_credit_caution: reasonCodes.includes('credit_caution'),\n  },\n}];"
+        "jsCode": "return [{ json: {\n  headers: { 'x-events-secret': $env.EVENTS_WEBHOOK_SECRET || '' },\n  body: {\n    type: 'lead.nurture',\n    sentAt: new Date().toISOString(),\n    payload: {\n      leadId: 'manual-nurture-' + Date.now(),\n      nurtureScriptId: 'noxh-zalo-ads-checklist',\n      scriptLabel: 'NOXH — Checklist hồ sơ (Zalo Ads)',\n      scriptDescription: 'Gửi checklist điều kiện NOXH + hẹn gọi xác nhận thu nhập trong 24h.',\n      channel: 'zalo',\n      trigger: 'on_create',\n      segment: 'noxh',\n      source: 'zalo_ads',\n      contact: { name: 'Manual Nurture', phone: '0901234567', email: 'nurture@housex.local' },\n      channels: { phone: '0901234567' },\n      opsNote: null,\n    },\n  },\n}}];"
+      },
+      "id": "nx49",
+      "name": "Inject Manual Lead Nurture",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        40,
+        880
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const SECRET = $env.EVENTS_WEBHOOK_SECRET || '';\nconst headers = $input.first().json.headers || {};\nconst got = headers['x-events-secret'] || headers['X-Events-Secret'] || '';\nif (SECRET && got !== SECRET) {\n  throw new Error('Unauthorized: invalid EVENTS_WEBHOOK_SECRET');\n}\n\nconst raw = $input.first().json;\nconst body = raw.body && typeof raw.body === 'object' ? raw.body : raw;\nconst type = String(body.type || '').trim();\nconst now = body.sentAt || new Date().toISOString();\n\nfunction resolveInquirySegment(payload, ctx) {\n  const explicit = String(payload.segment || '').trim().toLowerCase();\n  if (explicit === 'noxh' || explicit === 'cctm') return explicit;\n  const projectType = String(ctx.projectType || 'THUONG_MAI').toUpperCase();\n  return projectType === 'NHA_O_XA_HOI' ? 'noxh' : 'cctm';\n}\n\nfunction maskNormalizedPhone(normalized) {\n  const digits = String(normalized || '').replace(/\\D/g, '');\n  if (digits.length < 7) return '***';\n  return `${digits.slice(0, 4)}***${digits.slice(-3)}`;\n}\n\nif (type === 'lead.created') {\n  const p = body.payload || {};\n  const leadId = String(p.leadId || '').trim();\n  if (!leadId) throw new Error('Validation: payload.leadId is required');\n\n  const contact = p.contact || {};\n  const ctx = p.context || {};\n  const projectType = String(ctx.projectType || 'THUONG_MAI').toUpperCase();\n  const segment = resolveInquirySegment(p, ctx);\n  const slaDue = new Date(Date.now() + 2 * 3600000).toISOString();\n\n  return [{\n    json: {\n      ok: true,\n      skipped: false,\n      event_path: 'inquiry',\n      path: 'events',\n      lead_id: leadId,\n      source: String(p.source || 'organic'),\n      segment,\n      intent_lane: segment,\n      message: String(p.message || '').slice(0, 500),\n      contact_name: String(contact.name || '').slice(0, 80),\n      contact_phone: String(contact.phone || '').slice(0, 20),\n      contact_email: String(contact.email || '').slice(0, 120),\n      kind: String(ctx.kind || 'project'),\n      entity_name: String(ctx.entityName || '').slice(0, 120),\n      slug: String(ctx.slug || ''),\n      listing_code: String(ctx.listingCode || ''),\n      project_type: projectType,\n      province: String(ctx.province || ''),\n      public_url: String(ctx.adminUrl || ''),\n      assigned_broker_id: String(p.assignedBrokerId || ''),\n      ops_status: segment === 'noxh' ? 'new_inquiry_noxh' : 'new_inquiry_cctm',\n      sla_due_at: slaDue,\n      created_at: String(p.createdAt || now),\n      dedupe_key: `inquiry:${leadId}`,\n    },\n  }];\n}\n\nif (type === 'account.registered') {\n  const p = body.payload || {};\n  const userId = String(p.userAccountId || '').trim();\n  if (!userId) throw new Error('Validation: payload.userAccountId is required');\n\n  const role = String(p.role || 'CUSTOMER').toUpperCase();\n  const supplyKind = role === 'BROKER' ? 'broker' : 'member';\n  const slaHours = role === 'BROKER' ? 24 : 72;\n\n  return [{\n    json: {\n      ok: true,\n      skipped: false,\n      event_path: 'supply',\n      supply_kind: supplyKind,\n      path: 'events',\n      record_id: userId,\n      broker_id: String(p.brokerId || ''),\n      customer_id: String(p.customerId || ''),\n      role,\n      contact_name: String(p.name || '').slice(0, 80),\n      contact_phone: String(p.phone || '').slice(0, 20),\n      contact_email: String(p.email || '').slice(0, 120),\n      marketing_opt_in: p.marketingOptIn === true,\n      detail: role === 'BROKER' ? 'Đăng ký môi giới — chờ onboarding đăng tin' : 'Đăng ký thành viên khách hàng',\n      region: '',\n      public_url: String(p.signupUrl || ''),\n      ops_status: role === 'BROKER' ? 'new_broker' : 'new_member',\n      sla_due_at: new Date(Date.now() + slaHours * 3600000).toISOString(),\n      created_at: String(p.registeredAt || now),\n      dedupe_key: `account:${userId}`,\n    },\n  }];\n}\n\nif (type === 'ctv.application_submitted') {\n  const p = body.payload || {};\n  const appId = String(p.applicationId || '').trim();\n  if (!appId) throw new Error('Validation: payload.applicationId is required');\n\n  return [{\n    json: {\n      ok: true,\n      skipped: false,\n      event_path: 'supply',\n      supply_kind: 'ctv',\n      path: 'events',\n      record_id: appId,\n      broker_id: String(p.brokerId || ''),\n      customer_id: '',\n      role: 'BROKER',\n      contact_name: String(p.brokerName || '').slice(0, 80),\n      contact_phone: String(p.brokerPhone || '').slice(0, 20),\n      contact_email: String(p.brokerEmail || '').slice(0, 120),\n      marketing_opt_in: false,\n      detail: [\n        `CCCD ***${String(p.idNumberLast4 || '')}`,\n        `Kinh nghiệm: ${String(p.experience || '').slice(0, 120)}`,\n        `Lý do: ${String(p.motivation || '').slice(0, 120)}`,\n      ].join(' · '),\n      region: String(p.region || ''),\n      public_url: String(p.adminUrl || ''),\n      ops_status: 'ctv_pending',\n      sla_due_at: new Date(Date.now() + 24 * 3600000).toISOString(),\n      created_at: String(p.submittedAt || now),\n      dedupe_key: `ctv:${appId}`,\n    },\n  }];\n}\n\nif (type === 'noxh_case.created') {\n  const p = body.payload || {};\n  const caseId = String(p.caseId || '').trim();\n  if (!caseId) throw new Error('Validation: payload.caseId is required');\n\n  return [{\n    json: {\n      ok: true,\n      skipped: false,\n      event_path: 'noxh_case',\n      path: 'events',\n      noxh_case_event: type,\n      case_id: caseId,\n      case_code: String(p.caseCode || '').slice(0, 32),\n      broker_id: p.brokerId != null && p.brokerId !== '' ? String(p.brokerId) : null,\n      milestone: String(p.milestone || 'M1_RECEIVED'),\n      customer_name: String(p.customerName || '').slice(0, 80),\n      phone_masked: maskNormalizedPhone(p.normalizedPhone),\n      created_at: now,\n    },\n  }];\n}\n\nif (type === 'noxh_case.milestone_changed') {\n  const p = body.payload || {};\n  const caseId = String(p.caseId || '').trim();\n  if (!caseId) throw new Error('Validation: payload.caseId is required');\n\n  return [{\n    json: {\n      ok: true,\n      skipped: false,\n      event_path: 'noxh_case',\n      path: 'events',\n      noxh_case_event: type,\n      case_id: caseId,\n      case_code: String(p.caseCode || '').slice(0, 32),\n      broker_id: p.brokerId != null && p.brokerId !== '' ? String(p.brokerId) : null,\n      from_milestone: String(p.fromMilestone || ''),\n      to_milestone: String(p.toMilestone || ''),\n      milestone_sub: p.milestoneSub ? String(p.milestoneSub) : null,\n      ops_note: p.opsNote ? String(p.opsNote).slice(0, 500) : null,\n    },\n  }];\n}\n\nif (type === 'noxh_case.ctv_nudge') {\n  const p = body.payload || {};\n  const caseId = String(p.caseId || '').trim();\n  if (!caseId) throw new Error('Validation: payload.caseId is required');\n\n  return [{\n    json: {\n      ok: true,\n      skipped: false,\n      event_path: 'noxh_case',\n      path: 'events',\n      noxh_case_event: type,\n      case_id: caseId,\n      case_code: String(p.caseCode || '').slice(0, 32),\n      broker_id: String(p.brokerId || '').trim() || null,\n      doc_type: p.docType ? String(p.docType) : null,\n      nudge_message: String(p.message || '').slice(0, 500),\n    },\n  }];\n}\n\nif (type === 'lead.nurture') {\n  const p = body.payload || {};\n  const leadId = String(p.leadId || '').trim();\n  if (!leadId) throw new Error('Validation: payload.leadId is required');\n\n  const contact = p.contact || {};\n  const scriptId = String(p.nurtureScriptId || '').trim();\n  const trigger = String(p.trigger || 'on_create').trim();\n  const channel = String(p.channel || 'manual').trim();\n\n  const channelAction =\n    channel === 'zalo'\n      ? 'zalo_dm'\n      : channel === 'oa'\n        ? 'zalo_oa_cs'\n        : channel === 'telegram'\n          ? 'telegram_ops'\n          : 'ops_manual';\n\n  return [{\n    json: {\n      ok: true,\n      skipped: false,\n      event_path: 'nurture',\n      path: 'events',\n      lead_id: leadId,\n      nurture_script_id: scriptId,\n      script_label: String(p.scriptLabel || '').slice(0, 120),\n      script_description: String(p.scriptDescription || '').slice(0, 500),\n      channel,\n      channel_action: channelAction,\n      trigger,\n      segment: String(p.segment || '').toLowerCase(),\n      source: String(p.source || ''),\n      contact_name: String(contact.name || '').slice(0, 80),\n      contact_phone: String(contact.phone || '').slice(0, 20),\n      contact_email: String(contact.email || '').slice(0, 120),\n      ops_note: p.opsNote ? String(p.opsNote).slice(0, 500) : '',\n      ops_status: 'nurture_auto_queued',\n      created_at: now,\n      dedupe_key: `nurture:${leadId}:${trigger}:${scriptId}`,\n    },\n  }];\n}\n\nif (type !== 'lead.noxh_checked') {\n  return [{ json: { ok: true, skipped: true, event_path: 'none', path: 'events', reason: 'UNSUPPORTED_EVENT', type } }];\n}\n\nconst p = body.payload || {};\nconst leadId = String(p.leadId || '').trim();\nif (!leadId) throw new Error('Validation: payload.leadId is required');\n\nconst tier = String(p.tier || 'WARM').toUpperCase();\nconst contact = p.contact || {};\nconst reasonCodes = Array.isArray(p.reasonCodes) ? p.reasonCodes : [];\n\nconst slaHours = tier === 'HOT' ? 2 : tier === 'WARM' ? 24 : 72;\nconst slaDue = new Date(Date.now() + slaHours * 3600000).toISOString();\n\nreturn [{\n  json: {\n    ok: true,\n    skipped: false,\n    event_path: 'noxh',\n    path: 'events',\n    lead_id: leadId,\n    tier,\n    overall: String(p.overall || ''),\n    credit_flag: String(p.creditFlag || ''),\n    reason_codes: reasonCodes,\n    reason_codes_csv: reasonCodes.join(','),\n    recommended_action: String(p.recommendedAction || ''),\n    rules_version: String(p.rulesVersion || ''),\n    contact_name: String(contact.name || '').slice(0, 80),\n    contact_phone: String(contact.phone || '').slice(0, 20),\n    contact_email: String(contact.email || '').slice(0, 120),\n    ops_status: tier === 'HOT' ? 'new_hot' : tier === 'WARM' ? 'new_warm' : 'nurture',\n    assigned_to: '',\n    sla_due_at: slaDue,\n    created_at: now,\n    dedupe_key: `noxh:${leadId}`,\n    has_credit_blocker: reasonCodes.includes('credit_blocker'),\n    has_credit_caution: reasonCodes.includes('credit_caution'),\n  },\n}];"
       },
       "id": "nx05",
       "name": "Parse HouseX Event",
@@ -260,6 +273,28 @@
               },
               "renameOutput": true,
               "outputKey": "noxh_case"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "typeValidation": "strict"
+                },
+                "conditions": [
+                  {
+                    "id": "r5",
+                    "leftValue": "={{ $json.event_path }}",
+                    "rightValue": "nurture",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "nurture"
             }
           ]
         },
@@ -546,6 +581,127 @@
     },
     {
       "parameters": {
+        "jsCode": "const item = $input.first().json;\nif (item.skipped || item.duplicate) {\n  return [{ json: item }];\n}\n\nconst SHEET_ID = '1fYB4h_BTiKXa9O3lBah-tQonWpQOQMG2aSkSfPs6yU4';\nconst TAB = 'housex_leads_nurture';\n\nconst append_row = [\n  item.dedupe_key,\n  item.lead_id,\n  item.nurture_script_id,\n  item.script_label,\n  item.channel,\n  item.trigger,\n  item.segment,\n  item.source,\n  item.contact_name,\n  item.contact_phone,\n  item.contact_email,\n  item.ops_note,\n  item.ops_status,\n  item.channel_action,\n  item.script_description,\n  item.created_at,\n  JSON.stringify({\n    dedupe_key: item.dedupe_key,\n    channel_action: item.channel_action,\n  }).slice(0, 45000),\n];\n\nreturn [{\n  json: {\n    ...item,\n    append_row,\n    append_url: `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent(`${TAB}!A:Q`)}:append?valueInputOption=USER_ENTERED&insertDataOption=INSERT_ROWS`,\n    append_body: { values: [append_row] },\n  },\n}];"
+      },
+      "id": "nx50",
+      "name": "Prepare Nurture Append",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1000,
+        960
+      ]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "https://sheets.googleapis.com/v4/spreadsheets/1fYB4h_BTiKXa9O3lBah-tQonWpQOQMG2aSkSfPs6yU4/values/housex_leads_nurture!A%3AA",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleApi",
+        "options": {}
+      },
+      "id": "nx51",
+      "name": "HTTP GET nurture dedupe",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1240,
+        960
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const item = $('Prepare Nurture Append').item?.json || $input.first().json;\nconst getRes = $input.first().json || {};\nconst rows = getRes.values || [];\n\nconst existing = new Set();\nfor (let i = 1; i < rows.length; i++) {\n  const key = String(rows[i][0] || '').trim();\n  if (key) existing.add(key);\n}\n\nif (existing.has(item.dedupe_key)) {\n  return [{\n    json: {\n      ...item,\n      duplicate: true,\n      skipped: true,\n      ok: true,\n      reason: 'DUPLICATE_NURTURE_KEY',\n    },\n  }];\n}\n\nreturn [{ json: { ...item, duplicate: false, skipped: false } }];"
+      },
+      "id": "nx52",
+      "name": "Dedupe Nurture",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1480,
+        960
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "c1",
+              "leftValue": "={{ $json.duplicate }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      },
+      "id": "nx53",
+      "name": "Nurture Duplicate?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        1720,
+        960
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $json.append_url }}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json.append_body) }}",
+        "options": {}
+      },
+      "id": "nx54",
+      "name": "HTTP POST housex_leads_nurture",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1960,
+        880
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const item = $input.first().json;\nif (item.skipped || item.duplicate) {\n  return [{ json: { ...item, telegram_skip: item.reason || 'skipped' } }];\n}\n\nconst segment = item.segment === 'noxh' ? 'noxh' : item.segment === 'cctm' ? 'cctm' : 'general';\nconst isNoxh = segment === 'noxh';\n\nconst chatNoxh =\n  $env.TELEGRAM_CHAT_ID_NOXH_HOT ||\n  $env.TELEGRAM_CHAT_ID_LEAD_NOXH ||\n  $env.TELEGRAM_CHAT_ID_OPS ||\n  '';\nconst chatCommercial =\n  $env.TELEGRAM_CHAT_ID_LEAD_COMMERCIAL ||\n  $env.TELEGRAM_CHAT_ID_OPS ||\n  $env.TELEGRAM_CHAT_ID_OWNER ||\n  '';\n\nconst triggerLabel =\n  item.trigger === 'status_contacted' ? 'Sau CONTACTED' : 'Khi tạo lead';\n\nconst channelHint =\n  item.channel === 'zalo'\n    ? '→ Gửi Zalo DM khách (checklist/script)'\n    : item.channel === 'oa'\n      ? '→ Gửi Zalo OA CS (nếu khách follow OA)'\n      : item.channel === 'telegram'\n        ? '→ Phản hồi qua Telegram Ops'\n        : '→ Ops xử lý thủ công';\n\nconst lines = [\n  `📬 [HouseX Nurture] ${triggerLabel}`,\n  `Lead: ${item.lead_id}`,\n  `Script: ${item.script_label || item.nurture_script_id}`,\n  `Kênh: ${item.channel} · ${channelHint}`,\n  segment !== 'general' ? `Lane: ${segment.toUpperCase()}` : null,\n  item.source ? `Nguồn: ${item.source}` : null,\n  `Khách: ${item.contact_name}`,\n  `SĐT: ${item.contact_phone}`,\n  item.contact_email ? `Email: ${item.contact_email}` : null,\n  item.script_description ? `Mô tả: ${item.script_description}` : null,\n  item.ops_note ? `Ghi chú Ops: ${item.ops_note}` : null,\n  'Admin: /admin/ops-leads',\n].filter(Boolean);\n\nconst message = lines.join('\\n').slice(0, 3900);\nconst token = $env.TELEGRAM_BOT_TOKEN || '';\nconst chat_id = isNoxh ? chatNoxh : chatCommercial || chatNoxh;\nconst enabled =\n  String($env.TELEGRAM_LEAD_NURTURE_ENABLED || 'true').toLowerCase() === 'true';\n\nreturn [{\n  json: {\n    ...item,\n    segment,\n    telegram_enabled: enabled && !!token && !!chat_id,\n    telegram_chat_id: chat_id,\n    telegram_message: message,\n    telegram_priority: 'normal',\n    telegram_route: isNoxh ? 'noxh_nurture' : 'cctm_nurture',\n  },\n}];"
+      },
+      "id": "nx55",
+      "name": "Format Nurture Telegram",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2200,
+        880
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const item = $input.first().json;\nif (!item.telegram_enabled) {\n  return [{\n    json: {\n      ...item,\n      telegram_sent: false,\n      telegram_skip: item.telegram_skip || 'TELEGRAM_DISABLED',\n    },\n  }];\n}\n\nconst token = $env.TELEGRAM_BOT_TOKEN || '';\nconst chatId = item.telegram_chat_id || '';\n\nlet tgRes;\ntry {\n  tgRes = await this.helpers.httpRequest({\n    method: 'POST',\n    url: `https://api.telegram.org/bot${token}/sendMessage`,\n    body: {\n      chat_id: chatId,\n      text: item.telegram_message,\n      disable_web_page_preview: true,\n    },\n    json: true,\n    timeout: 15000,\n  });\n} catch (e) {\n  return [{\n    json: {\n      ...item,\n      telegram_sent: false,\n      telegram_error: (e.message || String(e)).slice(0, 200),\n    },\n  }];\n}\n\nreturn [{\n  json: {\n    ...item,\n    telegram_sent: tgRes?.ok === true,\n    telegram_message_id: tgRes?.result?.message_id || null,\n  },\n}];"
+      },
+      "id": "nx56",
+      "name": "Send Nurture Telegram",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2440,
+        880
+      ]
+    },
+    {
+      "parameters": {
         "jsCode": "const item = $input.first().json;\nif (item.skipped || item.duplicate) {\n  return [{ json: item }];\n}\n\nconst SHEET_ID = '1fYB4h_BTiKXa9O3lBah-tQonWpQOQMG2aSkSfPs6yU4';\nconst TAB = 'noxh_leads_ops';\n\nconst append_row = [\n  item.lead_id,\n  item.tier,\n  item.overall,\n  item.credit_flag,\n  item.reason_codes_csv,\n  item.recommended_action,\n  item.rules_version,\n  item.contact_name,\n  item.contact_phone,\n  item.contact_email,\n  item.ops_status,\n  item.assigned_to,\n  item.sla_due_at,\n  item.created_at,\n  JSON.stringify({\n    has_credit_blocker: item.has_credit_blocker,\n    has_credit_caution: item.has_credit_caution,\n    dedupe_key: item.dedupe_key,\n  }).slice(0, 45000),\n];\n\nreturn [{\n  json: {\n    ...item,\n    append_row,\n    append_url: `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent(`${TAB}!A:O`)}:append?valueInputOption=USER_ENTERED&insertDataOption=INSERT_ROWS`,\n    append_body: { values: [append_row] },\n  },\n}];"
       },
       "id": "nx07",
@@ -667,7 +823,7 @@
     },
     {
       "parameters": {
-        "jsCode": "const item = $input.first().json;\nreturn [{\n  json: {\n    ok: item.ok !== false,\n    workflow: 'housex-noxh-lead-route',\n    path: item.path || 'events',\n    lead_id: item.lead_id || null,\n    event_path: item.event_path || null,\n    tier: item.tier || null,\n    supply_kind: item.supply_kind || null,\n    case_id: item.case_id || null,\n    case_code: item.case_code || null,\n    noxh_case_event: item.noxh_case_event || null,\n    duplicate: item.duplicate === true,\n    skipped: item.skipped === true,\n    telegram_sent: item.telegram_sent === true,\n    reason: item.reason || item.telegram_skip || null,\n    finished_at: new Date().toISOString(),\n  },\n}];"
+        "jsCode": "const item = $input.first().json;\nreturn [{\n  json: {\n    ok: item.ok !== false,\n    workflow: 'housex-noxh-lead-route',\n    path: item.path || 'events',\n    lead_id: item.lead_id || null,\n    event_path: item.event_path || null,\n    tier: item.tier || null,\n    supply_kind: item.supply_kind || null,\n    case_id: item.case_id || null,\n    case_code: item.case_code || null,\n    noxh_case_event: item.noxh_case_event || null,\n    nurture_script_id: item.nurture_script_id || null,\n    nurture_trigger: item.trigger || null,\n    nurture_channel: item.channel || null,\n    duplicate: item.duplicate === true,\n    skipped: item.skipped === true,\n    telegram_sent: item.telegram_sent === true,\n    reason: item.reason || item.telegram_skip || null,\n    finished_at: new Date().toISOString(),\n  },\n}];"
       },
       "id": "nx14",
       "name": "Build Response",
@@ -832,6 +988,13 @@
             "type": "main",
             "index": 0
           }
+        ],
+        [
+          {
+            "node": "Inject Manual Lead Nurture",
+            "type": "main",
+            "index": 0
+          }
         ]
       ]
     },
@@ -880,6 +1043,17 @@
       ]
     },
     "Inject Manual Case Milestone": {
+      "main": [
+        [
+          {
+            "node": "Parse HouseX Event",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Inject Manual Lead Nurture": {
       "main": [
         [
           {
@@ -945,6 +1119,13 @@
         [
           {
             "node": "Format Noxh Case Telegram",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Prepare Nurture Append",
             "type": "main",
             "index": 0
           }
@@ -1148,6 +1329,90 @@
         ]
       ]
     },
+    "Prepare Nurture Append": {
+      "main": [
+        [
+          {
+            "node": "HTTP GET nurture dedupe",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP GET nurture dedupe": {
+      "main": [
+        [
+          {
+            "node": "Dedupe Nurture",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Dedupe Nurture": {
+      "main": [
+        [
+          {
+            "node": "Nurture Duplicate?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Nurture Duplicate?": {
+      "main": [
+        [
+          {
+            "node": "Build Response",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "HTTP POST housex_leads_nurture",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP POST housex_leads_nurture": {
+      "main": [
+        [
+          {
+            "node": "Format Nurture Telegram",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format Nurture Telegram": {
+      "main": [
+        [
+          {
+            "node": "Send Nurture Telegram",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Nurture Telegram": {
+      "main": [
+        [
+          {
+            "node": "Build Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
     "Prepare Ops Append": {
       "main": [
         [
@@ -1334,6 +1599,9 @@
     },
     {
       "name": "housex-lead-inquiry"
+    },
+    {
+      "name": "housex-lead-nurture"
     },
     {
       "name": "housex-supply-signup"

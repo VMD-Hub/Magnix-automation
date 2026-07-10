@@ -24,6 +24,7 @@ const sheetId = PUBLIC.google_sheet_id;
 const opsTab = PUBLIC.noxh_leads_ops_tab || 'noxh_leads_ops';
 const detailTab = PUBLIC.noxh_leads_detail_tab || 'noxh_leads_detail';
 const inquiryTab = PUBLIC.housex_leads_inquiry_tab || 'housex_leads_inquiry';
+const nurtureTab = PUBLIC.housex_leads_nurture_tab || 'housex_leads_nurture';
 const supplyTab = PUBLIC.housex_supply_ops_tab || 'housex_supply_ops';
 
 const replaceSheet = (code) =>
@@ -32,6 +33,7 @@ const replaceSheet = (code) =>
     .replace(/__NOXH_OPS_TAB__/g, opsTab)
     .replace(/__NOXH_DETAIL_TAB__/g, detailTab)
     .replace(/__INQUIRY_TAB__/g, inquiryTab)
+    .replace(/__NURTURE_TAB__/g, nurtureTab)
     .replace(/__SUPPLY_TAB__/g, supplyTab);
 
 const codes = {
@@ -53,6 +55,10 @@ const codes = {
   sendSupplyTg: replaceSheet(read('supply-05-send-telegram.js')),
   formatNoxhCaseTg: replaceSheet(read('noxh-case-04-format-telegram.js')),
   sendNoxhCaseTg: replaceSheet(read('noxh-case-05-send-telegram.js')),
+  prepareNurture: replaceSheet(read('nurture-02-prepare-append.js')),
+  dedupeNurture: replaceSheet(read('nurture-03-dedupe.js')),
+  formatNurtureTg: replaceSheet(read('nurture-04-format-telegram.js')),
+  sendNurtureTg: replaceSheet(read('nurture-05-send-telegram.js')),
 };
 
 const manualEvent = `return [{ json: {
@@ -160,6 +166,27 @@ const manualNoxhCaseMilestone = `return [{ json: {
   },
 }}];`;
 
+const manualLeadNurture = `return [{ json: {
+  headers: { 'x-events-secret': $env.EVENTS_WEBHOOK_SECRET || '' },
+  body: {
+    type: 'lead.nurture',
+    sentAt: new Date().toISOString(),
+    payload: {
+      leadId: 'manual-nurture-' + Date.now(),
+      nurtureScriptId: 'noxh-zalo-ads-checklist',
+      scriptLabel: 'NOXH — Checklist hồ sơ (Zalo Ads)',
+      scriptDescription: 'Gửi checklist điều kiện NOXH + hẹn gọi xác nhận thu nhập trong 24h.',
+      channel: 'zalo',
+      trigger: 'on_create',
+      segment: 'noxh',
+      source: 'zalo_ads',
+      contact: { name: 'Manual Nurture', phone: '0901234567', email: 'nurture@housex.local' },
+      channels: { phone: '0901234567' },
+      opsNote: null,
+    },
+  },
+}}];`;
+
 const pos = (x, y) => [x, y];
 const nid = (prefix, n) => `${prefix}${String(n).padStart(2, '0')}`;
 
@@ -167,7 +194,7 @@ const nodes = [
   {
     parameters: {
       content:
-        '## HouseX Events Hub\n**Webhook A:** POST `/webhook/magnix/housex-events` ← `EVENTS_WEBHOOK_URL`\n**Webhook B:** POST `/webhook/magnix/housex-noxh-detail` ← `NOXH_DETAIL_WEBHOOK_URL`\n**Events:** `lead.noxh_checked` · `lead.created` · `noxh_case.*` · `account.registered` · `ctv.application_submitted`\nAuth: `x-events-secret` = `EVENTS_WEBHOOK_SECRET`',
+        '## HouseX Events Hub\n**Webhook A:** POST `/webhook/magnix/housex-events` ← `EVENTS_WEBHOOK_URL`\n**Webhook B:** POST `/webhook/magnix/housex-noxh-detail` ← `NOXH_DETAIL_WEBHOOK_URL`\n**Events:** `lead.noxh_checked` · `lead.created` · `lead.nurture` · `noxh_case.*` · `account.registered` · `ctv.application_submitted`\nAuth: `x-events-secret` = `EVENTS_WEBHOOK_SECRET`',
       height: 260,
       width: 560,
     },
@@ -244,6 +271,14 @@ const nodes = [
     position: pos(40, 800),
   },
   {
+    parameters: { jsCode: manualLeadNurture },
+    id: nid('nx', 49),
+    name: 'Inject Manual Lead Nurture',
+    type: 'n8n-nodes-base.code',
+    typeVersion: 2,
+    position: pos(40, 880),
+  },
+  {
     parameters: { jsCode: codes.parseEvent },
     id: nid('nx', 5),
     name: 'Parse HouseX Event',
@@ -304,6 +339,15 @@ const nodes = [
             },
             renameOutput: true,
             outputKey: 'noxh_case',
+          },
+          {
+            conditions: {
+              options: { caseSensitive: true, typeValidation: 'strict' },
+              conditions: [{ id: 'r5', leftValue: '={{ $json.event_path }}', rightValue: 'nurture', operator: { type: 'string', operation: 'equals' } }],
+              combinator: 'and',
+            },
+            renameOutput: true,
+            outputKey: 'nurture',
           },
         ],
       },
@@ -490,6 +534,85 @@ const nodes = [
     position: pos(1240, 820),
   },
   {
+    parameters: { jsCode: codes.prepareNurture },
+    id: nid('nx', 50),
+    name: 'Prepare Nurture Append',
+    type: 'n8n-nodes-base.code',
+    typeVersion: 2,
+    position: pos(1000, 960),
+  },
+  {
+    parameters: {
+      method: 'GET',
+      url: `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${encodeURIComponent(`${nurtureTab}!A:A`)}`,
+      authentication: 'predefinedCredentialType',
+      nodeCredentialType: 'googleApi',
+      options: {},
+    },
+    id: nid('nx', 51),
+    name: 'HTTP GET nurture dedupe',
+    type: 'n8n-nodes-base.httpRequest',
+    typeVersion: 4.2,
+    position: pos(1240, 960),
+    onError: 'continueRegularOutput',
+  },
+  {
+    parameters: { jsCode: codes.dedupeNurture },
+    id: nid('nx', 52),
+    name: 'Dedupe Nurture',
+    type: 'n8n-nodes-base.code',
+    typeVersion: 2,
+    position: pos(1480, 960),
+  },
+  {
+    parameters: {
+      conditions: {
+        options: { caseSensitive: true, typeValidation: 'strict' },
+        conditions: [{ id: 'c1', leftValue: '={{ $json.duplicate }}', rightValue: true, operator: { type: 'boolean', operation: 'equals' } }],
+        combinator: 'and',
+      },
+    },
+    id: nid('nx', 53),
+    name: 'Nurture Duplicate?',
+    type: 'n8n-nodes-base.if',
+    typeVersion: 2,
+    position: pos(1720, 960),
+  },
+  {
+    parameters: {
+      method: 'POST',
+      url: '={{ $json.append_url }}',
+      authentication: 'predefinedCredentialType',
+      nodeCredentialType: 'googleApi',
+      sendBody: true,
+      specifyBody: 'json',
+      jsonBody: '={{ JSON.stringify($json.append_body) }}',
+      options: {},
+    },
+    id: nid('nx', 54),
+    name: 'HTTP POST housex_leads_nurture',
+    type: 'n8n-nodes-base.httpRequest',
+    typeVersion: 4.2,
+    position: pos(1960, 880),
+    onError: 'continueRegularOutput',
+  },
+  {
+    parameters: { jsCode: codes.formatNurtureTg },
+    id: nid('nx', 55),
+    name: 'Format Nurture Telegram',
+    type: 'n8n-nodes-base.code',
+    typeVersion: 2,
+    position: pos(2200, 880),
+  },
+  {
+    parameters: { jsCode: codes.sendNurtureTg },
+    id: nid('nx', 56),
+    name: 'Send Nurture Telegram',
+    type: 'n8n-nodes-base.code',
+    typeVersion: 2,
+    position: pos(2440, 880),
+  },
+  {
     parameters: { jsCode: codes.prepareOps },
     id: nid('nx', 7),
     name: 'Prepare Ops Append',
@@ -654,6 +777,7 @@ const connections = {
       [{ node: 'Inject Manual CCTM Inquiry', type: 'main', index: 0 }],
       [{ node: 'Inject Manual Noxh Case', type: 'main', index: 0 }],
       [{ node: 'Inject Manual Case Milestone', type: 'main', index: 0 }],
+      [{ node: 'Inject Manual Lead Nurture', type: 'main', index: 0 }],
     ],
   },
   'Inject Manual NOXH Event': { main: [[{ node: 'Parse HouseX Event', type: 'main', index: 0 }]] },
@@ -661,6 +785,7 @@ const connections = {
   'Inject Manual CCTM Inquiry': { main: [[{ node: 'Parse HouseX Event', type: 'main', index: 0 }]] },
   'Inject Manual Noxh Case': { main: [[{ node: 'Parse HouseX Event', type: 'main', index: 0 }]] },
   'Inject Manual Case Milestone': { main: [[{ node: 'Parse HouseX Event', type: 'main', index: 0 }]] },
+  'Inject Manual Lead Nurture': { main: [[{ node: 'Parse HouseX Event', type: 'main', index: 0 }]] },
   'Parse HouseX Event': { main: [[{ node: 'Skipped Event?', type: 'main', index: 0 }]] },
   'Skipped Event?': {
     main: [
@@ -674,6 +799,7 @@ const connections = {
       [{ node: 'Prepare Ops Append', type: 'main', index: 0 }],
       [{ node: 'Prepare Supply Append', type: 'main', index: 0 }],
       [{ node: 'Format Noxh Case Telegram', type: 'main', index: 0 }],
+      [{ node: 'Prepare Nurture Append', type: 'main', index: 0 }],
       [{ node: 'Build Response', type: 'main', index: 0 }],
     ],
   },
@@ -703,6 +829,18 @@ const connections = {
   'Send Supply Telegram': { main: [[{ node: 'Build Response', type: 'main', index: 0 }]] },
   'Format Noxh Case Telegram': { main: [[{ node: 'Send Noxh Case Telegram', type: 'main', index: 0 }]] },
   'Send Noxh Case Telegram': { main: [[{ node: 'Build Response', type: 'main', index: 0 }]] },
+  'Prepare Nurture Append': { main: [[{ node: 'HTTP GET nurture dedupe', type: 'main', index: 0 }]] },
+  'HTTP GET nurture dedupe': { main: [[{ node: 'Dedupe Nurture', type: 'main', index: 0 }]] },
+  'Dedupe Nurture': { main: [[{ node: 'Nurture Duplicate?', type: 'main', index: 0 }]] },
+  'Nurture Duplicate?': {
+    main: [
+      [{ node: 'Build Response', type: 'main', index: 0 }],
+      [{ node: 'HTTP POST housex_leads_nurture', type: 'main', index: 0 }],
+    ],
+  },
+  'HTTP POST housex_leads_nurture': { main: [[{ node: 'Format Nurture Telegram', type: 'main', index: 0 }]] },
+  'Format Nurture Telegram': { main: [[{ node: 'Send Nurture Telegram', type: 'main', index: 0 }]] },
+  'Send Nurture Telegram': { main: [[{ node: 'Build Response', type: 'main', index: 0 }]] },
   'Prepare Ops Append': { main: [[{ node: 'HTTP GET ops dedupe', type: 'main', index: 0 }]] },
   'HTTP GET ops dedupe': { main: [[{ node: 'Dedupe Ops', type: 'main', index: 0 }]] },
   'Dedupe Ops': { main: [[{ node: 'Duplicate?', type: 'main', index: 0 }]] },
@@ -737,7 +875,7 @@ const workflow = {
   settings: { executionOrder: 'v1' },
   versionId: '2',
   meta: { templateCredsSetupCompleted: true },
-  tags: [{ name: 'housex' }, { name: 'housex-noxh-lead-route' }, { name: 'housex-lead-inquiry' }, { name: 'housex-supply-signup' }, { name: 'housex-noxh-case' }],
+  tags: [{ name: 'housex' }, { name: 'housex-noxh-lead-route' }, { name: 'housex-lead-inquiry' }, { name: 'housex-lead-nurture' }, { name: 'housex-supply-signup' }, { name: 'housex-noxh-case' }],
 };
 
 const out = path.join(__dirname, 'housex-noxh-lead-route.workflow.json');

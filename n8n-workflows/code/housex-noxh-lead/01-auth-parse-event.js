@@ -1,5 +1,5 @@
 // Parse envelope từ HouseX EVENTS_WEBHOOK_URL: { type, payload, sentAt }
-// Hỗ trợ: lead.noxh_checked · lead.created · noxh_case.* · account.registered · ctv.application_submitted
+// Hỗ trợ: lead.noxh_checked · lead.created · lead.nurture · noxh_case.* · account.registered · ctv.application_submitted
 
 const SECRET = $env.EVENTS_WEBHOOK_SECRET || '';
 const headers = $input.first().json.headers || {};
@@ -200,6 +200,51 @@ if (type === 'noxh_case.ctv_nudge') {
       broker_id: String(p.brokerId || '').trim() || null,
       doc_type: p.docType ? String(p.docType) : null,
       nudge_message: String(p.message || '').slice(0, 500),
+    },
+  }];
+}
+
+if (type === 'lead.nurture') {
+  const p = body.payload || {};
+  const leadId = String(p.leadId || '').trim();
+  if (!leadId) throw new Error('Validation: payload.leadId is required');
+
+  const contact = p.contact || {};
+  const scriptId = String(p.nurtureScriptId || '').trim();
+  const trigger = String(p.trigger || 'on_create').trim();
+  const channel = String(p.channel || 'manual').trim();
+
+  const channelAction =
+    channel === 'zalo'
+      ? 'zalo_dm'
+      : channel === 'oa'
+        ? 'zalo_oa_cs'
+        : channel === 'telegram'
+          ? 'telegram_ops'
+          : 'ops_manual';
+
+  return [{
+    json: {
+      ok: true,
+      skipped: false,
+      event_path: 'nurture',
+      path: 'events',
+      lead_id: leadId,
+      nurture_script_id: scriptId,
+      script_label: String(p.scriptLabel || '').slice(0, 120),
+      script_description: String(p.scriptDescription || '').slice(0, 500),
+      channel,
+      channel_action: channelAction,
+      trigger,
+      segment: String(p.segment || '').toLowerCase(),
+      source: String(p.source || ''),
+      contact_name: String(contact.name || '').slice(0, 80),
+      contact_phone: String(contact.phone || '').slice(0, 20),
+      contact_email: String(contact.email || '').slice(0, 120),
+      ops_note: p.opsNote ? String(p.opsNote).slice(0, 500) : '',
+      ops_status: 'nurture_auto_queued',
+      created_at: now,
+      dedupe_key: `nurture:${leadId}:${trigger}:${scriptId}`,
     },
   }];
 }

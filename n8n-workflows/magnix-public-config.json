@@ -28,6 +28,7 @@
   "noxh_leads_ops_tab": "noxh_leads_ops",
   "noxh_leads_detail_tab": "noxh_leads_detail",
   "housex_leads_inquiry_tab": "housex_leads_inquiry",
+  "housex_leads_nurture_tab": "housex_leads_nurture",
   "housex_supply_ops_tab": "housex_supply_ops",
   "noxh_nurture_batch_size": 10,
   "noxh_nurture_min_age_hours": 24,

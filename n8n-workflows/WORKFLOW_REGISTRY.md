@@ -15,7 +15,7 @@
 | `content-page-publish` | `content-page-publish.workflow.json` | Cron 10/14/18h + Manual | L0 | Consume | — | **Page Publish:** `content_drafts` approved → Graph API feed | staging |
 | `content-page-cover` | `content-page-cover.workflow.json` | Cron 9:30 + Manual | L0 | — | — | **Page Cover:** Gemini image → Drive → `meta.publish_image_url` | staging |
 | `content-housex-article` | `content-housex-article.workflow.json` | Webhook POST + Manual | L0 + voice gate + L3 | **Consume** | ✅ | **HouseX PR:** webhook `/magnix/housex-article` → LLM PR → Sheet `housex_articles` | staging |
-| `housex-noxh-lead-route` | `housex-noxh-lead-route.workflow.json` | Webhook POST ×2 + Manual | L0 | — | ✅ | **HouseX Events Hub:** NOXH tool + form liên hệ + đăng ký khách/môi giới/CTV → Sheet + Telegram | staging |
+| `housex-noxh-lead-route` | `housex-noxh-lead-route.workflow.json` | Webhook POST ×2 + Manual | L0 | — | ✅ | **HouseX Events Hub:** NOXH tool + form + **lead.nurture** + đăng ký → Sheet + Telegram | staging |
 | `housex-noxh-nurture` | `housex-noxh-nurture.workflow.json` | Cron 9h + Manual | L0 | — | — | **HouseX NOXH:** COLD/OUT → email nurture (Resend) + meta `nurture_sent_at` | staging |
 | `content-video-render` | `content-video-render.workflow.json` | Cron 9:45 + Manual | L3 | L0 text | — | Agent 7: assembly/render package (1/batch) | staging v2 |
 | `telegram-notify` | `telegram-notify.workflow.json` | Webhook POST | L0 | Escalate | — | Central notify incl. `legal_source_needed` | staging |

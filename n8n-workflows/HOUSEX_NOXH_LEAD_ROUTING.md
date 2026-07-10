@@ -11,6 +11,7 @@ Hai luồng lead inbound:
 | **C — Đăng ký khách** | `/dang-ky/khach-hang` | `account.registered` (CUSTOMER) | Telegram ops |
 | **D — Đăng ký môi giới** | `/dang-ky/moi-gioi` | `account.registered` (BROKER) | Telegram ops — onboarding 24h |
 | **E — Đăng ký CTV** | `/moi-gioi/dang-ky-ctv` | `ctv.application_submitted` | Telegram CTV ops — duyệt 24h |
+| **F — Ops nurture auto** | `POST /api/leads` + Admin `CONTACTED` | `lead.nurture` | Telegram Ops queue (script + channel) |
 
 ---
 
@@ -74,6 +75,67 @@ Envelope `lead.created`:
 **Sheet tab:** `housex_leads_inquiry` — chạy `node scripts/init-magnix-sheet.mjs` nếu tab chưa có.
 
 **Cột mới (P3):** `segment` (sau `project_type`). Tab đã tồn tại: chèn cột D `segment` trên Google Sheet hoặc chạy lại init trên tab trống — append workflow ghi `A:R`.
+
+---
+
+## Luồng F — Ops nurture auto (`lead.nurture`)
+
+HouseX enqueue `lead.nurture` khi:
+- Lead Ops mới tạo (`trigger=on_create`) — script `zalo`/`oa`/`telegram` (bỏ qua `manual`)
+- Admin chuyển lead → `CONTACTED` (`trigger=status_contacted`)
+
+```mermaid
+flowchart LR
+  subgraph HouseX
+    L[POST /api/leads / PATCH ops-leads] --> OB[Outbox lead.nurture]
+  end
+  subgraph n8n
+    OB --> WH[Webhook housex-events]
+    WH --> NUR[(Sheet housex_leads_nurture)]
+    WH --> TG[Telegram Ops\nscript + channel hint]
+  end
+```
+
+Envelope `lead.nurture`:
+
+```json
+{
+  "type": "lead.nurture",
+  "payload": {
+    "leadId": "uuid",
+    "nurtureScriptId": "noxh-zalo-ads-checklist",
+    "scriptLabel": "NOXH — Checklist hồ sơ (Zalo Ads)",
+    "scriptDescription": "Gửi checklist điều kiện NOXH...",
+    "channel": "zalo",
+    "trigger": "on_create",
+    "segment": "noxh",
+    "source": "zalo_ads",
+    "contact": { "name": "...", "phone": "...", "email": null },
+    "channels": { "phone": "090..." },
+    "opsNote": null
+  },
+  "sentAt": "..."
+}
+```
+
+**Dedupe:** cột A `dedupe_key` = `nurture:{leadId}:{trigger}:{scriptId}` (trùng HouseX outbox).
+
+**Sheet tab:** `housex_leads_nurture` — tạo tab + header:
+
+```
+dedupe_key | lead_id | nurture_script_id | script_label | channel | trigger | segment | source |
+contact_name | contact_phone | contact_email | ops_note | ops_status | channel_action | script_description | created_at | meta
+```
+
+**Telegram env (n8n):**
+
+| Biến | Mục đích |
+|---|---|
+| `TELEGRAM_LEAD_NURTURE_ENABLED` | `true` (mặc định) — tắt khi test |
+| `TELEGRAM_CHAT_ID_NOXH_HOT` / `TELEGRAM_CHAT_ID_LEAD_NOXH` | `segment=noxh` |
+| `TELEGRAM_CHAT_ID_LEAD_COMMERCIAL` / `TELEGRAM_CHAT_ID_OPS` | `segment=cctm` / fallback |
+
+**Test manual:** n8n → Execute workflow → **Inject Manual Lead Nurture**.
 
 ---
 
