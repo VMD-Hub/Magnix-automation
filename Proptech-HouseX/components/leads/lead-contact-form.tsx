@@ -2,6 +2,7 @@
 
 import { useEffect, useId, useState } from "react";
 import { Button } from "@/components/ui/button";
+import { readStoredLeadUtm } from "@/lib/leads/client-utm";
 
 type Props = {
   listingId?: string;
@@ -61,13 +62,15 @@ export function LeadContactForm({
     setError(null);
     setLoading(true);
     try {
-      const body: Record<string, string | undefined> = {
+      const utm = readStoredLeadUtm();
+      const body: Record<string, string | undefined | object> = {
         name: name.trim(),
         phone: phone.trim(),
         email: email.trim() || undefined,
         message: message.trim() || undefined,
         listingId,
         projectId,
+        ...(utm ? { utm } : {}),
       };
 
       const res = await fetch("/api/leads", {

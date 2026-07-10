@@ -1,5 +1,16 @@
 import { z } from "zod";
 import { leadSegmentInputSchema } from "@/lib/rules/lead-segment";
+import { parseLeadUtmFromRecord } from "@/lib/leads/utm";
+
+const leadUtmSchema = z
+  .object({
+    utm_source: z.string().max(200).optional(),
+    utm_medium: z.string().max(200).optional(),
+    utm_campaign: z.string().max(200).optional(),
+    utm_content: z.string().max(200).optional(),
+    utm_term: z.string().max(200).optional(),
+  })
+  .optional();
 
 export const leadStatusEnum = z.enum([
   "NEW",
@@ -21,11 +32,37 @@ export const leadCreateSchema = z
     listingId: z.string().uuid().optional(),
     projectId: z.string().uuid().optional(),
     source: z.string().optional(),
+    /** UTM từ landing Zalo Ads / fanpage — object hoặc field phẳng utm_*. */
+    utm: leadUtmSchema,
+    utm_source: z.string().max(200).optional(),
+    utm_medium: z.string().max(200).optional(),
+    utm_campaign: z.string().max(200).optional(),
+    utm_content: z.string().max(200).optional(),
+    utm_term: z.string().max(200).optional(),
     /** Intent lane — Mini App gửi `noxh` | `cctm`; server suy ra từ project nếu thiếu. */
     segment: leadSegmentInputSchema.optional(),
   })
   .refine((d) => !!d.listingId || !!d.projectId, {
     message: "Lead cần gắn với ít nhất listingId hoặc projectId.",
+  })
+  .transform((d) => {
+    const utm =
+      parseLeadUtmFromRecord(d.utm ?? {}) ??
+      parseLeadUtmFromRecord({
+        utm_source: d.utm_source,
+        utm_medium: d.utm_medium,
+        utm_campaign: d.utm_campaign,
+        utm_content: d.utm_content,
+        utm_term: d.utm_term,
+      });
+    const { utm_source, utm_medium, utm_campaign, utm_content, utm_term, ...rest } =
+      d;
+    void utm_source;
+    void utm_medium;
+    void utm_campaign;
+    void utm_content;
+    void utm_term;
+    return { ...rest, utm };
   });
 
 export type LeadCreateInput = z.infer<typeof leadCreateSchema>;

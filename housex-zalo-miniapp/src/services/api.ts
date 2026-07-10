@@ -43,6 +43,7 @@ export async function apiFetch<T>(
 ): Promise<T> {
   const headers = new Headers(init.headers);
   headers.set("Accept", "application/json");
+  headers.set("X-HouseX-Channel", "miniapp");
   if (init.body && !headers.has("Content-Type")) {
     headers.set("Content-Type", "application/json");
   }

@@ -10,6 +10,7 @@ export async function buildLeadCreatedPayload(
   lead: {
     id: string;
     source: string;
+    sourceMeta?: unknown;
     segment?: import("@prisma/client").LeadSegment | null;
     message: string | null;
     assignedBrokerId: string | null;
@@ -38,6 +39,7 @@ export async function buildLeadCreatedPayload(
     return {
       leadId: lead.id,
       source: lead.source,
+      sourceMeta: (lead.sourceMeta as LeadCreatedPayload["sourceMeta"]) ?? null,
       segment: fromPrismaLeadSegment(lead.segment),
       message: lead.message,
       contact: {
@@ -85,6 +87,7 @@ export async function buildLeadCreatedPayload(
     return {
       leadId: lead.id,
       source: lead.source,
+      sourceMeta: (lead.sourceMeta as LeadCreatedPayload["sourceMeta"]) ?? null,
       segment: fromPrismaLeadSegment(lead.segment),
       message: lead.message,
       contact: {

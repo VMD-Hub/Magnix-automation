@@ -8,6 +8,7 @@ import {
   readInboundOpsMeta,
   type InboundOpsStatus,
 } from "@/lib/inbound/ops-meta";
+import { magnixInboundSource } from "@/lib/leads/source";
 
 const ingestSchema = z.object({
   uid: z.string().min(1),
@@ -139,7 +140,7 @@ export async function convertInboundUidToPlatformLead(
     const lead = await tx.lead.create({
       data: {
         projectId: opts?.projectId ?? undefined,
-        source: `magnix:${inbound.uidSource}`,
+        source: magnixInboundSource(inbound.uidSource),
         message,
         status: "NEW",
       },

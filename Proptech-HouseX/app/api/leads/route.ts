@@ -14,6 +14,12 @@ import {
   forwardLeadCreatedBestEffort,
 } from "@/lib/events/lead-inquiry";
 import { resolveLeadSegmentPrisma } from "@/lib/rules/lead-segment-resolve";
+import {
+  LEAD_CHANNEL_HEADER,
+  parseLeadChannelHeader,
+  resolveLeadSource,
+} from "@/lib/leads/source";
+import type { Prisma } from "@prisma/client";
 
 const LEAD_RATE_MAX = Number(process.env.LEAD_RATE_MAX ?? "20");
 const LEAD_RATE_WINDOW_SEC = Number(process.env.LEAD_RATE_WINDOW_SEC ?? "3600");
@@ -101,6 +107,17 @@ export async function POST(req: NextRequest) {
 
       const segment = await resolveLeadSegmentPrisma(tx, body);
 
+      const channel =
+        parseLeadChannelHeader(req.headers.get(LEAD_CHANNEL_HEADER)) ??
+        (body.source?.toLowerCase() === "zalo_miniapp" ? "miniapp" : "web");
+
+      const { source, sourceMeta } = resolveLeadSource({
+        bodySource: body.source,
+        utm: body.utm,
+        channel,
+        referralAssigned: !!attribution.assignedBrokerId,
+      });
+
       const created = await tx.lead.create({
         data: {
           customerId: customer.id,
@@ -108,7 +125,8 @@ export async function POST(req: NextRequest) {
           projectId: body.projectId,
           referralId: attribution.referralId,
           assignedBrokerId: attribution.assignedBrokerId,
-          source: attribution.assignedBrokerId ? "referral" : body.source ?? "organic",
+          source,
+          sourceMeta: sourceMeta as Prisma.InputJsonValue | undefined,
           segment,
           message: body.message,
         },

@@ -1,4 +1,5 @@
 import { apiFetch } from "./api";
+import { readStoredLeadUtm } from "@/services/lead-utm";
 
 export type ProjectCard = {
   id: string;
@@ -182,6 +183,8 @@ export async function createProjectLead(input: {
       ? crypto.randomUUID()
       : `mini-${Date.now()}-${input.phone}`;
 
+  const utm = readStoredLeadUtm();
+
   return apiFetch<{ id: string }>("/api/leads", {
     method: "POST",
     headers: { "Idempotency-Key": idem },
@@ -190,8 +193,8 @@ export async function createProjectLead(input: {
       phone: input.phone,
       projectId: input.projectId,
       message: input.message,
-      source: "zalo_miniapp",
       ...(input.segment ? { segment: input.segment } : {}),
+      ...(utm ? { utm } : {}),
     }),
   });
 }

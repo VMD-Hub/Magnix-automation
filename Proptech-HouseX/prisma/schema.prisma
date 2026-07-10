@@ -585,6 +585,7 @@ model Lead {
   referralId       String?    @map("referral_id")
   assignedBrokerId String?     @map("assigned_broker_id")
   source           String      @default("organic")
+  sourceMeta       Json?       @map("source_meta")
   segment          LeadSegment? @map("segment")
   message          String?     @db.Text
   status           LeadStatus @default(NEW)

@@ -6,6 +6,7 @@ import { SiteFooter } from "@/components/layout/site-footer";
 import { EmailVerificationBanner } from "@/components/layout/header-auth";
 import { ThemeScript } from "@/components/theme/theme-script";
 import { ThemeShell } from "@/components/theme/theme-shell";
+import { UtmCapture } from "@/components/leads/utm-capture";
 import { getSiteUrl } from "@/lib/site-config";
 import { buildOrganizationJsonLd } from "@/lib/seo/organization-json-ld";
 import {
@@ -60,6 +61,7 @@ export default function RootLayout({
           }}
         />
         <ThemeScript />
+        <UtmCapture />
         <ThemeShell>
           <SiteHeader />
           <EmailVerificationBanner />

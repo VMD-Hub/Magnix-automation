@@ -1,7 +1,7 @@
 # House X — NOXH Case Pipeline (DNA Ops)
 
 > **Store of record:** Postgres (`noxh_cases`, `case_documents`, …) — ADR-013.  
-> **Liên quan:** [DNA_COMPLETION.md](DNA_COMPLETION.md) · [OPS_BACKUP_MIRROR.md](OPS_BACKUP_MIRROR.md) · `lib/noxh-case/`
+> **Liên quan:** [DNA_COMPLETION.md](DNA_COMPLETION.md) · [OPS_BACKUP_MIRROR.md](OPS_BACKUP_MIRROR.md) · [LEAD_ATTRIBUTION_CONFLICT_RULES.md](LEAD_ATTRIBUTION_CONFLICT_RULES.md) · `lib/noxh-case/`
 
 ---
 

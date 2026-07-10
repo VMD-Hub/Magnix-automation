@@ -9,6 +9,10 @@ import {
   segmentForLane,
 } from "@/services/lane";
 import { listProjects } from "@/services/projects";
+import {
+  captureLeadUtmFromLocation,
+  readStoredLeadUtm,
+} from "@/services/lead-utm";
 
 /**
  * Form tư vấn nhanh — lọc dự án theo lane đang nhớ, gửi segment cho CRM.
@@ -30,6 +34,10 @@ export function ConsultPage() {
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);
   const [ok, setOk] = useState<string | null>(null);
+
+  useEffect(() => {
+    captureLeadUtmFromLocation();
+  }, []);
 
   useEffect(() => {
     void listProjects({
@@ -56,6 +64,7 @@ export function ConsultPage() {
         typeof crypto !== "undefined" && "randomUUID" in crypto
           ? crypto.randomUUID()
           : `consult-${Date.now()}`;
+      const utm = readStoredLeadUtm();
       await apiFetch("/api/leads", {
         method: "POST",
         headers: { "Idempotency-Key": idem },
@@ -64,8 +73,8 @@ export function ConsultPage() {
           phone: phone.trim(),
           projectId,
           message: message.trim(),
-          source: "zalo_miniapp",
           segment: segmentForLane(lane),
+          ...(utm ? { utm } : {}),
         }),
       });
       setOk("Đã gửi. Chúng tôi sẽ liên hệ sớm.");

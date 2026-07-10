@@ -49,6 +49,17 @@ export interface OutboxPayloads {
   "lead.created": {
     leadId: string;
     source: string;
+    sourceMeta?: {
+      utm?: {
+        utm_source?: string;
+        utm_medium?: string;
+        utm_campaign?: string;
+        utm_content?: string;
+        utm_term?: string;
+      };
+      rawSource?: string;
+      channel?: "web" | "miniapp" | "api";
+    } | null;
     /** Intent lane — `noxh` | `cctm` (null nếu lead cũ / không suy được). */
     segment: "noxh" | "cctm" | null;
     message: string | null;
