@@ -30,6 +30,13 @@ export const metadata: Metadata = {
     template: "%s | House X",
   },
   description: SEO_DESCRIPTION_DEFAULT,
+  icons: {
+    icon: [
+      { url: "/favicon.ico", sizes: "48x48" },
+      { url: "/icon.png", type: "image/png", sizes: "512x512" },
+    ],
+    apple: [{ url: "/apple-icon.png", sizes: "180x180", type: "image/png" }],
+  },
 };
 
 export default function RootLayout({

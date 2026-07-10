@@ -30,6 +30,8 @@ const OUT = {
   oaAvatar: "public/brand/housex-oa-avatar.png",
   faviconPng: "app/icon.png",
   appleIcon: "app/apple-icon.png",
+  faviconIco: "app/favicon.ico",
+  faviconPublic: "public/favicon.ico",
 } as const;
 
 function colorDist(
@@ -215,8 +217,13 @@ async function main() {
   });
 
   const oa = await saveSolidBgSquare(MARK_SRC, OUT.oaAvatar, 1024);
-  const favicon = await saveFaviconFromMark(MARK_SRC);
-  const apple = await saveSolidBgSquare(MARK_SRC, OUT.appleIcon, 180);
+
+  // icon.png, apple-icon.png, favicon.ico — đồng bộ từ OA mark
+  const { execSync } = await import("node:child_process");
+  execSync("node --import tsx scripts/sync-favicon.ts", {
+    cwd: process.cwd(),
+    stdio: "inherit",
+  });
 
   console.log(
     JSON.stringify(
@@ -224,8 +231,6 @@ async function main() {
         lockup,
         markOnly,
         oa,
-        favicon,
-        apple,
         note: "Update HOUSEX_*_WIDTH/HEIGHT in lib/brand/housex-logo-assets.ts from lockup dims",
       },
       null,

@@ -35,6 +35,8 @@ test("housex brand: favicon PNG + OA avatar từ mark-only đã duyệt", () => 
   assert.equal(HOUSEX_FOOTER_TAGLINE, "Smart Tools · Trusted Utility");
   assert.ok(existsSync(join(process.cwd(), "app/icon.png")));
   assert.ok(existsSync(join(process.cwd(), "app/apple-icon.png")));
+  assert.ok(existsSync(join(process.cwd(), "app/favicon.ico")));
+  assert.ok(existsSync(join(process.cwd(), "public/favicon.ico")));
   assert.ok(
     existsSync(join(process.cwd(), "public", HOUSEX_OA_AVATAR_SRC.replace(/^\//, ""))),
   );
