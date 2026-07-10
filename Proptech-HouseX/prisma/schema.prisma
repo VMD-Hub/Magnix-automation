@@ -1000,6 +1000,7 @@ model NoxhCase {
   caseStatus        NoxhCaseStatus @default(ACTIVE) @map("case_status")
   opsNote           String?        @db.Text @map("ops_note")
   attributionLockedAt DateTime?    @map("attribution_locked_at")
+  consultScheduledAt  DateTime?    @map("consult_scheduled_at")
   lockExpiresAt     DateTime?      @map("lock_expires_at")
   claimedAt         DateTime       @default(now()) @map("claimed_at")
   firstContactedAt  DateTime?      @map("first_contacted_at")

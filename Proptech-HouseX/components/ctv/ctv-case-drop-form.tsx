@@ -3,10 +3,19 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 
+function defaultConsultLocal(): string {
+  const d = new Date();
+  d.setDate(d.getDate() + 1);
+  d.setHours(10, 0, 0, 0);
+  const pad = (n: number) => String(n).padStart(2, "0");
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+}
+
 export function CtvCaseDropForm({ onCreated }: { onCreated?: () => void }) {
   const [customerName, setCustomerName] = useState("");
   const [phone, setPhone] = useState("");
   const [message, setMessage] = useState("");
+  const [consultAt, setConsultAt] = useState(defaultConsultLocal);
   const [intendToBorrow, setIntendToBorrow] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -25,6 +34,7 @@ export function CtvCaseDropForm({ onCreated }: { onCreated?: () => void }) {
           phone,
           message: message || undefined,
           intendToBorrow,
+          consultScheduledAt: consultAt,
         }),
       });
       const json = await res.json().catch(() => ({}));
@@ -86,6 +96,16 @@ export function CtvCaseDropForm({ onCreated }: { onCreated?: () => void }) {
             onChange={(e) => setPhone(e.target.value)}
             className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm"
             placeholder="0901234567"
+          />
+        </label>
+        <label className="block text-sm font-medium text-slate-700">
+          Lịch tư vấn dự kiến *
+          <input
+            required
+            type="datetime-local"
+            value={consultAt}
+            onChange={(e) => setConsultAt(e.target.value)}
+            className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm"
           />
         </label>
         <label className="block text-sm font-medium text-slate-700">

@@ -20,6 +20,12 @@ export const ctvClaimSchema = z.object({
   objectGroup: z.enum(NOXH_OBJECT_GROUP_VALUES).optional().default("WORKER"),
   intendToBorrow: z.boolean().optional().default(false),
   message: z.string().trim().max(500).optional(),
+  /** Lịch tư vấn — bắt buộc khi claim (CRM-R3). ISO hoặc datetime-local. */
+  consultScheduledAt: z.string().trim().min(10).max(40),
+});
+
+export const consultScheduleSchema = z.object({
+  consultScheduledAt: z.string().trim().min(10).max(40),
 });
 
 export const assistLogSchema = z.object({

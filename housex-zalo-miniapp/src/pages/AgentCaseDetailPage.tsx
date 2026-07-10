@@ -2,10 +2,19 @@ import { useEffect, useState } from "react";
 import { Link, Navigate, useParams } from "react-router-dom";
 import { useAuth } from "@/auth-context";
 import {
+  addCtvCaseNote,
   getCtvCase,
   nudgeCtvCase,
+  updateCtvCaseSchedule,
   type CtvCaseDetail,
 } from "@/services/agent";
+
+function toLocalInputValue(iso: string | null): string {
+  if (!iso) return "";
+  const d = new Date(iso);
+  const pad = (n: number) => String(n).padStart(2, "0");
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+}
 
 export function AgentCaseDetailPage() {
   const { id = "" } = useParams();
@@ -15,6 +24,9 @@ export function AgentCaseDetailPage() {
   const [err, setErr] = useState<string | null>(null);
   const [nudgeMsg, setNudgeMsg] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const [consultAt, setConsultAt] = useState("");
+  const [progressNote, setProgressNote] = useState("");
+  const [actionMsg, setActionMsg] = useState<string | null>(null);
 
   useEffect(() => {
     if (!canAgent || !id) return;
@@ -24,7 +36,10 @@ export function AgentCaseDetailPage() {
       setErr(null);
       try {
         const d = await getCtvCase(id);
-        if (alive) setRow(d);
+        if (alive) {
+          setRow(d);
+          setConsultAt(toLocalInputValue(d.consultScheduledAt));
+        }
       } catch (e) {
         if (alive) setErr(e instanceof Error ? e.message : "Lỗi tải hồ sơ");
       } finally {
@@ -35,6 +50,38 @@ export function AgentCaseDetailPage() {
       alive = false;
     };
   }, [canAgent, id]);
+
+  async function onSaveSchedule() {
+    if (!row || !consultAt) return;
+    setBusy(true);
+    setActionMsg(null);
+    try {
+      const d = await updateCtvCaseSchedule(row.id, consultAt);
+      setRow(d);
+      setActionMsg("Đã cập nhật lịch tư vấn.");
+    } catch (e) {
+      setActionMsg(e instanceof Error ? e.message : "Không lưu được lịch");
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function onSaveProgress() {
+    if (!row || progressNote.trim().length < 3) return;
+    setBusy(true);
+    setActionMsg(null);
+    try {
+      await addCtvCaseNote(row.id, progressNote.trim());
+      const d = await getCtvCase(row.id);
+      setRow(d);
+      setProgressNote("");
+      setActionMsg("Đã ghi tiến độ — lock có thể được gia hạn nếu đủ điều kiện.");
+    } catch (e) {
+      setActionMsg(e instanceof Error ? e.message : "Không ghi được tiến độ");
+    } finally {
+      setBusy(false);
+    }
+  }
 
   async function onNudge() {
     if (!row) return;
@@ -86,11 +133,66 @@ export function AgentCaseDetailPage() {
         <p className="muted" style={{ marginTop: 6 }}>
           Hồ sơ giấy tờ: {row.docPassed}/{row.docRequired} ({row.docPercent}%)
         </p>
+        {row.lockCompliance?.businessDaysUntilLockExpiry != null ? (
+          <p className="muted" style={{ marginTop: 6 }}>
+            Còn {row.lockCompliance.businessDaysUntilLockExpiry} ngày làm việc
+            giữ lead
+          </p>
+        ) : null}
+        {row.lockCompliance?.needsProgressWarning ? (
+          <p className="err" style={{ marginTop: 8 }}>
+            Cần ghi tiến độ tư vấn trong 7 ngày LV để giữ lock.
+          </p>
+        ) : null}
+        {row.lockCompliance?.needsScheduleWarning ? (
+          <p className="err" style={{ marginTop: 8 }}>
+            Chưa có lịch tư vấn — hãy đặt lịch bên dưới.
+          </p>
+        ) : null}
         {row.opsNote ? (
           <p className="muted" style={{ marginTop: 8 }}>
             Ops: {row.opsNote}
           </p>
         ) : null}
+      </div>
+
+      <div className="card">
+        <h2>Lịch tư vấn</h2>
+        <input
+          className="input"
+          type="datetime-local"
+          value={consultAt}
+          onChange={(e) => setConsultAt(e.target.value)}
+        />
+        <button
+          className="btn secondary"
+          type="button"
+          style={{ marginTop: 8 }}
+          disabled={busy || !consultAt}
+          onClick={onSaveSchedule}
+        >
+          Lưu lịch
+        </button>
+      </div>
+
+      <div className="card">
+        <h2>Ghi tiến độ</h2>
+        <textarea
+          className="input textarea"
+          rows={3}
+          placeholder="Đã gọi khách, hẹn gặp…"
+          value={progressNote}
+          onChange={(e) => setProgressNote(e.target.value)}
+        />
+        <button
+          className="btn secondary"
+          type="button"
+          style={{ marginTop: 8 }}
+          disabled={busy || progressNote.trim().length < 3}
+          onClick={onSaveProgress}
+        >
+          Lưu tiến độ
+        </button>
       </div>
 
       {row.missingDocs?.length ? (
@@ -114,6 +216,7 @@ export function AgentCaseDetailPage() {
         {busy ? "Đang gửi…" : "Nhắc khách (qua House X)"}
       </button>
       {nudgeMsg ? <p className="ok">{nudgeMsg}</p> : null}
+      {actionMsg ? <p className="ok">{actionMsg}</p> : null}
 
       {row.assistLogs?.length ? (
         <div className="card" style={{ marginTop: 12 }}>

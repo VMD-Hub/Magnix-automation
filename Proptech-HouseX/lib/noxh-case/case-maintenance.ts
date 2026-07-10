@@ -1,6 +1,10 @@
 import type { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { subtractBusinessDays } from "@/lib/noxh-case/business-days";
+import {
+  CTV_LOCK_WARNING_BUSINESS_DAYS,
+  evaluateCtvLockCompliance,
+} from "@/lib/noxh-case/ctv-lock-compliance";
 import { createBrokerNotification } from "@/lib/data/broker-notification";
 import { MILESTONE_LABEL } from "@/lib/noxh-case/milestone-labels";
 
@@ -16,6 +20,7 @@ const M1_CONTACT_SLA_BUSINESS_HOURS = 48;
 export async function runNoxhCaseMaintenance(now = new Date()) {
   let released = 0;
   let slaAlerts = 0;
+  let lockWarnings = 0;
 
   const expiredLocks = await prisma.noxhCase.findMany({
     where: {
@@ -78,7 +83,70 @@ export async function runNoxhCaseMaintenance(now = new Date()) {
     slaAlerts += 1;
   }
 
-  return { released, slaAlerts };
+  const lockRisk = await prisma.noxhCase.findMany({
+    where: {
+      caseStatus: "ACTIVE",
+      brokerId: { not: null },
+      attributionLockedAt: null,
+      lockExpiresAt: { gt: now },
+    },
+    select: {
+      id: true,
+      code: true,
+      brokerId: true,
+      consultScheduledAt: true,
+      lockExpiresAt: true,
+      attributionLockedAt: true,
+      caseStatus: true,
+      assistLogs: { orderBy: { createdAt: "desc" }, take: 10 },
+    },
+    take: 80,
+  });
+
+  for (const c of lockRisk) {
+    if (!c.brokerId || !c.lockExpiresAt) continue;
+    const compliance = evaluateCtvLockCompliance({
+      consultScheduledAt: c.consultScheduledAt,
+      lockExpiresAt: c.lockExpiresAt,
+      attributionLockedAt: c.attributionLockedAt,
+      caseStatus: c.caseStatus,
+      assistLogs: c.assistLogs,
+      now,
+    });
+    if (
+      !compliance.needsProgressWarning &&
+      !(compliance.needsScheduleWarning &&
+        compliance.businessDaysUntilLockExpiry !== null &&
+        compliance.businessDaysUntilLockExpiry <= CTV_LOCK_WARNING_BUSINESS_DAYS)
+    ) {
+      continue;
+    }
+
+    const exists = await prisma.brokerNotification.findFirst({
+      where: {
+        brokerId: c.brokerId,
+        caseId: c.id,
+        type: "case.lock_expiring",
+        createdAt: { gte: subtractBusinessDays(now, 1) },
+      },
+    });
+    if (exists) continue;
+
+    const body = compliance.needsScheduleWarning
+      ? `Hồ sơ ${c.code}: chưa có lịch tư vấn — còn ${compliance.businessDaysUntilLockExpiry} ngày LV trước khi hết lock.`
+      : `Hồ sơ ${c.code}: cần ghi tiến độ tư vấn — còn ${compliance.businessDaysUntilLockExpiry} ngày LV.`;
+
+    await createBrokerNotification(prisma, {
+      brokerId: c.brokerId,
+      type: "case.lock_expiring",
+      title: "Sắp hết thời gian giữ lead",
+      body,
+      caseId: c.id,
+    });
+    lockWarnings += 1;
+  }
+
+  return { released, slaAlerts, lockWarnings };
 }
 
 /** Tạo notification khi đổi milestone (gọi từ noxh-case update). */

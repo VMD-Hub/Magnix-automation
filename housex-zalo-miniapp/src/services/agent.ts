@@ -17,6 +17,15 @@ export type CtvCaseListItem = {
   docRequired: number;
   opsNote: string | null;
   attributionLocked: boolean;
+  consultScheduledAt: string | null;
+  lockExpiresAt: string | null;
+  lockCompliance: {
+    businessDaysUntilLockExpiry: number | null;
+    hasRecentProgress: boolean;
+    needsProgressWarning: boolean;
+    needsScheduleWarning: boolean;
+    canExtendLock: boolean;
+  };
   updatedAt: string;
 };
 
@@ -85,6 +94,7 @@ export async function claimCtvCase(input: {
   phone: string;
   message?: string;
   intendToBorrow?: boolean;
+  consultScheduledAt: string;
 }): Promise<CtvCaseDetail> {
   return apiFetch<CtvCaseDetail>("/api/ctv/cases", {
     method: "POST",
@@ -93,7 +103,31 @@ export async function claimCtvCase(input: {
       phone: input.phone,
       message: input.message,
       intendToBorrow: input.intendToBorrow ?? false,
+      consultScheduledAt: input.consultScheduledAt,
     }),
+  });
+}
+
+export async function updateCtvCaseSchedule(
+  caseId: string,
+  consultScheduledAt: string,
+): Promise<CtvCaseDetail> {
+  return apiFetch<CtvCaseDetail>(
+    `/api/ctv/cases/${encodeURIComponent(caseId)}/schedule`,
+    {
+      method: "PATCH",
+      body: JSON.stringify({ consultScheduledAt }),
+    },
+  );
+}
+
+export async function addCtvCaseNote(
+  caseId: string,
+  message: string,
+): Promise<{ id: string }> {
+  return apiFetch(`/api/ctv/cases/${encodeURIComponent(caseId)}/assist`, {
+    method: "POST",
+    body: JSON.stringify({ assistType: "NOTE", message }),
   });
 }
 

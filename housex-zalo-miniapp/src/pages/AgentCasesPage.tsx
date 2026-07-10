@@ -8,6 +8,14 @@ import {
   type CtvCaseListItem,
 } from "@/services/agent";
 
+function defaultConsultLocal(): string {
+  const d = new Date();
+  d.setDate(d.getDate() + 1);
+  d.setHours(10, 0, 0, 0);
+  const pad = (n: number) => String(n).padStart(2, "0");
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+}
+
 export function AgentCasesPage() {
   const { canAgent, loading: authLoading } = useAuth();
   const [items, setItems] = useState<CtvCaseListItem[]>([]);
@@ -17,6 +25,7 @@ export function AgentCasesPage() {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [message, setMessage] = useState("");
+  const [consultAt, setConsultAt] = useState(defaultConsultLocal);
   const [busy, setBusy] = useState(false);
   const [claimErr, setClaimErr] = useState<string | null>(null);
   const [claimUnlocked, setClaimUnlocked] = useState<boolean | null>(null);
@@ -52,6 +61,7 @@ export function AgentCasesPage() {
         customerName: name.trim(),
         phone: phone.trim(),
         message: message.trim() || undefined,
+        consultScheduledAt: consultAt,
       });
       setShowClaim(false);
       setName("");
@@ -132,6 +142,14 @@ export function AgentCasesPage() {
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             rows={2}
+            disabled={claimUnlocked === false}
+          />
+          <input
+            className="input"
+            type="datetime-local"
+            value={consultAt}
+            onChange={(e) => setConsultAt(e.target.value)}
+            required
             disabled={claimUnlocked === false}
           />
           {claimErr ? <p className="err">{claimErr}</p> : null}

@@ -18,6 +18,10 @@ import {
   type ClaimRejectReason,
 } from "@/lib/noxh-case/attribution-claim";
 import { queueConflictFromCtvClaim } from "@/lib/attribution/conflict";
+import {
+  computeExtendedLockExpiry,
+  evaluateCtvLockCompliance,
+} from "@/lib/noxh-case/ctv-lock-compliance";
 import { accrueNoxhCommissionOnSigned } from "@/lib/noxh-case/commission-accrual";
 import { notifyBrokerMilestoneChange } from "@/lib/noxh-case/case-maintenance";
 
@@ -41,6 +45,16 @@ export class CtvClaimError extends Error {
   ) {
     super(message);
     this.name = "CtvClaimError";
+  }
+}
+
+export class CtvScheduleError extends Error {
+  constructor(
+    public code: "INVALID_CONSULT_SCHEDULE" | "CONSULT_SCHEDULE_PAST",
+    message: string,
+  ) {
+    super(message);
+    this.name = "CtvScheduleError";
   }
 }
 
@@ -262,6 +276,7 @@ export async function createCtvClaim(params: {
   objectGroup?: NoxhObjectGroupId;
   intendToBorrow?: boolean;
   message?: string;
+  consultScheduledAt: Date;
 }) {
   const normalizedPhone = normalizeVnPhone(params.phone);
   const brokerNormalizedPhone = normalizeVnPhone(params.brokerPhone);
@@ -320,6 +335,7 @@ export async function createCtvClaim(params: {
         objectGroup,
         intendToBorrow,
         lockExpiresAt,
+        consultScheduledAt: params.consultScheduledAt,
         milestone: "M1_RECEIVED",
         milestoneSub: "M1_SCHEDULED",
       },
@@ -606,8 +622,80 @@ export async function createCaseAssistLog(params: {
   assistType: "NUDGE" | "ESCORT" | "NOTE";
   message: string;
 }) {
-  return prisma.caseAssistLog.create({
-    data: params,
+  return prisma.$transaction(async (tx) => {
+    const log = await tx.caseAssistLog.create({ data: params });
+
+    await maybeExtendCtvLockOnProgress(tx, params.caseId);
+
+    return log;
+  });
+}
+
+async function maybeExtendCtvLockOnProgress(
+  tx: Prisma.TransactionClient,
+  caseId: string,
+) {
+  const caseRow = await tx.noxhCase.findUnique({
+    where: { id: caseId },
+    include: {
+      assistLogs: { orderBy: { createdAt: "desc" }, take: 20 },
+    },
+  });
+  if (!caseRow?.brokerId || !caseRow.lockExpiresAt) return;
+
+  const compliance = evaluateCtvLockCompliance({
+    consultScheduledAt: caseRow.consultScheduledAt,
+    lockExpiresAt: caseRow.lockExpiresAt,
+    attributionLockedAt: caseRow.attributionLockedAt,
+    caseStatus: caseRow.caseStatus,
+    assistLogs: caseRow.assistLogs,
+  });
+
+  if (!compliance.canExtendLock) return;
+
+  const nextExpiry = computeExtendedLockExpiry(caseRow.lockExpiresAt);
+  if (nextExpiry <= caseRow.lockExpiresAt) return;
+
+  const customer = await tx.customer.findUnique({
+    where: { normalizedPhone: caseRow.normalizedPhone },
+    select: { id: true },
+  });
+
+  await tx.noxhCase.update({
+    where: { id: caseId },
+    data: { lockExpiresAt: nextExpiry },
+  });
+
+  if (customer) {
+    await tx.attributionLock.updateMany({
+      where: { customerId: customer.id },
+      data: { expiresAt: nextExpiry },
+    });
+
+    await tx.attributionEvent.create({
+      data: {
+        customerId: customer.id,
+        toBroker: caseRow.brokerId,
+        reason: "lock_extended",
+      },
+    });
+  }
+}
+
+export async function updateCtvConsultSchedule(
+  caseId: string,
+  brokerId: string,
+  consultScheduledAt: Date,
+) {
+  const row = await prisma.noxhCase.findFirst({
+    where: { id: caseId, brokerId, caseStatus: "ACTIVE" },
+  });
+  if (!row) return null;
+
+  return prisma.noxhCase.update({
+    where: { id: caseId },
+    data: { consultScheduledAt },
+    include: caseInclude,
   });
 }
 

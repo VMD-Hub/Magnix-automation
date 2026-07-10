@@ -5,8 +5,10 @@ import { requireBrokerSessionFromRequest } from "@/lib/auth/require-broker";
 import {
   createCtvClaim,
   CtvClaimError,
+  CtvScheduleError,
   listNoxhCasesForBroker,
 } from "@/lib/data/noxh-case";
+import { parseConsultScheduleInput } from "@/lib/noxh-case/ctv-lock-compliance";
 import { serializeCaseListItemForCtv } from "@/lib/noxh-case/serialize-ctv";
 import { ctvClaimSchema } from "@/lib/validation/noxh-case";
 import { isValidVnPhone, normalizeVnPhone } from "@/lib/phone";
@@ -92,6 +94,7 @@ export async function POST(req: NextRequest) {
       objectGroup: body.objectGroup,
       intendToBorrow: body.intendToBorrow,
       message: body.message,
+      consultScheduledAt: parseConsultScheduleInput(body.consultScheduledAt),
     });
 
     const { serializeCaseForCtv } = await import("@/lib/noxh-case/serialize-ctv");
@@ -99,6 +102,21 @@ export async function POST(req: NextRequest) {
   } catch (err) {
     if (err instanceof CtvClaimError) {
       return applyApiCors(fail(409, err.code, err.message), req);
+    }
+    if (err instanceof CtvScheduleError) {
+      return applyApiCors(fail(422, err.code, err.message), req);
+    }
+    if (err instanceof Error && err.message === "CONSULT_SCHEDULE_PAST") {
+      return applyApiCors(
+        fail(422, "CONSULT_SCHEDULE_PAST", "Lịch tư vấn phải ở tương lai."),
+        req,
+      );
+    }
+    if (err instanceof Error && err.message === "INVALID_CONSULT_SCHEDULE") {
+      return applyApiCors(
+        fail(422, "INVALID_CONSULT_SCHEDULE", "Lịch tư vấn không hợp lệ."),
+        req,
+      );
     }
     return applyApiCors(handleApiError(err), req);
   }

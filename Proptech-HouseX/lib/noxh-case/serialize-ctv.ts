@@ -4,6 +4,7 @@ import {
   DOC_STATUS_LABEL,
   countDocProgress,
 } from "@/lib/noxh-case/doc-catalog";
+import { evaluateCtvLockCompliance } from "@/lib/noxh-case/ctv-lock-compliance";
 import {
   MILESTONE_LABEL,
   milestoneProgressLabel,
@@ -38,6 +39,15 @@ export type CtvCaseListItem = {
   docRequired: number;
   opsNote: string | null;
   attributionLocked: boolean;
+  consultScheduledAt: string | null;
+  lockExpiresAt: string | null;
+  lockCompliance: {
+    businessDaysUntilLockExpiry: number | null;
+    hasRecentProgress: boolean;
+    needsProgressWarning: boolean;
+    needsScheduleWarning: boolean;
+    canExtendLock: boolean;
+  };
   updatedAt: string;
 };
 
@@ -62,6 +72,8 @@ type CaseWithDocs = {
   caseStatus: string;
   opsNote: string | null;
   attributionLockedAt: Date | null;
+  consultScheduledAt: Date | null;
+  lockExpiresAt: Date | null;
   updatedAt: Date;
   project: { name: string } | null;
   documents: {
@@ -116,6 +128,14 @@ export function serializeCaseForCtv(caseRow: CaseWithDocs): CtvCaseDetail {
     (d) => d.status === "MISSING" || d.status === "REJECTED",
   );
 
+  const compliance = evaluateCtvLockCompliance({
+    consultScheduledAt: caseRow.consultScheduledAt,
+    lockExpiresAt: caseRow.lockExpiresAt,
+    attributionLockedAt: caseRow.attributionLockedAt,
+    caseStatus: caseRow.caseStatus,
+    assistLogs: caseRow.assistLogs ?? [],
+  });
+
   return {
     id: caseRow.id,
     code: caseRow.code,
@@ -132,6 +152,15 @@ export function serializeCaseForCtv(caseRow: CaseWithDocs): CtvCaseDetail {
     docRequired: progress.required,
     opsNote: caseRow.opsNote,
     attributionLocked: !!caseRow.attributionLockedAt,
+    consultScheduledAt: caseRow.consultScheduledAt?.toISOString() ?? null,
+    lockExpiresAt: caseRow.lockExpiresAt?.toISOString() ?? null,
+    lockCompliance: {
+      businessDaysUntilLockExpiry: compliance.businessDaysUntilLockExpiry,
+      hasRecentProgress: compliance.hasRecentProgress,
+      needsProgressWarning: compliance.needsProgressWarning,
+      needsScheduleWarning: compliance.needsScheduleWarning,
+      canExtendLock: compliance.canExtendLock,
+    },
     updatedAt: caseRow.updatedAt.toISOString(),
     documents: docs,
     missingDocs,
