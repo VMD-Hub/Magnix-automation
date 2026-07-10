@@ -1,5 +1,6 @@
 "use client";
 
+import type { ReactNode } from "react";
 import { cn } from "@/lib/ui/cn";
 import {
   fmtVndFull,
@@ -266,7 +267,7 @@ function Section({
 }: {
   title: string;
   titleEn: string;
-  children: React.ReactNode;
+  children: ReactNode;
 }) {
   return (
     <div className="rounded-lg border border-slate-200 bg-white p-3">
@@ -287,7 +288,7 @@ function FactRow({
 }: {
   label: string;
   en: string;
-  value: React.ReactNode;
+  value: ReactNode;
   highlight?: boolean;
 }) {
   return (

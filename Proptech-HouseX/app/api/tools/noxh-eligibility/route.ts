@@ -1,4 +1,5 @@
 import { NextRequest } from "next/server";
+import type { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { created, fail, handleApiError } from "@/lib/api/http";
 import { noxhLeadSchema } from "@/lib/validation/noxh-lead";
@@ -136,7 +137,7 @@ export async function POST(req: NextRequest) {
             segment: "NOXH",
             source: "tool:noxh-check",
             wizardSnapshot,
-          }),
+          }) as Prisma.InputJsonValue,
         },
       });
 
