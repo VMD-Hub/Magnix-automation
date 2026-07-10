@@ -1,0 +1,53 @@
+/** Vai trò console vận hành nền tảng House X (không phải admin group Zalo). */
+export type AdminRole = "super" | "ops";
+
+export const ADMIN_ROLE_LABEL: Record<AdminRole, string> = {
+  super: "Chủ quản",
+  ops: "Ops",
+};
+
+/** Trang chỉ dành cho Ops — pipeline lead / conflict / NOXH. */
+export const OPS_ADMIN_PAGE_PREFIXES = [
+  "/admin/ops-leads",
+  "/admin/conflicts",
+  "/admin/inbound-leads",
+  "/admin/noxh-cases",
+] as const;
+
+/** API Ops được phép (ngoài /api/admin/session). */
+export const OPS_ADMIN_API_PREFIXES = [
+  "/api/admin/queue-counts",
+  "/api/admin/ops-leads",
+  "/api/admin/conflicts",
+  "/api/admin/inbound-leads",
+  "/api/admin/noxh-cases",
+] as const;
+
+export function isOpsAdminPage(pathname: string): boolean {
+  return OPS_ADMIN_PAGE_PREFIXES.some(
+    (p) => pathname === p || pathname.startsWith(`${p}/`),
+  );
+}
+
+export function isOpsAdminApi(pathname: string): boolean {
+  if (pathname === "/api/admin/session") return true;
+  return OPS_ADMIN_API_PREFIXES.some(
+    (p) => pathname === p || pathname.startsWith(`${p}/`),
+  );
+}
+
+export function isSuperAdminOnlyPage(pathname: string): boolean {
+  if (!pathname.startsWith("/admin")) return false;
+  if (pathname === "/admin/login") return false;
+  if (pathname === "/admin") return true;
+  return !isOpsAdminPage(pathname);
+}
+
+export function isSuperAdminOnlyApi(pathname: string): boolean {
+  if (!pathname.startsWith("/api/admin")) return false;
+  return !isOpsAdminApi(pathname);
+}
+
+export function defaultAdminHome(role: AdminRole): string {
+  return role === "ops" ? "/admin/ops-leads" : "/admin/ctv";
+}

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
+import { defaultAdminHome } from "@/lib/admin/roles";
 import { getAdminSessionFromCookies } from "@/lib/admin/session";
 import { AdminLoginForm } from "@/components/admin/admin-login-form";
 
@@ -9,9 +10,9 @@ export const metadata: Metadata = {
 };
 
 export default async function AdminLoginPage() {
-  const authenticated = await getAdminSessionFromCookies();
-  if (authenticated) {
-    redirect("/admin/ctv");
+  const session = await getAdminSessionFromCookies();
+  if (session) {
+    redirect(defaultAdminHome(session.role));
   }
 
   return (
@@ -20,7 +21,7 @@ export default async function AdminLoginPage() {
         <h1 className="text-2xl font-bold text-slate-900">
           House<span className="text-brand-600">X</span> Admin
         </h1>
-        <p className="mt-1 text-sm text-slate-500">Duyệt đơn CTV — Lớp 3</p>
+        <p className="mt-1 text-sm text-slate-500">Console vận hành nền tảng House X</p>
       </div>
       <AdminLoginForm />
     </div>

@@ -1,7 +1,25 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { buildCampaignLaneRedirectUrl } from "@/lib/miniapp/campaign-lane-host";
+import {
+  defaultAdminHome,
+  isSuperAdminOnlyApi,
+  isSuperAdminOnlyPage,
+} from "@/lib/admin/roles";
+import { getAdminSessionFromRequest } from "@/lib/admin/session";
 import { isBlockedScraperUserAgent } from "@/lib/security/scrape-guard";
+
+function adminForbiddenApi() {
+  return NextResponse.json(
+    {
+      error: {
+        code: "FORBIDDEN",
+        message: "Chỉ chủ quản (Super Admin) mới truy cập mục này.",
+      },
+    },
+    { status: 403 },
+  );
+}
 
 export function middleware(req: NextRequest) {
   const host = req.headers.get("host") ?? "";
@@ -17,6 +35,37 @@ export function middleware(req: NextRequest) {
       headers: { "content-type": "text/plain; charset=utf-8" },
     });
   }
+
+  const pathname = req.nextUrl.pathname;
+  const session = getAdminSessionFromRequest(req);
+
+  if (pathname.startsWith("/api/admin") && isSuperAdminOnlyApi(pathname)) {
+    if (!session) {
+      return NextResponse.json(
+        { error: { code: "FORBIDDEN", message: "Không có quyền truy cập admin." } },
+        { status: 403 },
+      );
+    }
+    if (session.role === "ops") {
+      return adminForbiddenApi();
+    }
+  }
+
+  if (
+    pathname.startsWith("/admin") &&
+    pathname !== "/admin/login" &&
+    isSuperAdminOnlyPage(pathname)
+  ) {
+    if (!session) {
+      const login = new URL("/admin/login", req.url);
+      login.searchParams.set("next", pathname);
+      return NextResponse.redirect(login);
+    }
+    if (session.role === "ops") {
+      return NextResponse.redirect(new URL(defaultAdminHome("ops"), req.url));
+    }
+  }
+
   return NextResponse.next();
 }
 
@@ -30,6 +79,9 @@ export const config = {
       source: "/:path*",
       has: [{ type: "host", value: "cctm.timnhaxahoi.com" }],
     },
+    "/admin",
+    "/admin/:path*",
+    "/api/admin/:path*",
     "/cho-thue/:path*",
     "/mua-ban/:path*",
     "/tin-dang/:path*",

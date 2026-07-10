@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { isAdminAuthorized } from "@/lib/admin/session";
+import { isSuperAdminAuthorized } from "@/lib/admin/session";
 import {
   buildOaPermissionUrl,
   createPkceCookieValue,
@@ -14,7 +14,7 @@ import {
  * Trước đó đăng ký Callback URL trên developers = getOaCallbackUrl().
  */
 export async function GET(req: NextRequest) {
-  if (!isAdminAuthorized(req)) {
+  if (!isSuperAdminAuthorized(req)) {
     return NextResponse.json(
       {
         error: {

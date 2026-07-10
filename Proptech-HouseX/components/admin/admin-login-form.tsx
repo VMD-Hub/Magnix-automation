@@ -25,7 +25,9 @@ export function AdminLoginForm() {
         setError(json?.error?.message ?? "Đăng nhập thất bại.");
         return;
       }
-      router.push("/admin/ctv");
+      const home =
+        typeof json?.data?.home === "string" ? json.data.home : "/admin/ctv";
+      router.push(home);
       router.refresh();
     } catch {
       setError("Lỗi kết nối.");
@@ -40,11 +42,20 @@ export function AdminLoginForm() {
       className="mx-auto w-full max-w-sm space-y-4 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm"
     >
       <p className="text-sm text-slate-600">
-        Nhập <code className="rounded bg-slate-100 px-1">ADMIN_SECRET</code> từ
-        biến môi trường. Phiên hết hạn sau 8 giờ.
+        Console vận hành nền tảng House X — không phải quản trị group Zalo.
       </p>
+      <ul className="list-inside list-disc text-xs text-slate-500">
+        <li>
+          <code className="rounded bg-slate-100 px-1">ADMIN_SECRET</code> → Chủ
+          quản (Super)
+        </li>
+        <li>
+          <code className="rounded bg-slate-100 px-1">ADMIN_OPS_SECRET</code> →
+          Ops (lead, conflict, NOXH)
+        </li>
+      </ul>
       <label className="block">
-        <span className="text-sm font-medium text-slate-700">Mật khẩu admin</span>
+        <span className="text-sm font-medium text-slate-700">Mật khẩu</span>
         <input
           type="password"
           required
@@ -58,7 +69,7 @@ export function AdminLoginForm() {
         <p className="rounded-lg bg-rose-50 px-3 py-2 text-sm text-rose-700">{error}</p>
       ) : null}
       <Button type="submit" className="w-full" disabled={loading}>
-        {loading ? "Đang đăng nhập…" : "Vào admin"}
+        {loading ? "Đang đăng nhập…" : "Vào console"}
       </Button>
     </form>
   );

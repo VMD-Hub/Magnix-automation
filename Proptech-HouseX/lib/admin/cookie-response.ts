@@ -1,12 +1,16 @@
 import { NextResponse } from "next/server";
+import type { AdminRole } from "@/lib/admin/roles";
 import {
   ADMIN_COOKIE,
   ADMIN_MAX_AGE_SEC,
   createAdminSessionToken,
 } from "@/lib/admin/session";
 
-export function attachAdminCookie(res: NextResponse): NextResponse {
-  res.cookies.set(ADMIN_COOKIE, createAdminSessionToken(), {
+export function attachAdminCookie(
+  res: NextResponse,
+  role: AdminRole = "super",
+): NextResponse {
+  res.cookies.set(ADMIN_COOKIE, createAdminSessionToken(role), {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "strict",

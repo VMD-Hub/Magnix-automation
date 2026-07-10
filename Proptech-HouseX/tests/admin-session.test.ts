@@ -2,12 +2,14 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import {
   createAdminSessionToken,
+  parseAdminSessionToken,
   verifyAdminSessionToken,
 } from "../lib/admin/session";
 
 test("admin session: token hợp lệ sau khi tạo", () => {
   const token = createAdminSessionToken();
   assert.equal(verifyAdminSessionToken(token), true);
+  assert.equal(parseAdminSessionToken(token)?.role, "super");
 });
 
 test("admin session: token bị sửa → false", () => {

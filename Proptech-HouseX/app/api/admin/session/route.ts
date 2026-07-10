@@ -4,7 +4,11 @@ import {
   attachAdminCookie,
   clearAdminCookie,
 } from "@/lib/admin/cookie-response";
-import { getAdminSessionFromCookies } from "@/lib/admin/session";
+import { defaultAdminHome } from "@/lib/admin/roles";
+import {
+  getAdminSessionFromCookies,
+  resolveAdminRoleFromSecret,
+} from "@/lib/admin/session";
 import { z } from "zod";
 
 const loginSchema = z.object({
@@ -13,25 +17,38 @@ const loginSchema = z.object({
 
 /** Kiểm tra phiên admin hiện tại. */
 export async function GET() {
-  const authenticated = await getAdminSessionFromCookies();
-  return ok({ authenticated });
+  const session = await getAdminSessionFromCookies();
+  return ok({
+    authenticated: session !== null,
+    role: session?.role ?? null,
+  });
 }
 
-/** Đăng nhập admin bằng ADMIN_SECRET → cookie httpOnly. */
+/** Đăng nhập — `ADMIN_SECRET` (Super) hoặc `ADMIN_OPS_SECRET` (Ops). */
 export async function POST(req: NextRequest) {
   try {
-    const envSecret = process.env.ADMIN_SECRET;
-    if (!envSecret) {
-      return fail(503, "ADMIN_NOT_CONFIGURED", "ADMIN_SECRET chưa được cấu hình.");
+    const superSecret = process.env.ADMIN_SECRET?.trim();
+    const opsSecret = process.env.ADMIN_OPS_SECRET?.trim();
+    if (!superSecret && !opsSecret) {
+      return fail(
+        503,
+        "ADMIN_NOT_CONFIGURED",
+        "ADMIN_SECRET hoặc ADMIN_OPS_SECRET chưa được cấu hình.",
+      );
     }
 
     const body = loginSchema.parse(await req.json());
-    if (body.secret !== envSecret) {
+    const role = resolveAdminRoleFromSecret(body.secret);
+    if (!role) {
       return fail(401, "INVALID_SECRET", "Mật khẩu admin không đúng.");
     }
 
-    const res = ok({ authenticated: true });
-    return attachAdminCookie(res);
+    const res = ok({
+      authenticated: true,
+      role,
+      home: defaultAdminHome(role),
+    });
+    return attachAdminCookie(res, role);
   } catch (err) {
     return handleApiError(err);
   }
@@ -39,6 +56,6 @@ export async function POST(req: NextRequest) {
 
 /** Đăng xuất admin. */
 export async function DELETE() {
-  const res = ok({ authenticated: false });
+  const res = ok({ authenticated: false, role: null });
   return clearAdminCookie(res);
 }

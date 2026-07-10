@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import type { ReactNode } from "react";
+import { useAdminRole } from "@/lib/admin/admin-role-context";
+import { ADMIN_ROLE_LABEL, defaultAdminHome } from "@/lib/admin/roles";
 import { AdminNavBadge } from "@/components/admin/admin-nav-badge";
 import { useAdminQueueCounts } from "@/components/admin/use-admin-queue-counts";
 
@@ -14,50 +16,68 @@ export function AdminShell({
   children: ReactNode;
 }) {
   const counts = useAdminQueueCounts();
+  const role = useAdminRole();
+  const isSuper = role === "super";
+  const home = defaultAdminHome(role);
 
   return (
     <div className="fixed inset-0 z-[100] flex flex-col bg-slate-100">
       <header className="border-b border-slate-200 bg-white px-4 py-3 shadow-sm">
         <div className="mx-auto flex max-w-6xl items-center justify-between">
           <div className="flex items-center gap-4">
-            <Link href="/admin/listings" className="text-lg font-bold text-slate-900">
+            <Link href={home} className="text-lg font-bold text-slate-900">
               House<span className="text-brand-600">X</span> Admin
             </Link>
-            <span className="hidden rounded-full bg-amber-100 px-2 py-0.5 text-xs font-medium text-amber-800 sm:inline">
-              Lớp 3
+            <span className="hidden rounded-full bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-700 sm:inline">
+              {ADMIN_ROLE_LABEL[role]}
             </span>
+            {isSuper ? (
+              <span className="hidden rounded-full bg-amber-100 px-2 py-0.5 text-xs font-medium text-amber-800 sm:inline">
+                Lớp 3
+              </span>
+            ) : null}
           </div>
           <nav className="flex flex-wrap items-center justify-end gap-3 text-sm">
-            <Link
-              href="/admin/listings"
-              className="font-medium text-brand-700 hover:text-brand-800"
-            >
-              Duyệt tin
-            </Link>
-            <Link
-              href="/admin/articles"
-              className="text-slate-600 hover:text-slate-800"
-            >
-              Tin tức
-            </Link>
-            <Link
-              href="/admin/projects"
-              className="text-slate-600 hover:text-slate-800"
-            >
-              Landing dự án
-            </Link>
-            <Link
-              href="/admin/unit-bookings"
-              className="text-slate-600 hover:text-slate-800"
-            >
-              Giữ suất F1
-            </Link>
-            <Link
-              href="/admin/promotions"
-              className="text-slate-600 hover:text-slate-800"
-            >
-              Khuyến mãi
-            </Link>
+            {isSuper ? (
+              <>
+                <Link
+                  href="/admin/listings"
+                  className="font-medium text-brand-700 hover:text-brand-800"
+                >
+                  Duyệt tin
+                </Link>
+                <Link
+                  href="/admin/articles"
+                  className="text-slate-600 hover:text-slate-800"
+                >
+                  Tin tức
+                </Link>
+                <Link
+                  href="/admin/projects"
+                  className="text-slate-600 hover:text-slate-800"
+                >
+                  Landing dự án
+                </Link>
+                <Link
+                  href="/admin/unit-bookings"
+                  className="text-slate-600 hover:text-slate-800"
+                >
+                  Giữ suất F1
+                </Link>
+                <Link
+                  href="/admin/promotions"
+                  className="text-slate-600 hover:text-slate-800"
+                >
+                  Khuyến mãi
+                </Link>
+                <Link
+                  href="/admin/ctv"
+                  className="text-slate-600 hover:text-slate-800"
+                >
+                  Duyệt CTV
+                </Link>
+              </>
+            ) : null}
             <Link
               href="/admin/conflicts"
               className="inline-flex items-center text-slate-600 hover:text-slate-800"
@@ -93,12 +113,6 @@ export function AdminShell({
               className="text-slate-600 hover:text-slate-800"
             >
               Hồ sơ NOXH
-            </Link>
-            <Link
-              href="/admin/ctv"
-              className="text-slate-600 hover:text-slate-800"
-            >
-              Duyệt CTV
             </Link>
             <AdminLogoutButton />
             <Link href="/" className="text-slate-500 hover:text-slate-700">
