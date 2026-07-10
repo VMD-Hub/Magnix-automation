@@ -12,6 +12,7 @@ Hai luồng lead inbound:
 | **D — Đăng ký môi giới** | `/dang-ky/moi-gioi` | `account.registered` (BROKER) | Telegram ops — onboarding 24h |
 | **E — Đăng ký CTV** | `/moi-gioi/dang-ky-ctv` | `ctv.application_submitted` | Telegram CTV ops — duyệt 24h |
 | **F — Ops nurture auto** | `POST /api/leads` + Admin `CONTACTED` | `lead.nurture` | Telegram Ops queue (script + channel) |
+| **G — Xung đột attribution** | CTV claim / Ops lead trùng lock | `attribution.conflict` | Telegram Ops + Sheet mirror |
 
 ---
 
@@ -136,6 +137,64 @@ contact_name | contact_phone | contact_email | ops_note | ops_status | channel_a
 | `TELEGRAM_CHAT_ID_LEAD_COMMERCIAL` / `TELEGRAM_CHAT_ID_OPS` | `segment=cctm` / fallback |
 
 **Test manual:** n8n → Execute workflow → **Inject Manual Lead Nurture**.
+
+---
+
+## Luồng G — Attribution conflict (`attribution.conflict`)
+
+HouseX enqueue khi:
+- CTV claim bị R3/R4 chặn (`phase=opened`)
+- Admin resolve conflict (`phase=resolved`)
+
+Zalo OA CTV do HouseX outbox handler gửi trực tiếp; n8n mirror Sheet + ping Telegram Ops.
+
+```mermaid
+flowchart LR
+  subgraph HouseX
+    C[Conflict queue] --> OB[Outbox attribution.conflict]
+    OB --> OA[Zalo OA CTV]
+  end
+  subgraph n8n
+    OB --> WH[Webhook housex-events]
+    WH --> CF[(Sheet housex_attribution_conflicts)]
+    WH --> TG[Telegram Ops]
+  end
+```
+
+Envelope `attribution.conflict`:
+
+```json
+{
+  "type": "attribution.conflict",
+  "payload": {
+    "phase": "opened",
+    "conflictId": "uuid",
+    "kind": "CTV_CLAIM_BLOCKED",
+    "normalizedPhoneMasked": "0901***567",
+    "brokerId": "uuid",
+    "rejectReason": "PLATFORM_LEAD_ACTIVE",
+    "rejectLabel": "Ops đang tư vấn (R4)",
+    "resolution": null,
+    "resolutionLabel": null,
+    "platformLeadSource": "zalo_ads",
+    "noxhCaseCode": "HX-NOXH-...",
+    "customerName": "..."
+  }
+}
+```
+
+**Dedupe Sheet:** `conflict:{conflictId}:{phase}` (outbox HouseX: `attribution.conflict:{phase}:{conflictId}`).
+
+**Sheet tab:** `housex_attribution_conflicts` — `node scripts/init-magnix-sheet.mjs`
+
+**Telegram env (n8n):**
+
+| Biến | Mục đích |
+|---|---|
+| `TELEGRAM_ATTRIBUTION_CONFLICT_ENABLED` | `true` (mặc định) |
+| `TELEGRAM_CHAT_ID_NOXH_CASE_OPS` / `TELEGRAM_CHAT_ID_OPS` | Chat Ops duyệt conflict |
+
+**Test manual:** **Inject Manual Attribution Conflict**.
 
 ---
 

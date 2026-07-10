@@ -187,6 +187,27 @@ const MAGNIX_TABS = {
       'meta',
     ],
   },
+  housex_attribution_conflicts: {
+    headers: [
+      'dedupe_key',
+      'conflict_id',
+      'phase',
+      'kind',
+      'kind_label',
+      'phone_masked',
+      'broker_id',
+      'customer_name',
+      'reject_reason',
+      'reject_label',
+      'resolution',
+      'resolution_label',
+      'platform_lead_source',
+      'noxh_case_code',
+      'ops_status',
+      'created_at',
+      'meta',
+    ],
+  },
   housex_supply_ops: {
     headers: [
       'record_id',

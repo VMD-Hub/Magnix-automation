@@ -1,5 +1,5 @@
 // Parse envelope từ HouseX EVENTS_WEBHOOK_URL: { type, payload, sentAt }
-// Hỗ trợ: lead.noxh_checked · lead.created · lead.nurture · noxh_case.* · account.registered · ctv.application_submitted
+// Hỗ trợ: lead.noxh_checked · lead.created · lead.nurture · attribution.conflict · noxh_case.* · account.registered · ctv.application_submitted
 
 const SECRET = $env.EVENTS_WEBHOOK_SECRET || '';
 const headers = $input.first().json.headers || {};
@@ -245,6 +245,44 @@ if (type === 'lead.nurture') {
       ops_status: 'nurture_auto_queued',
       created_at: now,
       dedupe_key: `nurture:${leadId}:${trigger}:${scriptId}`,
+    },
+  }];
+}
+
+if (type === 'attribution.conflict') {
+  const p = body.payload || {};
+  const conflictId = String(p.conflictId || '').trim();
+  if (!conflictId) throw new Error('Validation: payload.conflictId is required');
+
+  const phase = String(p.phase || 'opened').trim();
+  const kind = String(p.kind || '').trim();
+  const KIND_LABEL = {
+    CTV_CLAIM_BLOCKED: 'CTV claim bị chặn',
+    OPS_LEAD_CTV_LOCK: 'Lead Ops trùng CTV đang lock',
+  };
+
+  return [{
+    json: {
+      ok: true,
+      skipped: false,
+      event_path: 'attribution_conflict',
+      path: 'events',
+      conflict_id: conflictId,
+      phase,
+      kind,
+      kind_label: KIND_LABEL[kind] || kind,
+      phone_masked: String(p.normalizedPhoneMasked || '***'),
+      broker_id: String(p.brokerId || ''),
+      reject_reason: p.rejectReason ? String(p.rejectReason) : '',
+      reject_label: String(p.rejectLabel || ''),
+      resolution: p.resolution ? String(p.resolution) : '',
+      resolution_label: String(p.resolutionLabel || ''),
+      platform_lead_source: p.platformLeadSource ? String(p.platformLeadSource) : '',
+      noxh_case_code: p.noxhCaseCode ? String(p.noxhCaseCode) : '',
+      customer_name: String(p.customerName || '').slice(0, 80),
+      ops_status: phase === 'resolved' ? 'conflict_resolved' : 'conflict_open',
+      created_at: now,
+      dedupe_key: `conflict:${conflictId}:${phase}`,
     },
   }];
 }

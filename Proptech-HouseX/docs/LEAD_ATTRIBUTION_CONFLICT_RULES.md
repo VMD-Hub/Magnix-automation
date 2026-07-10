@@ -195,6 +195,7 @@ CTV claim bị chặn / Ops phát hiện trùng
 | **CRM-R3** | CTV lịch + tiến độ bắt buộc | `NoxhCase.consultScheduledAt`, validate trước gia hạn lock |
 | **CRM-R4** | Ops lead board + nurture meta | Lead `meta.channels`, `meta.nurtureScriptId` |
 | **CRM-R5** | OA notify xung đột | `broker-oa-notify.ts` + event `attribution.conflict` |
+| **CRM-R6** | n8n mirror conflict | `housex_attribution_conflicts` + Telegram Ops |
 
 ---
 

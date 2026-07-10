@@ -25,6 +25,7 @@ const opsTab = PUBLIC.noxh_leads_ops_tab || 'noxh_leads_ops';
 const detailTab = PUBLIC.noxh_leads_detail_tab || 'noxh_leads_detail';
 const inquiryTab = PUBLIC.housex_leads_inquiry_tab || 'housex_leads_inquiry';
 const nurtureTab = PUBLIC.housex_leads_nurture_tab || 'housex_leads_nurture';
+const conflictTab = PUBLIC.housex_attribution_conflicts_tab || 'housex_attribution_conflicts';
 const supplyTab = PUBLIC.housex_supply_ops_tab || 'housex_supply_ops';
 
 const replaceSheet = (code) =>
@@ -34,6 +35,7 @@ const replaceSheet = (code) =>
     .replace(/__NOXH_DETAIL_TAB__/g, detailTab)
     .replace(/__INQUIRY_TAB__/g, inquiryTab)
     .replace(/__NURTURE_TAB__/g, nurtureTab)
+    .replace(/__CONFLICT_TAB__/g, conflictTab)
     .replace(/__SUPPLY_TAB__/g, supplyTab);
 
 const codes = {
@@ -59,6 +61,10 @@ const codes = {
   dedupeNurture: replaceSheet(read('nurture-03-dedupe.js')),
   formatNurtureTg: replaceSheet(read('nurture-04-format-telegram.js')),
   sendNurtureTg: replaceSheet(read('nurture-05-send-telegram.js')),
+  prepareConflict: replaceSheet(read('conflict-02-prepare-append.js')),
+  dedupeConflict: replaceSheet(read('conflict-03-dedupe.js')),
+  formatConflictTg: replaceSheet(read('conflict-04-format-telegram.js')),
+  sendConflictTg: replaceSheet(read('nurture-05-send-telegram.js')),
 };
 
 const manualEvent = `return [{ json: {
@@ -187,6 +193,28 @@ const manualLeadNurture = `return [{ json: {
   },
 }}];`;
 
+const manualAttributionConflict = `return [{ json: {
+  headers: { 'x-events-secret': $env.EVENTS_WEBHOOK_SECRET || '' },
+  body: {
+    type: 'attribution.conflict',
+    sentAt: new Date().toISOString(),
+    payload: {
+      phase: 'opened',
+      conflictId: 'manual-conflict-' + Date.now(),
+      kind: 'CTV_CLAIM_BLOCKED',
+      normalizedPhoneMasked: '0901***567',
+      brokerId: 'broker-demo',
+      rejectReason: 'PLATFORM_LEAD_ACTIVE',
+      rejectLabel: 'Ops đang tư vấn (R4)',
+      resolution: null,
+      resolutionLabel: null,
+      platformLeadSource: 'zalo_ads',
+      noxhCaseCode: 'HX-NOXH-MANUAL',
+      customerName: 'Manual Conflict Test',
+    },
+  },
+}}];`;
+
 const pos = (x, y) => [x, y];
 const nid = (prefix, n) => `${prefix}${String(n).padStart(2, '0')}`;
 
@@ -194,7 +222,7 @@ const nodes = [
   {
     parameters: {
       content:
-        '## HouseX Events Hub\n**Webhook A:** POST `/webhook/magnix/housex-events` ← `EVENTS_WEBHOOK_URL`\n**Webhook B:** POST `/webhook/magnix/housex-noxh-detail` ← `NOXH_DETAIL_WEBHOOK_URL`\n**Events:** `lead.noxh_checked` · `lead.created` · `lead.nurture` · `noxh_case.*` · `account.registered` · `ctv.application_submitted`\nAuth: `x-events-secret` = `EVENTS_WEBHOOK_SECRET`',
+        '## HouseX Events Hub\n**Webhook A:** POST `/webhook/magnix/housex-events` ← `EVENTS_WEBHOOK_URL`\n**Webhook B:** POST `/webhook/magnix/housex-noxh-detail` ← `NOXH_DETAIL_WEBHOOK_URL`\n**Events:** `lead.noxh_checked` · `lead.created` · `lead.nurture` · `attribution.conflict` · `noxh_case.*` · `account.registered` · `ctv.application_submitted`\nAuth: `x-events-secret` = `EVENTS_WEBHOOK_SECRET`',
       height: 260,
       width: 560,
     },
@@ -279,6 +307,14 @@ const nodes = [
     position: pos(40, 880),
   },
   {
+    parameters: { jsCode: manualAttributionConflict },
+    id: nid('nx', 57),
+    name: 'Inject Manual Attribution Conflict',
+    type: 'n8n-nodes-base.code',
+    typeVersion: 2,
+    position: pos(40, 960),
+  },
+  {
     parameters: { jsCode: codes.parseEvent },
     id: nid('nx', 5),
     name: 'Parse HouseX Event',
@@ -348,6 +384,15 @@ const nodes = [
             },
             renameOutput: true,
             outputKey: 'nurture',
+          },
+          {
+            conditions: {
+              options: { caseSensitive: true, typeValidation: 'strict' },
+              conditions: [{ id: 'r6', leftValue: '={{ $json.event_path }}', rightValue: 'attribution_conflict', operator: { type: 'string', operation: 'equals' } }],
+              combinator: 'and',
+            },
+            renameOutput: true,
+            outputKey: 'attribution_conflict',
           },
         ],
       },
@@ -613,6 +658,85 @@ const nodes = [
     position: pos(2440, 880),
   },
   {
+    parameters: { jsCode: codes.prepareConflict },
+    id: nid('nx', 58),
+    name: 'Prepare Conflict Append',
+    type: 'n8n-nodes-base.code',
+    typeVersion: 2,
+    position: pos(1000, 1100),
+  },
+  {
+    parameters: {
+      method: 'GET',
+      url: `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${encodeURIComponent(`${conflictTab}!A:A`)}`,
+      authentication: 'predefinedCredentialType',
+      nodeCredentialType: 'googleApi',
+      options: {},
+    },
+    id: nid('nx', 59),
+    name: 'HTTP GET conflict dedupe',
+    type: 'n8n-nodes-base.httpRequest',
+    typeVersion: 4.2,
+    position: pos(1240, 1100),
+    onError: 'continueRegularOutput',
+  },
+  {
+    parameters: { jsCode: codes.dedupeConflict },
+    id: nid('nx', 60),
+    name: 'Dedupe Conflict',
+    type: 'n8n-nodes-base.code',
+    typeVersion: 2,
+    position: pos(1480, 1100),
+  },
+  {
+    parameters: {
+      conditions: {
+        options: { caseSensitive: true, typeValidation: 'strict' },
+        conditions: [{ id: 'c1', leftValue: '={{ $json.duplicate }}', rightValue: true, operator: { type: 'boolean', operation: 'equals' } }],
+        combinator: 'and',
+      },
+    },
+    id: nid('nx', 61),
+    name: 'Conflict Duplicate?',
+    type: 'n8n-nodes-base.if',
+    typeVersion: 2,
+    position: pos(1720, 1100),
+  },
+  {
+    parameters: {
+      method: 'POST',
+      url: '={{ $json.append_url }}',
+      authentication: 'predefinedCredentialType',
+      nodeCredentialType: 'googleApi',
+      sendBody: true,
+      specifyBody: 'json',
+      jsonBody: '={{ JSON.stringify($json.append_body) }}',
+      options: {},
+    },
+    id: nid('nx', 62),
+    name: 'HTTP POST housex_attribution_conflicts',
+    type: 'n8n-nodes-base.httpRequest',
+    typeVersion: 4.2,
+    position: pos(1960, 1020),
+    onError: 'continueRegularOutput',
+  },
+  {
+    parameters: { jsCode: codes.formatConflictTg },
+    id: nid('nx', 63),
+    name: 'Format Conflict Telegram',
+    type: 'n8n-nodes-base.code',
+    typeVersion: 2,
+    position: pos(2200, 1020),
+  },
+  {
+    parameters: { jsCode: codes.sendConflictTg },
+    id: nid('nx', 64),
+    name: 'Send Conflict Telegram',
+    type: 'n8n-nodes-base.code',
+    typeVersion: 2,
+    position: pos(2440, 1020),
+  },
+  {
     parameters: { jsCode: codes.prepareOps },
     id: nid('nx', 7),
     name: 'Prepare Ops Append',
@@ -778,6 +902,7 @@ const connections = {
       [{ node: 'Inject Manual Noxh Case', type: 'main', index: 0 }],
       [{ node: 'Inject Manual Case Milestone', type: 'main', index: 0 }],
       [{ node: 'Inject Manual Lead Nurture', type: 'main', index: 0 }],
+      [{ node: 'Inject Manual Attribution Conflict', type: 'main', index: 0 }],
     ],
   },
   'Inject Manual NOXH Event': { main: [[{ node: 'Parse HouseX Event', type: 'main', index: 0 }]] },
@@ -786,6 +911,7 @@ const connections = {
   'Inject Manual Noxh Case': { main: [[{ node: 'Parse HouseX Event', type: 'main', index: 0 }]] },
   'Inject Manual Case Milestone': { main: [[{ node: 'Parse HouseX Event', type: 'main', index: 0 }]] },
   'Inject Manual Lead Nurture': { main: [[{ node: 'Parse HouseX Event', type: 'main', index: 0 }]] },
+  'Inject Manual Attribution Conflict': { main: [[{ node: 'Parse HouseX Event', type: 'main', index: 0 }]] },
   'Parse HouseX Event': { main: [[{ node: 'Skipped Event?', type: 'main', index: 0 }]] },
   'Skipped Event?': {
     main: [
@@ -800,6 +926,7 @@ const connections = {
       [{ node: 'Prepare Supply Append', type: 'main', index: 0 }],
       [{ node: 'Format Noxh Case Telegram', type: 'main', index: 0 }],
       [{ node: 'Prepare Nurture Append', type: 'main', index: 0 }],
+      [{ node: 'Prepare Conflict Append', type: 'main', index: 0 }],
       [{ node: 'Build Response', type: 'main', index: 0 }],
     ],
   },
@@ -841,6 +968,18 @@ const connections = {
   'HTTP POST housex_leads_nurture': { main: [[{ node: 'Format Nurture Telegram', type: 'main', index: 0 }]] },
   'Format Nurture Telegram': { main: [[{ node: 'Send Nurture Telegram', type: 'main', index: 0 }]] },
   'Send Nurture Telegram': { main: [[{ node: 'Build Response', type: 'main', index: 0 }]] },
+  'Prepare Conflict Append': { main: [[{ node: 'HTTP GET conflict dedupe', type: 'main', index: 0 }]] },
+  'HTTP GET conflict dedupe': { main: [[{ node: 'Dedupe Conflict', type: 'main', index: 0 }]] },
+  'Dedupe Conflict': { main: [[{ node: 'Conflict Duplicate?', type: 'main', index: 0 }]] },
+  'Conflict Duplicate?': {
+    main: [
+      [{ node: 'Build Response', type: 'main', index: 0 }],
+      [{ node: 'HTTP POST housex_attribution_conflicts', type: 'main', index: 0 }],
+    ],
+  },
+  'HTTP POST housex_attribution_conflicts': { main: [[{ node: 'Format Conflict Telegram', type: 'main', index: 0 }]] },
+  'Format Conflict Telegram': { main: [[{ node: 'Send Conflict Telegram', type: 'main', index: 0 }]] },
+  'Send Conflict Telegram': { main: [[{ node: 'Build Response', type: 'main', index: 0 }]] },
   'Prepare Ops Append': { main: [[{ node: 'HTTP GET ops dedupe', type: 'main', index: 0 }]] },
   'HTTP GET ops dedupe': { main: [[{ node: 'Dedupe Ops', type: 'main', index: 0 }]] },
   'Dedupe Ops': { main: [[{ node: 'Duplicate?', type: 'main', index: 0 }]] },
@@ -875,7 +1014,7 @@ const workflow = {
   settings: { executionOrder: 'v1' },
   versionId: '2',
   meta: { templateCredsSetupCompleted: true },
-  tags: [{ name: 'housex' }, { name: 'housex-noxh-lead-route' }, { name: 'housex-lead-inquiry' }, { name: 'housex-lead-nurture' }, { name: 'housex-supply-signup' }, { name: 'housex-noxh-case' }],
+  tags: [{ name: 'housex' }, { name: 'housex-noxh-lead-route' }, { name: 'housex-lead-inquiry' }, { name: 'housex-lead-nurture' }, { name: 'housex-attribution-conflict' }, { name: 'housex-supply-signup' }, { name: 'housex-noxh-case' }],
 };
 
 const out = path.join(__dirname, 'housex-noxh-lead-route.workflow.json');
