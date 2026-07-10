@@ -55,6 +55,12 @@ export function AdminShell({
               Khuyến mãi
             </Link>
             <Link
+              href="/admin/conflicts"
+              className="text-slate-600 hover:text-slate-800"
+            >
+              Xung đột
+            </Link>
+            <Link
               href="/admin/inbound-leads"
               className="text-slate-600 hover:text-slate-800"
             >

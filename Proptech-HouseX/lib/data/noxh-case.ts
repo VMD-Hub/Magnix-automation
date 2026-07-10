@@ -17,6 +17,7 @@ import {
   evaluateCtvClaim,
   type ClaimRejectReason,
 } from "@/lib/noxh-case/attribution-claim";
+import { queueConflictFromCtvClaim } from "@/lib/attribution/conflict";
 import { accrueNoxhCommissionOnSigned } from "@/lib/noxh-case/commission-accrual";
 import { notifyBrokerMilestoneChange } from "@/lib/noxh-case/case-maintenance";
 
@@ -274,6 +275,12 @@ export async function createCtvClaim(params: {
       brokerNormalizedPhone,
     });
     if (!evaluation.ok) {
+      await queueConflictFromCtvClaim(tx, {
+        normalizedPhone,
+        brokerId: params.brokerId,
+        reason: evaluation.reason,
+        customerName: params.customerName,
+      });
       throw new CtvClaimError(evaluation.reason, evaluation.message);
     }
 

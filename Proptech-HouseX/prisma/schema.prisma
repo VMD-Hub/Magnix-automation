@@ -115,6 +115,24 @@ enum LeadSegment {
   CCTM
 }
 
+enum AttributionConflictKind {
+  CTV_CLAIM_BLOCKED
+  OPS_LEAD_CTV_LOCK
+}
+
+enum AttributionConflictStatus {
+  OPEN
+  RESOLVED
+  DISMISSED
+}
+
+enum AttributionConflictResolution {
+  KEEP_PLATFORM
+  RELEASE_TO_CTV
+  SPLIT_LANE
+  DISMISS_BOTH
+}
+
 enum ReferralType {
   CTV_PROJECT
   SHARE_LISTING
@@ -406,6 +424,7 @@ model Broker {
   notifications    BrokerNotification[]
   entitlements     AgentEntitlement[]
   quizAttempts     QuizAttempt[]
+  attributionConflicts AttributionConflict[]
 
   @@map("brokers")
 }
@@ -536,6 +555,7 @@ model Customer {
   promotionParticipants PromotionParticipant[]
   promotionSpins        PromotionSpin[]
   promotionWins         PromotionWin[]
+  attributionConflicts  AttributionConflict[]
 
   @@map("customers")
 }
@@ -599,6 +619,7 @@ model Lead {
   assignedBroker Broker?     @relation("AssignedBroker", fields: [assignedBrokerId], references: [id])
   commission     Commission?
   noxhCases      NoxhCase[]
+  attributionConflicts AttributionConflict[]
 
   @@index([status])
   @@index([segment])
@@ -762,6 +783,35 @@ model AttributionEvent {
 
   @@index([customerId])
   @@map("attribution_events")
+}
+
+/// CRM-R2 — hàng đợi xung đột Ops vs CTV (SĐT trùng).
+model AttributionConflict {
+  id              String                       @id @default(uuid())
+  normalizedPhone String                       @map("normalized_phone")
+  kind            AttributionConflictKind
+  status          AttributionConflictStatus    @default(OPEN)
+  rejectReason    String?                      @map("reject_reason")
+  customerId      String?                      @map("customer_id")
+  platformLeadId  String?                      @map("platform_lead_id")
+  noxhCaseId      String?                      @map("noxh_case_id")
+  brokerId        String?                      @map("broker_id")
+  resolution      AttributionConflictResolution?
+  resolutionNote  String?                      @db.Text @map("resolution_note")
+  resolvedBy      String?                      @map("resolved_by")
+  resolvedAt      DateTime?                    @map("resolved_at")
+  meta            Json                         @default("{}")
+  createdAt       DateTime                     @default(now()) @map("created_at")
+  updatedAt       DateTime                     @updatedAt @map("updated_at")
+
+  customer     Customer? @relation(fields: [customerId], references: [id])
+  platformLead Lead?     @relation(fields: [platformLeadId], references: [id])
+  noxhCase     NoxhCase? @relation(fields: [noxhCaseId], references: [id])
+  broker       Broker?   @relation(fields: [brokerId], references: [id])
+
+  @@index([status, createdAt(sort: Desc)])
+  @@index([normalizedPhone, status])
+  @@map("attribution_conflicts")
 }
 
 /// Lucky wheel — chương trình khuyến mãi (1 campaign Phase 1).
@@ -964,6 +1014,7 @@ model NoxhCase {
   documents    CaseDocument[]
   assistLogs   CaseAssistLog[]
   milestoneEvents CaseMilestoneEvent[]
+  attributionConflicts AttributionConflict[]
 
   @@index([brokerId, caseStatus])
   @@index([normalizedPhone, caseStatus])

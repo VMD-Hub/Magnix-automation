@@ -20,6 +20,7 @@ import {
   resolveLeadSource,
 } from "@/lib/leads/source";
 import type { Prisma } from "@prisma/client";
+import { queueConflictFromOpsLead } from "@/lib/attribution/conflict";
 
 const LEAD_RATE_MAX = Number(process.env.LEAD_RATE_MAX ?? "20");
 const LEAD_RATE_WINDOW_SEC = Number(process.env.LEAD_RATE_WINDOW_SEC ?? "3600");
@@ -144,6 +145,13 @@ export async function POST(req: NextRequest) {
         eventPayload,
         `lead.created:${created.id}`,
       );
+
+      await queueConflictFromOpsLead(tx, {
+        normalizedPhone,
+        customerId: customer.id,
+        platformLeadId: created.id,
+        assignedBrokerId: attribution.assignedBrokerId,
+      });
 
       return { lead: created, eventPayload };
     });
