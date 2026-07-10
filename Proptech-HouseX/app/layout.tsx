@@ -1,9 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { SiteHeader } from "@/components/layout/site-header";
-import { SiteFooter } from "@/components/layout/site-footer";
-import { EmailVerificationBanner } from "@/components/layout/header-auth";
+import { SiteChrome } from "@/components/layout/site-chrome";
 import { ThemeScript } from "@/components/theme/theme-script";
 import { ThemeShell } from "@/components/theme/theme-shell";
 import { UtmCapture } from "@/components/leads/utm-capture";
@@ -63,10 +61,7 @@ export default function RootLayout({
         <ThemeScript />
         <UtmCapture />
         <ThemeShell>
-          <SiteHeader />
-          <EmailVerificationBanner />
-          <main className="flex-1">{children}</main>
-          <SiteFooter />
+          <SiteChrome>{children}</SiteChrome>
         </ThemeShell>
       </body>
     </html>

@@ -9,6 +9,8 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
+export const dynamic = "force-dynamic";
+
 export default async function AdminLoginPage() {
   const session = await getAdminSessionFromCookies();
   if (session) {
@@ -16,7 +18,7 @@ export default async function AdminLoginPage() {
   }
 
   return (
-    <div className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-slate-100 px-4">
+    <div className="flex min-h-screen flex-col items-center justify-center bg-slate-100 px-4">
       <div className="mb-6 text-center">
         <h1 className="text-2xl font-bold text-slate-900">
           House<span className="text-brand-600">X</span> Admin
