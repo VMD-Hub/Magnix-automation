@@ -170,6 +170,29 @@ export interface OutboxPayloads {
     noxhCaseCode: string | null;
     customerName: string | null;
   };
+  /** CRM-2 — Ops nurture auto → n8n route Zalo/Telegram/OA. */
+  "lead.nurture": {
+    leadId: string;
+    nurtureScriptId: string;
+    scriptLabel: string;
+    scriptDescription: string;
+    channel: "oa" | "telegram" | "zalo" | "manual";
+    trigger: "on_create" | "status_contacted";
+    segment: "noxh" | "cctm" | null;
+    source: string;
+    contact: {
+      name: string;
+      phone: string;
+      email: string | null;
+    };
+    channels: {
+      phone?: string | null;
+      zalo?: string | null;
+      email?: string | null;
+      facebook?: string | null;
+    };
+    opsNote: string | null;
+  };
 }
 
 export type OutboxEventType = keyof OutboxPayloads;

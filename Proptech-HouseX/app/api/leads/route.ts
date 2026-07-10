@@ -19,7 +19,8 @@ import {
   parseLeadChannelHeader,
   resolveLeadSource,
 } from "@/lib/leads/source";
-import { buildInitialLeadOpsMeta } from "@/lib/leads/ops-meta";
+import { buildInitialLeadOpsMeta, readLeadOpsMeta } from "@/lib/leads/ops-meta";
+import { tryEnqueueLeadNurture } from "@/lib/leads/nurture-auto";
 import type { Prisma } from "@prisma/client";
 import { queueConflictFromOpsLead } from "@/lib/attribution/conflict";
 
@@ -140,7 +141,31 @@ export async function POST(req: NextRequest) {
         },
       });
 
-      const eventPayload = await buildLeadCreatedPayload(tx, created, {
+      let finalLead = created;
+      if (!attribution.assignedBrokerId) {
+        const ops = readLeadOpsMeta(created.opsMeta);
+        const nurtureMeta = await tryEnqueueLeadNurture(tx, {
+          leadId: created.id,
+          opsMeta: created.opsMeta,
+          nurtureScriptId: ops.nurtureScriptId,
+          segment,
+          source,
+          trigger: "on_create",
+          contact: {
+            name: body.name,
+            phone: body.phone,
+            email: body.email,
+          },
+        });
+        if (nurtureMeta) {
+          finalLead = await tx.lead.update({
+            where: { id: created.id },
+            data: { opsMeta: nurtureMeta as Prisma.InputJsonValue },
+          });
+        }
+      }
+
+      const eventPayload = await buildLeadCreatedPayload(tx, finalLead, {
         name: body.name,
         phone: body.phone,
         email: body.email,
@@ -160,7 +185,7 @@ export async function POST(req: NextRequest) {
         assignedBrokerId: attribution.assignedBrokerId,
       });
 
-      return { lead: created, eventPayload };
+      return { lead: finalLead, eventPayload };
     });
 
     void forwardLeadCreatedBestEffort(eventPayload);

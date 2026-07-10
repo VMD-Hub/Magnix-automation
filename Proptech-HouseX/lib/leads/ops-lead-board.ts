@@ -14,6 +14,7 @@ import { createCommissionOnWon } from "@/lib/rules/commission-trigger";
 import { recordStatusChange } from "@/lib/data/status-history";
 import { enqueueEvent } from "@/lib/events/outbox";
 import type { CommissionOverride } from "@/lib/validation/lead";
+import { tryEnqueueLeadNurture } from "@/lib/leads/nurture-auto";
 
 const OPS_EXCLUDED_SOURCES = new Set([
   LEAD_SOURCE.REFERRAL,
@@ -127,6 +128,7 @@ export async function patchOpsLeadForAdmin(
         referral: { select: { brokerId: true } },
         listing: { select: { price: true } },
         commission: { select: { id: true } },
+        customer: { select: { name: true, phone: true, email: true } },
       },
     });
 
@@ -158,17 +160,38 @@ export async function patchOpsLeadForAdmin(
     }
     if (patch.channels !== undefined) opsMetaPatch.channels = patch.channels;
 
+    let nextOpsMeta: unknown = lead.opsMeta;
+    if (Object.keys(opsMetaPatch).length > 0) {
+      nextOpsMeta = mergeLeadOpsMeta(nextOpsMeta, opsMetaPatch);
+    }
+
+    const movingToContacted =
+      patch.status === "CONTACTED" && lead.status !== "CONTACTED";
+
+    if (movingToContacted && lead.customer) {
+      const ops = readLeadOpsMeta(nextOpsMeta);
+      const nurtureMeta = await tryEnqueueLeadNurture(tx, {
+        leadId: lead.id,
+        opsMeta: nextOpsMeta,
+        nurtureScriptId: ops.nurtureScriptId,
+        segment: lead.segment,
+        source: lead.source,
+        trigger: "status_contacted",
+        contact: {
+          name: lead.customer.name,
+          phone: lead.customer.phone,
+          email: lead.customer.email,
+        },
+      });
+      if (nurtureMeta) nextOpsMeta = nurtureMeta;
+    }
+
     const updated = await tx.lead.update({
       where: { id },
       data: {
         ...(patch.status !== undefined ? { status: patch.status } : {}),
-        ...(Object.keys(opsMetaPatch).length > 0
-          ? {
-              opsMeta: mergeLeadOpsMeta(
-                lead.opsMeta,
-                opsMetaPatch,
-              ) as Prisma.InputJsonValue,
-            }
+        ...(nextOpsMeta !== lead.opsMeta
+          ? { opsMeta: nextOpsMeta as Prisma.InputJsonValue }
           : {}),
       },
       include: leadListInclude,
