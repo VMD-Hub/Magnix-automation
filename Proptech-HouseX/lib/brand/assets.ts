@@ -1,10 +1,10 @@
 /**
  * HouseX brand assets — registry tập trung.
- * File vật lý: `public/brand/**` · SVG favicon: `app/icon.svg` (sync qua npm run brand:sync-favicon).
+ * File vật lý: `public/brand/**` · Favicon PNG: `app/icon.png` (npm run brand:sync-favicon).
  */
 
 export type BrandRasterAsset = {
-  /** URL public, bắt đầu bằng `/brand/…` */
+  /** URL public, bắt đầu bằng `/brand/…` hoặc metadata icon path */
   path: string;
   /** Gợi ý dùng — không ràng buộc runtime */
   usage: string;
@@ -29,12 +29,23 @@ export const BRAND_ASSETS = {
     },
   },
 
-  /** HouseX Mark Iteration 3 — vector (SVG), không phải PNG */
   housex: {
-    /** Favicon + PWA — sinh từ housex-mark.config */
+    /** Favicon + PWA — mark-only X trên nền ruby */
     favicon: {
-      path: "/icon.svg",
-      usage: "Tab trình duyệt, shortcut — npm run brand:sync-favicon",
+      path: "/icon.png",
+      usage: "Tab trình duyệt — npm run brand:sync-favicon",
+      decorative: true,
+    },
+    /** Avatar Zalo OA / social */
+    oaAvatar: {
+      path: "/brand/housex-oa-avatar.png",
+      usage: "Zalo OA avatar, social profile",
+      decorative: true,
+    },
+    /** Lockup header/footer */
+    lockup: {
+      path: "/brand/housex-footer-logo-transparent.png",
+      usage: "Header + footer wordmark",
       decorative: true,
     },
   },

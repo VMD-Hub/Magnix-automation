@@ -32,6 +32,7 @@
     "ranking:recompute": "node --import tsx scripts/recompute-ranking.ts",
     "events:dispatch": "node --import tsx scripts/dispatch-events.ts",
     "brand:sync-favicon": "node --import tsx scripts/sync-favicon.ts",
+    "brand:import-approved-lockup": "node --import tsx scripts/import-approved-brand-lockup.ts",
     "brand:sync-clover-icon": "node --import tsx scripts/sync-clover-icon.ts",
     "brand:generate-footer-logo": "node --import tsx scripts/generate-footer-logo.ts",
     "brand:extract-header-paper": "node --import tsx scripts/extract-header-paper.ts",

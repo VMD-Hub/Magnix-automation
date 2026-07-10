@@ -47,4 +47,4 @@ export const PLATFORM_BROKER_CTA = {
 } as const;
 
 export const PLATFORM_FOOTER_BLURB =
-  "Tìm nhà, khám phá dự án và dùng công cụ vay — tài chính, thẩm định và nội thất trên cùng cổng House X." as const;
+  "Công cụ mua nhà thông minh — tính vay, NOXH, dự án và thông tin minh bạch trên cùng cổng House X." as const;
