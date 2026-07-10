@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import type { ReactNode } from "react";
+import { AdminNavBadge } from "@/components/admin/admin-nav-badge";
+import { useAdminQueueCounts } from "@/components/admin/use-admin-queue-counts";
 
 export function AdminShell({
   title,
@@ -11,6 +13,8 @@ export function AdminShell({
   title: string;
   children: ReactNode;
 }) {
+  const counts = useAdminQueueCounts();
+
   return (
     <div className="fixed inset-0 z-[100] flex flex-col bg-slate-100">
       <header className="border-b border-slate-200 bg-white px-4 py-3 shadow-sm">
@@ -23,7 +27,7 @@ export function AdminShell({
               Lớp 3
             </span>
           </div>
-          <nav className="flex items-center gap-3 text-sm">
+          <nav className="flex flex-wrap items-center justify-end gap-3 text-sm">
             <Link
               href="/admin/listings"
               className="font-medium text-brand-700 hover:text-brand-800"
@@ -56,15 +60,27 @@ export function AdminShell({
             </Link>
             <Link
               href="/admin/conflicts"
-              className="text-slate-600 hover:text-slate-800"
+              className="inline-flex items-center text-slate-600 hover:text-slate-800"
+              title={
+                counts
+                  ? `${counts.conflictsOpen} xung đột đang mở`
+                  : "Hàng đợi xung đột attribution"
+              }
             >
               Xung đột
+              <AdminNavBadge count={counts?.conflictsOpen ?? 0} />
             </Link>
             <Link
               href="/admin/ops-leads"
-              className="text-slate-600 hover:text-slate-800"
+              className="inline-flex items-center text-slate-600 hover:text-slate-800"
+              title={
+                counts
+                  ? `${counts.opsLeadsNew} lead mới · ${counts.opsLeadsActive} đang xử lý`
+                  : "Lead marketing Ops (ads, form, tool)"
+              }
             >
               Ops leads
+              <AdminNavBadge count={counts?.opsLeadsNew ?? 0} />
             </Link>
             <Link
               href="/admin/inbound-leads"

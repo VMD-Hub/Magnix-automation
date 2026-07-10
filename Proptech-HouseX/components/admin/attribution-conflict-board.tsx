@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { notifyAdminQueueRefresh } from "@/components/admin/use-admin-queue-counts";
 import { cn } from "@/lib/ui/cn";
 
 type ConflictRow = {
@@ -117,6 +118,7 @@ export function AttributionConflictBoard() {
       return;
     }
     setMsg("Đã xử lý xung đột");
+    notifyAdminQueueRefresh();
     setSelectedId(null);
     setDetail(null);
     await load();

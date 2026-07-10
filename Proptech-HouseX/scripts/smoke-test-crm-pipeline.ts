@@ -74,6 +74,18 @@ async function main() {
   const conflictData = conflictRes.json.data as { items?: unknown[] } | undefined;
   ok(`GET /api/admin/conflicts → ${conflictData?.items?.length ?? 0} open`);
 
+  const queueRes = await adminApi("/api/admin/queue-counts");
+  if (!queueRes.res.ok) {
+    fail(`queue-counts ${queueRes.res.status} ${queueRes.json.error?.code ?? ""}`);
+  }
+  const queueData = queueRes.json.data as {
+    opsLeadsNew?: number;
+    conflictsOpen?: number;
+  } | undefined;
+  ok(
+    `GET /api/admin/queue-counts → new=${queueData?.opsLeadsNew ?? 0} conflicts=${queueData?.conflictsOpen ?? 0}`,
+  );
+
   const cronSecret = (process.env.CRON_SECRET ?? "").trim();
   if (cronSecret) {
     const dispatchRes = await fetch(`${site}/api/cron/dispatch-events`, {

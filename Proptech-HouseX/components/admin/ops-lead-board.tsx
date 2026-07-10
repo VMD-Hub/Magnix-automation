@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
+import { notifyAdminQueueRefresh } from "@/components/admin/use-admin-queue-counts";
 import { cn } from "@/lib/ui/cn";
 
 type OpsLeadRow = {
@@ -132,6 +133,7 @@ export function OpsLeadBoard() {
       return;
     }
     setMsg("Đã lưu.");
+    notifyAdminQueueRefresh();
     await load();
     setDetail(json.data);
   }
