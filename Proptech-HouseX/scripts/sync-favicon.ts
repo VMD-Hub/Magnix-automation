@@ -1,12 +1,15 @@
 /**
  * Đồng bộ favicon / apple-icon / favicon.ico từ mark-only OA đã duyệt.
- * Nguồn: public/brand/housex-oa-avatar.png
+ * Vuông bo góc (~22%) — thân thiện trên tab trình duyệt.
  *
  * Chạy: npm run brand:sync-favicon
  */
 import { existsSync, mkdirSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
-import sharp from "sharp";
+import {
+  roundedSquarePng,
+  writeRoundedSquarePng,
+} from "../lib/brand/favicon-image";
 
 const OA = join(process.cwd(), "public/brand/housex-oa-avatar.png");
 const MARK = join(process.cwd(), "public/brand/housex-mark-only.png");
@@ -41,19 +44,12 @@ function packPngIco(images: Array<{ size: number; data: Buffer }>): Buffer {
   return Buffer.concat([header, ...entries, ...payloads]);
 }
 
-async function resizePng(src: string, size: number): Promise<Buffer> {
-  return sharp(src)
-    .resize(size, size, { fit: "cover", position: "centre" })
-    .png({ compressionLevel: 9 })
-    .toBuffer();
-}
-
 async function writeIco(src: string, outPath: string) {
   const sizes = [16, 32, 48];
   const images = await Promise.all(
     sizes.map(async (size) => ({
       size,
-      data: await resizePng(src, size),
+      data: await roundedSquarePng(src, size),
     })),
   );
   writeFileSync(outPath, packPngIco(images));
@@ -75,21 +71,13 @@ async function main() {
   mkdirSync(dirname(iconPath), { recursive: true });
   mkdirSync(dirname(faviconPublic), { recursive: true });
 
-  await sharp(src)
-    .resize(512, 512, { fit: "cover", position: "centre" })
-    .png({ compressionLevel: 9 })
-    .toFile(iconPath);
-
-  await sharp(src)
-    .resize(180, 180, { fit: "cover", position: "centre" })
-    .png({ compressionLevel: 9 })
-    .toFile(applePath);
-
+  await writeRoundedSquarePng(src, 512, iconPath);
+  await writeRoundedSquarePng(src, 180, applePath);
   await writeIco(src, faviconApp);
   await writeIco(src, faviconPublic);
 
   console.log(
-    "Synced app/icon.png, app/apple-icon.png, app/favicon.ico, public/favicon.ico",
+    "Synced rounded favicon: app/icon.png, app/apple-icon.png, app/favicon.ico, public/favicon.ico",
   );
 }
 
