@@ -606,6 +606,8 @@ model Lead {
   assignedBrokerId String?     @map("assigned_broker_id")
   source           String      @default("organic")
   sourceMeta       Json?       @map("source_meta")
+  /// CRM-R4 — kênh liên hệ nurture + script gợi ý (channels, nurtureScriptId, opsNote).
+  opsMeta          Json        @default("{}") @map("ops_meta")
   segment          LeadSegment? @map("segment")
   message          String?     @db.Text
   status           LeadStatus @default(NEW)
@@ -622,6 +624,7 @@ model Lead {
   attributionConflicts AttributionConflict[]
 
   @@index([status])
+  @@index([assignedBrokerId, status])
   @@index([segment])
   @@map("leads")
 }

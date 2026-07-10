@@ -61,6 +61,12 @@ export function AdminShell({
               Xung đột
             </Link>
             <Link
+              href="/admin/ops-leads"
+              className="text-slate-600 hover:text-slate-800"
+            >
+              Ops leads
+            </Link>
+            <Link
               href="/admin/inbound-leads"
               className="text-slate-600 hover:text-slate-800"
             >

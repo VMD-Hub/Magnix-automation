@@ -19,6 +19,7 @@ import {
   parseLeadChannelHeader,
   resolveLeadSource,
 } from "@/lib/leads/source";
+import { buildInitialLeadOpsMeta } from "@/lib/leads/ops-meta";
 import type { Prisma } from "@prisma/client";
 import { queueConflictFromOpsLead } from "@/lib/attribution/conflict";
 
@@ -128,6 +129,12 @@ export async function POST(req: NextRequest) {
           assignedBrokerId: attribution.assignedBrokerId,
           source,
           sourceMeta: sourceMeta as Prisma.InputJsonValue | undefined,
+          opsMeta: buildInitialLeadOpsMeta({
+            phone: body.phone,
+            email: body.email,
+            segment,
+            source,
+          }) as Prisma.InputJsonValue,
           segment,
           message: body.message,
         },
