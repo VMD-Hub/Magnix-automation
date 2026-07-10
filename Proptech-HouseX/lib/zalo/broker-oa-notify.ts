@@ -1,3 +1,8 @@
+/**
+ * Zalo OA CS — tùy chọn, tách khỏi thông báo in-app CTV.
+ * Mặc định production: ZALO_OA_NOTIFY_ENABLED=false (milestone/conflict chỉ in-app).
+ * Bật true khi chạy chiến dịch quảng bá qua OA (phase sau).
+ */
 import type { OutboxPayloads } from "@/lib/events/types";
 import { prisma } from "@/lib/prisma";
 import { MILESTONE_LABEL } from "@/lib/noxh-case/milestone-labels";

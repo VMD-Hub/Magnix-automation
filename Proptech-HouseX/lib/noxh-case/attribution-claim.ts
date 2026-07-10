@@ -79,6 +79,32 @@ export async function evaluateCtvClaim(
     select: { id: true },
   });
 
+  const platformCase = await tx.noxhCase.findFirst({
+    where: {
+      normalizedPhone: params.normalizedPhone,
+      caseStatus: "ACTIVE",
+      brokerId: null,
+    },
+    orderBy: { createdAt: "desc" },
+    select: { code: true, createdAt: true },
+  });
+
+  if (
+    platformCase &&
+    isWithinBusinessDaysWindow(
+      platformCase.createdAt,
+      PLATFORM_LEAD_ACTIVE_BUSINESS_DAYS,
+      now,
+    )
+  ) {
+    return {
+      ok: false,
+      reason: "PLATFORM_LEAD_ACTIVE",
+      message:
+        "Khách đang được HouseX tư vấn. Thử lại sau khi hết thời gian chờ.",
+    };
+  }
+
   if (customer) {
     const platformLead = await tx.lead.findFirst({
       where: {

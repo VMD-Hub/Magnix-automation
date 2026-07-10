@@ -53,7 +53,24 @@
 | **1** | Tab Khách: home, dự án, lead, tools | ✅ |
 | **2** | Tab Agent: cases, notifications, commissions | ✅ |
 | **3a** | Đào tạo / pháp lý / quản lý dịch vụ + quiz unlock | ✅ |
-| **3b** | OA CS milestone notify CTV (DNA-D) + deep link/ZNS (sau) | ✅ CS / 🔜 ZNS |
+| **3b** | Thông báo CTV: in-app (mặc định); OA CS tùy chọn (marketing) | ✅ in-app / 🔜 OA campaign |
+
+## Thông báo CTV & Zalo OA (chốt 2026-07)
+
+| Kênh | Dùng cho | Mặc định | Phí |
+|------|----------|----------|-----|
+| **In-app** (`brokerNotification` → `/api/ctv/notifications`) | Milestone NOXH, xung đột attribution, claim blocked | **Bật** | Miễn phí |
+| **Zalo OA CS API** (`broker-oa-notify.ts`, `/oa/message/cs`) | Chiến dịch quảng bá / broadcast (phase sau) | **Tắt** (`ZALO_OA_NOTIFY_ENABLED=false`) | Gói OA + hạn mức tin |
+| **Push Mini App** (`requestSendNotification`) | Nhắc ngoài app (tùy chọn sau) | Chưa bật | Qua hệ thống OA |
+
+**Quy tắc vận hành:**
+
+1. CTV đăng ký → trách nhiệm mở Mini App / bật thông báo; hệ thống **không** spam OA cho notify Ops.
+2. Wizard HOT auto-case **không** đổi `Lead.status` sang `CONTACTED` — giữ `NEW`; fairplay R4 chặn claim qua `NoxhCase` platform active (`brokerId = null`, 20 ngày LV).
+3. Nhãn Ops lead: `CONTACTED` = «Đã tiếp nhận»; `QUALIFIED` = «Đã liên hệ» (đã gọi/chăm sóc).
+4. Bật OA API chỉ khi chạy marketing — cần gói **Tăng trưởng** trở lên (lỗi `-224` nếu gói Tiêu chuẩn).
+
+**Tài liệu:** `Proptech-HouseX/docs/DNA_COMPLETION.md` · `NOXH_CASE_PIPELINE.md` · `LEAD_ATTRIBUTION_CONFLICT_RULES.md` §7.
 
 ## Env
 

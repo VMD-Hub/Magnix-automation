@@ -175,7 +175,7 @@ export async function createPlatformNoxhCase(params: {
           projectId: params.projectId ?? undefined,
           source,
           message,
-          status: "CONTACTED",
+          // Giữ NEW — fairplay R4 qua NoxhCase active (xem attribution-claim).
         },
       });
     } else {
@@ -184,7 +184,6 @@ export async function createPlatformNoxhCase(params: {
         data: {
           customerId: customer.id,
           projectId: params.projectId ?? lead.projectId ?? undefined,
-          status: lead.status === "NEW" ? "CONTACTED" : lead.status,
         },
       });
     }

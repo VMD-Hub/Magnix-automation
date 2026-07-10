@@ -56,7 +56,7 @@ Thứ tự kiểm tra (`evaluateCtvClaim`):
 | R1 | SĐT = SĐT của chính CTV | **Từ chối** | `SELF_REFERRAL` |
 | R2 | CTV chưa unlock `NOXH_CLAIM` | **Từ chối** | `BROKER_NOT_CTV` |
 | R3 | `NoxhCase` ACTIVE, `brokerId` ≠ CTV này, còn lock | **Từ chối** | `ACTIVE_CASE_OTHER_CTV` |
-| R4 | `Lead` sàn Ops `CONTACTED`/`QUALIFIED`, `assignedBrokerId = null`, trong **20 ngày LV** | **Từ chối** | `PLATFORM_LEAD_ACTIVE` |
+| R4 | `Lead` sàn Ops `CONTACTED`/`QUALIFIED`, **hoặc** `NoxhCase` platform active (`brokerId = null`), trong **20 ngày LV** | **Từ chối** | `PLATFORM_LEAD_ACTIVE` |
 | R5 | Không rơi R1–R4 | **Cho claim** + lock 20 ngày LV | — |
 
 **Thông báo CTV (R4):** *"Khách đang được House X tư vấn. Thử lại sau khi hết thời gian chờ hoặc liên hệ Ops."*
@@ -124,8 +124,8 @@ Khai báo tối thiểu khi claim:
 | `Lead.status` | Ops làm gì | Ảnh hưởng claim CTV |
 |---------------|------------|---------------------|
 | `NEW` | Phân loại nguồn + segment; gán kịch bản | Chưa chặn CTV |
-| `CONTACTED` | Đã liên hệ lần 1 — ghi kênh (Zalo/email/FB) | **Bật R4** trong 20 ngày LV |
-| `QUALIFIED` | Đủ điều kiện tư vấn sâu / hồ sơ | **Bật R4** |
+| `CONTACTED` | Ops đã tiếp nhận vào pipeline (chưa chắc đã gọi) | **Bật R4** trong 20 ngày LV |
+| `QUALIFIED` | Đã liên hệ / chăm sóc; đủ điều kiện tư vấn sâu | **Bật R4** trong 20 ngày LV |
 | `WON` | Chuyển hồ sơ / HĐMB | Ops giữ pipeline chính |
 | `LOST` | Nurture lại sau X ngày | Hết R4 → CTV có thể claim (nếu không case khác) |
 
@@ -149,7 +149,7 @@ CTV claim bị chặn / Ops phát hiện trùng
         └─ Đóng cả hai (khách trùng spam / sai SĐT)
         │
         ▼
-  Ghi AttributionEvent + thông báo CTV (Mini App + OA)
+  Ghi AttributionEvent + thông báo CTV (in-app; OA chỉ khi ZALO_OA_NOTIFY_ENABLED=true)
 ```
 
 | Quyết định | Ai duyệt | Audit |
@@ -194,7 +194,7 @@ CTV claim bị chặn / Ops phát hiện trùng
 | **CRM-R2** | Conflict queue Admin | `AttributionConflict` table + `/admin/conflicts` |
 | **CRM-R3** | CTV lịch + tiến độ bắt buộc | `NoxhCase.consultScheduledAt`, validate trước gia hạn lock |
 | **CRM-R4** | Ops lead board + nurture meta | Lead `meta.channels`, `meta.nurtureScriptId` |
-| **CRM-R5** | OA notify xung đột | `broker-oa-notify.ts` + event `attribution.conflict` |
+| **CRM-R5** | Thông báo CTV xung đột (in-app); OA tùy chọn | `broker-in-app-notify.ts` · `broker-oa-notify.ts` nếu `ZALO_OA_NOTIFY_ENABLED` |
 | **CRM-R6** | n8n mirror conflict | `housex_attribution_conflicts` + Telegram Ops |
 | **CRM-R7** | Phân quyền Admin Ops vs Super | `ADMIN_OPS_SECRET` + middleware `/admin` |
 

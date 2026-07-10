@@ -139,8 +139,8 @@ export const COMMISSION_STATUS_LABEL: Record<string, string> = {
 
 export const LEAD_STATUS_LABEL: Record<string, string> = {
   NEW: "Mới",
-  CONTACTED: "Đã liên hệ",
-  QUALIFIED: "Đạt chuẩn",
+  CONTACTED: "Đã tiếp nhận",
+  QUALIFIED: "Đã liên hệ",
   WON: "Chốt thành công",
   LOST: "Thất bại",
 };

@@ -34,8 +34,8 @@ export const LEAD_SOURCE_LABELS: Record<string, string> = {
 
 export const LEAD_STATUS_LABELS: Record<LeadStatus, string> = {
   NEW: "Mới",
-  CONTACTED: "Đã liên hệ",
-  QUALIFIED: "Đủ điều kiện",
+  CONTACTED: "Đã tiếp nhận",
+  QUALIFIED: "Đã liên hệ",
   WON: "Thành công",
   LOST: "Đóng",
 };
@@ -50,6 +50,11 @@ const leadListInclude = {
   customer: { select: { name: true, phone: true, email: true } },
   project: { select: { name: true, slug: true } },
   listing: { select: { code: true, propertyType: true } },
+  noxhCases: {
+    where: { caseStatus: "ACTIVE" },
+    select: { code: true },
+    take: 1,
+  },
 } satisfies Prisma.LeadInclude;
 
 export type OpsLeadWithRelations = Prisma.LeadGetPayload<{
@@ -258,6 +263,7 @@ export function serializeOpsLeadListItem(row: OpsLeadWithRelations) {
         ? `${row.message.slice(0, 120)}…`
         : row.message
       : null,
+    noxhCaseCode: row.noxhCases[0]?.code ?? null,
     createdAt: row.createdAt.toISOString(),
   };
 }

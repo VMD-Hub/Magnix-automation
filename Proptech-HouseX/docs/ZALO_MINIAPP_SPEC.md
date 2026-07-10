@@ -120,6 +120,23 @@ Catalog `AgentService` (TRAINING / LEGAL / PRODUCT) + `AgentEntitlement` + quiz.
 
 Seed: `npm run db:seed:agent-services` — `CTV_ONBOARDING`, `LEGAL_BROKER_BASICS`, `NOXH_CLAIM`, `LISTING_POST`.
 
+## Thông báo CTV (chốt kiến trúc 2026-07)
+
+| Sự kiện | Kênh chính | OA API |
+|---------|------------|--------|
+| Milestone hồ sơ NOXH | In-app `/agent/thong-bao` | Tắt mặc định |
+| Xung đột attribution | In-app + Admin queue | Tắt mặc định |
+| Chiến dịch Zalo Ads / lead magnet | OA Broadcast / template (sau) | Bật khi cần |
+
+```env
+# Production MVP — không cần token OA cho notify hệ thống
+ZALO_OA_NOTIFY_ENABLED=false
+```
+
+Khi `ZALO_OA_NOTIFY_ENABLED=true`, outbox `noxh_case.milestone_changed` và `attribution.conflict` **có thể** gọi thêm `broker-oa-notify.ts` (best-effort). Khuyến nghị giữ `false` đến phase marketing.
+
+**Ops lead:** wizard HOT tạo `NoxhCase` nhưng **giữ** `Lead.status=NEW`; badge «Hồ sơ NOXH: HX-…» trên `/admin/ops-leads`.
+
 ## Repo
 
 ```

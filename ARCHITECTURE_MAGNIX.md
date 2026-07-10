@@ -52,6 +52,8 @@ Magnix **orchestrate** qua n8n; logic nặng có thể gọi HTTP sang service t
 ```
 
 > **Zalo Mini App (ADR-014):** frontend `housex-zalo-miniapp/` · auth `POST /api/auth/zalo` trên Proptech-HouseX · Postgres SoR. Spec: `Proptech-HouseX/docs/ZALO_MINIAPP_SPEC.md`.
+>
+> **Thông báo CTV (chốt 2026-07):** mặc định **in-app** (`brokerNotification` → Mini App `/agent/thong-bao`); `ZALO_OA_NOTIFY_ENABLED=false` trên VPS. Zalo OA Open API **không** dùng cho milestone/conflict Ops — chỉ phase **quảng bá/chiến dịch** (gói OA Tăng trưởng khi cần). Chi tiết: `.cursor/ADR-014-zalo-miniapp.md` § Thông báo.
 
 ---
 

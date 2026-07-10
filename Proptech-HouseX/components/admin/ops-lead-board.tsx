@@ -19,6 +19,7 @@ type OpsLeadRow = {
   projectName: string | null;
   listingTitle: string | null;
   messagePreview: string | null;
+  noxhCaseCode: string | null;
   createdAt: string;
 };
 
@@ -45,8 +46,8 @@ type OpsLeadDetail = OpsLeadRow & {
 
 const STATUSES = [
   { id: "NEW", label: "Mới" },
-  { id: "CONTACTED", label: "Đã liên hệ" },
-  { id: "QUALIFIED", label: "Đủ ĐK" },
+  { id: "CONTACTED", label: "Đã tiếp nhận" },
+  { id: "QUALIFIED", label: "Đã liên hệ" },
   { id: "WON", label: "Thành công" },
   { id: "LOST", label: "Đóng" },
 ] as const;
@@ -201,6 +202,11 @@ export function OpsLeadBoard() {
                           Nurture: {row.nurtureScriptLabel}
                         </p>
                       ) : null}
+                      {row.noxhCaseCode ? (
+                        <p className="mt-1 text-xs font-medium text-violet-700">
+                          Hồ sơ NOXH: {row.noxhCaseCode}
+                        </p>
+                      ) : null}
                     </div>
                     <StatusBadge status={row.status} label={row.statusLabel} />
                   </div>
@@ -241,6 +247,9 @@ export function OpsLeadBoard() {
                   </option>
                 ))}
               </select>
+              <p className="mt-1 text-xs text-slate-500">
+                Mới → Đã tiếp nhận (vào pipeline) → Đã liên hệ (đã gọi/chăm sóc).
+              </p>
             </label>
 
             <label className="block text-sm">
