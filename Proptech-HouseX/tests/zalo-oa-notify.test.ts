@@ -1,6 +1,9 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { formatMilestoneOaMessage } from "../lib/zalo/broker-oa-notify";
+import {
+  formatConflictOaMessage,
+  formatMilestoneOaMessage,
+} from "../lib/zalo/broker-oa-notify";
 import { isZaloOaNotifyEnabled, clearOaTokenCacheForTests } from "../lib/zalo/oa";
 
 test("formatMilestoneOaMessage — gồm mã hồ sơ và milestone", () => {
@@ -24,6 +27,53 @@ test("formatMilestoneOaMessage — gồm mã hồ sơ và milestone", () => {
 
   if (prev === undefined) delete process.env.NEXT_PUBLIC_SITE_URL;
   else process.env.NEXT_PUBLIC_SITE_URL = prev;
+});
+
+test("formatConflictOaMessage — CTV claim blocked (R4)", () => {
+  const prev = process.env.NEXT_PUBLIC_SITE_URL;
+  process.env.NEXT_PUBLIC_SITE_URL = "https://timnhaxahoi.com";
+
+  const msg = formatConflictOaMessage({
+    phase: "opened",
+    conflictId: "conf-1",
+    kind: "CTV_CLAIM_BLOCKED",
+    normalizedPhoneMasked: "090***67",
+    brokerId: "broker-1",
+    rejectReason: "PLATFORM_LEAD_ACTIVE",
+    rejectLabel: "Ops đang tư vấn (R4)",
+    resolution: null,
+    resolutionLabel: null,
+    platformLeadSource: null,
+    noxhCaseCode: null,
+    customerName: "An",
+  });
+
+  assert.match(msg, /Không thể giữ lead affiliate/);
+  assert.match(msg, /Ops đang tư vấn/);
+  assert.match(msg, /moi-gioi\/thong-bao/);
+
+  if (prev === undefined) delete process.env.NEXT_PUBLIC_SITE_URL;
+  else process.env.NEXT_PUBLIC_SITE_URL = prev;
+});
+
+test("formatConflictOaMessage — resolved KEEP_PLATFORM", () => {
+  const msg = formatConflictOaMessage({
+    phase: "resolved",
+    conflictId: "conf-2",
+    kind: "OPS_LEAD_CTV_LOCK",
+    normalizedPhoneMasked: "090***88",
+    brokerId: "broker-2",
+    rejectReason: null,
+    rejectLabel: null,
+    resolution: "KEEP_PLATFORM",
+    resolutionLabel: "Giữ Ops",
+    platformLeadSource: "zalo_ads",
+    noxhCaseCode: "HX-NOXH-000001",
+    customerName: null,
+  });
+
+  assert.match(msg, /Kết quả xử lý xung đột/);
+  assert.match(msg, /Giữ Ops/);
 });
 
 test("isZaloOaNotifyEnabled — cần app creds + refresh hoặc access token", () => {

@@ -5,6 +5,9 @@ import type {
 } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import type { ClaimRejectReason } from "@/lib/noxh-case/attribution-claim";
+import { enqueueEvent } from "@/lib/events/outbox";
+import type { OutboxPayloads } from "@/lib/events/types";
+import { maskLeadPhone } from "@/lib/leads/ops-meta";
 
 type Tx = Prisma.TransactionClient;
 
@@ -66,6 +69,51 @@ const conflictInclude = {
   broker: { select: { id: true, fullName: true, ctvCode: true } },
 } satisfies Prisma.AttributionConflictInclude;
 
+export function buildAttributionConflictNotifyPayload(input: {
+  phase: "opened" | "resolved";
+  conflictId: string;
+  kind: AttributionConflictKind;
+  normalizedPhone: string;
+  brokerId: string;
+  rejectReason?: string | null;
+  resolution?: AttributionConflictResolution | null;
+  platformLeadSource?: string | null;
+  noxhCaseCode?: string | null;
+  customerName?: string | null;
+}): OutboxPayloads["attribution.conflict"] {
+  return {
+    phase: input.phase,
+    conflictId: input.conflictId,
+    kind: input.kind,
+    normalizedPhoneMasked: maskLeadPhone(input.normalizedPhone) ?? "***",
+    brokerId: input.brokerId,
+    rejectReason: input.rejectReason ?? null,
+    rejectLabel: input.rejectReason
+      ? (CONFLICT_REJECT_LABEL[input.rejectReason] ?? input.rejectReason)
+      : null,
+    resolution: input.resolution ?? null,
+    resolutionLabel: input.resolution
+      ? CONFLICT_RESOLUTION_LABEL[input.resolution]
+      : null,
+    platformLeadSource: input.platformLeadSource ?? null,
+    noxhCaseCode: input.noxhCaseCode ?? null,
+    customerName: input.customerName ?? null,
+  };
+}
+
+async function enqueueAttributionConflictNotify(
+  tx: Tx,
+  payload: OutboxPayloads["attribution.conflict"],
+): Promise<void> {
+  if (!payload.brokerId.trim()) return;
+  await enqueueEvent(
+    tx,
+    "attribution.conflict",
+    payload,
+    `attribution.conflict:${payload.phase}:${payload.conflictId}`,
+  );
+}
+
 /** Upsert hàng đợi OPEN — tránh nhân đôi cùng SĐT + kind. */
 export async function queueAttributionConflict(
   tx: Tx,
@@ -104,7 +152,7 @@ export async function queueAttributionConflict(
     return;
   }
 
-  await tx.attributionConflict.create({
+  const created = await tx.attributionConflict.create({
     data: {
       normalizedPhone: input.normalizedPhone,
       kind: input.kind,
@@ -118,7 +166,37 @@ export async function queueAttributionConflict(
         firstTriggeredAt: new Date().toISOString(),
       } as Prisma.InputJsonValue,
     },
+    select: {
+      id: true,
+      kind: true,
+      normalizedPhone: true,
+      brokerId: true,
+      rejectReason: true,
+      platformLead: { select: { source: true } },
+      noxhCase: { select: { code: true } },
+    },
   });
+
+  if (created.brokerId) {
+    const customerName =
+      typeof input.meta?.customerName === "string"
+        ? input.meta.customerName
+        : null;
+    await enqueueAttributionConflictNotify(
+      tx,
+      buildAttributionConflictNotifyPayload({
+        phase: "opened",
+        conflictId: created.id,
+        kind: created.kind,
+        normalizedPhone: created.normalizedPhone,
+        brokerId: created.brokerId,
+        rejectReason: created.rejectReason,
+        platformLeadSource: created.platformLead?.source ?? null,
+        noxhCaseCode: created.noxhCase?.code ?? null,
+        customerName,
+      }),
+    );
+  }
 }
 
 /** Ghi conflict khi CTV claim bị R3/R4 chặn. */
@@ -396,7 +474,7 @@ export async function resolveAttributionConflict(
         break;
     }
 
-    return tx.attributionConflict.update({
+    const updated = await tx.attributionConflict.update({
       where: { id },
       data: {
         status: input.resolution === "DISMISS_BOTH" ? "DISMISSED" : "RESOLVED",
@@ -407,6 +485,32 @@ export async function resolveAttributionConflict(
       },
       include: conflictInclude,
     });
+
+    if (updated.brokerId) {
+      const meta =
+        updated.meta && typeof updated.meta === "object"
+          ? (updated.meta as Record<string, unknown>)
+          : {};
+      await enqueueAttributionConflictNotify(
+        tx,
+        buildAttributionConflictNotifyPayload({
+          phase: "resolved",
+          conflictId: updated.id,
+          kind: updated.kind,
+          normalizedPhone: updated.normalizedPhone,
+          brokerId: updated.brokerId,
+          rejectReason: updated.rejectReason,
+          resolution: input.resolution,
+          platformLeadSource: updated.platformLead?.source ?? null,
+          noxhCaseCode: updated.noxhCase?.code ?? null,
+          customerName:
+            updated.customer?.name ??
+            (typeof meta.customerName === "string" ? meta.customerName : null),
+        }),
+      );
+    }
+
+    return updated;
   });
 }
 

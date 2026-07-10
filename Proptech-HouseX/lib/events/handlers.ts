@@ -53,6 +53,15 @@ registerWebhookPlusHandler("noxh_case.milestone_changed", async (payload) => {
   );
 });
 
+registerWebhookPlusHandler("attribution.conflict", async (payload) => {
+  const { notifyBrokerConflictZaloOa } = await import(
+    "@/lib/zalo/broker-oa-notify"
+  );
+  await notifyBrokerConflictZaloOa(
+    payload as import("@/lib/events/types").OutboxPayloads["attribution.conflict"],
+  );
+});
+
 export async function handleEvent(
   type: string,
   payload: unknown,

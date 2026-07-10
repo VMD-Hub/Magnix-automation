@@ -155,6 +155,21 @@ export interface OutboxPayloads {
     docType: string | null;
     message: string;
   };
+  /** CRM-R5 — xung đột attribution Ops vs CTV → notify OA. */
+  "attribution.conflict": {
+    phase: "opened" | "resolved";
+    conflictId: string;
+    kind: "CTV_CLAIM_BLOCKED" | "OPS_LEAD_CTV_LOCK";
+    normalizedPhoneMasked: string;
+    brokerId: string;
+    rejectReason: string | null;
+    rejectLabel: string | null;
+    resolution: string | null;
+    resolutionLabel: string | null;
+    platformLeadSource: string | null;
+    noxhCaseCode: string | null;
+    customerName: string | null;
+  };
 }
 
 export type OutboxEventType = keyof OutboxPayloads;
