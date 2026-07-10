@@ -1,5 +1,9 @@
 import type { LeadSegment } from "@prisma/client";
 import { resolveNurtureScriptId } from "@/lib/leads/nurture-scripts";
+import {
+  readNoxhWizardSnapshot,
+  type NoxhWizardSnapshot,
+} from "@/lib/leads/noxh-wizard-snapshot";
 
 /** Kênh liên hệ phục vụ nurture — không thay SĐT khóa chính trên Customer. */
 export type LeadContactChannels = {
@@ -13,6 +17,8 @@ export type LeadOpsMeta = {
   channels: LeadContactChannels;
   nurtureScriptId: string | null;
   opsNote: string | null;
+  /** Snapshot wizard NOXH — chỉ Admin, có số tiền cụ thể. */
+  wizardSnapshot?: NoxhWizardSnapshot | null;
 };
 
 const EMPTY_CHANNELS: LeadContactChannels = {};
@@ -45,6 +51,7 @@ export function readLeadOpsMeta(meta: unknown): LeadOpsMeta {
           ? null
           : null,
     opsNote: typeof m.opsNote === "string" ? m.opsNote : null,
+    wizardSnapshot: readNoxhWizardSnapshot(m),
   };
 }
 
@@ -85,6 +92,7 @@ export function buildInitialLeadOpsMeta(input: {
   email?: string | null;
   segment: LeadSegment | null;
   source: string;
+  wizardSnapshot?: NoxhWizardSnapshot;
 }): Record<string, unknown> {
   return {
     channels: {
@@ -96,6 +104,7 @@ export function buildInitialLeadOpsMeta(input: {
       source: input.source,
     }),
     opsNote: null,
+    ...(input.wizardSnapshot ? { wizardSnapshot: input.wizardSnapshot } : {}),
   };
 }
 

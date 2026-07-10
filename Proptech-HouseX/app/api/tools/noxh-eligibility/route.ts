@@ -13,6 +13,8 @@ import {
   toLeadSummary,
   noxhLeadMessage,
 } from "@/lib/finance/noxh-lead";
+import { buildInitialLeadOpsMeta } from "@/lib/leads/ops-meta";
+import { buildNoxhWizardSnapshot } from "@/lib/leads/noxh-wizard-snapshot";
 import {
   ensurePlatformNoxhCaseFromWizardHot,
   shouldAutoCreatePlatformCaseForWizardTier,
@@ -22,9 +24,8 @@ const RATE_MAX = Number(process.env.LEAD_RATE_MAX ?? "20");
 const RATE_WINDOW = Number(process.env.LEAD_RATE_WINDOW_SEC ?? "3600");
 
 /**
- * Forward chi tiết tài chính (thu nhập, nợ xấu, DTI) sang n8n để lưu Google
- * Sheet — best-effort, KHÔNG lưu Postgres (theo quyết định lưu trữ: chi tiết
- * PII tài chính không nằm ở app). Không có URL → bỏ qua.
+ * Forward chi tiết tài chính sang n8n để lưu Google Sheet — best-effort.
+ * Snapshot đầy đủ cho Admin lưu trong Lead.opsMeta.wizardSnapshot (chỉ /admin).
  */
 async function forwardNoxhDetail(payload: unknown): Promise<void> {
   const url = process.env.NOXH_DETAIL_WEBHOOK_URL;
@@ -103,6 +104,14 @@ export async function POST(req: NextRequest) {
 
     const summary = toLeadSummary(evaluation, credit, classification);
 
+    const wizardSnapshot = buildNoxhWizardSnapshot({
+      wizardInput: i,
+      evaluation,
+      credit,
+      classification,
+      householdMonthlyIncome: householdIncome,
+    });
+
     const lead = await prisma.$transaction(async (tx) => {
       const customer = await tx.customer.upsert({
         where: { normalizedPhone },
@@ -121,6 +130,13 @@ export async function POST(req: NextRequest) {
           source: "tool:noxh-check",
           segment: "NOXH",
           message: noxhLeadMessage(summary),
+          opsMeta: buildInitialLeadOpsMeta({
+            phone: body.phone,
+            email: body.email,
+            segment: "NOXH",
+            source: "tool:noxh-check",
+            wizardSnapshot,
+          }),
         },
       });
 

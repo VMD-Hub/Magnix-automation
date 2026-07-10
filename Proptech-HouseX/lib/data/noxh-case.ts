@@ -36,6 +36,7 @@ const caseInclude = {
       status: true,
       message: true,
       source: true,
+      opsMeta: true,
       commission: true,
     },
   },

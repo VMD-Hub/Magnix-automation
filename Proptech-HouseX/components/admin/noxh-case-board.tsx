@@ -3,7 +3,12 @@
 import { useCallback, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
+import { NoxhWizardOpsSummary } from "@/components/admin/noxh-wizard-ops-summary";
 import { cn } from "@/lib/ui/cn";
+import {
+  readNoxhWizardSnapshot,
+  type NoxhWizardSnapshot,
+} from "@/lib/leads/noxh-wizard-snapshot";
 
 type AdminCaseRow = {
   id: string;
@@ -27,6 +32,7 @@ type AdminCaseDetail = {
   objectGroup: string;
   intendToBorrow: boolean;
   leadMessage: string | null;
+  wizardSnapshot: NoxhWizardSnapshot | null;
   leadId: string | null;
   leadSource: string | null;
 };
@@ -63,19 +69,6 @@ const DOC_STATUSES = [
   "EXPIRED",
 ] as const;
 
-const OBJECT_GROUP_LABEL: Record<string, string> = {
-  WORKER: "Công nhân / lao động",
-  MERIT: "Người có công",
-  POOR_RURAL: "Hộ nghèo nông thôn",
-  POOR_URBAN: "Hộ nghèo đô thị",
-  LOW_INCOME_URBAN: "Thu nhập thấp đô thị",
-  ARMED_FORCES: "Quân đội / công an",
-  CIVIL_SERVANT: "Công chức / viên chức",
-  RETURNED_OFFICIAL_HOUSING: "Trả nhà công vụ",
-  LAND_RECOVERED: "Thu hồi đất",
-  NONE: "Chưa xác định",
-};
-
 export function NoxhCaseBoard() {
   const searchParams = useSearchParams();
   const [items, setItems] = useState<AdminCaseRow[]>([]);
@@ -108,6 +101,7 @@ export function NoxhCaseBoard() {
         objectGroup: row.objectGroup ?? "WORKER",
         intendToBorrow: !!row.intendToBorrow,
         leadMessage: row.lead?.message ?? null,
+        wizardSnapshot: readNoxhWizardSnapshot(row.lead?.opsMeta),
         leadId: row.lead?.id ?? null,
         leadSource: row.lead?.source ?? null,
       });
@@ -305,21 +299,17 @@ export function NoxhCaseBoard() {
             {detail ? (
               <div className="mt-6 rounded-lg border border-slate-200 bg-slate-50 p-3 text-sm">
                 <h4 className="font-bold text-slate-900">Tóm tắt từ wizard / lead</h4>
-                <p className="mt-2 text-slate-600">
-                  Nhóm đối tượng:{" "}
-                  <strong>
-                    {OBJECT_GROUP_LABEL[detail.objectGroup] ?? detail.objectGroup}
-                  </strong>
-                  {" · "}
-                  Vay NH: <strong>{detail.intendToBorrow ? "Có" : "Không"}</strong>
+                <p className="mt-1 text-xs text-slate-500">
+                  Song ngữ · thu nhập & nợ cụ thể — chỉ Admin
                 </p>
-                {detail.leadMessage ? (
-                  <p className="mt-2 break-words text-xs text-slate-600">
-                    {detail.leadMessage}
-                  </p>
-                ) : null}
+                <div className="mt-3">
+                  <NoxhWizardOpsSummary
+                    wizardSnapshot={detail.wizardSnapshot}
+                    fallbackMessage={detail.leadMessage}
+                  />
+                </div>
                 {detail.leadId ? (
-                  <p className="mt-2 text-xs">
+                  <p className="mt-3 text-xs">
                     <a
                       href={`/admin/ops-leads`}
                       className="font-medium text-brand-700 hover:underline"
@@ -329,9 +319,8 @@ export function NoxhCaseBoard() {
                   </p>
                 ) : null}
                 <p className="mt-2 text-xs text-slate-500">
-                  Chi tiết thu nhập / nợ (số tuyệt đối) nằm trên Google Sheet qua
-                  n8n — không lưu Postgres. Mục «Giấy tờ» bên dưới là checklist hồ
-                  sơ pháp lý Ops cập nhật thủ công khi khách nộp bản cứng.
+                  Mục «Giấy tờ» bên dưới là checklist hồ sơ pháp lý Ops cập nhật
+                  thủ công khi khách nộp bản cứng.
                 </p>
               </div>
             ) : null}

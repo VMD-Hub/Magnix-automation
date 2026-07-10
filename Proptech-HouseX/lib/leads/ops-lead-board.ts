@@ -258,11 +258,15 @@ export function serializeOpsLeadListItem(row: OpsLeadWithRelations) {
     nurtureScriptLabel: script?.label ?? null,
     projectName: row.project?.name ?? null,
     listingTitle: row.listing?.code ?? null,
-    messagePreview: row.message
-      ? row.message.length > 120
-        ? `${row.message.slice(0, 120)}…`
-        : row.message
-      : null,
+    messagePreview: ops.wizardSnapshot?.listPreviewVi
+      ? ops.wizardSnapshot.listPreviewVi.length > 140
+        ? `${ops.wizardSnapshot.listPreviewVi.slice(0, 140)}…`
+        : ops.wizardSnapshot.listPreviewVi
+      : row.message
+        ? row.message.length > 120
+          ? `${row.message.slice(0, 120)}…`
+          : row.message
+        : null,
     noxhCaseCode: row.noxhCases[0]?.code ?? null,
     createdAt: row.createdAt.toISOString(),
   };
@@ -275,6 +279,7 @@ export function serializeOpsLeadDetail(row: OpsLeadWithRelations) {
   return {
     ...serializeOpsLeadListItem(row),
     message: row.message,
+    wizardSnapshot: ops.wizardSnapshot ?? null,
     opsNote: ops.opsNote,
     channels: {
       phone: ops.channels.phone ?? row.customer?.phone ?? null,

@@ -2,8 +2,10 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
+import { NoxhWizardOpsSummary } from "@/components/admin/noxh-wizard-ops-summary";
 import { notifyAdminQueueRefresh } from "@/components/admin/use-admin-queue-counts";
 import { cn } from "@/lib/ui/cn";
+import type { NoxhWizardSnapshot } from "@/lib/leads/noxh-wizard-snapshot";
 
 type OpsLeadRow = {
   id: string;
@@ -27,6 +29,7 @@ type NurtureOption = { id: string; label: string; channel: string };
 
 type OpsLeadDetail = OpsLeadRow & {
   message: string | null;
+  wizardSnapshot: NoxhWizardSnapshot | null;
   opsNote: string | null;
   channels: {
     phone: string | null;
@@ -296,11 +299,20 @@ export function OpsLeadBoard() {
               />
             </label>
 
-            {detail.message ? (
-              <div className="rounded-md bg-slate-50 p-2 text-xs text-slate-600">
-                {detail.message}
+            <div>
+              <p className="text-xs font-medium text-slate-700">
+                Tóm tắt wizard NOXH
+              </p>
+              <p className="text-[10px] text-slate-500">
+                Song ngữ · số tiền cụ thể — chỉ Admin thấy
+              </p>
+              <div className="mt-2 max-h-[min(70vh,520px)] overflow-y-auto">
+                <NoxhWizardOpsSummary
+                  wizardSnapshot={detail.wizardSnapshot}
+                  fallbackMessage={detail.message}
+                />
               </div>
-            ) : null}
+            </div>
 
             {msg ? <p className="text-sm text-brand-700">{msg}</p> : null}
 
