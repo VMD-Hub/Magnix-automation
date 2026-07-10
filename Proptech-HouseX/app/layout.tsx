@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
 import { Inter, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { SiteChrome } from "@/components/layout/site-chrome";
+import { AppBody } from "@/components/layout/app-body";
 import { ThemeScript } from "@/components/theme/theme-script";
-import { ThemeShell } from "@/components/theme/theme-shell";
 import { UtmCapture } from "@/components/leads/utm-capture";
 import { getSiteUrl } from "@/lib/site-config";
 import { buildOrganizationJsonLd } from "@/lib/seo/organization-json-ld";
@@ -60,9 +59,7 @@ export default function RootLayout({
         />
         <ThemeScript />
         <UtmCapture />
-        <ThemeShell>
-          <SiteChrome>{children}</SiteChrome>
-        </ThemeShell>
+        <AppBody>{children}</AppBody>
       </body>
     </html>
   );

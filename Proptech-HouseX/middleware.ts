@@ -21,12 +21,6 @@ function adminForbiddenApi() {
   );
 }
 
-function forwardWithPathname(req: NextRequest) {
-  const requestHeaders = new Headers(req.headers);
-  requestHeaders.set("x-pathname", req.nextUrl.pathname);
-  return NextResponse.next({ request: { headers: requestHeaders } });
-}
-
 export function middleware(req: NextRequest) {
   const host = req.headers.get("host") ?? "";
   const campaignRedirect = buildCampaignLaneRedirectUrl(host);
@@ -72,7 +66,7 @@ export function middleware(req: NextRequest) {
     }
   }
 
-  return forwardWithPathname(req);
+  return NextResponse.next();
 }
 
 export const config = {
