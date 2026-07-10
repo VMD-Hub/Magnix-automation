@@ -36,6 +36,7 @@ const WORKFLOW_FILES = [
   'telegram-notify.workflow.json',
   'telegram-reminder.workflow.json',
   'telegram-resolver.workflow.json',
+  'housex-noxh-lead-route.workflow.json',
 ];
 
 /** Tên workflow cũ trên n8n — push cập nhật in-place thay vì tạo bản trùng */
