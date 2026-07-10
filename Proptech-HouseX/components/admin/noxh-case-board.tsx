@@ -23,6 +23,14 @@ type AdminCaseRow = {
   updatedAt: string;
 };
 
+type AdminCaseDetail = {
+  objectGroup: string;
+  intendToBorrow: boolean;
+  leadMessage: string | null;
+  leadId: string | null;
+  leadSource: string | null;
+};
+
 type AdminDoc = {
   id: string;
   docType: string;
@@ -55,10 +63,24 @@ const DOC_STATUSES = [
   "EXPIRED",
 ] as const;
 
+const OBJECT_GROUP_LABEL: Record<string, string> = {
+  WORKER: "Công nhân / lao động",
+  MERIT: "Người có công",
+  POOR_RURAL: "Hộ nghèo nông thôn",
+  POOR_URBAN: "Hộ nghèo đô thị",
+  LOW_INCOME_URBAN: "Thu nhập thấp đô thị",
+  ARMED_FORCES: "Quân đội / công an",
+  CIVIL_SERVANT: "Công chức / viên chức",
+  RETURNED_OFFICIAL_HOUSING: "Trả nhà công vụ",
+  LAND_RECOVERED: "Thu hồi đất",
+  NONE: "Chưa xác định",
+};
+
 export function NoxhCaseBoard() {
   const searchParams = useSearchParams();
   const [items, setItems] = useState<AdminCaseRow[]>([]);
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [detail, setDetail] = useState<AdminCaseDetail | null>(null);
   const [docs, setDocs] = useState<AdminDoc[]>([]);
   const [commission, setCommission] = useState<AdminCommission | null>(null);
   const [opsNote, setOpsNote] = useState("");
@@ -81,8 +103,16 @@ export function NoxhCaseBoard() {
     const res = await fetch(`/api/admin/noxh-cases/${id}`);
     const json = await res.json();
     if (res.ok) {
-      setDocs(json.data?.documents ?? []);
-      setOpsNote(json.data?.opsNote ?? "");
+      const row = json.data;
+      setDetail({
+        objectGroup: row.objectGroup ?? "WORKER",
+        intendToBorrow: !!row.intendToBorrow,
+        leadMessage: row.lead?.message ?? null,
+        leadId: row.lead?.id ?? null,
+        leadSource: row.lead?.source ?? null,
+      });
+      setDocs(row?.documents ?? []);
+      setOpsNote(row?.opsNote ?? "");
       const c = json.data?.lead?.commission;
       setCommission(
         c
@@ -272,7 +302,45 @@ export function NoxhCaseBoard() {
               Lưu ghi chú
             </Button>
 
-            <h4 className="mt-6 text-sm font-bold">Giấy tờ</h4>
+            {detail ? (
+              <div className="mt-6 rounded-lg border border-slate-200 bg-slate-50 p-3 text-sm">
+                <h4 className="font-bold text-slate-900">Tóm tắt từ wizard / lead</h4>
+                <p className="mt-2 text-slate-600">
+                  Nhóm đối tượng:{" "}
+                  <strong>
+                    {OBJECT_GROUP_LABEL[detail.objectGroup] ?? detail.objectGroup}
+                  </strong>
+                  {" · "}
+                  Vay NH: <strong>{detail.intendToBorrow ? "Có" : "Không"}</strong>
+                </p>
+                {detail.leadMessage ? (
+                  <p className="mt-2 break-words text-xs text-slate-600">
+                    {detail.leadMessage}
+                  </p>
+                ) : null}
+                {detail.leadId ? (
+                  <p className="mt-2 text-xs">
+                    <a
+                      href={`/admin/ops-leads`}
+                      className="font-medium text-brand-700 hover:underline"
+                    >
+                      Xem lead Ops ({detail.leadSource ?? "sàn"})
+                    </a>
+                  </p>
+                ) : null}
+                <p className="mt-2 text-xs text-slate-500">
+                  Chi tiết thu nhập / nợ (số tuyệt đối) nằm trên Google Sheet qua
+                  n8n — không lưu Postgres. Mục «Giấy tờ» bên dưới là checklist hồ
+                  sơ pháp lý Ops cập nhật thủ công khi khách nộp bản cứng.
+                </p>
+              </div>
+            ) : null}
+
+            <h4 className="mt-6 text-sm font-bold">Giấy tờ (checklist pháp lý)</h4>
+            <p className="mt-1 text-xs text-slate-500">
+              Mặc định «Chưa có» sau wizard HOT — Ops đổi trạng thái khi nhận được
+              từng loại giấy.
+            </p>
             <ul className="mt-2 space-y-2">
               {docs
                 .filter((d) => d.status !== "NOT_REQUIRED")

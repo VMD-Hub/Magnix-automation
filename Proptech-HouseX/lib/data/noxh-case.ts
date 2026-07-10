@@ -30,7 +30,15 @@ const caseInclude = {
   broker: { select: { id: true, fullName: true, ctvCode: true } },
   documents: { orderBy: { docType: "asc" as const } },
   assistLogs: { orderBy: { createdAt: "desc" as const }, take: 20 },
-  lead: { select: { id: true, status: true, commission: true } },
+  lead: {
+    select: {
+      id: true,
+      status: true,
+      message: true,
+      source: true,
+      commission: true,
+    },
+  },
 } satisfies Prisma.NoxhCaseInclude;
 
 export async function generateNoxhCaseCode(): Promise<string> {
