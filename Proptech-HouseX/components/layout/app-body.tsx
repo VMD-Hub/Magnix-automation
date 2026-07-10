@@ -16,7 +16,7 @@ export function AppBody({ children }: { children: ReactNode }) {
   const adminConsole = pathname.startsWith("/admin");
 
   if (adminConsole) {
-    return <div className="min-h-screen bg-slate-100">{children}</div>;
+    return <div className="flex min-h-screen flex-col bg-slate-100">{children}</div>;
   }
 
   return (

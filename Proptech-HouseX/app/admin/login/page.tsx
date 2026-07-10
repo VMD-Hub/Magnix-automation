@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
+import { Suspense } from "react";
 import { defaultAdminHome } from "@/lib/admin/roles";
 import { getAdminSessionFromCookies } from "@/lib/admin/session";
 import { AdminLoginForm } from "@/components/admin/admin-login-form";
@@ -11,10 +12,29 @@ export const metadata: Metadata = {
 
 export const dynamic = "force-dynamic";
 
-export default async function AdminLoginPage() {
+function resolvePostLoginPath(
+  role: "super" | "ops",
+  next?: string | null,
+): string {
+  if (
+    next &&
+    next.startsWith("/admin/") &&
+    !next.startsWith("/admin/login")
+  ) {
+    return next;
+  }
+  return defaultAdminHome(role);
+}
+
+export default async function AdminLoginPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ next?: string }>;
+}) {
   const session = await getAdminSessionFromCookies();
+  const params = await searchParams;
   if (session) {
-    redirect(defaultAdminHome(session.role));
+    redirect(resolvePostLoginPath(session.role, params.next));
   }
 
   return (
@@ -25,7 +45,9 @@ export default async function AdminLoginPage() {
         </h1>
         <p className="mt-1 text-sm text-slate-500">Console vận hành nền tảng House X</p>
       </div>
-      <AdminLoginForm />
+      <Suspense fallback={<p className="text-sm text-slate-500">Đang tải form…</p>}>
+        <AdminLoginForm />
+      </Suspense>
     </div>
   );
 }

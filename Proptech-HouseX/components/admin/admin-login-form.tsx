@@ -1,11 +1,11 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 
 export function AdminLoginForm() {
-  const router = useRouter();
+  const searchParams = useSearchParams();
   const [secret, setSecret] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -17,6 +17,7 @@ export function AdminLoginForm() {
     try {
       const res = await fetch("/api/admin/session", {
         method: "POST",
+        credentials: "same-origin",
         headers: { "content-type": "application/json" },
         body: JSON.stringify({ secret }),
       });
@@ -27,8 +28,13 @@ export function AdminLoginForm() {
       }
       const home =
         typeof json?.data?.home === "string" ? json.data.home : "/admin/ctv";
-      router.push(home);
-      router.refresh();
+      const next = searchParams.get("next");
+      const target =
+        next && next.startsWith("/admin/") && !next.startsWith("/admin/login")
+          ? next
+          : home;
+      // Full reload — đảm bảo cookie hx_admin được middleware/layout đọc ngay.
+      window.location.assign(target);
     } catch {
       setError("Lỗi kết nối.");
     } finally {

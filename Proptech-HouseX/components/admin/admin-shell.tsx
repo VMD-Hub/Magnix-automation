@@ -21,7 +21,7 @@ export function AdminShell({
   const home = defaultAdminHome(role);
 
   return (
-    <div className="fixed inset-0 z-[100] flex flex-col bg-slate-100">
+    <div className="flex min-h-screen flex-col bg-slate-100">
       <header className="border-b border-slate-200 bg-white px-4 py-3 shadow-sm">
         <div className="mx-auto flex max-w-6xl items-center justify-between">
           <div className="flex items-center gap-4">
