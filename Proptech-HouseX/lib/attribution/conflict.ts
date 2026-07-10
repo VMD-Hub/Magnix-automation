@@ -8,6 +8,7 @@ import type { ClaimRejectReason } from "@/lib/noxh-case/attribution-claim";
 import { enqueueEvent } from "@/lib/events/outbox";
 import type { OutboxPayloads } from "@/lib/events/types";
 import { maskLeadPhone } from "@/lib/leads/ops-meta";
+import { createAttributionConflictBrokerNotification } from "@/lib/attribution/broker-in-app-notify";
 
 type Tx = Prisma.TransactionClient;
 
@@ -173,7 +174,7 @@ export async function queueAttributionConflict(
       brokerId: true,
       rejectReason: true,
       platformLead: { select: { source: true } },
-      noxhCase: { select: { code: true } },
+      noxhCase: { select: { id: true, code: true } },
     },
   });
 
@@ -196,6 +197,17 @@ export async function queueAttributionConflict(
         customerName,
       }),
     );
+    await createAttributionConflictBrokerNotification(tx, {
+      brokerId: created.brokerId,
+      phase: "opened",
+      conflictId: created.id,
+      kind: created.kind,
+      rejectReason: created.rejectReason,
+      customerName,
+      phoneMasked: maskLeadPhone(created.normalizedPhone) ?? "***",
+      noxhCaseId: created.noxhCase?.id ?? input.noxhCaseId ?? null,
+      noxhCaseCode: created.noxhCase?.code ?? null,
+    });
   }
 }
 
@@ -508,6 +520,20 @@ export async function resolveAttributionConflict(
             (typeof meta.customerName === "string" ? meta.customerName : null),
         }),
       );
+      await createAttributionConflictBrokerNotification(tx, {
+        brokerId: updated.brokerId,
+        phase: "resolved",
+        conflictId: updated.id,
+        kind: updated.kind,
+        rejectReason: updated.rejectReason,
+        resolution: input.resolution,
+        customerName:
+          updated.customer?.name ??
+          (typeof meta.customerName === "string" ? meta.customerName : null),
+        phoneMasked: maskLeadPhone(updated.normalizedPhone) ?? "***",
+        noxhCaseId: updated.noxhCase?.id ?? null,
+        noxhCaseCode: updated.noxhCase?.code ?? null,
+      });
     }
 
     return updated;

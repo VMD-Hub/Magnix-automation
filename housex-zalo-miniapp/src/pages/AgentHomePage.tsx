@@ -68,8 +68,22 @@ export function AgentHomePage() {
       </Link>
 
       <Link to="/agent/thong-bao" className="card tool-card">
-        <h2>Thông báo {unread > 0 ? `(${unread})` : ""}</h2>
-        <p>Cập nhật mốc, SLA và hoa hồng</p>
+        <h2>
+          Thông báo
+          {unread > 0 ? (
+            <span
+              style={{
+                marginLeft: 8,
+                fontSize: 13,
+                fontWeight: 600,
+                color: "var(--hx-accent-2)",
+              }}
+            >
+              {unread} mới
+            </span>
+          ) : null}
+        </h2>
+        <p>Mốc hồ sơ · xung đột attribution · SLA · hoa hồng</p>
         <span className="tool-card-cta">Xem thông báo →</span>
       </Link>
 

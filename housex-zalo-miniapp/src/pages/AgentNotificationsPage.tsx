@@ -6,6 +6,10 @@ import {
   markNotificationsRead,
   type BrokerNotification,
 } from "@/services/agent";
+import {
+  brokerNotificationCategory,
+  stripNotificationRef,
+} from "@/utils/notifications";
 
 export function AgentNotificationsPage() {
   const { canAgent, loading: authLoading } = useAuth();
@@ -61,7 +65,7 @@ export function AgentNotificationsPage() {
             }}
             onClick={() => void markAll()}
           >
-            Đánh dấu đã đọc
+            Đánh dấu đã đọc ({unread})
           </button>
         ) : null}
       </div>
@@ -71,14 +75,25 @@ export function AgentNotificationsPage() {
       {!loading && items.length === 0 ? (
         <div className="card">
           <p>Chưa có thông báo.</p>
+          <p className="muted" style={{ marginTop: 8, fontSize: 13 }}>
+            Cập nhật mốc hồ sơ, xung đột attribution và SLA sẽ hiện tại đây.
+          </p>
         </div>
       ) : null}
 
       {items.map((n) => {
+        const category = brokerNotificationCategory(n.type);
+        const body = stripNotificationRef(n.body);
         const inner = (
           <>
-            <h2>{n.title}</h2>
-            <p>{n.body}</p>
+            <p
+              className="muted"
+              style={{ margin: "0 0 4px", fontSize: 11, letterSpacing: "0.04em" }}
+            >
+              {category.toUpperCase()}
+            </p>
+            <h2 style={{ margin: 0 }}>{n.title}</h2>
+            <p style={{ marginTop: 8 }}>{body}</p>
             <p className="muted" style={{ marginTop: 6 }}>
               {new Date(n.createdAt).toLocaleString("vi-VN")}
               {!n.read ? " · Chưa đọc" : ""}
