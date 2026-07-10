@@ -10,17 +10,17 @@ export type AdminSession = {
   role: AdminRole;
 };
 
-function secret(): string {
-  const s = process.env.ADMIN_SECRET;
+function signingSecret(): string | null {
+  const s = process.env.ADMIN_SECRET?.trim();
   if (s) return s;
-  if (process.env.NODE_ENV === "production") {
-    throw new Error("ADMIN_SECRET is required in production");
-  }
+  if (process.env.NODE_ENV === "production") return null;
   return "dev-insecure-admin-secret";
 }
 
-function signPayload(payloadB64: string): string {
-  return createHmac("sha256", secret()).update(payloadB64).digest("base64url");
+function signPayload(payloadB64: string): string | null {
+  const s = signingSecret();
+  if (!s) return null;
+  return createHmac("sha256", s).update(payloadB64).digest("base64url");
 }
 
 export function resolveAdminRoleFromSecret(
@@ -45,7 +45,11 @@ export function createAdminSessionToken(
   const payloadB64 = Buffer.from(
     JSON.stringify({ scope: "admin", role, exp }),
   ).toString("base64url");
-  return `${payloadB64}.${signPayload(payloadB64)}`;
+  const sig = signPayload(payloadB64);
+  if (!sig) {
+    throw new Error("ADMIN_SECRET is required in production");
+  }
+  return `${payloadB64}.${sig}`;
 }
 
 export function parseAdminSessionToken(
@@ -59,6 +63,7 @@ export function parseAdminSessionToken(
   const payloadB64 = token.slice(0, dot);
   const sig = token.slice(dot + 1);
   const expected = signPayload(payloadB64);
+  if (!expected) return null;
 
   try {
     if (
@@ -91,18 +96,26 @@ export function verifyAdminSessionToken(token: string | undefined | null): boole
 export const ADMIN_MAX_AGE_SEC = DEFAULT_TTL_HOURS * 3_600;
 
 export function getAdminSessionFromRequest(req: NextRequest): AdminSession | null {
-  const headerRole = resolveAdminRoleFromSecret(req.headers.get("x-admin-secret"));
-  if (headerRole) return { role: headerRole };
+  try {
+    const headerRole = resolveAdminRoleFromSecret(req.headers.get("x-admin-secret"));
+    if (headerRole) return { role: headerRole };
 
-  const parsed = parseAdminSessionToken(req.cookies.get(ADMIN_COOKIE)?.value);
-  return parsed ? { role: parsed.role } : null;
+    const parsed = parseAdminSessionToken(req.cookies.get(ADMIN_COOKIE)?.value);
+    return parsed ? { role: parsed.role } : null;
+  } catch {
+    return null;
+  }
 }
 
 /** Cookie phiên admin (Server Component / Route Handler). */
 export async function getAdminSessionFromCookies(): Promise<AdminSession | null> {
-  const store = await cookies();
-  const parsed = parseAdminSessionToken(store.get(ADMIN_COOKIE)?.value);
-  return parsed ? { role: parsed.role } : null;
+  try {
+    const store = await cookies();
+    const parsed = parseAdminSessionToken(store.get(ADMIN_COOKIE)?.value);
+    return parsed ? { role: parsed.role } : null;
+  } catch {
+    return null;
+  }
 }
 
 /** Cookie hoặc header `x-admin-secret` (API / middleware). */

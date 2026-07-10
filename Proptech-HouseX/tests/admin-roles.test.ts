@@ -41,6 +41,20 @@ test("admin session: resolve secret super vs ops", () => {
   else process.env.ADMIN_OPS_SECRET = prevOps;
 });
 
+test("admin session: cookie cũ khi thiếu ADMIN_SECRET — không crash", () => {
+  const prev = process.env.ADMIN_SECRET;
+  const prevNode = process.env.NODE_ENV;
+  process.env.ADMIN_SECRET = "super-secret-32-chars-minimum!!";
+  const token = createAdminSessionToken("super");
+  delete process.env.ADMIN_SECRET;
+  process.env.NODE_ENV = "production";
+  assert.equal(parseAdminSessionToken(token), null);
+  if (prev === undefined) delete process.env.ADMIN_SECRET;
+  else process.env.ADMIN_SECRET = prev;
+  if (prevNode === undefined) delete process.env.NODE_ENV;
+  else process.env.NODE_ENV = prevNode;
+});
+
 test("admin roles: ops page vs super page", () => {
   assert.equal(isSuperAdminOnlyPage("/admin/ops-leads"), false);
   assert.equal(isSuperAdminOnlyPage("/admin/conflicts"), false);
