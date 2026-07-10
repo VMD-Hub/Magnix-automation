@@ -54,16 +54,21 @@ CTV_CLAIM_LOCK_BUSINESS_DAYS=20
 
 - [x] Mini App ID trong `housex-zalo-miniapp/app-config.json`
 - [ ] `ZALO_APP_ID` / `ZALO_APP_SECRET` / `ZALO_OA_ID` trên VPS — **tắt** `ZALO_AUTH_DEV_BYPASS` production
-- [ ] `ZALO_OA_REFRESH_TOKEN` (DNA-D) — xem **Lấy token OA** bên dưới
+- [ ] `ZALO_OA_REFRESH_TOKEN` — **tùy chọn**; chỉ cần khi bật OA quảng bá (`ZALO_OA_NOTIFY_ENABLED=true`)
 - [ ] Build Mini App prod + smoke Simulator
 - [ ] OA menu public (chờ duyệt Zalo)
 
-**DNA-D env:**
+**Thông báo CTV (mặc định — in-app, miễn phí):**
+
+- Milestone / conflict → `brokerNotification` → Mini App `/agent/thong-bao`
+- CTV có trách nhiệm mở Mini App / bật thông báo hệ thống khi đăng ký
+
+**DNA-D OA (tùy chọn — chiến dịch quảng bá sau):**
 
 ```env
-ZALO_OA_NOTIFY_ENABLED=true
-ZALO_OA_REFRESH_TOKEN=<từ Zalo OA authorize>
-# Hoặc dev ngắn hạn: ZALO_OA_ACCESS_TOKEN=
+ZALO_OA_NOTIFY_ENABLED=false
+# Khi cần broadcast/chiến dịch: true + token OA (gói Tăng trưởng)
+# ZALO_OA_REFRESH_TOKEN=<từ OAuth> hoặc ZALO_OA_ACCESS_TOKEN=<Explorer>
 ```
 
 ### Lấy token OA (DNA-D)

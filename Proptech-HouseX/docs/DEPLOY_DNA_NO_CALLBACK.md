@@ -27,8 +27,9 @@ Trên `developers.zalo.me` → app `1837365611738849660` → **API Explorer** �
 ```env
 ZALO_APP_ID=1837365611738849660
 ZALO_APP_SECRET=<secret từ developers>
-ZALO_OA_NOTIFY_ENABLED=true
-ZALO_OA_ACCESS_TOKEN=<token từ API Explorer>
+ZALO_OA_NOTIFY_ENABLED=false
+# Chỉ bật true khi chạy tin quảng bá/chiến dịch qua OA — không dùng cho notify hệ thống CTV.
+# ZALO_OA_ACCESS_TOKEN=<token từ API Explorer>  # khi bật OA
 # Không set placeholder ZALO_OA_REFRESH_TOKEN
 ```
 

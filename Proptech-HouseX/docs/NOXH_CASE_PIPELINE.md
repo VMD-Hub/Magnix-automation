@@ -174,12 +174,12 @@ cd Proptech-HouseX && npm run go-live:print-cron
 | **DNA-D** | Zalo OA CS → CTV khi milestone (outbox `noxh_case.milestone_changed`) |
 | **P4** | Subdomain campaign links (Mini App two lanes) |
 
-### C — Zalo OA (DNA-D)
+### C — Zalo OA (tùy chọn — không chặn MVP)
 
-1. CTV login Mini App → có `zaloUserId` + follow OA
-2. Admin đổi milestone hồ sơ có `brokerId`
-3. Outbox `noxh_case.milestone_changed` → n8n Telegram (Ops) + Zalo OA CS (CTV)
-4. CTV nhận tin Zalo + in-app notification
+1. CTV login Mini App → có `zaloUserId` + follow OA (khi cần quảng bá)
+2. **Mặc định:** milestone/conflict → **in-app only** (`ZALO_OA_NOTIFY_ENABLED=false`)
+3. Khi bật OA: Admin đổi milestone → outbox có thể gửi thêm tin OA (DNA-D)
+4. Chiến dịch quảng bá → OA Broadcast / template (phase marketing, không dùng pipeline Ops)
 
 ---
 
