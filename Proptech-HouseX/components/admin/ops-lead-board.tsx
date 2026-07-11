@@ -30,6 +30,8 @@ type NurtureOption = { id: string; label: string; channel: string };
 type OpsLeadDetail = OpsLeadRow & {
   message: string | null;
   wizardSnapshot: NoxhWizardSnapshot | null;
+  objectGroupLabel: string | null;
+  intendToBorrowFromCase: boolean | null;
   opsNote: string | null;
   channels: {
     phone: string | null;
@@ -310,6 +312,8 @@ export function OpsLeadBoard() {
                 <NoxhWizardOpsSummary
                   wizardSnapshot={detail.wizardSnapshot}
                   fallbackMessage={detail.message}
+                  objectGroupLabel={detail.objectGroupLabel}
+                  intendToBorrowFromCase={detail.intendToBorrowFromCase}
                 />
               </div>
             </div>

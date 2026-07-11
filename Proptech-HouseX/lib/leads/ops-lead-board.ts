@@ -15,6 +15,12 @@ import { recordStatusChange } from "@/lib/data/status-history";
 import { enqueueEvent } from "@/lib/events/outbox";
 import type { CommissionOverride } from "@/lib/validation/lead";
 import { tryEnqueueLeadNurture } from "@/lib/leads/nurture-auto";
+import {
+  formatLegacyNoxhLeadPreviewVi,
+  parseLegacyNoxhLeadMessage,
+} from "@/lib/leads/noxh-legacy-message";
+import { NOXH_OBJECT_GROUPS } from "@/lib/finance/noxh-rules";
+import type { NoxhObjectGroupId } from "@/lib/finance/noxh-rules";
 
 const OPS_EXCLUDED_SOURCES = new Set([
   LEAD_SOURCE.REFERRAL,
@@ -52,7 +58,7 @@ const leadListInclude = {
   listing: { select: { code: true, propertyType: true } },
   noxhCases: {
     where: { caseStatus: "ACTIVE" },
-    select: { code: true },
+    select: { code: true, objectGroup: true, intendToBorrow: true },
     take: 1,
   },
 } satisfies Prisma.LeadInclude;
@@ -263,9 +269,13 @@ export function serializeOpsLeadListItem(row: OpsLeadWithRelations) {
         ? `${ops.wizardSnapshot.listPreviewVi.slice(0, 140)}…`
         : ops.wizardSnapshot.listPreviewVi
       : row.message
-        ? row.message.length > 120
-          ? `${row.message.slice(0, 120)}…`
-          : row.message
+        ? (() => {
+            const legacy = parseLegacyNoxhLeadMessage(row.message);
+            const text = legacy
+              ? formatLegacyNoxhLeadPreviewVi(legacy)
+              : row.message;
+            return text.length > 140 ? `${text.slice(0, 140)}…` : text;
+          })()
         : null,
     noxhCaseCode: row.noxhCases[0]?.code ?? null,
     createdAt: row.createdAt.toISOString(),
@@ -275,11 +285,21 @@ export function serializeOpsLeadListItem(row: OpsLeadWithRelations) {
 export function serializeOpsLeadDetail(row: OpsLeadWithRelations) {
   const ops = readLeadOpsMeta(row.opsMeta);
   const script = getNurtureScript(ops.nurtureScriptId);
+  const linkedCase = row.noxhCases[0];
+  const objectGroupId = linkedCase?.objectGroup as
+    | NoxhObjectGroupId
+    | undefined;
+  const objectGroupLabel =
+    objectGroupId && NOXH_OBJECT_GROUPS[objectGroupId]
+      ? NOXH_OBJECT_GROUPS[objectGroupId].label
+      : null;
 
   return {
     ...serializeOpsLeadListItem(row),
     message: row.message,
     wizardSnapshot: ops.wizardSnapshot ?? null,
+    objectGroupLabel,
+    intendToBorrowFromCase: linkedCase?.intendToBorrow ?? null,
     opsNote: ops.opsNote,
     channels: {
       phone: ops.channels.phone ?? row.customer?.phone ?? null,

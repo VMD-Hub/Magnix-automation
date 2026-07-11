@@ -69,6 +69,19 @@ const DOC_STATUSES = [
   "EXPIRED",
 ] as const;
 
+const OBJECT_GROUP_LABEL: Record<string, string> = {
+  WORKER: "Công nhân / lao động",
+  MERIT: "Người có công",
+  POOR_RURAL: "Hộ nghèo nông thôn",
+  POOR_URBAN: "Hộ nghèo đô thị",
+  LOW_INCOME_URBAN: "Thu nhập thấp đô thị",
+  ARMED_FORCES: "Quân đội / công an",
+  CIVIL_SERVANT: "Công chức / viên chức",
+  RETURNED_OFFICIAL_HOUSING: "Trả nhà công vụ",
+  LAND_RECOVERED: "Thu hồi đất",
+  NONE: "Chưa xác định",
+};
+
 export function NoxhCaseBoard() {
   const searchParams = useSearchParams();
   const [items, setItems] = useState<AdminCaseRow[]>([]);
@@ -306,6 +319,10 @@ export function NoxhCaseBoard() {
                   <NoxhWizardOpsSummary
                     wizardSnapshot={detail.wizardSnapshot}
                     fallbackMessage={detail.leadMessage}
+                    objectGroupLabel={
+                      OBJECT_GROUP_LABEL[detail.objectGroup] ?? detail.objectGroup
+                    }
+                    intendToBorrowFromCase={detail.intendToBorrow}
                   />
                 </div>
                 {detail.leadId ? (

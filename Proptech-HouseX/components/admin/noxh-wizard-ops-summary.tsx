@@ -1,6 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
+import { NoxhLegacyLeadSummary } from "@/components/admin/noxh-legacy-lead-summary";
 import { cn } from "@/lib/ui/cn";
 import {
   fmtVndFull,
@@ -17,6 +18,8 @@ type Props = {
   /** Lead.message — fallback cho lead cũ. */
   fallbackMessage?: string | null;
   compact?: boolean;
+  objectGroupLabel?: string | null;
+  intendToBorrowFromCase?: boolean | null;
 };
 
 export function NoxhWizardOpsSummary({
@@ -24,6 +27,8 @@ export function NoxhWizardOpsSummary({
   wizardSnapshot: snapshotProp,
   fallbackMessage,
   compact = false,
+  objectGroupLabel,
+  intendToBorrowFromCase,
 }: Props) {
   const snapshot =
     snapshotProp ?? (opsMeta ? readNoxhWizardSnapshot(opsMeta) : null);
@@ -31,15 +36,11 @@ export function NoxhWizardOpsSummary({
   if (!snapshot) {
     if (!fallbackMessage) return null;
     return (
-      <div className="rounded-md border border-amber-200 bg-amber-50 p-3 text-xs text-amber-900">
-        <p className="font-medium">Tóm tắt kỹ thuật (lead cũ — chưa có bản chi tiết)</p>
-        <p className="mt-1 break-words font-mono text-[11px] text-amber-800">
-          {fallbackMessage}
-        </p>
-        <p className="mt-2 text-amber-700">
-          Lead mới từ wizard sẽ có đầy đủ thu nhập, nợ và ghi chú song ngữ cho Ops.
-        </p>
-      </div>
+      <NoxhLegacyLeadSummary
+        message={fallbackMessage}
+        objectGroupLabel={objectGroupLabel}
+        intendToBorrowFromCase={intendToBorrowFromCase}
+      />
     );
   }
 
