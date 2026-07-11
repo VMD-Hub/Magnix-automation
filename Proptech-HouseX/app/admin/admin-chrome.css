@@ -248,3 +248,28 @@
     padding: 1.5rem 1.25rem 2.5rem;
   }
 }
+
+/* Playbook — in / PDF */
+@media print {
+  .admin-chrome__top,
+  .admin-chrome__nav,
+  .admin-chrome__page-head {
+    display: none !important;
+  }
+
+  .admin-chrome__main {
+    background: #fff !important;
+  }
+
+  .admin-chrome__main-inner {
+    max-width: none;
+    padding: 0;
+  }
+
+  .ops-playbook section {
+    break-inside: avoid;
+    box-shadow: none !important;
+    border: 1px solid #cbd5e1 !important;
+    margin-bottom: 0.75rem;
+  }
+}

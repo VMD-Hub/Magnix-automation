@@ -12,6 +12,7 @@ export const OPS_ADMIN_PAGE_PREFIXES = [
   "/admin/conflicts",
   "/admin/inbound-leads",
   "/admin/noxh-cases",
+  "/admin/playbook",
 ] as const;
 
 /** API Ops được phép (ngoài /api/admin/session). */

@@ -88,6 +88,20 @@ export const ADMIN_NAV_GROUPS: AdminNavGroup[] = [
     ],
   },
   {
+    id: "help",
+    label: "Hỗ trợ",
+    roles: ["super", "ops"],
+    items: [
+      {
+        href: "/admin/playbook",
+        label: "Playbook",
+        title: "Đào tạo & SOP Ops — hướng dẫn trong Admin",
+        roles: ["super", "ops"],
+        matchPrefix: true,
+      },
+    ],
+  },
+  {
     id: "sales",
     label: "Sales & CTV",
     roles: ["super"],

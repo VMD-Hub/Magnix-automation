@@ -2,7 +2,8 @@
 
 Mục tiêu: đóng DNA product/ops trong repo — CTV pipeline, LMS, Zalo Mini App.
 
-**Runbook NOXH Case (Ops):** [NOXH_CASE_PIPELINE.md](NOXH_CASE_PIPELINE.md)
+**Runbook NOXH Case (Ops):** [NOXH_CASE_PIPELINE.md](NOXH_CASE_PIPELINE.md)  
+**SOP 1 trang (nhân viên):** [OPS_PLAYBOOK.md](OPS_PLAYBOOK.md) · in-app `/admin/playbook`
 
 ---
 
