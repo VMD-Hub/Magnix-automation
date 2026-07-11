@@ -1,8 +1,9 @@
 "use client";
 
-import type {
-  MilestoneInput,
-  PaymentScheduleMode,
+import {
+  newMilestoneId,
+  type MilestoneInput,
+  type PaymentScheduleMode,
 } from "@/lib/finance/loan-disbursement";
 import { DecimalInput } from "@/components/tools/decimal-input";
 import { IntegerInput } from "@/components/tools/integer-input";
