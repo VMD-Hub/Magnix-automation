@@ -8,7 +8,10 @@ export const metadata = {
 
 export default function AdminNoxhCasesPage() {
   return (
-    <AdminShell title="Hồ sơ NOXH — Pipeline Ops">
+    <AdminShell
+      title="Hồ sơ NOXH"
+      description="Checklist giấy tờ pháp lý, mốc M1–M5 và ghi chú Ops — liên kết lead marketing khi có."
+    >
       <Suspense fallback={<p className="text-sm text-slate-500">Đang tải…</p>}>
         <NoxhCaseBoard />
       </Suspense>

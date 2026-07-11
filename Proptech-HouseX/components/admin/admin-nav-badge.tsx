@@ -5,7 +5,7 @@ export function AdminNavBadge({ count }: { count: number }) {
 
   return (
     <span
-      className="ml-1 inline-flex min-h-[1.125rem] min-w-[1.125rem] items-center justify-center rounded-full bg-rose-600 px-1 text-[10px] font-semibold leading-none text-white"
+      className="ml-0.5 inline-flex min-h-[1.125rem] min-w-[1.125rem] items-center justify-center rounded-full bg-brand-600 px-1 text-[10px] font-bold leading-none text-white shadow-sm"
       aria-label={`${count} mục chờ xử lý`}
     >
       {label}

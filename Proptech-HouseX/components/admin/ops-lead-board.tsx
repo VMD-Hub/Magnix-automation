@@ -146,12 +146,12 @@ export function OpsLeadBoard() {
 
   return (
     <div className="grid gap-4 lg:grid-cols-[1fr_380px]">
-      <section className="rounded-xl border border-slate-200 bg-white shadow-sm">
-        <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 px-4 py-3">
+      <section className="overflow-hidden rounded-xl border border-slate-200/80 bg-white shadow-sm ring-1 ring-slate-900/5">
+        <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 bg-slate-50/80 px-4 py-3">
           <div>
-            <h2 className="font-semibold text-slate-900">Pipeline Ops (Ads / Web)</h2>
+            <h2 className="font-semibold text-slate-900">Danh sách lead</h2>
             <p className="text-xs text-slate-500">
-              Lead marketing — không gán CTV. Nurture theo segment + nguồn.
+              Chọn một dòng để cập nhật nurture & trạng thái pipeline
             </p>
           </div>
           <div className="flex flex-wrap gap-1">
@@ -227,7 +227,7 @@ export function OpsLeadBoard() {
         )}
       </section>
 
-      <aside className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+      <aside className="rounded-xl border border-slate-200/80 bg-white p-4 shadow-sm ring-1 ring-slate-900/5">
         {!selectedId || !detail ? (
           <p className="text-sm text-slate-500">Chọn lead để cập nhật nurture & trạng thái.</p>
         ) : (

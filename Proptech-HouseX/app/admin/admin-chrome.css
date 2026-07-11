@@ -1,0 +1,218 @@
+/* Admin console — đồng bộ ruby header + nav pill House X */
+
+.admin-chrome {
+  --admin-nav-height: 2.75rem;
+}
+
+.admin-chrome__top.site-header-bar.proptech-header-ruby {
+  border-bottom: 1px solid rgba(252, 211, 77, 0.22);
+}
+
+.admin-chrome__top-inner {
+  display: flex;
+  min-height: 3.25rem;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.5rem 1rem;
+}
+
+.admin-chrome__brand {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.admin-chrome__logo.housex-header-logo .housex-header-logo__img {
+  height: 2rem;
+  width: auto;
+}
+
+@media (min-width: 640px) {
+  .admin-chrome__logo.housex-header-logo .housex-header-logo__img {
+    height: 2.25rem;
+  }
+}
+
+.admin-chrome__console-label {
+  display: none;
+  flex-direction: column;
+  gap: 0.1rem;
+  border-left: 1px solid rgba(255, 255, 255, 0.22);
+  padding-left: 0.75rem;
+}
+
+@media (min-width: 640px) {
+  .admin-chrome__console-label {
+    display: flex;
+  }
+}
+
+.admin-chrome__console-title {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.admin-chrome__console-sub {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.admin-chrome__actions {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.admin-chrome__role-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(0, 0, 0, 0.15);
+  padding: 0.2rem 0.55rem;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.admin-chrome__role-tier {
+  border-radius: 9999px;
+  background: rgba(252, 211, 77, 0.22);
+  padding: 0.05rem 0.35rem;
+  font-size: 0.625rem;
+  font-weight: 700;
+  color: #fde68a;
+}
+
+.admin-chrome__ghost-btn {
+  border-radius: 0.5rem;
+  padding: 0.35rem 0.65rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.78);
+  transition: color 0.15s, background 0.15s;
+}
+
+.admin-chrome__ghost-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+.admin-chrome__nav {
+  border-bottom: 1px solid var(--border);
+  background: #fff;
+  box-shadow: 0 1px 0 rgba(26, 18, 20, 0.04);
+}
+
+.admin-chrome__nav-scroll {
+  display: flex;
+  gap: 0.75rem;
+  overflow-x: auto;
+  padding: 0.5rem 1rem;
+  scrollbar-width: thin;
+}
+
+.admin-chrome__group {
+  display: flex;
+  flex-shrink: 0;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.admin-chrome__group-label {
+  padding-left: 0.25rem;
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #94a3b8;
+}
+
+.admin-chrome__group-items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.admin-chrome__nav-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  border-radius: 9999px;
+  border: 1px solid transparent;
+  padding: 0.35rem 0.75rem;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: #475569;
+  white-space: nowrap;
+  transition:
+    background 0.15s,
+    border-color 0.15s,
+    color 0.15s;
+}
+
+.admin-chrome__nav-link:hover {
+  border-color: #f9c8cc;
+  background: #fdf2f3;
+  color: var(--color-brand-700);
+}
+
+.admin-chrome__nav-link--active {
+  border-color: #f0959c;
+  background: linear-gradient(180deg, #fdf2f3 0%, #fce4e6 100%);
+  color: var(--color-brand-700);
+  font-weight: 600;
+  box-shadow: 0 1px 2px rgba(155, 17, 30, 0.08);
+}
+
+.admin-chrome__page-head {
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid #e8e8ed;
+  padding-bottom: 1rem;
+}
+
+.admin-chrome__page-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #1a1214;
+}
+
+@media (min-width: 640px) {
+  .admin-chrome__page-title {
+    font-size: 1.625rem;
+  }
+}
+
+.admin-chrome__page-desc {
+  margin-top: 0.35rem;
+  max-width: 42rem;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: #64748b;
+}
+
+.admin-chrome__main {
+  flex: 1;
+  overflow: auto;
+  background: linear-gradient(180deg, #f8f8fb 0%, #f1f5f9 100%);
+}
+
+.admin-chrome__main-inner {
+  margin-inline: auto;
+  max-width: 72rem;
+  padding: 1.25rem 1rem 2rem;
+}
+
+@media (min-width: 640px) {
+  .admin-chrome__main-inner {
+    padding: 1.5rem 1.25rem 2.5rem;
+  }
+}

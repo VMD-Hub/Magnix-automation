@@ -7,7 +7,10 @@ export const metadata = {
 
 export default function AdminInboundLeadsPage() {
   return (
-    <AdminShell title="Magnix Inbound — Triage Ops">
+    <AdminShell
+      title="Magnix Inbound"
+      description="Lead inbound từ Magnix growth engine — phân loại và chuyển nurture."
+    >
       <InboundLeadBoard />
     </AdminShell>
   );

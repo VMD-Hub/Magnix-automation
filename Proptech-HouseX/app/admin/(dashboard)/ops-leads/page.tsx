@@ -7,7 +7,10 @@ export const metadata = {
 
 export default function AdminOpsLeadsPage() {
   return (
-    <AdminShell title="Ops Leads — Pipeline marketing">
+    <AdminShell
+      title="Lead marketing"
+      description="Pipeline lead từ Ads, form web và công cụ kiểm tra NOXH — nurture theo segment, không gán CTV."
+    >
       <OpsLeadBoard />
     </AdminShell>
   );

@@ -7,11 +7,10 @@ export const metadata = {
 
 export default function AdminConflictsPage() {
   return (
-    <AdminShell title="Xung đột Ops vs CTV">
-      <p className="mb-4 text-sm text-slate-600">
-        SĐT trùng giữa pipeline Ops (ads/form) và CTV affiliate — duyệt theo rule{" "}
-        <code className="text-xs">LEAD_ATTRIBUTION_CONFLICT_RULES</code>.
-      </p>
+    <AdminShell
+      title="Xung đột attribution"
+      description="SĐT trùng giữa pipeline Ops (ads/form) và CTV — duyệt theo LEAD_ATTRIBUTION_CONFLICT_RULES."
+    >
       <AttributionConflictBoard />
     </AdminShell>
   );
