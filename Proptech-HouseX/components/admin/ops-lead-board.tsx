@@ -237,6 +237,12 @@ export function OpsLeadBoard() {
               <p className="text-xs text-slate-500">
                 {detail.sourceLabel} · {new Date(detail.createdAt).toLocaleString("vi-VN")}
               </p>
+              <p
+                className="mt-1 break-all font-mono text-[10px] text-slate-400"
+                title="Lead ID — dùng cho Sheet noxh_leads_detail cột A"
+              >
+                ID: {detail.id}
+              </p>
             </div>
 
             <label className="block text-sm">

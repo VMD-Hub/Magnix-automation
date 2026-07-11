@@ -64,8 +64,26 @@ function loadDefaultSheetId(): string {
 async function main() {
   const apply = process.argv.includes("--apply");
   const force = process.argv.includes("--force");
+  const listLeadsOnly = process.argv.includes("--list-leads");
   const leadIdFilter = argValue("--lead-id");
   const limit = Number(argValue("--limit") ?? "0") || 0;
+
+  if (listLeadsOnly) {
+    const leads = await prisma.lead.findMany({
+      where: { source: LEAD_SOURCE.TOOL_NOXH_CHECK },
+      select: { id: true, message: true, createdAt: true, opsMeta: true },
+      orderBy: { createdAt: "desc" },
+    });
+    console.log(`tool:noxh-check leads: ${leads.length}`);
+    for (const lead of leads) {
+      const ops = readLeadOpsMeta(lead.opsMeta);
+      const hasSnap = ops.wizardSnapshot ? " [đã có snapshot]" : "";
+      const preview = (lead.message ?? "").replace(/\s+/g, " ").slice(0, 50);
+      console.log(`  ${lead.id}${hasSnap} — ${preview}`);
+    }
+    console.log("\nDán một ID trên vào cột A (noxh_leads_detail), rồi chạy lại backfill.");
+    return;
+  }
 
   const sheetId = loadDefaultSheetId();
   const tab =
@@ -83,6 +101,9 @@ async function main() {
   console.log(
     `Sheet: ${parsed.length} dòng hợp lệ → ${byLeadId.size} lead_id (dedupe)`,
   );
+  if (byLeadId.size > 0) {
+    console.log(`Sheet lead_id: ${[...byLeadId.keys()].join(", ")}`);
+  }
 
   const leads = await prisma.lead.findMany({
     where: {
@@ -146,6 +167,14 @@ async function main() {
 
   if (!apply && updated > 0) {
     console.log("\nChạy lại với --apply để ghi Postgres.");
+  }
+
+  if (updated === 0 && skippedNoSheet > 0 && byLeadId.size > 0) {
+    console.log("\nLead ID trong DB (tool:noxh-check) — cột A Sheet phải trùng một trong các ID sau:");
+    for (const lead of leads) {
+      console.log(`  ${lead.id}`);
+    }
+    console.log("\nGợi ý: npm run db:backfill:noxh-snapshot -- --list-leads");
   }
 }
 
