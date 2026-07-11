@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { PhoneInput } from "@/components/tools/phone-input";
 import { Button } from "@/components/ui/button";
 
 function defaultConsultLocal(): string {
@@ -89,11 +89,10 @@ export function CtvCaseDropForm({ onCreated }: { onCreated?: () => void }) {
         </label>
         <label className="block text-sm font-medium text-slate-700">
           Số điện thoại
-          <input
+          <PhoneInput
             required
-            type="tel"
             value={phone}
-            onChange={(e) => setPhone(e.target.value)}
+            onChange={setPhone}
             className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm"
             placeholder="0901234567"
           />

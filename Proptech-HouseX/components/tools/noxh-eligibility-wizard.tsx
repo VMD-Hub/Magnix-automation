@@ -8,6 +8,9 @@ import { track } from "@/lib/analytics/track";
 import { articlePath } from "@/lib/content/article-routes";
 import { NOXH_CATALOG_PATH } from "@/lib/content/project-catalog-routes";
 import { NoxhChecklistPrint } from "@/components/tools/noxh-checklist-print";
+import { VndInput } from "@/components/tools/vnd-input";
+import { PhoneInput } from "@/components/tools/phone-input";
+import { DecimalInput } from "@/components/tools/decimal-input";
 import {
   evaluateNoxhEligibility,
   type MaritalStatus,
@@ -29,14 +32,6 @@ import {
 } from "@/lib/finance/noxh-rules";
 
 /* ---------- helpers ---------- */
-
-function groupVnd(n: number): string {
-  return n.toLocaleString("vi-VN");
-}
-function parseVnd(s: string): number {
-  const digits = s.replace(/[^\d]/g, "");
-  return digits ? Number(digits) : 0;
-}
 
 const inputCls =
   "mt-1 h-11 w-full rounded-xl border border-slate-200 px-3 text-sm outline-none focus:border-brand-400 focus:ring-2 focus:ring-brand-100";
@@ -494,12 +489,13 @@ export function NoxhEligibilityWizard() {
               <span className="text-sm font-medium text-slate-700">
                 Diện tích ở bình quân đầu người hiện tại (m²)
               </span>
-              <input
-                inputMode="numeric"
-                value={areaPerPerson || ""}
-                onChange={(e) => setAreaPerPerson(parseVnd(e.target.value))}
-                placeholder="Ví dụ: 12"
+              <DecimalInput
+                value={areaPerPerson || 0}
+                onChange={setAreaPerPerson}
+                min={0}
+                max={500}
                 className={inputCls}
+                aria-label="Diện tích bình quân đầu người"
               />
               <span className="mt-1 block text-xs text-slate-400">
                 Dưới {CURRENT_NOXH_RULES.minAreaPerPersonSqm} m²/người vẫn đủ điều kiện.
@@ -550,12 +546,12 @@ export function NoxhEligibilityWizard() {
             <span className="text-sm font-medium text-slate-700">
               Thu nhập bình quân/tháng của bạn
             </span>
-            <input
-              inputMode="numeric"
-              value={applicantIncome ? groupVnd(applicantIncome) : ""}
-              onChange={(e) => setApplicantIncome(parseVnd(e.target.value))}
-              placeholder="Ví dụ: 18.000.000"
+            <VndInput
+              value={applicantIncome}
+              onChange={setApplicantIncome}
+              placeholder="Ví dụ: 18000000"
               className={inputCls}
+              aria-label="Thu nhập hàng tháng"
             />
           </label>
 
@@ -564,12 +560,12 @@ export function NoxhEligibilityWizard() {
               <span className="text-sm font-medium text-slate-700">
                 Thu nhập bình quân/tháng của vợ/chồng
               </span>
-              <input
-                inputMode="numeric"
-                value={spouseIncome ? groupVnd(spouseIncome) : ""}
-                onChange={(e) => setSpouseIncome(parseVnd(e.target.value))}
-                placeholder="Ví dụ: 15.000.000"
+              <VndInput
+                value={spouseIncome}
+                onChange={setSpouseIncome}
+                placeholder="Ví dụ: 15000000"
                 className={inputCls}
+                aria-label="Thu nhập vợ chồng"
               />
             </label>
           )}
@@ -622,24 +618,24 @@ export function NoxhEligibilityWizard() {
                 <span className="text-sm font-medium text-slate-700">
                   Tổng khoản trả nợ vay hiện tại/tháng (nếu có)
                 </span>
-                <input
-                  inputMode="numeric"
-                  value={existingDebt ? groupVnd(existingDebt) : ""}
-                  onChange={(e) => setExistingDebt(parseVnd(e.target.value))}
+                <VndInput
+                  value={existingDebt}
+                  onChange={setExistingDebt}
                   placeholder="0"
                   className={inputCls}
+                  aria-label="Trả nợ hàng tháng"
                 />
               </label>
               <label className="block">
                 <span className="text-sm font-medium text-slate-700">
                   Tổng hạn mức thẻ tín dụng đang dùng (nếu có)
                 </span>
-                <input
-                  inputMode="numeric"
-                  value={cardLimit ? groupVnd(cardLimit) : ""}
-                  onChange={(e) => setCardLimit(parseVnd(e.target.value))}
+                <VndInput
+                  value={cardLimit}
+                  onChange={setCardLimit}
                   placeholder="0"
                   className={inputCls}
+                  aria-label="Hạn mức thẻ"
                 />
                 <span className="mt-1 block text-xs text-slate-400">
                   Hạn mức thẻ cao làm giảm hạn mức có thể vay khi ngân hàng xét hồ sơ.
@@ -775,11 +771,11 @@ export function NoxhEligibilityWizard() {
                   <span className="text-xs font-medium text-slate-700">
                     Số điện thoại *
                   </span>
-                  <input
-                    type="tel"
+                  <PhoneInput
                     value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
+                    onChange={setPhone}
                     className={inputCls}
+                    required
                   />
                 </label>
                 <label className="block sm:col-span-2">

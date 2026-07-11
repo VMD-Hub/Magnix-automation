@@ -4,7 +4,8 @@ import type {
   MilestoneInput,
   PaymentScheduleMode,
 } from "@/lib/finance/loan-disbursement";
-import { newMilestoneId } from "@/lib/finance/loan-disbursement";
+import { DecimalInput } from "@/components/tools/decimal-input";
+import { IntegerInput } from "@/components/tools/integer-input";
 import { cn } from "@/lib/ui/cn";
 
 const MODE_TABS: {
@@ -144,15 +145,12 @@ export function DisbursementMilestoneTable({
             {milestones.map((row) => (
               <tr key={row.id}>
                 <td className="px-2 py-1.5">
-                  <input
-                    type="number"
+                  <IntegerInput
+                    value={row.month}
+                    onChange={(month) => updateRow(row.id, { month })}
                     min={0}
                     max={360}
                     className={cellCls}
-                    value={row.month}
-                    onChange={(e) =>
-                      updateRow(row.id, { month: Number(e.target.value) })
-                    }
                     aria-label="Tháng sau ký HĐMB"
                   />
                 </td>
@@ -172,48 +170,39 @@ export function DisbursementMilestoneTable({
                 {mode === "PARALLEL" ? (
                   <>
                     <td className="px-2 py-1.5">
-                      <input
-                        type="number"
+                      <DecimalInput
+                        value={row.customerPct ?? 0}
+                        onChange={(customerPct) =>
+                          updateRow(row.id, { customerPct })
+                        }
                         min={0}
                         max={100}
-                        step={0.1}
                         className={cellCls}
-                        value={row.customerPct ?? 0}
-                        onChange={(e) =>
-                          updateRow(row.id, {
-                            customerPct: Number(e.target.value),
-                          })
-                        }
+                        aria-label="Phần trăm khách trả"
                       />
                     </td>
                     <td className="px-2 py-1.5">
-                      <input
-                        type="number"
+                      <DecimalInput
+                        value={row.bankPct ?? 0}
+                        onChange={(bankPct) => updateRow(row.id, { bankPct })}
                         min={0}
                         max={100}
-                        step={0.1}
                         className={cellCls}
-                        value={row.bankPct ?? 0}
-                        onChange={(e) =>
-                          updateRow(row.id, { bankPct: Number(e.target.value) })
-                        }
+                        aria-label="Phần trăm ngân hàng giải ngân"
                       />
                     </td>
                   </>
                 ) : (
                   <td className="px-2 py-1.5">
-                    <input
-                      type="number"
+                    <DecimalInput
+                      value={row.installmentPct}
+                      onChange={(installmentPct) =>
+                        updateRow(row.id, { installmentPct })
+                      }
                       min={0}
                       max={100}
-                      step={0.1}
                       className={cellCls}
-                      value={row.installmentPct}
-                      onChange={(e) =>
-                        updateRow(row.id, {
-                          installmentPct: Number(e.target.value),
-                        })
-                      }
+                      aria-label="Phần trăm trả CĐT trong đợt"
                     />
                   </td>
                 )}

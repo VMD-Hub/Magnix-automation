@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useMemo, useState } from "react";
 import { Icon } from "@/components/icons";
 import { PercentInput } from "@/components/tools/percent-input";
+import { VndInput } from "@/components/tools/vnd-input";
 import { cn } from "@/lib/ui/cn";
 import { DEFAULT_LOAN_ANNUAL_RATE } from "@/lib/format/percent";
 import {
@@ -20,11 +21,6 @@ import { formatVnd } from "@/lib/format";
 
 function groupVnd(n: number): string {
   return n.toLocaleString("vi-VN");
-}
-
-function parseVnd(s: string): number {
-  const digits = s.replace(/[^\d]/g, "");
-  return digits ? Number(digits) : 0;
 }
 
 function Field({
@@ -191,11 +187,11 @@ export function LoanAffordabilityCalculator() {
           label="Thu nhập của bạn/tháng"
           hint="Lương + thu nhập chứng minh được (HĐLĐ, sao kê, hợp đồng…)"
         >
-          <input
-            inputMode="numeric"
-            value={groupVnd(income)}
-            onChange={(e) => setIncome(parseVnd(e.target.value))}
+          <VndInput
+            value={income}
+            onChange={setIncome}
             className={inputCls}
+            aria-label="Thu nhập hàng tháng"
           />
         </Field>
 
@@ -252,26 +248,23 @@ export function LoanAffordabilityCalculator() {
             {coBorrow ? (
               <div className="space-y-3 border-t border-slate-100 pt-3">
                 <Field label="Thu nhập vợ/chồng/tháng">
-                  <input
-                    inputMode="numeric"
-                    value={groupVnd(coIncome)}
-                    onChange={(e) => setCoIncome(parseVnd(e.target.value))}
+                  <VndInput
+                    value={coIncome}
+                    onChange={setCoIncome}
                     className={inputCls}
                   />
                 </Field>
                 <Field label="Trả nợ hiện tại của vợ/chồng/tháng">
-                  <input
-                    inputMode="numeric"
-                    value={groupVnd(coDebt)}
-                    onChange={(e) => setCoDebt(parseVnd(e.target.value))}
+                  <VndInput
+                    value={coDebt}
+                    onChange={setCoDebt}
                     className={inputCls}
                   />
                 </Field>
                 <Field label="Hạn mức thẻ tín dụng vợ/chồng">
-                  <input
-                    inputMode="numeric"
-                    value={groupVnd(coCard)}
-                    onChange={(e) => setCoCard(parseVnd(e.target.value))}
+                  <VndInput
+                    value={coCard}
+                    onChange={setCoCard}
                     className={inputCls}
                   />
                 </Field>
@@ -330,10 +323,9 @@ export function LoanAffordabilityCalculator() {
             ))}
           </select>
           {livingRegion === "CUSTOM" ? (
-            <input
-              inputMode="numeric"
-              value={groupVnd(customPerCapita)}
-              onChange={(e) => setCustomPerCapita(parseVnd(e.target.value))}
+            <VndInput
+              value={customPerCapita}
+              onChange={setCustomPerCapita}
               className={cn(inputCls, "mt-2")}
             />
           ) : null}
@@ -343,19 +335,17 @@ export function LoanAffordabilityCalculator() {
           label="Trả nợ hiện tại của bạn/tháng"
           hint="Vay tiêu dùng, mua xe, trả góp… (không gồm chi tiêu sinh hoạt)"
         >
-          <input
-            inputMode="numeric"
-            value={groupVnd(existingDebt)}
-            onChange={(e) => setExistingDebt(parseVnd(e.target.value))}
+          <VndInput
+            value={existingDebt}
+            onChange={setExistingDebt}
             className={inputCls}
           />
         </Field>
 
         <Field label="Hạn mức thẻ tín dụng của bạn" hint="Quy đổi ~5%/tháng khi thẩm định">
-          <input
-            inputMode="numeric"
-            value={groupVnd(cardLimit)}
-            onChange={(e) => setCardLimit(parseVnd(e.target.value))}
+          <VndInput
+            value={cardLimit}
+            onChange={setCardLimit}
             className={inputCls}
           />
         </Field>

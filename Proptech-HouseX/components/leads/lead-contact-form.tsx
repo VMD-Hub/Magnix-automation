@@ -2,6 +2,7 @@
 
 import { useEffect, useId, useState } from "react";
 import { Button } from "@/components/ui/button";
+import { PhoneInput } from "@/components/tools/phone-input";
 import { readStoredLeadUtm } from "@/lib/leads/client-utm";
 
 type Props = {
@@ -159,11 +160,10 @@ export function LeadContactForm({
         </label>
         <label className="block sm:col-span-1">
           <span className="text-xs font-medium text-slate-700">Số điện thoại *</span>
-          <input
+          <PhoneInput
             required
-            type="tel"
             value={phone}
-            onChange={(e) => setPhone(e.target.value)}
+            onChange={setPhone}
             className={inputCls}
           />
         </label>

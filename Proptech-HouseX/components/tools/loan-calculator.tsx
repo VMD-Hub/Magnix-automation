@@ -4,6 +4,8 @@ import { useCallback, useMemo, useState } from "react";
 import { Icon } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { PercentInput } from "@/components/tools/percent-input";
+import { VndInput } from "@/components/tools/vnd-input";
+import { IntegerInput } from "@/components/tools/integer-input";
 import { DisbursementMilestoneTable } from "@/components/tools/disbursement-milestone-table";
 import { cn } from "@/lib/ui/cn";
 import { DEFAULT_LOAN_ANNUAL_RATE } from "@/lib/format/percent";
@@ -18,11 +20,6 @@ import { formatVnd } from "@/lib/format";
 
 function groupVnd(n: number): string {
   return n.toLocaleString("vi-VN");
-}
-
-function parseVnd(s: string): number {
-  const digits = s.replace(/[^\d]/g, "");
-  return digits ? Number(digits) : 0;
 }
 
 function Field({
@@ -152,11 +149,11 @@ export function LoanCalculator() {
     <div className="grid min-w-0 gap-6 lg:grid-cols-[minmax(0,380px)_minmax(0,1fr)]">
       <div className="min-w-0 space-y-4 proptech-ruby-soft-panel p-4 sm:p-5 print:hidden">
         <Field label="Giá trị bất động sản" hint={`${groupVnd(price)} đ`}>
-          <input
-            inputMode="numeric"
-            value={groupVnd(price)}
-            onChange={(e) => setPrice(parseVnd(e.target.value))}
+          <VndInput
+            value={price}
+            onChange={setPrice}
             className={inputCls}
+            aria-label="Giá trị bất động sản"
           />
         </Field>
 
@@ -240,11 +237,13 @@ export function LoanCalculator() {
                   <PercentInput value={promoRate} onChange={setPromoRate} />
                 </Field>
                 <Field label="Số tháng ưu đãi">
-                  <input
-                    type="number"
+                  <IntegerInput
                     value={promoMonths}
-                    onChange={(e) => setPromoMonths(Number(e.target.value))}
+                    onChange={setPromoMonths}
+                    min={0}
+                    max={600}
                     className={inputCls}
+                    aria-label="Số tháng ưu đãi"
                   />
                 </Field>
               </div>
@@ -252,11 +251,13 @@ export function LoanCalculator() {
                 label="Ân hạn gốc (tháng)"
                 hint="Chỉ trả lãi trong giai đoạn này"
               >
-                <input
-                  type="number"
+                <IntegerInput
                   value={graceMonths}
-                  onChange={(e) => setGraceMonths(Number(e.target.value))}
+                  onChange={setGraceMonths}
+                  min={0}
+                  max={600}
                   className={inputCls}
+                  aria-label="Ân hạn gốc tháng"
                 />
               </Field>
             </div>
