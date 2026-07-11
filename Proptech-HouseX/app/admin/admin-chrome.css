@@ -107,38 +107,70 @@
 
 .admin-chrome__nav {
   border-bottom: 1px solid var(--border);
-  background: #fff;
+  background: linear-gradient(180deg, #fafafa 0%, #fff 100%);
   box-shadow: 0 1px 0 rgba(26, 18, 20, 0.04);
 }
 
 .admin-chrome__nav-scroll {
   display: flex;
-  gap: 0.75rem;
+  flex-wrap: wrap;
+  align-items: stretch;
+  justify-content: center;
+  gap: 0.625rem;
   overflow-x: auto;
-  padding: 0.5rem 1rem;
+  padding: 0.625rem 1rem 0.75rem;
   scrollbar-width: thin;
+}
+
+@media (min-width: 1024px) {
+  .admin-chrome__nav-scroll {
+    justify-content: flex-start;
+    gap: 0.75rem;
+  }
 }
 
 .admin-chrome__group {
   display: flex;
-  flex-shrink: 0;
+  flex: 1 1 11rem;
+  min-width: min(100%, 11rem);
   flex-direction: column;
-  gap: 0.35rem;
+  align-items: center;
+  gap: 0.5rem;
+  border: 2px solid var(--color-brand-600);
+  border-radius: 0.625rem;
+  background: linear-gradient(180deg, #fff 0%, #fdf2f3 100%);
+  padding: 0.5rem 0.625rem 0.625rem;
+  box-shadow:
+    0 0 0 1px rgba(155, 17, 30, 0.06),
+    0 2px 6px rgba(155, 17, 30, 0.07);
+}
+
+@media (min-width: 640px) {
+  .admin-chrome__group {
+    flex: 0 1 auto;
+    min-width: 10.5rem;
+    padding: 0.55rem 0.75rem 0.65rem;
+  }
 }
 
 .admin-chrome__group-label {
-  padding-left: 0.25rem;
+  width: 100%;
+  border-bottom: 1px solid rgba(155, 17, 30, 0.18);
+  padding-bottom: 0.35rem;
+  text-align: center;
   font-size: 0.625rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
+  font-weight: 800;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: #94a3b8;
+  color: var(--color-brand-700);
 }
 
 .admin-chrome__group-items {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
   gap: 0.35rem;
+  width: 100%;
 }
 
 .admin-chrome__nav-link {
