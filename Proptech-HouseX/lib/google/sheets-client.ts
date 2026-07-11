@@ -108,3 +108,22 @@ export async function sheetsValuesUpdate(
     throw new Error(`Sheets update failed (${res.status}): ${await res.text()}`);
   }
 }
+
+/** Đọc vùng Sheet — trả mảng 2D (hàng đầu thường là header). */
+export async function sheetsValuesGet(
+  spreadsheetId: string,
+  range: string,
+  accessToken: string,
+): Promise<string[][]> {
+  const res = await fetch(
+    `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${encodeURIComponent(range)}`,
+    {
+      headers: { Authorization: `Bearer ${accessToken}` },
+    },
+  );
+  if (!res.ok) {
+    throw new Error(`Sheets read failed (${res.status}): ${await res.text()}`);
+  }
+  const data = (await res.json()) as { values?: string[][] };
+  return data.values ?? [];
+}

@@ -25,6 +25,7 @@
     "db:seed:priority": "node --env-file=.env --import tsx scripts/seed-priority-miniapp-projects.ts",
     "db:hide-internal-demo": "node --env-file=.env --import tsx scripts/hide-internal-demo-content.ts",
     "db:verify:landings": "node --env-file=.env --import tsx scripts/verify-landings-db.ts",
+    "db:backfill:noxh-snapshot": "node --env-file=.env --import tsx scripts/backfill-noxh-wizard-snapshot-from-sheet.ts",
     "db:setup": "npm run db:up && npm run db:push && npm run db:seed",
     "db:studio": "prisma studio",
     "media:qc": "node --import tsx scripts/media-image-qc.ts",

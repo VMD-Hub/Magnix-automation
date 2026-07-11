@@ -61,6 +61,7 @@ export function mergeLeadOpsMeta(
     channels: Partial<LeadContactChannels>;
     nurtureScriptId: string | null;
     opsNote: string | null;
+    wizardSnapshot: NoxhWizardSnapshot | null;
   }>,
 ): Record<string, unknown> {
   const current = readLeadOpsMeta(meta);
@@ -82,6 +83,9 @@ export function mergeLeadOpsMeta(
   }
   if (patch.opsNote !== undefined) {
     base.opsNote = patch.opsNote;
+  }
+  if (patch.wizardSnapshot !== undefined) {
+    base.wizardSnapshot = patch.wizardSnapshot;
   }
 
   return base;
