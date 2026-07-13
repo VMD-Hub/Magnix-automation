@@ -35,6 +35,22 @@ Login mock: **Tài khoản** → SĐT → `POST /api/auth/zalo` với `zaloUserI
 | Agent | `/agent`, hồ sơ, thông báo, hoa hồng |
 | LMS | `/agent/dich-vu`, `/agent/dich-vu/:code` (đào tạo · pháp lý · dịch vụ) |
 
+## Build production (ZMP deploy)
+
+```bash
+# .env.production hoặc export trước khi build:
+# VITE_HOUSEX_API_BASE=https://timnhaxahoi.com
+# VITE_AUTH_DEV_BYPASS=false
+
+npm run build:zmp    # → www/assets/index.js + index.css
+zmp login
+zmp deploy
+# Mini App ID: 1554712272702750699
+# dist folder: www
+```
+
+`app-config.json` phải khai báo `listSyncJS` / `listCSS` — đã cấu hình `assets/index.js` + `assets/index.css`.
+
 ## Mai — OA / Mini App thật (chờ xác nhận)
 
 1. Điền Mini App ID vào `app-config.json`

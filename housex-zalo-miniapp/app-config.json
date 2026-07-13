@@ -9,7 +9,11 @@
     "leftButton": "none",
     "selfDefense": false
   },
-  "listCSS": [],
+  "listCSS": [
+    "assets/index.css"
+  ],
   "listSyncJS": [],
-  "listAsyncJS": []
+  "listAsyncJS": [
+    "assets/index.js"
+  ]
 }
