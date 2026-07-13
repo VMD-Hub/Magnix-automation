@@ -21,7 +21,7 @@ export function getHouseXWebUrl(): string {
   return getSiteUrl();
 }
 
-/** Deep link mở thẳng Mini App House X trong Zalo (`zalo.me/s/{appId}`). */
+/** Deep link mở thẳng Mini App House X trong Zalo — khớp QR developers.zalo.me */
 export function getHouseXMiniAppEntryUrl(): string {
   const fullUrl = process.env.NEXT_PUBLIC_ZALO_MINIAPP_URL?.trim();
   if (fullUrl) return fullUrl;
@@ -29,7 +29,7 @@ export function getHouseXMiniAppEntryUrl(): string {
   const miniAppId =
     process.env.NEXT_PUBLIC_ZALO_MINIAPP_ID?.trim() || HOUSEX_ZALO_MINIAPP_ID;
 
-  return `https://zalo.me/s/${miniAppId}`;
+  return `https://zalo.me/s/${miniAppId}/?utm_source=zalo-qr`;
 }
 
 export function getVuNguyenProfileNfcUrl(): string {
