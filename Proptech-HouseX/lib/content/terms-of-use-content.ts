@@ -1,7 +1,9 @@
 /**
  * Điều khoản sử dụng song ngữ (VN + EN) — House X.
  * Liên hệ động: lib/content/legal-contact.ts
+ * Pháp nhân: lib/content/legal-entity.ts
  */
+import { LEGAL_ENTITY_TERMS_CLAUSE } from "@/lib/content/legal-entity";
 
 export type BilingualClause = {
   id: string;
@@ -107,6 +109,11 @@ export const TERMS_OF_USE = {
           id: "1.2",
           vi: "Bằng cách truy cập hoặc sử dụng dịch vụ của House X, bạn đồng ý tuân thủ và bị ràng buộc bởi các Điều khoản này. Nếu bạn không đồng ý, vui lòng không sử dụng dịch vụ.",
           en: "By accessing or using House X’s services, you agree to be bound by these Terms. If you do not agree, do not use the services.",
+        },
+        {
+          id: LEGAL_ENTITY_TERMS_CLAUSE.id,
+          vi: LEGAL_ENTITY_TERMS_CLAUSE.vi,
+          en: LEGAL_ENTITY_TERMS_CLAUSE.en,
         },
       ],
     },

@@ -8,6 +8,7 @@ import {
   TrustBreadcrumb,
 } from "@/components/content/trust-page-sections";
 import { CONTACT_PAGE } from "@/lib/content/trust-hub-content";
+import { resolveContactFormIntent } from "@/lib/content/contact-form-routing";
 import { getSiteUrl } from "@/lib/site-config";
 
 export const metadata: Metadata = {
@@ -24,6 +25,7 @@ export default async function LienHePage({ searchParams }: Props) {
   const sp = await searchParams;
   const vertical = sp["dich-vu"] ?? undefined;
   const need = sp.goi ?? undefined;
+  const intent = resolveContactFormIntent(need);
   const c = CONTACT_PAGE;
 
   return (
@@ -43,14 +45,24 @@ export default async function LienHePage({ searchParams }: Props) {
 
       <ContactRouteCards routes={c.routes} className="mt-8" />
 
-      <section className="mt-10 rounded-2xl border border-silver-200 bg-white p-6 shadow-sm">
-        <h2 className="text-lg font-bold text-slate-900">Gửi yêu cầu tư vấn</h2>
+      <section
+        id="tu-van"
+        className="mt-10 scroll-mt-24 rounded-2xl border border-silver-200 bg-white p-6 shadow-sm"
+      >
+        <h2 className="text-lg font-bold text-slate-900">
+          {intent?.sectionTitle ?? "Gửi yêu cầu tư vấn"}
+        </h2>
         <p className="mt-1 text-sm text-slate-600">
-          Vay mua nhà, thẩm định giá, nội thất — điền form, chúng tôi liên hệ trong giờ hành chính.
+          {intent?.sectionLead ??
+            "Vay mua nhà, thẩm định giá, nội thất — điền form, chúng tôi liên hệ trong giờ hành chính."}
         </p>
         <div className="mt-6">
           <Suspense fallback={<p className="text-slate-500">Đang tải form…</p>}>
-            <AffiliateContactForm defaultVertical={vertical} defaultNeed={need} />
+            <AffiliateContactForm
+              defaultVertical={intent?.vertical ?? vertical}
+              defaultNeed={intent?.need ?? need}
+              defaultMessage={intent?.defaultMessage}
+            />
           </Suspense>
         </div>
       </section>

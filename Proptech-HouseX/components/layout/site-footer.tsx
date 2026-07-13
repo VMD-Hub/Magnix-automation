@@ -6,6 +6,7 @@ import {
   NOXH_HANDBOOK_TITLE,
 } from "@/lib/content/messaging/noxh-public";
 import { RENT_PROPERTY_TYPE_FILTER_OPTIONS } from "@/lib/content/property-type-slug";
+import { getLegalEntityDisclosure } from "@/lib/content/legal-entity";
 import { getBrandName } from "@/lib/site-config";
 import { HouseXFooterLogo } from "@/components/brand/housex-footer-logo";
 import { FooterBrandOrnament } from "@/components/layout/footer-brand-ornament";
@@ -41,6 +42,7 @@ function FooterCol({
 }
 
 export function SiteFooter() {
+  const legalEntity = getLegalEntityDisclosure();
   const taiChinh = AFFILIATE_VERTICALS.find((v) => v.id === "tai-chinh")!;
   const dinhGia = AFFILIATE_VERTICALS.find((v) => v.id === "dinh-gia")!;
   const noiThat = AFFILIATE_VERTICALS.find((v) => v.id === "noi-that")!;
@@ -151,7 +153,10 @@ export function SiteFooter() {
 
       <div className="proptech-footer-divider border-t">
         <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-3 py-5 text-xs text-silver-300/80 container-px sm:flex-row">
-          <p>© {new Date().getFullYear()} {getBrandName()}. All rights reserved.</p>
+          <div className="text-center sm:text-left">
+            <p>© {new Date().getFullYear()} {getBrandName()}. All rights reserved.</p>
+            <p className="mt-1 text-silver-300/65">{legalEntity.vi}</p>
+          </div>
           <div className="flex flex-wrap justify-center gap-4">
             <Link href="/dich-vu" className={FOOTER_LINK}>
               Dịch vụ {getBrandName()}

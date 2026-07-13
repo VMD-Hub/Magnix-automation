@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
+import { resolveContactFormIntent } from "@/lib/content/contact-form-routing";
 
 const VERTICAL_OPTIONS = [
   { value: "tai-chinh", label: "Vay vốn / Tài chính ngân hàng" },
@@ -13,6 +14,10 @@ const VERTICAL_OPTIONS = [
 
 const NEED_BY_VERTICAL: Record<string, { value: string; label: string }[]> = {
   "tai-chinh": [
+    {
+      value: "ra-soat-phap-ly-15-phut",
+      label: "Rà soát pháp lý 15 phút (NOXH / BĐS)",
+    },
     { value: "vay-mua-bds", label: "Vay mua bất động sản" },
     { value: "vay-sxkd", label: "Vay sản xuất kinh doanh" },
     { value: "tu-van-chung", label: "Chưa rõ — cần tư vấn" },
@@ -38,23 +43,46 @@ const NEED_BY_VERTICAL: Record<string, { value: string; label: string }[]> = {
 export function AffiliateContactForm({
   defaultVertical,
   defaultNeed,
+  defaultMessage,
   compact = false,
 }: {
   defaultVertical?: string;
   defaultNeed?: string;
+  defaultMessage?: string;
   compact?: boolean;
 }) {
+  const intent = resolveContactFormIntent(defaultNeed);
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
-  const [vertical, setVertical] = useState(defaultVertical ?? "tai-chinh");
-  const [need, setNeed] = useState(defaultNeed ?? "");
-  const [message, setMessage] = useState("");
+  const [vertical, setVertical] = useState(
+    intent?.vertical ?? defaultVertical ?? "tai-chinh",
+  );
+  const [need, setNeed] = useState(intent?.need ?? defaultNeed ?? "");
+  const [message, setMessage] = useState(
+    intent?.defaultMessage ?? defaultMessage ?? "",
+  );
   const [loading, setLoading] = useState(false);
   const [done, setDone] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const needOptions = NEED_BY_VERTICAL[vertical] ?? [];
+
+  useEffect(() => {
+    if (!intent) return;
+    setVertical(intent.vertical);
+    setNeed(intent.need);
+    setMessage((prev) => (prev.trim() ? prev : intent.defaultMessage));
+  }, [intent]);
+
+  useEffect(() => {
+    if (!defaultNeed && !window.location.hash.includes("tu-van")) return;
+    const el = document.getElementById("tu-van");
+    if (!el) return;
+    window.requestAnimationFrame(() => {
+      el.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+  }, [defaultNeed]);
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();

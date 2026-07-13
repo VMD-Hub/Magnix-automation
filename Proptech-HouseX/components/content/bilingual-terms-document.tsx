@@ -4,6 +4,7 @@ import type {
   TermsChangeLogEntry,
   TERMS_OF_USE,
 } from "@/lib/content/terms-of-use-content";
+import { getLegalEntityDisclosure } from "@/lib/content/legal-entity";
 import { getTermsContactBlock } from "@/lib/content/legal-contact";
 import {
   DocBilingualParagraph,
@@ -102,6 +103,7 @@ function ChangeLogTable({ entries }: { entries: readonly TermsChangeLogEntry[] }
 
 export function BilingualTermsDocument({ terms }: { terms: TermsContent }) {
   const t = terms;
+  const legalEntity = getLegalEntityDisclosure();
 
   return (
     <article className="mx-auto max-w-3xl py-10 container-px">
@@ -169,7 +171,9 @@ export function BilingualTermsDocument({ terms }: { terms: TermsContent }) {
       </section>
 
       <footer className="not-prose mt-10 border-t border-slate-200 pt-6 text-sm text-slate-500">
-        <p>{t.disclaimerVi}</p>
+        <p>{legalEntity.vi}</p>
+        <p className="mt-1 italic">{legalEntity.en}</p>
+        <p className="mt-4">{t.disclaimerVi}</p>
         <p className="mt-2 italic">{t.disclaimerEn}</p>
         <p className="mt-4">
           <Link href="/bao-mat" className="font-semibold text-brand-700 underline">

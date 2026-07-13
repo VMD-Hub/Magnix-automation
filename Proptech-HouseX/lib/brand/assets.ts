@@ -49,6 +49,39 @@ export const BRAND_ASSETS = {
       decorative: true,
     },
   },
+
+  /** Zalo OA ảnh bìa + Mini App banner — `npm run brand:zalo-banners` */
+  zalo: {
+    oaCover1280: {
+      path: "/brand/zalo/housex-zalo-oa-cover-1280x720.png",
+      usage: "Zalo OA ảnh bìa (khuyến nghị upload)",
+      decorative: true,
+    },
+    oaCover1920: {
+      path: "/brand/zalo/housex-zalo-oa-cover-1920x1080.png",
+      usage: "Zalo OA ảnh bìa HD",
+      decorative: true,
+    },
+    miniapp1280: {
+      path: "/brand/zalo/housex-miniapp-banner-1280x720.png",
+      usage: "Mini App splash / marketing banner",
+      decorative: true,
+    },
+    miniapp750: {
+      path: "/brand/zalo/housex-miniapp-banner-750x420.png",
+      usage: "Mini App banner mobile",
+      decorative: true,
+    },
+  },
+
+  /** Vũ Nguyễn — personal brand Lớp 3 · /vu-nguyen */
+  vuNguyen: {
+    portrait: {
+      path: "/brand/vu-nguyen/portrait.jpg",
+      usage: "Digital profile NFC — NEXT_PUBLIC_VU_NGUYEN_PORTRAIT_URL",
+      decorative: true,
+    },
+  },
 } as const satisfies Record<string, Record<string, BrandRasterAsset>>;
 
 /** @deprecated Dùng `BRAND_ASSETS.clover.gold3dStem.path` */
