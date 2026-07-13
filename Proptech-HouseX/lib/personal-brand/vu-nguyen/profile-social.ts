@@ -2,7 +2,7 @@
  * Liên kết icon trên digital name card — chỉ hiển thị khi có URL.
  */
 
-import { getVuNguyenZaloUrl } from "@/lib/personal-brand/vu-nguyen/profile-content";
+import { getVuNguyenZaloUrl, VU_NGUYEN_LINKEDIN_URL } from "@/lib/personal-brand/vu-nguyen/profile-content";
 import { getSocialChannels, getSupportPhoneTel } from "@/lib/site-config";
 
 export type ProfileSocialIconId =
@@ -23,11 +23,12 @@ export type ProfileSocialLink = {
   disabled?: boolean;
 };
 
-function getLinkedInUrl(): string | null {
+function getLinkedInUrl(): string {
   const fromVu = process.env.NEXT_PUBLIC_VU_NGUYEN_LINKEDIN_URL?.trim();
   if (fromVu) return fromVu;
   const fromSocial = process.env.NEXT_PUBLIC_SOCIAL_LINKEDIN_URL?.trim();
-  return fromSocial || null;
+  if (fromSocial) return fromSocial;
+  return VU_NGUYEN_LINKEDIN_URL;
 }
 
 function getTelegramUrl(): string | null {
@@ -68,9 +69,8 @@ export function getVuNguyenProfileSocialLinks(): ProfileSocialLink[] {
     {
       id: "linkedin",
       label: "LinkedIn",
-      href: linkedin ?? undefined,
+      href: linkedin,
       external: true,
-      disabled: !linkedin,
     },
   ];
 

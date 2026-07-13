@@ -26,6 +26,10 @@ export const VU_NGUYEN_PORTRAIT_SCALE = 1.28;
 /** Nhãn trang DNA thương hiệu từ danh thiếp (không case). */
 export const VU_NGUYEN_STORIES_LABEL = "Câu chuyện House X" as const;
 
+/** LinkedIn — profile công khai Vũ Nguyễn. */
+export const VU_NGUYEN_LINKEDIN_URL =
+  "https://www.linkedin.com/in/vu-n-506256408" as const;
+
 /** Lời cảm ơn cuối danh thiếp — song ngữ, không thêm liên kết. */
 export const VU_NGUYEN_THANK_YOU = {
   vi: "Cảm ơn bạn đã kết nối.",
