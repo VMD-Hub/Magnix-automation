@@ -78,10 +78,19 @@ export function getCinematicHeroPoster(): string {
 /** Domain production mặc định khi chưa có housex.vn. */
 const PRODUCTION_SITE_URL = "https://timnhaxahoi.com";
 
-/** URL gốc site — canonical, OG, sitemap, JSON-LD. */
+/** URL gốc site — canonical, OG, sitemap, JSON-LD, QR danh thiếp. */
 export function getSiteUrl(): string {
   const fromEnv = process.env.NEXT_PUBLIC_SITE_URL?.trim();
-  if (fromEnv) return fromEnv.replace(/\/$/, "");
+  if (fromEnv) {
+    const normalized = fromEnv.replace(/\/$/, "");
+    if (
+      process.env.NODE_ENV === "production" &&
+      /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/i.test(normalized)
+    ) {
+      return PRODUCTION_SITE_URL;
+    }
+    return normalized;
+  }
   if (process.env.NODE_ENV === "production") return PRODUCTION_SITE_URL;
   return "http://localhost:3000";
 }

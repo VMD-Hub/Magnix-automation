@@ -47,7 +47,8 @@ export function resolveVuNguyenQrUrl(target: VuNguyenQrTarget): string {
 }
 
 export function getVuNguyenQrImagePath(target: VuNguyenQrTarget): string {
-  return `/api/vu-nguyen/qr?target=${target}`;
+  const host = encodeURIComponent(new URL(getSiteUrl()).hostname);
+  return `/api/vu-nguyen/qr?target=${target}&v=${host}`;
 }
 
 /** QR trên digital name card — danh thiếp, web, Mini App. */
