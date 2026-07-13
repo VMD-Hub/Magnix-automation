@@ -15,7 +15,12 @@ const ROOT = process.cwd();
 const OUT_DIR = join(ROOT, VU_NGUYEN_QR_PRINT_DIR);
 const BRAND_RUBY = "#3d070c";
 
-const TARGETS: { file: string; target: VuNguyenQrTarget; label: string }[] = [
+const TARGETS: {
+  file: string;
+  target: VuNguyenQrTarget;
+  label: string;
+  skipGenerate?: boolean;
+}[] = [
   {
     file: "qr-profile-nfc.png",
     target: "profile-nfc",
@@ -29,7 +34,8 @@ const TARGETS: { file: string; target: VuNguyenQrTarget; label: string }[] = [
   {
     file: "qr-housex-miniapp-zalo.png",
     target: "miniapp",
-    label: "Zalo OA → Mini App House X",
+    label: "Mini App House X (giữ file QR chính thức từ developers.zalo.me)",
+    skipGenerate: true,
   },
 ];
 
@@ -37,6 +43,10 @@ async function main() {
   await mkdir(OUT_DIR, { recursive: true });
 
   for (const item of TARGETS) {
+    if ("skipGenerate" in item && item.skipGenerate) {
+      console.log(`⊘ ${item.file} — ${item.label}`);
+      continue;
+    }
     const url = resolveVuNguyenQrUrl(item.target);
     const png = await QRCode.toBuffer(url, {
       type: "png",

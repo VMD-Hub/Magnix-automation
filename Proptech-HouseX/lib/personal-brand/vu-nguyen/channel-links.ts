@@ -1,31 +1,35 @@
 /**
- * Liên kết kênh Web · Mini App (Zalo OA) · Profile NFC — Vũ Nguyễn / House X.
+ * Liên kết kênh Web · Mini App (Zalo) · Profile NFC — Vũ Nguyễn / House X.
  */
 
 import {
   getVuNguyenProfileUrl,
   VU_NGUYEN_PROFILE_PATH,
 } from "@/lib/personal-brand/vu-nguyen/profile-content";
-import { getSiteUrl, getSocialChannels } from "@/lib/site-config";
+import { getSiteUrl } from "@/lib/site-config";
 
 export type VuNguyenQrTarget = "profile" | "profile-nfc" | "web" | "miniapp";
+
+/** Mini App ID — `housex-zalo-miniapp/app-config.json` · QR developers.zalo.me */
+export const HOUSEX_ZALO_MINIAPP_ID = "1554712272702750699" as const;
+
+/** QR chính thức từ Zalo Developer (không generate lại). */
+export const HOUSEX_MINIAPP_QR_PATH =
+  "/brand/vu-nguyen/qr/qr-housex-miniapp-zalo.png" as const;
 
 export function getHouseXWebUrl(): string {
   return getSiteUrl();
 }
 
-/** Trang Zalo OA — khách bấm «Mở House X» (Mini App) trên OA. */
+/** Deep link mở thẳng Mini App House X trong Zalo (`zalo.me/s/{appId}`). */
 export function getHouseXMiniAppEntryUrl(): string {
-  const fromEnv = process.env.NEXT_PUBLIC_ZALO_OA_PUBLIC_URL?.trim();
-  if (fromEnv) return fromEnv;
+  const fullUrl = process.env.NEXT_PUBLIC_ZALO_MINIAPP_URL?.trim();
+  if (fullUrl) return fullUrl;
 
-  const social = getSocialChannels().find((c) => c.id === "zalo");
-  if (social?.href) return social.href;
+  const miniAppId =
+    process.env.NEXT_PUBLIC_ZALO_MINIAPP_ID?.trim() || HOUSEX_ZALO_MINIAPP_ID;
 
-  const oaId = process.env.NEXT_PUBLIC_ZALO_OA_ID?.trim();
-  if (oaId) return `https://zalo.me/${oaId}`;
-
-  return "https://zalo.me/0826600800";
+  return `https://zalo.me/s/${miniAppId}`;
 }
 
 export function getVuNguyenProfileNfcUrl(): string {
@@ -47,6 +51,9 @@ export function resolveVuNguyenQrUrl(target: VuNguyenQrTarget): string {
 }
 
 export function getVuNguyenQrImagePath(target: VuNguyenQrTarget): string {
+  if (target === "miniapp") {
+    return HOUSEX_MINIAPP_QR_PATH;
+  }
   const host = encodeURIComponent(new URL(getSiteUrl()).hostname);
   return `/api/vu-nguyen/qr?target=${target}&v=${host}`;
 }
@@ -85,7 +92,7 @@ export const VU_NGUYEN_CONNECT_CHANNELS = [
     label: "Mini App Zalo",
     shortLabel: "Zalo App",
     openLabel: "Mở Mini App",
-    description: "Mở House X trong Zalo — nút «Mở House X» trên OA",
+    description: "Quét QR hoặc bấm để mở Mini App House X trong Zalo",
     href: getHouseXMiniAppEntryUrl,
     qrTarget: "miniapp" as const,
     buttonVariant: "zalo" as const,
