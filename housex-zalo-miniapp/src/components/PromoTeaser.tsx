@@ -1,13 +1,12 @@
 import { useNavigate } from "react-router-dom";
 import { PromoWheelArt } from "@/components/PromoWheelArt";
 import { RubySurfaceOrnament } from "@/components/RubySurfaceOrnament";
-
-declare const __HX_BUILD_ID__: string;
+import { getHxBuildId } from "@/utils/build-id";
 
 /** Teaser vòng quay — copy trái, ảnh vòng quay phải (CTA trực quan). */
 export function PromoTeaser() {
   const navigate = useNavigate();
-  const buildId = typeof __HX_BUILD_ID__ !== "undefined" ? __HX_BUILD_ID__ : "dev";
+  const buildId = getHxBuildId();
 
   return (
     <button

@@ -7,6 +7,7 @@ import {
   IconUser,
 } from "@/components/AppIcons";
 import { useHomeTabPath } from "@/components/LaneSwitcher";
+import { getHxBuildId } from "@/utils/build-id";
 
 /**
  * 3 tab cố định — không trùng "Đăng nhập" với "Tài khoản".
@@ -17,6 +18,7 @@ export function AppShell() {
   const { canAgent } = useAuth();
   const homePath = useHomeTabPath();
   const location = useLocation();
+  const buildId = getHxBuildId();
   const homeActive =
     location.pathname === "/" ||
     location.pathname === "/noxh" ||
@@ -28,6 +30,9 @@ export function AppShell() {
     <div className="shell">
       <main className="shell-main">
         <Outlet />
+        <p className="hx-build-stamp" aria-hidden>
+          House X · {buildId}
+        </p>
       </main>
       <nav className="tabbar" aria-label="Chính">
         <NavLink

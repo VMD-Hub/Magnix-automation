@@ -8,6 +8,7 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "build:zmp": "npm run build && node scripts/sync-app-config.mjs && node scripts/verify-promo-bundle.mjs",
+    "deploy:testing": "npm run build:zmp && node scripts/remind-testing-deploy.mjs",
     "preview": "vite preview"
   },
   "dependencies": {

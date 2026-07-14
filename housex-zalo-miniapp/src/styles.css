@@ -53,6 +53,16 @@ a {
   overflow-x: hidden;
 }
 
+.hx-build-stamp {
+  margin: 20px 0 8px;
+  text-align: center;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--hx-brand-600);
+  opacity: 0.85;
+}
+
 .app-state-card {
   display: flex;
   flex-direction: column;

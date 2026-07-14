@@ -35,46 +35,37 @@ Login mock: **Tài khoản** → SĐT → `POST /api/auth/zalo` với `zaloUserI
 | Agent | `/agent`, hồ sơ, thông báo, hoa hồng |
 | LMS | `/agent/dich-vu`, `/agent/dich-vu/:code` (đào tạo · pháp lý · dịch vụ) |
 
-## Build production (ZMP deploy)
+## Development vs Testing (quan trọng)
 
-```bash
-# .env.production hoặc export trước khi build:
-# VITE_HOUSEX_API_BASE=https://timnhaxahoi.com
-# VITE_AUTH_DEV_BYPASS=false
+| Status | Ai mở được | Khi nào dùng |
+|--------|------------|--------------|
+| **Development** | Chủ yếu tài khoản **Developer / Admin** trên console Mini App | Debug nhanh 1 máy |
+| **Testing** | **Mọi tài khoản Zalo** quét QR phiên bản đó | Test nhiều máy / nhiều người — **mặc định của House X** |
+| Live (`zalo.me/s/<appId>/`) | Bản đã duyệt / public | Không dùng để xem bản vừa deploy |
 
-npm run build:zmp    # → www/assets/index-*.js + index-*.css (có hash chống cache)
-zmp login
-zmp deploy
-# Mini App ID: 1554712272702750699
-# dist folder: www
-#
-# QUAN TRỌNG — xem bản vừa deploy:
-# 1) Phải chạy `npm run build:zmp` trước `zmp deploy` (www không có trong git).
-# 2) Chọn Version status = Testing (không chỉ Development).
-# 3) Quét đúng QR trên terminal lần deploy đó — đóng hẳn Zalo rồi mở lại.
-# 4) KHÔNG mở bằng OA / link https://zalo.me/s/<appId>/ (đó là bản Live đã duyệt — cũ).
-# 5) Vào lane NOXH; teaser phải có mã build dạng "KHUYẾN MÃI NOXH · hx…".
-```
+Quota bạn đang luôn **Testing = 0** → các lần deploy Development nên các Zalo khác / máy khác không thấy UI mới.
 
-`app-config.json` được sync từ `www/index.html` — luôn khai báo đúng `listCSS` / `listAsyncJS` sau `build:zmp`.
+Nhận biết bundle đúng: cuối màn hình có dòng **`House X · hx…`**.
 
-## Deploy checklist (VPS)
+## Deploy Testing trên VPS (khuyên dùng)
 
 ```bash
 cd /opt/housex && git pull
 
-# API — bắt buộc nếu có auth/handoff mới
-cd Proptech-HouseX
-npm run build && pm2 restart housex --update-env
+# API nếu có thay đổi auth/handoff
+cd Proptech-HouseX && npm run build && pm2 restart housex --update-env
 
 cd ../housex-zalo-miniapp
-npm run build:zmp   # phải in: verify-promo-bundle: OK
-grep -o 'Quay là có quà' www/assets/*.js
-cat app-config.json
-zmp deploy          # chọn Testing + quét QR mới
+bash scripts/deploy-testing.sh
+# hoặc:
+#   npm run build:zmp
+#   zmp deploy --existing --testing
+# Khi hỏi Version status → Testing (không chọn Development)
 ```
 
-**Tài khoản:** Mini đăng nhập → **Xem hồ sơ đầy đủ** → webview Set-Cookie qua `/api/auth/miniapp-handoff`. Cần rebuild + restart Proptech-HouseX trước khi test CTA.
+Sau deploy: **force-stop Zalo** → quét **QR Testing** trên terminal.
+
+**Tài khoản:** Mini đăng nhập → **Xem hồ sơ đầy đủ** → webview handoff cookie.
 
 ## Mai — OA / Mini App thật (chờ xác nhận)
 
