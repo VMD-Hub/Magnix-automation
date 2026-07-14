@@ -7,7 +7,7 @@ function hrefOf(s: HomeNavItem): string {
   return s.to;
 }
 
-/** Hàng nút nhanh — tile ruby đầy đủ bề ngang, icon vàng / chữ trắng. */
+/** Hàng nút nhanh — kiểu be: nền sáng, chỉ icon tô ruby brand, chữ tối. */
 export function ShortcutGrid({ items }: { items: HomeNavItem[] }) {
   const navigate = useNavigate();
   const gridClass =
@@ -19,7 +19,7 @@ export function ShortcutGrid({ items }: { items: HomeNavItem[] }) {
         const inner = (
           <>
             <span className="shortcut-icon">
-              <ShortcutGlyph id={s.id} size={26} />
+              <ShortcutGlyph id={s.id} size={28} />
             </span>
             <span className="shortcut-label">{s.label}</span>
           </>

@@ -464,14 +464,14 @@ button.chip-active {
   justify-content: center;
   gap: 8px;
   width: 100%;
-  min-height: 96px;
-  padding: 14px 8px 12px;
-  border: 1px solid rgba(252, 211, 77, 0.3);
+  min-height: 92px;
+  padding: 12px 6px 10px;
+  border: 1px solid var(--hx-border);
   border-radius: 16px;
-  background: var(--hx-ruby-gradient);
-  box-shadow: var(--hx-shadow-ruby);
+  background: var(--hx-surface);
+  box-shadow: var(--hx-shadow-soft);
   cursor: pointer;
-  color: #fff;
+  color: var(--hx-text);
   text-decoration: none;
   font-family: inherit;
   -webkit-tap-highlight-color: transparent;
@@ -479,20 +479,20 @@ button.chip-active {
 
 .shortcut-item:active {
   transform: scale(0.98);
-  opacity: 0.95;
+  background: var(--hx-surface-muted);
 }
 
 .shortcut-icon {
-  width: 44px;
-  height: 44px;
+  width: 48px;
+  height: 48px;
   border-radius: 14px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid rgba(252, 211, 77, 0.35);
-  background: rgba(255, 255, 255, 0.12);
+  border: 0;
+  background: transparent;
   box-shadow: none;
-  color: var(--hx-gold-400);
+  color: var(--hx-brand-600);
 }
 
 .shortcut-glyph {
@@ -501,11 +501,11 @@ button.chip-active {
 
 .shortcut-label {
   font-size: 12px;
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: 0.01em;
   line-height: 1.2;
   text-align: center;
-  color: #fff;
+  color: var(--hx-text);
   max-width: none;
 }
 
