@@ -19,7 +19,7 @@ export function ShortcutGrid({ items }: { items: HomeShortcut[] }) {
           <>
             <span
               className="shortcut-icon"
-              style={{ background: `${s.tone}28`, borderColor: `${s.tone}55` }}
+              style={{ color: s.tone, borderColor: `${s.tone}55` }}
             >
               <ShortcutGlyph id={s.id} size={22} />
             </span>

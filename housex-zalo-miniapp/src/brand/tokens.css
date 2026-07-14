@@ -1,8 +1,14 @@
 /**
- * House X brand tokens — đồng bộ Proptech-HouseX/app/globals.css (Ruby Fire + Gold CTA).
- * KHÔNG dùng palette cũ (#e11d48 / cyan accent).
+ * House X Mini App tokens — align Proptech-HouseX/app/globals.css
+ * Light shell (60% Silver) · Ruby accents (30%) · Gold CTA (10%).
+ * KHÔNG dùng palette cũ (#e11d48 / cyan) · KHÔNG full-bleed dark mood.
  */
 :root {
+  /* Silver — nền Kim */
+  --hx-silver-50: #f5f5f7;
+  --hx-silver-100: #ebebed;
+  --hx-silver-200: #dcdce0;
+
   /* Ruby Fire */
   --hx-brand-50: #fdf2f3;
   --hx-brand-200: #f9c8cc;
@@ -14,29 +20,33 @@
   --hx-brand-800: #5c0b12;
   --hx-brand-900: #3d070c;
 
-  /* Gold accent (ornament + CTA bevel) */
+  /* Gold accent (CTA + ornament trên ruby) */
   --hx-gold-400: #e8c547;
   --hx-gold-500: #daa520;
-  --hx-gold-glow: rgba(252, 211, 77, 0.38);
+  --hx-gold-600: #b8860b;
+  --hx-gold-glow: rgba(218, 165, 32, 0.18);
 
-  /* Ink dark shell */
+  /* Ink — chỉ cho brand moments / media fallback */
   --hx-ink-900: #1a1214;
   --hx-ink-800: #2a2224;
+  --hx-ink-700: #4a4446;
 
-  /* Semantic — map tên cũ sang brand mới */
-  --hx-bg: var(--hx-ink-900);
-  --hx-surface: var(--hx-ink-800);
-  --hx-text: #f5f5f7;
-  --hx-muted: #a8a0a2;
+  /* Semantic — light shell (web daytime) */
+  --hx-bg: #fcfcfe;
+  --hx-surface: #ffffff;
+  --hx-surface-muted: #f8f8fb;
+  --hx-text: #2d2d2d;
+  --hx-muted: #5c5c5c;
   --hx-accent: var(--hx-brand-600);
   --hx-accent-hover: var(--hx-brand-500);
   --hx-accent-soft: var(--hx-brand-300);
-  --hx-accent-2: var(--hx-gold-400);
-  --hx-link: var(--hx-gold-400);
-  --hx-border: rgba(252, 211, 77, 0.14);
-  --hx-border-ruby: rgba(155, 17, 30, 0.45);
-  --hx-ruby-glow: rgba(155, 17, 30, 0.22);
-  --hx-shadow-ruby: 0 12px 32px rgba(92, 11, 18, 0.28);
+  --hx-accent-2: var(--hx-gold-600);
+  --hx-link: var(--hx-brand-600);
+  --hx-border: #e8e8ed;
+  --hx-border-ruby: rgba(155, 17, 30, 0.28);
+  --hx-ruby-glow: rgba(155, 17, 30, 0.12);
+  --hx-shadow-soft: 0 8px 24px rgba(45, 45, 45, 0.06);
+  --hx-shadow-ruby: 0 10px 28px rgba(92, 11, 18, 0.18);
 
   --hx-ruby-gradient: linear-gradient(
     90deg,

@@ -21,9 +21,9 @@ body,
 
 body {
   background:
-    radial-gradient(ellipse 80% 50% at 50% -20%, var(--hx-ruby-glow), transparent),
-    radial-gradient(ellipse 60% 40% at 100% 0%, rgba(218, 165, 32, 0.08), transparent),
-    #120e10;
+    radial-gradient(ellipse 80% 45% at 50% -18%, var(--hx-ruby-glow), transparent),
+    radial-gradient(ellipse 50% 35% at 100% 0%, var(--hx-gold-glow), transparent),
+    var(--hx-silver-50);
 }
 
 a {
@@ -41,7 +41,7 @@ a {
   flex-direction: column;
   padding-bottom: 64px;
   background: var(--hx-bg);
-  box-shadow: 0 0 0 1px var(--hx-border), 0 25px 80px rgba(0, 0, 0, 0.55);
+  box-shadow: 0 0 0 1px var(--hx-border), 0 20px 60px rgba(45, 45, 45, 0.12);
   position: relative;
 }
 
@@ -67,7 +67,7 @@ a {
 }
 
 .app-state-icon {
-  color: var(--hx-gold-400);
+  color: var(--hx-brand-600);
   margin-bottom: 4px;
 }
 
@@ -103,9 +103,9 @@ a {
   border-radius: 12px;
   background: linear-gradient(
     90deg,
-    rgba(42, 34, 36, 0.9) 0%,
-    rgba(64, 48, 52, 0.9) 50%,
-    rgba(42, 34, 36, 0.9) 100%
+    var(--hx-silver-100) 0%,
+    var(--hx-silver-50) 50%,
+    var(--hx-silver-100) 100%
   );
   background-size: 200% 100%;
   animation: skel-shimmer 1.2s ease-in-out infinite;
@@ -238,7 +238,7 @@ a {
   justify-content: center;
   gap: 6px;
   padding: 8px 0 10px;
-  background: var(--hx-ink-800);
+  background: var(--hx-surface-muted);
 }
 
 .home-dot {
@@ -247,7 +247,7 @@ a {
   border-radius: 99px;
   border: 0;
   padding: 0;
-  background: rgba(168, 160, 162, 0.45);
+  background: var(--hx-silver-200);
   cursor: pointer;
 }
 
@@ -343,10 +343,11 @@ a {
   display: block;
   border-radius: 12px;
   overflow: hidden;
-  border: 1px solid rgba(252, 211, 77, 0.14);
+  border: 1px solid var(--hx-border);
   background: var(--hx-surface);
   color: inherit;
   position: relative;
+  box-shadow: var(--hx-shadow-soft);
 }
 
 .project-grid-badge {
@@ -366,12 +367,12 @@ a {
 
 .project-grid-price {
   margin-top: 4px !important;
-  color: var(--hx-brand-300) !important;
+  color: var(--hx-brand-600) !important;
   font-weight: 600;
 }
 
 .insight-arrow {
-  color: var(--hx-gold-400);
+  color: var(--hx-brand-600);
   font-weight: 700;
   flex-shrink: 0;
 }
@@ -381,13 +382,13 @@ a {
   margin-top: 10px;
   font-size: 13px;
   font-weight: 600;
-  color: var(--hx-gold-400);
+  color: var(--hx-brand-600);
 }
 
 .price {
   font-size: 18px;
   font-weight: 700;
-  color: var(--hx-brand-300);
+  color: var(--hx-brand-600);
   margin: 6px 0 10px;
 }
 
@@ -397,9 +398,9 @@ a {
   font-weight: 700;
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  color: var(--hx-gold-400);
-  background: rgba(155, 17, 30, 0.35);
-  border: 1px solid rgba(252, 211, 77, 0.22);
+  color: var(--hx-brand-600);
+  background: var(--hx-brand-50);
+  border: 1px solid var(--hx-border-ruby);
   border-radius: 999px;
   padding: 2px 8px;
   cursor: pointer;
@@ -408,23 +409,23 @@ a {
 
 button.chip {
   color: var(--hx-muted);
-  background: rgba(148, 163, 184, 0.12);
-  border-color: transparent;
+  background: var(--hx-surface-muted);
+  border-color: var(--hx-border);
 }
 
 button.chip-active {
-  color: var(--hx-gold-400);
-  background: rgba(155, 17, 30, 0.45);
-  border-color: rgba(252, 211, 77, 0.22);
+  color: #fff;
+  background: var(--hx-brand-600);
+  border-color: var(--hx-brand-600);
 }
 
 .badge-ok {
-  color: #bbf7d0;
-  background: rgba(46, 139, 87, 0.22);
+  color: #047857;
+  background: rgba(46, 139, 87, 0.12);
 }
 
 .badge-locked {
-  color: var(--hx-gold-400);
+  color: var(--hx-gold-600);
   background: rgba(218, 165, 32, 0.12);
 }
 
@@ -439,8 +440,8 @@ button.chip-active {
   background: linear-gradient(
     180deg,
     transparent 0%,
-    rgba(26, 18, 20, 0.92) 28%,
-    rgba(26, 18, 20, 0.98) 100%
+    rgba(252, 252, 254, 0.92) 28%,
+    rgba(252, 252, 254, 0.98) 100%
   );
   z-index: 15;
 }
@@ -540,9 +541,10 @@ button.chip-active {
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid rgba(252, 211, 77, 0.18);
-  box-shadow: 0 2px 8px rgba(92, 11, 18, 0.12);
-  color: var(--hx-gold-400);
+  border: 1px solid var(--hx-border);
+  box-shadow: var(--hx-shadow-soft);
+  background: var(--hx-surface);
+  color: var(--hx-brand-600);
 }
 
 .shortcut-glyph {
@@ -571,17 +573,18 @@ button.chip-active {
   display: block;
   border-radius: 12px;
   overflow: hidden;
-  border: 1px solid rgba(252, 211, 77, 0.14);
+  border: 1px solid var(--hx-border);
   background: var(--hx-surface);
   color: inherit;
   position: relative;
+  box-shadow: var(--hx-shadow-soft);
 }
 
 .project-grid-media {
   aspect-ratio: 1 / 1;
   background:
-    linear-gradient(180deg, transparent 50%, rgba(42, 5, 8, 0.72)),
-    var(--hx-ink-800);
+    linear-gradient(180deg, transparent 50%, rgba(42, 5, 8, 0.55)),
+    var(--hx-silver-100);
   background-size: cover;
   background-position: center;
   position: relative;
@@ -624,7 +627,7 @@ button.chip-active {
 
 .project-grid-price {
   margin-top: 4px !important;
-  color: #fda4af !important;
+  color: var(--hx-brand-600) !important;
   font-weight: 600;
 }
 
@@ -680,8 +683,8 @@ button.chip-active {
   border-radius: 14px;
   margin: 10px 0 12px;
   background:
-    linear-gradient(180deg, transparent 35%, rgba(15, 23, 42, 0.85)),
-    #1e293b;
+    linear-gradient(180deg, transparent 35%, rgba(26, 18, 20, 0.78)),
+    var(--hx-silver-100);
   background-size: cover;
   background-position: center;
   border: 1px solid var(--hx-border);
@@ -700,12 +703,13 @@ button.chip-active {
   font-size: 22px;
   font-weight: 800;
   line-height: 1.2;
+  color: #fff;
 }
 
 .landing-hero-overlay p {
   margin: 0;
   font-size: 13px;
-  color: #cbd5e1;
+  color: rgba(255, 255, 255, 0.82);
 }
 
 .landing-intro .landing-lead {
@@ -737,7 +741,7 @@ button.chip-active {
   font-size: 12px;
   padding: 6px 10px;
   border-radius: 999px;
-  background: rgba(148, 163, 184, 0.12);
+  background: var(--hx-surface-muted);
   border: 1px solid var(--hx-border);
   color: var(--hx-muted);
 }
@@ -788,8 +792,8 @@ button.chip-active {
   background: linear-gradient(
     180deg,
     transparent 0%,
-    rgba(26, 18, 20, 0.92) 28%,
-    rgba(26, 18, 20, 0.98) 100%
+    rgba(252, 252, 254, 0.92) 28%,
+    rgba(252, 252, 254, 0.98) 100%
   );
   z-index: 15;
 }
@@ -809,7 +813,7 @@ button.chip-active {
   padding-bottom: env(safe-area-inset-bottom, 0);
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
-  background: rgba(26, 18, 20, 0.97);
+  background: rgba(255, 255, 255, 0.96);
   border-top: 1px solid var(--hx-border);
   backdrop-filter: blur(14px);
   z-index: 20;
@@ -829,7 +833,7 @@ button.chip-active {
 }
 
 .tabbar a.active {
-  color: var(--hx-gold-400);
+  color: var(--hx-brand-600);
 }
 
 .tabbar-icon {
@@ -842,7 +846,7 @@ button.chip-active {
 }
 
 .tabbar a.active .tabbar-icon {
-  color: var(--hx-gold-400);
+  color: var(--hx-brand-600);
 }
 
 .tabbar-label {
@@ -869,6 +873,7 @@ button.chip-active {
   border-radius: 14px;
   padding: 14px 16px;
   margin-bottom: 12px;
+  box-shadow: var(--hx-shadow-soft);
 }
 
 .card h2 {
@@ -889,20 +894,19 @@ button.chip-active {
   justify-content: center;
   min-height: 44px;
   padding: 0 16px;
-  border: 0;
+  border: 1px solid rgba(184, 134, 11, 0.35);
   border-radius: 12px;
   font-weight: 600;
   font-size: 14px;
   cursor: pointer;
-  background: linear-gradient(135deg, var(--hx-brand-700) 0%, var(--hx-brand-600) 100%);
-  color: white;
+  background: linear-gradient(180deg, var(--hx-gold-400) 0%, var(--hx-gold-500) 100%);
+  color: var(--hx-ink-900);
   width: 100%;
-  box-shadow: var(--hx-shadow-ruby);
-  border: 1px solid rgba(252, 211, 77, 0.22);
+  box-shadow: var(--hx-shadow-soft);
 }
 
 .btn.secondary {
-  background: transparent;
+  background: var(--hx-surface);
   border: 1px solid var(--hx-border);
   color: var(--hx-text);
   box-shadow: none;
@@ -913,7 +917,7 @@ button.chip-active {
   min-height: 44px;
   border-radius: 12px;
   border: 1px solid var(--hx-border);
-  background: var(--hx-ink-900);
+  background: var(--hx-surface);
   color: var(--hx-text);
   padding: 0 12px;
   margin-bottom: 10px;
@@ -921,13 +925,13 @@ button.chip-active {
 }
 
 .err {
-  color: var(--hx-brand-300);
+  color: var(--hx-brand-600);
   font-size: 13px;
   margin: 8px 0;
 }
 
 .ok {
-  color: #86efac;
+  color: #047857;
   font-size: 13px;
   margin: 8px 0;
 }
@@ -964,8 +968,8 @@ button.chip-active {
   height: auto;
   width: 100%;
   background:
-    linear-gradient(180deg, transparent 45%, rgba(26, 18, 20, 0.75)),
-    var(--hx-ink-800);
+    linear-gradient(180deg, transparent 45%, rgba(26, 18, 20, 0.55)),
+    var(--hx-silver-100);
   background-size: cover;
   background-position: center;
 }
@@ -1002,12 +1006,12 @@ button.chip-active {
 }
 
 .error {
-  color: var(--hx-brand-300);
+  color: var(--hx-brand-600);
   font-size: 13px;
 }
 
 .success {
-  color: #86efac;
+  color: #047857;
   font-size: 13px;
 }
 
@@ -1018,8 +1022,8 @@ button.chip-active {
   border-radius: 14px;
   margin: 12px 0;
   background:
-    linear-gradient(180deg, transparent 50%, rgba(26, 18, 20, 0.7)),
-    var(--hx-ink-800);
+    linear-gradient(180deg, transparent 50%, rgba(26, 18, 20, 0.55)),
+    var(--hx-silver-100);
   background-size: cover;
   background-position: center;
   border: 1px solid var(--hx-border);
@@ -1063,7 +1067,7 @@ select.input {
 }
 
 .tool-card:active {
-  border-color: rgba(225, 29, 72, 0.5);
+  border-color: var(--hx-border-ruby);
 }
 
 .tool-card-cta {
@@ -1169,7 +1173,7 @@ select.input {
   margin-bottom: 8px;
   border-radius: 12px;
   border: 1px solid var(--hx-border);
-  background: var(--hx-ink-900);
+  background: var(--hx-surface-muted);
   color: var(--hx-text);
   font-family: inherit;
   font-size: 14px;
@@ -1178,19 +1182,19 @@ select.input {
 }
 
 .lane-sheet-option.is-active {
-  border-color: rgba(252, 211, 77, 0.4);
-  background: rgba(155, 17, 30, 0.15);
+  border-color: var(--hx-border-ruby);
+  background: var(--hx-brand-50);
 }
 
 .lane-sheet-badge {
   font-size: 11px;
-  color: var(--hx-gold-400);
+  color: var(--hx-brand-600);
   font-weight: 600;
 }
 
 .lane-sheet-go {
   font-size: 12px;
-  color: var(--hx-accent-2);
+  color: var(--hx-brand-600);
   font-weight: 600;
 }
 
@@ -1228,14 +1232,14 @@ select.input {
   font-size: 9px;
   font-weight: 700;
   letter-spacing: 0.14em;
-  color: var(--hx-gold-400);
+  color: var(--hx-brand-600);
 }
 
 .start-prompt {
   margin: 16px 0 0;
   font-size: 15px;
   font-weight: 600;
-  color: #fff;
+  color: var(--hx-text);
 }
 
 .start-cards {
@@ -1273,12 +1277,12 @@ select.input {
   font-size: 11px;
   font-weight: 600;
   letter-spacing: 0.04em;
-  color: var(--hx-gold-400);
+  color: var(--hx-brand-600);
 }
 
 .brand-lockup--sm .brand-lockup-tagline-en {
   font-size: 10px;
-  color: rgba(252, 211, 77, 0.9);
+  color: var(--hx-gold-400);
 }
 
 .brand-lockup-tagline-vn {
@@ -1286,7 +1290,15 @@ select.input {
   max-width: 280px;
   font-size: 12px;
   line-height: 1.45;
-  color: rgba(255, 255, 255, 0.72);
+  color: var(--hx-muted);
+}
+
+.home-header--brand .brand-lockup-tagline-en {
+  color: var(--hx-gold-400);
+}
+
+.home-header--brand .home-logo {
+  color: #fff;
 }
 
 .lane-pick-card {
@@ -1295,13 +1307,13 @@ select.input {
   padding: 0;
   overflow: hidden;
   border-radius: 16px;
-  border: 1px solid rgba(252, 211, 77, 0.28);
+  border: 1px solid var(--hx-border);
   background: var(--hx-surface);
-  color: #fff;
+  color: var(--hx-text);
   text-align: left;
   cursor: pointer;
   font-family: inherit;
-  box-shadow: var(--hx-shadow-ruby);
+  box-shadow: var(--hx-shadow-soft);
 }
 
 .lane-pick-card-media {
@@ -1321,19 +1333,20 @@ select.input {
   font-size: 16px;
   font-weight: 800;
   margin-bottom: 4px;
+  color: var(--hx-text);
 }
 
 .lane-pick-card-benefit {
   margin: 0 0 10px;
   font-size: 12px;
   line-height: 1.45;
-  color: rgba(255, 255, 255, 0.78);
+  color: var(--hx-muted);
 }
 
 .lane-pick-card-cta {
   font-size: 12px;
   font-weight: 700;
-  color: var(--hx-gold-400);
+  color: var(--hx-brand-600);
 }
 
 .page-brand-header {
@@ -1433,7 +1446,7 @@ select.input {
 .explore-hub-cta {
   font-size: 13px;
   font-weight: 600;
-  color: var(--hx-accent-2);
+  color: var(--hx-brand-600);
 }
 
 .cross-lane {
