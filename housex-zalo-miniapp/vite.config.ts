@@ -2,9 +2,14 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import path from "path";
 
+const hxBuildId = `hx${Date.now().toString(36).slice(-5)}`;
+
 export default defineConfig({
   base: "./",
   plugins: [react()],
+  define: {
+    __HX_BUILD_ID__: JSON.stringify(hxBuildId),
+  },
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "src"),

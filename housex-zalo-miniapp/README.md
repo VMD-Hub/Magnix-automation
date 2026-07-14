@@ -47,10 +47,27 @@ zmp login
 zmp deploy
 # Mini App ID: 1554712272702750699
 # dist folder: www
-# Mở đúng QR của lần deploy này (Development), đóng Mini App cũ rồi mở lại
+#
+# QUAN TRỌNG — xem bản vừa deploy:
+# 1) Phải chạy `npm run build:zmp` trước `zmp deploy` (www không có trong git).
+# 2) Chọn Version status = Testing (không chỉ Development).
+# 3) Quét đúng QR trên terminal lần deploy đó — đóng hẳn Zalo rồi mở lại.
+# 4) KHÔNG mở bằng OA / link https://zalo.me/s/<appId>/ (đó là bản Live đã duyệt — cũ).
+# 5) Vào lane NOXH; teaser phải có mã build dạng "KHUYẾN MÃI NOXH · hx…".
 ```
 
 `app-config.json` được sync từ `www/index.html` — luôn khai báo đúng `listCSS` / `listAsyncJS` sau `build:zmp`.
+
+## Deploy checklist (VPS)
+
+```bash
+cd /opt/housex && git pull
+cd housex-zalo-miniapp
+npm run build:zmp   # phải in: verify-promo-bundle: OK
+grep -o 'Quay là có quà' www/assets/*.js
+cat app-config.json
+zmp deploy          # chọn Testing
+```
 
 ## Mai — OA / Mini App thật (chờ xác nhận)
 

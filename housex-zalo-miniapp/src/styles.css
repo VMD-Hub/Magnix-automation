@@ -675,8 +675,8 @@ button.chip-active {
 .promo-teaser--hero {
   align-items: stretch;
   gap: 8px;
-  min-height: 132px;
-  padding: 16px 10px 16px 16px;
+  min-height: 148px;
+  padding: 16px 8px 16px 16px;
 }
 
 .promo-teaser-body {
@@ -707,18 +707,19 @@ button.chip-active {
   color: #fff;
 }
 
-.promo-teaser--hero .promo-teaser-desc {
-  margin: 8px 0 0;
-  font-size: 13px;
-  line-height: 1.45;
-  color: rgba(255, 255, 255, 0.88);
-}
-
 .promo-teaser-desc {
   margin: 4px 0 0;
   font-size: 11px;
   line-height: 1.35;
   color: rgba(255, 255, 255, 0.78);
+}
+
+.promo-teaser--hero .promo-teaser-desc {
+  margin: 8px 0 0;
+  font-size: 13px;
+  line-height: 1.45;
+  font-weight: 600;
+  color: #fde68a;
 }
 
 .promo-teaser-wheel {
@@ -728,14 +729,14 @@ button.chip-active {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 118px;
+  width: 132px;
   align-self: center;
   filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.35));
 }
 
 .promo-wheel-svg {
   display: block;
-  width: 118px;
+  width: 132px;
   height: auto;
 }
 

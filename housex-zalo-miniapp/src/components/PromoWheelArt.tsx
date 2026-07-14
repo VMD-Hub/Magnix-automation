@@ -1,26 +1,41 @@
 /**
- * Vòng quay trang trí — màu tier khớp lucky-wheel House X (SPECIAL/FIRST/…).
- * Dùng trên PromoTeaser; không quay thật (chỉ CSS idle spin nhẹ).
+ * Vòng quay trang trí — màu tier khớp lucky-wheel House X.
+ * Chỉ wedge + hub (không chữ trên ô) — ổn định trên WebView Zalo.
  */
 
 const CX = 100;
 const CY = 100;
 const R = 94;
 
-/** Layout 12 ô giống seed mặc định (màu tier). */
-const SEGMENTS: { fill: string; stroke: string; label: string; text: string }[] = [
-  { fill: "#e2e8f0", stroke: "#64748b", text: "#334155", label: "May mắn" },
-  { fill: "#0d9488", stroke: "#115e59", text: "#ecfdf5", label: "500k" },
-  { fill: "#e2e8f0", stroke: "#64748b", text: "#334155", label: "May mắn" },
-  { fill: "#2563eb", stroke: "#1e3a8a", text: "#eff6ff", label: "1:1" },
-  { fill: "#0d9488", stroke: "#115e59", text: "#ecfdf5", label: "500k" },
-  { fill: "#facc15", stroke: "#a16207", text: "#422006", label: "Nồi" },
-  { fill: "#e2e8f0", stroke: "#64748b", text: "#334155", label: "May mắn" },
-  { fill: "#2563eb", stroke: "#1e3a8a", text: "#eff6ff", label: "1:1" },
-  { fill: "#0d9488", stroke: "#115e59", text: "#ecfdf5", label: "500k" },
-  { fill: "#14532d", stroke: "#052e16", text: "#dcfce7", label: "Bếp" },
-  { fill: "#2563eb", stroke: "#1e3a8a", text: "#eff6ff", label: "1:1" },
-  { fill: "#9b111e", stroke: "#3d070c", text: "#fcd34d", label: "Tủ lạnh" },
+/** Layout 12 ô màu giống seed mặc định. */
+const FILLS = [
+  "#e2e8f0",
+  "#0d9488",
+  "#e2e8f0",
+  "#2563eb",
+  "#0d9488",
+  "#facc15",
+  "#e2e8f0",
+  "#2563eb",
+  "#0d9488",
+  "#14532d",
+  "#2563eb",
+  "#9b111e",
+];
+
+const STROKES = [
+  "#64748b",
+  "#115e59",
+  "#64748b",
+  "#1e3a8a",
+  "#115e59",
+  "#a16207",
+  "#64748b",
+  "#1e3a8a",
+  "#115e59",
+  "#052e16",
+  "#1e3a8a",
+  "#3d070c",
 ];
 
 function polar(cx: number, cy: number, r: number, angleDeg: number) {
@@ -38,8 +53,7 @@ function slicePath(index: number, count: number): string {
 }
 
 export function PromoWheelArt() {
-  const n = SEGMENTS.length;
-  const angle = 360 / n;
+  const n = FILLS.length;
 
   return (
     <svg
@@ -48,43 +62,43 @@ export function PromoWheelArt() {
       role="img"
       aria-label="Vòng quay may mắn House X"
     >
-      {/* Pointer */}
-      <polygon points="100,6 112,28 88,28" fill="#5c0b12" stroke="#fcd34d" strokeWidth="1.2" />
+      <polygon
+        points="100,6 114,30 86,30"
+        fill="#fcd34d"
+        stroke="#5c0b12"
+        strokeWidth="2"
+      />
       <g transform="translate(0, 12)">
         <g className="promo-wheel-disc">
-          <circle cx={CX} cy={CY} r={R + 3} fill="#3d070c" />
-          <circle cx={CX} cy={CY} r={R + 1} fill="none" stroke="#fcd34d" strokeWidth="2.5" />
-          {SEGMENTS.map((seg, i) => {
-            const mid = i * angle - 90 + angle / 2;
-            const lab = polar(CX, CY, 62, mid);
-            return (
-              <g key={i}>
-                <path d={slicePath(i, n)} fill={seg.fill} stroke={seg.stroke} strokeWidth="1.4" />
-                <text
-                  x={lab.x}
-                  y={lab.y}
-                  fill={seg.text}
-                  fontSize={seg.label.length > 5 ? 7 : 8}
-                  fontWeight={800}
-                  textAnchor="middle"
-                  dominantBaseline="middle"
-                  transform={`rotate(${mid}, ${lab.x}, ${lab.y})`}
-                >
-                  {seg.label}
-                </text>
-              </g>
-            );
-          })}
-          <circle cx={CX} cy={CY} r={22} fill="#7a0e18" stroke="#fcd34d" strokeWidth="3" />
-          <circle cx={CX} cy={CY} r={14} fill="#9b111e" />
+          <circle cx={CX} cy={CY} r={R + 4} fill="#3d070c" />
+          <circle
+            cx={CX}
+            cy={CY}
+            r={R + 2}
+            fill="none"
+            stroke="#fcd34d"
+            strokeWidth="3"
+          />
+          {FILLS.map((fill, i) => (
+            <path
+              key={i}
+              d={slicePath(i, n)}
+              fill={fill}
+              stroke={STROKES[i]}
+              strokeWidth="1.5"
+            />
+          ))}
+          <circle cx={CX} cy={CY} r={26} fill="#7a0e18" stroke="#fcd34d" strokeWidth="4" />
+          <circle cx={CX} cy={CY} r={16} fill="#9b111e" />
           <text
             x={CX}
             y={CY + 1}
             textAnchor="middle"
             dominantBaseline="middle"
             fill="#fcd34d"
-            fontSize="9"
+            fontSize="14"
             fontWeight={900}
+            fontFamily="system-ui, sans-serif"
           >
             X
           </text>
