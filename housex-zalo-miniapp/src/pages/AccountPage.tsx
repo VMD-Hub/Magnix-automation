@@ -2,7 +2,7 @@ import { useEffect, useState, type FormEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { PageBrandHeader } from "@/components/PageBrandHeader";
 import { useAuth } from "@/auth-context";
-import { AUTH_DEV_BYPASS } from "@/config";
+import { AUTH_DEV_BYPASS, HOUSEX_API_BASE } from "@/config";
 import { createMiniappHandoff } from "@/services/api";
 import {
   completeZaloLoginWithPhone,
@@ -307,6 +307,13 @@ export function AccountPage() {
   const phaseHint =
     phase !== "idle" && phase !== "done" ? (PHASE_LABEL[phase] ?? null) : null;
   const anyBusy = busyZalo || busyCustomer || busyBroker;
+  let apiHost = "timnhaxahoi.com";
+  try {
+    apiHost = new URL(HOUSEX_API_BASE).host;
+  } catch {
+    /* keep default */
+  }
+  const badApi = /localhost|127\.0\.0\.1/i.test(apiHost);
 
   return (
     <div>
@@ -316,6 +323,14 @@ export function AccountPage() {
         lead="Chọn đúng nhóm bên dưới — khách mua nhà hoặc cộng đồng môi giới."
       />
 
+      <p
+        className={badApi ? "account-api-stamp account-api-stamp--bad" : "account-api-stamp"}
+        role="status"
+      >
+        {badApi
+          ? `BẢN LỖI — máy chủ ${apiHost} (cần deploy lại)`
+          : `Máy chủ: ${apiHost}`}
+      </p>
       {phaseHint && phase !== "need_phone" ? (
         <p className="account-progress" role="status" aria-live="polite">
           {phaseHint}
