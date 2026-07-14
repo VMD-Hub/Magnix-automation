@@ -19,10 +19,13 @@ const needle = "Quay là có quà";
 const wheel = "promo-wheel";
 let foundCopy = false;
 let foundWheel = false;
+let localhostApi = false;
 for (const f of files) {
   const body = readFileSync(resolve(assetsDir, f), "utf8");
   if (body.includes(needle)) foundCopy = true;
   if (body.includes(wheel)) foundWheel = true;
+  // Vite mang VITE_HOUSEX_API_BASE vào const e="…".replace — cấm localhost trong PROD.
+  if (/="http:\/\/localhost:\d+"\.replace/.test(body)) localhostApi = true;
 }
 
 if (!foundCopy || !foundWheel) {
@@ -31,6 +34,16 @@ if (!foundCopy || !foundWheel) {
     foundWheel,
     files,
   });
+  process.exit(1);
+}
+
+if (localhostApi) {
+  console.error(
+    "verify-promo-bundle: FAIL — bundle đang trỏ API localhost (Zalo không gọi được).",
+  );
+  console.error(
+    "  Fix: dùng .env.production với VITE_HOUSEX_API_BASE=https://timnhaxahoi.com",
+  );
   process.exit(1);
 }
 

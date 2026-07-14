@@ -175,5 +175,13 @@ export async function loginOrRegisterWithZalo(input: ZaloAuthInput) {
 }
 
 export function isZaloAuthError(err: unknown): err is ZaloAuthError {
-  return err instanceof ZaloAuthError;
+  if (err instanceof ZaloAuthError) return true;
+  // Next/webpack đôi khi làm instanceof fail giữa bundle — duck-type.
+  return (
+    typeof err === "object" &&
+    err !== null &&
+    (err as { name?: string }).name === "ZaloAuthError" &&
+    typeof (err as { code?: string }).code === "string" &&
+    typeof (err as { message?: string }).message === "string"
+  );
 }

@@ -110,7 +110,10 @@ export async function apiFetch<T>(
   }
 
   if (!res.ok) {
-    throw new Error(json.error?.message ?? `HTTP ${res.status}`);
+    const code = json.error?.code ? `[${json.error.code}] ` : "";
+    throw new Error(
+      `${code}${json.error?.message ?? `HTTP ${res.status}`}`,
+    );
   }
   return json.data;
 }
