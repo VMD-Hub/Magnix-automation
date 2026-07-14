@@ -57,6 +57,9 @@ export type LaneHomeCopy = {
   projectsTitle: string;
   projectsLead: string;
   showPromo: boolean;
+  /** Dòng giá trị trên banner brand gộp */
+  valueLine: string;
+  supportLine: string;
   banners: HomeBanner[];
   quickActions: HomeNavItem[];
   services: HomeServiceItem[];
@@ -71,6 +74,8 @@ export function laneHomeCopy(lane: "noxh" | "cctm"): LaneHomeCopy {
       projectsTitle: "Dự án NOXH nổi bật",
       projectsLead: "Pháp lý rõ · lộ trình vay · chọn dự án phù hợp điều kiện.",
       showPromo: true,
+      valueLine: "Nhà ở xã hội — rõ pháp lý, rõ lộ trình",
+      supportLine: "Điều kiện · vay · hồ sơ minh bạch",
       banners: NOXH_BANNERS,
       quickActions: QUICK_ACTIONS,
       services: HOME_SERVICES,
@@ -83,6 +88,8 @@ export function laneHomeCopy(lane: "noxh" | "cctm"): LaneHomeCopy {
     projectsTitle: "Căn hộ thương mại",
     projectsLead: "Vị trí · thanh toán · tiến độ — chọn lọc bởi House X.",
     showPromo: false,
+    valueLine: "Căn hộ thương mại — vị trí & lộ trình thanh toán",
+    supportLine: "House X · chọn lọc dự án đô thị",
     banners: CCTM_BANNERS,
     quickActions: QUICK_ACTIONS.filter((a) => a.id !== "khuyen-mai"),
     services: HOME_SERVICES,

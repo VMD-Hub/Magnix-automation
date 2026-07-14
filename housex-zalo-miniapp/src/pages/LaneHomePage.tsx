@@ -2,8 +2,8 @@ import { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { AppStateCard } from "@/components/AppStateCard";
 import { CrossLaneTeaser } from "@/components/CrossLaneTeaser";
-import { HomeBannerCarousel } from "@/components/HomeBannerCarousel";
 import { HomeBrandHeader } from "@/components/HomeBrandHeader";
+import { HomeContextHeader } from "@/components/HomeContextHeader";
 import { HomeNewsSection } from "@/components/HomeNewsSection";
 import { HomeServicesSection } from "@/components/HomeServicesSection";
 import { HomeToolsSection } from "@/components/HomeToolsSection";
@@ -85,9 +85,13 @@ export function LaneHomePage({ lane }: Props) {
 
   return (
     <div className={`home-page home-page--${lane}`}>
-      <HomeBrandHeader lane={lane} kicker={copy.kicker} />
-
-      <HomeBannerCarousel banners={copy.banners} />
+      <HomeContextHeader />
+      <HomeBrandHeader
+        lane={lane}
+        kicker={copy.kicker}
+        valueLine={copy.valueLine}
+        supportLine={copy.supportLine}
+      />
       {copy.showPromo ? <PromoTeaser /> : null}
 
       <ShortcutGrid items={copy.quickActions} />
