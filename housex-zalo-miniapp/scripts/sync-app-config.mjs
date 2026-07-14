@@ -35,4 +35,8 @@ config.listAsyncJS = asyncJs;
 config.listSyncJS = syncJs;
 
 writeFileSync(configPath, `${JSON.stringify(config, null, 2)}\n`);
+
+/** Một số luồng ZMP đọc config cạnh dist — mirror vào www. */
+writeFileSync(resolve(root, "www/app-config.json"), `${JSON.stringify(config, null, 2)}\n`);
+
 console.log("app-config.json synced:", { listCSS: css, listAsyncJS: asyncJs, listSyncJS: syncJs });

@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "build:zmp": "npm run build && node scripts/sync-app-config.mjs",
+    "build:zmp": "npm run build && node scripts/sync-app-config.mjs && node scripts/verify-promo-bundle.mjs",
     "preview": "vite preview"
   },
   "dependencies": {
