@@ -31,9 +31,10 @@ export default defineConfig({
     cssCodeSplit: false,
     rollupOptions: {
       output: {
+        /** Một file JS duy nhất — ZMP chỉ khai báo listAsyncJS, tránh chunk động thiếu */
+        inlineDynamicImports: true,
         manualChunks: undefined,
         entryFileNames: "assets/index-[hash].js",
-        chunkFileNames: "assets/[name]-[hash].js",
         assetFileNames: "assets/index-[hash].[ext]",
       },
     },

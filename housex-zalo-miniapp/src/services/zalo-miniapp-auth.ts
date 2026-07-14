@@ -1,19 +1,19 @@
 /**
- * Auth qua zmp-sdk trong Zalo Mini App.
- * Ngoài Zalo (browser/Vite) các API sẽ fail — caller dùng fallback.
+ * Auth qua zmp-sdk — chỉ dynamic import khi đăng nhập.
+ * Import tĩnh zmp-sdk vào main bundle dễ làm Mini App trắng màn cho mọi user.
  */
-import {
-  authorize,
-  getAccessToken,
-  getPhoneNumber,
-  getUserInfo,
-} from "zmp-sdk/apis";
 import { AUTH_DEV_BYPASS } from "@/config";
 import {
   loginWithZaloAccessToken,
   loginWithZaloDev,
   type HouseXUser,
 } from "@/services/api";
+
+type ZmpApis = typeof import("zmp-sdk/apis");
+
+async function loadZmpApis(): Promise<ZmpApis> {
+  return import("zmp-sdk/apis");
+}
 
 function friendlyZaloError(err: unknown): Error {
   const raw = err instanceof Error ? err.message : String(err ?? "");
@@ -29,6 +29,7 @@ function friendlyZaloError(err: unknown): Error {
 /** Thử lấy access token — báo có đang trong Zalo hay không. */
 export async function probeZaloMiniApp(): Promise<boolean> {
   try {
+    const { getAccessToken } = await loadZmpApis();
     const token = await getAccessToken({});
     return Boolean(token && token.length > 8);
   } catch {
@@ -42,15 +43,15 @@ export async function probeZaloMiniApp(): Promise<boolean> {
  */
 export async function loginViaZaloMiniApp(opts?: {
   preferredRole?: "CUSTOMER" | "BROKER";
-  /** Fallback nếu phoneToken không đổi được trên server */
   phoneFallback?: string;
 }): Promise<HouseXUser> {
   try {
+    const { authorize, getAccessToken, getPhoneNumber, getUserInfo } =
+      await loadZmpApis();
+
     await authorize({
       scopes: ["scope.userInfo", "scope.userPhonenumber"],
-    }).catch(() => {
-      /* một số phiên bản đã cấp quyền mặc định */
-    });
+    }).catch(() => undefined);
 
     const accessToken = await getAccessToken({});
     if (!accessToken) {
@@ -94,8 +95,6 @@ export async function loginViaZaloMiniApp(opts?: {
 
 /**
  * Đăng nhập bằng SĐT đã nhập.
- * - Dev bypass: mock zaloUserId
- * - Production trong Zalo: gắn accessToken thật
  */
 export async function loginWithPhoneInMiniApp(opts: {
   phone: string;
@@ -111,13 +110,18 @@ export async function loginWithPhoneInMiniApp(opts: {
   }
 
   try {
+    const { authorize, getAccessToken, getPhoneNumber, getUserInfo } =
+      await loadZmpApis();
+
     await authorize({
       scopes: ["scope.userInfo", "scope.userPhonenumber"],
     }).catch(() => undefined);
 
     const accessToken = await getAccessToken({});
     if (!accessToken) {
-      throw new Error("Không lấy được phiên Zalo. Mở Mini App trong Zalo rồi thử lại.");
+      throw new Error(
+        "Không lấy được phiên Zalo. Mở Mini App trong Zalo rồi thử lại.",
+      );
     }
 
     let phoneToken: string | undefined;

@@ -1,4 +1,4 @@
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import { HashRouter, Navigate, Route, Routes } from "react-router-dom";
 import { AuthProvider } from "@/auth-context";
 import { AppShell } from "@/components/AppShell";
 import { AccountPage } from "@/pages/AccountPage";
@@ -19,10 +19,11 @@ import { ToolsHubPage } from "@/pages/ToolsHubPage";
 import { ToolViewerPage } from "@/pages/ToolViewerPage";
 import { WebViewPage } from "@/pages/WebViewPage";
 
+/** HashRouter — ổn định trên Zalo Mini App (CDN path không phải domain thật). */
 export default function App() {
   return (
     <AuthProvider>
-      <BrowserRouter>
+      <HashRouter>
         <Routes>
           <Route path="/start" element={<StartPage />} />
           <Route element={<AppShell />}>
@@ -49,7 +50,7 @@ export default function App() {
             <Route path="*" element={<Navigate to="/" replace />} />
           </Route>
         </Routes>
-      </BrowserRouter>
+      </HashRouter>
     </AuthProvider>
   );
 }
