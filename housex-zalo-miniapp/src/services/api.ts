@@ -51,22 +51,35 @@ function friendlyNetworkError(err: unknown): Error {
   return err instanceof Error ? err : new Error(msg || "Lỗi không xác định");
 }
 
+/** Query channel — không dùng custom header (tránh CORS preflight fail). */
+function attachMiniappChannel(path: string): string {
+  if (path.includes("hxChannel=")) return path;
+  const join = path.includes("?") ? "&" : "?";
+  return `${path}${join}hxChannel=miniapp`;
+}
+
 export async function apiFetch<T>(
   path: string,
   init: RequestInit = {},
 ): Promise<T> {
   const headers = new Headers(init.headers);
   headers.set("Accept", "application/json");
-  headers.set("X-HouseX-Channel", "miniapp");
+  /**
+   * Không gắn X-HouseX-Channel: header custom bắt buộc preflight CORS.
+   * Production chưa rebuild sẽ chặn → "Load failed" trong Zalo.
+   * Channel gắn query khi cần (xem attachMiniappChannel).
+   */
   if (init.body && !headers.has("Content-Type")) {
     headers.set("Content-Type", "application/json");
   }
   const token = getToken();
   if (token) headers.set("Authorization", `Bearer ${token}`);
 
+  const url = `${HOUSEX_API_BASE}${attachMiniappChannel(path)}`;
+
   let res: Response;
   try {
-    res = await fetch(`${HOUSEX_API_BASE}${path}`, {
+    res = await fetch(url, {
       ...init,
       headers,
     });
