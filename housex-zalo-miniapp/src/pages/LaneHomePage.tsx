@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { AppStateCard } from "@/components/AppStateCard";
 import { CrossLaneTeaser } from "@/components/CrossLaneTeaser";
 import { HomeBannerCarousel } from "@/components/HomeBannerCarousel";
 import { HomeBrandHeader } from "@/components/HomeBrandHeader";
@@ -29,10 +30,15 @@ export function LaneHomePage({ lane }: Props) {
   const [items, setItems] = useState<ProjectCard[]>([]);
   const [loading, setLoading] = useState(true);
   const [err, setErr] = useState<string | null>(null);
+  const [reloadKey, setReloadKey] = useState(0);
 
   useEffect(() => {
     setPreferredLane(lane);
   }, [lane]);
+
+  const retry = useCallback(() => {
+    setReloadKey((k) => k + 1);
+  }, []);
 
   useEffect(() => {
     let alive = true;
@@ -73,7 +79,7 @@ export function LaneHomePage({ lane }: Props) {
     return () => {
       alive = false;
     };
-  }, [lane]);
+  }, [lane, reloadKey]);
 
   return (
     <div className={`home-page home-page--${lane}`}>
@@ -96,19 +102,37 @@ export function LaneHomePage({ lane }: Props) {
           {copy.projectsLead}
         </p>
 
-        {loading ? <p className="muted">Đang tải dự án…</p> : null}
-        {err ? <p className="err">{err}</p> : null}
-        {!loading && !err && items.length === 0 ? (
-          <div className="card">
-            <p>Chưa có dự án trong phân khúc này. Thử lại sau hoặc đổi mục tiêu ở header.</p>
+        {loading ? (
+          <div className="project-grid-skeleton" aria-busy="true">
+            <div className="skel-card" />
+            <div className="skel-card" />
           </div>
         ) : null}
 
-        <div className="project-grid">
-          {items.map((p) => (
-            <ProjectGridCard key={p.id} project={p} />
-          ))}
-        </div>
+        {err ? (
+          <AppStateCard
+            title="Không tải được dự án"
+            message={err}
+            onRetry={retry}
+            busy={loading}
+          />
+        ) : null}
+
+        {!loading && !err && items.length === 0 ? (
+          <AppStateCard
+            title="Chưa có dự án"
+            message="Chưa có dự án trong phân khúc này. Thử lại sau hoặc đổi mục tiêu ở header."
+            onRetry={retry}
+          />
+        ) : null}
+
+        {!loading && !err && items.length > 0 ? (
+          <div className="project-grid">
+            {items.map((p) => (
+              <ProjectGridCard key={p.id} project={p} />
+            ))}
+          </div>
+        ) : null}
       </section>
 
       <CrossLaneTeaser currentLane={lane} />

@@ -1,4 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
+import { ShortcutGlyph } from "@/components/AppIcons";
 import type { HomeShortcut } from "@/data/home-content";
 
 function shortcutHref(s: HomeShortcut): string {
@@ -18,9 +19,9 @@ export function ShortcutGrid({ items }: { items: HomeShortcut[] }) {
           <>
             <span
               className="shortcut-icon"
-              style={{ background: `${s.tone}33`, borderColor: `${s.tone}55` }}
+              style={{ background: `${s.tone}28`, borderColor: `${s.tone}55` }}
             >
-              {s.icon}
+              <ShortcutGlyph id={s.id} size={22} />
             </span>
             <span className="shortcut-label">{s.label}</span>
           </>

@@ -1,5 +1,11 @@
 import { NavLink, Outlet, useLocation } from "react-router-dom";
 import { useAuth } from "@/auth-context";
+import {
+  IconAgent,
+  IconHome,
+  IconTools,
+  IconUser,
+} from "@/components/AppIcons";
 import { useHomeTabPath } from "@/components/LaneSwitcher";
 
 /**
@@ -24,38 +30,35 @@ export function AppShell() {
         <Outlet />
       </main>
       <nav className="tabbar" aria-label="Chính">
-        <NavLink to={homePath} className={homeActive ? "active" : undefined}>
-          <>
-            <span className={`dot${homeActive ? " on" : ""}`} />
-            Tìm nhà
-          </>
+        <NavLink
+          to={homePath}
+          className={homeActive ? "active" : undefined}
+        >
+          <span className="tabbar-icon">
+            <IconHome size={22} />
+          </span>
+          <span className="tabbar-label">Tìm nhà</span>
         </NavLink>
         {canAgent ? (
           <NavLink to="/agent">
-            {({ isActive }) => (
-              <>
-                <span className={`dot${isActive ? " on" : ""}`} />
-                Agent
-              </>
-            )}
+            <span className="tabbar-icon">
+              <IconAgent size={22} />
+            </span>
+            <span className="tabbar-label">Agent</span>
           </NavLink>
         ) : (
           <NavLink to="/cong-cu">
-            {({ isActive }) => (
-              <>
-                <span className={`dot${isActive ? " on" : ""}`} />
-                Công cụ
-              </>
-            )}
+            <span className="tabbar-icon">
+              <IconTools size={22} />
+            </span>
+            <span className="tabbar-label">Công cụ</span>
           </NavLink>
         )}
         <NavLink to="/tai-khoan">
-          {({ isActive }) => (
-            <>
-              <span className={`dot${isActive ? " on" : ""}`} />
-              Tài khoản
-            </>
-          )}
+          <span className="tabbar-icon">
+            <IconUser size={22} />
+          </span>
+          <span className="tabbar-label">Tài khoản</span>
         </NavLink>
       </nav>
     </div>

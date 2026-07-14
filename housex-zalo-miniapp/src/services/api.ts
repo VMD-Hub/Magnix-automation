@@ -37,6 +37,20 @@ export function setToken(token: string | null) {
   }
 }
 
+function friendlyNetworkError(err: unknown): Error {
+  const msg = err instanceof Error ? err.message : String(err);
+  if (
+    /failed to fetch|networkerror|load failed|network request failed/i.test(
+      msg,
+    )
+  ) {
+    return new Error(
+      "Không kết nối được máy chủ House X. Kiểm tra mạng hoặc thử lại.",
+    );
+  }
+  return err instanceof Error ? err : new Error(msg || "Lỗi không xác định");
+}
+
 export async function apiFetch<T>(
   path: string,
   init: RequestInit = {},
@@ -50,12 +64,26 @@ export async function apiFetch<T>(
   const token = getToken();
   if (token) headers.set("Authorization", `Bearer ${token}`);
 
-  const res = await fetch(`${HOUSEX_API_BASE}${path}`, {
-    ...init,
-    headers,
-  });
+  let res: Response;
+  try {
+    res = await fetch(`${HOUSEX_API_BASE}${path}`, {
+      ...init,
+      headers,
+    });
+  } catch (err) {
+    throw friendlyNetworkError(err);
+  }
 
-  const json = (await res.json()) as ApiOk<T> & ApiErr;
+  let json: (ApiOk<T> & ApiErr) | null = null;
+  try {
+    json = (await res.json()) as ApiOk<T> & ApiErr;
+  } catch {
+    if (!res.ok) {
+      throw new Error(`HTTP ${res.status}`);
+    }
+    throw new Error("Phản hồi API không hợp lệ");
+  }
+
   if (!res.ok) {
     throw new Error(json.error?.message ?? `HTTP ${res.status}`);
   }
