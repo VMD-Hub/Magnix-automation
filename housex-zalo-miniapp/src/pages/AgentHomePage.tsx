@@ -21,7 +21,7 @@ export function AgentHomePage() {
         <PageBrandHeader
           kicker="HOUSEX AGENT"
           title="Khu vực môi giới"
-          lead="Đăng nhập tài khoản môi giới / CTV để xem hồ sơ và hoa hồng."
+          lead="Đăng nhập tài khoản cộng đồng môi giới để xem hồ sơ và hoa hồng."
         />
         <Link className="btn" to="/tai-khoan">
           Tới Tài khoản
@@ -35,7 +35,7 @@ export function AgentHomePage() {
       <PageBrandHeader
         kicker="HOUSEX AGENT"
         title={`Xin chào, ${user?.name ?? ""}`}
-        lead={user?.ctvCode ? `Mã CTV ${user.ctvCode}` : undefined}
+        lead={user?.ctvCode ? `Mã môi giới ${user.ctvCode}` : undefined}
       />
 
       <Link to="/agent/dich-vu?tab=product" className="card tool-card">
@@ -46,7 +46,7 @@ export function AgentHomePage() {
 
       <Link to="/agent/dich-vu?tab=training" className="card tool-card">
         <h2>Đào tạo nội bộ</h2>
-        <p>E-learning hội nhập CTV · bài kiểm tra</p>
+        <p>E-learning hội nhập môi giới · bài kiểm tra</p>
         <span className="tool-card-cta">Vào học →</span>
       </Link>
 

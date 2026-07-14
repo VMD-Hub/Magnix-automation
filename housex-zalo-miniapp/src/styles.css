@@ -53,10 +53,6 @@ a {
   overflow-x: hidden;
 }
 
-.hx-build-stamp {
-  display: none;
-}
-
 .account-progress {
   margin: 0 0 12px;
   padding: 10px 12px;

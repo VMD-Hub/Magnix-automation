@@ -45,7 +45,7 @@ Login mock: **Tài khoản** → SĐT → `POST /api/auth/zalo` với `zaloUserI
 
 Quota bạn đang luôn **Testing = 0** → các lần deploy Development nên các Zalo khác / máy khác không thấy UI mới.
 
-Nhận biết bundle đúng: cuối màn hình có dòng **`House X · hx…`**.
+Nhận biết bundle đúng (mục **Tài khoản**): có **«1. Khách mua nhà»** và **«2. Cộng đồng môi giới House X»**; **không** còn «CTV thử nghiệm» / stamp `House X · hx…`.
 
 ## Deploy Testing trên VPS (khuyên dùng)
 
