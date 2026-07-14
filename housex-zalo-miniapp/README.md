@@ -42,14 +42,15 @@ Login mock: **Tài khoản** → SĐT → `POST /api/auth/zalo` với `zaloUserI
 # VITE_HOUSEX_API_BASE=https://timnhaxahoi.com
 # VITE_AUTH_DEV_BYPASS=false
 
-npm run build:zmp    # → www/assets/index.js + index.css
+npm run build:zmp    # → www/assets/index-*.js + index-*.css (có hash chống cache)
 zmp login
 zmp deploy
 # Mini App ID: 1554712272702750699
 # dist folder: www
+# Mở đúng QR của lần deploy này (Development), đóng Mini App cũ rồi mở lại
 ```
 
-`app-config.json` phải khai báo `listSyncJS` / `listCSS` — đã cấu hình `assets/index.js` + `assets/index.css`.
+`app-config.json` được sync từ `www/index.html` — luôn khai báo đúng `listCSS` / `listAsyncJS` sau `build:zmp`.
 
 ## Mai — OA / Mini App thật (chờ xác nhận)
 
