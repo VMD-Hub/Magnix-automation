@@ -447,17 +447,66 @@ button.chip-active {
 }
 
 .shortcut-grid {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 10px;
-  overflow-x: auto;
-  margin-bottom: 20px;
-  padding-bottom: 4px;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
+  margin: 4px 0 22px;
 }
 
-.shortcut-grid::-webkit-scrollbar {
-  display: none;
+.shortcut-grid--n3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.shortcut-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  min-height: 96px;
+  padding: 14px 8px 12px;
+  border: 1px solid rgba(252, 211, 77, 0.3);
+  border-radius: 16px;
+  background: var(--hx-ruby-gradient);
+  box-shadow: var(--hx-shadow-ruby);
+  cursor: pointer;
+  color: #fff;
+  text-decoration: none;
+  font-family: inherit;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.shortcut-item:active {
+  transform: scale(0.98);
+  opacity: 0.95;
+}
+
+.shortcut-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(252, 211, 77, 0.35);
+  background: rgba(255, 255, 255, 0.12);
+  box-shadow: none;
+  color: var(--hx-gold-400);
+}
+
+.shortcut-glyph {
+  display: block;
+}
+
+.shortcut-label {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  line-height: 1.2;
+  text-align: center;
+  color: #fff;
+  max-width: none;
 }
 
 .promo-teaser {
@@ -516,47 +565,6 @@ button.chip-active {
   color: var(--hx-gold-400);
   position: relative;
   z-index: 1;
-}
-
-.shortcut-item {
-  flex: 0 0 auto;
-  width: 68px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
-  border: 0;
-  background: none;
-  padding: 0;
-  cursor: pointer;
-  color: inherit;
-  text-decoration: none;
-  font-family: inherit;
-}
-
-.shortcut-icon {
-  width: 52px;
-  height: 52px;
-  border-radius: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid var(--hx-border-ruby);
-  box-shadow: var(--hx-shadow-soft);
-  background: var(--hx-brand-50);
-  color: var(--hx-brand-600);
-}
-
-.shortcut-glyph {
-  display: block;
-}
-
-.shortcut-label {
-  font-size: 11px;
-  line-height: 1.2;
-  text-align: center;
-  color: var(--hx-muted);
-  max-width: 72px;
 }
 
 .home-projects {
