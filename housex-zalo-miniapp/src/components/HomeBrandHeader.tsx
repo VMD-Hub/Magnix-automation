@@ -1,35 +1,24 @@
 import { BrandLockup } from "@/components/BrandLockup";
-import { LaneSwitcher } from "@/components/LaneSwitcher";
 import { RubySurfaceOrnament } from "@/components/RubySurfaceOrnament";
-import type { UserLane } from "@/services/lane";
 
 type Props = {
-  lane: UserLane;
-  kicker?: string;
-  /** Một dòng giá trị — gộp banner intro cũ */
+  /** Dòng giá trị / thông điệp — ưu tiên trên banner */
   valueLine: string;
   supportLine?: string;
 };
 
 /**
- * Banner brand gộp — logo + tagline + giá trị lane.
- * Cao hơn header cũ; không trùng với vùng chào/vị trí phía trên.
+ * Banner ruby: thông điệp lane trước, logo nhỏ góc trái (không kicker / không chip NOXH).
+ * Đổi mục tiêu: Tài khoản hoặc teaser cross-lane phía dưới.
  */
-export function HomeBrandHeader({
-  lane,
-  kicker,
-  valueLine,
-  supportLine,
-}: Props) {
+export function HomeBrandHeader({ valueLine, supportLine }: Props) {
   return (
     <header className="home-header home-header--brand home-header--merged">
       <RubySurfaceOrnament variant="header" />
-      <div className="home-header-inner">
-        <div className="home-header-top">
-          <p className="home-header-kicker">{kicker ?? "PROPTECH · HOUSE X"}</p>
-          <LaneSwitcher current={lane} />
+      <div className="home-header-inner home-header-inner--msg">
+        <div className="home-header-brand-row">
+          <BrandLockup size="sm" showVn={false} showEn={false} />
         </div>
-        <BrandLockup size="md" showVn={false} />
         <h2 className="home-header-value">{valueLine}</h2>
         {supportLine ? (
           <p className="home-header-support">{supportLine}</p>

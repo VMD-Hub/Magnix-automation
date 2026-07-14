@@ -8,9 +8,14 @@ import { mediaUrl } from "@/utils/media";
 type Props = {
   size?: "sm" | "md";
   showVn?: boolean;
+  showEn?: boolean;
 };
 
-export function BrandLockup({ size = "md", showVn = true }: Props) {
+export function BrandLockup({
+  size = "md",
+  showVn = true,
+  showEn = true,
+}: Props) {
   const logoSrc = mediaUrl(HOUSEX_LOGO_SRC);
 
   return (
@@ -22,7 +27,9 @@ export function BrandLockup({ size = "md", showVn = true }: Props) {
           House <span className="home-logo-x">X</span>
         </div>
       )}
-      <p className="brand-lockup-tagline-en">{BRAND_TAGLINE_EN}</p>
+      {showEn ? (
+        <p className="brand-lockup-tagline-en">{BRAND_TAGLINE_EN}</p>
+      ) : null}
       {showVn ? (
         <p className="brand-lockup-tagline-vn">{BRAND_TAGLINE_VN}</p>
       ) : null}

@@ -87,8 +87,6 @@ export function LaneHomePage({ lane }: Props) {
     <div className={`home-page home-page--${lane}`}>
       <HomeContextHeader />
       <HomeBrandHeader
-        lane={lane}
-        kicker={copy.kicker}
         valueLine={copy.valueLine}
         supportLine={copy.supportLine}
       />
