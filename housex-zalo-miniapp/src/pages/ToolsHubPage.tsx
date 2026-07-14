@@ -1,37 +1,33 @@
 import { Link } from "react-router-dom";
 import { PageBrandHeader } from "@/components/PageBrandHeader";
-import { NOXH_TOOLS } from "@/services/tools";
-
-const TOOL_ORDER = ["dieu-kien", "vay-60s", "tham-dinh"] as const;
+import { ShortcutGlyph } from "@/components/AppIcons";
+import { HOME_TOOLS_CORE } from "@/data/home-ia";
 
 export function ToolsHubPage() {
-  const tools = TOOL_ORDER.map(
-    (id) => NOXH_TOOLS.find((t) => t.id === id)!,
-  ).filter(Boolean);
-
   return (
     <div>
       <PageBrandHeader
         kicker="CÔNG CỤ"
-        title="Kiểm tra NOXH"
-        lead="Ba bước tự đánh giá NOXH trước khi nhờ tư vấn chuyên sâu."
+        title="Bộ công cụ House X"
+        lead="Tự đánh giá trước khi nhờ tư vấn — mở trong Mini App, không nhảy trình duyệt ngoài."
         backTo="/"
       />
 
-      {tools.map((t, idx) => (
-        <Link
-          key={t.id}
-          to={`/cong-cu/mo?p=${encodeURIComponent(t.path)}`}
-          className="card tool-card"
-        >
-          <p className="muted" style={{ margin: "0 0 4px" }}>
-            Bước {idx + 1}
-          </p>
-          <h2>{t.title}</h2>
-          <p>{t.desc}</p>
-          <span className="tool-card-cta">Mở công cụ →</span>
-        </Link>
-      ))}
+      <div className="tool-hub-list">
+        {HOME_TOOLS_CORE.map((t) => (
+          <Link
+            key={t.id}
+            to={`/mo?p=${encodeURIComponent(t.path)}`}
+            className="card tool-card"
+          >
+            <span className="tool-hub-icon">
+              <ShortcutGlyph id={t.id} size={20} />
+            </span>
+            <h2>{t.title}</h2>
+            <span className="tool-card-cta">Mở công cụ →</span>
+          </Link>
+        ))}
+      </div>
     </div>
   );
 }

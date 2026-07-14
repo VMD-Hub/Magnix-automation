@@ -4,7 +4,9 @@ import { AppStateCard } from "@/components/AppStateCard";
 import { CrossLaneTeaser } from "@/components/CrossLaneTeaser";
 import { HomeBannerCarousel } from "@/components/HomeBannerCarousel";
 import { HomeBrandHeader } from "@/components/HomeBrandHeader";
-import { HomeInsightsSection } from "@/components/HomeInsightsSection";
+import { HomeNewsSection } from "@/components/HomeNewsSection";
+import { HomeServicesSection } from "@/components/HomeServicesSection";
+import { HomeToolsSection } from "@/components/HomeToolsSection";
 import { PromoTeaser } from "@/components/PromoTeaser";
 import { ProjectGridCard } from "@/components/ProjectGridCard";
 import { ShortcutGrid } from "@/components/ShortcutGrid";
@@ -87,7 +89,11 @@ export function LaneHomePage({ lane }: Props) {
 
       <HomeBannerCarousel banners={copy.banners} />
       {copy.showPromo ? <PromoTeaser /> : null}
-      <ShortcutGrid items={copy.shortcuts} />
+
+      <ShortcutGrid items={copy.quickActions} />
+
+      <HomeServicesSection items={copy.services} />
+      <HomeToolsSection items={copy.tools} />
 
       <section id="projects" className="home-projects" aria-labelledby="projects-title">
         <div className="section-head">
@@ -98,9 +104,7 @@ export function LaneHomePage({ lane }: Props) {
             Tư vấn ngay
           </Link>
         </div>
-        <p className="muted" style={{ margin: "0 0 12px" }}>
-          {copy.projectsLead}
-        </p>
+        <p className="muted section-lead">{copy.projectsLead}</p>
 
         {loading ? (
           <div className="project-grid-skeleton" aria-busy="true">
@@ -136,11 +140,9 @@ export function LaneHomePage({ lane }: Props) {
       </section>
 
       <CrossLaneTeaser currentLane={lane} />
-      <HomeInsightsSection items={copy.insights} />
+      <HomeNewsSection items={copy.articles} />
 
-      <p className="home-foot muted">
-        House X · timnhaxahoi.com
-      </p>
+      <p className="home-foot muted">House X · timnhaxahoi.com</p>
     </div>
   );
 }

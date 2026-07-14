@@ -232,6 +232,72 @@ export function IconNews({ size, className }: IconProps) {
   );
 }
 
+export function IconPaint({ size, className }: IconProps) {
+  return (
+    <Svg size={size} className={className}>
+      <path
+        d="M6 14.5c0 2.5 2 4.5 4.5 4.5S15 17 15 14.5V6.5a2.5 2.5 0 0 0-5 0v.5"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+      />
+      <path
+        d="M15 8.5h2.5A1.5 1.5 0 0 1 19 10v1.5a2 2 0 0 1-2 2H15"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinejoin="round"
+      />
+    </Svg>
+  );
+}
+
+export function IconCompass({ size, className }: IconProps) {
+  return (
+    <Svg size={size} className={className}>
+      <circle cx="12" cy="12" r="8" stroke="currentColor" strokeWidth="1.6" />
+      <path
+        d="m14.8 9.2-1.6 4.4-4.4 1.6 1.6-4.4 4.4-1.6Z"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinejoin="round"
+      />
+    </Svg>
+  );
+}
+
+export function IconInterior({ size, className }: IconProps) {
+  return (
+    <Svg size={size} className={className}>
+      <path
+        d="M4 19V9l8-5 8 5v10"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M9 19v-6h6v6"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinejoin="round"
+      />
+    </Svg>
+  );
+}
+
+export function IconKey({ size, className }: IconProps) {
+  return (
+    <Svg size={size} className={className}>
+      <circle cx="9" cy="10" r="3.2" stroke="currentColor" strokeWidth="1.6" />
+      <path
+        d="M11.5 11.5 19 19M16.5 16.5l2 2M15 18l2 2"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+      />
+    </Svg>
+  );
+}
+
 const SHORTCUT_ICONS: Record<string, (props: IconProps) => ReactElement> = {
   "cam-nang": IconBook,
   "khuyen-mai": IconWheel,
@@ -243,6 +309,18 @@ const SHORTCUT_ICONS: Record<string, (props: IconProps) => ReactElement> = {
   vay: IconChart,
   "tin-tuc": IconNews,
   "tham-dinh": IconChart,
+  "cong-cu-hub": IconTools,
+  "vay-bds": IconChart,
+  "tham-dinh-gia": IconScale,
+  "noi-that": IconInterior,
+  "ky-gui": IconKey,
+  "tinh-vay": IconChart,
+  "han-muc": IconClock,
+  "tham-dinh-hs": IconCheck,
+  "mau-son": IconPaint,
+  "huong-nha": IconCompass,
+  "ban-lv": IconCompass,
+  "tuoi-xay": IconHome,
 };
 
 export function ShortcutGlyph({

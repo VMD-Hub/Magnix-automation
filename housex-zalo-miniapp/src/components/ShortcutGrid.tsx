@@ -1,26 +1,22 @@
 import { Link, useNavigate } from "react-router-dom";
 import { ShortcutGlyph } from "@/components/AppIcons";
-import type { HomeShortcut } from "@/data/home-content";
+import type { HomeNavItem } from "@/data/home-ia";
 
-function shortcutHref(s: HomeShortcut): string {
-  if (s.kind === "webview") {
-    return `/mo?p=${encodeURIComponent(s.to)}`;
-  }
+function hrefOf(s: HomeNavItem): string {
+  if (s.kind === "webview") return `/mo?p=${encodeURIComponent(s.to)}`;
   return s.to;
 }
 
-export function ShortcutGrid({ items }: { items: HomeShortcut[] }) {
+/** Hàng nút nhanh — icon ruby nhạt trên nền bạc. */
+export function ShortcutGrid({ items }: { items: HomeNavItem[] }) {
   const navigate = useNavigate();
 
   return (
-    <div className="shortcut-grid" aria-label="Tiện ích nhanh">
+    <div className="shortcut-grid" aria-label="Thao tác nhanh">
       {items.map((s) => {
         const inner = (
           <>
-            <span
-              className="shortcut-icon"
-              style={{ color: s.tone, borderColor: `${s.tone}55` }}
-            >
+            <span className="shortcut-icon">
               <ShortcutGlyph id={s.id} size={22} />
             </span>
             <span className="shortcut-label">{s.label}</span>
@@ -57,7 +53,7 @@ export function ShortcutGrid({ items }: { items: HomeShortcut[] }) {
             key={s.id}
             type="button"
             className="shortcut-item"
-            onClick={() => navigate(shortcutHref(s))}
+            onClick={() => navigate(hrefOf(s))}
           >
             {inner}
           </button>
