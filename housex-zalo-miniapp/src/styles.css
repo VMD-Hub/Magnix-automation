@@ -57,6 +57,30 @@ a {
   display: none;
 }
 
+.account-progress {
+  margin: 0 0 12px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(0, 80, 200, 0.22);
+  background: rgba(0, 104, 255, 0.08);
+  color: #0b4fbf;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.account-success {
+  margin: 0 0 12px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(22, 130, 70, 0.28);
+  background: rgba(34, 160, 90, 0.1);
+  color: #146b3a;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
 .account-block {
   margin-bottom: 14px;
 }

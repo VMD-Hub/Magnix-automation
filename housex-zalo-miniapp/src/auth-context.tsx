@@ -16,7 +16,8 @@ import {
 type AuthState = {
   user: HouseXUser | null;
   loading: boolean;
-  refresh: () => Promise<void>;
+  /** Soft re-fetch — không xóa user đang có nếu /me lỗi mạng. */
+  refresh: () => Promise<HouseXUser | null>;
   setUser: (u: HouseXUser | null) => void;
   logout: () => void;
   canAgent: boolean;
@@ -28,20 +29,31 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<HouseXUser | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const refresh = useCallback(async () => {
+  const refresh = useCallback(async (): Promise<HouseXUser | null> => {
     try {
       const me = await fetchMe();
       setUser(me);
+      return me;
     } catch {
-      setUser(null);
+      // Không wipe user vừa login khi /me lỗi mạng.
+      return null;
     } finally {
       setLoading(false);
     }
   }, []);
 
   useEffect(() => {
-    void refresh();
-  }, [refresh]);
+    void (async () => {
+      try {
+        const me = await fetchMe();
+        setUser(me);
+      } catch {
+        setUser(null);
+      } finally {
+        setLoading(false);
+      }
+    })();
+  }, []);
 
   const value = useMemo<AuthState>(
     () => ({

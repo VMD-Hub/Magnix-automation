@@ -35,21 +35,23 @@ export async function fetchZaloMe(accessToken: string): Promise<ZaloMeProfile> {
 }
 
 /**
- * Đổi phoneToken (Mini App getPhoneNumber) → số điện thoại.
- * Cần ZALO_APP_ID + ZALO_APP_SECRET. Nếu thiếu secret → bỏ qua (caller dùng phone từ client).
+ * Đổi code từ Mini App getPhoneNumber → số điện thoại.
+ * Bắt buộc: accessToken (getAccessToken) + code (getPhoneNumber) + secret_key.
+ * Không gửi phoneToken vào header access_token — Zalo sẽ trả lỗi / số rỗng.
+ * Thiếu secret → null (caller dùng phone nhập tay nếu có).
  */
 export async function exchangeZaloPhoneToken(
-  phoneToken: string,
+  phoneCode: string,
+  accessToken: string,
 ): Promise<string | null> {
-  const appId = process.env.ZALO_APP_ID?.trim();
   const secret = process.env.ZALO_APP_SECRET?.trim();
-  if (!appId || !secret) return null;
+  if (!secret || !accessToken?.trim() || !phoneCode?.trim()) return null;
 
   const res = await fetch("https://graph.zalo.me/v2.0/me/info", {
     method: "GET",
     headers: {
-      access_token: phoneToken,
-      code: phoneToken,
+      access_token: accessToken,
+      code: phoneCode,
       secret_key: secret,
     },
     cache: "no-store",
