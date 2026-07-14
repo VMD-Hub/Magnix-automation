@@ -61,7 +61,9 @@ export async function POST(req: NextRequest) {
           ? 422
           : err.code === "PHONE_LINKED_OTHER_ZALO"
             ? 409
-            : 401;
+            : err.code === "ZALO_BYPASS_FORBIDDEN"
+              ? 503
+              : 401;
       return applyApiCors(fail(status, err.code, err.message), req);
     }
     return applyApiCors(handleApiError(err), req);

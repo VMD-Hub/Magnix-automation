@@ -25,22 +25,19 @@ async function resolveZaloUserId(input: ZaloAuthInput): Promise<{
   zaloUserId: string;
   displayName?: string;
 }> {
-  if (
-    process.env.ZALO_AUTH_DEV_BYPASS === "true" &&
-    process.env.NODE_ENV === "production"
-  ) {
-    throw new ZaloAuthError(
-      "ZALO_BYPASS_FORBIDDEN",
-      "ZALO_AUTH_DEV_BYPASS không được bật trên production.",
-    );
+  const bypassWanted = process.env.ZALO_AUTH_DEV_BYPASS === "true";
+  const isProd = process.env.NODE_ENV === "production";
+
+  // Dev/simulator only — không chặn accessToken thật nếu ai đó quên tắt bypass trên VPS.
+  if (bypassWanted && !isProd && input.zaloUserId) {
+    return { zaloUserId: input.zaloUserId, displayName: input.name };
   }
 
-  const bypass =
-    process.env.ZALO_AUTH_DEV_BYPASS === "true" &&
-    process.env.NODE_ENV !== "production";
-
-  if (bypass && input.zaloUserId) {
-    return { zaloUserId: input.zaloUserId, displayName: input.name };
+  if (bypassWanted && isProd && input.zaloUserId && !input.accessToken) {
+    throw new ZaloAuthError(
+      "ZALO_BYPASS_FORBIDDEN",
+      "Production không cho đăng nhập giả. Trên VPS đặt ZALO_AUTH_DEV_BYPASS=false rồi pm2 restart.",
+    );
   }
 
   if (!input.accessToken) {
