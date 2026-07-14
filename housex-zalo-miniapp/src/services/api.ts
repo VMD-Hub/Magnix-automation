@@ -60,30 +60,42 @@ function attachMiniappChannel(path: string): string {
 
 export async function apiFetch<T>(
   path: string,
-  init: RequestInit = {},
+  init: RequestInit & { timeoutMs?: number } = {},
 ): Promise<T> {
-  const headers = new Headers(init.headers);
+  const { timeoutMs, ...fetchInit } = init;
+  const headers = new Headers(fetchInit.headers);
   headers.set("Accept", "application/json");
   /**
    * Không gắn X-HouseX-Channel: header custom bắt buộc preflight CORS.
    * Production chưa rebuild sẽ chặn → "Load failed" trong Zalo.
    * Channel gắn query khi cần (xem attachMiniappChannel).
    */
-  if (init.body && !headers.has("Content-Type")) {
+  if (fetchInit.body && !headers.has("Content-Type")) {
     headers.set("Content-Type", "application/json");
   }
   const token = getToken();
   if (token) headers.set("Authorization", `Bearer ${token}`);
 
   const url = `${HOUSEX_API_BASE}${attachMiniappChannel(path)}`;
+  const signal =
+    fetchInit.signal ??
+    (typeof timeoutMs === "number" && timeoutMs > 0
+      ? AbortSignal.timeout(timeoutMs)
+      : undefined);
 
   let res: Response;
   try {
     res = await fetch(url, {
-      ...init,
+      ...fetchInit,
       headers,
+      ...(signal ? { signal } : {}),
     });
   } catch (err) {
+    if (err instanceof Error && /aborted|timeout/i.test(err.name + err.message)) {
+      throw new Error(
+        "Máy chủ phản hồi quá chậm. Kiểm tra mạng rồi thử lại.",
+      );
+    }
     throw friendlyNetworkError(err);
   }
 
@@ -138,6 +150,7 @@ export async function loginWithZaloAccessToken(opts: {
   phoneToken?: string;
   name?: string;
   preferredRole?: "CUSTOMER" | "BROKER";
+  timeoutMs?: number;
 }) {
   if (AUTH_DEV_BYPASS) {
     const phone = opts.phone?.trim();
@@ -154,6 +167,7 @@ export async function loginWithZaloAccessToken(opts: {
     "/api/auth/zalo",
     {
       method: "POST",
+      timeoutMs: opts.timeoutMs ?? 22000,
       body: JSON.stringify({
         accessToken: opts.accessToken,
         phone: opts.phone,

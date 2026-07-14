@@ -1,6 +1,5 @@
 /**
  * Auth qua zmp-sdk UMD (`window["zmp-sdk"]`) — KHÔNG import vào Vite bundle.
- * Import zmp-sdk qua bundler dễ làm Mini App trắng màn khi khởi động.
  */
 import { AUTH_DEV_BYPASS } from "@/config";
 import {
@@ -10,14 +9,16 @@ import {
 } from "@/services/api";
 
 type ZmpApis = {
-  getAccessToken: (args?: Record<string, unknown>) => Promise<string>;
+  getAccessToken: (
+    args?: Record<string, unknown>,
+  ) => Promise<string> | void;
   getPhoneNumber: (
     args?: Record<string, unknown>,
-  ) => Promise<{ token?: string }>;
-  getUserInfo: (args?: Record<string, unknown>) => Promise<{
-    userInfo?: { name?: string };
-  }>;
-  authorize: (args?: Record<string, unknown>) => Promise<unknown>;
+  ) => Promise<{ token?: string }> | void;
+  getUserInfo: (
+    args?: Record<string, unknown>,
+  ) => Promise<{ userInfo?: { name?: string } }> | void;
+  authorize: (args?: Record<string, unknown>) => Promise<unknown> | void;
 };
 
 export type ZaloLoginPhase =
@@ -26,14 +27,35 @@ export type ZaloLoginPhase =
   | "phone"
   | "profile"
   | "server"
+  | "need_phone"
   | "done";
 
-const SDK_STEP_MS = 28000;
+/** Phiên Zalo đã xin quyền — chờ SĐT để hoàn tất (tránh kẹt getPhoneNumber). */
+export type PendingZaloSession = {
+  accessToken: string;
+  phoneToken?: string;
+  name?: string;
+  preferredRole: "CUSTOMER" | "BROKER";
+};
+
+export class NeedPhoneError extends Error {
+  readonly prep: PendingZaloSession;
+  constructor(prep: PendingZaloSession) {
+    super(
+      "Zalo đã kết nối. Nhập số điện thoại bên dưới rồi nhấn Hoàn tất đăng nhập.",
+    );
+    this.name = "NeedPhoneError";
+    this.prep = prep;
+  }
+}
+
+const AUTHORIZE_MS = 20000;
+const PHONE_MS = 12000;
+const PROFILE_MS = 5000;
+const TOKEN_MS = 10000;
 
 function getZmpApis(): ZmpApis {
-  const g = globalThis as unknown as {
-    "zmp-sdk"?: ZmpApis;
-  };
+  const g = globalThis as unknown as { "zmp-sdk"?: ZmpApis };
   const api = g["zmp-sdk"];
   if (!api?.getAccessToken) {
     throw new Error(
@@ -52,7 +74,7 @@ function withTimeout<T>(
     const t = setTimeout(() => {
       reject(
         new Error(
-          `${label} quá lâu (${Math.round(ms / 1000)}s). Đóng Mini App rồi mở lại, hoặc nhập SĐT bên dưới.`,
+          `${label} quá lâu (${Math.round(ms / 1000)}s). Thử lại hoặc nhập SĐT để hoàn tất.`,
         ),
       );
     }, ms);
@@ -69,7 +91,52 @@ function withTimeout<T>(
   });
 }
 
+/**
+ * Một số bản Zalo chỉ gọi success/fail, Promise treo → luôn gắn callback + Promise.
+ */
+function callZmp<T>(
+  fn: (args?: Record<string, unknown>) => Promise<T> | void,
+  args: Record<string, unknown>,
+  ms: number,
+  label: string,
+): Promise<T> {
+  return withTimeout(
+    new Promise<T>((resolve, reject) => {
+      let settled = false;
+      const done = (run: () => void) => {
+        if (settled) return;
+        settled = true;
+        run();
+      };
+      try {
+        const ret = fn({
+          ...args,
+          success: (data: T) => done(() => resolve(data)),
+          fail: (err: unknown) => {
+            const msg =
+              err && typeof err === "object" && "message" in err
+                ? String((err as { message: unknown }).message)
+                : String(err ?? "Zalo từ chối");
+            done(() => reject(new Error(msg)));
+          },
+        });
+        if (ret != null && typeof (ret as Promise<T>).then === "function") {
+          (ret as Promise<T>).then(
+            (v) => done(() => resolve(v)),
+            (e) => done(() => reject(e instanceof Error ? e : new Error(String(e)))),
+          );
+        }
+      } catch (e) {
+        done(() => reject(e instanceof Error ? e : new Error(String(e))));
+      }
+    }),
+    ms,
+    label,
+  );
+}
+
 function friendlyZaloError(err: unknown): Error {
+  if (err instanceof NeedPhoneError) return err;
   const raw = err instanceof Error ? err.message : String(err ?? "");
   if (/cancel|denied|refuse|từ chối|người dùng/i.test(raw)) {
     return new Error("Bạn đã từ chối quyền. Cho phép SĐT để đăng nhập House X.");
@@ -80,13 +147,21 @@ function friendlyZaloError(err: unknown): Error {
   return err instanceof Error ? err : new Error(raw || "Không đăng nhập được Zalo");
 }
 
-/** Probe — không gọi SDK nếu chưa có (tránh throw lúc vào Tài khoản). */
+function extractPhoneToken(res: unknown): string | undefined {
+  if (!res || typeof res !== "object") return undefined;
+  const o = res as Record<string, unknown>;
+  const token = o.token ?? o.code;
+  if (typeof token === "string" && token.trim().length > 4) return token.trim();
+  return undefined;
+}
+
+/** Probe — không gọi SDK nếu chưa có. */
 export async function probeZaloMiniApp(): Promise<boolean> {
   try {
-    const g = globalThis as unknown as { "zmp-sdk"?: ZmpApis };
-    if (!g["zmp-sdk"]?.getAccessToken) return false;
-    const token = await withTimeout(
-      g["zmp-sdk"].getAccessToken({}),
+    const api = getZmpApis();
+    const token = await callZmp<string>(
+      api.getAccessToken,
+      {},
       8000,
       "Kiểm tra phiên Zalo",
     );
@@ -102,22 +177,29 @@ export async function loginViaZaloMiniApp(opts?: {
   onPhase?: (phase: ZaloLoginPhase) => void;
 }): Promise<HouseXUser> {
   const onPhase = opts?.onPhase;
+  const preferredRole = opts?.preferredRole ?? "CUSTOMER";
+  const phoneFallback = opts?.phoneFallback?.trim();
+
   try {
     const { authorize, getAccessToken, getPhoneNumber, getUserInfo } =
       getZmpApis();
 
     onPhase?.("authorize");
-    await withTimeout(
-      authorize({
-        scopes: ["scope.userInfo", "scope.userPhonenumber"],
-      }).catch(() => undefined),
-      SDK_STEP_MS,
-      "Xin quyền Zalo",
-    );
+    // Một số máy authorize không resolve sau khi đã cấp quyền → không được block vô hạn.
+    await Promise.race([
+      callZmp(
+        authorize,
+        { scopes: ["scope.userInfo", "scope.userPhonenumber"] },
+        AUTHORIZE_MS,
+        "Xin quyền Zalo",
+      ).catch(() => undefined),
+      new Promise<void>((r) => setTimeout(r, 8000)),
+    ]);
 
-    const accessToken = await withTimeout(
-      getAccessToken({}),
-      12000,
+    const accessToken = await callZmp<string>(
+      getAccessToken,
+      {},
+      TOKEN_MS,
       "Lấy phiên Zalo",
     );
     if (!accessToken) {
@@ -127,36 +209,39 @@ export async function loginViaZaloMiniApp(opts?: {
     onPhase?.("phone");
     let phoneToken: string | undefined;
     try {
-      const phoneRes = await withTimeout(
-        getPhoneNumber({}),
-        SDK_STEP_MS,
+      const phoneRes = await callZmp<{ token?: string }>(
+        getPhoneNumber,
+        {},
+        PHONE_MS,
         "Lấy số điện thoại Zalo",
       );
-      phoneToken = phoneRes?.token;
-    } catch (phoneErr) {
-      if (!opts?.phoneFallback?.trim()) {
-        throw phoneErr;
-      }
+      phoneToken = extractPhoneToken(phoneRes);
+    } catch {
+      /* chuyển sang nhập SĐT thay vì kẹt vô hạn */
     }
 
     onPhase?.("profile");
     let name: string | undefined;
     try {
-      const { userInfo } = await withTimeout(
-        getUserInfo({ autoRequestPermission: true }),
-        12000,
+      const profile = await callZmp<{ userInfo?: { name?: string } }>(
+        getUserInfo,
+        { autoRequestPermission: true },
+        PROFILE_MS,
         "Lấy tên Zalo",
       );
-      name = userInfo?.name;
+      name = profile?.userInfo?.name;
     } catch {
       /* optional */
     }
 
-    const phoneFallback = opts?.phoneFallback?.trim();
     if (!phoneToken && !phoneFallback) {
-      throw new Error(
-        "Cần cho phép số điện thoại Zalo, hoặc nhập SĐT bên dưới rồi nhấn lại.",
-      );
+      onPhase?.("need_phone");
+      throw new NeedPhoneError({
+        accessToken,
+        phoneToken,
+        name,
+        preferredRole,
+      });
     }
 
     onPhase?.("server");
@@ -165,13 +250,34 @@ export async function loginViaZaloMiniApp(opts?: {
       ...(phoneFallback ? { phone: phoneFallback } : {}),
       phoneToken,
       name,
-      preferredRole: opts?.preferredRole,
+      preferredRole,
+      timeoutMs: 22000,
     });
     onPhase?.("done");
     return user;
   } catch (err) {
     throw friendlyZaloError(err);
   }
+}
+
+/** Hoàn tất sau khi đã có phiên Zalo + SĐT người dùng nhập. */
+export async function completeZaloLoginWithPhone(
+  prep: PendingZaloSession,
+  phone: string,
+  onPhase?: (phase: ZaloLoginPhase) => void,
+): Promise<HouseXUser> {
+  const trimmed = phone.trim();
+  onPhase?.("server");
+  const user = await loginWithZaloAccessToken({
+    accessToken: prep.accessToken,
+    phone: trimmed,
+    phoneToken: prep.phoneToken,
+    name: prep.name,
+    preferredRole: prep.preferredRole,
+    timeoutMs: 22000,
+  });
+  onPhase?.("done");
+  return user;
 }
 
 export async function loginWithPhoneInMiniApp(opts: {

@@ -5,9 +5,12 @@ import { useAuth } from "@/auth-context";
 import { AUTH_DEV_BYPASS } from "@/config";
 import { createMiniappHandoff } from "@/services/api";
 import {
+  completeZaloLoginWithPhone,
   loginViaZaloMiniApp,
   loginWithPhoneInMiniApp,
+  NeedPhoneError,
   probeZaloMiniApp,
+  type PendingZaloSession,
   type ZaloLoginPhase,
 } from "@/services/zalo-miniapp-auth";
 import {
@@ -23,11 +26,12 @@ function isValidVnPhoneInput(raw: string): boolean {
   return /^0\d{9}$/.test(raw) || /^\+84\d{9}$/.test(raw);
 }
 
-const PHASE_LABEL: Record<Exclude<ZaloLoginPhase, "idle" | "done">, string> = {
+const PHASE_LABEL: Partial<Record<ZaloLoginPhase, string>> = {
   authorize: "Đang xin quyền Zalo…",
   phone: "Đang lấy số điện thoại…",
   profile: "Đang lấy thông tin hiển thị…",
   server: "Đang liên kết tài khoản House X…",
+  need_phone: "Zalo đã kết nối — cần số điện thoại",
 };
 
 export function AccountPage() {
@@ -42,6 +46,9 @@ export function AccountPage() {
   const [err, setErr] = useState<string | null>(null);
   const [brokerErr, setBrokerErr] = useState<string | null>(null);
   const [phase, setPhase] = useState<ZaloLoginPhase>("idle");
+  const [pendingZalo, setPendingZalo] = useState<PendingZaloSession | null>(
+    null,
+  );
   const [justLoggedIn, setJustLoggedIn] = useState(false);
   const [inZalo, setInZalo] = useState<boolean | null>(null);
   const [lane, setLane] = useState<UserLane | null>(() => getPreferredLane());
@@ -69,6 +76,7 @@ export function AccountPage() {
 
   function finishLoginSuccess() {
     setPhase("done");
+    setPendingZalo(null);
     setJustLoggedIn(true);
     setErr(null);
     setBrokerErr(null);
@@ -115,6 +123,12 @@ export function AccountPage() {
       setUser(u);
       finishLoginSuccess();
     } catch (ex) {
+      if (ex instanceof NeedPhoneError) {
+        setPendingZalo(ex.prep);
+        setPhase("need_phone");
+        setErr(ex.message);
+        return;
+      }
       setPhase("idle");
       setErr(ex instanceof Error ? ex.message : "Không đăng nhập được bằng Zalo");
     } finally {
@@ -131,8 +145,20 @@ export function AccountPage() {
       return;
     }
     setBusyCustomer(true);
-    setPhase("authorize");
     try {
+      if (pendingZalo) {
+        setPhase("server");
+        const u = await completeZaloLoginWithPhone(
+          pendingZalo,
+          trimmed,
+          onAuthPhase,
+        );
+        setUser(u);
+        finishLoginSuccess();
+        return;
+      }
+
+      setPhase("authorize");
       const u = await loginWithPhoneInMiniApp({
         phone: trimmed,
         preferredRole: "CUSTOMER",
@@ -141,7 +167,13 @@ export function AccountPage() {
       setUser(u);
       finishLoginSuccess();
     } catch (ex) {
-      setPhase("idle");
+      if (ex instanceof NeedPhoneError) {
+        setPendingZalo(ex.prep);
+        setPhase("need_phone");
+        setErr(ex.message);
+        return;
+      }
+      setPhase(pendingZalo ? "need_phone" : "idle");
       const msg = ex instanceof Error ? ex.message : "Đăng nhập thất bại";
       setErr(
         msg.includes("accessToken") || msg.includes("Token")
@@ -174,6 +206,14 @@ export function AccountPage() {
       setUser(u);
       finishLoginSuccess();
     } catch (ex) {
+      if (ex instanceof NeedPhoneError) {
+        setPendingZalo({ ...ex.prep, preferredRole: "BROKER" });
+        setBrokerPhone(trimmed);
+        setCustomerPhone(trimmed);
+        setPhase("need_phone");
+        setErr(ex.message);
+        return;
+      }
       setPhase("idle");
       setBrokerErr(
         ex instanceof Error
@@ -259,7 +299,7 @@ export function AccountPage() {
 
   const zaloReady = !AUTH_DEV_BYPASS;
   const phaseHint =
-    phase !== "idle" && phase !== "done" ? PHASE_LABEL[phase] : null;
+    phase !== "idle" && phase !== "done" ? (PHASE_LABEL[phase] ?? null) : null;
   const anyBusy = busyZalo || busyCustomer || busyBroker;
 
   return (
@@ -270,9 +310,16 @@ export function AccountPage() {
         lead="Chọn đúng nhóm bên dưới — khách mua nhà hoặc cộng đồng môi giới."
       />
 
-      {phaseHint ? (
+      {phaseHint && phase !== "need_phone" ? (
         <p className="account-progress" role="status" aria-live="polite">
           {phaseHint}
+        </p>
+      ) : null}
+
+      {pendingZalo ? (
+        <p className="account-need-phone" role="status">
+          Zalo đã kết nối. Nhập số điện thoại bên dưới rồi nhấn{" "}
+          <strong>Hoàn tất đăng nhập</strong> — không cần bấm Zalo lại.
         </p>
       ) : null}
 
@@ -283,7 +330,7 @@ export function AccountPage() {
           có tài khoản thì hệ thống tạo giúp bạn lần đầu.
         </p>
 
-        {zaloReady ? (
+        {zaloReady && !pendingZalo ? (
           <>
             <button
               type="button"
@@ -308,9 +355,11 @@ export function AccountPage() {
 
         <form onSubmit={onCustomerPhoneSubmit} className="account-phone-form">
           <p className="muted" style={{ margin: "14px 0 8px", fontSize: 12 }}>
-            {zaloReady
-              ? "Nếu Zalo chưa chia sẻ số — nhập SĐT rồi tiếp tục:"
-              : "Nhập SĐT để đăng nhập (chế độ local):"}
+            {pendingZalo
+              ? "Số điện thoại để hoàn tất đăng nhập Zalo:"
+              : zaloReady
+                ? "Hoặc nhập SĐT trước, rồi Đăng nhập bằng Zalo / Tiếp tục:"
+                : "Nhập SĐT để đăng nhập (chế độ local):"}
           </p>
           <label className="muted" htmlFor="customer-phone">
             Số điện thoại
@@ -324,14 +373,19 @@ export function AccountPage() {
             inputMode="tel"
             autoComplete="tel"
             disabled={anyBusy}
+            autoFocus={Boolean(pendingZalo)}
           />
           {err ? <p className="err">{err}</p> : null}
           <button
-            className="btn secondary"
+            className={pendingZalo ? "btn" : "btn secondary"}
             type="submit"
             disabled={anyBusy || !customerPhone.trim()}
           >
-            {busyCustomer ? phaseHint ?? "Đang xử lý…" : "Tiếp tục với số điện thoại"}
+            {busyCustomer
+              ? phaseHint ?? "Đang xử lý…"
+              : pendingZalo
+                ? "Hoàn tất đăng nhập"
+                : "Tiếp tục với số điện thoại"}
           </button>
         </form>
       </section>
@@ -355,13 +409,13 @@ export function AccountPage() {
             inputMode="tel"
             autoComplete="tel"
             required
-            disabled={anyBusy}
+            disabled={anyBusy || Boolean(pendingZalo)}
           />
           {brokerErr ? <p className="err">{brokerErr}</p> : null}
           <button
             className="btn"
             type="submit"
-            disabled={anyBusy || !brokerPhone.trim()}
+            disabled={anyBusy || Boolean(pendingZalo) || !brokerPhone.trim()}
           >
             {busyBroker
               ? phaseHint ?? "Đang xử lý…"

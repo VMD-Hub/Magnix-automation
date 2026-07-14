@@ -20,11 +20,20 @@ export async function fetchZaloMe(accessToken: string): Promise<ZaloMeProfile> {
   url.searchParams.set("fields", "id,name");
   url.searchParams.set("access_token", accessToken);
 
-  const res = await fetch(url.toString(), {
-    method: "GET",
-    headers: { Accept: "application/json" },
-    cache: "no-store",
-  });
+  let res: Response;
+  try {
+    res = await fetch(url.toString(), {
+      method: "GET",
+      headers: { Accept: "application/json" },
+      cache: "no-store",
+      signal: AbortSignal.timeout(12000),
+    });
+  } catch {
+    throw new ZaloAuthError(
+      "ZALO_NETWORK",
+      "Không xác thực được Zalo (mạng chậm). Thử lại sau ít giây.",
+    );
+  }
 
   const data = (await res.json()) as ZaloMeResponse;
   if (!data.id) {
@@ -47,15 +56,21 @@ export async function exchangeZaloPhoneToken(
   const secret = process.env.ZALO_APP_SECRET?.trim();
   if (!secret || !accessToken?.trim() || !phoneCode?.trim()) return null;
 
-  const res = await fetch("https://graph.zalo.me/v2.0/me/info", {
-    method: "GET",
-    headers: {
-      access_token: accessToken,
-      code: phoneCode,
-      secret_key: secret,
-    },
-    cache: "no-store",
-  });
+  let res: Response;
+  try {
+    res = await fetch("https://graph.zalo.me/v2.0/me/info", {
+      method: "GET",
+      headers: {
+        access_token: accessToken,
+        code: phoneCode,
+        secret_key: secret,
+      },
+      cache: "no-store",
+      signal: AbortSignal.timeout(12000),
+    });
+  } catch {
+    return null;
+  }
 
   const data = (await res.json()) as {
     data?: { number?: string };
@@ -65,7 +80,16 @@ export async function exchangeZaloPhoneToken(
   };
 
   const number = data.data?.number ?? data.number;
-  if (!number) return null;
+  if (!number) {
+    // Không throw — caller fallback sang phone nhập tay; log mã lỗi an toàn.
+    if (data.error != null && data.error !== 0) {
+      console.warn(
+        "[zalo/phone] exchange failed",
+        typeof data.error === "number" ? data.error : "err",
+      );
+    }
+    return null;
+  }
   return String(number);
 }
 
