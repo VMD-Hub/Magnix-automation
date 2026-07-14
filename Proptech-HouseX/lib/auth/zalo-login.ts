@@ -55,10 +55,16 @@ async function resolveZaloUserId(input: ZaloAuthInput): Promise<{
 }
 
 async function resolvePhone(input: ZaloAuthInput): Promise<string> {
-  let raw = input.phone;
+  let raw = input.phone?.trim();
   if (input.phoneToken) {
     const exchanged = await exchangeZaloPhoneToken(input.phoneToken);
     if (exchanged) raw = exchanged;
+  }
+  if (!raw) {
+    throw new ZaloAuthError(
+      "INVALID_PHONE",
+      "Không lấy được số điện thoại. Cho phép chia sẻ SĐT trong Zalo hoặc nhập tay.",
+    );
   }
   const normalized = normalizeVnPhone(raw);
   if (!isValidVnPhone(normalized)) {

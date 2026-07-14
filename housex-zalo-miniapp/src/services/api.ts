@@ -134,18 +134,33 @@ export async function loginWithZaloDev(
  */
 export async function loginWithZaloAccessToken(opts: {
   accessToken: string;
-  phone: string;
+  phone?: string;
   phoneToken?: string;
   name?: string;
+  preferredRole?: "CUSTOMER" | "BROKER";
 }) {
   if (AUTH_DEV_BYPASS) {
-    return loginWithZaloDev(opts.phone, `dev-${opts.phone}`);
+    const phone = opts.phone?.trim();
+    if (!phone) {
+      throw new Error("Dev login cần số điện thoại.");
+    }
+    return loginWithZaloDev(
+      phone,
+      `dev-${phone}`,
+      opts.preferredRole ?? "CUSTOMER",
+    );
   }
   const data = await apiFetch<{ token: string; user: HouseXUser }>(
     "/api/auth/zalo",
     {
       method: "POST",
-      body: JSON.stringify(opts),
+      body: JSON.stringify({
+        accessToken: opts.accessToken,
+        phone: opts.phone,
+        phoneToken: opts.phoneToken,
+        name: opts.name,
+        preferredRole: opts.preferredRole,
+      }),
     },
   );
   setToken(data.token);

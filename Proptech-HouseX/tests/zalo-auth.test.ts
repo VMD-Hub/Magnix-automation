@@ -19,6 +19,13 @@ function testZaloAuthSchema() {
     preferredRole: "BROKER",
   });
   assert.equal(b.preferredRole, "BROKER");
+
+  const c = zaloAuthSchema.parse({
+    accessToken: "a".repeat(20),
+    phoneToken: "b".repeat(20),
+  });
+  assert.equal(c.phoneToken?.length, 20);
+  assert.equal(c.phone, undefined);
 }
 
 function testZaloAuthError() {

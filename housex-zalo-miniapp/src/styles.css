@@ -1871,6 +1871,16 @@ select.input {
   gap: 8px;
 }
 
+.account-login-zalo {
+  margin-bottom: 12px;
+}
+
+.account-login-zalo .btn {
+  background: linear-gradient(180deg, #0068ff 0%, #0050c8 100%);
+  border-color: rgba(0, 80, 200, 0.35);
+  color: #fff;
+}
+
 .account-lane-pick .chip {
   text-transform: none;
   letter-spacing: 0;
