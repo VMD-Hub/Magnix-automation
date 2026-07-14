@@ -89,11 +89,18 @@ Mini App                  House X API              Zalo Graph
 | `/kham-pha` | Hub khi user chưa chắc |
 | `/du-an/:slug` | `GET /api/projects/:slug` + `POST /api/leads` |
 | `/tu-van` | `POST /api/leads` |
-| `/tai-khoan` | Auth + đổi lane |
+| `/tai-khoan` | Auth + đổi lane + CTA **hồ sơ đầy đủ** (web SoR) |
+
+### Account — Mini Auth + Web SoR
+
+- Đăng nhập / đăng ký: Mini App (`POST /api/auth/zalo`, Bearer `localStorage`).
+- Dashboard khách (lead, booking, quà NOXH): **web** `/khach-hang/tai-khoan` — một UI store of record.
+- Cầu nối phiên: `POST /api/auth/miniapp-handoff` (Bearer) → one-time `code` → webview `GET /api/auth/miniapp-handoff/consume?code&next=` Set-Cookie `hx_session` + 302.  
+  `next` allowlist: `/khach-hang/tai-khoan`, `/moi-gioi/tai-khoan`.
 
 Chi tiết UX: [MINIAPP_TWO_LANES.md](MINIAPP_TWO_LANES.md).
 
-CORS: `/api/projects`, `/api/projects/:slug`, `/api/leads` dùng `applyApiCors` + `OPTIONS`.
+CORS: `/api/projects`, `/api/projects/:slug`, `/api/leads`, `/api/auth/zalo`, `/api/auth/miniapp-handoff` dùng `applyApiCors` + `OPTIONS`.
 
 ## Phase 2 (Agent) — scaffolded
 

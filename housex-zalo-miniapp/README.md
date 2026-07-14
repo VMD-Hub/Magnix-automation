@@ -62,12 +62,19 @@ zmp deploy
 
 ```bash
 cd /opt/housex && git pull
-cd housex-zalo-miniapp
+
+# API — bắt buộc nếu có auth/handoff mới
+cd Proptech-HouseX
+npm run build && pm2 restart housex --update-env
+
+cd ../housex-zalo-miniapp
 npm run build:zmp   # phải in: verify-promo-bundle: OK
 grep -o 'Quay là có quà' www/assets/*.js
 cat app-config.json
-zmp deploy          # chọn Testing
+zmp deploy          # chọn Testing + quét QR mới
 ```
+
+**Tài khoản:** Mini đăng nhập → **Xem hồ sơ đầy đủ** → webview Set-Cookie qua `/api/auth/miniapp-handoff`. Cần rebuild + restart Proptech-HouseX trước khi test CTA.
 
 ## Mai — OA / Mini App thật (chờ xác nhận)
 

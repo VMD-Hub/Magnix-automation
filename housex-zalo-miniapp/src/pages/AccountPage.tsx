@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { PageBrandHeader } from "@/components/PageBrandHeader";
 import { useAuth } from "@/auth-context";
 import { AUTH_DEV_BYPASS } from "@/config";
+import { createMiniappHandoff } from "@/services/api";
 import {
   loginViaZaloMiniApp,
   loginWithPhoneInMiniApp,
@@ -15,6 +16,7 @@ import {
   setPreferredLane,
   type UserLane,
 } from "@/services/lane";
+import { sanitizeHandoffNext } from "@/services/webview";
 
 function isValidVnPhoneInput(raw: string): boolean {
   return /^0\d{9}$/.test(raw) || /^\+84\d{9}$/.test(raw);
@@ -27,6 +29,7 @@ export function AccountPage() {
   const [asAgent, setAsAgent] = useState(false);
   const [busy, setBusy] = useState(false);
   const [busyZalo, setBusyZalo] = useState(false);
+  const [busyHandoff, setBusyHandoff] = useState(false);
   const [err, setErr] = useState<string | null>(null);
   const [inZalo, setInZalo] = useState<boolean | null>(null);
   const [lane, setLane] = useState<UserLane | null>(() => getPreferredLane());
@@ -46,6 +49,31 @@ export function AccountPage() {
     setPreferredLane(next);
     setLane(next);
     navigate(laneHomePath(next));
+  }
+
+  async function openFullProfileWeb() {
+    setErr(null);
+    setBusyHandoff(true);
+    try {
+      const next = sanitizeHandoffNext(
+        canAgent ? "/moi-gioi/tai-khoan" : "/khach-hang/tai-khoan",
+      );
+      const { code } = await createMiniappHandoff();
+      const q = new URLSearchParams({
+        handoff: "1",
+        code,
+        next,
+      });
+      navigate(`/mo?${q.toString()}`);
+    } catch (ex) {
+      setErr(
+        ex instanceof Error
+          ? ex.message
+          : "Không mở được hồ sơ web. Thử đăng nhập lại.",
+      );
+    } finally {
+      setBusyHandoff(false);
+    }
   }
 
   async function onZaloLogin() {
@@ -138,8 +166,22 @@ export function AccountPage() {
             ))}
           </div>
         </div>
+        {err ? <p className="err">{err}</p> : null}
+        <button
+          type="button"
+          className="btn"
+          style={{ marginBottom: 10 }}
+          disabled={busyHandoff}
+          onClick={() => void openFullProfileWeb()}
+        >
+          {busyHandoff
+            ? "Đang mở hồ sơ…"
+            : canAgent
+              ? "Hồ sơ môi giới đầy đủ (web)"
+              : "Xem hồ sơ đầy đủ"}
+        </button>
         {canAgent ? (
-          <Link className="btn" to="/agent" style={{ marginBottom: 10 }}>
+          <Link className="btn secondary" to="/agent" style={{ marginBottom: 10 }}>
             Vào HouseX Agent
           </Link>
         ) : null}

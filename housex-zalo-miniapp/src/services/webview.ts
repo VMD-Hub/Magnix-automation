@@ -8,7 +8,14 @@ const ALLOWED_PREFIXES = [
   "/chinh-sach",
   "/quy-dinh",
   "/lien-he",
+  "/khach-hang/",
+  "/moi-gioi/",
 ];
+
+const ALLOWED_HANDOFF_NEXT = new Set([
+  "/khach-hang/tai-khoan",
+  "/moi-gioi/tai-khoan",
+]);
 
 /** Path an toàn để nhúng trang House X web trong Mini App. */
 export function sanitizeWebPath(path: string): string {
@@ -23,4 +30,24 @@ export function sanitizeWebPath(path: string): string {
 export function webAbsoluteUrl(path: string): string {
   const p = sanitizeWebPath(path);
   return `${HOUSEX_API_BASE}${p}`;
+}
+
+/** URL consume handoff — Set-Cookie rồi redirect hồ sơ web. */
+export function accountHandoffConsumeUrl(
+  code: string,
+  nextPath: string,
+): string {
+  const next = ALLOWED_HANDOFF_NEXT.has(nextPath)
+    ? nextPath
+    : "/khach-hang/tai-khoan";
+  const q = new URLSearchParams({
+    code,
+    next,
+  });
+  return `${HOUSEX_API_BASE}/api/auth/miniapp-handoff/consume?${q.toString()}`;
+}
+
+export function sanitizeHandoffNext(path: string | null | undefined): string {
+  if (!path) return "/khach-hang/tai-khoan";
+  return ALLOWED_HANDOFF_NEXT.has(path) ? path : "/khach-hang/tai-khoan";
 }

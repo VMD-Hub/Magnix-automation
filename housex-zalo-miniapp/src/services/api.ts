@@ -173,6 +173,17 @@ export async function fetchMe(): Promise<HouseXUser | null> {
   return data.user;
 }
 
+/** Bearer → one-time code để webview Set-Cookie hồ sơ web. */
+export async function createMiniappHandoff(): Promise<{
+  code: string;
+  expiresIn: number;
+}> {
+  return apiFetch<{ code: string; expiresIn: number }>(
+    "/api/auth/miniapp-handoff",
+    { method: "POST", body: "{}" },
+  );
+}
+
 export function logout() {
   setToken(null);
 }
