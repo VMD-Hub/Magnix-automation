@@ -10,7 +10,7 @@ export function HomeInsightsSection({ items }: { items: HomeInsightLink[] }) {
         Tin tức & pháp lý
       </h2>
       <p className="muted" style={{ margin: "0 0 12px" }}>
-        Kiến thức nền — chứng minh House X là nền tảng BĐS, không chỉ thu lead.
+        Cẩm nang, tin thị trường và điều khoản — để quyết định rõ ràng hơn.
       </p>
       {items.map((item) => (
         <button

@@ -14,7 +14,7 @@ export function ToolsHubPage() {
       <PageBrandHeader
         kicker="CÔNG CỤ"
         title="Kiểm tra NOXH"
-        lead="Lộ trình 3 bước — tự đánh giá trước khi nhờ tư vấn. Kết quả mang tính tham khảo."
+        lead="Ba bước tự đánh giá NOXH trước khi nhờ tư vấn chuyên sâu."
         backTo="/"
       />
 

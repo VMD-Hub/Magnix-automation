@@ -76,7 +76,7 @@ export function StartPage() {
       </button>
 
       <p className="start-foot muted">
-        timnhaxahoi.com · Có thể đổi mục tiêu bất cứ lúc nào
+        timnhaxahoi.com
       </p>
     </div>
   );

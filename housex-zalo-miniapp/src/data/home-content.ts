@@ -40,14 +40,14 @@ export const HOME_BANNERS: HomeBanner[] = [
     gradient: "var(--hx-ruby-gradient)",
     imageUrl: "/images/hero/housex-hero-brand-ruby-skyline.webp",
     headline: "Nhà ở xã hội — rõ pháp lý, rõ lộ trình",
-    subline: "Ruby Fire · minh bạch từ điều kiện đến vay",
+    subline: "Điều kiện · vay · hồ sơ minh bạch",
   },
   {
     id: "tools",
     gradient:
       "linear-gradient(135deg, #5c0b12 0%, #7a0e18 45%, #3d070c 100%)",
-    headline: "Công cụ thật — không chỉ form thu lead",
-    subline: "Kiểm tra điều kiện & khả năng vay trước khi quyết định",
+    headline: "Công cụ thật — hỗ trợ trước khi quyết định",
+    subline: "Kiểm tra điều kiện & khả năng vay một cách minh bạch",
   },
   {
     id: "platform",

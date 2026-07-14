@@ -139,7 +139,7 @@ export function LaneHomePage({ lane }: Props) {
       <HomeInsightsSection items={copy.insights} />
 
       <p className="home-foot muted">
-        House X · timnhaxahoi.com · Kết quả công cụ mang tính tham khảo.
+        House X · timnhaxahoi.com
       </p>
     </div>
   );

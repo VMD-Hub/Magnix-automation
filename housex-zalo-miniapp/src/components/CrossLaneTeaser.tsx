@@ -83,7 +83,7 @@ export function CrossLaneTeaser({ currentLane }: { currentLane: UserLane }) {
         </Link>
       </div>
       <p className="muted cross-lane-lead">
-        Khám phá thêm — chuyển lane bất cứ lúc nào từ góc header.
+        Gợi ý dự án khác phù hợp — bạn có thể đổi mục tiêu bất cứ lúc nào.
       </p>
       <div className="project-grid project-grid--teaser">
         {items.map((p) => (

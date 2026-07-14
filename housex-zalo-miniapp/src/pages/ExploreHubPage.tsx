@@ -47,7 +47,7 @@ export function ExploreHubPage() {
       <PageBrandHeader
         kicker="KHÁM PHÁ"
         title="Hai hành trình House X"
-        lead="Chọn hướng gần với bạn nhất — có thể đổi sau từ header."
+        lead="Chọn hướng gần với bạn nhất — có thể đổi sau bất cứ lúc nào."
         backTo="/start"
         backLabel="← Quay lại màn chào"
       />
