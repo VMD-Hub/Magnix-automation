@@ -117,7 +117,9 @@ export function ProjectDetailPage() {
         style={img ? { backgroundImage: `url(${img})` } : undefined}
       >
         <div className="landing-hero-overlay">
-          <span className="chip">NOXH</span>
+          <span className="chip">
+            {project.projectType === "THUONG_MAI" ? "CCTM" : "NOXH"}
+          </span>
           <h1>{project.name}</h1>
           {loc ? <p>{loc}</p> : null}
         </div>

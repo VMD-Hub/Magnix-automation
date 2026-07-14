@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { PageBrandHeader } from "@/components/PageBrandHeader";
 import { NOXH_TOOLS } from "@/services/tools";
 
 const TOOL_ORDER = ["dieu-kien", "vay-60s", "tham-dinh"] as const;
@@ -10,16 +11,12 @@ export function ToolsHubPage() {
 
   return (
     <div>
-      <Link to="/" className="muted">
-        ← Trang chủ
-      </Link>
-      <h1 className="brand" style={{ fontSize: 22 }}>
-        Kiểm tra NOXH
-      </h1>
-      <p className="lead">
-        Lộ trình 3 bước — tự đánh giá trước khi nhờ tư vấn. Kết quả mang tính
-        tham khảo.
-      </p>
+      <PageBrandHeader
+        kicker="CÔNG CỤ"
+        title="Kiểm tra NOXH"
+        lead="Lộ trình 3 bước — tự đánh giá trước khi nhờ tư vấn. Kết quả mang tính tham khảo."
+        backTo="/"
+      />
 
       {tools.map((t, idx) => (
         <Link

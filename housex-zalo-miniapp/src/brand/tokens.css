@@ -31,6 +31,7 @@
   --hx-accent: var(--hx-brand-600);
   --hx-accent-hover: var(--hx-brand-500);
   --hx-accent-soft: var(--hx-brand-300);
+  --hx-accent-2: var(--hx-gold-400);
   --hx-link: var(--hx-gold-400);
   --hx-border: rgba(252, 211, 77, 0.14);
   --hx-border-ruby: rgba(155, 17, 30, 0.45);

@@ -1,5 +1,5 @@
 import { useEffect, useState, type FormEvent } from "react";
-import { Link } from "react-router-dom";
+import { PageBrandHeader } from "@/components/PageBrandHeader";
 import { useAuth } from "@/auth-context";
 import { apiFetch } from "@/services/api";
 import {
@@ -87,15 +87,12 @@ export function ConsultPage() {
 
   return (
     <div>
-      <Link to={laneHomePath(lane)} className="muted">
-        ← Trang chủ
-      </Link>
-      <h1 className="brand" style={{ fontSize: 22 }}>
-        Tư vấn nhanh
-      </h1>
-      <p className="lead">
-        Điền SĐT để chuyên viên House X gọi lại. Không hứa duyệt vay.
-      </p>
+      <PageBrandHeader
+        kicker="TƯ VẤN"
+        title="Tư vấn nhanh"
+        lead="Điền SĐT để chuyên viên House X gọi lại. Không hứa duyệt vay."
+        backTo={laneHomePath(lane)}
+      />
       <form className="card" onSubmit={onSubmit}>
         <label className="muted">Dự án quan tâm</label>
         <select

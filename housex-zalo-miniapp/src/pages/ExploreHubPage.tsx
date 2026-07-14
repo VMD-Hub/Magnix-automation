@@ -1,20 +1,35 @@
 import { useNavigate } from "react-router-dom";
-import { RubySurfaceOrnament } from "@/components/RubySurfaceOrnament";
+import { LanePickCard } from "@/components/LanePickCard";
+import { PageBrandHeader } from "@/components/PageBrandHeader";
+import { CCTM_BANNERS, NOXH_BANNERS } from "@/data/home-lane-content";
 import {
   laneHomePath,
   LANE_LABELS,
   setPreferredLane,
   type UserLane,
 } from "@/services/lane";
+import { mediaUrl } from "@/utils/media";
 
-const PICKS: Array<{ lane: UserLane; desc: string }> = [
+const PICKS: Array<{
+  lane: UserLane;
+  benefit: string;
+  imageUrl?: string;
+  gradient: string;
+}> = [
   {
     lane: "noxh",
-    desc: "Phù hợp nếu bạn quan tâm điều kiện NOXH, vay ưu đãi và hồ sơ pháp lý.",
+    benefit: "Phù hợp nếu bạn quan tâm điều kiện NOXH, vay ưu đãi và hồ sơ pháp lý.",
+    imageUrl: NOXH_BANNERS[0]?.imageUrl,
+    gradient: NOXH_BANNERS[0]?.gradient ?? "var(--hx-ruby-gradient)",
   },
   {
     lane: "cctm",
-    desc: "Phù hợp nếu bạn tìm căn hộ thương mại — vị trí, thanh toán, tiện ích đô thị.",
+    benefit:
+      "Phù hợp nếu bạn tìm căn hộ thương mại — vị trí, thanh toán, tiện ích đô thị.",
+    imageUrl: CCTM_BANNERS[0]?.imageUrl,
+    gradient:
+      CCTM_BANNERS[0]?.gradient ??
+      "linear-gradient(135deg, #1a1214 0%, #2a1a1c 35%, #5c0b12 100%)",
   },
 ];
 
@@ -29,40 +44,27 @@ export function ExploreHubPage() {
 
   return (
     <div className="explore-hub">
-      <RubySurfaceOrnament variant="header" />
-      <p className="muted">KHÁM PHÁ</p>
-      <h1 className="brand" style={{ fontSize: 22, marginBottom: 8 }}>
-        Hai hành trình House X
-      </h1>
-      <p className="lead" style={{ marginBottom: 16 }}>
-        Chọn hướng gần với bạn nhất — có thể đổi sau từ header.
-      </p>
+      <PageBrandHeader
+        kicker="KHÁM PHÁ"
+        title="Hai hành trình House X"
+        lead="Chọn hướng gần với bạn nhất — có thể đổi sau từ header."
+        backTo="/start"
+        backLabel="← Quay lại màn chào"
+      />
 
       <div className="explore-hub-cards">
         {PICKS.map((p) => (
-          <button
+          <LanePickCard
             key={p.lane}
-            type="button"
-            className="card explore-hub-card"
+            title={LANE_LABELS[p.lane]}
+            benefit={p.benefit}
+            imageUrl={mediaUrl(p.imageUrl)}
+            gradient={p.gradient}
+            cta="Vào khu vực này →"
             onClick={() => enter(p.lane)}
-          >
-            <strong>{LANE_LABELS[p.lane]}</strong>
-            <p className="muted" style={{ margin: "8px 0 12px", fontSize: 13 }}>
-              {p.desc}
-            </p>
-            <span className="explore-hub-cta">Vào khu vực này →</span>
-          </button>
+          />
         ))}
       </div>
-
-      <button
-        type="button"
-        className="btn secondary"
-        style={{ marginTop: 16, width: "100%" }}
-        onClick={() => navigate("/start")}
-      >
-        Quay lại màn chào
-      </button>
     </div>
   );
 }

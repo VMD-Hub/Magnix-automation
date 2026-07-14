@@ -1,4 +1,4 @@
-import { HOME_TAGLINE } from "@/data/home-content";
+import { BrandLockup } from "@/components/BrandLockup";
 import { LaneSwitcher } from "@/components/LaneSwitcher";
 import { RubySurfaceOrnament } from "@/components/RubySurfaceOrnament";
 import type { UserLane } from "@/services/lane";
@@ -17,10 +17,7 @@ export function HomeBrandHeader({ lane, kicker }: Props) {
           <p className="home-header-kicker">{kicker ?? "PROPTECH · HOUSE X"}</p>
           <LaneSwitcher current={lane} />
         </div>
-        <div className="home-logo">
-          House <span className="home-logo-x">X</span>
-        </div>
-        <p className="home-tagline">{HOME_TAGLINE}</p>
+        <BrandLockup size="sm" showVn={false} />
       </div>
       <span className="home-header-gold-line" aria-hidden />
     </header>

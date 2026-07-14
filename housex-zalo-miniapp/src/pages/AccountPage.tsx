@@ -1,5 +1,6 @@
 import { useState, type FormEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { PageBrandHeader } from "@/components/PageBrandHeader";
 import { useAuth } from "@/auth-context";
 import { AUTH_DEV_BYPASS } from "@/config";
 import { loginWithZaloDev } from "@/services/api";
@@ -64,15 +65,17 @@ export function AccountPage() {
   if (user) {
     return (
       <div>
-        <p className="muted">TÀI KHOẢN</p>
-        <h1 className="brand" style={{ fontSize: 22 }}>
-          {user.name}
-        </h1>
+        <PageBrandHeader
+          kicker="TÀI KHOẢN"
+          title={user.name}
+          lead={
+            canAgent
+              ? "Tài khoản môi giới / CTV"
+              : "Tài khoản khách hàng"
+          }
+        />
         <div className="card">
-          <p>
-            {canAgent ? "Tài khoản môi giới / CTV" : "Tài khoản khách hàng"}
-          </p>
-          <p className="muted" style={{ marginTop: 8 }}>
+          <p className="muted">
             SĐT: {user.phoneMasked}
             {user.ctvCode ? ` · Mã CTV ${user.ctvCode}` : ""}
           </p>
@@ -108,13 +111,11 @@ export function AccountPage() {
 
   return (
     <div>
-      <p className="muted">TÀI KHOẢN</p>
-      <h1 className="brand" style={{ fontSize: 22 }}>
-        Kết nối House X
-      </h1>
-      <p className="lead">
-        Đăng nhập bằng số điện thoại để lưu hồ sơ và nhận tư vấn.
-      </p>
+      <PageBrandHeader
+        kicker="TÀI KHOẢN"
+        title="Kết nối House X"
+        lead="Đăng nhập bằng số điện thoại để lưu hồ sơ và nhận tư vấn."
+      />
 
       {AUTH_DEV_BYPASS ? (
         <form onSubmit={onDevLogin} className="card">

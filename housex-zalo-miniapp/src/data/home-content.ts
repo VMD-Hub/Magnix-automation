@@ -1,5 +1,7 @@
 /** Nội dung thương hiệu & IA trang chủ Mini App — DNA House X. */
 
+import { BRAND_TAGLINE_EN } from "@/data/brand-content";
+
 export type HomeBanner = {
   id: string;
   /** Gradient hoặc ảnh từ web House X */
@@ -29,8 +31,8 @@ export type HomeInsightLink = {
   path: string;
 };
 
-export const HOME_TAGLINE =
-  "Nền tảng bất động sản · Công nghệ minh bạch · Sản phẩm là trung tâm";
+/** Tagline chính — đồng bộ web lockup. */
+export const HOME_TAGLINE = BRAND_TAGLINE_EN;
 
 export const HOME_BANNERS: HomeBanner[] = [
   {

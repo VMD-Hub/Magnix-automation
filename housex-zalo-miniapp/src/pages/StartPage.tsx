@@ -1,37 +1,42 @@
 import { useNavigate } from "react-router-dom";
+import { BrandLockup } from "@/components/BrandLockup";
+import { LanePickCard } from "@/components/LanePickCard";
 import { RubySurfaceOrnament } from "@/components/RubySurfaceOrnament";
-import { HOME_TAGLINE } from "@/data/home-content";
+import { CCTM_BANNERS, NOXH_BANNERS } from "@/data/home-lane-content";
 import {
   laneHomePath,
   LANE_LABELS,
   setPreferredLane,
   type UserLane,
 } from "@/services/lane";
+import { mediaUrl } from "@/utils/media";
 
 const LANE_CARDS: Array<{
   lane: UserLane;
-  emoji: string;
   title: string;
-  bullets: string[];
-  tone: string;
+  benefit: string;
+  imageUrl?: string;
+  gradient: string;
 }> = [
   {
     lane: "noxh",
-    emoji: "🏡",
     title: LANE_LABELS.noxh,
-    bullets: ["Điều kiện & đối tượng", "Vay NOXH · hồ sơ", "Dự án đã chọn lọc"],
-    tone: "var(--hx-ruby-gradient)",
+    benefit: "Điều kiện · vay · hồ sơ minh bạch",
+    imageUrl: NOXH_BANNERS[0]?.imageUrl,
+    gradient: NOXH_BANNERS[0]?.gradient ?? "var(--hx-ruby-gradient)",
   },
   {
     lane: "cctm",
-    emoji: "🏙",
     title: LANE_LABELS.cctm,
-    bullets: ["Vị trí & tiện ích", "Lộ trình thanh toán", "Căn hộ đô thị"],
-    tone: "linear-gradient(135deg, #1a1214 0%, #3d2528 40%, #5c0b12 100%)",
+    benefit: "Vị trí · tiện ích · lộ trình thanh toán",
+    imageUrl: CCTM_BANNERS[0]?.imageUrl,
+    gradient:
+      CCTM_BANNERS[0]?.gradient ??
+      "linear-gradient(135deg, #1a1214 0%, #3d2528 40%, #5c0b12 100%)",
   },
 ];
 
-/** Màn chào — không tabbar; first impression hai lane. */
+/** Màn chào — không tabbar; first impression hai lane (ảnh + 1 dòng lợi ích). */
 export function StartPage() {
   const navigate = useNavigate();
 
@@ -45,33 +50,20 @@ export function StartPage() {
       <RubySurfaceOrnament variant="header" />
       <header className="start-hero">
         <p className="start-kicker">HOUSE X · PROPTECH</p>
-        <h1 className="start-title">
-          House <span className="home-logo-x">X</span>
-        </h1>
-        <p className="start-tagline">{HOME_TAGLINE}</p>
+        <BrandLockup size="md" showVn />
         <p className="start-prompt">Bạn đang tìm gì hôm nay?</p>
       </header>
 
       <div className="start-cards">
         {LANE_CARDS.map((card) => (
-          <button
+          <LanePickCard
             key={card.lane}
-            type="button"
-            className="start-card"
-            style={{ background: card.tone }}
+            title={card.title}
+            benefit={card.benefit}
+            imageUrl={mediaUrl(card.imageUrl)}
+            gradient={card.gradient}
             onClick={() => pick(card.lane)}
-          >
-            <span className="start-card-emoji" aria-hidden>
-              {card.emoji}
-            </span>
-            <span className="start-card-title">{card.title}</span>
-            <ul className="start-card-bullets">
-              {card.bullets.map((b) => (
-                <li key={b}>{b}</li>
-              ))}
-            </ul>
-            <span className="start-card-cta">Bắt đầu →</span>
-          </button>
+          />
         ))}
       </div>
 
@@ -83,7 +75,9 @@ export function StartPage() {
         Tôi chưa chắc — xem tổng quan ngắn
       </button>
 
-      <p className="start-foot muted">timnhaxahoi.com · Có thể đổi mục tiêu bất cứ lúc nào</p>
+      <p className="start-foot muted">
+        timnhaxahoi.com · Có thể đổi mục tiêu bất cứ lúc nào
+      </p>
     </div>
   );
 }

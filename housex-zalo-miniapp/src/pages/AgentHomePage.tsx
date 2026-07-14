@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { useAuth } from "@/auth-context";
 import { useEffect, useState } from "react";
+import { PageBrandHeader } from "@/components/PageBrandHeader";
 import { listNotifications } from "@/services/agent";
 
 export function AgentHomePage() {
@@ -17,13 +18,11 @@ export function AgentHomePage() {
   if (!canAgent) {
     return (
       <div>
-        <h1 className="brand" style={{ fontSize: 22 }}>
-          HouseX Agent
-        </h1>
-        <p className="lead">
-          Khu vực dành cho môi giới / CTV. Đăng nhập tài khoản môi giới để xem
-          hồ sơ và hoa hồng.
-        </p>
+        <PageBrandHeader
+          kicker="HOUSEX AGENT"
+          title="Khu vực môi giới"
+          lead="Đăng nhập tài khoản môi giới / CTV để xem hồ sơ và hoa hồng."
+        />
         <Link className="btn" to="/tai-khoan">
           Tới Tài khoản
         </Link>
@@ -33,15 +32,11 @@ export function AgentHomePage() {
 
   return (
     <div>
-      <p className="muted">HOUSEX AGENT</p>
-      <h1 className="brand" style={{ fontSize: 22 }}>
-        Xin chào, {user?.name}
-      </h1>
-      {user?.ctvCode ? (
-        <p className="muted" style={{ marginBottom: 16 }}>
-          Mã CTV {user.ctvCode}
-        </p>
-      ) : null}
+      <PageBrandHeader
+        kicker="HOUSEX AGENT"
+        title={`Xin chào, ${user?.name ?? ""}`}
+        lead={user?.ctvCode ? `Mã CTV ${user.ctvCode}` : undefined}
+      />
 
       <Link to="/agent/dich-vu?tab=product" className="card tool-card">
         <h2>Quản lý dịch vụ</h2>
