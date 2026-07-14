@@ -8,3 +8,5 @@ dist/
 .env
 .env.*
 !.env.example
+
+housex-miniapp-upload.zip
