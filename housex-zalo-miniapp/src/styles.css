@@ -672,15 +672,26 @@ button.chip-active {
   font-family: inherit;
 }
 
+.promo-teaser--hero {
+  align-items: stretch;
+  gap: 8px;
+  min-height: 132px;
+  padding: 16px 10px 16px 16px;
+}
+
 .promo-teaser-body {
   flex: 1;
   min-width: 0;
   position: relative;
   z-index: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 4px 0;
 }
 
 .promo-teaser-kicker {
-  margin: 0 0 2px;
+  margin: 0 0 4px;
   font-size: 9px;
   font-weight: 700;
   letter-spacing: 0.1em;
@@ -689,9 +700,18 @@ button.chip-active {
 
 .promo-teaser-title {
   margin: 0;
-  font-size: 15px;
+  font-size: 18px;
   font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
   color: #fff;
+}
+
+.promo-teaser--hero .promo-teaser-desc {
+  margin: 8px 0 0;
+  font-size: 13px;
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.88);
 }
 
 .promo-teaser-desc {
@@ -699,6 +719,44 @@ button.chip-active {
   font-size: 11px;
   line-height: 1.35;
   color: rgba(255, 255, 255, 0.78);
+}
+
+.promo-teaser-wheel {
+  flex-shrink: 0;
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 118px;
+  align-self: center;
+  filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.35));
+}
+
+.promo-wheel-svg {
+  display: block;
+  width: 118px;
+  height: auto;
+}
+
+.promo-wheel-disc {
+  transform-origin: 100px 100px;
+  animation: promo-wheel-idle 14s linear infinite;
+}
+
+@keyframes promo-wheel-idle {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .promo-wheel-disc {
+    animation: none;
+  }
 }
 
 .promo-teaser-cta {
