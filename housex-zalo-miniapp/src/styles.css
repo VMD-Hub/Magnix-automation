@@ -54,13 +54,49 @@ a {
 }
 
 .hx-build-stamp {
-  margin: 20px 0 8px;
-  text-align: center;
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  color: var(--hx-brand-600);
-  opacity: 0.85;
+  display: none;
+}
+
+.account-block {
+  margin-bottom: 14px;
+}
+
+.account-block-title {
+  margin: 0 0 6px;
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--hx-text);
+}
+
+.account-block-lead {
+  margin: 0 0 12px;
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.account-block--broker {
+  border-color: rgba(155, 17, 30, 0.22);
+}
+
+.account-login-zalo-btn {
+  background: linear-gradient(180deg, #0068ff 0%, #0050c8 100%);
+  border-color: rgba(0, 80, 200, 0.35);
+  color: #fff;
+}
+
+.account-phone-form .btn.secondary {
+  margin-top: 0;
+}
+
+.account-login-zalo {
+  margin-bottom: 12px;
+}
+
+.account-login-zalo .btn {
+  background: linear-gradient(180deg, #0068ff 0%, #0050c8 100%);
+  border-color: rgba(0, 80, 200, 0.35);
+  color: #fff;
 }
 
 .app-state-card {

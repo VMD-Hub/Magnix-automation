@@ -25,12 +25,14 @@ function isValidVnPhoneInput(raw: string): boolean {
 export function AccountPage() {
   const { user, loading, logout, setUser, canAgent, refresh } = useAuth();
   const navigate = useNavigate();
-  const [phone, setPhone] = useState("");
-  const [asAgent, setAsAgent] = useState(false);
-  const [busy, setBusy] = useState(false);
+  const [customerPhone, setCustomerPhone] = useState("");
+  const [brokerPhone, setBrokerPhone] = useState("");
+  const [busyCustomer, setBusyCustomer] = useState(false);
   const [busyZalo, setBusyZalo] = useState(false);
+  const [busyBroker, setBusyBroker] = useState(false);
   const [busyHandoff, setBusyHandoff] = useState(false);
   const [err, setErr] = useState<string | null>(null);
+  const [brokerErr, setBrokerErr] = useState<string | null>(null);
   const [inZalo, setInZalo] = useState<boolean | null>(null);
   const [lane, setLane] = useState<UserLane | null>(() => getPreferredLane());
 
@@ -76,40 +78,38 @@ export function AccountPage() {
     }
   }
 
-  async function onZaloLogin() {
+  async function onZaloCustomerLogin() {
     setErr(null);
     setBusyZalo(true);
     try {
       const u = await loginViaZaloMiniApp({
-        preferredRole: asAgent ? "BROKER" : "CUSTOMER",
-        phoneFallback: isValidVnPhoneInput(phone.trim())
-          ? phone.trim()
+        preferredRole: "CUSTOMER",
+        phoneFallback: isValidVnPhoneInput(customerPhone.trim())
+          ? customerPhone.trim()
           : undefined,
       });
       setUser(u);
       await refresh();
     } catch (ex) {
-      setErr(ex instanceof Error ? ex.message : "Đăng nhập Zalo thất bại");
+      setErr(ex instanceof Error ? ex.message : "Không đăng nhập được bằng Zalo");
     } finally {
       setBusyZalo(false);
     }
   }
 
-  async function onPhoneLogin(e: FormEvent) {
+  async function onCustomerPhoneSubmit(e: FormEvent) {
     e.preventDefault();
     setErr(null);
-
-    const trimmed = phone.trim();
+    const trimmed = customerPhone.trim();
     if (!isValidVnPhoneInput(trimmed)) {
       setErr("Nhập số điện thoại Việt Nam hợp lệ (10 số, bắt đầu bằng 0).");
       return;
     }
-
-    setBusy(true);
+    setBusyCustomer(true);
     try {
       const u = await loginWithPhoneInMiniApp({
         phone: trimmed,
-        asAgent,
+        preferredRole: "CUSTOMER",
       });
       setUser(u);
       await refresh();
@@ -118,12 +118,39 @@ export function AccountPage() {
       setErr(
         msg.includes("accessToken") || msg.includes("Token")
           ? AUTH_DEV_BYPASS
-            ? "Máy chủ chưa bật đăng nhập thử nghiệm. Thêm ZALO_AUTH_DEV_BYPASS=true vào .env API."
-            : "Không xác thực được Zalo. Mở Mini App trong ứng dụng Zalo rồi thử lại."
+            ? "Máy chủ chưa bật đăng nhập thử nghiệm local."
+            : "Cần mở trong Zalo và cho phép xác thực."
           : msg,
       );
     } finally {
-      setBusy(false);
+      setBusyCustomer(false);
+    }
+  }
+
+  async function onBrokerSubmit(e: FormEvent) {
+    e.preventDefault();
+    setBrokerErr(null);
+    const trimmed = brokerPhone.trim();
+    if (!isValidVnPhoneInput(trimmed)) {
+      setBrokerErr("Nhập số điện thoại Việt Nam hợp lệ (10 số, bắt đầu bằng 0).");
+      return;
+    }
+    setBusyBroker(true);
+    try {
+      const u = await loginWithPhoneInMiniApp({
+        phone: trimmed,
+        preferredRole: "BROKER",
+      });
+      setUser(u);
+      await refresh();
+    } catch (ex) {
+      setBrokerErr(
+        ex instanceof Error
+          ? ex.message
+          : "Không đăng ký / đăng nhập được. Thử lại trong Zalo.",
+      );
+    } finally {
+      setBusyBroker(false);
     }
   }
 
@@ -139,33 +166,35 @@ export function AccountPage() {
           title={user.name}
           lead={
             canAgent
-              ? "Tài khoản môi giới / CTV"
-              : "Tài khoản khách hàng"
+              ? "Cộng đồng môi giới House X"
+              : "Tài khoản khách — lưu tư vấn và ưu đãi"
           }
         />
         <div className="card">
           <p className="muted">
             SĐT: {user.phoneMasked}
-            {user.ctvCode ? ` · Mã CTV ${user.ctvCode}` : ""}
+            {user.ctvCode ? ` · Mã môi giới ${user.ctvCode}` : ""}
           </p>
         </div>
-        <div className="card account-lane-pick">
-          <p className="muted" style={{ marginBottom: 8 }}>
-            Mục tiêu mua nhà
-          </p>
-          <div className="account-lane-row">
-            {(["noxh", "cctm"] as const).map((id) => (
-              <button
-                key={id}
-                type="button"
-                className={`chip${lane === id ? " chip-active" : ""}`}
-                onClick={() => pickLane(id)}
-              >
-                {LANE_LABELS[id]}
-              </button>
-            ))}
+        {!canAgent ? (
+          <div className="card account-lane-pick">
+            <p className="muted" style={{ marginBottom: 8 }}>
+              Mục tiêu mua nhà
+            </p>
+            <div className="account-lane-row">
+              {(["noxh", "cctm"] as const).map((id) => (
+                <button
+                  key={id}
+                  type="button"
+                  className={`chip${lane === id ? " chip-active" : ""}`}
+                  onClick={() => pickLane(id)}
+                >
+                  {LANE_LABELS[id]}
+                </button>
+              ))}
+            </div>
           </div>
-        </div>
+        ) : null}
         {err ? <p className="err">{err}</p> : null}
         <button
           type="button"
@@ -177,12 +206,12 @@ export function AccountPage() {
           {busyHandoff
             ? "Đang mở hồ sơ…"
             : canAgent
-              ? "Hồ sơ môi giới đầy đủ (web)"
+              ? "Hồ sơ môi giới trên web"
               : "Xem hồ sơ đầy đủ"}
         </button>
         {canAgent ? (
           <Link className="btn secondary" to="/agent" style={{ marginBottom: 10 }}>
-            Vào HouseX Agent
+            Vào không gian môi giới
           </Link>
         ) : null}
         <button type="button" className="btn secondary" onClick={logout}>
@@ -192,97 +221,107 @@ export function AccountPage() {
     );
   }
 
-  const showZaloPrimary = !AUTH_DEV_BYPASS;
+  const zaloReady = !AUTH_DEV_BYPASS;
 
   return (
     <div>
       <PageBrandHeader
         kicker="TÀI KHOẢN"
-        title="Kết nối House X"
-        lead="Đăng nhập để lưu hồ sơ, nhận tư vấn và theo dõi ưu đãi."
+        title="Tài khoản House X"
+        lead="Chọn đúng nhóm bên dưới — khách mua nhà hoặc cộng đồng môi giới."
       />
 
-      {showZaloPrimary ? (
-        <div className="card account-login-zalo">
-          <p className="muted" style={{ marginBottom: 12 }}>
-            Dùng tài khoản Zalo của bạn — nhanh, không cần mật khẩu riêng.
+      <section className="card account-block">
+        <h2 className="account-block-title">1. Khách mua nhà</h2>
+        <p className="muted account-block-lead">
+          Đăng nhập bằng Zalo để lưu yêu cầu tư vấn, ưu đãi và hồ sơ mua nhà. Chưa
+          có tài khoản thì hệ thống tạo giúp bạn lần đầu.
+        </p>
+
+        {zaloReady ? (
+          <>
+            <button
+              type="button"
+              className="btn account-login-zalo-btn"
+              onClick={() => void onZaloCustomerLogin()}
+              disabled={busyZalo || busyCustomer || inZalo === false}
+            >
+              {busyZalo ? "Đang kết nối Zalo…" : "Đăng nhập bằng Zalo"}
+            </button>
+            {inZalo === false ? (
+              <p className="err" style={{ marginTop: 10 }}>
+                Chưa nhận được phiên Zalo. Mở Mini App từ trong ứng dụng Zalo.
+              </p>
+            ) : null}
+            {inZalo === null ? (
+              <p className="muted" style={{ marginTop: 8, fontSize: 12 }}>
+                Đang kiểm tra phiên Zalo…
+              </p>
+            ) : null}
+          </>
+        ) : null}
+
+        <form onSubmit={onCustomerPhoneSubmit} className="account-phone-form">
+          <p className="muted" style={{ margin: "14px 0 8px", fontSize: 12 }}>
+            {zaloReady
+              ? "Nếu Zalo chưa chia sẻ số điện thoại — nhập SĐT rồi tiếp tục:"
+              : "Nhập SĐT để đăng nhập (chế độ local):"}
           </p>
-          <button
-            type="button"
-            className="btn"
-            onClick={() => void onZaloLogin()}
-            disabled={busyZalo || busy || inZalo === false}
-          >
-            {busyZalo ? "Đang kết nối Zalo…" : "Đăng nhập bằng Zalo"}
-          </button>
-          {inZalo === false ? (
-            <p className="err" style={{ marginTop: 10 }}>
-              Chưa nhận được phiên Zalo. Hãy mở Mini App từ trong ứng dụng Zalo.
-            </p>
-          ) : null}
-          {inZalo === null ? (
-            <p className="muted" style={{ marginTop: 8, fontSize: 12 }}>
-              Đang kiểm tra phiên Zalo…
-            </p>
-          ) : null}
-        </div>
-      ) : null}
-
-      <form onSubmit={onPhoneLogin} className="card">
-        <p className="muted" style={{ marginBottom: 10 }}>
-          {showZaloPrimary
-            ? "Hoặc nhập số điện thoại để hoàn tất / liên kết hồ sơ"
-            : AUTH_DEV_BYPASS
-              ? "Đăng nhập thử nghiệm (dev) bằng số điện thoại"
-              : "Nhập số điện thoại để đăng nhập"}
-        </p>
-        <label className="muted" htmlFor="phone">
-          Số điện thoại
-        </label>
-        <input
-          id="phone"
-          className="input"
-          value={phone}
-          onChange={(e) => setPhone(e.target.value)}
-          placeholder="09xxxxxxxx"
-          inputMode="tel"
-          autoComplete="tel"
-          required
-        />
-        {(AUTH_DEV_BYPASS || showZaloPrimary) && (
-          <label
-            className="muted"
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: 8,
-              marginBottom: 12,
-            }}
-          >
-            <input
-              type="checkbox"
-              checked={asAgent}
-              onChange={(e) => setAsAgent(e.target.checked)}
-            />
-            Đăng nhập Agent (CTV thử nghiệm)
+          <label className="muted" htmlFor="customer-phone">
+            Số điện thoại
           </label>
-        )}
-        {err ? <p className="err">{err}</p> : null}
-        <button
-          className="btn"
-          type="submit"
-          disabled={busy || busyZalo || !phone.trim()}
-        >
-          {busy ? "Đang đăng nhập…" : "Đăng nhập"}
-        </button>
-      </form>
+          <input
+            id="customer-phone"
+            className="input"
+            value={customerPhone}
+            onChange={(e) => setCustomerPhone(e.target.value)}
+            placeholder="09xxxxxxxx"
+            inputMode="tel"
+            autoComplete="tel"
+          />
+          {err ? <p className="err">{err}</p> : null}
+          <button
+            className="btn secondary"
+            type="submit"
+            disabled={busyCustomer || busyZalo || !customerPhone.trim()}
+          >
+            {busyCustomer ? "Đang xử lý…" : "Tiếp tục với số điện thoại"}
+          </button>
+        </form>
+      </section>
 
-      {!showZaloPrimary && !AUTH_DEV_BYPASS ? (
-        <p className="muted" style={{ marginTop: 8, fontSize: 12 }}>
-          Lưu ý: đăng nhập đầy đủ cần mở Mini App bên trong Zalo để xác thực tài
-          khoản.
+      <section className="card account-block account-block--broker">
+        <h2 className="account-block-title">2. Cộng đồng môi giới House X</h2>
+        <p className="muted account-block-lead">
+          Dành cho môi giới / cộng tác viên. Đăng ký tham gia lần đầu bằng số
+          điện thoại, hoặc đăng nhập lại nếu bạn đã có tài khoản môi giới.
         </p>
-      ) : null}
+        <form onSubmit={onBrokerSubmit}>
+          <label className="muted" htmlFor="broker-phone">
+            Số điện thoại đăng ký cộng đồng
+          </label>
+          <input
+            id="broker-phone"
+            className="input"
+            value={brokerPhone}
+            onChange={(e) => setBrokerPhone(e.target.value)}
+            placeholder="09xxxxxxxx"
+            inputMode="tel"
+            autoComplete="tel"
+            required
+          />
+          {brokerErr ? <p className="err">{brokerErr}</p> : null}
+          <button
+            className="btn"
+            type="submit"
+            disabled={busyBroker || !brokerPhone.trim()}
+          >
+            {busyBroker
+              ? "Đang xử lý…"
+              : "Đăng ký / đăng nhập cộng đồng môi giới"}
+          </button>
+        </form>
+      </section>
     </div>
   );
 }
