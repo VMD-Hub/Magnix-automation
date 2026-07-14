@@ -12,8 +12,10 @@
   "listCSS": [
     "assets/index-DBUJ66A1.css"
   ],
-  "listSyncJS": [],
+  "listSyncJS": [
+    "assets/zmp-sdk.umd.js"
+  ],
   "listAsyncJS": [
-    "assets/index-DTeMIijL.js"
+    "assets/index-w5Sn2sge.js"
   ]
 }

@@ -1,9 +1,9 @@
 /**
- * Đọc www/index.html sau build → cập nhật listCSS / listAsyncJS trong app-config.json.
- * ZMP CLI cần đường dẫn tương đối từ thư mục www (không có leading slash).
+ * Đọc www/index.html sau build → cập nhật listCSS / listAsyncJS / listSyncJS.
+ * Copy zmp-sdk UMD vào www (không bundle bằng Vite — tránh trắng màn).
  */
-import { readFileSync, writeFileSync } from "node:fs";
-import { resolve, dirname } from "node:path";
+import { copyFileSync, existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
@@ -29,14 +29,32 @@ if (!css.length && !asyncJs.length && !syncJs.length) {
   process.exit(1);
 }
 
+const assetsDir = resolve(root, "www/assets");
+if (!existsSync(assetsDir)) mkdirSync(assetsDir, { recursive: true });
+
+const umdSrc = resolve(root, "node_modules/zmp-sdk/index.umd.js");
+const umdRel = "assets/zmp-sdk.umd.js";
+const umdDest = resolve(root, "www", umdRel);
+if (!existsSync(umdSrc)) {
+  console.error("sync-app-config: missing", umdSrc);
+  process.exit(1);
+}
+copyFileSync(umdSrc, umdDest);
+
 const config = JSON.parse(readFileSync(configPath, "utf8"));
 config.listCSS = css;
+/** UMD trước — React app sau (module) */
+config.listSyncJS = [umdRel, ...syncJs.filter((p) => p !== umdRel)];
 config.listAsyncJS = asyncJs;
-config.listSyncJS = syncJs;
 
 writeFileSync(configPath, `${JSON.stringify(config, null, 2)}\n`);
+writeFileSync(
+  resolve(root, "www/app-config.json"),
+  `${JSON.stringify(config, null, 2)}\n`,
+);
 
-/** Một số luồng ZMP đọc config cạnh dist — mirror vào www. */
-writeFileSync(resolve(root, "www/app-config.json"), `${JSON.stringify(config, null, 2)}\n`);
-
-console.log("app-config.json synced:", { listCSS: css, listAsyncJS: asyncJs, listSyncJS: syncJs });
+console.log("app-config.json synced:", {
+  listCSS: css,
+  listAsyncJS: asyncJs,
+  listSyncJS: config.listSyncJS,
+});

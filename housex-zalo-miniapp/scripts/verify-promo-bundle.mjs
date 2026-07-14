@@ -1,5 +1,5 @@
 /**
- * Fail build nếu bundle chưa chứa PromoTeaser mới — tránh zmp deploy www cũ.
+ * Fail build nếu bundle React chưa chứa PromoTeaser mới — tránh zmp deploy www cũ.
  */
 import { readdirSync, readFileSync } from "node:fs";
 import { resolve, dirname } from "node:path";
@@ -7,9 +7,11 @@ import { fileURLToPath } from "node:url";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const assetsDir = resolve(root, "www/assets");
-const files = readdirSync(assetsDir).filter((f) => f.endsWith(".js"));
+const files = readdirSync(assetsDir).filter(
+  (f) => f.endsWith(".js") && !f.includes("zmp-sdk"),
+);
 if (!files.length) {
-  console.error("verify-promo-bundle: no JS in www/assets");
+  console.error("verify-promo-bundle: no React JS in www/assets");
   process.exit(1);
 }
 
