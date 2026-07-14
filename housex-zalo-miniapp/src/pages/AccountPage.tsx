@@ -110,14 +110,20 @@ export function AccountPage() {
 
   async function onZaloCustomerLogin() {
     setErr(null);
+    const phoneTrim = customerPhone.trim();
+    if (!isValidVnPhoneInput(phoneTrim)) {
+      setErr(
+        "Nhập số điện thoại hợp lệ trước (09xxxxxxxx), rồi nhấn Đăng nhập bằng Zalo.",
+      );
+      setPhase("need_phone");
+      return;
+    }
     setBusyZalo(true);
     setPhase("authorize");
     try {
       const u = await loginViaZaloMiniApp({
         preferredRole: "CUSTOMER",
-        phoneFallback: isValidVnPhoneInput(customerPhone.trim())
-          ? customerPhone.trim()
-          : undefined,
+        phoneFallback: phoneTrim,
         onPhase: onAuthPhase,
       });
       setUser(u);
@@ -136,8 +142,8 @@ export function AccountPage() {
     }
   }
 
-  async function onCustomerPhoneSubmit(e: FormEvent) {
-    e.preventDefault();
+  async function onCustomerPhoneSubmit(e?: FormEvent) {
+    e?.preventDefault();
     setErr(null);
     const trimmed = customerPhone.trim();
     if (!isValidVnPhoneInput(trimmed)) {
@@ -326,41 +332,17 @@ export function AccountPage() {
       <section className="card account-block">
         <h2 className="account-block-title">1. Khách mua nhà</h2>
         <p className="muted account-block-lead">
-          Đăng nhập bằng Zalo để lưu yêu cầu tư vấn, ưu đãi và hồ sơ mua nhà. Chưa
-          có tài khoản thì hệ thống tạo giúp bạn lần đầu.
+          Nhập số điện thoại trước, rồi nhấn Đăng nhập bằng Zalo. Hệ thống tạo tài
+          khoản lần đầu và lưu tư vấn / ưu đãi.
         </p>
 
-        {zaloReady && !pendingZalo ? (
-          <>
-            <button
-              type="button"
-              className="btn account-login-zalo-btn"
-              onClick={() => void onZaloCustomerLogin()}
-              disabled={anyBusy || inZalo === false}
-            >
-              {busyZalo ? phaseHint ?? "Đang kết nối Zalo…" : "Đăng nhập bằng Zalo"}
-            </button>
-            {inZalo === false ? (
-              <p className="err" style={{ marginTop: 10 }}>
-                Chưa nhận được phiên Zalo. Mở Mini App từ trong ứng dụng Zalo.
-              </p>
-            ) : null}
-            {inZalo === null ? (
-              <p className="muted" style={{ marginTop: 8, fontSize: 12 }}>
-                Đang kiểm tra phiên Zalo…
-              </p>
-            ) : null}
-          </>
-        ) : null}
-
-        <form onSubmit={onCustomerPhoneSubmit} className="account-phone-form">
-          <p className="muted" style={{ margin: "14px 0 8px", fontSize: 12 }}>
-            {pendingZalo
-              ? "Số điện thoại để hoàn tất đăng nhập Zalo:"
-              : zaloReady
-                ? "Hoặc nhập SĐT trước, rồi Đăng nhập bằng Zalo / Tiếp tục:"
-                : "Nhập SĐT để đăng nhập (chế độ local):"}
-          </p>
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            void onZaloCustomerLogin();
+          }}
+          className="account-phone-form"
+        >
           <label className="muted" htmlFor="customer-phone">
             Số điện thoại
           </label>
@@ -376,17 +358,52 @@ export function AccountPage() {
             autoFocus={Boolean(pendingZalo)}
           />
           {err ? <p className="err">{err}</p> : null}
-          <button
-            className={pendingZalo ? "btn" : "btn secondary"}
-            type="submit"
-            disabled={anyBusy || !customerPhone.trim()}
-          >
-            {busyCustomer
-              ? phaseHint ?? "Đang xử lý…"
-              : pendingZalo
-                ? "Hoàn tất đăng nhập"
-                : "Tiếp tục với số điện thoại"}
-          </button>
+
+          {zaloReady && !pendingZalo ? (
+            <>
+              <button
+                type="submit"
+                className="btn account-login-zalo-btn"
+                disabled={anyBusy || inZalo === false || !customerPhone.trim()}
+              >
+                {busyZalo
+                  ? phaseHint ?? "Đang kết nối Zalo…"
+                  : "Đăng nhập bằng Zalo"}
+              </button>
+              {inZalo === false ? (
+                <p className="err" style={{ marginTop: 10 }}>
+                  Chưa nhận được phiên Zalo. Mở Mini App từ trong ứng dụng Zalo.
+                </p>
+              ) : null}
+              {inZalo === null ? (
+                <p className="muted" style={{ marginTop: 8, fontSize: 12 }}>
+                  Đang kiểm tra phiên Zalo…
+                </p>
+              ) : null}
+            </>
+          ) : null}
+
+          {pendingZalo ? (
+            <button
+              className="btn"
+              type="button"
+              disabled={anyBusy || !customerPhone.trim()}
+              onClick={() => void onCustomerPhoneSubmit()}
+            >
+              {busyCustomer ? phaseHint ?? "Đang xử lý…" : "Hoàn tất đăng nhập"}
+            </button>
+          ) : null}
+
+          {!zaloReady ? (
+            <button
+              className="btn secondary"
+              type="button"
+              disabled={anyBusy || !customerPhone.trim()}
+              onClick={() => void onCustomerPhoneSubmit()}
+            >
+              {busyCustomer ? phaseHint ?? "Đang xử lý…" : "Tiếp tục với số điện thoại"}
+            </button>
+          ) : null}
         </form>
       </section>
 

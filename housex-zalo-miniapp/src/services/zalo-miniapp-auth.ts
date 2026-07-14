@@ -148,10 +148,24 @@ function friendlyZaloError(err: unknown): Error {
 }
 
 function extractPhoneToken(res: unknown): string | undefined {
-  if (!res || typeof res !== "object") return undefined;
+  if (!res || typeof res !== "object") {
+    return typeof res === "string" && res.trim().length > 4 ? res.trim() : undefined;
+  }
   const o = res as Record<string, unknown>;
   const token = o.token ?? o.code;
   if (typeof token === "string" && token.trim().length > 4) return token.trim();
+  return undefined;
+}
+
+/** getAccessToken đôi khi trả string, đôi khi { token } / { accessToken }. */
+function extractAccessToken(res: unknown): string | undefined {
+  if (typeof res === "string" && res.trim().length > 8) return res.trim();
+  if (!res || typeof res !== "object") return undefined;
+  const o = res as Record<string, unknown>;
+  for (const key of ["token", "accessToken", "access_token"]) {
+    const v = o[key];
+    if (typeof v === "string" && v.trim().length > 8) return v.trim();
+  }
   return undefined;
 }
 
@@ -196,12 +210,13 @@ export async function loginViaZaloMiniApp(opts?: {
       new Promise<void>((r) => setTimeout(r, 8000)),
     ]);
 
-    const accessToken = await callZmp<string>(
+    const accessRaw = await callZmp<unknown>(
       getAccessToken,
       {},
       TOKEN_MS,
       "Lấy phiên Zalo",
     );
+    const accessToken = extractAccessToken(accessRaw);
     if (!accessToken) {
       throw new Error("Không lấy được phiên Zalo. Thử mở lại Mini App.");
     }
@@ -245,10 +260,11 @@ export async function loginViaZaloMiniApp(opts?: {
     }
 
     onPhase?.("server");
+    // Có SĐT nhập tay thì không gửi phoneToken — tránh exchange fail / secret lệch che lỗi.
     const user = await loginWithZaloAccessToken({
       accessToken,
       ...(phoneFallback ? { phone: phoneFallback } : {}),
-      phoneToken,
+      ...(!phoneFallback && phoneToken ? { phoneToken } : {}),
       name,
       preferredRole,
       timeoutMs: 22000,
@@ -271,7 +287,7 @@ export async function completeZaloLoginWithPhone(
   const user = await loginWithZaloAccessToken({
     accessToken: prep.accessToken,
     phone: trimmed,
-    phoneToken: prep.phoneToken,
+    // Đã có SĐT nhập tay — không phụ thuộc exchange phoneToken.
     name: prep.name,
     preferredRole: prep.preferredRole,
     timeoutMs: 22000,
