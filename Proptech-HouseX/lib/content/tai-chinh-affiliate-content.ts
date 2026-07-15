@@ -203,7 +203,7 @@ Mục đích vay phải khớp thực tế và quy định ngân hàng. HouseX k
     title: "Bảo hiểm nhà, kho & xe",
     metaDescription:
       "Bảo hiểm phi nhân thọ trên HouseX: nhà ở (kèm vay hoặc độc lập), kho xưởng và vật chất xe — tư vấn gói, phí và giấy chứng nhận điện tử.",
-    h1: "Bảo hiểm tài sản — Kèm hồ sơ vay hay mua riêng?",
+    h1: "Bảo hiểm tài sản",
     intro:
       "Nhiều ngân hàng yêu cầu bảo hiểm nhà ở khi vay mua / thế chấp BĐS. HouseX tư vấn gói bảo hiểm tài sản (phi nhân thọ) cho nhà ở, kho xưởng và xe — vừa đồng bộ với hồ sơ vay, vừa phục vụ khi bạn chỉ cần bảo vệ tài sản mà chưa vay.",
     body: `## Dịch vụ này dành cho ai?
@@ -224,9 +224,9 @@ Khi gói vay bắt buộc BH tài sản, HouseX:
 4. **Chốt hợp đồng & thanh toán** theo hướng dẫn HouseX
 5. **Nhận giấy chứng nhận (GCN) điện tử** từ đối tác bảo hiểm được cấp phép — lưu kèm hồ sơ để ngân hàng / bạn tra cứu
 
-### 2. Mua bảo hiểm độc lập
+### 2. Mua bảo hiểm theo nhu cầu
 
-Không cần đang vay: gửi nhu cầu (nhà / kho / xe) → tư vấn viên làm rõ hiện trạng tài sản và mức bảo hiểm mong muốn → báo phí → chốt HĐ và nhận GCN.
+Gửi nhu cầu (nhà / kho / xe) → tư vấn viên làm rõ hiện trạng tài sản và mức bảo hiểm mong muốn → báo phí → chốt HĐ và nhận GCN.
 
 ## Nhóm sản phẩm (phi nhân thọ)
 
