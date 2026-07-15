@@ -91,18 +91,19 @@ async function resolvePhone(
     return { normalized, verified: true };
   }
 
-  // Có phoneToken nhưng exchange thất bại (thường thiếu ZALO_APP_SECRET).
+  // Có phoneToken nhưng exchange thất bại (thường thiếu secret / quyền App).
+  // Không lộ tên biến env cho người dùng cuối.
   if (input.phoneToken && !verifiedRaw) {
     if (role === "BROKER" && !bypass) {
       throw new ZaloAuthError(
         "ZALO_PHONE_REQUIRED",
-        "Không đổi được SĐT từ Zalo. Kiểm tra ZALO_APP_SECRET trên máy chủ và quyền lấy SĐT của Mini App.",
+        "Chưa lấy được số điện thoại từ Zalo. Cho phép chia sẻ SĐT rồi thử lại. Nếu vẫn lỗi, liên hệ House X để cấu hình máy chủ.",
       );
     }
     if (!manualRaw) {
       throw new ZaloAuthError(
         "INVALID_PHONE",
-        "Zalo đã cho phép SĐT nhưng chưa đổi ra số được. Nhập SĐT liên hệ rồi thử lại (hoặc cấu hình ZALO_APP_SECRET).",
+        "Zalo đã kết nối. Vui lòng nhập số điện thoại liên hệ để hoàn tất đăng nhập.",
       );
     }
   }
@@ -110,14 +111,14 @@ async function resolvePhone(
   if (role === "BROKER" && !bypass) {
     throw new ZaloAuthError(
       "ZALO_PHONE_REQUIRED",
-      "Môi giới phải dùng số điện thoại đang gắn tài khoản Zalo và còn hoạt động. Cho phép chia sẻ SĐT trong Zalo rồi thử lại.",
+      "Môi giới cần cho phép chia sẻ số điện thoại đang dùng Zalo rồi thử lại.",
     );
   }
 
   if (!manualRaw) {
     throw new ZaloAuthError(
       "INVALID_PHONE",
-      "Không lấy được số điện thoại. Cho phép chia sẻ SĐT trong Zalo, hoặc nhập SĐT liên hệ rồi thử lại.",
+      "Nhập số điện thoại liên hệ để hoàn tất đăng nhập.",
     );
   }
 

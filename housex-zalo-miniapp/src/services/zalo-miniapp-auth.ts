@@ -42,9 +42,7 @@ export type PendingZaloSession = {
 export class NeedPhoneError extends Error {
   readonly prep: PendingZaloSession;
   constructor(prep: PendingZaloSession) {
-    super(
-      "Zalo đã kết nối. Nhập số điện thoại bên dưới rồi nhấn Hoàn tất đăng nhập.",
-    );
+    super("Zalo đã kết nối. Nhập số điện thoại liên hệ để hoàn tất.");
     this.name = "NeedPhoneError";
     this.prep = prep;
   }
@@ -302,16 +300,35 @@ export async function loginViaZaloMiniApp(opts?: {
 
     onPhase?.("server");
     // Ưu tiên SĐT Zalo (đã xác minh). Chỉ dùng số nhập tay khi Zalo không trả phoneToken.
-    const user = await loginWithZaloAccessToken({
-      accessToken,
-      ...(phoneToken ? { phoneToken } : {}),
-      ...(!phoneToken && phoneFallback ? { phone: phoneFallback } : {}),
-      name,
-      preferredRole,
-      timeoutMs: 22000,
-    });
-    onPhase?.("done");
-    return user;
+    try {
+      const user = await loginWithZaloAccessToken({
+        accessToken,
+        ...(phoneToken ? { phoneToken } : {}),
+        ...(!phoneToken && phoneFallback ? { phone: phoneFallback } : {}),
+        name,
+        preferredRole,
+        timeoutMs: 22000,
+      });
+      onPhase?.("done");
+      return user;
+    } catch (serverErr) {
+      // Khách: server không đổi được phoneToken → chuyển sang nhập SĐT liên hệ.
+      const msg =
+        serverErr instanceof Error ? serverErr.message : String(serverErr ?? "");
+      if (
+        preferredRole === "CUSTOMER" &&
+        /INVALID_PHONE|số điện thoại liên hệ|chưa đổi ra số/i.test(msg)
+      ) {
+        onPhase?.("need_phone");
+        throw new NeedPhoneError({
+          accessToken,
+          phoneToken,
+          name,
+          preferredRole,
+        });
+      }
+      throw serverErr;
+    }
   } catch (err) {
     throw friendlyZaloError(err);
   }
@@ -336,8 +353,9 @@ export async function completeZaloLoginWithPhone(
   onPhase?.("server");
   const user = await loginWithZaloAccessToken({
     accessToken: prep.accessToken,
-    // Ưu tiên token Zalo nếu đã có; không thì SĐT liên hệ nhập tay.
-    ...(prep.phoneToken ? { phoneToken: prep.phoneToken } : { phone: trimmed }),
+    // Luôn gửi SĐT liên hệ. Gửi kèm phoneToken nếu có — server ưu tiên đổi được thì lấy Zalo.
+    phone: trimmed,
+    ...(prep.phoneToken ? { phoneToken: prep.phoneToken } : {}),
     name: prep.name,
     preferredRole: prep.preferredRole,
     timeoutMs: 22000,

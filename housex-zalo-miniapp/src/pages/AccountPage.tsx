@@ -36,6 +36,14 @@ const PHASE_LABEL: Partial<Record<ZaloLoginPhase, string>> = {
   need_phone: "Zalo đã kết nối — cần số điện thoại",
 };
 
+function friendlyAuthMessage(raw: string): string {
+  const cleaned = raw.replace(/^\[[A-Z0-9_]+\]\s*/i, "").trim();
+  if (/ZALO_APP_SECRET|AppSecret|auth\/zalo\/diag/i.test(cleaned)) {
+    return "Zalo đã kết nối. Nhập số điện thoại liên hệ để hoàn tất đăng nhập.";
+  }
+  return cleaned || "Không đăng nhập được. Thử lại.";
+}
+
 export function AccountPage() {
   const { user, loading, logout, setUser, canAgent } = useAuth();
   const navigate = useNavigate();
@@ -130,13 +138,15 @@ export function AccountPage() {
       if (ex instanceof NeedPhoneError) {
         setPendingZalo(ex.prep);
         setPhase("need_phone");
-        setErr(
-          "Zalo đã kết nối. Cho phép chia sẻ SĐT trên popup Zalo, hoặc nhập SĐT liên hệ bên dưới rồi nhấn Hoàn tất.",
-        );
+        setErr(ex.message);
         return;
       }
       setPhase("idle");
-      setErr(ex instanceof Error ? ex.message : "Không đăng nhập được bằng Zalo");
+      setErr(
+        friendlyAuthMessage(
+          ex instanceof Error ? ex.message : "Không đăng nhập được bằng Zalo",
+        ),
+      );
     } finally {
       setBusyZalo(false);
     }
@@ -194,7 +204,7 @@ export function AccountPage() {
           ? AUTH_DEV_BYPASS
             ? "Máy chủ chưa bật đăng nhập thử nghiệm local."
             : "Cần mở trong Zalo và cho phép xác thực."
-          : msg,
+          : friendlyAuthMessage(msg),
       );
     } finally {
       setBusyCustomer(false);
@@ -224,9 +234,11 @@ export function AccountPage() {
       }
       setPhase("idle");
       setBrokerErr(
-        ex instanceof Error
-          ? ex.message
-          : "Không đăng ký / đăng nhập được. Thử lại trong Zalo.",
+        friendlyAuthMessage(
+          ex instanceof Error
+            ? ex.message
+            : "Không đăng ký / đăng nhập được. Thử lại trong Zalo.",
+        ),
       );
     } finally {
       setBusyBroker(false);
@@ -370,45 +382,26 @@ export function AccountPage() {
     <div>
       <PageBrandHeader
         kicker="TÀI KHOẢN"
-        title="Tài khoản House X"
-        lead="Chọn đúng nhóm bên dưới — khách mua nhà hoặc cộng đồng môi giới."
+        title="Kết nối House X"
+        lead="Đăng nhập bằng Zalo để lưu hồ sơ và nhận tư vấn."
       />
 
-      <p
-        className={badApi ? "account-api-stamp account-api-stamp--bad" : "account-api-stamp"}
-        role="status"
-      >
-        {badApi
-          ? `BẢN LỖI — máy chủ ${apiHost} (cần deploy lại)`
-          : `Máy chủ: ${apiHost}`}
-      </p>
+      {badApi ? (
+        <p className="account-api-stamp account-api-stamp--bad" role="status">
+          Bản lỗi — máy chủ {apiHost}. Cần deploy lại.
+        </p>
+      ) : null}
+
       {phaseHint && phase !== "need_phone" ? (
         <p className="account-progress" role="status" aria-live="polite">
           {phaseHint}
         </p>
       ) : null}
 
-      {pendingZalo && pendingZalo.preferredRole !== "BROKER" ? (
-        <p className="account-need-phone" role="status">
-          Zalo đã kết nối nhưng chưa chia sẻ SĐT. Nhập{" "}
-          <strong>SĐT liên hệ</strong> bên dưới rồi nhấn Hoàn tất — số này không
-          cần phải là số đăng ký Zalo.
-        </p>
-      ) : null}
-
-      {pendingZalo?.preferredRole === "BROKER" ? (
-        <p className="account-need-phone" role="status">
-          Môi giới bắt buộc dùng SĐT đang gắn Zalo. Bấm Cho phép trên popup Zalo,
-          rồi nhấn lại nút đăng ký môi giới.
-        </p>
-      ) : null}
-
       <section className="card account-block">
-        <h2 className="account-block-title">1. Khách mua nhà</h2>
+        <h2 className="account-block-title">Khách mua nhà</h2>
         <p className="muted account-block-lead">
-          Bạn đang trong Zalo — nhấn một lần để đăng nhập bằng tài khoản Zalo
-          đang mở. House X lấy tên / ảnh và (khi được cho phép) SĐT Zalo để lưu
-          hồ sơ tư vấn.
+          Một chạm — dùng Zalo đang mở trên máy này.
         </p>
 
         {zaloReady && !pendingZalo ? (
@@ -420,24 +413,14 @@ export function AccountPage() {
               onClick={() => void onZaloCustomerLogin()}
             >
               {busyZalo
-                ? phaseHint ?? "Đang kết nối Zalo…"
-                : "Đăng nhập bằng Zalo của bạn"}
+                ? phaseHint ?? "Đang đăng nhập…"
+                : "Đăng nhập bằng Zalo"}
             </button>
             {inZalo === false ? (
               <p className="err" style={{ marginTop: 10 }}>
-                Chưa nhận được phiên Zalo. Mở Mini App từ trong ứng dụng Zalo.
+                Mở Mini App từ trong ứng dụng Zalo.
               </p>
             ) : null}
-            {inZalo === null ? (
-              <p className="muted" style={{ marginTop: 8, fontSize: 12 }}>
-                Đang kiểm tra phiên Zalo…
-              </p>
-            ) : null}
-            <p className="muted" style={{ marginTop: 10, fontSize: 12 }}>
-              Khi Zalo hỏi quyền SĐT, hãy chọn Cho phép để trải nghiệm trọn vẹn
-              hơn. SĐT không có Zalo vẫn dùng được làm số liên hệ nếu bạn nhập
-              tay ở bước dự phòng.
-            </p>
           </>
         ) : null}
 
@@ -449,12 +432,10 @@ export function AccountPage() {
               void onCustomerPhoneSubmit();
             }}
             className="account-phone-form"
-            style={{ marginTop: pendingZalo ? 12 : 0 }}
+            style={{ marginTop: pendingZalo || !zaloReady ? 12 : 0 }}
           >
             <label className="muted" htmlFor="customer-phone">
-              {pendingZalo
-                ? "SĐT liên hệ (hoàn tất đăng nhập)"
-                : "SĐT (chỉ dùng khi thử nghiệm local)"}
+              Số điện thoại liên hệ
             </label>
             <input
               id="customer-phone"
@@ -477,7 +458,7 @@ export function AccountPage() {
                 ? phaseHint ?? "Đang xử lý…"
                 : pendingZalo
                   ? "Hoàn tất đăng nhập"
-                  : "Tiếp tục với số điện thoại"}
+                  : "Tiếp tục"}
             </button>
           </form>
         ) : err ? (
@@ -488,17 +469,11 @@ export function AccountPage() {
       </section>
 
       <section className="card account-block account-block--broker">
-        <h2 className="account-block-title">2. Cộng đồng môi giới House X</h2>
+        <h2 className="account-block-title">Môi giới / CTV</h2>
         <p className="muted account-block-lead">
-          Dành cho môi giới / CTV. Bắt buộc dùng tài khoản Zalo có số điện thoại
-          đang gắn và còn hoạt động — House X lấy SĐT đó để định danh môi giới
-          (không nhận số nhập tay).
+          Dành cho cộng đồng môi giới. Cần Zalo có số điện thoại đang gắn và còn
+          hoạt động — chọn Cho phép khi được hỏi.
         </p>
-        <ol className="account-broker-steps muted">
-          <li>Đăng nhập đúng Zalo cá nhân đang dùng để kinh doanh.</li>
-          <li>Nhấn nút bên dưới và Cho phép chia sẻ SĐT khi Zalo hỏi.</li>
-          <li>Lần sau mở lại Mini App — cùng Zalo là đăng nhập được.</li>
-        </ol>
         {zaloReady ? (
           <>
             <button
@@ -509,8 +484,13 @@ export function AccountPage() {
             >
               {busyBroker
                 ? phaseHint ?? "Đang xử lý…"
-                : "Đăng ký / đăng nhập môi giới bằng Zalo"}
+                : "Đăng nhập môi giới bằng Zalo"}
             </button>
+            {pendingZalo?.preferredRole === "BROKER" ? (
+              <p className="err" style={{ marginTop: 10 }}>
+                Cho phép chia sẻ SĐT trên popup Zalo, rồi bấm lại nút trên.
+              </p>
+            ) : null}
             {brokerErr ? <p className="err">{brokerErr}</p> : null}
           </>
         ) : (
@@ -551,12 +531,12 @@ export function AccountPage() {
             else setDiagOpen((v) => !v);
           }}
         >
-          {diagOpen ? "▾" : "▸"} Chẩn đoán kết nối (khi đăng nhập lỗi)
+          {diagOpen ? "▾" : "▸"} Gặp sự cố đăng nhập?
         </button>
         {diagOpen ? (
           <div className="account-diag-body">
             <p className="muted" style={{ fontSize: 12, marginTop: 8 }}>
-              Bản build: <code>{__HX_BUILD_ID__}</code> · Máy chủ: {apiHost}
+              Chỉ dùng khi cần hỗ trợ kỹ thuật. Bản: <code>{__HX_BUILD_ID__}</code>
             </p>
             <button
               type="button"
@@ -565,7 +545,7 @@ export function AccountPage() {
               disabled={diagBusy}
               onClick={() => void onRunDiagnostics()}
             >
-              {diagBusy ? "Đang kiểm tra…" : "Chạy lại chẩn đoán"}
+              {diagBusy ? "Đang kiểm tra…" : "Chạy chẩn đoán"}
             </button>
             {diagLines ? (
               <ul className="account-diag-list">
