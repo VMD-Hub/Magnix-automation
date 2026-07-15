@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { AffiliateService, AffiliateVertical } from "@/lib/content/affiliate-verticals";
 import { showcasePagePath } from "@/lib/content/affiliate-verticals";
+import { renderAffiliateServiceMarkdown } from "@/lib/content/affiliate-body-render";
 import { HOUSEX_SERVICES_LABEL } from "@/lib/content/housex-services-copy";
 import {
   getCaseStudiesByStyle,
@@ -87,7 +88,12 @@ export function ShowcaseArticlePage({
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src={heroImage} alt="" className="h-full w-full object-cover" />
                 </div>
-                <p className="p-6 text-sm leading-relaxed text-slate-700">{article.body}</p>
+                <div
+                  className="p-6"
+                  dangerouslySetInnerHTML={{
+                    __html: renderAffiliateServiceMarkdown(article.body),
+                  }}
+                />
               </section>
             ) : null}
 

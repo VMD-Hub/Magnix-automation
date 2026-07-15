@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { AffiliateService, AffiliateVertical } from "@/lib/content/affiliate-verticals";
+import { renderAffiliateServiceMarkdown } from "@/lib/content/affiliate-body-render";
 import { HOUSEX_SERVICES_LABEL } from "@/lib/content/housex-services-copy";
 import {
   cardImageForSlug,
@@ -16,37 +17,20 @@ import {
   buildServiceJsonLd,
 } from "@/lib/seo/affiliate-json-ld";
 
-/** Render nội dung body: ## tiêu đề, đoạn văn, dòng • bullet. */
+/** Render markdown body → HTML (bold, link, list, blockquote, bảng). */
 function AffiliateServiceBody({ body }: { body: string }) {
   const blocks = body.split(/\n(?=## )/);
   return (
     <div className="space-y-8">
-      {blocks.map((block) => {
-        const lines = block.trim().split("\n");
-        const heading = lines[0]?.startsWith("## ")
-          ? lines[0].replace(/^## /, "")
-          : null;
-        const rest = heading ? lines.slice(1).join("\n").trim() : block.trim();
-        const paragraphs = rest.split(/\n\n+/).filter(Boolean);
+      {blocks.map((block, i) => {
+        const html = renderAffiliateServiceMarkdown(block.trim());
+        if (!html) return null;
         return (
           <div
-            key={heading ?? rest.slice(0, 40)}
+            key={`aff-body-${i}`}
             className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm"
-          >
-            {heading ? (
-              <h2 className="text-lg font-bold text-slate-900">{heading}</h2>
-            ) : null}
-            <div className={heading ? "mt-4 space-y-3" : "space-y-3"}>
-              {paragraphs.map((p) => (
-                <p
-                  key={p.slice(0, 48)}
-                  className="whitespace-pre-line text-sm leading-relaxed text-slate-700"
-                >
-                  {p}
-                </p>
-              ))}
-            </div>
-          </div>
+            dangerouslySetInnerHTML={{ __html: html }}
+          />
         );
       })}
     </div>
