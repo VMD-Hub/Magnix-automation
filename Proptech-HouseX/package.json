@@ -28,6 +28,7 @@
     "db:backfill:noxh-snapshot": "node --env-file=.env --import tsx scripts/backfill-noxh-wizard-snapshot-from-sheet.ts",
     "db:setup": "npm run db:up && npm run db:push && npm run db:seed",
     "db:studio": "prisma studio",
+    "ops:unbind-zalo-phone": "node --env-file=.env --import tsx scripts/unbind-zalo-test-phone.ts",
     "media:qc": "node --import tsx scripts/media-image-qc.ts",
     "search:reindex": "node --import tsx scripts/search-reindex.ts",
     "ranking:recompute": "node --import tsx scripts/recompute-ranking.ts",

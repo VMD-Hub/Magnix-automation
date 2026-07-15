@@ -1,12 +1,27 @@
 /**
  * Fail build nếu bundle React chưa chứa PromoTeaser mới — tránh zmp deploy www cũ.
  */
-import { readdirSync, readFileSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const assetsDir = resolve(root, "www/assets");
+const brandLogo = resolve(
+  root,
+  "www/brand/housex-footer-logo-transparent.png",
+);
+
+if (!existsSync(brandLogo)) {
+  console.error(
+    "verify-promo-bundle: FAIL — thiếu www/brand/housex-footer-logo-transparent.png",
+  );
+  console.error(
+    "  Copy từ Proptech-HouseX/public/brand/ vào housex-zalo-miniapp/public/brand/ rồi build lại.",
+  );
+  process.exit(1);
+}
+
 const files = readdirSync(assetsDir).filter(
   (f) => f.endsWith(".js") && !f.includes("zmp-sdk"),
 );
@@ -47,4 +62,9 @@ if (localhostApi) {
   process.exit(1);
 }
 
-console.log("verify-promo-bundle: OK", { files, needle, wheel });
+console.log("verify-promo-bundle: OK", {
+  files,
+  needle,
+  wheel,
+  brandLogo: "www/brand/housex-footer-logo-transparent.png",
+});
