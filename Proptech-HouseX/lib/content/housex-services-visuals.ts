@@ -66,13 +66,40 @@ export const VERTICAL_VISUALS: Record<ServiceVerticalId, VerticalVisual> = {
     accentText: "text-brand-800",
     stats: [
       { label: "Chuẩn ngành", value: "VAS" },
-      { label: "Thời gian", value: "3–15 ngày" },
+      { label: "Quy trình", value: "6 bước" },
       { label: "Use-case", value: "5 dịch vụ" },
     ],
     process: [
-      { step: "01", title: "Tiếp nhận & tư vấn", desc: "Xác định mục đích thẩm định: ngân hàng, bán nhà, thừa kế, visa…" },
-      { step: "02", title: "Khảo sát hiện trạng", desc: "Thu thập hồ sơ pháp lý, đo đạc và dữ liệu thị trường so sánh." },
-      { step: "03", title: "Bàn giao chứng thư", desc: "Báo cáo/chứng thư theo Chuẩn mực thẩm định giá Việt Nam." },
+      {
+        step: "01",
+        title: "Tra cứu & khởi tạo",
+        desc: "Định vị tài sản, kiểm tra thửa đất / công trình và tạo đơn hàng thẩm định.",
+      },
+      {
+        step: "02",
+        title: "Yêu cầu định giá chính thức",
+        desc: "Bổ sung pháp lý, thông tin khách hàng và tạo hợp đồng dịch vụ.",
+      },
+      {
+        step: "03",
+        title: "Xác nhận phí & lịch khảo sát",
+        desc: "Vận hành báo phí hồ sơ và hẹn thời gian khảo sát hiện trạng tại tài sản.",
+      },
+      {
+        step: "04",
+        title: "Khảo sát & phê duyệt",
+        desc: "Chuyên viên thẩm định khảo sát hiện trường; kiểm soát chất lượng duyệt báo cáo.",
+      },
+      {
+        step: "05",
+        title: "Thông báo kết quả",
+        desc: "Bạn nhận báo cáo / chứng thư (bản điện tử) và phản hồi đồng ý hoặc từ chối kết quả.",
+      },
+      {
+        step: "06",
+        title: "Chuyển phát chứng thư có dấu",
+        desc: "Sau khi thanh toán phần còn lại, nhận chứng thư bản cứng có dấu tại tay.",
+      },
     ],
     trust: [
       { title: "Đúng pháp luật", desc: "Thẩm định viên được cấp phép, chứng thư hợp lệ." },

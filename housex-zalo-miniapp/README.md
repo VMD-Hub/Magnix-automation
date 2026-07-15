@@ -33,7 +33,7 @@ Login mock: **Tài khoản** → SĐT → `POST /api/auth/zalo` với `zaloUserI
 |-------|--------|
 | Khách (two lanes) | `/start`, `/noxh`, `/cctm`, `/kham-pha`, `/du-an/:slug`, `/tu-van`, `/cong-cu` |
 | Agent | `/agent`, hồ sơ, thông báo, hoa hồng |
-| LMS | `/agent/dich-vu`, `/agent/dich-vu/:code` (đào tạo · pháp lý · dịch vụ) |
+| LMS | `/agent/dich-vu`, `/agent/dich-vu/:code` (đào tạo · pháp lý · dịch vụ — gồm `THAM_DINH_BDS`) |
 
 ## Development vs Testing (quan trọng)
 

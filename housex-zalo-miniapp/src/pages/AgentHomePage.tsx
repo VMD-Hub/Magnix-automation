@@ -46,7 +46,7 @@ export function AgentHomePage() {
 
       <Link to="/agent/dich-vu?tab=training" className="card tool-card">
         <h2>Đào tạo nội bộ</h2>
-        <p>E-learning hội nhập môi giới · bài kiểm tra</p>
+        <p>Hội nhập CTV · Thẩm định BĐS khách hàng lẻ · bài kiểm tra</p>
         <span className="tool-card-cta">Vào học →</span>
       </Link>
 

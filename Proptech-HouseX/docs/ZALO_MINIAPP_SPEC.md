@@ -125,7 +125,7 @@ Catalog `AgentService` (TRAINING / LEGAL / PRODUCT) + `AgentEntitlement` + quiz.
 | `/agent/dich-vu/:code` | `GET /api/ctv/services/:code` + `POST /api/ctv/quizzes/submit` |
 | Thả lead | `POST /api/ctv/cases` yêu cầu entitlement `NOXH_CLAIM` (sau `CTV_ONBOARDING`) |
 
-Seed: `npm run db:seed:agent-services` — `CTV_ONBOARDING`, `LEGAL_BROKER_BASICS`, `NOXH_CLAIM`, `LISTING_POST`.
+Seed: `npm run db:seed:agent-services` — `CTV_ONBOARDING`, `LEGAL_BROKER_BASICS`, `HOUSEX_AGENT_GUIDE`, `NGUON_KHACH_VAY`, `PHAP_LY_BDS`, `HOUSEX_INSURANCE`, `THAM_DINH_BDS`, `NOXH_CLAIM`, `LISTING_POST`.
 
 ## Thông báo CTV (chốt kiến trúc 2026-07)
 

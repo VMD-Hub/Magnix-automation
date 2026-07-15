@@ -184,7 +184,7 @@ Hoặc dán thủ công (thay `$CRON_SECRET` và domain):
 | `npm run go-live:smoke-email` | Test email prod (Resend/webhook) |
 | `npm run go-live:print-cron` | In crontab mẫu VPS |
 | `npm run db:seed:vinhomes` | Seed 3 landing Vinhomes → `/du-an` — xem [DEPLOY_VINHOMES.md](DEPLOY_VINHOMES.md) |
-| `npm run db:seed:agent-services` | Catalog + quiz Agent (đào tạo / pháp lý / dịch vụ) |
+| `npm run db:seed:agent-services` | Catalog + quiz Agent (`CTV_ONBOARDING`, `LEGAL_BROKER_BASICS`, `HOUSEX_AGENT_GUIDE`, `NGUON_KHACH_VAY`, `PHAP_LY_BDS`, `HOUSEX_INSURANCE`, `THAM_DINH_BDS`, `NOXH_CLAIM`, `LISTING_POST`) |
 | `npm run db:bootstrap:agent-entitlements` | Gắn entitlement cho mọi CTV đã duyệt |
 
 ---
