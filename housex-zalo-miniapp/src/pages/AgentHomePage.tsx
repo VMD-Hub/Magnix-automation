@@ -5,6 +5,7 @@ import { PageBrandHeader } from "@/components/PageBrandHeader";
 import { EcosystemServicesGrid } from "@/components/EcosystemServicesGrid";
 import { HOME_SERVICES } from "@/data/home-ia";
 import { listNotifications } from "@/services/agent";
+import { moEmbedHref } from "@/services/mo-embed";
 
 export function AgentHomePage() {
   const { canAgent, user } = useAuth();
@@ -57,7 +58,7 @@ export function AgentHomePage() {
           cursor: "pointer",
           fontFamily: "inherit",
         }}
-        onClick={() => navigate("/mo?p=" + encodeURIComponent("/tai-chinh"))}
+        onClick={() => navigate(moEmbedHref("/tai-chinh"))}
       >
         <h2>Hub tài chính & vay</h2>
         <p>Gói vay · bảo hiểm — trang tổng cho khách xem trên Zalo</p>

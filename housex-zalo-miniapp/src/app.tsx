@@ -36,6 +36,7 @@ export default function App() {
             <Route path="cong-cu" element={<ToolsHubPage />} />
             <Route path="cong-cu/mo" element={<ToolViewerPage />} />
             <Route path="mo" element={<WebViewPage />} />
+            <Route path="mo/*" element={<WebViewPage />} />
             <Route path="tai-khoan" element={<AccountPage />} />
             <Route path="agent" element={<AgentHomePage />} />
             <Route path="agent/dich-vu" element={<AgentServicesPage />} />

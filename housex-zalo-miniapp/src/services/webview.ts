@@ -2,6 +2,7 @@ import { HOUSEX_API_BASE } from "../config";
 
 const ALLOWED_PREFIXES = [
   "/cong-cu/",
+  "/cong-cu",
   "/tin-tuc",
   "/khuyen-mai",
   "/dieu-khoan",
@@ -22,10 +23,33 @@ const ALLOWED_HANDOFF_NEXT = new Set([
   "/moi-gioi/tai-khoan",
 ]);
 
+function normalizePath(raw: string): string {
+  let path = raw.trim();
+  try {
+    path = decodeURIComponent(path);
+  } catch {
+    /* keep raw */
+  }
+  if (path.includes("://")) {
+    try {
+      path = new URL(path).pathname;
+    } catch {
+      return "/tin-tuc";
+    }
+  }
+  if (!path.startsWith("/")) path = `/${path}`;
+  // strip query/hash if leaked into path
+  const q = path.indexOf("?");
+  if (q >= 0) path = path.slice(0, q);
+  const h = path.indexOf("#");
+  if (h >= 0) path = path.slice(0, h);
+  return path || "/";
+}
+
 /** Path an toàn để nhúng trang House X web trong Mini App. */
-export function sanitizeWebPath(path: string): string {
-  if (!path.startsWith("/")) return "/";
-  if (path.includes("://") || path.includes("..")) return "/tin-tuc";
+export function sanitizeWebPath(raw: string): string {
+  const path = normalizePath(raw);
+  if (path.includes("..")) return "/tin-tuc";
   const ok = ALLOWED_PREFIXES.some(
     (p) => path === p.replace(/\/$/, "") || path.startsWith(p),
   );

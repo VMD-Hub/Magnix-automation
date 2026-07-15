@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { PromoWheelArt } from "@/components/PromoWheelArt";
 import { RubySurfaceOrnament } from "@/components/RubySurfaceOrnament";
+import { moEmbedHref } from "@/services/mo-embed";
 
 /** Teaser vòng quay — copy trái, ảnh vòng quay phải (CTA trực quan). */
 export function PromoTeaser() {
@@ -10,7 +11,7 @@ export function PromoTeaser() {
     <button
       type="button"
       className="promo-teaser promo-teaser--hero"
-      onClick={() => navigate("/mo?p=%2Fkhuyen-mai")}
+      onClick={() => navigate(moEmbedHref("/khuyen-mai"))}
       aria-label="Vào vòng quay may mắn House X"
     >
       <RubySurfaceOrnament variant="card" />

@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { PageBrandHeader } from "@/components/PageBrandHeader";
 import { ShortcutGlyph } from "@/components/AppIcons";
 import { HOME_TOOLS_CORE } from "@/data/home-ia";
+import { moEmbedHref } from "@/services/mo-embed";
 
 export function ToolsHubPage() {
   return (
@@ -15,11 +16,7 @@ export function ToolsHubPage() {
 
       <div className="tool-hub-list">
         {HOME_TOOLS_CORE.map((t) => (
-          <Link
-            key={t.id}
-            to={`/mo?p=${encodeURIComponent(t.path)}`}
-            className="card tool-card"
-          >
+          <Link key={t.id} to={moEmbedHref(t.path)} className="card tool-card">
             <span className="tool-hub-icon">
               <ShortcutGlyph id={t.id} size={20} />
             </span>

@@ -1676,6 +1676,16 @@ select.input {
   flex-shrink: 0;
 }
 
+.tool-viewer-path {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 12px;
+  text-align: center;
+}
+
 .tool-viewer-frame {
   flex: 1;
   width: 100%;

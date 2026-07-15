@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import type { HomeArticleItem } from "@/data/home-ia";
 import { mediaUrl } from "@/utils/media";
+import { moEmbedHref } from "@/services/mo-embed";
 
 /** Tin / chính sách — ảnh + tiêu đề bài (không lẫn tiện ích / promo). */
 export function HomeNewsSection({ items }: { items: HomeArticleItem[] }) {
@@ -24,9 +25,7 @@ export function HomeNewsSection({ items }: { items: HomeArticleItem[] }) {
               key={a.id}
               type="button"
               className="news-card"
-              onClick={() =>
-                navigate(`/mo?p=${encodeURIComponent(a.path)}`)
-              }
+              onClick={() => navigate(moEmbedHref(a.path))}
             >
               <div
                 className="news-card-media"

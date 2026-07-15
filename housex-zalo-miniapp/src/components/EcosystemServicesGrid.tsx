@@ -1,10 +1,10 @@
 import { useNavigate } from "react-router-dom";
 import { ShortcutGlyph } from "@/components/AppIcons";
 import type { HomeServiceItem } from "@/data/home-ia";
+import { moEmbedHref } from "@/services/mo-embed";
 
 type Props = {
   items: HomeServiceItem[];
-  /** lead tùy ngữ cảnh khách / Agent */
   lead?: string;
   title?: string;
   titleId?: string;
@@ -36,7 +36,7 @@ export function EcosystemServicesGrid({
             role="listitem"
             title={s.title}
             aria-label={`${s.label}: ${s.desc}`}
-            onClick={() => navigate(`/mo?p=${encodeURIComponent(s.path)}`)}
+            onClick={() => navigate(moEmbedHref(s.path))}
           >
             <span className="shortcut-icon">
               <ShortcutGlyph id={s.id} size={28} />

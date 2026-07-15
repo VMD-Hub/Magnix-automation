@@ -1,9 +1,10 @@
 import { Link, useNavigate } from "react-router-dom";
 import { ShortcutGlyph } from "@/components/AppIcons";
 import type { HomeNavItem } from "@/data/home-ia";
+import { moEmbedHref } from "@/services/mo-embed";
 
 function hrefOf(s: HomeNavItem): string {
-  if (s.kind === "webview") return `/mo?p=${encodeURIComponent(s.to)}`;
+  if (s.kind === "webview") return moEmbedHref(s.to);
   return s.to;
 }
 
