@@ -76,7 +76,7 @@ Theo thực tiễn ngành thẩm định, chủ nhà thường yêu cầu thẩm
 
 Tài sản thường được định giá theo phương pháp so sánh (đối chiếu tài sản tương đương trên thị trường), phương pháp chi phí hoặc phương pháp thu nhập — tùy đặc điểm BĐS và Chuẩn mực thẩm định giá Việt Nam.
 
-> **Lưu ý:** Giá trị ước tính công trình (nếu có) thường tính trên đơn giá nhà thô — không bao gồm chi phí hoàn thiện và nội thất trừ khi thỏa thuận riêng.`}
+> **Lưu ý:** Giá trị ước tính công trình (nếu có) thường tính trên đơn giá nhà thô — không bao gồm chi phí hoàn thiện và nội thất trừ khi thỏa thuận riêng.`,
     faqs: [
       {
         q: "Tra cứu giá chủ nhà khác gì so với môi giới báo giá?",
