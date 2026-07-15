@@ -298,6 +298,58 @@ export function IconKey({ size, className }: IconProps) {
   );
 }
 
+export function IconShield({ size, className }: IconProps) {
+  return (
+    <Svg size={size} className={className}>
+      <path
+        d="M12 3.5 19 6.5v5.2c0 4.3-2.9 7.4-7 8.8-4.1-1.4-7-4.5-7-8.8V6.5L12 3.5Z"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinejoin="round"
+      />
+      <path
+        d="m9.2 12 1.8 1.8 3.8-3.8"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </Svg>
+  );
+}
+
+export function IconBriefcase({ size, className }: IconProps) {
+  return (
+    <Svg size={size} className={className}>
+      <path
+        d="M8 8V6.5A1.5 1.5 0 0 1 9.5 5h5A1.5 1.5 0 0 1 16 6.5V8"
+        stroke="currentColor"
+        strokeWidth="1.6"
+      />
+      <path
+        d="M4.5 8.5h15v9A1.5 1.5 0 0 1 18 19H6a1.5 1.5 0 0 1-1.5-1.5v-9Z"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinejoin="round"
+      />
+      <path d="M4.5 12.5h15" stroke="currentColor" strokeWidth="1.6" />
+    </Svg>
+  );
+}
+
+export function IconGrid({ size, className }: IconProps) {
+  return (
+    <Svg size={size} className={className}>
+      <path
+        d="M5 5h5.5v5.5H5V5ZM13.5 5H19v5.5h-5.5V5ZM5 13.5h5.5V19H5v-5.5ZM13.5 13.5H19V19h-5.5v-5.5Z"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinejoin="round"
+      />
+    </Svg>
+  );
+}
+
 const SHORTCUT_ICONS: Record<string, (props: IconProps) => ReactElement> = {
   "cam-nang": IconBook,
   "khuyen-mai": IconWheel,
@@ -311,9 +363,14 @@ const SHORTCUT_ICONS: Record<string, (props: IconProps) => ReactElement> = {
   "tham-dinh": IconChart,
   "cong-cu-hub": IconTools,
   "vay-bds": IconChart,
+  "vay-mua-nha": IconHome,
+  "vay-the-chap": IconKey,
+  "vay-sxkd": IconBriefcase,
+  "bao-hiem-tai-san": IconShield,
   "tham-dinh-gia": IconScale,
   "noi-that": IconInterior,
   "ky-gui": IconKey,
+  "dich-vu-hub": IconGrid,
   "tinh-vay": IconChart,
   "han-muc": IconClock,
   "tham-dinh-hs": IconCheck,

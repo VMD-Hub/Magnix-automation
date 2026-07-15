@@ -10,6 +10,11 @@ const ALLOWED_PREFIXES = [
   "/lien-he",
   "/khach-hang/",
   "/moi-gioi/",
+  "/dang-ky",
+  "/tai-chinh",
+  "/dinh-gia",
+  "/noi-that",
+  "/dich-vu",
 ];
 
 const ALLOWED_HANDOFF_NEXT = new Set([

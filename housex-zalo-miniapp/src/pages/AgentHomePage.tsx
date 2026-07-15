@@ -1,12 +1,15 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/auth-context";
 import { useEffect, useState } from "react";
 import { PageBrandHeader } from "@/components/PageBrandHeader";
+import { EcosystemServicesGrid } from "@/components/EcosystemServicesGrid";
+import { HOME_SERVICES } from "@/data/home-ia";
 import { listNotifications } from "@/services/agent";
 
 export function AgentHomePage() {
   const { canAgent, user } = useAuth();
   const [unread, setUnread] = useState(0);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (!canAgent) return;
@@ -37,6 +40,29 @@ export function AgentHomePage() {
         title={`Xin chào, ${user?.name ?? ""}`}
         lead={user?.ctvCode ? `Mã môi giới ${user.ctvCode}` : undefined}
       />
+
+      <EcosystemServicesGrid
+        items={HOME_SERVICES.filter((s) => s.id !== "dich-vu-hub")}
+        title="Giới thiệu khách"
+        titleId="agent-ecosystem-title"
+        lead="Mở landing dịch vụ House X khi tư vấn — tạo thu nhập và dựng niềm tin trước khi nộp hồ sơ."
+      />
+
+      <button
+        type="button"
+        className="card tool-card"
+        style={{
+          width: "100%",
+          textAlign: "left",
+          cursor: "pointer",
+          fontFamily: "inherit",
+        }}
+        onClick={() => navigate("/mo?p=" + encodeURIComponent("/tai-chinh"))}
+      >
+        <h2>Hub tài chính & vay</h2>
+        <p>Gói vay · bảo hiểm — trang tổng cho khách xem trên Zalo</p>
+        <span className="tool-card-cta">Mở hub →</span>
+      </button>
 
       <Link to="/agent/dich-vu?tab=product" className="card tool-card">
         <h2>Quản lý dịch vụ</h2>

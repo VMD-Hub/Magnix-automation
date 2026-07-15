@@ -11,6 +11,8 @@ export type HomeNavItem = {
 
 export type HomeServiceItem = {
   id: string;
+  /** Nhãn ngắn trên lưới icon */
+  label: string;
   title: string;
   desc: string;
   path: string;
@@ -63,31 +65,66 @@ export const QUICK_ACTIONS: HomeNavItem[] = [
   },
 ];
 
-/** Dịch vụ — mở webview hub House X. */
+/**
+ * Hệ sinh thái dịch vụ House X — tạo thu nhập + uy tín với khách.
+ * Mở landing web trong webview Mini App.
+ */
 export const HOME_SERVICES: HomeServiceItem[] = [
   {
-    id: "vay-bds",
-    title: "Cho vay mua bất động sản",
-    desc: "Tư vấn gói vay, hồ sơ và đồng hành đến giải ngân.",
-    path: "/tai-chinh",
+    id: "vay-mua-nha",
+    label: "Vay mua nhà",
+    title: "Vay mua nhà & căn hộ",
+    desc: "Sơ loại hồ sơ, so sánh gói ngân hàng, đồng hành giải ngân.",
+    path: "/tai-chinh/vay-mua-nha",
+  },
+  {
+    id: "vay-the-chap",
+    label: "Thế chấp",
+    title: "Vay thế chấp & tái tài trợ",
+    desc: "Bổ sung vốn hoặc chuyển khoản vay — hồ sơ TSĐB.",
+    path: "/tai-chinh/vay-the-chap",
+  },
+  {
+    id: "vay-sxkd",
+    label: "Vay SXKD",
+    title: "Vay sản xuất kinh doanh",
+    desc: "Vốn lưu động / máy móc có thế chấp BĐS cho hộ KD & SME.",
+    path: "/tai-chinh/vay-sxkd",
+  },
+  {
+    id: "bao-hiem-tai-san",
+    label: "Bảo hiểm",
+    title: "Bảo hiểm nhà, kho & xe",
+    desc: "Kèm điều kiện vay hoặc mua độc lập — phi nhân thọ.",
+    path: "/tai-chinh/bao-hiem-tai-san",
   },
   {
     id: "tham-dinh-gia",
+    label: "Định giá",
     title: "Thẩm định giá bất động sản",
-    desc: "Định giá phục vụ vay, giao dịch, thừa kế, visa.",
+    desc: "Chủ nhà, ngân hàng, thừa kế, visa — chứng thư chuẩn ngành.",
     path: "/dinh-gia",
   },
   {
     id: "noi-that",
+    label: "Nội thất",
     title: "Thi công & nội thất",
     desc: "Thiết kế đến hoàn thiện — một đầu mối tư vấn.",
     path: "/noi-that",
   },
   {
     id: "ky-gui",
+    label: "Ký gửi",
     title: "Ký gửi nhà đất",
     desc: "Đăng / ký gửi sản phẩm để tiếp cận người mua.",
     path: "/dang-ky/moi-gioi",
+  },
+  {
+    id: "dich-vu-hub",
+    label: "Tất cả",
+    title: "Hub dịch vụ House X",
+    desc: "Tài chính · định giá · nội thất trên một nền tảng.",
+    path: "/dich-vu",
   },
 ];
 
