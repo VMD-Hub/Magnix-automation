@@ -34,12 +34,12 @@ export function ServicesHubLanding() {
       <ServiceLandingHero
         eyebrow={SERVICES_HUB_VISUAL.eyebrow}
         title={HOUSEX_SERVICES_LABEL}
-        intro="Tài chính, thẩm định giá và thiết kế nội thất — đồng hành trọn hành trình mua nhà, vay vốn và an cư."
+        intro="Vay vốn, thẩm định giá và thiết kế nội thất — mỗi nhóm có landing riêng với quy trình và form tư vấn."
         heroImage={SERVICES_HUB_VISUAL.heroImage}
         heroGradient="from-ink-900/95 via-ink-800/88 to-brand-900/70"
         breadcrumbs={breadcrumbs}
-        primaryCta={{ label: "Nhận tư vấn", href: "/lien-he" }}
-        secondaryCta={{ label: "Tính khoản vay", href: "/cong-cu/tinh-khoan-vay" }}
+        primaryCta={{ label: "Tư vấn vay", href: "/tai-chinh" }}
+        secondaryCta={{ label: "Định giá BĐS", href: "/dinh-gia" }}
       />
 
       <section className="proptech-trust-band">

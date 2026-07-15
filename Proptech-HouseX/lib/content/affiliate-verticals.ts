@@ -56,6 +56,11 @@ import {
   DING_GIA_HUB_INTRO,
   DING_GIA_SERVICES,
 } from "@/lib/content/dinh-gia-affiliate-content";
+import {
+  TAI_CHINH_HUB_FAQS,
+  TAI_CHINH_HUB_INTRO,
+  TAI_CHINH_SERVICES,
+} from "@/lib/content/tai-chinh-affiliate-content";
 import { INTERIOR_CASE_STUDIES } from "@/lib/content/noi-that-content";
 import { HOUSEX_SERVICE_NOTE } from "@/lib/content/housex-services-copy";
 
@@ -81,51 +86,22 @@ export const AFFILIATE_VERTICALS: AffiliateVertical[] = [
   {
     id: "tai-chinh",
     path: "/tai-chinh",
-    layout: "promo-hub",
+    layout: "service-cluster",
     title: "Tài chính & vay vốn mua nhà — HouseX",
     metaDescription:
-      "Dịch vụ tư vấn vay mua bất động sản và vay kinh doanh trên HouseX. Hỗ trợ làm hồ sơ, so sánh gói vay và theo sát tiến độ duyệt.",
+      "Tư vấn vay mua nhà, vay thế chấp và vay SXKD trên HouseX. Sơ loại hồ sơ, so sánh gói ngân hàng, đồng hành đến giải ngân.",
     h1: "Tài chính & vay vốn",
-    intro:
-      "HouseX hỗ trợ bạn chọn gói vay phù hợp — mua nhà, căn hộ, đất nền hoặc bổ sung vốn kinh doanh. Đội ngũ tư vấn làm rõ nhu cầu, chuẩn bị hồ sơ và đồng hành đến khi ngân hàng phê duyệt.",
+    intro: TAI_CHINH_HUB_INTRO,
     disclaimer: HOUSEX_SERVICE_NOTE,
     partners: BANK_PARTNERS,
     partnerIntro:
       "HouseX hỗ trợ làm hồ sơ vay tại các ngân hàng thương mại phổ biến. Lãi suất và điều kiện cụ thể được ngân hàng công bố tại thời điểm ký hợp đồng tín dụng.",
-    productLines: [
-      {
-        id: "vay-mua-bds",
-        title: "Vay mua bất động sản",
-        desc: "Nhà ở, căn hộ chung cư, nhà phố, shophouse, đất nền — thế chấp tài sản, chứng minh thu nhập. Phù hợp người mua nhà lần đầu hoặc đầu tư.",
-      },
-      {
-        id: "vay-sxkd",
-        title: "Vay sản xuất kinh doanh",
-        desc: "Vốn lưu động, mua máy móc, mở rộng xưởng — dành cho hộ kinh doanh và SME. Hồ sơ và TSĐB theo quy định từng ngân hàng.",
-      },
-    ],
-    hubFaqs: [
-      {
-        q: "Quy trình vay qua HouseX diễn ra thế nào?",
-        a: "Bạn gửi yêu cầu → tư vấn viên HouseX làm rõ mục đích vay, thu nhập và tài sản đảm bảo → hướng dẫn chuẩn bị hồ sơ → đồng hành đến khi ngân hàng phê duyệt và giải ngân.",
-      },
-      {
-        q: "Sau khi gửi form thì ai liên hệ?",
-        a: "Tư vấn viên HouseX hoặc trợ lý AI sẽ gọi lại trong giờ làm việc để làm rõ nhu cầu và hướng dẫn bước tiếp theo.",
-      },
-      {
-        q: "Có cần chọn ngân hàng trước không?",
-        a: "Không bắt buộc. Bạn mô tả nhu cầu; chúng tôi gợi ý gói vay và ngân hàng phù hợp nhất với hồ sơ của bạn.",
-      },
-      {
-        q: "Công cụ tính khoản vay dùng thế nào?",
-        a: "Dùng công cụ miễn phí trên HouseX để ước lượng tiền trả hàng tháng trước khi làm hồ sơ chính thức. Kết quả mang tính tham khảo.",
-      },
-    ],
+    hubFaqs: TAI_CHINH_HUB_FAQS,
     toolLinks: [
       { label: "Tính khoản vay mua nhà", href: "/cong-cu/tinh-khoan-vay" },
+      { label: "Thẩm định cho ngân hàng", href: "/dinh-gia/tham-dinh-ngan-hang" },
     ],
-    services: [],
+    services: TAI_CHINH_SERVICES,
   },
   {
     id: "dinh-gia",

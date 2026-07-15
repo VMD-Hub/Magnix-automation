@@ -19,6 +19,8 @@ const NAV = [
   { label: "Mua bán", href: "/mua-ban" },
   { label: "Cho thuê", href: "/cho-thue" },
   { label: "Dự án", href: "/du-an" },
+  { label: "Vay", href: "/tai-chinh" },
+  { label: "Định giá", href: "/dinh-gia" },
   { label: "Khuyến mãi", href: "/khuyen-mai" },
   { label: "Dịch vụ", href: "/dich-vu" },
   { label: "Công cụ", href: "/cong-cu" },
@@ -26,7 +28,15 @@ const NAV = [
 ] as const;
 
 /** Prefetch các trang catalog chính — phản hồi nhanh khi chuyển tab header. */
-const PREFETCH_HREFS = new Set<string>(["/mua-ban", "/cho-thue", "/du-an", "/cong-cu", "/dich-vu"]);
+const PREFETCH_HREFS = new Set<string>([
+  "/mua-ban",
+  "/cho-thue",
+  "/du-an",
+  "/tai-chinh",
+  "/dinh-gia",
+  "/cong-cu",
+  "/dich-vu",
+]);
 
 export function SiteHeader() {
   const router = useRouter();

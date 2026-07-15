@@ -93,10 +93,10 @@ export function SiteFooter() {
                 {taiChinh.h1}
               </Link>
             </li>
-            {taiChinh.productLines?.map((p) => (
-              <li key={p.id}>
-                <Link href={`${taiChinh.path}#${p.id}`} className={FOOTER_LINK}>
-                  {p.title}
+            {taiChinh.services.map((s) => (
+              <li key={s.slug}>
+                <Link href={`${taiChinh.path}/${s.slug}`} className={FOOTER_LINK}>
+                  {s.title}
                 </Link>
               </li>
             ))}

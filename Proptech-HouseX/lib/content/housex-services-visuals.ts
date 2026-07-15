@@ -44,13 +44,40 @@ export const VERTICAL_VISUALS: Record<ServiceVerticalId, VerticalVisual> = {
     accentText: "text-amber-800",
     stats: [
       { label: "Ngân hàng", value: "10+" },
-      { label: "Thời gian phản hồi", value: "< 24h" },
-      { label: "Gói vay", value: "BĐS & SXKD" },
+      { label: "Quy trình", value: "6 bước" },
+      { label: "Gói vay", value: "3 dịch vụ" },
     ],
     process: [
-      { step: "01", title: "Làm rõ nhu cầu vay", desc: "Mục đích, thu nhập, tài sản đảm bảo và ngân sách trả nợ hàng tháng." },
-      { step: "02", title: "Chọn gói & chuẩn bị hồ sơ", desc: "So sánh lãi suất, hạn mức — checklist giấy tờ theo ngân hàng." },
-      { step: "03", title: "Duyệt vay & giải ngân", desc: "Đồng hành thẩm định tài sản, ký hợp đồng và theo sát tiến độ." },
+      {
+        step: "01",
+        title: "Làm rõ nhu cầu",
+        desc: "Mục đích vay, thu nhập, tài sản đảm bảo và khả năng trả hàng tháng.",
+      },
+      {
+        step: "02",
+        title: "Sơ loại hồ sơ",
+        desc: "Ước hạn mức / DTI tham khảo; chỉ ra điểm thiếu trên giấy tờ trước khi nộp bank.",
+      },
+      {
+        step: "03",
+        title: "Chọn ngân hàng & gói",
+        desc: "So sánh tỷ lệ tài trợ, phí liên quan và điều kiện hiện trạng tài sản.",
+      },
+      {
+        step: "04",
+        title: "Nộp hồ sơ",
+        desc: "Checklist CCCD, thu nhập, pháp lý TS — bổ sung theo yêu cầu từng ngân hàng.",
+      },
+      {
+        step: "05",
+        title: "Thẩm định & phê duyệt",
+        desc: "Đồng hành khi bank thẩm định tài sản / tín dụng; theo dõi yêu cầu bổ sung.",
+      },
+      {
+        step: "06",
+        title: "Xác nhận vay & giải ngân",
+        desc: "Hỗ trợ bạn hiểu điều kiện cuối trước khi đồng ý vay và nhận giải ngân.",
+      },
     ],
     trust: [
       { title: "Minh bạch điều kiện", desc: "Lãi suất và phí do ngân hàng công bố tại thời điểm ký hợp đồng." },
@@ -137,6 +164,8 @@ export const VERTICAL_VISUALS: Record<ServiceVerticalId, VerticalVisual> = {
 /** Ảnh thẻ dịch vụ theo slug hoặc product line id */
 export const SERVICE_CARD_IMAGES: Record<string, string> = {
   "vay-mua-bds": "/images/tools/finance-hub.png",
+  "vay-mua-nha": "/images/tools/finance-hub.png",
+  "vay-the-chap": "/images/tools/finance-hub.png",
   "vay-sxkd": "/images/tools/business-loan.png",
   "tra-cuu-gia-chu-nha": u("photo-1564013799919-ab600027ffc6"),
   "tham-dinh-ngan-hang": "/images/tools/finance-hub.png",
@@ -157,6 +186,8 @@ export const SERVICE_CARD_IMAGES: Record<string, string> = {
 /** WebP cho thẻ dịch vụ có ảnh thương hiệu local. */
 export const SERVICE_CARD_IMAGES_WEBP: Record<string, string> = {
   "vay-mua-bds": "/images/tools/finance-hub.webp",
+  "vay-mua-nha": "/images/tools/finance-hub.webp",
+  "vay-the-chap": "/images/tools/finance-hub.webp",
   "vay-sxkd": "/images/tools/business-loan.webp",
   "tham-dinh-ngan-hang": "/images/tools/finance-hub.webp",
 };

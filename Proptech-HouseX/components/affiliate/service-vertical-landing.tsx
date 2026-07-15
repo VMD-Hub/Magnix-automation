@@ -34,9 +34,11 @@ export function ServiceVerticalLanding({ vertical }: { vertical: AffiliateVertic
   const servicesSectionTitle =
     vertical.id === "dinh-gia"
       ? "Dịch vụ thẩm định giá"
-      : vertical.id === "noi-that"
-        ? "Phong cách & ý tưởng"
-        : "Gói vay phổ biến";
+      : vertical.id === "tai-chinh"
+        ? "Gói vay phổ biến"
+        : vertical.id === "noi-that"
+          ? "Phong cách & ý tưởng"
+          : "Gói dịch vụ";
 
   return (
     <div className="min-h-screen bg-slate-50">
