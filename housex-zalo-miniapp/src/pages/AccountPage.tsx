@@ -10,6 +10,8 @@ import {
   loginWithPhoneInMiniApp,
   NeedPhoneError,
   probeZaloMiniApp,
+  runZaloDiagnostics,
+  type DiagLine,
   type PendingZaloSession,
   type ZaloLoginPhase,
 } from "@/services/zalo-miniapp-auth";
@@ -52,6 +54,9 @@ export function AccountPage() {
   const [justLoggedIn, setJustLoggedIn] = useState(false);
   const [inZalo, setInZalo] = useState<boolean | null>(null);
   const [lane, setLane] = useState<UserLane | null>(() => getPreferredLane());
+  const [diagOpen, setDiagOpen] = useState(false);
+  const [diagBusy, setDiagBusy] = useState(false);
+  const [diagLines, setDiagLines] = useState<DiagLine[] | null>(null);
 
   useEffect(() => {
     let alive = true;
@@ -110,20 +115,13 @@ export function AccountPage() {
 
   async function onZaloCustomerLogin() {
     setErr(null);
-    const phoneTrim = customerPhone.trim();
-    if (!isValidVnPhoneInput(phoneTrim)) {
-      setErr(
-        "Nhập số điện thoại hợp lệ trước (09xxxxxxxx), rồi nhấn Đăng nhập bằng Zalo.",
-      );
-      setPhase("need_phone");
-      return;
-    }
     setBusyZalo(true);
     setPhase("authorize");
     try {
       const u = await loginViaZaloMiniApp({
         preferredRole: "CUSTOMER",
-        phoneFallback: phoneTrim,
+        // Không bắt nhập SĐT trước — ưu tiên lấy từ Zalo.
+        phoneFallback: customerPhone.trim() || undefined,
         onPhase: onAuthPhase,
       });
       setUser(u);
@@ -132,7 +130,9 @@ export function AccountPage() {
       if (ex instanceof NeedPhoneError) {
         setPendingZalo(ex.prep);
         setPhase("need_phone");
-        setErr(ex.message);
+        setErr(
+          "Zalo đã kết nối. Cho phép chia sẻ SĐT trên popup Zalo, hoặc nhập SĐT liên hệ bên dưới rồi nhấn Hoàn tất.",
+        );
         return;
       }
       setPhase("idle");
@@ -153,6 +153,13 @@ export function AccountPage() {
     setBusyCustomer(true);
     try {
       if (pendingZalo) {
+        if (pendingZalo.preferredRole === "BROKER") {
+          setErr(
+            "Môi giới cần cho phép chia sẻ SĐT Zalo — không dùng số nhập tay. Bấm lại CTA môi giới và chọn Cho phép trên popup.",
+          );
+          setBusyCustomer(false);
+          return;
+        }
         setPhase("server");
         const u = await completeZaloLoginWithPhone(
           pendingZalo,
@@ -164,6 +171,7 @@ export function AccountPage() {
         return;
       }
 
+      // Dev bypass only — production luôn đi Zalo.
       setPhase("authorize");
       const u = await loginWithPhoneInMiniApp({
         phone: trimmed,
@@ -193,8 +201,41 @@ export function AccountPage() {
     }
   }
 
-  async function onBrokerSubmit(e: FormEvent) {
+  async function onBrokerZaloLogin() {
+    setBrokerErr(null);
+    setErr(null);
+    setBusyBroker(true);
+    setPhase("authorize");
+    try {
+      const u = await loginViaZaloMiniApp({
+        preferredRole: "BROKER",
+        onPhase: onAuthPhase,
+      });
+      setUser(u);
+      finishLoginSuccess();
+    } catch (ex) {
+      if (ex instanceof NeedPhoneError) {
+        setPendingZalo({ ...ex.prep, preferredRole: "BROKER" });
+        setPhase("need_phone");
+        setBrokerErr(
+          "Chưa lấy được SĐT từ Zalo. Cho phép chia sẻ số đang dùng Zalo (còn hoạt động), rồi bấm lại.",
+        );
+        return;
+      }
+      setPhase("idle");
+      setBrokerErr(
+        ex instanceof Error
+          ? ex.message
+          : "Không đăng ký / đăng nhập được. Thử lại trong Zalo.",
+      );
+    } finally {
+      setBusyBroker(false);
+    }
+  }
+
+  async function onBrokerDevSubmit(e: FormEvent) {
     e.preventDefault();
+    if (!AUTH_DEV_BYPASS) return;
     setBrokerErr(null);
     const trimmed = brokerPhone.trim();
     if (!isValidVnPhoneInput(trimmed)) {
@@ -212,22 +253,32 @@ export function AccountPage() {
       setUser(u);
       finishLoginSuccess();
     } catch (ex) {
-      if (ex instanceof NeedPhoneError) {
-        setPendingZalo({ ...ex.prep, preferredRole: "BROKER" });
-        setBrokerPhone(trimmed);
-        setCustomerPhone(trimmed);
-        setPhase("need_phone");
-        setErr(ex.message);
-        return;
-      }
       setPhase("idle");
       setBrokerErr(
-        ex instanceof Error
-          ? ex.message
-          : "Không đăng ký / đăng nhập được. Thử lại trong Zalo.",
+        ex instanceof Error ? ex.message : "Đăng nhập thử nghiệm thất bại.",
       );
     } finally {
       setBusyBroker(false);
+    }
+  }
+
+  async function onRunDiagnostics() {
+    setDiagBusy(true);
+    setDiagOpen(true);
+    try {
+      const lines = await runZaloDiagnostics();
+      setDiagLines(lines);
+    } catch {
+      setDiagLines([
+        {
+          key: "unexpected",
+          label: "Chẩn đoán",
+          status: "fail",
+          detail: "Không chạy được chẩn đoán. Thử mở lại Mini App.",
+        },
+      ]);
+    } finally {
+      setDiagBusy(false);
     }
   }
 
@@ -249,7 +300,7 @@ export function AccountPage() {
         />
         {justLoggedIn ? (
           <p className="account-success" role="status">
-            Đăng nhập thành công. Hồ sơ của bạn đã sẵn sàng.
+            Đăng nhập bằng Zalo thành công. SĐT liên hệ trên hồ sơ: {user.phoneMasked}.
           </p>
         ) : null}
         <div className="card">
@@ -337,123 +388,205 @@ export function AccountPage() {
         </p>
       ) : null}
 
-      {pendingZalo ? (
+      {pendingZalo && pendingZalo.preferredRole !== "BROKER" ? (
         <p className="account-need-phone" role="status">
-          Zalo đã kết nối. Nhập số điện thoại bên dưới rồi nhấn{" "}
-          <strong>Hoàn tất đăng nhập</strong> — không cần bấm Zalo lại.
+          Zalo đã kết nối nhưng chưa chia sẻ SĐT. Nhập{" "}
+          <strong>SĐT liên hệ</strong> bên dưới rồi nhấn Hoàn tất — số này không
+          cần phải là số đăng ký Zalo.
+        </p>
+      ) : null}
+
+      {pendingZalo?.preferredRole === "BROKER" ? (
+        <p className="account-need-phone" role="status">
+          Môi giới bắt buộc dùng SĐT đang gắn Zalo. Bấm Cho phép trên popup Zalo,
+          rồi nhấn lại nút đăng ký môi giới.
         </p>
       ) : null}
 
       <section className="card account-block">
         <h2 className="account-block-title">1. Khách mua nhà</h2>
         <p className="muted account-block-lead">
-          Nhập số điện thoại trước, rồi nhấn Đăng nhập bằng Zalo. Hệ thống tạo tài
-          khoản lần đầu và lưu tư vấn / ưu đãi.
+          Bạn đang trong Zalo — nhấn một lần để đăng nhập bằng tài khoản Zalo
+          đang mở. House X lấy tên / ảnh và (khi được cho phép) SĐT Zalo để lưu
+          hồ sơ tư vấn.
         </p>
 
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            void onZaloCustomerLogin();
-          }}
-          className="account-phone-form"
-        >
-          <label className="muted" htmlFor="customer-phone">
-            Số điện thoại
-          </label>
-          <input
-            id="customer-phone"
-            className="input"
-            value={customerPhone}
-            onChange={(e) => setCustomerPhone(e.target.value)}
-            placeholder="09xxxxxxxx"
-            inputMode="tel"
-            autoComplete="tel"
-            disabled={anyBusy}
-            autoFocus={Boolean(pendingZalo)}
-          />
-          {err ? <p className="err">{err}</p> : null}
+        {zaloReady && !pendingZalo ? (
+          <>
+            <button
+              type="button"
+              className="btn account-login-zalo-btn"
+              disabled={anyBusy || inZalo === false}
+              onClick={() => void onZaloCustomerLogin()}
+            >
+              {busyZalo
+                ? phaseHint ?? "Đang kết nối Zalo…"
+                : "Đăng nhập bằng Zalo của bạn"}
+            </button>
+            {inZalo === false ? (
+              <p className="err" style={{ marginTop: 10 }}>
+                Chưa nhận được phiên Zalo. Mở Mini App từ trong ứng dụng Zalo.
+              </p>
+            ) : null}
+            {inZalo === null ? (
+              <p className="muted" style={{ marginTop: 8, fontSize: 12 }}>
+                Đang kiểm tra phiên Zalo…
+              </p>
+            ) : null}
+            <p className="muted" style={{ marginTop: 10, fontSize: 12 }}>
+              Khi Zalo hỏi quyền SĐT, hãy chọn Cho phép để trải nghiệm trọn vẹn
+              hơn. SĐT không có Zalo vẫn dùng được làm số liên hệ nếu bạn nhập
+              tay ở bước dự phòng.
+            </p>
+          </>
+        ) : null}
 
-          {zaloReady && !pendingZalo ? (
-            <>
-              <button
-                type="submit"
-                className="btn account-login-zalo-btn"
-                disabled={anyBusy || inZalo === false || !customerPhone.trim()}
-              >
-                {busyZalo
-                  ? phaseHint ?? "Đang kết nối Zalo…"
-                  : "Đăng nhập bằng Zalo"}
-              </button>
-              {inZalo === false ? (
-                <p className="err" style={{ marginTop: 10 }}>
-                  Chưa nhận được phiên Zalo. Mở Mini App từ trong ứng dụng Zalo.
-                </p>
-              ) : null}
-              {inZalo === null ? (
-                <p className="muted" style={{ marginTop: 8, fontSize: 12 }}>
-                  Đang kiểm tra phiên Zalo…
-                </p>
-              ) : null}
-            </>
-          ) : null}
-
-          {pendingZalo ? (
+        {(pendingZalo && pendingZalo.preferredRole !== "BROKER") ||
+        !zaloReady ? (
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              void onCustomerPhoneSubmit();
+            }}
+            className="account-phone-form"
+            style={{ marginTop: pendingZalo ? 12 : 0 }}
+          >
+            <label className="muted" htmlFor="customer-phone">
+              {pendingZalo
+                ? "SĐT liên hệ (hoàn tất đăng nhập)"
+                : "SĐT (chỉ dùng khi thử nghiệm local)"}
+            </label>
+            <input
+              id="customer-phone"
+              className="input"
+              value={customerPhone}
+              onChange={(e) => setCustomerPhone(e.target.value)}
+              placeholder="09xxxxxxxx"
+              inputMode="tel"
+              autoComplete="tel"
+              disabled={anyBusy}
+              autoFocus={Boolean(pendingZalo)}
+            />
+            {err ? <p className="err">{err}</p> : null}
             <button
               className="btn"
-              type="button"
+              type="submit"
               disabled={anyBusy || !customerPhone.trim()}
-              onClick={() => void onCustomerPhoneSubmit()}
             >
-              {busyCustomer ? phaseHint ?? "Đang xử lý…" : "Hoàn tất đăng nhập"}
+              {busyCustomer
+                ? phaseHint ?? "Đang xử lý…"
+                : pendingZalo
+                  ? "Hoàn tất đăng nhập"
+                  : "Tiếp tục với số điện thoại"}
             </button>
-          ) : null}
-
-          {!zaloReady ? (
-            <button
-              className="btn secondary"
-              type="button"
-              disabled={anyBusy || !customerPhone.trim()}
-              onClick={() => void onCustomerPhoneSubmit()}
-            >
-              {busyCustomer ? phaseHint ?? "Đang xử lý…" : "Tiếp tục với số điện thoại"}
-            </button>
-          ) : null}
-        </form>
+          </form>
+        ) : err ? (
+          <p className="err" style={{ marginTop: 10 }}>
+            {err}
+          </p>
+        ) : null}
       </section>
 
       <section className="card account-block account-block--broker">
         <h2 className="account-block-title">2. Cộng đồng môi giới House X</h2>
         <p className="muted account-block-lead">
-          Dành cho môi giới / cộng tác viên. Đăng ký tham gia lần đầu bằng số
-          điện thoại, hoặc đăng nhập lại nếu bạn đã có tài khoản môi giới.
+          Dành cho môi giới / CTV. Bắt buộc dùng tài khoản Zalo có số điện thoại
+          đang gắn và còn hoạt động — House X lấy SĐT đó để định danh môi giới
+          (không nhận số nhập tay).
         </p>
-        <form onSubmit={onBrokerSubmit}>
-          <label className="muted" htmlFor="broker-phone">
-            Số điện thoại đăng ký cộng đồng
-          </label>
-          <input
-            id="broker-phone"
-            className="input"
-            value={brokerPhone}
-            onChange={(e) => setBrokerPhone(e.target.value)}
-            placeholder="09xxxxxxxx"
-            inputMode="tel"
-            autoComplete="tel"
-            required
-            disabled={anyBusy || Boolean(pendingZalo)}
-          />
-          {brokerErr ? <p className="err">{brokerErr}</p> : null}
-          <button
-            className="btn"
-            type="submit"
-            disabled={anyBusy || Boolean(pendingZalo) || !brokerPhone.trim()}
-          >
-            {busyBroker
-              ? phaseHint ?? "Đang xử lý…"
-              : "Đăng ký / đăng nhập cộng đồng môi giới"}
-          </button>
-        </form>
+        <ol className="account-broker-steps muted">
+          <li>Đăng nhập đúng Zalo cá nhân đang dùng để kinh doanh.</li>
+          <li>Nhấn nút bên dưới và Cho phép chia sẻ SĐT khi Zalo hỏi.</li>
+          <li>Lần sau mở lại Mini App — cùng Zalo là đăng nhập được.</li>
+        </ol>
+        {zaloReady ? (
+          <>
+            <button
+              type="button"
+              className="btn"
+              disabled={anyBusy || inZalo === false}
+              onClick={() => void onBrokerZaloLogin()}
+            >
+              {busyBroker
+                ? phaseHint ?? "Đang xử lý…"
+                : "Đăng ký / đăng nhập môi giới bằng Zalo"}
+            </button>
+            {brokerErr ? <p className="err">{brokerErr}</p> : null}
+          </>
+        ) : (
+          <form onSubmit={onBrokerDevSubmit}>
+            <label className="muted" htmlFor="broker-phone">
+              SĐT thử nghiệm (local)
+            </label>
+            <input
+              id="broker-phone"
+              className="input"
+              value={brokerPhone}
+              onChange={(e) => setBrokerPhone(e.target.value)}
+              placeholder="09xxxxxxxx"
+              inputMode="tel"
+              autoComplete="tel"
+              required
+              disabled={anyBusy}
+            />
+            {brokerErr ? <p className="err">{brokerErr}</p> : null}
+            <button
+              className="btn"
+              type="submit"
+              disabled={anyBusy || !brokerPhone.trim()}
+            >
+              {busyBroker ? phaseHint ?? "Đang xử lý…" : "Đăng nhập thử nghiệm"}
+            </button>
+          </form>
+        )}
+      </section>
+
+      <section className="card account-diag">
+        <button
+          type="button"
+          className="account-diag-toggle"
+          aria-expanded={diagOpen}
+          onClick={() => {
+            if (!diagOpen && !diagLines) void onRunDiagnostics();
+            else setDiagOpen((v) => !v);
+          }}
+        >
+          {diagOpen ? "▾" : "▸"} Chẩn đoán kết nối (khi đăng nhập lỗi)
+        </button>
+        {diagOpen ? (
+          <div className="account-diag-body">
+            <p className="muted" style={{ fontSize: 12, marginTop: 8 }}>
+              Bản build: <code>{__HX_BUILD_ID__}</code> · Máy chủ: {apiHost}
+            </p>
+            <button
+              type="button"
+              className="btn secondary"
+              style={{ marginTop: 8 }}
+              disabled={diagBusy}
+              onClick={() => void onRunDiagnostics()}
+            >
+              {diagBusy ? "Đang kiểm tra…" : "Chạy lại chẩn đoán"}
+            </button>
+            {diagLines ? (
+              <ul className="account-diag-list">
+                {diagLines.map((line) => (
+                  <li key={line.key} className={`account-diag-item diag-${line.status}`}>
+                    <span className="account-diag-badge">
+                      {line.status === "ok" ? "✓" : line.status === "warn" ? "!" : "✕"}
+                    </span>
+                    <span>
+                      <strong>{line.label}</strong>
+                      <br />
+                      <span className="muted" style={{ fontSize: 12 }}>
+                        {line.detail}
+                      </span>
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            ) : null}
+          </div>
+        ) : null}
       </section>
     </div>
   );

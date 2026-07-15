@@ -204,3 +204,21 @@ export async function createMiniappHandoff(): Promise<{
 export function logout() {
   setToken(null);
 }
+
+export type ServerAuthDiag = {
+  ok: boolean;
+  nodeEnv: string;
+  bypass: boolean;
+  hasAuthSecret: boolean;
+  hasZaloAppId: boolean;
+  hasZaloAppSecret: boolean;
+  zaloAppIdSuffix: string | null;
+  dbOk: boolean;
+  dbError?: string;
+  hint?: string | null;
+};
+
+/** Chẩn đoán env/DB máy chủ auth — không trả secret/PII. */
+export async function fetchServerAuthDiag(): Promise<ServerAuthDiag> {
+  return apiFetch<ServerAuthDiag>("/api/auth/zalo/diag", { timeoutMs: 12000 });
+}

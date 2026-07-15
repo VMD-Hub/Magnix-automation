@@ -57,7 +57,10 @@ export async function POST(req: NextRequest) {
   } catch (err) {
     if (isZaloAuthError(err)) {
       const status =
-        err.code === "INVALID_PHONE" || err.code === "ZALO_TOKEN_REQUIRED"
+        err.code === "INVALID_PHONE" ||
+        err.code === "ZALO_TOKEN_REQUIRED" ||
+        err.code === "ZALO_PHONE_REQUIRED" ||
+        err.code === "PHONE_CLAIM_REQUIRES_VERIFY"
           ? 422
           : err.code === "PHONE_LINKED_OTHER_ZALO"
             ? 409

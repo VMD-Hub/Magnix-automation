@@ -21,6 +21,10 @@ function unusablePasswordHash(): string {
   return hashPassword(`zalo-only:${randomBytes(32).toString("hex")}`);
 }
 
+function toDisplayPhone(normalized: string): string {
+  return normalized.replace(/^\+84/, "0");
+}
+
 async function resolveZaloUserId(input: ZaloAuthInput): Promise<{
   zaloUserId: string;
   displayName?: string;
@@ -51,38 +55,131 @@ async function resolveZaloUserId(input: ZaloAuthInput): Promise<{
   return { zaloUserId: me.id, displayName: me.name ?? input.name };
 }
 
-async function resolvePhone(input: ZaloAuthInput): Promise<string> {
-  let raw = input.phone?.trim();
+type ResolvedPhone = {
+  normalized: string;
+  /** true = đổi từ phoneToken Zalo (đã xác minh sở hữu). */
+  verified: boolean;
+};
+
+/**
+ * SĐT Zalo (phoneToken) luôn ưu tiên hơn số nhập tay.
+ * Môi giới (BROKER): bắt buộc SĐT xác minh từ Zalo (trừ dev bypass).
+ */
+async function resolvePhone(
+  input: ZaloAuthInput,
+  role: AccountRole,
+): Promise<ResolvedPhone> {
+  const bypass =
+    process.env.ZALO_AUTH_DEV_BYPASS === "true" &&
+    process.env.NODE_ENV !== "production";
+
+  let verifiedRaw: string | null = null;
   if (input.phoneToken && input.accessToken) {
-    const exchanged = await exchangeZaloPhoneToken(
+    verifiedRaw = await exchangeZaloPhoneToken(
       input.phoneToken,
       input.accessToken,
     );
-    if (exchanged) raw = exchanged;
   }
-  if (!raw) {
+
+  const manualRaw = input.phone?.trim() || null;
+
+  if (verifiedRaw) {
+    const normalized = normalizeVnPhone(verifiedRaw);
+    if (!isValidVnPhone(normalized)) {
+      throw new ZaloAuthError("INVALID_PHONE", "Số điện thoại Zalo không hợp lệ.");
+    }
+    return { normalized, verified: true };
+  }
+
+  // Có phoneToken nhưng exchange thất bại (thường thiếu ZALO_APP_SECRET).
+  if (input.phoneToken && !verifiedRaw) {
+    if (role === "BROKER" && !bypass) {
+      throw new ZaloAuthError(
+        "ZALO_PHONE_REQUIRED",
+        "Không đổi được SĐT từ Zalo. Kiểm tra ZALO_APP_SECRET trên máy chủ và quyền lấy SĐT của Mini App.",
+      );
+    }
+    if (!manualRaw) {
+      throw new ZaloAuthError(
+        "INVALID_PHONE",
+        "Zalo đã cho phép SĐT nhưng chưa đổi ra số được. Nhập SĐT liên hệ rồi thử lại (hoặc cấu hình ZALO_APP_SECRET).",
+      );
+    }
+  }
+
+  if (role === "BROKER" && !bypass) {
     throw new ZaloAuthError(
-      "INVALID_PHONE",
-      "Không lấy được số điện thoại. Cho phép chia sẻ SĐT trong Zalo, hoặc nhập SĐT rồi thử lại.",
+      "ZALO_PHONE_REQUIRED",
+      "Môi giới phải dùng số điện thoại đang gắn tài khoản Zalo và còn hoạt động. Cho phép chia sẻ SĐT trong Zalo rồi thử lại.",
     );
   }
-  const normalized = normalizeVnPhone(raw);
+
+  if (!manualRaw) {
+    throw new ZaloAuthError(
+      "INVALID_PHONE",
+      "Không lấy được số điện thoại. Cho phép chia sẻ SĐT trong Zalo, hoặc nhập SĐT liên hệ rồi thử lại.",
+    );
+  }
+
+  const normalized = normalizeVnPhone(manualRaw);
   if (!isValidVnPhone(normalized)) {
     throw new ZaloAuthError("INVALID_PHONE", "Số điện thoại không hợp lệ.");
   }
-  return normalized;
+  return { normalized, verified: false };
 }
 
 export async function loginOrRegisterWithZalo(input: ZaloAuthInput) {
   const { zaloUserId, displayName } = await resolveZaloUserId(input);
-  const normalizedPhone = await resolvePhone(input);
   const role: AccountRole = input.preferredRole ?? "CUSTOMER";
+  const { normalized: normalizedPhone, verified: phoneVerified } =
+    await resolvePhone(input, role);
   const name = (displayName ?? input.name ?? "Người dùng House X").trim();
+  const displayPhone = toDisplayPhone(normalizedPhone);
 
   let account = await prisma.userAccount.findUnique({
     where: { zaloUserId },
   });
 
+  // Đã có tài khoản theo Zalo → danh tính = Zalo. Chỉ cập nhật SĐT khi đã xác minh từ Zalo.
+  if (account) {
+    if (phoneVerified && account.normalizedPhone !== normalizedPhone) {
+      const conflict = await prisma.userAccount.findUnique({
+        where: { normalizedPhone },
+      });
+      if (conflict && conflict.id !== account.id) {
+        throw new ZaloAuthError(
+          "PHONE_LINKED_OTHER_ZALO",
+          "Số điện thoại Zalo đã gắn tài khoản House X khác.",
+        );
+      }
+      account = await prisma.userAccount.update({
+        where: { id: account.id },
+        data: {
+          phone: displayPhone,
+          normalizedPhone,
+          ...(displayName && !account.name ? { name: displayName } : {}),
+        },
+      });
+      if (account.role === "CUSTOMER") {
+        await prisma.customer.updateMany({
+          where: { userAccountId: account.id },
+          data: { phone: displayPhone, normalizedPhone },
+        });
+      } else if (account.role === "BROKER") {
+        await prisma.broker.updateMany({
+          where: { userAccountId: account.id },
+          data: { phone: displayPhone },
+        });
+      }
+    } else if (displayName && !account.name) {
+      account = await prisma.userAccount.update({
+        where: { id: account.id },
+        data: { name: displayName },
+      });
+    }
+  }
+
+  // Chưa có theo Zalo: chỉ được gắn vào tài khoản sẵn có nếu SĐT đã xác minh (chống phone-claim).
   if (!account) {
     const byPhone = await prisma.userAccount.findUnique({
       where: { normalizedPhone },
@@ -94,11 +191,20 @@ export async function loginOrRegisterWithZalo(input: ZaloAuthInput) {
           "Số điện thoại đã gắn tài khoản Zalo khác.",
         );
       }
+      if (!phoneVerified && !byPhone.zaloUserId) {
+        throw new ZaloAuthError(
+          "PHONE_CLAIM_REQUIRES_VERIFY",
+          "Số này đã có trên House X (đăng ký web). Cho phép chia sẻ SĐT Zalo để liên kết an toàn, hoặc đăng nhập trên web.",
+        );
+      }
       account = await prisma.userAccount.update({
         where: { id: byPhone.id },
         data: {
           zaloUserId,
           ...(displayName && !byPhone.name ? { name: displayName } : {}),
+          ...(phoneVerified
+            ? { phone: displayPhone, normalizedPhone }
+            : {}),
         },
       });
     }
@@ -110,7 +216,7 @@ export async function loginOrRegisterWithZalo(input: ZaloAuthInput) {
         data: {
           role,
           name,
-          phone: normalizedPhone.replace(/^\+84/, "0"),
+          phone: displayPhone,
           normalizedPhone,
           email: placeholderEmail(zaloUserId),
           emailVerified: false,
@@ -135,7 +241,10 @@ export async function loginOrRegisterWithZalo(input: ZaloAuthInput) {
         const bypass =
           process.env.ZALO_AUTH_DEV_BYPASS === "true" &&
           process.env.NODE_ENV !== "production";
-        const suffix = zaloUserId.replace(/[^a-zA-Z0-9]/g, "").slice(-6).toUpperCase();
+        const suffix = zaloUserId
+          .replace(/[^a-zA-Z0-9]/g, "")
+          .slice(-6)
+          .toUpperCase();
         await tx.broker.create({
           data: {
             userAccountId: created.id,

@@ -128,6 +128,92 @@ a {
   border-color: rgba(155, 17, 30, 0.22);
 }
 
+.account-broker-steps {
+  margin: 0 0 14px;
+  padding-left: 18px;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.account-broker-steps li {
+  margin-bottom: 4px;
+}
+
+.account-diag {
+  margin-top: 14px;
+}
+
+.account-diag-toggle {
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--hx-muted);
+  cursor: pointer;
+}
+
+.account-diag-list {
+  list-style: none;
+  margin: 12px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.account-diag-item {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  background: rgba(0, 0, 0, 0.02);
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.account-diag-badge {
+  flex: 0 0 auto;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 800;
+  color: #fff;
+  margin-top: 1px;
+}
+
+.account-diag-item.diag-ok {
+  border-color: rgba(22, 128, 61, 0.3);
+  background: rgba(22, 128, 61, 0.06);
+}
+.account-diag-item.diag-ok .account-diag-badge {
+  background: #16803d;
+}
+
+.account-diag-item.diag-warn {
+  border-color: rgba(180, 120, 0, 0.35);
+  background: rgba(180, 120, 0, 0.07);
+}
+.account-diag-item.diag-warn .account-diag-badge {
+  background: #b47800;
+}
+
+.account-diag-item.diag-fail {
+  border-color: rgba(155, 17, 30, 0.35);
+  background: rgba(155, 17, 30, 0.07);
+}
+.account-diag-item.diag-fail .account-diag-badge {
+  background: #9b111e;
+}
+
 .account-login-zalo-btn {
   background: linear-gradient(180deg, #0068ff 0%, #0050c8 100%);
   border-color: rgba(0, 80, 200, 0.35);

@@ -1,8 +1,9 @@
 /**
  * Auth qua zmp-sdk UMD (`window["zmp-sdk"]`) — KHÔNG import vào Vite bundle.
  */
-import { AUTH_DEV_BYPASS } from "@/config";
+import { AUTH_DEV_BYPASS, HOUSEX_API_BASE } from "@/config";
 import {
+  fetchServerAuthDiag,
   loginWithZaloAccessToken,
   loginWithZaloDev,
   type HouseXUser,
@@ -54,15 +55,47 @@ const PHONE_MS = 12000;
 const PROFILE_MS = 5000;
 const TOKEN_MS = 10000;
 
+/**
+ * Tên global UMD có thể gặp tùy cách runtime Zalo nạp listSyncJS.
+ * Chuẩn hiện tại (zmp-sdk >= 2.x): globalThis["zmp-sdk"].
+ * Thêm fallback phòng khi bundle/tên khác — tránh "Chưa có Zalo SDK" giả.
+ */
+const SDK_GLOBAL_CANDIDATES = [
+  "zmp-sdk",
+  "zmp",
+  "ZMPSDK",
+  "zmpSdk",
+  "ZaloMiniApp",
+] as const;
+
+function looksLikeZmp(v: unknown): v is ZmpApis {
+  return (
+    typeof v === "object" &&
+    v !== null &&
+    typeof (v as ZmpApis).getAccessToken === "function"
+  );
+}
+
+/** Trả API + tên global đã tìm thấy (null nếu không có SDK). */
+function findZmpApis(): { api: ZmpApis; globalName: string } | null {
+  const g = globalThis as unknown as Record<string, unknown>;
+  for (const name of SDK_GLOBAL_CANDIDATES) {
+    const candidate = g[name];
+    if (looksLikeZmp(candidate)) {
+      return { api: candidate, globalName: name };
+    }
+  }
+  return null;
+}
+
 function getZmpApis(): ZmpApis {
-  const g = globalThis as unknown as { "zmp-sdk"?: ZmpApis };
-  const api = g["zmp-sdk"];
-  if (!api?.getAccessToken) {
+  const found = findZmpApis();
+  if (!found) {
     throw new Error(
       "Chưa có Zalo SDK. Mở Mini App trong Zalo (không dùng trình duyệt thường).",
     );
   }
-  return api;
+  return found.api;
 }
 
 function withTimeout<T>(
@@ -259,12 +292,20 @@ export async function loginViaZaloMiniApp(opts?: {
       });
     }
 
+    // Môi giới: bắt buộc token SĐT từ Zalo (không chấp nhận nhập tay).
+    if (preferredRole === "BROKER" && !phoneToken && !AUTH_DEV_BYPASS) {
+      onPhase?.("need_phone");
+      throw new Error(
+        "Môi giới phải cho phép chia sẻ số điện thoại đang dùng Zalo. Nhấn Cho phép trên popup Zalo rồi thử lại.",
+      );
+    }
+
     onPhase?.("server");
-    // Có SĐT nhập tay thì không gửi phoneToken — tránh exchange fail / secret lệch che lỗi.
+    // Ưu tiên SĐT Zalo (đã xác minh). Chỉ dùng số nhập tay khi Zalo không trả phoneToken.
     const user = await loginWithZaloAccessToken({
       accessToken,
-      ...(phoneFallback ? { phone: phoneFallback } : {}),
-      ...(!phoneFallback && phoneToken ? { phoneToken } : {}),
+      ...(phoneToken ? { phoneToken } : {}),
+      ...(!phoneToken && phoneFallback ? { phone: phoneFallback } : {}),
       name,
       preferredRole,
       timeoutMs: 22000,
@@ -276,18 +317,27 @@ export async function loginViaZaloMiniApp(opts?: {
   }
 }
 
-/** Hoàn tất sau khi đã có phiên Zalo + SĐT người dùng nhập. */
+/**
+ * Hoàn tất khi Zalo đã kết nối nhưng chưa chia sẻ SĐT.
+ * Chỉ dùng cho khách (CUSTOMER) — số nhập tay = SĐT liên hệ.
+ * Môi giới không đi nhánh này.
+ */
 export async function completeZaloLoginWithPhone(
   prep: PendingZaloSession,
   phone: string,
   onPhase?: (phase: ZaloLoginPhase) => void,
 ): Promise<HouseXUser> {
+  if (prep.preferredRole === "BROKER" && !AUTH_DEV_BYPASS) {
+    throw new Error(
+      "Môi giới cần cho phép chia sẻ SĐT Zalo — không dùng số nhập tay.",
+    );
+  }
   const trimmed = phone.trim();
   onPhase?.("server");
   const user = await loginWithZaloAccessToken({
     accessToken: prep.accessToken,
-    phone: trimmed,
-    // Đã có SĐT nhập tay — không phụ thuộc exchange phoneToken.
+    // Ưu tiên token Zalo nếu đã có; không thì SĐT liên hệ nhập tay.
+    ...(prep.phoneToken ? { phoneToken: prep.phoneToken } : { phone: trimmed }),
     name: prep.name,
     preferredRole: prep.preferredRole,
     timeoutMs: 22000,
@@ -319,4 +369,172 @@ export async function loginWithPhoneInMiniApp(opts: {
     phoneFallback: trimmed,
     onPhase,
   });
+}
+
+/* ------------------------------------------------------------------ *
+ * Chẩn đoán trên máy (Zalo WebView không có DevTools).
+ * Mục tiêu: chỉ ra CHÍNH XÁC bước hỏng — SDK global / accessToken /
+ * số điện thoại / máy chủ — thay vì đoán mò rồi sửa mù.
+ * ------------------------------------------------------------------ */
+
+export type DiagStatus = "ok" | "warn" | "fail";
+
+export type DiagLine = {
+  key: string;
+  label: string;
+  status: DiagStatus;
+  detail: string;
+};
+
+/** Soi các global UMD khả dĩ — xác nhận SDK có được nạp không. */
+export function inspectZaloSdkGlobals(): {
+  found: boolean;
+  globalName: string | null;
+  keyCount: number;
+  hasGetAccessToken: boolean;
+  hasGetPhoneNumber: boolean;
+  hasAuthorize: boolean;
+  presentGlobals: string[];
+} {
+  const g = globalThis as unknown as Record<string, unknown>;
+  const presentGlobals = SDK_GLOBAL_CANDIDATES.filter(
+    (n) => g[n] != null && typeof g[n] === "object",
+  );
+  const found = findZmpApis();
+  const api = found?.api as Record<string, unknown> | undefined;
+  return {
+    found: Boolean(found),
+    globalName: found?.globalName ?? null,
+    keyCount: api ? Object.keys(api).length : 0,
+    hasGetAccessToken: typeof api?.getAccessToken === "function",
+    hasGetPhoneNumber: typeof api?.getPhoneNumber === "function",
+    hasAuthorize: typeof api?.authorize === "function",
+    presentGlobals,
+  };
+}
+
+function short(value: string, max = 96): string {
+  const s = value.replace(/\s+/g, " ").trim();
+  return s.length > max ? `${s.slice(0, max)}…` : s;
+}
+
+/**
+ * Chạy toàn bộ chuỗi kiểm tra và trả về báo cáo hiển thị ngay trên UI.
+ * Không ném lỗi — mọi bước đều được nuốt và ghi lại trạng thái.
+ */
+export async function runZaloDiagnostics(): Promise<DiagLine[]> {
+  const lines: DiagLine[] = [];
+
+  // 1) API base — localhost trong Zalo = chắc chắn hỏng.
+  let apiHost = HOUSEX_API_BASE;
+  try {
+    apiHost = new URL(HOUSEX_API_BASE).host;
+  } catch {
+    /* keep raw */
+  }
+  const badApi = /localhost|127\.0\.0\.1/i.test(apiHost);
+  lines.push({
+    key: "api-base",
+    label: "Máy chủ API",
+    status: badApi ? "fail" : "ok",
+    detail: badApi
+      ? `${apiHost} — bản build sai (Zalo không gọi được localhost). Build lại với VITE_HOUSEX_API_BASE=https://timnhaxahoi.com`
+      : apiHost,
+  });
+
+  // 2) SDK global — nguyên nhân số 1 khiến nút Zalo "không làm gì".
+  const sdk = inspectZaloSdkGlobals();
+  lines.push({
+    key: "sdk-global",
+    label: "Zalo SDK (global UMD)",
+    status: sdk.found ? "ok" : "fail",
+    detail: sdk.found
+      ? `Tìm thấy global "${sdk.globalName}" · ${sdk.keyCount} API · getAccessToken=${sdk.hasGetAccessToken} getPhoneNumber=${sdk.hasGetPhoneNumber}`
+      : `Không thấy SDK. Global object hiện có: [${sdk.presentGlobals.join(", ") || "none"}]. ` +
+        `Kiểm tra listSyncJS trong app-config.json có assets/zmp-sdk.umd.js và mở app TỪ TRONG Zalo.`,
+  });
+
+  // 3) getAccessToken — token thật để máy chủ verify /v2.0/me.
+  if (sdk.found) {
+    try {
+      const api = getZmpApis();
+      const raw = await callZmp<unknown>(
+        api.getAccessToken,
+        {},
+        TOKEN_MS,
+        "getAccessToken",
+      );
+      const token = extractAccessToken(raw);
+      lines.push({
+        key: "access-token",
+        label: "getAccessToken",
+        status: token ? "ok" : "fail",
+        detail: token
+          ? `OK · độ dài ${token.length}`
+          : `SDK trả về nhưng không có token hợp lệ: ${short(JSON.stringify(raw))}`,
+      });
+    } catch (err) {
+      lines.push({
+        key: "access-token",
+        label: "getAccessToken",
+        status: "fail",
+        detail: short(err instanceof Error ? err.message : String(err)),
+      });
+    }
+
+    // 4) getPhoneNumber — tùy chọn; lỗi -201/-202 = user/app chưa cấp quyền SĐT.
+    try {
+      const api = getZmpApis();
+      const raw = await callZmp<{ token?: string }>(
+        api.getPhoneNumber,
+        {},
+        PHONE_MS,
+        "getPhoneNumber",
+      );
+      const phoneToken = extractPhoneToken(raw);
+      lines.push({
+        key: "phone-token",
+        label: "getPhoneNumber",
+        status: phoneToken ? "ok" : "warn",
+        detail: phoneToken
+          ? "OK · có token SĐT (máy chủ cần ZALO_APP_SECRET để đổi ra số)"
+          : "Không có token SĐT — dùng nhập tay. Nếu cần tự động: bật quyền SĐT cho Mini App + user đồng ý.",
+      });
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : String(err);
+      lines.push({
+        key: "phone-token",
+        label: "getPhoneNumber",
+        status: "warn",
+        detail: `${short(msg)} — vẫn đăng nhập được bằng SĐT nhập tay.`,
+      });
+    }
+  }
+
+  // 5) Máy chủ auth — AUTH_SECRET / DB / bypass.
+  try {
+    const d = await fetchServerAuthDiag();
+    const problems: string[] = [];
+    if (!d.hasAuthSecret) problems.push("thiếu AUTH_SECRET (không tạo được phiên)");
+    if (!d.dbOk) problems.push(`DB lỗi: ${short(d.dbError ?? "", 40)}`);
+    if (d.bypass && d.nodeEnv === "production")
+      problems.push("ZALO_AUTH_DEV_BYPASS=true trên production");
+    lines.push({
+      key: "server",
+      label: "Máy chủ auth (/api/auth/zalo/diag)",
+      status: problems.length ? "fail" : "ok",
+      detail: problems.length
+        ? problems.join(" · ")
+        : `OK · env=${d.nodeEnv} · AppSecret=${d.hasZaloAppSecret} · DB ok`,
+    });
+  } catch (err) {
+    lines.push({
+      key: "server",
+      label: "Máy chủ auth (/api/auth/zalo/diag)",
+      status: "fail",
+      detail: short(err instanceof Error ? err.message : String(err)),
+    });
+  }
+
+  return lines;
 }
