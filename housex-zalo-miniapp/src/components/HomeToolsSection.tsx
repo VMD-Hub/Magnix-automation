@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import { ShortcutGlyph } from "@/components/AppIcons";
 import type { HomeToolItem } from "@/data/home-ia";
-import { moEmbedHref } from "@/services/mo-embed";
+import { openHouseXWeb } from "@/services/open-housex-web";
 
 export function HomeToolsSection({ items }: { items: HomeToolItem[] }) {
   const navigate = useNavigate();
@@ -25,7 +25,9 @@ export function HomeToolsSection({ items }: { items: HomeToolItem[] }) {
             key={t.id}
             type="button"
             className="tool-chip"
-            onClick={() => navigate(moEmbedHref(t.path))}
+            onClick={() => {
+              void openHouseXWeb(t.path, navigate);
+            }}
           >
             <span className="tool-chip-icon">
               <ShortcutGlyph id={t.id} size={18} />

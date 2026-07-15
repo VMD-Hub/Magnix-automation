@@ -1686,6 +1686,28 @@ select.input {
   text-align: center;
 }
 
+.tool-viewer-error {
+  padding: 24px 16px;
+  max-width: 420px;
+  margin: 0 auto;
+}
+
+.tool-viewer-error h2 {
+  margin: 0 0 8px;
+  font-size: 17px;
+}
+
+.tool-viewer-error p {
+  margin: 0 0 12px;
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.tool-viewer-error code {
+  font-size: 12px;
+  word-break: break-all;
+}
+
 .tool-viewer-frame {
   flex: 1;
   width: 100%;

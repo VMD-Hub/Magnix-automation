@@ -1,17 +1,18 @@
 /**
- * Embed path helper — tránh ?p=%2F... trên HashRouter Zalo (dễ mất param → fallback /tin-tuc).
- * Dùng /mo/tai-chinh/vay-mua-nha thay cho /mo?p=/tai-chinh/vay-mua-nha
+ * Embed path helper — ưu tiên /mo/tai-chinh/... ; legacy ?p= vẫn đọc được.
+ * Không mặc định sang /tin-tuc (gây hiểu nhầm “luôn về tin tức”).
  */
 export function moEmbedHref(webPath: string): string {
   const p = webPath.startsWith("/") ? webPath : `/${webPath}`;
   return `/mo${p}`;
 }
 
-/** Lấy path web từ location Mini App (/mo/... hoặc ?p= legacy). */
+/** Lấy path web từ location Mini App. Trả null nếu không suy ra được. */
 export function webPathFromMoLocation(
   pathname: string,
   queryP: string | null,
-): string {
+  splat?: string | undefined,
+): string | null {
   if (queryP) {
     try {
       return decodeURIComponent(queryP.trim());
@@ -19,8 +20,11 @@ export function webPathFromMoLocation(
       return queryP.trim();
     }
   }
-  if (pathname.startsWith("/mo/") && pathname.length > 4) {
-    return pathname.slice(3); // "/mo" + "/tai-chinh/..." → "/tai-chinh/..."
+  if (splat && splat.length > 0) {
+    return splat.startsWith("/") ? splat : `/${splat}`;
   }
-  return "/tin-tuc";
+  if (pathname.startsWith("/mo/") && pathname.length > 4) {
+    return pathname.slice(3);
+  }
+  return null;
 }

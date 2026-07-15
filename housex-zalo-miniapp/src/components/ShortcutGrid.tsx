@@ -1,12 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import { ShortcutGlyph } from "@/components/AppIcons";
 import type { HomeNavItem } from "@/data/home-ia";
-import { moEmbedHref } from "@/services/mo-embed";
-
-function hrefOf(s: HomeNavItem): string {
-  if (s.kind === "webview") return moEmbedHref(s.to);
-  return s.to;
-}
+import { openHouseXWeb } from "@/services/open-housex-web";
 
 /** Hàng nút nhanh — kiểu be: nền sáng, chỉ icon tô ruby brand, chữ tối. */
 export function ShortcutGrid({ items }: { items: HomeNavItem[] }) {
@@ -56,7 +51,9 @@ export function ShortcutGrid({ items }: { items: HomeNavItem[] }) {
             key={s.id}
             type="button"
             className="shortcut-item"
-            onClick={() => navigate(hrefOf(s))}
+            onClick={() => {
+              void openHouseXWeb(s.to, navigate);
+            }}
           >
             {inner}
           </button>

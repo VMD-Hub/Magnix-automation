@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { ShortcutGlyph } from "@/components/AppIcons";
 import type { HomeServiceItem } from "@/data/home-ia";
-import { moEmbedHref } from "@/services/mo-embed";
+import { openHouseXWeb } from "@/services/open-housex-web";
 
 type Props = {
   items: HomeServiceItem[];
@@ -10,10 +10,10 @@ type Props = {
   titleId?: string;
 };
 
-/** Lưới icon dịch vụ — hệ sinh thái thu nhập & uy tín House X. */
+/** Lưới icon dịch vụ — mở bằng Zalo openWebview (không iframe /tin-tuc). */
 export function EcosystemServicesGrid({
   items,
-  lead = "Vay · bảo hiểm · định giá · nội thất — đồng hành trọn hành trình, tạo niềm tin với khách.",
+  lead = "Vay · bảo hiểm · định giá · nội thất — hệ sinh thái House X.",
   title = "Dịch vụ",
   titleId = "services-title",
 }: Props) {
@@ -25,6 +25,9 @@ export function EcosystemServicesGrid({
         <h2 id={titleId} className="section-title">
           {title}
         </h2>
+        <span className="muted" style={{ fontSize: 11 }}>
+          bản dịch vụ 15c
+        </span>
       </div>
       <p className="muted section-lead">{lead}</p>
       <div className="shortcut-grid" role="list">
@@ -36,7 +39,9 @@ export function EcosystemServicesGrid({
             role="listitem"
             title={s.title}
             aria-label={`${s.label}: ${s.desc}`}
-            onClick={() => navigate(moEmbedHref(s.path))}
+            onClick={() => {
+              void openHouseXWeb(s.path, navigate);
+            }}
           >
             <span className="shortcut-icon">
               <ShortcutGlyph id={s.id} size={28} />
