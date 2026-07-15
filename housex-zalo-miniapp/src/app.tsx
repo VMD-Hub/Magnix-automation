@@ -16,6 +16,7 @@ import { ProjectDetailPage } from "@/pages/ProjectDetailPage";
 import { ConsultPage } from "@/pages/ConsultPage";
 import { StartPage } from "@/pages/StartPage";
 import { ToolsHubPage } from "@/pages/ToolsHubPage";
+import { ServicesHubPage } from "@/pages/ServicesHubPage";
 import { ToolViewerPage } from "@/pages/ToolViewerPage";
 import { WebViewPage } from "@/pages/WebViewPage";
 
@@ -33,6 +34,7 @@ export default function App() {
             <Route path="kham-pha" element={<ExploreHubPage />} />
             <Route path="du-an/:slug" element={<ProjectDetailPage />} />
             <Route path="tu-van" element={<ConsultPage />} />
+            <Route path="dich-vu" element={<ServicesHubPage />} />
             <Route path="cong-cu" element={<ToolsHubPage />} />
             <Route path="cong-cu/mo" element={<ToolViewerPage />} />
             <Route path="mo" element={<WebViewPage />} />

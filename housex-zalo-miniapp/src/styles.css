@@ -1391,7 +1391,7 @@ button.chip-active {
   height: 60px;
   padding-bottom: env(safe-area-inset-bottom, 0);
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
   background: rgba(255, 255, 255, 0.96);
   border-top: 1px solid var(--hx-border);
   backdrop-filter: blur(14px);
@@ -1429,7 +1429,14 @@ button.chip-active {
 }
 
 .tabbar-label {
-  line-height: 1;
+  font-size: 10px;
+  line-height: 1.15;
+  max-width: 100%;
+  padding: 0 2px;
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .brand {

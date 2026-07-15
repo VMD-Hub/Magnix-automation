@@ -21,6 +21,17 @@ import {
 } from "@/services/webview";
 import { webPathFromMoLocation } from "@/services/mo-embed";
 
+function isServiceWebPath(path: string | null): boolean {
+  if (!path) return false;
+  return (
+    path.startsWith("/tai-chinh") ||
+    path.startsWith("/dinh-gia") ||
+    path.startsWith("/noi-that") ||
+    path.startsWith("/dich-vu") ||
+    path.startsWith("/dang-ky")
+  );
+}
+
 /** Nhãn người dùng — không hiện path kỹ thuật kiểu /dinh-gia. */
 function viewerTitle(path: string | null, handoff: boolean): string {
   if (handoff) return "Hồ sơ";
@@ -77,7 +88,9 @@ export function WebViewPage() {
     ? "/tai-khoan"
     : safePath?.startsWith("/cong-cu")
       ? "/cong-cu"
-      : homePath;
+      : isServiceWebPath(safePath)
+        ? "/dich-vu"
+        : homePath;
 
   const backLabel = isHandoff ? "← Tài khoản" : "← Quay lại";
   const title = viewerTitle(safePath, isHandoff);

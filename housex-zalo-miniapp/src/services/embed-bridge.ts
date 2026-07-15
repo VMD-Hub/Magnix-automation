@@ -14,6 +14,7 @@ const ALLOWED_MINI_PATHS = new Set([
   "/noxh",
   "/cctm",
   "/kham-pha",
+  "/dich-vu",
   "/cong-cu",
   "/tu-van",
   "/tai-khoan",

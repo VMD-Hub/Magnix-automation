@@ -52,6 +52,50 @@ export function IconTools({ size, className }: IconProps) {
   );
 }
 
+/** Lưới dịch vụ — tab Dịch vụ */
+export function IconServices({ size, className }: IconProps) {
+  return (
+    <Svg size={size} className={className}>
+      <rect
+        x="4"
+        y="4"
+        width="6.5"
+        height="6.5"
+        rx="1.4"
+        stroke="currentColor"
+        strokeWidth="1.6"
+      />
+      <rect
+        x="13.5"
+        y="4"
+        width="6.5"
+        height="6.5"
+        rx="1.4"
+        stroke="currentColor"
+        strokeWidth="1.6"
+      />
+      <rect
+        x="4"
+        y="13.5"
+        width="6.5"
+        height="6.5"
+        rx="1.4"
+        stroke="currentColor"
+        strokeWidth="1.6"
+      />
+      <rect
+        x="13.5"
+        y="13.5"
+        width="6.5"
+        height="6.5"
+        rx="1.4"
+        stroke="currentColor"
+        strokeWidth="1.6"
+      />
+    </Svg>
+  );
+}
+
 export function IconUser({ size, className }: IconProps) {
   return (
     <Svg size={size} className={className}>
