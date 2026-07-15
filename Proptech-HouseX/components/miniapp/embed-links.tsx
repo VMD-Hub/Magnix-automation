@@ -1,15 +1,19 @@
 "use client";
 
 import Link from "next/link";
-import type { ReactNode } from "react";
+import type { ReactNode, MouseEvent } from "react";
 import {
   useEmbedAwareHref,
-  useEmbedHomeHref,
   useMiniAppEmbed,
 } from "@/components/miniapp/miniapp-embed-context";
-import { getHouseXMiniAppEntryUrl } from "@/lib/personal-brand/vu-nguyen/channel-links";
+import { goMiniAppHome } from "@/lib/miniapp/request-miniapp-nav";
 
-/** Logo / «Trang chủ» — về Mini App khi đang xem từ Zalo webview. */
+function onEmbedHomeClick(e: MouseEvent<HTMLAnchorElement>) {
+  e.preventDefault();
+  goMiniAppHome();
+}
+
+/** Logo / «Trang chủ» — về home Mini App qua postMessage (không zalo.me trong iframe). */
 export function EmbedHomeLink({
   children,
   className,
@@ -19,15 +23,16 @@ export function EmbedHomeLink({
   className?: string;
   ariaLabel?: string;
 }) {
-  const href = useEmbedHomeHref("/");
   const embed = useMiniAppEmbed();
 
   if (embed) {
     return (
       <a
-        href={href}
+        href="/"
+        role="link"
         className={className}
-        aria-label={`${ariaLabel} — House X Mini App`}
+        aria-label={ariaLabel}
+        onClick={onEmbedHomeClick}
       >
         {children}
       </a>
@@ -56,12 +61,16 @@ export function EmbedAwareLink({
   const resolved = useEmbedAwareHref(href);
   const embed = useMiniAppEmbed();
 
-  if (embed && (href === "/" || resolved.startsWith("https://zalo.me/"))) {
+  if (embed && (href === "/" || href.startsWith("/#"))) {
     return (
       <a
-        href={getHouseXMiniAppEntryUrl()}
+        href="/"
         className={className}
-        onClick={onClick}
+        onClick={(e) => {
+          e.preventDefault();
+          goMiniAppHome();
+          onClick?.();
+        }}
       >
         {children}
       </a>

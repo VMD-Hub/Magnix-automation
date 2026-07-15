@@ -4,7 +4,6 @@ import { toolAbsoluteUrl } from "@/services/tools";
 
 /**
  * Nhúng công cụ House X (Next.js) trong khung Mini App.
- * Local: cần API/dev server ở VITE_HOUSEX_API_BASE (vd. :3000).
  */
 export function ToolViewerPage() {
   const [params] = useSearchParams();
@@ -23,12 +22,11 @@ export function ToolViewerPage() {
   return (
     <div className="tool-viewer">
       <div className="tool-viewer-bar">
-        <Link to="/cong-cu" className="muted">
-          ← Công cụ
+        <Link to="/cong-cu" className="tool-viewer-back">
+          ← Quay lại
         </Link>
-        <a className="muted" href={src} target="_blank" rel="noreferrer">
-          Mở rộng
-        </a>
+        <span className="tool-viewer-title">Công cụ</span>
+        <span className="tool-viewer-bar-spacer" aria-hidden />
       </div>
       <iframe
         title="Công cụ House X"

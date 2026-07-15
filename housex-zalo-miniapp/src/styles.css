@@ -1666,14 +1666,41 @@ select.input {
 }
 
 .tool-viewer-bar {
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(5.5rem, auto) 1fr minmax(5.5rem, auto);
   align-items: center;
-  justify-content: space-between;
   gap: 8px;
-  padding: 10px 14px;
+  padding: 12px 14px;
   border-bottom: 1px solid var(--hx-border);
   background: var(--hx-surface);
   flex-shrink: 0;
+}
+
+.tool-viewer-back {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--hx-accent-2);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.tool-viewer-back:active {
+  opacity: 0.7;
+}
+
+.tool-viewer-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--hx-text);
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tool-viewer-bar-spacer {
+  width: 1px;
+  height: 1px;
 }
 
 .tool-viewer-path {

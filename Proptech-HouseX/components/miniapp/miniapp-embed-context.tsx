@@ -16,7 +16,6 @@ import {
   isMiniAppEmbedValue,
   withMiniAppEmbedParam,
 } from "@/lib/miniapp/embed-mode";
-import { getHouseXMiniAppEntryUrl } from "@/lib/personal-brand/vu-nguyen/channel-links";
 
 const MiniAppEmbedContext = createContext(false);
 
@@ -91,19 +90,16 @@ export function useMiniAppEmbed(): boolean {
 /** URL home khi đang embed Mini App; ngược lại path web. */
 export function useEmbedHomeHref(webFallback = "/"): string {
   const embed = useMiniAppEmbed();
-  return useMemo(
-    () => (embed ? getHouseXMiniAppEntryUrl() : webFallback),
-    [embed, webFallback],
-  );
+  return useMemo(() => (embed ? "/" : webFallback), [embed, webFallback]);
 }
 
-/** Giữ hx_embed khi điều hướng nội bộ trong webview Mini App. */
+/** Giữ hx_embed khi điều hướng nội bộ trong iframe Mini App. */
 export function useEmbedAwareHref(href: string): string {
   const embed = useMiniAppEmbed();
   if (!embed) return href;
   if (!href.startsWith("/")) return href;
   if (href === "/" || href.startsWith("/#")) {
-    return getHouseXMiniAppEntryUrl();
+    return "/";
   }
   return withMiniAppEmbedParam(href);
 }

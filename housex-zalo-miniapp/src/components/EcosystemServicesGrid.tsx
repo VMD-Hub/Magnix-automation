@@ -26,7 +26,7 @@ export function EcosystemServicesGrid({
           {title}
         </h2>
         <span className="muted" style={{ fontSize: 11 }}>
-          bản dịch vụ 15d
+          bản dịch vụ 15e
         </span>
       </div>
       <p className="muted section-lead">{lead}</p>

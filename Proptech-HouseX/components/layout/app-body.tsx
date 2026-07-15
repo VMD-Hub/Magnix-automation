@@ -6,7 +6,6 @@ import type { ReactNode } from "react";
 import { SiteHeader } from "@/components/layout/site-header";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { EmailVerificationBanner } from "@/components/layout/header-auth";
-import { MiniAppEmbedBar } from "@/components/miniapp/miniapp-embed-bar";
 import {
   MiniAppEmbedProvider,
   useMiniAppEmbed,
@@ -28,7 +27,6 @@ function SiteChrome({
   if (minimal) {
     return (
       <ThemeShell>
-        {embed ? <MiniAppEmbedBar /> : null}
         <main className="flex min-h-dvh flex-1 flex-col">{children}</main>
       </ThemeShell>
     );
@@ -61,11 +59,8 @@ function AppBodyChrome({ children }: { children: ReactNode }) {
 }
 
 /**
- * Tách shell site vs console admin — dùng pathname client (SSR + hydrate khớp).
- * Admin không bọc ThemeShell Suspense để tránh trang login trắng khi chunk chậm.
- * Embed Mini App (?hx_embed=miniapp): ẩn header/footer web — giữ cảm giác app.
- *
- * Fallback Suspense không gắn MiniAppEmbedProvider (tránh useSearchParams trên /_not-found).
+ * Embed Mini App: ẩn header/footer web — điều hướng về home do thanh Mini App
+ * («← Quay lại») + breadcrumb «Trang chủ» (postMessage), không thêm bar trùng.
  */
 export function AppBody({ children }: { children: ReactNode }) {
   const pathname = usePathname() ?? "";
