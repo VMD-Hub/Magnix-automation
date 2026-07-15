@@ -77,7 +77,7 @@ export async function openHouseXWeb(
     return;
   }
 
-  const url = `${HOUSEX_API_BASE}${path}`;
+  const url = `${HOUSEX_API_BASE}${withEmbed(path)}`;
 
   try {
     await callOpenWebview(url);
@@ -87,4 +87,9 @@ export async function openHouseXWeb(
   }
 
   navigate(moEmbedHref(path));
+}
+
+function withEmbed(path: string): string {
+  if (path.includes("hx_embed=")) return path;
+  return `${path}${path.includes("?") ? "&" : "?"}hx_embed=miniapp`;
 }

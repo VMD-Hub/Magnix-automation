@@ -6,6 +6,7 @@ import type { ReactNode } from "react";
 import { SiteHeader } from "@/components/layout/site-header";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { EmailVerificationBanner } from "@/components/layout/header-auth";
+import { MiniAppEmbedProvider } from "@/components/miniapp/miniapp-embed-context";
 import { ThemeShell } from "@/components/theme/theme-shell";
 import { isVuNguyenPersonalBrandPath } from "@/lib/personal-brand/vu-nguyen/nfc-mode";
 
@@ -37,7 +38,11 @@ function AppBodyChrome({ children }: { children: ReactNode }) {
     return <div className="flex min-h-screen flex-col bg-slate-100">{children}</div>;
   }
 
-  return <SiteChrome minimal={personalBrandShell}>{children}</SiteChrome>;
+  return (
+    <MiniAppEmbedProvider>
+      <SiteChrome minimal={personalBrandShell}>{children}</SiteChrome>
+    </MiniAppEmbedProvider>
+  );
 }
 
 /**

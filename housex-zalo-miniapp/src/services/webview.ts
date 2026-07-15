@@ -61,7 +61,10 @@ export function sanitizeWebPath(raw: string): string | null {
 export function webAbsoluteUrl(path: string): string {
   const p = sanitizeWebPath(path);
   if (!p) return `${HOUSEX_API_BASE}/`;
-  return `${HOUSEX_API_BASE}${p}`;
+  const withEmbed = p.includes("hx_embed=")
+    ? p
+    : `${p}${p.includes("?") ? "&" : "?"}hx_embed=miniapp`;
+  return `${HOUSEX_API_BASE}${withEmbed}`;
 }
 
 export function accountHandoffConsumeUrl(

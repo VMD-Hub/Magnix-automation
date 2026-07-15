@@ -7,6 +7,7 @@ import { Icon } from "@/components/icons";
 import { ButtonLink } from "@/components/ui/button";
 import { HouseXHeaderLogo } from "@/components/brand/housex-header-logo";
 import { HeaderAuth } from "@/components/layout/header-auth";
+import { EmbedAwareLink } from "@/components/miniapp/embed-links";
 import {
   NEWS_HUB_PATH,
   NEWS_HUB_TITLE,
@@ -57,14 +58,13 @@ export function SiteHeader() {
 
         <nav className="hidden items-center gap-1 md:flex">
           {NAV.map((item) => (
-            <Link
+            <EmbedAwareLink
               key={item.href}
               href={item.href}
-              prefetch={PREFETCH_HREFS.has(item.href)}
               className="site-header-nav-link"
             >
               {item.label}
-            </Link>
+            </EmbedAwareLink>
           ))}
         </nav>
 
@@ -87,15 +87,14 @@ export function SiteHeader() {
       <div className={cn("site-header-mobile-panel md:hidden", open ? "block" : "hidden")}>
         <nav className="mx-auto flex max-w-7xl flex-col py-2 container-px">
           {NAV.map((item) => (
-            <Link
+            <EmbedAwareLink
               key={item.href}
               href={item.href}
-              prefetch={PREFETCH_HREFS.has(item.href)}
-              onClick={() => setOpen(false)}
               className="site-header-mobile-link"
+              onClick={() => setOpen(false)}
             >
               {item.label}
-            </Link>
+            </EmbedAwareLink>
           ))}
           <ButtonLink href="/dang-tin" size="sm" className="mt-2">
             Đăng tin

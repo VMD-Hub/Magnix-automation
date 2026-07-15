@@ -1,3 +1,5 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -8,6 +10,7 @@ import {
 } from "@/lib/brand/housex-logo-assets";
 import { getBrandName } from "@/lib/site-config";
 import { cn } from "@/lib/ui/cn";
+import { EmbedHomeLink } from "@/components/miniapp/embed-links";
 
 export { HOUSEX_HEADER_LOGO_SRC } from "@/lib/brand/housex-logo-assets";
 
@@ -19,7 +22,7 @@ type Props = {
   surface?: "ruby" | "light";
 };
 
-/** Logo thanh tiêu đề — mark trong suốt đồng bộ footer. */
+/** Logo thanh tiêu đề — khi mở từ Mini App, chạm logo về Mini App (không về home web). */
 export function HouseXHeaderLogo({
   href = "/",
   className,
@@ -49,6 +52,12 @@ export function HouseXHeaderLogo({
       image
     );
 
+  const logoClass = cn(
+    "housex-header-logo inline-flex shrink-0 items-center rounded-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-400",
+    surface === "light" && "housex-header-logo--light",
+    className,
+  );
+
   if (!href) {
     return (
       <span
@@ -63,14 +72,21 @@ export function HouseXHeaderLogo({
     );
   }
 
+  if (href === "/") {
+    return (
+      <EmbedHomeLink
+        className={logoClass}
+        ariaLabel={`${getBrandName()} — Trang chủ`}
+      >
+        {lockup}
+      </EmbedHomeLink>
+    );
+  }
+
   return (
     <Link
       href={href}
-      className={cn(
-        "housex-header-logo inline-flex shrink-0 items-center rounded-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-400",
-        surface === "light" && "housex-header-logo--light",
-        className,
-      )}
+      className={logoClass}
       aria-label={`${getBrandName()} — Trang chủ`}
     >
       {lockup}

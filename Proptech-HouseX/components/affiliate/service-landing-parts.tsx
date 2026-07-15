@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { AffiliateFaq } from "@/lib/content/affiliate-verticals";
 import { RubySurfaceOrnament } from "@/components/brand/ruby-surface-ornament";
 import { AffiliateContactForm } from "@/components/affiliate/affiliate-contact-form";
+import { EmbedAwareLink } from "@/components/miniapp/embed-links";
 import type { ServiceVerticalId } from "@/lib/content/housex-services-visuals";
 
 export function ServiceLandingHero({
@@ -51,9 +52,9 @@ export function ServiceLandingHero({
               <span key={item.path}>
                 {i > 0 ? <span className="mx-2 text-slate-500">/</span> : null}
                 {i < breadcrumbs.length - 1 ? (
-                  <Link href={item.path} className="hover:text-white">
+                  <EmbedAwareLink href={item.path} className="hover:text-white">
                     {item.name}
-                  </Link>
+                  </EmbedAwareLink>
                 ) : (
                   <span className="text-slate-200">{item.name}</span>
                 )}
@@ -77,20 +78,20 @@ export function ServiceLandingHero({
         {(primaryCta || secondaryCta) && (
           <div className="mt-8 flex flex-wrap gap-3">
             {primaryCta ? (
-              <Link
+              <EmbedAwareLink
                 href={primaryCta.href}
                 className="inline-flex h-12 items-center rounded-xl bg-brand-500 px-6 text-sm font-semibold text-white shadow-lg shadow-brand-900/30 hover:bg-brand-400"
               >
                 {primaryCta.label}
-              </Link>
+              </EmbedAwareLink>
             ) : null}
             {secondaryCta ? (
-              <Link
+              <EmbedAwareLink
                 href={secondaryCta.href}
                 className="inline-flex h-12 items-center rounded-xl border border-white/30 bg-white/10 px-6 text-sm font-semibold text-white backdrop-blur-sm hover:bg-white/20"
               >
                 {secondaryCta.label}
-              </Link>
+              </EmbedAwareLink>
             ) : null}
           </div>
         )}
