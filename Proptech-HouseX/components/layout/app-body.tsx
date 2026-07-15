@@ -64,6 +64,8 @@ function AppBodyChrome({ children }: { children: ReactNode }) {
  * Tách shell site vs console admin — dùng pathname client (SSR + hydrate khớp).
  * Admin không bọc ThemeShell Suspense để tránh trang login trắng khi chunk chậm.
  * Embed Mini App (?hx_embed=miniapp): ẩn header/footer web — giữ cảm giác app.
+ *
+ * Fallback Suspense không gắn MiniAppEmbedProvider (tránh useSearchParams trên /_not-found).
  */
 export function AppBody({ children }: { children: ReactNode }) {
   const pathname = usePathname() ?? "";
@@ -72,9 +74,7 @@ export function AppBody({ children }: { children: ReactNode }) {
   return (
     <Suspense
       fallback={
-        <MiniAppEmbedProvider>
-          <SiteChrome forceMinimal={maybePersonalBrand}>{children}</SiteChrome>
-        </MiniAppEmbedProvider>
+        <SiteChrome forceMinimal={maybePersonalBrand}>{children}</SiteChrome>
       }
     >
       <AppBodyChrome>{children}</AppBodyChrome>

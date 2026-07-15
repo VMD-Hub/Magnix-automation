@@ -2,6 +2,7 @@
 
 import {
   createContext,
+  Suspense,
   useContext,
   useEffect,
   useMemo,
@@ -39,10 +40,9 @@ function readStoredEmbed(): boolean {
 }
 
 /**
- * Bắt ?hx_embed=miniapp từ Mini App + giữ session trong tab webview.
- * Cung cấp context cho logo / breadcrumb "Trang chủ".
+ * Đọc ?hx_embed= — phải nằm trong <Suspense> (Next.js: /_not-found, CSR bailout).
  */
-export function MiniAppEmbedProvider({ children }: { children: ReactNode }) {
+function MiniAppEmbedFromSearch({ children }: { children: ReactNode }) {
   const searchParams = useSearchParams();
   const [stored, setStored] = useState(false);
 
@@ -63,6 +63,24 @@ export function MiniAppEmbedProvider({ children }: { children: ReactNode }) {
     <MiniAppEmbedContext.Provider value={embed}>
       {children}
     </MiniAppEmbedContext.Provider>
+  );
+}
+
+/**
+ * Bắt ?hx_embed=miniapp từ Mini App + giữ session trong tab webview.
+ * Cung cấp context cho logo / breadcrumb "Trang chủ" / chrome tối giản.
+ */
+export function MiniAppEmbedProvider({ children }: { children: ReactNode }) {
+  return (
+    <Suspense
+      fallback={
+        <MiniAppEmbedContext.Provider value={false}>
+          {children}
+        </MiniAppEmbedContext.Provider>
+      }
+    >
+      <MiniAppEmbedFromSearch>{children}</MiniAppEmbedFromSearch>
+    </Suspense>
   );
 }
 
@@ -90,5 +108,4 @@ export function useEmbedAwareHref(href: string): string {
   return withMiniAppEmbedParam(href);
 }
 
-/** Capture-only for layouts that already wrap Suspense — re-export read helpers. */
 export { withMiniAppEmbedParam };
