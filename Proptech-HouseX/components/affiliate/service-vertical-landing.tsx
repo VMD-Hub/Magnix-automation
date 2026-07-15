@@ -35,7 +35,7 @@ export function ServiceVerticalLanding({ vertical }: { vertical: AffiliateVertic
     vertical.id === "dinh-gia"
       ? "Dịch vụ thẩm định giá"
       : vertical.id === "tai-chinh"
-        ? "Gói vay phổ biến"
+        ? "Gói vay & bảo hiểm"
         : vertical.id === "noi-that"
           ? "Phong cách & ý tưởng"
           : "Gói dịch vụ";

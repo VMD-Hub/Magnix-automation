@@ -45,7 +45,7 @@ export const VERTICAL_VISUALS: Record<ServiceVerticalId, VerticalVisual> = {
     stats: [
       { label: "Ngân hàng", value: "10+" },
       { label: "Quy trình", value: "6 bước" },
-      { label: "Gói vay", value: "3 dịch vụ" },
+      { label: "Gói dịch vụ", value: "4 dòng" },
     ],
     process: [
       {
@@ -167,6 +167,7 @@ export const SERVICE_CARD_IMAGES: Record<string, string> = {
   "vay-mua-nha": "/images/tools/finance-hub.png",
   "vay-the-chap": "/images/tools/finance-hub.png",
   "vay-sxkd": "/images/tools/business-loan.png",
+  "bao-hiem-tai-san": u("photo-1450101499163-c8848c66ca85"),
   "tra-cuu-gia-chu-nha": u("photo-1564013799919-ab600027ffc6"),
   "tham-dinh-ngan-hang": "/images/tools/finance-hub.png",
   "chung-nhan-tham-dinh": u("photo-1450101499163-c8848c66ca85"),

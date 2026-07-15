@@ -89,7 +89,7 @@ export const AFFILIATE_VERTICALS: AffiliateVertical[] = [
     layout: "service-cluster",
     title: "Tài chính & vay vốn mua nhà — HouseX",
     metaDescription:
-      "Tư vấn vay mua nhà, vay thế chấp và vay SXKD trên HouseX. Sơ loại hồ sơ, so sánh gói ngân hàng, đồng hành đến giải ngân.",
+      "Tư vấn vay mua nhà, vay thế chấp, vay SXKD và bảo hiểm tài sản (nhà, kho, xe) trên HouseX. Sơ loại hồ sơ, so sánh điều kiện, đồng hành đến giải ngân hoặc nhận GCN.",
     h1: "Tài chính & vay vốn",
     intro: TAI_CHINH_HUB_INTRO,
     disclaimer: HOUSEX_SERVICE_NOTE,
@@ -99,6 +99,7 @@ export const AFFILIATE_VERTICALS: AffiliateVertical[] = [
     hubFaqs: TAI_CHINH_HUB_FAQS,
     toolLinks: [
       { label: "Tính khoản vay mua nhà", href: "/cong-cu/tinh-khoan-vay" },
+      { label: "Bảo hiểm nhà, kho & xe", href: "/tai-chinh/bao-hiem-tai-san" },
       { label: "Thẩm định cho ngân hàng", href: "/dinh-gia/tham-dinh-ngan-hang" },
     ],
     services: TAI_CHINH_SERVICES,

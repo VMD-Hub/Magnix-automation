@@ -26,6 +26,10 @@ export const TAI_CHINH_HUB_FAQS: AffiliateFaq[] = [
     q: "Sau khi gửi form thì ai liên hệ?",
     a: "Tư vấn viên HouseX liên hệ trong giờ làm việc để làm rõ mục đích vay, thu nhập và tài sản đảm bảo — rồi hướng dẫn bước tiếp theo.",
   },
+  {
+    q: "Bảo hiểm nhà khi vay là bắt buộc?",
+    a: "Nhiều gói vay mua nhà / thế chấp yêu cầu bảo hiểm tài sản (nhà ở) theo điều kiện ngân hàng. HouseX tư vấn gói và phí tham khảo; bạn cũng có thể mua bảo hiểm nhà, kho hoặc xe độc lập khi chưa vay — xem /tai-chinh/bao-hiem-tai-san.",
+  },
 ];
 
 export const TAI_CHINH_SERVICES: AffiliateService[] = [
@@ -62,9 +66,10 @@ export const TAI_CHINH_SERVICES: AffiliateService[] = [
 
 Dùng [Tính khoản vay mua nhà](/cong-cu/tinh-khoan-vay) để có con số sơ bộ. Kết quả không thay thế thẩm định ngân hàng.
 
-## Liên quan thẩm định giá
+## Liên quan thẩm định giá & bảo hiểm
 
-Khi ngân hàng yêu cầu chứng thư định giá tài sản đảm bảo, HouseX đồng bộ với dịch vụ [thẩm định cho ngân hàng](/dinh-gia/tham-dinh-ngan-hang) trên cùng nền tảng.`,
+• Khi ngân hàng yêu cầu chứng thư định giá tài sản đảm bảo: [thẩm định cho ngân hàng](/dinh-gia/tham-dinh-ngan-hang)
+• Nhiều gói vay yêu cầu bảo hiểm nhà ở: [bảo hiểm tài sản](/tai-chinh/bao-hiem-tai-san)`,
     faqs: [
       {
         q: "Mua NOXH có vay được không?",
@@ -81,6 +86,10 @@ Khi ngân hàng yêu cầu chứng thư định giá tài sản đảm bảo, Ho
       {
         q: "Bao lâu thì có phản hồi sau form?",
         a: "Thường trong giờ làm việc, trong vòng một ngày làm việc. Hồ sơ phức tạp có thể cần thêm thời gian thu thập giấy tờ.",
+      },
+      {
+        q: "Có bắt buộc mua bảo hiểm nhà khi vay không?",
+        a: "Tùy gói và ngân hàng. Nhiều gói vay mua nhà / thế chấp yêu cầu bảo hiểm tài sản. HouseX tư vấn kèm hồ sơ vay hoặc độc lập — xem /tai-chinh/bao-hiem-tai-san.",
       },
     ],
     ctaLabel: "Tư vấn vay mua nhà",
@@ -121,7 +130,8 @@ Khi ngân hàng yêu cầu chứng thư định giá tài sản đảm bảo, Ho
 
 • Kê khai đúng mục đích và hiện trạng tài sản — sai lệch có thể khiến hồ sơ bị từ chối
 • HouseX không cam kết duyệt vay; quyết định cuối thuộc ngân hàng
-• Cần thẩm định giá chính thức: xem [thẩm định cho ngân hàng](/dinh-gia/tham-dinh-ngan-hang)`,
+• Cần thẩm định giá chính thức: xem [thẩm định cho ngân hàng](/dinh-gia/tham-dinh-ngan-hang)
+• Gói vay bắt buộc BH nhà ở: xem [bảo hiểm tài sản](/tai-chinh/bao-hiem-tai-san)`,
     faqs: [
       {
         q: "Tái tài trợ khác vay mới thế nào?",
@@ -133,7 +143,7 @@ Khi ngân hàng yêu cầu chứng thư định giá tài sản đảm bảo, Ho
       },
       {
         q: "Có bắt buộc bảo hiểm nhà khi vay không?",
-        a: "Một số gói ngân hàng yêu cầu bảo hiểm tài sản. HouseX tư vấn khi gói vay có điều kiện này; chi tiết theo từng hợp đồng.",
+        a: "Nhiều gói ngân hàng yêu cầu bảo hiểm tài sản. HouseX tư vấn phí và gói phù hợp — có thể mua kèm hồ sơ vay hoặc độc lập tại /tai-chinh/bao-hiem-tai-san.",
       },
     ],
     ctaLabel: "Tư vấn vay thế chấp",
@@ -188,7 +198,85 @@ Mục đích vay phải khớp thực tế và quy định ngân hàng. HouseX k
     ctaLabel: "Tư vấn vay SXKD",
     tags: ["SXKD", "SME", "vốn lưu động"],
   },
+  {
+    slug: "bao-hiem-tai-san",
+    title: "Bảo hiểm nhà, kho & xe",
+    metaDescription:
+      "Bảo hiểm phi nhân thọ trên HouseX: nhà ở (kèm vay hoặc độc lập), kho xưởng và vật chất xe — tư vấn gói, phí và giấy chứng nhận điện tử.",
+    h1: "Bảo hiểm tài sản — Kèm hồ sơ vay hay mua riêng?",
+    intro:
+      "Nhiều ngân hàng yêu cầu bảo hiểm nhà ở khi vay mua / thế chấp BĐS. HouseX tư vấn gói bảo hiểm tài sản (phi nhân thọ) cho nhà ở, kho xưởng và xe — vừa đồng bộ với hồ sơ vay, vừa phục vụ khi bạn chỉ cần bảo vệ tài sản mà chưa vay.",
+    body: `## Dịch vụ này dành cho ai?
+
+• Đang / sắp vay mua nhà, thế chấp — ngân hàng yêu cầu **bảo hiểm nhà ở** làm điều kiện giải ngân
+• Chủ nhà, chủ kho / xưởng muốn bảo vệ công trình và tài sản gắn liền
+• Có nhu cầu **bảo hiểm vật chất xe ô tô** (phi nhân thọ), độc lập hoặc cùng lúc với bảo hiểm nhà
+
+## Hai tình huống phổ biến
+
+### 1. Bảo hiểm kèm khoản vay
+
+Khi gói vay bắt buộc BH tài sản, HouseX:
+
+1. **Nhận diện yêu cầu** theo gói vay / ngân hàng
+2. **Tư vấn sơ bộ** phạm vi bảo hiểm và phí tạm tính (thường dựa trên giá trị tham chiếu / hạn mức vay dự kiến)
+3. **Cập nhật phí chính thức** khi có giá thẩm định hoặc hạn mức ngân hàng chấp nhận
+4. **Chốt hợp đồng & thanh toán** theo hướng dẫn HouseX
+5. **Nhận giấy chứng nhận (GCN) điện tử** từ đối tác bảo hiểm được cấp phép — lưu kèm hồ sơ để ngân hàng / bạn tra cứu
+
+### 2. Mua bảo hiểm độc lập
+
+Không cần đang vay: gửi nhu cầu (nhà / kho / xe) → tư vấn viên làm rõ hiện trạng tài sản và mức bảo hiểm mong muốn → báo phí → chốt HĐ và nhận GCN.
+
+## Nhóm sản phẩm (phi nhân thọ)
+
+| Nhóm | Ví dụ nhu cầu |
+|---|---|
+| **Bảo hiểm nhà ở** | Nhà phố, căn hộ — cháy nổ, rủi ro cơ bản theo điều khoản HĐ; thường gắn điều kiện vay |
+| **Kho / xưởng** | Công trình và tài sản trong kho — tư vấn theo hiện trạng và mức độ rủi ro |
+| **Vật chất xe ô tô** | Bảo hiểm thân vỏ / vật chất xe theo gói đối tác |
+
+Phạm vi quyền lợi, mức miễn thường và loại trừ rủi ro theo **hợp đồng bảo hiểm** từng sản phẩm — không cam kết trên website.
+
+## Hồ sơ / thông tin thường cần
+
+• Loại tài sản (nhà / căn hộ / kho / xe) và địa chỉ hoặc biển số
+• Giá trị muốn bảo hiểm hoặc số tiền vay liên quan (nếu kèm hồ sơ vay)
+• CCCD người mua bảo hiểm / thụ hưởng (theo yêu cầu HĐ)
+• Pháp lý sơ bộ (sổ, HĐMB) nếu ngân hàng yêu cầu khớp hồ sơ vay
+
+## Liên quan vay & thẩm định
+
+• [Vay mua nhà](/tai-chinh/vay-mua-nha) · [Vay thế chấp](/tai-chinh/vay-the-chap)
+• Khi cần chứng thư cho ngân hàng: [thẩm định cho ngân hàng](/dinh-gia/tham-dinh-ngan-hang)
+
+> HouseX là đầu mối tư vấn và đồng hành; **doanh nghiệp bảo hiểm được cấp phép** phát hành hợp đồng và GCN. Phí chính thức sau khi có đủ thông tin tài sản / hạn mức.`,
+    faqs: [
+      {
+        q: "Bảo hiểm nhà có bắt buộc khi vay không?",
+        a: "Tùy gói và chính sách từng ngân hàng. Nhiều gói vay mua nhà / thế chấp yêu cầu BH tài sản. HouseX chỉ ra khi gói bạn chọn có điều kiện này và hỗ trợ mua gói phù hợp.",
+      },
+      {
+        q: "Chưa vay — mua bảo hiểm nhà / xe được không?",
+        a: "Được. Dịch vụ phục vụ cả nhu cầu bảo vệ tài sản độc lập (nhà, kho, xe), không bắt buộc gắn hồ sơ vay.",
+      },
+      {
+        q: "Phí bảo hiểm trên web có phải phí cuối không?",
+        a: "Không. Phí tạm tính dựa trên thông tin sơ bộ hoặc hạn mức vay dự kiến. Phí chính thức cập nhật khi có giá trị / hạn mức cuối và điều khoản HĐ cụ thể.",
+      },
+      {
+        q: "Ai phát hành giấy chứng nhận?",
+        a: "Doanh nghiệp bảo hiểm đối tác được cấp phép. Sau thanh toán, bạn nhận GCN điện tử và lưu kèm hồ sơ (kể cả khi nộp cho ngân hàng).",
+      },
+      {
+        q: "Bảo hiểm kho xưởng khác bảo hiểm nhà ở thế nào?",
+        a: "Khác về đối tượng rủi ro, điều khoản và cách định phí. Mô tả loại công trình / hàng hóa trong kho khi gửi form để tư vấn viên báo gói phù hợp.",
+      },
+    ],
+    ctaLabel: "Tư vấn bảo hiểm tài sản",
+    tags: ["bảo hiểm nhà", "kho xưởng", "xe"],
+  },
 ];
 
 export const TAI_CHINH_HUB_INTRO =
-  "HouseX đồng hành vay mua nhà, vay thế chấp và vay SXKD có tài sản đảm bảo: làm rõ nhu cầu, sơ loại hồ sơ, so sánh gói ngân hàng và theo sát đến giải ngân. Lãi suất và phê duyệt do ngân hàng quyết định — HouseX giúp bạn chuẩn bị đúng và đi đúng quy trình.";
+  "HouseX đồng hành vay mua nhà, vay thế chấp, vay SXKD và bảo hiểm tài sản (nhà, kho, xe): làm rõ nhu cầu, sơ loại hồ sơ / gói bảo hiểm, so sánh điều kiện và theo sát đến giải ngân hoặc nhận giấy chứng nhận. Lãi suất và phê duyệt vay do ngân hàng quyết định; hợp đồng bảo hiểm do doanh nghiệp được cấp phép phát hành — HouseX giúp bạn chuẩn bị đúng và đi đúng quy trình.";
