@@ -13,7 +13,7 @@ type Props = {
 /** Lưới icon dịch vụ — nhúng #/mo/... trong shell Mini App (giữ cảm giác app). */
 export function EcosystemServicesGrid({
   items,
-  lead = "Vay · bảo hiểm · định giá · nội thất — hệ sinh thái House X.",
+  lead = "Chọn dịch vụ bạn cần hỗ trợ — xem điều kiện, quy trình và gửi yêu cầu tư vấn.",
   title = "Dịch vụ",
   titleId = "services-title",
 }: Props) {
@@ -26,7 +26,7 @@ export function EcosystemServicesGrid({
           {title}
         </h2>
         <span className="muted" style={{ fontSize: 11 }}>
-          bản dịch vụ 15e
+          bản dịch vụ 15f
         </span>
       </div>
       <p className="muted section-lead">{lead}</p>

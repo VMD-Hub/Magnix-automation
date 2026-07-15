@@ -6,7 +6,7 @@ export function HomeServicesSection({ items }: { items: HomeServiceItem[] }) {
     <EcosystemServicesGrid
       items={items}
       title="Dịch vụ"
-      lead="Vay · bảo hiểm · định giá · nội thất — hệ sinh thái House X tạo uy tín và đồng hành đến giao dịch."
+      lead="Chọn dịch vụ bạn cần hỗ trợ — xem điều kiện, quy trình và gửi yêu cầu tư vấn."
     />
   );
 }
