@@ -10,7 +10,7 @@ type Props = {
   titleId?: string;
 };
 
-/** Lưới icon dịch vụ — mở bằng Zalo openWebview (không iframe /tin-tuc). */
+/** Lưới icon dịch vụ — nhúng #/mo/... trong shell Mini App (giữ cảm giác app). */
 export function EcosystemServicesGrid({
   items,
   lead = "Vay · bảo hiểm · định giá · nội thất — hệ sinh thái House X.",
@@ -26,7 +26,7 @@ export function EcosystemServicesGrid({
           {title}
         </h2>
         <span className="muted" style={{ fontSize: 11 }}>
-          bản dịch vụ 15c
+          bản dịch vụ 15d
         </span>
       </div>
       <p className="muted section-lead">{lead}</p>

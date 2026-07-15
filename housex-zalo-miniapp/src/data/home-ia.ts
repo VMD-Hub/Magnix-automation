@@ -67,7 +67,7 @@ export const QUICK_ACTIONS: HomeNavItem[] = [
 
 /**
  * Hệ sinh thái dịch vụ House X — tạo thu nhập + uy tín với khách.
- * Mở landing web trong webview Mini App.
+ * Mở landing web nhúng trong khung Mini App (#/mo/...) — giữ tab bar, không nhảy openWebview.
  */
 export const HOME_SERVICES: HomeServiceItem[] = [
   {
