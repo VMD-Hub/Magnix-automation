@@ -317,7 +317,7 @@ ${NOXH_SUPPORT_CLOSING}`,
       "Giải thích khi nào được mua dù đang có nhà, ngưỡng 15 m² sàn/người (NĐ 100), trường hợp vợ chồng đứng tên sổ và lỗi hồ sơ hay bị loại nhất.",
     body: `## Vì sao nhiều hồ sơ NOXH bị loại ở khâu “nhà ở”?
 
-Sau khi qua cửa đối tượng (Điều 76), bước rà soát kế tiếp là tình trạng nhà ở — đây là lý do phổ biến khiến hộ đủ thu nhập vẫn không được chọn mua. Khung pháp lý nằm tại điểm a khoản 1 Điều 78 [Luật Nhà ở 2023](https://vanban.chinhphu.vn/?docid=209627&pageid=27160), chi tiết hóa tại Điều 29 [Nghị định 100/2024/NĐ-CP](https://vanban.chinhphu.vn/?docid=210760&pageid=27160).
+Sau khi qua cửa đối tượng (Điều 76), bước rà soát kế tiếp là tình trạng nhà ở — đây là lý do phổ biến khiến hộ đã thỏa điều kiện về thu nhập vẫn không được chọn mua. Khung pháp lý nằm tại điểm a khoản 1 Điều 78 [Luật Nhà ở 2023](https://vanban.chinhphu.vn/?docid=209627&pageid=27160), chi tiết hóa tại Điều 29 [Nghị định 100/2024/NĐ-CP](https://vanban.chinhphu.vn/?docid=210760&pageid=27160).
 
 ${EDITORIAL_FIGURES.noxhEligibility}
 
