@@ -33,7 +33,7 @@ export const NOXH_HANDBOOK_SEO_TITLE =
   "Cẩm nang NOXH — Mua nhà xã hội minh bạch, an tâm | HouseX" as const;
 
 export const NOXH_HANDBOOK_INTRO =
-  "Mua nhà xã hội không cần phải đoán mò. Chuyên mục này tổng hợp từ tiến độ thực tế, điểm tựa pháp lý đến các phương án tài chính tối ưu từ chuyên gia. Cung cấp kiến thức minh bạch để hành trình sở hữu tổ ấm của bạn an tâm và chủ động hơn." as const;
+  "Mua nhà ở xã hội cần thông tin có căn cứ — không dựa vào tin đồn hay lời giới thiệu miệng. Cẩm nang này hệ thống hóa tiến độ dự án, khung pháp lý và phương án tài chính từ chuyên gia, giúp bạn chủ động kiểm tra điều kiện, hồ sơ và khả năng vay trước khi quyết định." as const;
 
 /** Mô tả hub chủ đề NOXH — đồng bộ với cẩm nang chính. */
 export const NOXH_TOPIC_HUB_INTRO = NOXH_HANDBOOK_INTRO;
