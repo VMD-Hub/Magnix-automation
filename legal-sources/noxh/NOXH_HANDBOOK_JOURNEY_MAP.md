@@ -44,14 +44,14 @@ flowchart LR
 | **C2** | P1 | `thoi-han-12-thang-giay-xac-nhan-noxh` | Giấy xác nhận NOXH có hiệu lực bao lâu? | NĐ 54 Đ.38 · atomic claims | backlog |
 | **C3** | P1 | *(có)* `quy-trinh-mua-thue-mua-noxh-2026` | Quy trình mua/thuê mua NOXH 2026? | `noxh-knowledge-series-2026.ts` | published |
 | **C4** | **P0** | `hau-kiem-noxh-doi-chieu-bhxh-thue-2026` | Hậu kiểm hồ sơ NOXH: Dữ liệu thuế và BHXH được đối chiếu thế nào? | atomic batch2 · case Đồng Nai | backlog L3 |
-| **C4** | P0 | `bai-hoc-thanh-tra-noxh-dong-nai-2026` | Bài học từ thanh tra NOXH Đồng Nai 2026: Checklist an toàn cho người mua | [Thanh tra 09/07/2026](https://thanhtra.com.vn/ket-luan-thanh-tra-E17BD7A25/thanh-tra-tp-dong-nai-phat-hien-nhieu-bat-thuong-ho-so-mua-nha-o-xa-hoi-818acf2ed.html) · KL **09/KL-TT** 19/6/2026 | backlog L3 |
+| **C4** | P0 | `bai-hoc-thanh-tra-noxh-dong-nai-2026` | Bài học từ kết luận thanh tra tại Đồng Nai 06/2026 | [Thanh tra 09/07/2026](https://thanhtra.com.vn/ket-luan-thanh-tra-E17BD7A25/thanh-tra-tp-dong-nai-phat-hien-nhieu-bat-thuong-ho-so-mua-nha-o-xa-hoi-818acf2ed.html) · KL **09/KL-TT** 19/6/2026 | published |
 | **C5** | — | *(cụm vay hiện có)* | Xem `noxh-loan-cluster-map-2026.ts` | 10 bài + pillar — **không viết lại** | published |
 | **C5** | P1 | `room-tin-dung-noxh-va-30-von-tu-co` | Mua NOXH cần chuẩn bị bao nhiêu vốn tự có? Room tín dụng là gì? | `bank-credit-appraisal-counseling.md` | backlog |
 | **C6** | P2 | `bi-loai-ho-so-noxh-lam-gi-tiep-theo` | Bị loại hoặc không được ký HĐ NOXH — làm gì tiếp theo? | NĐ 54 Đ.38 · Luật Khiếu nại 2011 · **không** quy trình NOXH riêng | backlog |
 
 ---
 
-## Case Đồng Nai — fact sheet publish (L3)
+## Kết luận thanh tra Đồng Nai — fact sheet publish (L3)
 
 **Nguồn công khai:** Báo Thanh tra, 09/07/2026 — tóm tắt KL thanh tra TP Đồng Nai.
 
