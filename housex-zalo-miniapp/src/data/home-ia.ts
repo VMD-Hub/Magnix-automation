@@ -209,8 +209,8 @@ export const HOME_ARTICLES_NOXH: HomeArticleItem[] = [
   },
   {
     id: "quy-trinh",
-    title: "Quy trình mua — thuê mua NOXH 2026",
-    dek: "Các bước từ đủ điều kiện đến nhận nhà.",
+    title: "Mua NOXH khác gì thương mại — quy trình 7 bước",
+    dek: "So sánh điều kiện, 7 bước đợt mở bán, checklist hồ sơ.",
     path: "/tin-tuc/quy-trinh-mua-thue-mua-noxh-2026",
     imageUrl: "/images/hero/housex-thu-thiem-civic-center-night.webp",
   },

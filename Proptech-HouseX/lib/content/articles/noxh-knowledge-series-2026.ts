@@ -16,63 +16,103 @@ import {
 } from "@/lib/preview/noxh-long-an-projects";
 
 const PUBLISHED = new Date("2026-07-03T00:00:00.000Z");
-const UPDATED = new Date("2026-07-04T00:00:00.000Z");
+const UPDATED = new Date("2026-07-16T00:00:00.000Z");
 
 const PHUC_LOC_THO_SLUG = "chung-cu-phuc-loc-tho-noxh";
 const PHUC_LOC_THO_NAME = "Chung cư Phúc Lộc Thọ (Block C NOXH)";
 
 /**
- * Cluster kiến thức NOXH — bổ sung pillar pháp lý, vay, quy trình, vùng/dự án.
- * Cấu trúc AIO: H2 dạng câu hỏi, trích Điều luật, bảng/bullet, nội link hub.
+ * Cluster kiến thức NOXH — pillar pháp lý, vay, quy trình, vùng/dự án.
+ * Chuẩn biên tập: mỗi H2 trả lời xong tại chỗ (bảng/công thức/checklist);
+ * không dùng "xem thêm / công cụ" thay phần làm rõ tiêu đề hoặc câu hỏi H2.
  */
 export const NOXH_KNOWLEDGE_ARTICLES_2026: ArticleDetail[] = [
   {
     id: "article-noxh-knowledge-01",
     slug: "quy-trinh-mua-thue-mua-noxh-2026",
     title:
-      "Quy trình mua nhà ở xã hội 2026 — từ đăng ký đến ký hợp đồng và nhận căn",
+      "Mua NOXH khác gì căn hộ thương mại? — Quy trình 7 bước đến nhận căn",
     excerpt:
-      "7 bước thực tế: rà soát đối tượng Đ.76, chuẩn bị hồ sơ, nộp đợt mở bán, xét duyệt, bốc thăm/chọn căn, ký HĐ mua/thuê mua, vay NHCSXH — căn cứ Luật Nhà ở và NĐ 100/2024.",
+      "Bảng so sánh NOXH vs thương mại, ba trụ cột đối tượng–nhà ở–thu nhập, 7 bước đợt mở bán, thuê mua vs mua, lỗi hay bị loại — tự đủ trong một bài.",
     body: `## Mua NOXH khác gì mua căn hộ thương mại?
 
-Mua nhà ở xã hội (NOXH) là giao dịch có điều kiện: người mua phải thuộc nhóm đối tượng tại Điều 76 [Luật Nhà ở 2023](https://vanban.chinhphu.vn/?docid=209627&pageid=27160), đáp ứng điều kiện nhà ở và thu nhập tại Điều 78, rồi trải qua vòng rà soát của Sở Xây dựng/UBND và chủ đầu tư — không phải “chốt căn” ngay như thương mại.
+Hai giao dịch khác nhau ngay từ cửa vào — không chỉ khác giá.
 
-Trước khi nộp hồ sơ, nên tự kiểm tra ba trụ cột pháp lý: [đối tượng, nhà ở, thu nhập](/tin-tuc/dieu-kien-mua-nha-o-xa-hoi-2026-tom-tat) hoặc dùng [công cụ kiểm tra NOXH](/cong-cu/dieu-kien-noxh).
+| Tiêu chí | Nhà ở xã hội (NOXH) | Căn hộ thương mại |
+| --- | --- | --- |
+| Ai được mua | Phải thuộc nhóm đối tượng Điều 76 Luật Nhà ở 2023 | Ai cũng mua được nếu đủ tiền / vay |
+| Nhà ở hiện có | Xét cả hộ tại tỉnh có dự án (chưa có nhà, nhà chật, hoặc chưa hưởng hỗ trợ) | Không xét điều kiện nhà ở hiện có |
+| Thu nhập | Trần 25/35/50 triệu/tháng (k5, k6, k8) hoặc cơ chế riêng (k7, người có công…) | Không có trần “được phép mua” |
+| Quy trình | Nộp hồ sơ → rà soát Sở/UBND/CĐT → công khai danh sách → bốc thăm nếu vượt quỹ căn | Giữ chỗ / cọc → ký HĐMB theo tiến độ CĐT |
+| Thời điểm “chốt căn” | Chỉ sau khi đủ điều kiện và được chọn | Có thể chốt ngay khi còn hàng |
+| Chuyển nhượng | Hạn chế theo Luật (thường sau thời hạn tối thiểu) | Tự do hơn theo HĐ và pháp luật chung |
+| Giá /m² | Có khung kiểm soát, thường thấp hơn thương mại cùng khu | Theo thị trường |
+
+Ví dụ thực tế: Cùng khu Thủ Đức, NOXH Lý Thường Kiệt khoảng 23 triệu/m² trong khi căn thương mại cùng khu thường cao hơn nhiều — nhưng hơn 12.000 hồ sơ tranh 755 suất. Giá thấp không đồng nghĩa dễ mua.
+
+## Ba trụ cột phải đạt trước khi nộp (làm ngay tại đây)
+
+| Trụ cột | Đạt khi nào | Không đạt thì sao |
+| --- | --- | --- |
+| Đối tượng (Đ.76) | Bạn thuộc một khoản: công nhân KCN (k6), CBCCVC (k8), thu nhập thấp đô thị (k5), LLVT (k7), người có công / hộ nghèo… | Sai nhóm → sai mẫu giấy → trả hồ sơ |
+| Nhà ở (Đ.78 / Đ.29 NĐ 100) | Chưa có nhà tại tỉnh dự án, hoặc bình quân dưới 15 m² sàn/người, hoặc chưa hưởng hỗ trợ | Có nhà đủ diện tích tại tỉnh dự án (kể cả đứng tên vợ/chồng) → loại |
+| Thu nhập | k5/k6/k8: bình quân 12 tháng ≤ 25 (độc thân) / 35 (nuôi con) / 50 (đã kết hôn, tổng vợ chồng). k7: theo Điều 67, không dùng trần dân sự | Vượt trần → không đủ điều kiện mua |
+
+Công thức thu nhập: (Tổng lương/tiền công thực nhận 12 tháng liền kề) ÷ 12 ≤ trần. Đã kết hôn thì cộng cả hai trước khi chia 12.
 
 ## Các bước trong một đợt mở bán NOXH (thực tế 2025–2026)
 
-| Bước | Việc cần làm | Cơ quan / bên liên quan |
-| --- | --- | --- |
-| 1 | Theo dõi thông báo mở đăng ký (giá, quỹ căn, thời hạn) | Sở Xây dựng, CĐT, báo chí |
-| 2 | Xác định nhóm đối tượng Đ.76 và đối chiếu điều kiện nhà ở Đ.77/Đ.78 | Tự rà soát + công cụ HouseX |
-| 3 | Xin giấy xác nhận thu nhập & đối tượng (12 tháng lương, HĐLĐ…) | Đơn vị công tác / Công an cấp xã |
-| 4 | Nộp hồ sơ + phí (nếu có) đúng hạn — mỗi hộ một dự án tại một thời điểm | CĐT / điểm tiếp nhận đợt mở bán |
-| 5 | Rà soát hồ sơ: đối tượng, thu nhập, nhà ở, cư trú/làm việc | Sở XĐ, UBND, CĐT |
-| 6 | Công bố danh sách đủ điều kiện; bốc thăm / xếp hạng ưu tiên nếu vượt quỹ căn | Theo thông báo đợt |
-| 7 | Ký hợp đồng mua/thuê mua, đóng tiền theo tiến độ, làm thủ tục vay (nếu có) | CĐT, ngân hàng liên kết / NHCSXH |
+| Bước | Việc cần làm | Cơ quan / bên liên quan | Hệ quả nếu sai |
+| --- | --- | --- | --- |
+| 1 | Theo dõi thông báo mở đăng ký (giá, quỹ căn, thời hạn, số bộ hồ sơ) | Sở Xây dựng, CĐT | Xin giấy quá sớm → hết hạn 12 tháng giữa đợt |
+| 2 | Chốt đúng nhóm Đ.76 + nhánh nhà ở + tính thu nhập ÷ 12 | Tự làm trước khi xin giấy | Sai nhánh → làm lại toàn bộ giấy |
+| 3 | Xin giấy xác nhận thu nhập/đối tượng + giấy xác nhận nhà ở (Mẫu 02/03 hoặc BQP/BCA) | Đơn vị / CA xã / VPĐK / UBND xã | Giấy sai mẫu hoặc lệch BHXH → trả / hậu kiểm |
+| 4 | Nộp đúng hạn — mỗi hộ một dự án tại một thời điểm | CĐT / điểm tiếp nhận | Nộp hai dự án → loại |
+| 5 | Rà soát đối tượng, thu nhập, nhà ở, cư trú | Sở XĐ, UBND, CĐT | Lệch dữ liệu → trả trong 15 ngày sau công khai |
+| 6 | Công bố danh sách; bốc thăm / ưu tiên nếu vượt quỹ căn | Theo thông báo đợt | Đủ điều kiện ≠ chắc được căn |
+| 7 | Ký HĐ mua/thuê mua, đóng tiền, làm vay (nếu có) | CĐT, NH liên kết / NHCSXH | Thiếu ~30% vốn tự có → treo tiến độ |
 
 ## Thuê mua và mua trực tiếp — khác nhau thế nào?
 
-Theo Điều 78 và hướng dẫn tại [Nghị định 100/2024/NĐ-CP](https://vanban.chinhphu.vn/?docid=210760&pageid=27160), đối tượng khoản 1, 4, 5, 6, 7, 8, 9 và 10 Điều 76 có thể được mua hoặc thuê mua NOXH khi đủ điều kiện. Hình thức cụ thể (mua hay thuê mua, tỷ lệ trả trước, thời hạn chuyển quyền) do thông báo từng đợt và hợp đồng mẫu của CĐT quy định.
+Theo Điều 78 và [Nghị định 100/2024/NĐ-CP](https://vanban.chinhphu.vn/?docid=210760&pageid=27160), đối tượng khoản 1, 4, 5, 6, 7, 8, 9 và 10 Điều 76 có thể mua hoặc thuê mua khi đủ điều kiện. Hình thức từng đợt do CĐT thông báo.
 
-Điểm cần nhớ:
+| Điểm so sánh | Thuê mua | Mua trực tiếp |
+| --- | --- | --- |
+| Vốn đầu | Thường thấp hơn (trả theo tiến độ thuê mua) | Cao hơn ngay (cọc + phần đến khi vay giải ngân) |
+| Quyền sở hữu | Chuyển sau khi hoàn thành nghĩa vụ theo HĐ | Theo tiến độ HĐMB và làm sổ |
+| Ràng buộc ở | Thường gắn thời gian ở / điều kiện chuyển nhượng | Theo Luật NOXH + HĐ |
+| Phù hợp ai | Thu nhập ổn nhưng vốn tự có mỏng | Đã tích lũy đủ ~20–30% giá căn |
 
-- Thuê mua thường giảm áp lực vốn ban đầu nhưng ràng buộc thời gian ở và điều kiện chuyển sở hữu.
-- Mua trực tiếp yêu cầu vốn tự có hoặc vay lớn hơn ngay từ đầu — cần [ước tính khoản vay](/cong-cu/tinh-khoan-vay) trước khi cam kết.
+Ví dụ căn 700 triệu, mua trực tiếp thường cần khoảng 210 triệu (~30%) trước khi trông chờ giải ngân vay; thuê mua có thể kéo giãn dòng tiền đầu nhưng kéo dài thời gian trước khi đứng tên đầy đủ.
 
 ## Ai được ưu tiên khi nhiều hồ sơ cùng đạt điều kiện?
 
-Điều 79 Luật Nhà ở 2023 quy định nguyên tắc ưu tiên khi cùng tiêu chuẩn: người có công, người khuyết tật, hộ tái định cư, nữ giới… và thứ tự bố trí căn theo từng nhóm. Thực tế, dự án nội thành như [Lý Thường Kiệt](/du-an/nha-o-xa-hoi-ly-thuong-kiet) từng ghi nhận hơn 12.000 hồ sơ cho 755 suất — đủ điều kiện pháp lý chưa đồng nghĩa được chọn mua.
+Điều 79 Luật Nhà ở 2023: khi cùng tiêu chuẩn, ưu tiên theo nhóm (người có công, người khuyết tật, hộ tái định cư, nữ giới…) và thứ tự bố trí căn theo từng đợt. Thực tế nội thành: hơn 12.000 hồ sơ / 755 suất tại Lý Thường Kiệt — đủ ba trụ cột vẫn có thể không được chọn nếu không trúng bốc thăm hoặc không thuộc nhóm ưu tiên cao.
+
+Trước khi cọc: hỏi CĐT bằng văn bản — nếu số hồ sơ > số căn thì bốc thăm hay xét theo thứ tự nào.
 
 ## Năm lỗi thường gặp ở bước nộp hồ sơ
 
-- Đăng ký đồng thời hai dự án NOXH.
-- Dùng mức thu nhập cũ (20/30/40 triệu) trong khi đợt áp dụng [NĐ 136/2026](https://vanban.chinhphu.vn/?classid=1&docid=217605&pageid=27160) (25/35/50 triệu từ 07/04/2026).
-- Vợ/chồng đứng tên nhà ở nhưng kê khai “không sở hữu” — xem [điều kiện nhà ở Điều 78](/tin-tuc/dieu-kien-nha-o-mua-noxh-dieu-77-2026).
-- Thiếu giấy xác nhận đơn vị hoặc nộp sau hạn.
-- Không đọc phạm vi “không sở hữu nhà tại tỉnh có dự án” của từng đợt mở bán.
+| Lỗi | Hệ quả | Sửa trước khi nộp |
+| --- | --- | --- |
+| Đăng ký đồng thời hai dự án | Loại | Chỉ nộp một dự án trong cùng thời điểm tiếp nhận |
+| Dùng trần cũ 20/30/40 triệu | Sai điều kiện thu nhập | Áp NĐ 136 từ 07/04/2026: 25/35/50 |
+| Vợ/chồng có nhà tại tỉnh dự án nhưng khai “chưa có” | Loại / hủy sau công khai | Tra GCN cả hộ trước; chọn đúng Mẫu 02 hoặc 03 |
+| Thiếu giấy đơn vị hoặc nộp sau hạn | Không vào danh sách xét | Xin giấy sớm hơn hạn nộp ít nhất vài ngày |
+| Không đọc phạm vi “nhà ở tại tỉnh có dự án” | Giấy xác nhận sai tỉnh | Xin Mẫu 02/03 đúng tỉnh dự án, không theo nơi thuê trọ |
 
-Bài liên quan: [Gói vay 120.000 tỷ NHCSXH](/tin-tuc/vay-noxh-goi-120000-ty-nhcsxh-2026) · [Lãi suất dưới 35 tuổi](/tin-tuc/lai-suat-vay-noxh-duoi-35-tuoi-nhnn-2026)
+## Checklist 10 điểm trước khi photo hồ sơ
+
+- [ ] Đã chọn đúng khoản Điều 76
+- [ ] Thu nhập ÷ 12 đã so với trần (hoặc đúng cơ chế k7 / miễn trần)
+- [ ] Đã tra nhà ở cả vợ chồng tại tỉnh dự án
+- [ ] Mẫu thu nhập / nhà ở đúng loại (04/05 hoặc BQP/BCA; 02/03)
+- [ ] Giấy còn hiệu lực 12 tháng tính đến mốc ký HĐ dự kiến
+- [ ] Chỉ nộp một dự án
+- [ ] Đơn Mẫu 01 khớp toàn bộ giấy kèm
+- [ ] Đã hỏi quy trình bốc thăm nếu vượt quỹ căn
+- [ ] Đã tính vốn tự có ~20–30% trước khi cọc
+- [ ] Có biên nhận / email xác nhận khi nộp
 
 ${NOXH_SUPPORT_CLOSING}`,
     status: "PUBLISHED",
@@ -81,9 +121,9 @@ ${NOXH_SUPPORT_CLOSING}`,
     coverImageUrl: null,
     authorName: "Ban biên tập House X",
     seoTitle:
-      "Quy trình mua NOXH 2026 — 7 bước từ đăng ký đến nhận căn | HouseX",
+      "Mua NOXH khác gì căn hộ thương mại — quy trình 7 bước | HouseX",
     seoDesc:
-      "Hướng dẫn quy trình mua/thuê mua nhà ở xã hội: hồ sơ, rà soát, bốc thăm, ký HĐ. Căn cứ Luật Nhà ở 2023 và NĐ 100/2024.",
+      "So sánh NOXH và thương mại, ba trụ cột điều kiện, 7 bước đợt mở bán, thuê mua vs mua, checklist hồ sơ 2026.",
     tags: [NOXH_TAG_CHINH_SACH],
     projects: [],
   },
@@ -111,32 +151,39 @@ Thông lệ thị trường và chính sách CĐT nhiều dự án NOXH miền N
 | Tỷ lệ vay | Thường 50–70% giá căn | Tùy ngân hàng, thu nhập, CIC |
 | Vốn tự có | 30–50% + phí bảo trì, làm sổ | Cần dự trù trước khi ký HĐ |
 | Thời hạn | 15–20 năm phổ biến | NOXH thường ưu đãi hơn TM |
-| Lãi suất | Gói ưu đãi + thả nổi sau giai đoạn đầu | Xem [lãi suất dưới 35 tuổi](/tin-tuc/lai-suat-vay-noxh-duoi-35-tuoi-nhnn-2026) |
+| Lãi suất | Gói ưu đãi + thả nổi sau giai đoạn đầu | Hỏi NH liên kết trước khi cọc |
 
-Dùng [công cụ tính khoản vay](/cong-cu/tinh-khoan-vay) trên HouseX để ước lượng tiền trả hàng tháng theo giá căn và tỷ lệ vay bạn dự kiến.
+Dùng bảng trên để ước lượng: căn 700 triệu × 70% vay = 490 triệu; vốn tự có tối thiểu khoảng 210 triệu trước khi trông chờ giải ngân. Tiền trả tháng phụ thuộc lãi và kỳ hạn — hỏi NH liên kết dự án số cụ thể trước khi cọc.
 
 ## Điều kiện vay khác gì điều kiện mua NOXH?
 
-Hai lớp điều kiện tách biệt:
+Hai lớp tách biệt — đạt lớp 1 không bảo đảm lớp 2.
 
-- Mua NOXH: đối tượng Đ.76, nhà ở, thu nhập (hoặc miễn trần) — không xét CIC.
-- Vay vốn: lịch sử tín dụng (CIC), khả năng trả nợ, hợp đồng mua NOXH hợp lệ, chứng minh thu nhập cho ngân hàng.
+| Lớp | Ai xét | Xét gì | Ví dụ thất bại |
+| --- | --- | --- | --- |
+| 1. Được mua NOXH | Sở / UBND / CĐT | Đối tượng Đ.76, nhà ở, thu nhập trong trần (hoặc miễn trần) | Vượt trần 25 triệu dù CIC sạch |
+| 2. Được vay | Ngân hàng / NHCSXH | CIC, DTI (trả nợ ÷ thu nhập), HĐ mua hợp lệ, room dự án | Đủ mua nhưng nợ xe + trả nhà = 60% lương → từ chối |
 
-Nợ xấu nhóm 2, DTI cao, hạn mức thẻ tín dụng lớn có thể khiến hồ sơ vay bị từ chối dù bạn đủ điều kiện mua — nên rà soát tín dụng song song với [kiểm tra điều kiện NOXH](/cong-cu/dieu-kien-noxh).
+Công thức DTI tham chiếu: (Nợ cũ hàng tháng + khoản trả nhà mới) ÷ thu nhập tháng. Nhiều NH kỳ vọng dưới khoảng 40–50% — tỷ lệ cụ thể do từng NH quy định.
+
+Ví dụ: Lương 24 triệu (đủ trần mua độc thân). Nợ xe 7 triệu + dự kiến trả nhà 9 triệu = 16 triệu ≈ 67% → dễ bị từ chối vay dù hồ sơ NOXH đạt.
 
 ## Hồ sơ vay NOXH thường gồm những gì?
 
-- Hợp đồng mua/thuê mua NOXH đã ký với CĐT.
-- Giấy xác nhận đối tượng và thu nhập (đơn vị / UBND).
-- CMND/CCCD, giấy tờ hôn nhân, hộ khẩu/cư trú theo yêu cầu ngân hàng.
-- Cam kết tình trạng nhà ở theo mẫu đợt mở bán.
-- Bảng kê tài sản, sao kê lương 3–6 tháng (tùy ngân hàng).
+1. Hợp đồng mua/thuê mua NOXH đã ký với CĐT.
+2. Giấy xác nhận đối tượng và thu nhập (đơn vị / UBND / mẫu BQP-BCA nếu k7).
+3. CCCD, giấy tờ hôn nhân, cư trú theo yêu cầu NH.
+4. Cam kết tình trạng nhà ở theo mẫu đợt mở bán.
+5. Sao kê lương 3–6 tháng, bảng kê tài sản (tùy NH).
+6. Tra CIC trước khi nộp — xử lý nợ xấu/nhóm 2 nếu có.
 
-Ngân hàng thương mại liên kết từng dự án có thể bổ sung biểu mẫu riêng — tra cứu mục vay trên trang dự án (vd. DTA Happy Home).
+Ngân hàng liên kết từng dự án có thể thêm biểu mẫu riêng — hỏi trước khi cọc: còn room giải ngân không, tỷ lệ vay thực tế (70% hay thấp hơn), thời gian thẩm định.
 
 ## Gói 120.000 tỷ và lãi suất người trẻ dưới 35 tuổi
 
-Từ 01/7/2026, NHNN thông báo khung lãi suất cho vay mua NOXH đối với người dưới 35 tuổi (Công văn 5340/NHNN-CSTT) — chi tiết tại bài [lãi suất vay NOXH dưới 35 tuổi](/tin-tuc/lai-suat-vay-noxh-duoi-35-tuoi-nhnn-2026). Đây là lớp ưu đãi bổ sung, không thay thế điều kiện đối tượng mua nhà.
+Từ 01/7/2026, NHNN có khung lãi suất cho vay mua NOXH với người dưới 35 tuổi (Công văn 5340/NHNN-CSTT). Đây là lớp ưu đãi lãi suất bổ sung — không thay thế điều kiện đối tượng mua và không bảo đảm được duyệt vay nếu CIC/DTI/room không đạt.
+
+Trước khi ký HĐ: hỏi NH liên kết mức lãi áp dụng cho độ tuổi của bạn, giai đoạn ưu đãi bao lâu, và lãi thả nổi sau đó tính thế nào.
 
 ${NOXH_SUPPORT_CLOSING}`,
     status: "PUBLISHED",
@@ -193,11 +240,15 @@ Nên tra cứu sổ đỏ, quyền sử dụng đất và cam kết của cả h
 
 Đã từng mua/thuê mua NOXH hoặc đã hưởng hỗ trợ nhà ở tại cùng tỉnh/TP → không đủ điều kiện cho đợt mới tại địa phương đó.
 
-## Liên kết rà soát trước khi nộp
+## Checklist trước khi nộp — nhà ở
 
-- Pillar tổng hợp: [điều kiện mua NOXH 2026](/tin-tuc/dieu-kien-mua-nha-o-xa-hoi-2026-tom-tat)
-- Công cụ 5 bước: [/cong-cu/dieu-kien-noxh](/cong-cu/dieu-kien-noxh)
-- Quy trình sau khi đủ điều kiện: [quy trình mua/thuê mua](/tin-tuc/quy-trinh-mua-thue-mua-noxh-2026)
+- [ ] Đã xác định đúng tỉnh có dự án (không dùng nơi thuê trọ)
+- [ ] Đã tra GCN bạn và vợ/chồng tại tỉnh đó
+- [ ] Đã chọn đúng nhánh: chưa có nhà (Mẫu 02) hoặc nhà chật (Mẫu 03)
+- [ ] Nếu Mẫu 03: đã tính m² ÷ số người và có giấy cư trú chứng minh số người ở
+- [ ] Phần nhà ở trên đơn Mẫu 01 khớp giấy xác nhận
+- [ ] Chưa từng mua/thuê mua NOXH tại cùng tỉnh/TP (trừ thuê)
+- [ ] Giấy xác nhận còn trong 12 tháng tại mốc ký HĐ dự kiến
 
 ${NOXH_SUPPORT_CLOSING}`,
     status: "PUBLISHED",
@@ -235,20 +286,21 @@ UBND TP.HCM phê duyệt chuyển một phần quỹ căn Block C sang nhà ở 
 | Quy mô NOXH | 140 căn Block C |
 | Giá căn tham chiếu | Khoảng 1,4 – 2,65 tỷ tùy diện tích |
 
-Mức giá cao hơn đáng kể so với [Lý Thường Kiệt ~23,25 triệu/m²](/du-an/nha-o-xa-hoi-ly-thuong-kiet) nhưng vẫn dưới nhiều so với căn hộ thương mại cùng khu Thủ Đức. So sánh chiến lược: [LTK vs DTA Happy Home](/tin-tuc/so-sanh-gia-noxh-ly-thuong-kiet-dta-happy-home-2026).
+Mức giá cao hơn Lý Thường Kiệt (~23,25 triệu/m²) nhưng vẫn thấp hơn nhiều căn thương mại cùng khu Thủ Đức. Trade-off: vị trí nội thành + tổng vốn cao hơn — chỉ nên nộp nếu đã tính được vốn tự có và khả năng vay, không chỉ vì gần trung tâm.
 
 ## Ai nên cân nhắc Phúc Lộc Thọ Block C?
 
-- Người thuộc nhóm đối tượng Điều 76 (thu nhập thấp, công nhân, CBCCVC…) và đủ [điều kiện nhà ở](/tin-tuc/dieu-kien-nha-o-mua-noxh-dieu-77-2026).
-- Hộ cần ở gần ngã tư Thủ Đức, kết nối Xa lộ Hà Nội, KCN Linh Trung — ưu tiên vị trí hơn mức giá tuyệt đối thấp nhất.
-- Người đã rà soát thu nhập theo trần 25/35/50 triệu ([NĐ 136/2026](/tin-tuc/dieu-kien-mua-nha-o-xa-hoi-2026-tom-tat)) và dự trù vay ~70% qua [gói NHCSXH](/tin-tuc/vay-noxh-goi-120000-ty-nhcsxh-2026).
+- Thuộc nhóm Điều 76 (thu nhập thấp, công nhân, CBCCVC…) và đủ nhà ở: chưa có nhà tại TP.HCM hoặc bình quân dưới 15 m²/người.
+- Cần ở gần ngã tư Thủ Đức, Xa lộ Hà Nội, KCN Linh Trung — ưu tiên vị trí hơn mức giá tuyệt đối thấp nhất.
+- Đã tính thu nhập ÷ 12 trong trần 25/35/50 (NĐ 136) và dự trù vay khoảng 70%: ví dụ căn 1,8 tỷ → vốn tự có ~540 triệu trước giải ngân.
 
 ## Chuẩn bị hồ sơ trước đợt mở bán
 
-1. Xác nhận đối tượng và thu nhập tại đơn vị (12 tháng lương).
-2. Cam kết tình trạng nhà ở cả hộ.
-3. Theo dõi thông báo Sở Xây dựng TP.HCM về thời hạn nộp — tương tự quy trình [7 bước mua NOXH](/tin-tuc/quy-trinh-mua-thue-mua-noxh-2026).
-4. Ước tính dòng tiền: [công cụ tính vay](/cong-cu/tinh-khoan-vay).
+1. Xác nhận đối tượng và thu nhập tại đơn vị (12 tháng lương thực nhận).
+2. Tra GCN cả vợ chồng tại TP.HCM; xin Mẫu 02 hoặc 03 khớp nhánh nhà ở.
+3. Theo dõi thông báo Sở Xây dựng TP.HCM về thời hạn nộp và số bộ photo.
+4. Hỏi NH liên kết: còn room không, tỷ lệ vay thực tế, DTI tối thiểu.
+5. Không cọc nếu chưa cầm đủ phần vốn tự có đến mốc ký HĐ.
 
 Tra cứu mặt bằng, vị trí và gallery: [/du-an/chung-cu-phuc-loc-tho-noxh](/du-an/chung-cu-phuc-loc-tho-noxh).
 
@@ -274,9 +326,15 @@ Tra cứu mặt bằng, vị trí và gallery: [/du-an/chung-cu-phuc-loc-tho-nox
       "Danh mục NOXH vùng ven TP.HCM: 6 dự án tại Bến Lức, Đức Hòa, Cần Giuộc — giá từ ~14 triệu/m², phù hợp công nhân và hộ trẻ chưa trúng suất nội thành.",
     body: `## Vì sao Long An là “vùng đệm” NOXH của TP.HCM?
 
-Khi NOXH nội thành như [Lý Thường Kiệt](/du-an/nha-o-xa-hoi-ly-thuong-kiet) ghi nhận áp lực hồ sơ vượt quỹ căn hàng chục lần, nhiều hộ chuyển sang vùng ven Long An — giá/m² thấp hơn, quỹ căn mở rộng dần, phù hợp công nhân KCN và người lao động làm việc dọc Quốc lộ 1A, QL22.
+Khi NOXH nội thành như Lý Thường Kiệt ghi nhận áp lực hồ sơ vượt quỹ căn hàng chục lần, nhiều hộ chuyển sang vùng ven Long An — giá/m² thấp hơn, quỹ căn mở rộng dần, phù hợp công nhân KCN và người lao động làm việc dọc Quốc lộ 1A, QL22.
 
-Điều kiện mua vẫn theo Luật Nhà ở 2023 toàn quốc: [đối tượng Đ.76](/tin-tuc/dieu-kien-mua-nha-o-xa-hoi-2026-tom-tat), [nhà ở](/tin-tuc/dieu-kien-nha-o-mua-noxh-dieu-77-2026), thu nhập 25/35/50 triệu (khoản 5, 6, 8).
+Điều kiện mua vẫn theo Luật Nhà ở 2023 toàn quốc — làm đủ ba trụ trước khi nộp bất kỳ dự án Long An nào:
+
+| Trụ | Mốc cần đạt |
+| --- | --- |
+| Đối tượng | Thuộc Điều 76 (hay gặp: k5, k6, k8) |
+| Nhà ở | Chưa có nhà tại Long An (tỉnh dự án) hoặc dưới 15 m²/người — xét cả vợ chồng |
+| Thu nhập | Bình quân 12 tháng ≤ 25/35/50 triệu (k5/k6/k8); k7 theo Điều 67 |
 
 ## Bảng 6 dự án NOXH Long An trên HouseX
 
@@ -294,15 +352,15 @@ Giá trên là tham chiếu công bố Sở Xây dựng/CĐT tại thời điể
 ## Long An phù hợp nhóm đối tượng nào?
 
 - Công nhân, người lao động (khoản 6 Điều 76) tại KCN Prodezi, KCN Long Hậu, vùng giáp ranh TP.HCM.
-- Người thu nhập thấp tại đô thị (khoản 5) đã rà soát thu nhập nhưng chưa trúng suất nội thành.
-- Hộ trẻ cần tổng vốn thấp hơn [DTA Happy Home Nhơn Trạch](/du-an/dta-happy-home-nhon-trach) hoặc [Lý Thường Kiệt](/du-an/nha-o-xa-hoi-ly-thuong-kiet) — so sánh: [bài phân tích giá](/tin-tuc/so-sanh-gia-noxh-ly-thuong-kiet-dta-happy-home-2026).
+- Người thu nhập thấp đô thị (khoản 5) đã đủ ba trụ cột nhưng chưa trúng suất nội thành.
+- Hộ trẻ cần tổng vốn thấp: ví dụ LA Home căn ~385 triệu → vốn tự có ~115–155 triệu (30–40%) trước khi vay phần còn lại — thấp hơn nhiều căn NOXH nội thành 1,4–2 tỷ.
 
 ## Chuẩn bị gì trước đợt mở bán Long An?
 
-1. [Kiểm tra điều kiện NOXH](/cong-cu/dieu-kien-noxh) — đặc biệt nhà ở tại Long An/TP.HCM.
-2. Xin giấy xác nhận thu nhập tại đơn vị (công nhân KCN: HĐLĐ + bảng lương 12 tháng).
-3. Theo dõi Sở Xây dựng Long An và từng CĐT — mỗi dự án mở đợt riêng.
-4. Lập kế hoạch vay: [gói 120.000 tỷ](/tin-tuc/vay-noxh-goi-120000-ty-nhcsxh-2026) + [tính khoản vay](/cong-cu/tinh-khoan-vay).
+1. Tính thu nhập ÷ 12 và tra GCN cả hộ tại Long An (không chỉ TP.HCM nếu dự án ở Long An).
+2. Xin giấy xác nhận thu nhập tại đơn vị (công nhân: HĐLĐ + bảng lương 12 tháng).
+3. Theo dõi Sở Xây dựng Long An và từng CĐT — mỗi dự án mở đợt riêng; chỉ nộp một dự án tại một thời điểm.
+4. Hỏi NH liên kết: room, tỷ lệ vay, lãi; không cọc nếu chưa đủ vốn tự có đến mốc ký HĐ.
 
 Danh mục đầy đủ: [/du-an/nha-o-xa-hoi](/du-an/nha-o-xa-hoi)
 
