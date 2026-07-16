@@ -101,9 +101,9 @@ export const NOXH_HANDBOOK_JOURNEY_ARTICLES_2026: ArticleDetail[] = [
       "Chưa có nhà trên GCN, nhà diện tích thấp, hay có nhà xa nơi làm việc — ba nhánh Điều 29 NĐ 100 với Mẫu 02/03 TT-BXD và lỗi khai sai tỉnh dự án.",
     body: `${NOXH_FORM_SCOPE_DISCLAIMER}
 
-## Vì sao bị trả hồ sơ dù thu nhập đủ?
+## Vì sao bị trả hồ sơ dù đã thỏa điều kiện về thu nhập?
 
-Nguyên nhân thường nằm ở Điều 29 [Nghị định 100/2024/NĐ-CP](https://vanban.chinhphu.vn/?docid=210760&pageid=27160), không nằm ở lương. Cơ quan xét điều kiện nhà ở theo tỉnh có dự án NOXH, đối chiếu cả người đứng đơn và vợ/chồng nếu đã kết hôn. Chỉ cần chọn sai nhánh nhà ở, toàn bộ bộ hồ sơ có thể bị trả dù giấy thu nhập vẫn hợp lệ.
+Nguyên nhân thường nằm ở Điều 29 [Nghị định 100/2024/NĐ-CP](https://vanban.chinhphu.vn/?docid=210760&pageid=27160), không nằm ở mức lương hay giấy xác nhận thu nhập. Cơ quan xét điều kiện nhà ở theo tỉnh có dự án NOXH, đối chiếu cả người đứng đơn và vợ/chồng nếu đã kết hôn. Chỉ cần chọn sai nhánh nhà ở, toàn bộ bộ hồ sơ có thể bị trả dù giấy thu nhập vẫn hợp lệ và đã thỏa điều kiện về thu nhập.
 
 ## Ba nhánh điều kiện nhà ở thường gặp
 
