@@ -220,12 +220,24 @@ Tick sai một dòng = sai cả bộ giấy kèm theo.
 
 ## Thứ tự điền đơn Mẫu 01 (15–20 phút, làm một lần)
 
-1. Thông tin CCCD — copy đúng từng dòng trên thẻ, không viết tắt nơi cấp.
-2. Tick nhóm Điều 76 — dùng bảng trên.
-3. Tình trạng hôn nhân — nếu đã kết hôn, điền đủ vợ/chồng ngay, không để trống.
-4. Phần nhà ở — ghi theo tỉnh dự án, khớp Mẫu 02 hoặc 03 sẽ xin sau.
-5. Mục 11 — k7 ghi 11.2; k5/k6/k8 ghi 11.1 và mức thu nhập bình quân tháng.
-6. Cam kết cuối đơn — chỉ ký khi xác nhận chỉ đăng ký một dự án trong thời điểm tiếp nhận.
+Trước khi viết: mở song song thẻ CCCD còn hiệu lực và ứng dụng VNeID tài khoản định danh điện tử mức 2. Theo khoản 8 Điều 13 Nghị định 59/2022/NĐ-CP, dùng tài khoản mức 2 trong giao dịch điện tử có giá trị tương đương xuất trình giấy tờ đã tích hợp — Bộ Công an khuyến khích dùng VNeID khi giải quyết thủ tục hành chính. Thông tin cư trú trên VNeID thường đồng bộ CSDL quốc gia sớm hơn thẻ vật lý (nhiều người đã chuyển trú nhưng chưa đổi thẻ).
+
+| Loại thông tin trên đơn | Nguồn ưu tiên khi khai | Nếu lệch giữa CCCD và VNeID |
+| --- | --- | --- |
+| Số CCCD / định danh, họ tên, ngày sinh | Thẻ CCCD còn hiệu lực (khớp CSDL dân cư) | Đồng bộ tại Công an trước khi nộp — không chọn bừa |
+| Ngày cấp, nơi cấp | Mặt sau thẻ CCCD | Ghi theo dòng in trên thẻ (xem mục viết tắt bên dưới) |
+| Nơi thường trú / tạm trú | VNeID / CSDL cư trú quốc gia (CA đối chiếu theo NĐ 54) | Đã chuyển trú: khai theo VNeID mới; CCCD còn địa chỉ cũ → kèm giải thích / đổi thẻ khi được. CCCD mới đúng mà VNeID chưa cập nhật → yêu cầu CA đồng bộ VNeID trước, không khai theo VNeID cũ |
+| Tình trạng hôn nhân | Thực tế pháp lý (giấy kết hôn) | Không khai độc thân chỉ vì CCCD chưa cập nhật |
+
+Thứ tự điền:
+
+1. Thông tin định danh — số CCCD, họ tên, ngày sinh theo thẻ; địa chỉ thường trú/tạm trú theo VNeID mức 2 (không copy máy móc địa chỉ cũ trên thẻ nếu hệ thống đã đổi).
+2. Nơi cấp CCCD — ghi theo mặt sau thẻ. Ô ngắn: được viết gọn nhận diện được cơ quan, ví dụ thẻ chip từ 10/10/2018 thường ghi đầy đủ “Cục Cảnh sát quản lý hành chính về trật tự xã hội” → thực hành phổ biến ghi “Cục CS QLHC về TTXH” (QLHC = quản lý hành chính; TTXH = trật tự xã hội). Không ghi “Công an xã/phường” (đó là nơi làm thủ tục đổi thẻ, không phải nơi cấp thẻ). Không thêm chữ “Cục trưởng”. Thẻ theo Luật Căn cước 2023 ghi “Bộ Công an” thì ghi đúng dòng trên thẻ.
+3. Tick nhóm Điều 76 — dùng bảng trên.
+4. Tình trạng hôn nhân — nếu đã kết hôn, điền đủ vợ/chồng ngay; kèm giấy kết hôn nếu CĐT yêu cầu.
+5. Phần nhà ở — ghi theo tỉnh dự án, khớp Mẫu 02 hoặc 03 sẽ xin sau.
+6. Mục 11 — k7 ghi 11.2; k5/k6/k8 ghi 11.1 và mức thu nhập bình quân tháng.
+7. Cam kết cuối đơn — chỉ ký khi xác nhận chỉ đăng ký một dự án trong thời điểm tiếp nhận và toàn bộ dòng trên đơn khớp một bộ dữ liệu (đơn + CCCD + VNeID + giấy kèm).
 
 ## Năm lỗi và cách sửa ngay trên bàn
 
@@ -235,12 +247,16 @@ Tick sai một dòng = sai cả bộ giấy kèm theo.
 | Sai tick k6 thành k8 | Không | Làm đơn mới + đổi giấy Mẫu 04 |
 | Quên khai vợ/chồng | Không | Làm đơn mới + bổ sung giấy thu nhập/nhà ở cả hộ |
 | Mục 11.1 trong khi là k7 | Không | Làm đơn mới + giấy BQP/BCA |
+| Khai địa chỉ CCCD cũ trong khi VNeID đã chuyển trú | Không nên giữ | Làm đơn mới theo VNeID; đồng bộ/đổi thẻ nếu CĐT yêu cầu |
 | Tẩy xóa nhiều chỗ | Không nên | Làm đơn mới — CĐT có thể nghi ngờ chỉnh sửa |
 
 ## Checklist chốt đơn trước khi photo
 
+- [ ] Đã đối chiếu VNeID mức 2 với thẻ CCCD trước khi viết
+- [ ] Địa chỉ thường trú/tạm trú khớp VNeID / CSDL cư trú
+- [ ] Nơi cấp CCCD đúng cơ quan trên thẻ (hoặc viết gọn QLHC/TTXH nếu ô ngắn)
 - [ ] Nhóm Điều 76 đã khớp giấy chứng minh đối tượng
-- [ ] Trạng thái hôn nhân khớp giấy tờ thực tế
+- [ ] Trạng thái hôn nhân khớp giấy tờ thực tế (không theo CCCD lỗi thời)
 - [ ] Phần nhà ở khớp Mẫu 02 hoặc Mẫu 03
 - [ ] Mục 11 đúng nhánh 11.1 hay 11.2
 - [ ] Chỉ nộp một dự án trong cùng thời điểm tiếp nhận
@@ -254,7 +270,7 @@ ${journeyClosing("mau-01-don-dang-ky-noxh-cach-dien-tranh-loi")}`,
     authorName: "Ban biên tập House X",
     seoTitle: "Cách điền Mẫu 01 đăng ký NOXH — tránh lỗi hay gặp | HouseX",
     seoDesc:
-      "Hướng dẫn đơn Mẫu 01 NĐ 100: tick Đ.76, khai vợ/chồng, nhà ở, mục 11 và cam kết một dự án.",
+      "Hướng dẫn đơn Mẫu 01 NĐ 100: đối chiếu VNeID mức 2, nơi cấp QLHC/TTXH, tick Đ.76, vợ/chồng, mục 11.",
     tags: [TAG],
     projects: [],
   },
