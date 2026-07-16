@@ -115,7 +115,7 @@ Kết quả trúng thưởng chỉ được công nhận **hợp lệ và có gi
 ## 4. Cách thức tham gia
 
 1. Truy cập mục **Khuyến mãi / Vòng Quay May Mắn** trên HouseX.vn.
-2. Nhấn **Quay** — khách có thể trải nghiệm vòng quay trước khi đăng nhập; **lưu kết quả** yêu cầu đăng nhập, xác minh email và đủ điều kiện mua NOXH.
+2. Nhấn **Quay** — được phép trải nghiệm vòng quay trước khi đăng nhập; kết quả chỉ được ghi nhận vào tài khoản khi đã đăng nhập, xác minh email và hoàn thành kiểm tra điều kiện mua nhà ở xã hội (NOXH) với kết quả đủ điều kiện.
 3. Kết quả trúng thưởng được lưu tại mục **Quà tặng** trong tài khoản khách hàng sau khi hoàn tất bước lưu.
 4. **Giới hạn lượt quay:** Tối đa **${maxDay} lượt/ngày**, tối đa **${maxAccount} lượt/chiến dịch** (cộng thêm 1 lượt nếu chia sẻ chương trình theo quy định hiện hành).
 5. **Giới hạn phần quà:** Mỗi tài khoản chỉ được nhận **một (01)** phần quà trong suốt chiến dịch.

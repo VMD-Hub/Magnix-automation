@@ -18,7 +18,6 @@ import type {
 import { DEFAULT_PROMOTION_SLUG } from "@/lib/promotion/constants";
 import {
   PROMOTION_CLAIM_REQUIREMENTS,
-  PROMOTION_SCOPE_BANNER,
 } from "@/lib/promotion/scope";
 import { getSiteUrl } from "@/lib/site-config";
 
@@ -297,11 +296,6 @@ export function PromotionHub({ slug = DEFAULT_PROMOTION_SLUG, preview = false }:
           trên server để bật chế độ thật.
         </div>
       ) : null}
-      {!preview && !data.isDemo ? (
-        <div className="proptech-ruby-soft-panel px-4 py-3 text-sm text-brand-950">
-          <strong>Phạm vi NOXH.</strong> {PROMOTION_SCOPE_BANNER}
-        </div>
-      ) : null}
 
       <header className="proptech-catalog-hero proptech-catalog-hero--compact">
         <RubySurfaceOrnament variant="holder" />
@@ -556,7 +550,7 @@ function resolveGate(input: {
   }
 
   let message =
-    "Bạn có thể quay thử ngay. Lưu kết quả trúng thưởng cần đăng nhập, xác minh email và đủ điều kiện mua NOXH.";
+    "Được phép trải nghiệm vòng quay trước khi đăng nhập. Kết quả trúng thưởng chỉ được ghi nhận vào tài khoản khi đã đăng nhập, xác minh email và hoàn thành kiểm tra điều kiện mua nhà ở xã hội (NOXH) với kết quả đủ điều kiện.";
   let cta: { href: string; label: string } | null = null;
 
   if (
