@@ -4,6 +4,7 @@ import { parseProjectOverview, resolveLandingHeroImage } from "@/lib/content/pro
 import { ensureNoxhLandingMedia } from "@/lib/content/noxh-stock-images";
 import { NOXH_REGION_TAGLINE } from "@/lib/content/messaging/noxh-public";
 import { ProjectLocationSection } from "@/components/projects/project-location-section";
+import { ProjectIntroVideo } from "@/components/projects/project-intro-video";
 import { getProjectMarketplaceListings } from "@/lib/data/listing";
 import type { ProjectLandingListingCard } from "@/lib/data/listing";
 import type { ArticleCardData } from "@/lib/data/article-types";
@@ -273,6 +274,14 @@ export function ProjectLandingContent({
                   Xem bảng hàng
                 </a>
               )}
+              {landing.introVideo?.url && (
+                <a
+                  href="#project-intro-video"
+                  className="inline-flex h-11 items-center rounded-xl border border-white/30 bg-white/10 px-6 font-medium text-white backdrop-blur-sm transition hover:bg-white/20"
+                >
+                  Xem video review
+                </a>
+              )}
               {relatedArticles.length > 0 && (
                 <a
                   href="#project-related-articles"
@@ -321,6 +330,13 @@ export function ProjectLandingContent({
               ))}
             </div>
           </section>
+        )}
+
+        {landing?.introVideo?.url && (
+          <ProjectIntroVideo
+            video={landing.introVideo}
+            projectName={project.name}
+          />
         )}
 
         {landing && landing.highlights.length > 0 && (

@@ -174,6 +174,13 @@ function formToPayload(form: FormState) {
             caption: form.landing.heroImage.caption?.trim() || undefined,
           }
         : undefined,
+      introVideo: form.landing.introVideo?.url?.trim()
+        ? {
+            url: form.landing.introVideo.url.trim(),
+            title: form.landing.introVideo.title?.trim() || undefined,
+            caption: form.landing.introVideo.caption?.trim() || undefined,
+          }
+        : undefined,
     },
   };
 }
@@ -571,6 +578,73 @@ export function ProjectLandingEditor({
               }
               className={inputClass}
               placeholder="Phối cảnh DTA Happy Home Nhơn Trạch"
+            />
+          </label>
+          <label className={labelClass}>
+            Video giới thiệu — URL YouTube / Shorts
+            <input
+              value={form.landing.introVideo?.url ?? ""}
+              onChange={(e) =>
+                setForm((prev) => ({
+                  ...prev,
+                  landing: {
+                    ...prev.landing,
+                    introVideo: e.target.value.trim()
+                      ? {
+                          url: e.target.value.trim(),
+                          title: prev.landing.introVideo?.title ?? "",
+                          caption: prev.landing.introVideo?.caption ?? "",
+                        }
+                      : undefined,
+                  },
+                }))
+              }
+              className={inputClass}
+              placeholder="https://www.youtube.com/shorts/…"
+            />
+          </label>
+          <label className={labelClass}>
+            Video giới thiệu — tiêu đề section
+            <input
+              value={form.landing.introVideo?.title ?? ""}
+              onChange={(e) =>
+                setForm((prev) => ({
+                  ...prev,
+                  landing: {
+                    ...prev.landing,
+                    introVideo: {
+                      url: prev.landing.introVideo?.url ?? "",
+                      title: e.target.value,
+                      caption: prev.landing.introVideo?.caption ?? "",
+                    },
+                  },
+                }))
+              }
+              className={inputClass}
+              placeholder="Video review DTA Happy Home — Hùng Thuận"
+              disabled={!form.landing.introVideo?.url}
+            />
+          </label>
+          <label className={labelClass}>
+            Video giới thiệu — mô tả ngắn
+            <input
+              value={form.landing.introVideo?.caption ?? ""}
+              onChange={(e) =>
+                setForm((prev) => ({
+                  ...prev,
+                  landing: {
+                    ...prev.landing,
+                    introVideo: {
+                      url: prev.landing.introVideo?.url ?? "",
+                      title: prev.landing.introVideo?.title ?? "",
+                      caption: e.target.value,
+                    },
+                  },
+                }))
+              }
+              className={inputClass}
+              placeholder="Diễn viên Hùng Thuận trải nghiệm dự án…"
+              disabled={!form.landing.introVideo?.url}
             />
           </label>
         </div>

@@ -191,6 +191,18 @@ Không ghi disclaimer “thông tin tham khảo / không phải CĐT” trên la
 
 ---
 
+## Video giới thiệu
+
+| Field | Giá trị |
+|-------|---------|
+| **URL** | https://www.youtube.com/shorts/t8Lx4NTnHos |
+| **Title** | Video review DTA Happy Home — Hùng Thuận |
+| **Caption** | Diễn viên Hùng Thuận trải nghiệm và chia sẻ cảm nhận về dự án DTA Happy Home Nhơn Trạch. |
+
+Host trên YouTube (không upload MP4 lên VPS). Share với khách: link trang `/du-an/dta-happy-home-nhon-trach` hoặc link Shorts.
+
+---
+
 ## Ảnh / tài sản admin PHẢI bổ sung
 
 1. Logo CĐT Đệ Tam (Developer) — 400×400 px

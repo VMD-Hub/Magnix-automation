@@ -117,6 +117,12 @@ export function buildDtaHappyHomeLanding(): ProjectLanding {
       href: "/lien-he",
     },
   ];
+  landing.introVideo = {
+    url: "https://www.youtube.com/shorts/t8Lx4NTnHos",
+    title: "Video review DTA Happy Home — Hùng Thuận",
+    caption:
+      "Diễn viên Hùng Thuận trải nghiệm và chia sẻ cảm nhận về dự án DTA Happy Home Nhơn Trạch.",
+  };
   landing.gallery = dtaHappyHomeGallery();
   landing.ctaLabel = "Liên hệ tư vấn";
   landing.ctaHref = "/lien-he";

@@ -1,25 +1,9 @@
 import { getVuNguyenVideoUrl } from "@/lib/personal-brand/vu-nguyen/profile-content";
+import {
+  isYoutubeUrl,
+  toYoutubeEmbedUrl,
+} from "@/lib/media/youtube";
 import { cn } from "@/lib/ui/cn";
-
-function isYoutubeEmbedUrl(url: string): boolean {
-  return /youtube\.com|youtu\.be/.test(url);
-}
-
-function toYoutubeEmbed(url: string): string | null {
-  try {
-    const u = new URL(url);
-    if (u.hostname.includes("youtu.be")) {
-      const id = u.pathname.slice(1);
-      return id ? `https://www.youtube.com/embed/${id}` : null;
-    }
-    const id = u.searchParams.get("v");
-    if (id) return `https://www.youtube.com/embed/${id}`;
-    if (u.pathname.startsWith("/embed/")) return url;
-    return null;
-  } catch {
-    return null;
-  }
-}
 
 type Props = {
   variant?: "holder" | "light";
@@ -54,7 +38,7 @@ export function ProfileVideo({ variant = "light" }: Props) {
     );
   }
 
-  const yt = isYoutubeEmbedUrl(videoUrl) ? toYoutubeEmbed(videoUrl) : null;
+  const yt = isYoutubeUrl(videoUrl) ? toYoutubeEmbedUrl(videoUrl) : null;
 
   const frameClass = cn(
     "aspect-video w-full overflow-hidden rounded-xl border shadow-lg",

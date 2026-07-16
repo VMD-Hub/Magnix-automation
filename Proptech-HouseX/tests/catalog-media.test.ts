@@ -50,6 +50,10 @@ describe("catalog media fallbacks", () => {
     );
     assert.match(landing.gallery[0]?.caption ?? "", /Mặt bằng tổng thể/i);
     assert.ok(landing.services.length >= 2);
+    assert.equal(
+      landing.introVideo?.url,
+      "https://www.youtube.com/shorts/t8Lx4NTnHos",
+    );
   });
 
   it("NOXH stock media fills risky external URLs and preserves DTA CĐT images", () => {

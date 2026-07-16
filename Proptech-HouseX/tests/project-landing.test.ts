@@ -77,6 +77,21 @@ test("projectLandingSchema validates location map image", () => {
   assert.equal(parsed.success, true);
 });
 
+test("projectLandingSchema validates introVideo YouTube Shorts", () => {
+  const landing = defaultProjectLanding("X");
+  landing.introVideo = {
+    url: "https://www.youtube.com/shorts/t8Lx4NTnHos",
+    title: "Review",
+    caption: "Celebrity review",
+  };
+  const parsed = projectLandingSchema.safeParse(landing);
+  assert.equal(parsed.success, true);
+  assert.equal(
+    parsed.success && parsed.data.introVideo?.url,
+    "https://www.youtube.com/shorts/t8Lx4NTnHos",
+  );
+});
+
 test("project landing guidelines cover all form sections", () => {
   const ids = [
     "basic",

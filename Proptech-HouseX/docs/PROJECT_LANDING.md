@@ -22,6 +22,7 @@ Sao chép: landing, loại hình sản phẩm (`unitTypes`), hồ sơ pháp lý 
 | Field | Mục đích SEO |
 |-------|----------------|
 | `heroSubtitle` | Mô tả phụ dưới H1 |
+| `introVideo` | Video review / giới thiệu (YouTube, kể cả Shorts) |
 | `highlights[]` | H3 — điểm nổi bật |
 | `amenities[]` | Tiện ích nội khu |
 | `locationMapImage` | Ảnh bản đồ minh hoạ khoảng cách (1 ảnh, 4:3) |

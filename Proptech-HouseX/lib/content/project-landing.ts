@@ -45,11 +45,20 @@ export const projectLandingLocationMapSchema = z.object({
 /** Banner hero full-width — ảnh phối cảnh / ngoại cảnh dự án. */
 export const projectLandingHeroImageSchema = projectLandingLocationMapSchema;
 
+/** Video giới thiệu dự án — YouTube (kể cả Shorts) hoặc URL phát trực tiếp. */
+export const projectLandingIntroVideoSchema = z.object({
+  url: z.string().url(),
+  title: z.string().min(1).optional(),
+  caption: z.string().optional(),
+});
+
 export const projectLandingSchema = z.object({
   version: z.literal(1).default(1),
   heroSubtitle: z.string().optional(),
   /** Ảnh banner phía sau hero (1920×720 khuyến nghị). Fallback: ảnh gallery đầu tiên. */
   heroImage: projectLandingHeroImageSchema.optional(),
+  /** Video review / giới thiệu — embed YouTube hoặc file mp4. */
+  introVideo: projectLandingIntroVideoSchema.optional(),
   highlights: z.array(projectLandingBlockSchema).default([]),
   amenities: z.array(z.string().min(1)).default([]),
   /** Ảnh thiết kế: bản đồ khoảng cách tới tiện ích (trái trên desktop). */
@@ -72,6 +81,9 @@ export type ProjectLandingLocationMap = z.infer<
 >;
 export type ProjectLandingHeroImage = z.infer<
   typeof projectLandingHeroImageSchema
+>;
+export type ProjectLandingIntroVideo = z.infer<
+  typeof projectLandingIntroVideoSchema
 >;
 
 export const projectOverviewSchema = z
