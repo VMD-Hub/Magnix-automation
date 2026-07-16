@@ -796,45 +796,82 @@ ${journeyClosing("hau-kiem-noxh-doi-chieu-bhxh-thue-2026")}`,
     title:
       "Bài học từ kết luận thanh tra tại Đồng Nai 06/2026",
     excerpt:
-      "Từ kết luận thanh tra 09/KL-TT (19/6/2026): lệch giấy thu nhập với BHXH/thuế, thiếu bốc thăm, cọc vượt 5% — rút danh mục kiểm trước khi nộp hồ sơ hoặc đặt cọc. Không kết luận hình sự cá nhân.",
-    body: `## Kết luận thanh tra nói gì với người mua?
+      "Tách hai rủi ro: sai sót tính thu nhập (xem bài Mẫu 04/05) và khai gian vì tin “thuế–BHXH chưa xét”. KL 09/KL-TT: giấy DN ký vẫn bị đối chiếu ngược với BHXH/thuế — bóc chiêu môi giới dẫn đến lệch dữ liệu.",
+    body: `## Kết luận Đồng Nai nói gì — và vì sao người mua phải tách hai loại rủi ro
 
-Theo [Báo Thanh tra ngày 09/07/2026](https://thanhtra.com.vn/ket-luan-thanh-tra-E17BD7A25/thanh-tra-tp-dong-nai-phat-hien-nhieu-bat-thuong-ho-so-mua-nha-o-xa-hoi-818acf2ed.html), Thanh tra TP Đồng Nai ban hành Kết luận số 09/KL-TT ngày 19/6/2026 về chương trình NOXH trên địa bàn. Bài này không kể lại toàn bộ vụ việc — chỉ rút việc người mua phải tự kiểm trước khi nộp hồ sơ hoặc đặt cọc.
+Theo [Báo Thanh tra ngày 09/07/2026](https://thanhtra.com.vn/ket-luan-thanh-tra-E17BD7A25/thanh-tra-tp-dong-nai-phat-hien-nhieu-bat-thuong-ho-so-mua-nha-o-xa-hoi-818acf2ed.html), Kết luận số 09/KL-TT ngày 19/6/2026 của Thanh tra TP Đồng Nai kiểm ba dự án NOXH (Long Thành Riverside, KDC Thái Thành - Thuận Lợi, Chương Dương Homeland Long Hưng). Với người mua, điểm then chốt là hồ sơ thu nhập bị soi ngược sang dữ liệu BHXH và thuế:
 
-Phạm vi báo chí nêu ba dự án: Long Thành Riverside, KDC Thái Thành - Thuận Lợi, Chương Dương Homeland Long Hưng.
+- Có dự án ghi nhận 76 người được DN xác nhận thu nhập nhưng không có thông tin BHXH tại đúng DN đó.
+- Có hồ sơ kê khai, xác nhận đối tượng và điều kiện thu nhập không đúng thực tế, không khớp thông tin cơ quan thuế và BHXH cung cấp.
+- Ngoài hồ sơ: có đợt vượt số căn không bốc thăm; có thu cọc vượt 5% giá bán.
 
-## Ba nhóm phát hiện và việc làm ngay
+Hai nhóm người dễ dính cùng một kết quả “giấy không khớp dữ liệu nguồn” — nhưng động cơ khác nhau. Phải tách rõ để xử lý đúng.
 
-| Phát hiện | Hệ quả với người mua | Việc làm trước khi nộp / cọc |
-| --- | --- | --- |
-| Giấy xác nhận thu nhập do DN ký nhưng không khớp BHXH (báo chí nêu >76 trường hợp tại một dự án) | Bị rà lại điều kiện; có thể mất quyền mua | Chỉ xin Mẫu 04 tại DN đang đóng BHXH; đối chiếu app BHXH + bảng lương trước khi nộp |
-| Hồ sơ vượt số căn nhưng không bốc thăm | Kết quả xét chọn có thể bị xem xét lại | Hỏi CĐT bằng văn bản: nếu hồ sơ > số căn thì quy trình chọn là gì |
-| Thu cọc vượt 5% giá bán | Rủi ro tài chính nếu dự án bị thanh tra | Đọc thông báo + điều khoản cọc; không chuyển tiền vượt khung trước HĐMB |
+| Nhóm | Bản chất | Ví dụ | Cách xử lý |
+| --- | --- | --- | --- |
+| Sai sót | Muốn khai đúng nhưng tính sai bình quân 12 tháng, quên cộng vợ/chồng, cộng nhầm khoản, lấy sai cửa sổ thời gian | Tự tính “lương tháng này” thay vì tổng 12 tháng ÷ 12 | Làm đúng công thức và đối chiếu bảng lương/BHXH — xem bài Mẫu 04/05 bên dưới |
+| Cố ý / quá tự tin | Tin lời môi giới “dễ làm”, “thuế–BHXH chưa xét được”, hoặc chủ động tạo giấy lệch thực tế để qua trần | Nhờ DN ký giúp; nghỉ HĐLĐ rồi khai lao động tự do thu nhập thấp | Dừng ngay — hậu kiểm/thanh tra đối chiếu dữ liệu nguồn, không chỉ chữ trên giấy |
 
-## Danh mục kiểm 12 điểm trước khi cọc hoặc nộp hồ sơ
+## Sai sót khi tính thu nhập — xem bài Mẫu 04/05
 
-- [ ] Mẫu 04 chỉ do DN bạn đang đóng BHXH ký — đã mở app BHXH đối chiếu
-- [ ] Bảng lương 12 tháng khớp số trên giấy xác nhận
-- [ ] GCN tại tỉnh/thành phố nơi có dự án đã tra cho cả vợ chồng
-- [ ] Đơn Mẫu 01 khớp toàn bộ giấy kèm
-- [ ] Đã hỏi bằng văn bản: nếu hồ sơ > số căn thì có bốc thăm không
-- [ ] Đã đọc điều khoản cọc — không vượt 5% trước HĐMB (theo thông báo dự án)
-- [ ] Có biên nhận nộp hồ sơ hoặc email xác nhận
-- [ ] Giấy xác nhận còn trong 12 tháng tại mốc ký HĐ dự kiến
-- [ ] Không nhờ DN “ký giúp” khi không làm việc tại đó
-- [ ] Đã chụp lưu toàn bộ bộ hồ sơ đã nộp
-- [ ] Đã hỏi CĐT số bộ hồ sơ và danh mục chính xác (thường 4 bộ; vay thì +1 bộ ngân hàng)
-- [ ] Không chuyển cọc chỉ qua tin nhắn cá nhân không có căn cứ dự án
+Công thức bình quân 12 tháng liền kề ÷ 12, trần độc thân 25 triệu / nuôi con dưới 18 tuổi 35 triệu / vợ chồng 50 triệu, ví dụ số và bảng lỗi hay gặp (quên cộng vợ/chồng, cộng nhầm phụ cấp, sai cửa sổ thời gian, lệch BHXH) đã có đủ tại [Mẫu 04 và Mẫu 05: Khai thu nhập mua NOXH đúng thế nào?](${articlePath("mau-04-mau-05-xac-nhan-thu-nhap-noxh-2026")}).
+
+Bài này chỉ nhắc: trước khi nộp, tự so giấy với bảng lương và app BHXH cùng một DN. Không khớp thì sửa theo hướng dẫn bài trên — đừng nộp với bộ lệch.
+
+## Lớp cố ý: quá tự tin rằng “hậu kiểm chưa tìm ra” — và các chiêu môi giới dẫn đến sai
+
+Lúc nộp, CĐT thường rà danh mục và hình thức trước. Đó là nửa sự thật. Nửa còn lại: cơ chế NOXH nghiêng về kê khai–cam kết khi nộp và đối chiếu dữ liệu nguồn khi công khai danh sách, thanh tra chuyên đề, hoặc có dấu hiệu bất thường. Kết luận Đồng Nai cho thấy giấy DN đã ký vẫn bị đối chiếu với BHXH và thuế — không phải “nộp xong là xong”.
+
+### Chiêu 1 — “Dễ làm lắm; thuế với BHXH chưa soi đâu anh/chị đừng lo”
+
+Bẫy: Đánh vào tâm lý “chưa soi ngay = không bao giờ soi”.
+
+Thực tế: 76 trường hợp DN ký nhưng không có BHXH tại DN đó vẫn bị phát hiện khi đối chiếu dữ liệu nguồn. “Giấy đẹp” không thay được dữ liệu gốc.
+
+Việc làm: Tự khớp giấy với app BHXH trước khi nộp. Không khớp thì dừng — không nhờ nơi khác ký giúp.
+
+### Chiêu 2 — “Lương cao quá thì nghỉ HĐLĐ, chuyển khai lao động tự do cho dưới trần”
+
+Bẫy: Đổi đối tượng trên giấy để né trần, tưởng chỉ cần tháng sau nghỉ việc là đủ.
+
+Thực tế: Bình quân vẫn tính 12 tháng liền kề; tháng lương cao còn trong cửa sổ vẫn kéo bình quân lên. Mẫu 05 có cam kết trung thực và hậu kiểm. Lịch sử BHXH/thuế TNCN không mất vì đã nghỉ việc.
+
+Việc làm: Chỉ đăng ký khi tình trạng thật đã thỏa điều kiện. Không tạo “hồ sơ tạm” để qua xét duyệt.
+
+### Chiêu 3 — “Em lo giấy ở công ty quen; anh/chị chỉ việc ký đơn”
+
+Bẫy: Tách người đứng đơn khỏi nguồn thu nhập thật — đúng kiểu giấy có chữ ký DN nhưng không có quan hệ BHXH tại DN.
+
+Thực tế: Khi thanh tra/hậu kiểm hỏi DN và đối chiếu BHXH, lệch sẽ lộ. Người đứng tên hồ sơ chịu hệ quả trên quyền mua và cam kết trong hồ sơ.
+
+Việc làm: Chỉ xin Mẫu 04 tại đơn vị mình đang đóng BHXH. Giữ bản chụp bảng lương và màn hình BHXH cùng bộ hồ sơ.
+
+### Chiêu 4 — “Cọc nhiều để giữ suất; hồ sơ đông xếp trước xếp sau”
+
+Bẫy: Thay quy trình bằng lời miệng.
+
+Thực tế: Kết luận Đồng Nai nêu thu cọc vượt 5% giá bán và đợt vượt căn không bốc thăm.
+
+Việc làm: Hỏi CĐT bằng văn bản về mức cọc và quy trình chọn căn khi hồ sơ > số căn. Không chuyển tiền vượt khung thông báo dự án.
+
+## Việc làm trước khi nộp hoặc đặt cọc
+
+| Việc | Chuẩn đạt |
+| --- | --- |
+| Tự tính bình quân 12 tháng | Làm theo bài Mẫu 04/05; khớp bảng lương ↔ BHXH ↔ giấy |
+| Khớp giấy thu nhập | Mẫu 04 ↔ bảng lương ↔ BHXH cùng DN (hoặc Mẫu 05 khớp nguồn thu thật) |
+| Từ chối chiêu đổi đối tượng / ký giúp | Chỉ khai đúng tình trạng lao động thật |
+| Cọc và chọn căn | Có trả lời văn bản của CĐT trước khi chuyển tiền |
 
 ## Mẫu câu hỏi CĐT trước khi cọc
 
 “Dự án [tên] đợt này có [X] căn, hiện tiếp nhận [Y] hồ sơ. Nếu Y > X, quy trình chọn căn là bốc thăm hay xét theo thứ tự? Mức cọc tối đa trước HĐMB là bao nhiêu % giá bán? Vui lòng trả lời qua thông báo hoặc email để em lưu căn cứ.”
 
-## Giới hạn khi đọc kết luận này
+## Nguồn
 
-Nội dung tổng hợp từ báo chí công khai (KL 09/KL-TT, 19/6/2026). Không kết luận hình sự cá nhân; không khẳng định mọi dự án Đồng Nai có cùng lỗi. Dùng danh mục kiểm để rà hồ sơ của bạn — không dùng để kết tội bên thứ ba.
+[Báo Thanh tra — Kết luận thanh tra NOXH Đồng Nai (09/07/2026)](https://thanhtra.com.vn/ket-luan-thanh-tra-E17BD7A25/thanh-tra-tp-dong-nai-phat-hien-nhieu-bat-thuong-ho-so-mua-nha-o-xa-hoi-818acf2ed.html) · KL 09/KL-TT ngày 19/6/2026.
 
-Cách đối chiếu giấy với BHXH/Thuế trước khi nộp: [Hậu kiểm hồ sơ NOXH](${articlePath("hau-kiem-noxh-doi-chieu-bhxh-thue-2026")}).
+Cách tự đối chiếu giấy với BHXH/Thuế trước khi nộp: [Hậu kiểm hồ sơ NOXH](${articlePath("hau-kiem-noxh-doi-chieu-bhxh-thue-2026")}).
 
 ${journeyClosing("bai-hoc-thanh-tra-noxh-dong-nai-2026")}`,
     status: "PUBLISHED",
@@ -845,7 +882,7 @@ ${journeyClosing("bai-hoc-thanh-tra-noxh-dong-nai-2026")}`,
     seoTitle:
       "Bài học từ kết luận thanh tra Đồng Nai 06/2026 | HouseX",
     seoDesc:
-      "KL 09/KL-TT: lệch BHXH/thuế, thiếu bốc thăm, cọc vượt 5%. Danh mục kiểm 12 điểm trước khi nộp hồ sơ hoặc đặt cọc NOXH.",
+      "KL Đồng Nai 09/KL-TT: bóc chiêu “dễ làm / thuế–BHXH chưa xét”, ký giúp, đổi khai lao động tự do. Sai sót tính thu nhập → bài Mẫu 04/05.",
     tags: [TAG],
     projects: [],
   },

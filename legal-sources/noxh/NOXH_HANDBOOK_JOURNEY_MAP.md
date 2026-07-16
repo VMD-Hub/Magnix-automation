@@ -60,8 +60,9 @@ flowchart LR
 | Văn bản | Kết luận thanh tra số **09/KL-TT**, ngày **19/6/2026** |
 | Phạm vi | 3 dự án NOXH (Long Thành Riverside; Thái Thành–Thuận Lợi; Chương Dương Homeland Long Hưng) |
 | Phát hiện | Giấy xác nhận thu nhập **không khớp** BHXH/thuế; DN ký xác nhận nhưng người mua **không có BHXH tại DN**; một số dự án **không bốc thăm** khi vượt quỹ căn; cọc **&gt; 5%** giá bán |
+| Góc biên tập bài C4 | Tách 2 lớp: sai sót tính TN → link bài Mẫu 04/05; lõi bài = bóc chiêu môi giới / quá tự tin hậu kiểm không bắt được |
 | Kiến nghị | Sở Xây dựng rà soát lại hồ sơ; chuyển điều tra nếu có dấu hiệu hình sự |
-| **Không viết** | Kết luận gian lận cá nhân; số liệu hình sự chưa có QĐ tố tụng |
+| **Không viết** | Kết luận gian lận cá nhân; số liệu hình sự chưa có QĐ tố tụng; disclaimer “không kết luận hình sự” kiểu né tránh |
 
 ---
 
