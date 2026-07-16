@@ -199,7 +199,7 @@ Không ghi disclaimer “thông tin tham khảo / không phải CĐT” trên la
 | **Title** | Video review DTA Happy Home — Hùng Thuận |
 | **Caption** | Diễn viên Hùng Thuận trải nghiệm và chia sẻ cảm nhận về dự án DTA Happy Home Nhơn Trạch. |
 
-Host trên YouTube (không upload MP4 lên VPS). Share với khách: link trang `/du-an/dta-happy-home-nhon-trach` hoặc link Shorts.
+Host trên YouTube (không upload MP4 lên VPS). Trang công khai chỉ hiển thị embed + link “Xem trên YouTube” — không ghi hướng dẫn nội bộ cho CTV.
 
 ---
 

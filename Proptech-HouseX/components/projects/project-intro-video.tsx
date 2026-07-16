@@ -77,10 +77,8 @@ export function ProjectIntroVideo({ video, projectName }: Props) {
             rel="noopener noreferrer"
             className="font-medium text-brand-700 underline-offset-2 hover:underline"
           >
-            Mở trên YouTube
+            Xem trên YouTube
           </a>
-          {" · "}
-          chia sẻ link này hoặc link trang dự án với khách hàng.
         </p>
       )}
     </section>
