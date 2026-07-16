@@ -4,6 +4,7 @@ import {
   assertEditorialBodyQuality,
   EDITORIAL_BANNED_BODY_PATTERNS,
 } from "@/lib/content/articles/article-editorial-voice";
+import { NOXH_HANDBOOK_JOURNEY_ARTICLES_2026 } from "@/lib/content/articles/noxh-handbook-journey-2026";
 import { NOXH_KNOWLEDGE_ARTICLES_2026 } from "@/lib/content/articles/noxh-knowledge-series-2026";
 import { NOXH_TREND_ARTICLES_2026 } from "@/lib/content/articles/noxh-trend-series-2026";
 import { TOD_NHON_TRACH_ARTICLES_2026 } from "@/lib/content/articles/tod-nhon-trach-series-2026";
@@ -12,6 +13,7 @@ import { getDemoArticleBySlug } from "@/lib/preview/demo-articles";
 const EDITORIAL_SERIES = [
   ...NOXH_TREND_ARTICLES_2026,
   ...NOXH_KNOWLEDGE_ARTICLES_2026,
+  ...NOXH_HANDBOOK_JOURNEY_ARTICLES_2026,
   ...TOD_NHON_TRACH_ARTICLES_2026,
 ];
 

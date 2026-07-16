@@ -41,7 +41,7 @@ Dù Luật xếp LLVT vào nhóm phải có điều kiện thu nhập (Đ.78 k1 
 **Thực hành hồ sơ:**
 
 - Giấy xác nhận của **thủ trưởng đơn vị**: đang công tác, chưa được hưởng chính sách nhà ở đất ở quân đội/công an.
-- **Không** dùng Mẫu xác nhận thu nhập (Mẫu số 03 / mục 11.1) như công nhân — dùng **mục 11.2 Mẫu 01** và mẫu BQP/BCA.
+- **Không** dùng Mẫu xác nhận thu nhập dân sự (**Mẫu 04/05 TT 05** hoặc mục **11.1** trên đơn NĐ 100) như công nhân — dùng **mục 11.2 Mẫu 01 NĐ 100** và mẫu **BQP/BCA**.
 - Chứng minh thu nhập được **nội bộ hóa** tại đơn vị quản lý.
 
 Chi tiết mục 11.2: `mau-01-section-11-income.md` · claim `mau01_section_11_2_k7_001`.
@@ -62,9 +62,11 @@ Chỉ áp dụng cho **khoản 5, 6, 8 Điều 76** (không áp k1,2,3,4,9,10,11
 
 ---
 
-## 4. Hồ sơ thực tế — ai không cần Mẫu xác nhận thu nhập (Mẫu 03)?
+## 4. Hồ sơ thực tế — ai không cần Mẫu 04/05 thu nhập (TT 05)?
 
-| Nhóm đứng đơn | Thay Mẫu 03 bằng |
+> **Lưu ý:** Mẫu **03 TT 05** = chứng minh **nhà ở (có nhà)** — không phải thu nhập. Xem `NOXH_FORM_TAXONOMY.md`.
+
+| Nhóm đứng đơn | Thay Mẫu 04/05 thu nhập bằng |
 |---------------|------------------|
 | **Người có công** (k1) | Giấy chứng nhận người có công / quyết định hưởng chính sách NCC |
 | **Bị thu hồi đất, giải tỏa** (k10) | Quyết định thu hồi đất, xác nhận UBND cấp huyện |
@@ -78,10 +80,10 @@ Người thu nhập thấp / công nhân / CBCCVC (k5, k6, k8) **bắt buộc** 
 ## 5. Quy tắc agent (Magnix)
 
 - **Không** áp trần 25/35/50 cho quân nhân, công an đương nhiệm (k7).
-- **Không** yêu cầu Mẫu 03 cho người có công (k1) hoặc hộ bị thu hồi đất (k10) khi mua/thuê mua.
+- **Không** yêu cầu Mẫu 04/05 thu nhập cho người có công (k1) hoặc hộ bị thu hồi đất (k10) khi mua/thuê mua.
 - **Không** khẳng định “chắc chắn đủ điều kiện” — chỉ sàng lọc sơ bộ; kết luận thuộc Sở XD / CĐT.
 - Phân biệt **mua/thuê mua** vs **thuê** (Đ.78 k2 — thuê không xét nhà ở & thu nhập).
 
 ---
 
-*Magnix Legal KB — cập nhật 2026-07-03. Tra thêm: `luat-nha-o-2023-dieu-76-78-79.md`, `nghi-dinh-100-2024-nd-cp.md`.*
+*Magnix Legal KB — cập nhật 2026-07-16 (taxonomy Mẫu 04/05). Tra thêm: `NOXH_FORM_TAXONOMY.md`, `luat-nha-o-2023-dieu-76-78-79.md`, `nghi-dinh-100-2024-nd-cp.md`.*

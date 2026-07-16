@@ -261,7 +261,7 @@
     "disclaimer_required": true,
     "usage_rules": [
       "Phân biệt k7 đương nhiệm vs anh hùng/thương binh/NCC (k1)",
-      "Hồ sơ dùng mục 11.2 Mẫu 01, không Mẫu 03 trần dân sự"
+      "Hồ sơ dùng mục 11.2 Mẫu 01 NĐ 100, không Mẫu 04/05 thu nhập TT 05"
     ],
     "forbidden_claims": [
       "Quân nhân lương 30 triệu chắc chắn không đủ NOXH",
@@ -272,7 +272,7 @@
   {
     "claim_id": "noxh_dossier_no_mau03_merit_land_001",
     "topic": "noxh_documents",
-    "claim": "Hồ sơ mua/thuê mua NOXH đứng tên người có công (khoản 1 Đ.76) hoặc hộ bị thu hồi đất, giải tỏa chưa được bồi thường (khoản 10 Đ.76): không cần Mẫu xác nhận thu nhập dân sự (Mẫu số 03 / mục 11.1) — thay bằng giấy chứng nhận người có công hoặc Quyết định thu hồi đất và xác nhận UBND.",
+    "claim": "Hồ sơ mua/thuê mua NOXH đứng tên người có công (khoản 1 Đ.76) hoặc hộ bị thu hồi đất, giải tỏa chưa được bồi thường (khoản 10 Đ.76): không cần Mẫu xác nhận thu nhập dân sự (Mẫu 04/05 TT 05 hoặc mục 11.1 Mẫu 01 NĐ 100) — thay bằng giấy chứng nhận người có công hoặc Quyết định thu hồi đất và xác nhận UBND. (Mẫu 03 TT 05 = nhà ở có nhà, không phải thu nhập.)",
     "source_refs": [
       "luat78_income_exemption_k1234911_001",
       "noxh_nd_100_2024:article_38"

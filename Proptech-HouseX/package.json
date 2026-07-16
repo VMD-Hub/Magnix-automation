@@ -41,6 +41,8 @@
     "brand:generate-header-logo-mark": "node --import tsx scripts/generate-header-logo-mark.ts",
     "brand:sync-header-assets": "npm run brand:extract-header-paper && npm run brand:generate-header-logo-mark",
     "brand:zalo-banners": "node --import tsx scripts/generate-zalo-brand-banners.ts",
+    "brand:zalo-personal-cover": "node --import tsx scripts/generate-zalo-personal-cover.ts",
+    "brand:facebook-personal-cover": "node --import tsx scripts/generate-facebook-personal-cover.ts",
     "brand:vu-nguyen-qr": "node --import tsx scripts/generate-vu-nguyen-qr.ts",
     "go-live:secrets": "node --import tsx scripts/generate-secrets.ts",
     "go-live:check-env": "node --import tsx scripts/check-go-live-env.ts",

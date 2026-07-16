@@ -3,6 +3,10 @@
 > **Trạng thái:** `human_verified` — 2026-06-26 · L3 duyệt toàn module Mẫu 01 / CT07 + vay/CIC  
 > **Mục đích:** Điểm vào thống nhất cho agent/copywriter — mọi thắc mắc tư vấn đăng ký nên tra file tương ứng trước khi trả lời khách.
 
+**Taxonomy mẫu (bắt buộc):** `NOXH_FORM_TAXONOMY.md` — không nhầm Mẫu 04/05 địa chính (`cam-nang-phap-ly-bds.md`) với Mẫu 04/05 thu nhập TT-BXD.
+
+**Lộ trình bài viết:** `NOXH_HANDBOOK_JOURNEY_MAP.md` (cluster C0–C6).
+
 ---
 
 ## Ba kênh phục vụ (cùng một KB)
@@ -21,6 +25,7 @@ Chi tiết: `docs/NOXH_THREE_CHANNEL_ARCHITECTURE.md` · `buildChannelPack('aio_
 
 | Chủ đề khách hỏi | File tư vấn | Claim / Q&A chính |
 |------------------|-------------|-------------------|
+| **Đánh số mẫu NOXH — tránh nhầm** | `NOXH_FORM_TAXONOMY.md` | — |
 | Điền Mẫu 01 từng phần · L3 ✓ | `application-form-mau-01-guide.md` | `mau01_core_bundle_001` |
 | **Viết tay / nơi cấp / xuống dòng / mục 9** · L3 ✓ 2026-06-26 | `mau-01-handwriting-sample-guide.md` | `mau01_qa_handwriting_place_issue_001` · mẫu: `samples/mau-01-sample-filled-reference.md` |
 | **Số bộ hồ sơ / checklist giấy tờ** · L3 ✓ | `application-dossier-checklist.md` | `mau01_one_dossier_per_project_001`, `mau01_qa_dossier_sets_001` — **số bộ tùy CĐT từng dự án** |

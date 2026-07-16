@@ -1,6 +1,7 @@
 import type { ArticleCardData, ArticleDetail, ArticleTagSummary } from "@/lib/data/article-types";
 import { applyEditorialMedia, EDITORIAL_FIGURES } from "@/lib/content/articles/article-editorial-media";
 import { NOXH_SUPPORT_CLOSING } from "@/lib/content/articles/article-editorial-voice";
+import { NOXH_HANDBOOK_JOURNEY_ARTICLES_2026 } from "@/lib/content/articles/noxh-handbook-journey-2026";
 import { NOXH_KNOWLEDGE_ARTICLES_2026 } from "@/lib/content/articles/noxh-knowledge-series-2026";
 import { NOXH_MINDSET_ARTICLES_2026 } from "@/lib/content/articles/noxh-mindset-series-2026";
 import { NOXH_LOAN_ASSESSMENT_ARTICLES_2026 } from "@/lib/content/articles/noxh-loan-assessment-series-2026";
@@ -157,7 +158,11 @@ Ví dụ: Công nhân KCN lương 22 triệu/tháng ổn định 12 tháng thì 
 
 Lưu ý địa phương: UBND cấp tỉnh được quyết định hệ số điều chỉnh mức thu nhập (không vượt quá tỷ lệ thu nhập bình quân đầu người địa phương so với cả nước). Trước khi nộp, tra thông báo Sở Xây dựng tỉnh/TP nơi dự án tọa lạc — mức áp dụng có thể khác biệt nhẹ.
 
-**Phân biệt hai lớp thu nhập:** Trần 25/35/50 triệu ở trên là điều kiện **được mua** NOXH — khác với khả năng **vay ngân hàng** và trả góp hàng tháng. Nếu bạn đang hỏi “vay mua NOXH cần thu nhập bao nhiêu”, hãy đọc [bài phân tích hai lớp thu nhập](/tin-tuc/vay-noxh-can-thu-nhap-bao-nhieu) trước khi nộp hồ sơ.
+## Hai lớp thu nhập khác nhau
+
+Trần 25/35/50 triệu là điều kiện được mua NOXH theo Điều 30 NĐ 100 — xét bình quân thu nhập thực nhận 12 tháng. Khả năng vay ngân hàng là lớp riêng: ngân hàng xét DTI (tỷ lệ trả nợ trên thu nhập), CIC, và room dự án. Đủ trần mua không đồng nghĩa đủ trả góp hàng tháng.
+
+Ví dụ: lương 24 triệu/tháng có thể đủ trần 25 triệu (độc thân) nhưng nếu đang trả nợ xe 8 triệu/tháng, khoản vay nhà thêm 10–12 triệu/tháng có thể vượt khả năng chi trả — ngân hàng từ chối dù hồ sơ NOXH đạt điều kiện mua.
 
 ## Ai ký xác nhận thu nhập và đối tượng?
 
@@ -306,6 +311,7 @@ Xem thêm [chuyên mục phong thủy](/phong-thuy) và [xem hướng nhà](/con
   },
   ...NOXH_TREND_ARTICLES_2026,
   ...NOXH_KNOWLEDGE_ARTICLES_2026,
+  ...NOXH_HANDBOOK_JOURNEY_ARTICLES_2026,
   ...NOXH_LOAN_ASSESSMENT_ARTICLES_2026,
   ...NOXH_MINDSET_ARTICLES_2026,
   ...TOD_NHON_TRACH_ARTICLES_2026,

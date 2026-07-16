@@ -33,6 +33,17 @@ export const NOXH_SUPPORT_CLOSING = `## Chuyên gia HouseX hỗ trợ rà soát 
 Tự đối chiếu ba trụ cột pháp lý là bước nên làm — nhưng hồ sơ NOXH còn nhiều chi tiết theo từng đợt mở bán: hệ số thu nhập địa phương, giấy xác nhận đơn vị, cam kết nhà ở cả hộ. Đội ngũ HouseX hỗ trợ miễn phí rà soát điều kiện đối tượng, gợi ý dự án phù hợp mức vay và nhắc lịch mở bán — bạn [để lại thông tin tại đây](/lien-he), chuyên gia sẽ đồng hành từ checklist hồ sơ đến khi chọn được phương án an cư phù hợp.`;
 
 /**
+ * Chuẩn biên tập journey NOXH — mỗi H2 phải trả lời xong tại chỗ.
+ * Không dùng "xem thêm / đọc bài khác" thay cho quy trình, công thức, hoặc checklist.
+ */
+export const NOXH_JOURNEY_EDITORIAL_RULES = [
+  "Mỗi H2: bản chất + lỗi thực tế + bước làm + hệ quả — trong cùng bài.",
+  "Công thức, mẫu câu, bảng quyết định nằm trong thân bài, không defer sang slug khác.",
+  "Link chỉ ở footer tối giản (prev/next) hoặc nguồn pháp lý — không thay phần trả lời.",
+  "Không dùng **bold** trong body; không block CTA đầu bài.",
+] as const;
+
+/**
  * Khung khái niệm TOD — dùng trong bài hạ tầng để phân biệt TOD đúng nghĩa
  * với đô thị vệ tinh hưởng lợi giao thông công cộng (DTA Happy Home ~3–5 km tới ga quy hoạch).
  */

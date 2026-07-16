@@ -72,6 +72,31 @@ export const BRAND_ASSETS = {
       usage: "Mini App banner mobile",
       decorative: true,
     },
+    /** Zalo cá nhân — `npm run brand:zalo-personal-cover` · chuẩn 640×700 */
+    personalCover640: {
+      path: "/brand/zalo/housex-zalo-personal-cover-640x700.jpg",
+      usage: "Ảnh bìa Zalo cá nhân mobile (upload ≤1MB)",
+      decorative: true,
+    },
+    personalCover1280: {
+      path: "/brand/zalo/housex-zalo-personal-cover-1280x1400.jpg",
+      usage: "Ảnh bìa Zalo cá nhân @2x (nếu app chấp nhận)",
+      decorative: true,
+    },
+  },
+
+  /** Facebook cá nhân — `npm run brand:facebook-personal-cover` · 851×315 */
+  facebook: {
+    personalCover851: {
+      path: "/brand/facebook/housex-facebook-personal-cover-851x315.jpg",
+      usage: "Ảnh bìa Facebook cá nhân (upload chuẩn)",
+      decorative: true,
+    },
+    personalCover1702: {
+      path: "/brand/facebook/housex-facebook-personal-cover-1702x630.jpg",
+      usage: "Ảnh bìa Facebook cá nhân @2x",
+      decorative: true,
+    },
   },
 
   /** Vũ Nguyễn — personal brand Lớp 3 · /vu-nguyen */

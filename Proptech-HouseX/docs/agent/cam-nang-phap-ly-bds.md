@@ -87,6 +87,8 @@ Ghi nhận cập nhật sau khi cấp sổ lần đầu:
 
 ### 1.3. Bản vẽ hiện trạng vị trí và các loại văn bản đi kèm
 
+> **Phạm vi tài liệu này:** Mẫu 01–05 dưới đây là **bản vẽ / trích lục địa chính** phục vụ thẩm định BĐS thường — **không** dùng cho hồ sơ đăng ký **nhà ở xã hội**. Silo NOXH dùng taxonomy riêng: `legal-sources/noxh/NOXH_FORM_TAXONOMY.md` (NĐ 100 Phụ lục II + TT 05/2024/TT-BXD Phụ lục I).
+
 #### Các loại bản vẽ hiện trạng phổ biến theo khu vực
 
 1. **Mẫu 01: Bản vẽ hiện trạng vị trí** (phổ biến tại TP.HCM)
