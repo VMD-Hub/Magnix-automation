@@ -23,6 +23,11 @@ export type ProjectLandingView = {
   services: Array<{ title: string; text: string }>;
   ctaLabel: string | null;
   ctaSubtext: string | null;
+  introVideo: {
+    url: string;
+    title: string | null;
+    caption: string | null;
+  } | null;
 };
 
 export type ProjectDetail = ProjectCard & {
@@ -52,6 +57,7 @@ type OverviewLanding = {
     services?: Array<{ title: string; text: string }>;
     ctaLabel?: string;
     ctaSubtext?: string;
+    introVideo?: { url?: string; title?: string; caption?: string };
   };
   shortDescription?: string;
 };
@@ -108,6 +114,7 @@ function pickLanding(overviewData: unknown): ProjectLandingView | null {
   const o = overviewData as OverviewLanding | null;
   const l = o?.landing;
   if (!l) return null;
+  const videoUrl = l.introVideo?.url?.trim();
   return {
     heroSubtitle: l.heroSubtitle ?? null,
     highlights: l.highlights ?? [],
@@ -120,6 +127,13 @@ function pickLanding(overviewData: unknown): ProjectLandingView | null {
     services: l.services ?? [],
     ctaLabel: l.ctaLabel ?? null,
     ctaSubtext: l.ctaSubtext ?? null,
+    introVideo: videoUrl
+      ? {
+          url: videoUrl,
+          title: l.introVideo?.title?.trim() || null,
+          caption: l.introVideo?.caption?.trim() || null,
+        }
+      : null,
   };
 }
 

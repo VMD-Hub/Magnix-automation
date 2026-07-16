@@ -8,6 +8,11 @@ import {
 } from "@/services/projects";
 import { formatVnd, mediaUrl } from "@/utils/media";
 import {
+  isYoutubeShortsUrl,
+  toYoutubeEmbedUrl,
+  toYoutubeWatchUrl,
+} from "@/utils/youtube";
+import {
   getPreferredLane,
   segmentForLane,
   segmentFromProjectType,
@@ -132,6 +137,68 @@ export function ProjectDetailPage() {
         ) : null}
         {intro ? <p className="lead landing-lead">{intro}</p> : null}
       </div>
+
+      {landing?.introVideo ? (
+        <div className="landing-block">
+          <h2 className="section-title">
+            {landing.introVideo.title || `Video review ${project.name}`}
+          </h2>
+          {landing.introVideo.caption ? (
+            <p className="muted landing-video-caption">
+              {landing.introVideo.caption}
+            </p>
+          ) : null}
+          {(() => {
+            const embed = toYoutubeEmbedUrl(landing.introVideo.url);
+            const watch = toYoutubeWatchUrl(landing.introVideo.url);
+            const shorts = isYoutubeShortsUrl(landing.introVideo.url);
+            if (embed) {
+              return (
+                <>
+                  <div
+                    className={
+                      shorts
+                        ? "landing-video-frame landing-video-frame--shorts"
+                        : "landing-video-frame"
+                    }
+                  >
+                    <iframe
+                      title={
+                        landing.introVideo.title ||
+                        `Video review ${project.name}`
+                      }
+                      src={embed}
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                      allowFullScreen
+                      loading="lazy"
+                      referrerPolicy="strict-origin-when-cross-origin"
+                    />
+                  </div>
+                  {watch ? (
+                    <p className="landing-video-link">
+                      <a href={watch} target="_blank" rel="noopener noreferrer">
+                        Mở trên YouTube
+                      </a>
+                    </p>
+                  ) : null}
+                </>
+              );
+            }
+            return (
+              <div className="landing-video-frame">
+                <video
+                  controls
+                  playsInline
+                  preload="metadata"
+                  src={landing.introVideo.url}
+                >
+                  Trình duyệt không hỗ trợ video.
+                </video>
+              </div>
+            );
+          })()}
+        </div>
+      ) : null}
 
       {landing && landing.highlights.length > 0 ? (
         <div className="landing-block">
