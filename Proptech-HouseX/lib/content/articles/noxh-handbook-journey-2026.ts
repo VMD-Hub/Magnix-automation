@@ -5,9 +5,6 @@ import type { ArticleDetail } from "@/lib/data/article-types";
 const PUBLISHED = new Date("2026-07-16T00:00:00.000Z");
 const TAG = NOXH_TAG_CHINH_SACH;
 
-/** Chỉ chèn đầu bài C1 về mẫu biểu / danh mục hồ sơ formal. Không gắn bài hậu kiểm, thanh tra, vốn vay, khiếu nại. */
-export const NOXH_FORM_SCOPE_DISCLAIMER = `> Phạm vi mẫu biểu: Chỉ mẫu NOXH theo NĐ 100/2024/NĐ-CP và Thông tư 05/2024/TT-BXD (Phụ lục I). Không nhầm với mẫu bản vẽ địa chính hay Mẫu 06 TT-BXD (vay tự xây/sửa nhà). Danh mục chi tiết — đối chiếu thông báo tiếp nhận của từng chủ đầu tư.`;
-
 export type HandbookJourneyClusterId =
   | "c0-eligibility"
   | "c1-forms"
@@ -193,9 +190,7 @@ ${journeyClosing("dieu-kien-nha-o-noxh-3-tinh-huong-hay-bi-tra-ho-so")}`,
       "Điền đơn Mẫu 01 NOXH thế nào để tránh bị trả hồ sơ?",
     excerpt:
       "Đơn đăng ký NĐ 100 Phụ lục II: tick đối tượng Đ.76, khai vợ/chồng, nhà ở tại tỉnh/thành phố nơi có dự án, cam kết một dự án — năm lỗi hay gặp khi viết tay.",
-    body: `${NOXH_FORM_SCOPE_DISCLAIMER}
-
-## Mẫu 01 NĐ 100 là giấy gì và sai ở đâu nhiều nhất?
+    body: `## Mẫu 01 NĐ 100 là giấy gì và sai ở đâu nhiều nhất?
 
 Đây là đơn chính để đăng ký mua hoặc thuê mua NOXH theo Phụ lục II NĐ 100. Sai ở đơn này thường không phải lỗi câu chữ mà là sai dữ liệu nền: tick nhầm đối tượng Điều 76, khai thiếu vợ/chồng, ghi sai tình trạng nhà ở, hoặc chọn nhầm mục 11 về thu nhập. CĐT thường soi đơn trước rồi mới nhận các giấy kèm theo.
 
@@ -279,9 +274,7 @@ ${journeyClosing("mau-01-don-dang-ky-noxh-cach-dien-tranh-loi")}`,
       "Mẫu 04 và Mẫu 05 (TT-BXD): Khai thu nhập mua NOXH đúng thế nào?",
     excerpt:
       "Mẫu 04 cho người có HĐLĐ; Mẫu 05 cho k5 không HĐLĐ (Công an cấp xã từ NĐ 54). Trần bình quân tháng (NĐ 136): độc thân 25 triệu; độc thân nuôi con dưới 18 tuổi 35 triệu; đã kết hôn tổng vợ chồng 50 triệu. Tránh cộng nhầm phụ cấp miễn thuế vào thu nhập xét.",
-    body: `${NOXH_FORM_SCOPE_DISCLAIMER}
-
-## Mẫu 04 hay Mẫu 05 — chọn ngay trong 30 giây
+    body: `## Mẫu 04 hay Mẫu 05 — chọn ngay trong 30 giây
 
 | Tình huống của bạn | Mẫu dùng | Ai ký | Thời hạn xử lý tham chiếu |
 | --- | --- | --- | --- |
@@ -377,9 +370,7 @@ ${journeyClosing("mau-04-mau-05-xac-nhan-thu-nhap-noxh-2026")}`,
       "Mẫu 02 và Mẫu 03: Chứng minh điều kiện nhà ở NOXH ra sao?",
     excerpt:
       "Mẫu 02 TT-BXD khi chưa có nhà trên GCN tại tỉnh/thành phố nơi có dự án; Mẫu 03 khi có nhà dưới 15 m²/người. VPĐK đất đai và UBND xã xác nhận trong 07 ngày.",
-    body: `${NOXH_FORM_SCOPE_DISCLAIMER}
-
-## Khi nào dùng Mẫu 02, khi nào dùng Mẫu 03?
+    body: `## Khi nào dùng Mẫu 02, khi nào dùng Mẫu 03?
 
 Trả lời ngắn gọn:
 
@@ -474,9 +465,7 @@ ${journeyClosing("mau-02-mau-03-dieu-kien-nha-o-noxh")}`,
     title: "Nộp hồ sơ NOXH cần chuẩn bị mấy bộ?",
     excerpt:
       "Thường 4 bộ theo thông báo CĐT; có vay thì ngân hàng cần thêm 1 bộ. Mẫu biểu viết tay và ký sống từng bản — không photocopy đơn đã điền.",
-    body: `${NOXH_FORM_SCOPE_DISCLAIMER}
-
-## Nộp hồ sơ NOXH cần chuẩn bị mấy bộ?
+    body: `## Nộp hồ sơ NOXH cần chuẩn bị mấy bộ?
 
 Pháp luật (NĐ 100/54) quy định loại giấy tờ, không ấn định một số bộ cố định toàn quốc. Số bộ do chủ đầu tư ghi trong thông báo tiếp nhận từng dự án — bắt buộc đọc thông báo đúng dự án trước khi chuẩn bị.
 
@@ -570,9 +559,7 @@ ${journeyClosing("bao-nhieu-bo-ho-so-photo-noxh")}`,
       "Quân nhân, công an (k7) nộp hồ sơ NOXH dùng mẫu gì?",
     excerpt:
       "k7 không dùng trần thu nhập dân sự theo NĐ 136 (độc thân 25 triệu; độc thân nuôi con dưới 18 tuổi 35 triệu; đã kết hôn tổng vợ chồng 50 triệu). Đi mục 11.2 trên Mẫu 01 NĐ 100 và giấy xác nhận đơn vị BQP/BCA. Không nhầm Mẫu 06 TT 05 (vay tự xây/sửa).",
-    body: `${NOXH_FORM_SCOPE_DISCLAIMER}
-
-## k7 và k8 khác nhau ở đâu?
+    body: `## k7 và k8 khác nhau ở đâu?
 
 Khác ngay ở bản chất đối tượng:
 
