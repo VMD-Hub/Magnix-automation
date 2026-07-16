@@ -196,12 +196,12 @@ ${closing("tham-dinh-khoan-vay-mua-nha-o-xa-hoi")}`,
     slug: "kiem-tra-kha-nang-vay-noxh-60-giay",
     title: "Kiểm tra nhanh thời hạn vay mua nhà ở xã hội",
     excerpt:
-      "Môi giới hay nói vay 20, 25 hay 30 năm — nhưng không phải ai cũng được cùng thời hạn. Ngân hàng xét tuổi cuối kỳ vay; kiểm tra trước giúp bạn biết mình vay NOXH được bao lâu trước khi nộp hồ sơ.",
-    body: `Bạn thường nghe môi giới bất động sản nói thời hạn cho vay **20 năm, 25 năm**, thậm chí **30 năm** — nhưng **không phải ai cũng được cùng một thời hạn vay**. Hai người cùng xem một căn NOXH, cùng nghe một con số kỳ hạn, nhưng khi ngân hàng thẩm định, một người có thể vay đủ 20 năm, người kia chỉ được 12 hoặc 15 năm vì **tuổi cuối kỳ vay** của mỗi người khác nhau.
+      "Môi giới thường giới thiệu: dự án này anh/chị được vay 20 năm, 25 năm hay 30 năm — nhưng không phải ai cũng được cùng thời hạn. Ngân hàng xét tuổi cuối kỳ vay; kiểm tra trước giúp bạn biết mình vay NOXH được bao lâu trước khi nộp hồ sơ.",
+    body: `Môi giới thường giới thiệu: dự án này anh/chị được vay 20 năm, 25 năm hay 30 năm — nhưng không phải ai cũng được cùng một thời hạn vay. Hai người cùng xem một căn NOXH, cùng nghe một con số kỳ hạn, nhưng khi ngân hàng thẩm định, một người có thể vay đủ 20 năm, người kia chỉ được 12 hoặc 15 năm vì tuổi cuối kỳ vay của mỗi người khác nhau.
 
-Đó là lý do nên tự kiểm tra **trước khi nộp hồ sơ hoặc đặt cọc** — không để thay ngân hàng quyết định, mà để biết sớm thời hạn vay thực tế áp dụng với bạn. Nhiều người bỏ qua bước này và đi thẳng vào cọc; đến khi hồ sơ bị rút ngắn kỳ hạn hoặc từ chối, kế hoạch trả góp đã xây trên giả định sai — dù thu nhập vẫn ổn.
+Đó là lý do nên tự kiểm tra trước khi nộp hồ sơ hoặc đặt cọc — không để thay ngân hàng quyết định, mà để biết sớm thời hạn vay thực tế áp dụng với bạn. Nhiều người bỏ qua bước này và đi thẳng vào cọc; đến khi hồ sơ bị rút ngắn kỳ hạn hoặc từ chối, kế hoạch trả góp đã xây trên giả định sai — dù thu nhập vẫn ổn.
 
-Bài viết giải thích **vì sao tuổi tác quyết định thời hạn vay NOXH**, bước kiểm tra sơ bộ mang lại giá trị gì, và cần làm gì sau khi biết kết quả.
+Bài viết giải thích vì sao tuổi tác quyết định thời hạn vay NOXH, bước kiểm tra sơ bộ mang lại giá trị gì, và cần làm gì sau khi biết kết quả.
 
 ## Vì sao không phải ai cũng vay được 20–30 năm?
 
@@ -255,7 +255,7 @@ ${closing("kiem-tra-kha-nang-vay-noxh-60-giay")}`,
     seoTitle:
       "Kiểm tra nhanh thời hạn vay NOXH — vì sao mỗi người khác nhau? | HouseX",
     seoDesc:
-      "Môi giới hay nói vay 20–30 năm nhưng mỗi người có thời hạn vay NOXH khác nhau. Giải thích tuổi cuối kỳ vay, vì sao nên kiểm tra trước và bước tiếp theo sau khi biết kết quả sơ bộ.",
+      "Môi giới thường giới thiệu dự án cho vay 20–30 năm nhưng mỗi người có thời hạn vay NOXH khác nhau. Giải thích tuổi cuối kỳ vay, vì sao nên kiểm tra trước và bước tiếp theo sau khi biết kết quả sơ bộ.",
     tags: [TAG],
     projects: [],
   },
