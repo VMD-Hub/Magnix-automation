@@ -48,7 +48,7 @@ Hai giao dịch khác nhau ngay từ cửa vào — không chỉ khác giá.
 | Chuyển nhượng | Hạn chế theo Luật (thường sau thời hạn tối thiểu) | Tự do hơn theo HĐ và pháp luật chung |
 | Giá /m² | Có khung kiểm soát, thường thấp hơn thương mại cùng khu | Theo thị trường |
 
-Ví dụ thực tế: Cùng khu Thủ Đức, NOXH Lý Thường Kiệt khoảng 23 triệu/m² trong khi căn thương mại cùng khu thường cao hơn nhiều — nhưng hơn 12.000 hồ sơ tranh 755 suất. Giá thấp không đồng nghĩa dễ mua.
+Ví dụ thực tế: NOXH Lý Thường Kiệt (đường Lý Thường Kiệt, Quận 10 cũ — nội thành trung tâm TP.HCM) công bố khoảng 23 triệu/m², thấp hơn nhiều căn thương mại nội thành cùng phân khúc vị trí — nhưng hơn 12.000 hồ sơ tranh 755 suất. Giá thấp không đồng nghĩa dễ mua: cạnh tranh tỷ lệ thuận với vị trí trung tâm và quỹ căn hạn chế.
 
 ## Ba trụ cột phải đạt trước khi nộp (làm ngay tại đây)
 
@@ -72,18 +72,60 @@ Công thức thu nhập: (Tổng lương/tiền công thực nhận 12 tháng li
 | 6 | Công bố danh sách; bốc thăm / ưu tiên nếu vượt quỹ căn | Theo thông báo đợt | Đủ điều kiện ≠ chắc được căn |
 | 7 | Ký HĐ mua/thuê mua, đóng tiền, làm vay (nếu có) | CĐT, NH liên kết / NHCSXH | Thiếu ~30% vốn tự có → treo tiến độ |
 
-## Thuê mua và mua trực tiếp — khác nhau thế nào?
+## Thuê, thuê mua và mua — khác nhau thế nào?
 
-Theo Điều 78 và [Nghị định 100/2024/NĐ-CP](https://vanban.chinhphu.vn/?docid=210760&pageid=27160), đối tượng khoản 1, 4, 5, 6, 7, 8, 9 và 10 Điều 76 có thể mua hoặc thuê mua khi đủ điều kiện. Hình thức từng đợt do CĐT thông báo.
+Căn cứ Điều 77, Điều 78 và Điều 89 [Luật Nhà ở số 27/2023/QH15](https://vanban.chinhphu.vn/?docid=209627&pageid=27160); thủ tục tại Mục 7 [Nghị định 100/2024/NĐ-CP](https://vanban.chinhphu.vn/?docid=210760&pageid=27160) (đã được sửa bởi [Nghị định 54/2026/NĐ-CP](https://baochinhphu.vn/sua-doi-bo-sung-quy-dinh-ve-nha-o-xa-hoi-10226020917541606.htm)). Cùng đối tượng đủ điều kiện có thể đăng ký mua, thuê mua hoặc thuê — tùy hình thức đợt mở bán do chủ đầu tư thông báo. Ba hình thức không thay thế nhau; nhầm tên trên HĐ là nguồn gốc nhiều tranh chấp sau 5 năm.
 
-| Điểm so sánh | Thuê mua | Mua trực tiếp |
+### Ba hình thức — bản chất theo luật
+
+| Hình thức | Căn cứ chính | Bản chất | Thời điểm xét đủ điều kiện để “mua” | Thời điểm đứng tên |
+| --- | --- | --- | --- | --- |
+| Mua | Điều 89 khoản 1 Luật Nhà ở | Hợp đồng mua bán NOXH; thanh toán theo tiến độ HĐ | Ngay khi nộp hồ sơ đợt mở bán (đối tượng Đ.76 + điều kiện Đ.78 / NĐ 100) | Theo tiến độ HĐMB và cấp GCN |
+| Thuê mua | Điều 89 khoản 2 Luật Nhà ở | Hợp đồng thuê mua; thời hạn thanh toán tiền thuê mua tối thiểu 05 năm kể từ ngày ký HĐ (điểm a khoản 2 Điều 89) | Ngay khi ký HĐ thuê mua — đã xét đối tượng và điều kiện như mua | Sau khi thanh toán đủ tiền thuê mua theo HĐ |
+| Thuê | Điều 78 khoản 2 Luật Nhà ở; ưu tiên mua lại: Điều 78 khoản 12 NĐ 100 (sửa bởi NĐ 54) | Hợp đồng thuê; không phải giao dịch mua | Không xét mua ngay. Khi muốn mua: được ưu tiên bán nếu đang thuê và còn trong khung trước thời hạn 10 năm (NĐ 54), và phải đủ điều kiện mua tại thời điểm đề nghị mua | Chỉ có quyền thuê theo HĐ; mua lại là giao dịch mới |
+
+Điểm dễ nhầm: “ở khoảng 5 năm rồi mới được xét mua” thuộc nhánh thuê → ưu tiên mua lại (Điều 78 khoản 12 NĐ 100/NĐ 54), không phải bản chất thuê mua tại Điều 89 khoản 2.
+
+### So sánh mua và thuê mua (Điều 89)
+
+| Điểm so sánh | Mua (khoản 1 Điều 89) | Thuê mua (khoản 2 Điều 89) |
 | --- | --- | --- |
-| Vốn đầu | Thường thấp hơn (trả theo tiến độ thuê mua) | Cao hơn ngay (cọc + phần đến khi vay giải ngân) |
-| Quyền sở hữu | Chuyển sau khi hoàn thành nghĩa vụ theo HĐ | Theo tiến độ HĐMB và làm sổ |
-| Ràng buộc ở | Thường gắn thời gian ở / điều kiện chuyển nhượng | Theo Luật NOXH + HĐ |
-| Phù hợp ai | Thu nhập ổn nhưng vốn tự có mỏng | Đã tích lũy đủ ~20–30% giá căn |
+| Xét đối tượng / điều kiện | Ngay từ đầu đợt | Ngay từ đầu — không cần ở thuê trước |
+| Dòng tiền đầu | Theo thông báo CĐT | Theo thông báo CĐT từng giai đoạn — luật không mặc định “thuê mua = nộp ít hơn mua” |
+| Thời hạn thanh toán tối thiểu | Theo HĐMB / tiến độ dự án | Tối thiểu 05 năm kể từ ngày ký HĐ thuê mua |
+| Hạn chế bán lại trong 05 năm sau khi trả đủ | Chỉ bán lại cho CĐT hoặc đối tượng đủ điều kiện mua NOXH; giá tối đa bằng giá trong HĐ với CĐT (điểm d, đ khoản 1 Điều 89); thủ tục NĐ 100 Điều 39–40 | Khung tương tự (điểm b, c khoản 2 Điều 89) |
+| Sau 05 năm (đã trả đủ, đủ điều kiện cấp GCN) | Bán theo cơ chế thị trường (điểm e khoản 1 Điều 89) | Bán theo cơ chế thị trường (điểm d khoản 2 Điều 89) |
 
-Ví dụ căn 700 triệu, mua trực tiếp thường cần khoảng 210 triệu (~30%) trước khi trông chờ giải ngân vay; thuê mua có thể kéo giãn dòng tiền đầu nhưng kéo dài thời gian trước khi đứng tên đầy đủ.
+### Nỗi đau thực tế: sau vài năm CĐT không duyệt mua, viện dẫn “thu nhập theo luật mới”, muốn thanh lý giá cũ để bán người khác
+
+Tình huống hay gặp: gia đình ký với CĐT dưới tên “thuê mua” hoặc “thuê”; sau khoảng 5 năm nhà tăng giá; khi đề nghị hoàn tất mua / đứng tên, CĐT bảo không còn đủ điều kiện thu nhập theo nghị định mới và muốn thanh lý theo giá cũ để bán cho người mua mới. Cách xử lý phụ thuộc đúng loại hợp đồng đã ký — không xử theo lời nói miệng của CĐT.
+
+#### Nhánh A — Đã ký đúng hợp đồng thuê mua (Điều 89 khoản 2)
+
+- Điều kiện đối tượng và thu nhập đã được xét tại thời điểm ký HĐ thuê mua (Điều 78 + NĐ 100 tại thời điểm đó).
+- Khi bên thuê mua đã thanh toán đủ tiền thuê mua theo thời hạn điểm a khoản 2 Điều 89, quyền hoàn tất theo HĐ và khung Điều 89 không bị “reset” chỉ vì sau này Nhà nước nâng/hạ trần thu nhập (NĐ 261, NĐ 136…).
+- CĐT không được tự ý từ chối hoàn tất nghĩa vụ HĐ thuê mua rồi ép thanh lý để bán lại người khác chỉ vì giá thị trường đã tăng — đó là tranh chấp thực hiện hợp đồng, không phải “mở đợt xét đối tượng mới”.
+- Khoản 10 Điều 88 Luật Nhà ở 2023: hợp đồng mua/thuê mua vô hiệu khi bán, cho thuê mua vi phạm quy định về đối tượng hoặc điều kiện — hướng tới giao dịch sai từ đầu. CĐT muốn viện dẫn điều này phải chứng minh sai đối tượng/điều kiện tại thời điểm giao kết, không thể chỉ lấy mức thu nhập hiện tại theo luật mới để phủ nhận HĐ đã ký hợp lệ.
+- Việc cần làm: yêu cầu CĐT trả lời bằng văn bản (căn cứ điều khoản HĐ + điều luật cụ thể); đối chiếu bản HĐ là “thuê mua” hay chỉ “thuê”; gửi Sở Xây dựng nơi có dự án đề nghị kiểm tra; giữ biên lai thanh toán đủ tiền thuê mua; cân nhắc khởi kiện yêu cầu tiếp tục thực hiện HĐ nếu CĐT cố tình thanh lý trái thỏa thuận.
+
+#### Nhánh B — Thực chất là thuê, sau đó xin mua (Điều 78 khoản 12 NĐ 100, sửa NĐ 54)
+
+- Người đang thuê được ưu tiên bán trước thời hạn 10 năm nếu có nhu cầu mua và đủ điều kiện; hoặc CĐT bán cho Quỹ nhà ở quốc gia.
+- Giá bán khi chuyển từ thuê sang mua theo NĐ 54: giá thẩm định + lãi vay bình quân ngân hàng thương mại nhà nước tương ứng thời gian thuê − khấu hao — không phải CĐT tự đặt giá thị trường tùy tiện.
+- Vì đây là giao dịch mua mới, điều kiện nhà ở và thu nhập được xác định lại tại thời điểm đề nghị mua (nguyên tắc chuyển tiếp từng giai đoạn nghị định thu nhập — ví dụ NĐ 261 từng ghi nhận hướng dẫn đang thuê/thuê mua muốn mua thì xác định theo quy định đang hiệu lực tại thời điểm đó; sau 07/04/2026 áp khung NĐ 136 nếu thuộc nhóm chịu trần).
+- Nếu không còn đủ điều kiện mua theo luật tại thời điểm đó: không bắt buộc CĐT phải bán cho bạn theo suất mua NOXH; nhưng CĐT cũng không được nhân danh “không đủ điều kiện” để thanh lý trái HĐ thuê đang còn hiệu lực, hoặc ép bán lại dưới giá trị quyền lợi hợp pháp của bên thuê ngoài khung luật.
+- Việc cần làm: xác nhận văn bản đây là HĐ thuê; hỏi rõ quy trình ưu tiên mua theo Điều 78 khoản 12; nộp hồ sơ điều kiện mua tại thời điểm hiện hành; nếu CĐT từ chối, yêu cầu văn bản và gửi Sở Xây dựng đối chiếu giá và thứ tự ưu tiên.
+
+#### Ai chịu trách nhiệm — đọc nhanh
+
+| Việc CĐT làm | Trách nhiệm / hướng xử lý theo khung pháp lý |
+| --- | --- |
+| Ghi “thuê mua” trên giấy nhưng thực chất chỉ cho thuê | Tranh chấp bản chất HĐ — đối chiếu nội dung HĐ (thanh toán tối thiểu 05 năm thuê mua hay chỉ tiền thuê); Sở XD / Tòa án làm rõ |
+| Đã nhận đủ tiền thuê mua theo HĐ rồi từ chối hoàn tất đứng tên vì “luật thu nhập mới” | Tranh chấp thực hiện HĐ thuê mua (Điều 89 khoản 2); đề nghị Sở XD kiểm tra; có thể kiện yêu cầu tiếp tục thực hiện nghĩa vụ |
+| Ép thanh lý giá cũ rồi bán người mới khi nhà đã tăng giá | Trong 05 năm sau khi trả đủ, bán lại cho CĐT/đối tượng đủ điều kiện có trần giá theo HĐ gốc (Điều 89; NĐ 100 Điều 39–40). CĐT không được dùng thanh lý cưỡng bức trái luật để chiếm chênh lệch thị trường |
+| Thuê hợp lệ, xin mua nhưng vượt trần thu nhập luật mới | Có thể từ chối bán NOXH vì không đủ điều kiện tại thời điểm mua (nhánh B); không đồng nghĩa được đơn phương chấm dứt thuê trái HĐ |
+
+Trước khi ký bất kỳ hình thức nào: yêu cầu CĐT ghi rõ trên HĐ là mua, thuê mua hay thuê; lịch thanh toán; điều kiện hoàn tất đứng tên; và căn cứ pháp lý nếu sau này chuyển từ thuê sang mua. Không ký khi chỉ có tư vấn miệng “năm năm là được mua”.
 
 ## Ai được ưu tiên khi nhiều hồ sơ cùng đạt điều kiện?
 
