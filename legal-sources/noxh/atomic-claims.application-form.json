@@ -590,7 +590,7 @@
   {
     "claim_id": "mau01_one_dossier_per_project_001",
     "topic": "noxh_documents",
-    "claim": "Số bộ hồ sơ photo (bản sao đầy đủ cùng danh mục) khi đăng ký NOXH do chủ đầu tư quy định trong thông báo tiếp nhận từng dự án — không cố định toàn quốc. Tham khảo thị trường: thường ~3 bộ không vay, ~4 bộ có vay NH; CĐT khác nhau có thể 2, 3, 4 hoặc 5 bộ. Agent phải hỏi kỹ/đối chiếu thông báo dự án trước khi khẳng định số bộ. Danh mục loại giấy theo NĐ 100/54 (Mẫu 01 + chứng minh Đ.76, 78).",
+    "claim": "Số bộ hồ sơ khi đăng ký NOXH do chủ đầu tư quy định trong thông báo tiếp nhận từng dự án — không cố định toàn quốc. Tham khảo thị trường: thường ~4 bộ; có vay thì thường thêm 1 bộ ngân hàng (trừ khi thông báo đã gộp bộ NH vào tổng số bộ). CĐT khác nhau có thể 2, 3, 4 hoặc 5 bộ. Agent phải hỏi kỹ/đối chiếu thông báo dự án trước khi khẳng định số bộ. Mẫu biểu (Mẫu 01…) viết tay và ký sống từng bản theo số bộ — không photocopy đơn đã điền; giấy tờ kèm (CCCD, giấy xác nhận cơ quan) mới dùng bản sao/photo. Danh mục loại giấy theo NĐ 100/54 (Mẫu 01 + chứng minh Đ.76, 78).",
     "source_refs": [
       "mau01_core_bundle_001",
       "mau01_spouse_declaration_001",
@@ -603,20 +603,22 @@
     "disclaimer_required": true,
     "usage_rules": [
       "Chi tiết checklist: application-dossier-checklist.md",
-      "Bắt buộc hỏi số bộ theo thông báo CĐT từng dự án — không chốt 3/4 nếu chưa có nguồn dự án"
+      "Bắt buộc hỏi số bộ theo thông báo CĐT từng dự án — không chốt 4 nếu chưa có nguồn dự án",
+      "Không nói 'photo hồ sơ' theo nghĩa viết một lần rồi photocopy mẫu biểu đã điền"
     ],
     "forbidden_claims": [
       "Mọi hồ sơ NOXH luôn 3 bộ hoặc luôn 4 bộ",
       "Số bộ giống nhau mọi chủ đầu tư",
-      "Không cần đọc thông báo dự án về số bản photo"
+      "Viết một Mẫu 01 rồi photocopy nhân bản là đủ",
+      "Không cần đọc thông báo dự án về số bộ"
     ],
     "counseling_guide_path": "legal-sources/noxh/application-dossier-checklist.md",
-    "last_checked": "2026-06-26"
+    "last_checked": "2026-07-16"
   },
   {
     "claim_id": "mau01_handwriting_sign_001",
     "topic": "noxh_documents",
-    "claim": "Đơn đăng ký Mẫu 01 (NĐ 100 Phụ lục II) thực hành điền viết tay trên bản in và ký tên người đăng ký; thông tin phải trung thực (NĐ 54). Không sửa tẩy bằng bút xóa — sai thì gạch một nét và viết đúng bên cạnh. Một số CĐT cho điền PDF in ký — phải đối chiếu thông báo dự án.",
+    "claim": "Đơn đăng ký Mẫu 01 (NĐ 100 Phụ lục II) thực hành điền viết tay trên bản in và ký tên người đăng ký trên từng bộ hồ sơ; thông tin phải trung thực (NĐ 54). Không viết một bản rồi photocopy đơn đã điền để nhân số bộ. Không sửa tẩy bằng bút xóa — sai thì gạch một nét và viết đúng bên cạnh. Một số CĐT cho điền PDF in ký — phải đối chiếu thông báo dự án.",
     "source_refs": ["mau01_core_bundle_001"],
     "effective_from": "2024-08-01",
     "effective_to": null,

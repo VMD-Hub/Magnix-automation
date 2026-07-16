@@ -40,7 +40,7 @@ flowchart LR
 | **C1** | P0 | `mau-04-mau-05-xac-nhan-thu-nhap-noxh-2026` | Mẫu 04 và Mẫu 05 (TT-BXD): Khai thu nhập mua NOXH đúng thế nào? | `mau-01-section-11-income.md` · `NOXH_FORM_TAXONOMY.md` | backlog |
 | **C1** | P1 | `mau-02-mau-03-dieu-kien-nha-o-noxh` | Mẫu 02 và Mẫu 03: Chứng minh điều kiện nhà ở NOXH ra sao? | `application-form-mau-01-guide.md` · TT 05 Đ.7 | backlog |
 | **C1** | P1 | `llvt-k7-ho-so-noxh-mau-bqp-bca` | Quân nhân, công an (k7) nộp hồ sơ NOXH dùng mẫu gì? | `income-exemption-and-llvt-counseling.md` | backlog |
-| **C1** | P1 | `bao-nhieu-bo-ho-so-photo-noxh` | Nộp hồ sơ NOXH cần photo mấy bộ? | `application-dossier-checklist.md` | backlog |
+| **C1** | P1 | `bao-nhieu-bo-ho-so-photo-noxh` | Nộp hồ sơ NOXH cần chuẩn bị mấy bộ? | `application-dossier-checklist.md` | published |
 | **C2** | P1 | `thoi-han-12-thang-giay-xac-nhan-noxh` | Giấy xác nhận NOXH có hiệu lực bao lâu? | NĐ 54 Đ.38 · atomic claims | backlog |
 | **C3** | P1 | *(có)* `quy-trinh-mua-thue-mua-noxh-2026` | Quy trình mua/thuê mua NOXH 2026? | `noxh-knowledge-series-2026.ts` | published |
 | **C4** | **P0** | `hau-kiem-noxh-doi-chieu-bhxh-thue-2026` | Hậu kiểm hồ sơ NOXH: Dữ liệu thuế và BHXH được đối chiếu thế nào? | atomic batch2 · case Đồng Nai | backlog L3 |

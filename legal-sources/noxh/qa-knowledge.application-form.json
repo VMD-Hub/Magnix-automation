@@ -330,15 +330,15 @@
     "qa_id": "mau01_qa_dossier_sets_001",
     "topic": "noxh_documents",
     "question": "Hồ sơ mua NOXH cần làm bao nhiêu bộ? Độc thân và kết hôn khác nhau thế nào?",
-    "short_answer": "Số bộ = số lần photo cả danh mục giấy — do từng CĐT quy định; phải đọc thông báo đúng dự án. Tham khảo: không vay ~3 bộ, có vay ~4 bộ. Độc thân/kết hôn cùng số bộ theo dự án, khác loại giấy trong mỗi bộ.",
-    "expanded_answer": "NĐ 100/54 quy loại giấy (Mẫu 01, CCCD, xác nhận nhà ở, thu nhập…), không cố định 3 hay 4 bộ. Mỗi chủ đầu tư/dự án có thể yêu cầu khác — agent cần hỏi kỹ hoặc đối chiếu Thông báo tiếp nhận trước khi photo. Tham khảo thị trường: ~3 bộ không vay, ~4 bộ có vay NH. Nộp online: thường 1 bộ scan. Chưa có thông báo dự án: needs_human_legal_source, không chốt số bộ.",
-    "source_refs": ["mau01_one_dossier_per_project_001", "mau01_core_bundle_001"],
+    "short_answer": "Số bộ do từng CĐT quy định trong thông báo dự án — phải đọc đúng dự án. Tham khảo: thường ~4 bộ; có vay thì hỏi thêm bộ ngân hàng đã gồm chưa. Mẫu biểu viết tay ký sống từng bản — không photocopy đơn đã điền; giấy kèm (CCCD…) mới bản sao/photo. Độc thân/kết hôn cùng số bộ theo dự án, khác loại giấy trong mỗi bộ.",
+    "expanded_answer": "NĐ 100/54 quy loại giấy (Mẫu 01, CCCD, xác nhận nhà ở, thu nhập…), không cố định số bộ. Mỗi chủ đầu tư/dự án có thể yêu cầu khác — agent hỏi kỹ hoặc đối chiếu Thông báo tiếp nhận. Tham khảo thị trường: thường ~4 bộ; có vay thường +1 bộ NH (trừ khi CĐT đã gộp). Mẫu 01 và mẫu kê khai: in trống → viết tay → ký sống mỗi bộ. Chỉ CCCD/giấy cơ quan mới photo/sao. Nộp online: thường 1 bộ scan. Chưa có thông báo dự án: needs_human_legal_source, không chốt số bộ.",
+    "source_refs": ["mau01_one_dossier_per_project_001", "mau01_core_bundle_001", "mau01_handwriting_sign_001"],
     "related_questions": [
       "Độc thân cần những giấy gì?",
       "Vợ chồng nộp chung mấy bộ?"
     ],
     "safe_cta": "Comment BOSO để nhận checklist bộ hồ sơ theo đối tượng.",
-    "disclaimer": "Số bản photocopy theo từng dự án."
+    "disclaimer": "Số bộ và cách điền mẫu theo từng dự án — đối chiếu thông báo CĐT."
   },
   {
     "qa_id": "mau01_qa_handwriting_place_issue_001",

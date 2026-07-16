@@ -6,7 +6,7 @@
 
 - Tài liệu trong folder này mang tính **tham khảo và tự kiểm**, không thay tư vấn pháp lý, không thay quyết định của CĐT, Sở Xây dựng hay cơ quan có thẩm quyền.
 - **Không** điền thông tin cá nhân thật (CCCD, SĐT, địa chỉ) vào file mẫu rồi gửi công khai.
-- Mỗi dự án NOXH có thể yêu cầu **số bộ photo / giấy tờ khác nhau** — luôn đối chiếu thông báo tiếp nhận của **đúng CĐT**.
+- Mỗi dự án NOXH có thể yêu cầu **số bộ hồ sơ / giấy tờ khác nhau** — luôn đối chiếu thông báo tiếp nhận của **đúng CĐT**. Mẫu biểu viết tay ký sống từng bản; giấy kèm bản sao/photo theo CĐT.
 
 ## Cách dùng
 

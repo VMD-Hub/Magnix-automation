@@ -24,7 +24,7 @@
 
 ## 5. Trước khi nộp
 
-- [ ] Đọc thông báo tiếp nhận hồ sơ của **đúng dự án** (số bộ photo, deadline, nơi nộp).
+- [ ] Đọc thông báo tiếp nhận hồ sơ của **đúng dự án** (số bộ, deadline, nơi nộp; mẫu biểu viết tay từng bản).
 - [ ] Không nộp hồ sơ thiếu mục bắt buộc vì “tưởng là phụ”.
 
 ---

@@ -87,7 +87,7 @@ Luôn ghi đủ: *“Mẫu 01 NĐ 100”* hoặc *“Mẫu 01 TT 05”* — khô
 ```markdown
 > **Phạm vi mẫu biểu:** Chỉ mẫu NOXH theo NĐ 100/2024/NĐ-CP và Thông tư 05/2024/TT-BXD (Phụ lục I).
 > Không nhầm với mẫu bản vẽ địa chính (thẩm định BĐS) hay Mẫu 06 TT 05 (vay tự xây/sửa nhà).
-> Danh mục chi tiết và số bộ photo — đối chiếu thông báo tiếp nhận của từng chủ đầu tư.
+> Danh mục chi tiết và số bộ hồ sơ — đối chiếu thông báo tiếp nhận của từng chủ đầu tư. Mẫu biểu viết tay ký sống từng bản; giấy kèm bản sao/photo theo CĐT.
 ```
 
 ---
