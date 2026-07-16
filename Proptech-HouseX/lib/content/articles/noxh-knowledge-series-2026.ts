@@ -87,9 +87,77 @@ Ví dụ căn 700 triệu, mua trực tiếp thường cần khoảng 210 triệ
 
 ## Ai được ưu tiên khi nhiều hồ sơ cùng đạt điều kiện?
 
-Điều 79 Luật Nhà ở 2023: khi cùng tiêu chuẩn, ưu tiên theo nhóm (người có công, người khuyết tật, hộ tái định cư, nữ giới…) và thứ tự bố trí căn theo từng đợt. Thực tế nội thành: hơn 12.000 hồ sơ / 755 suất tại Lý Thường Kiệt — đủ ba trụ cột vẫn có thể không được chọn nếu không trúng bốc thăm hoặc không thuộc nhóm ưu tiên cao.
+Hai lớp quy định khác nhau — nhiều người nhầm “đối tượng được mua” với “đối tượng được ưu tiên bố trí căn”.
 
-Trước khi cọc: hỏi CĐT bằng văn bản — nếu số hồ sơ > số căn thì bốc thăm hay xét theo thứ tự nào.
+### Lớp 1 — Ai được hưởng chính sách NOXH? (Điều 76)
+
+Điều 76 [Luật Nhà ở số 27/2023/QH15](https://vanban.chinhphu.vn/?docid=209627&pageid=27160) liệt kê đối tượng được hưởng chính sách hỗ trợ về nhà ở xã hội. Từ ngày 01/7/2026, [Luật Dân số số 113/2025/QH15](https://thuvienphapluat.vn/van-ban/Van-hoa-Xa-hoi/Luat-dan-so-2025-so-113-2025-QH15-443680.aspx) bổ sung khoản 13 vào sau khoản 12 Điều 76, nâng danh mục lên 13 nhóm:
+
+| Khoản Đ.76 | Đối tượng |
+| --- | --- |
+| 1 | Người có công với cách mạng, thân nhân liệt sĩ (theo Pháp lệnh ưu đãi người có công) |
+| 2 | Hộ nghèo, cận nghèo khu vực nông thôn |
+| 3 | Hộ nghèo, cận nghèo nông thôn vùng thiên tai, biến đổi khí hậu |
+| 4 | Hộ nghèo, cận nghèo khu vực đô thị |
+| 5 | Người thu nhập thấp tại khu vực đô thị |
+| 6 | Công nhân, người lao động tại DN, HTX trong và ngoài KCN |
+| 7 | Lực lượng vũ trang nhân dân đang phục vụ tại ngũ; cơ yếu hưởng lương NSNN |
+| 8 | Cán bộ, công chức, viên chức |
+| 9 | Đối tượng đã trả lại nhà ở công vụ (trừ bị thu hồi do vi phạm) |
+| 10 | Hộ bị thu hồi đất, giải tỏa, phá dỡ nhà mà chưa được bồi thường bằng nhà/đất ở |
+| 11 | Học sinh, sinh viên (chủ yếu hình thức thuê) |
+| 12 | DN, HTX trong KCN (thuê nhà lưu trú công nhân) |
+| 13 | Người có từ 02 con đẻ trở lên (bổ sung từ 01/7/2026) |
+
+Thuộc một trong 13 khoản trên mới vào cửa chính sách. Để được mua hoặc thuê mua căn dự án, còn phải đủ điều kiện nhà ở và thu nhập theo Điều 78 Luật Nhà ở và Nghị định 100/2024/NĐ-CP (đã được sửa bởi NĐ 54, NĐ 136).
+
+### Lớp 2 — Khi cùng đủ điều kiện, ai được ưu tiên trước? (điểm đ khoản 1 Điều 79)
+
+Không phải cả 13 khoản Điều 76 đều được xếp ưu tiên bố trí căn. Thứ tự ưu tiên chỉ áp khi các đối tượng đã cùng tiêu chuẩn và điều kiện, theo điểm đ khoản 1 Điều 79 Luật Nhà ở (được sửa bởi Luật Dân số 2025), nguyên văn cấu trúc:
+
+“Trường hợp một đối tượng được hưởng nhiều chính sách hỗ trợ khác nhau thì được hưởng một chính sách hỗ trợ mức cao nhất; trường hợp các đối tượng có cùng tiêu chuẩn và điều kiện thì thực hiện hỗ trợ theo thứ tự ưu tiên trước đối với: người có công với cách mạng, thân nhân liệt sĩ, người khuyết tật, người được bố trí tái định cư theo hình thức mua, thuê mua nhà ở xã hội, người có từ 02 con đẻ trở lên, nữ giới.”
+
+Từ câu trên, thứ tự ưu tiên bố trí (cao → thấp) là:
+
+| Thứ tự | Nhóm theo điểm đ khoản 1 Điều 79 | Ý nghĩa thực tế khi đọc hồ sơ |
+| --- | --- | --- |
+| 1 | Người có công với cách mạng | Có quyết định/giấy chứng nhận người có công theo Pháp lệnh ưu đãi |
+| 2 | Thân nhân liệt sĩ | Có giấy tờ thân nhân liệt sĩ / chế độ theo quy định |
+| 3 | Người khuyết tật | Có giấy xác nhận khuyết tật do cơ quan có thẩm quyền cấp (Luật Người khuyết tật) — không phải tự khai “sức khỏe yếu” |
+| 4 | Người được bố trí tái định cư theo hình thức mua, thuê mua NOXH | Thuộc phương án tái định cư và đăng ký mua/thuê mua NOXH theo đợt |
+| 5 | Người có từ 02 con đẻ trở lên | Áp dụng từ 01/7/2026 theo Luật Dân số 2025; cần giấy tờ chứng minh quan hệ cha/mẹ–con đẻ |
+| 6 | Nữ giới | Người đứng đơn là nữ và đã đủ điều kiện mua/thuê mua; xếp sau năm nhóm trên |
+
+Điểm e khoản 1 Điều 79: nếu hộ gia đình có nhiều đối tượng cùng hưởng chính sách thì chỉ áp dụng một chính sách hỗ trợ cho cả hộ.
+
+### Cách bố trí căn khi hồ sơ nhiều hơn số căn (Điều 38 NĐ 100, sửa bởi NĐ 54/2026)
+
+Khi số hồ sơ đủ điều kiện lớn hơn số căn dự kiến bán:
+
+1. Chủ đầu tư tổ chức bốc thăm; có sự giám sát của Sở Xây dựng, UBND cấp xã và Công an cấp xã (NĐ 54 sửa Điều 38).
+2. Nhóm thuộc điểm đ khoản 1 Điều 79 được ưu tiên bố trí theo tỷ lệ: số căn ưu tiên = (số hồ sơ đủ điều kiện thuộc nhóm ưu tiên ÷ tổng hồ sơ đủ điều kiện) × tổng căn dự kiến bán.
+3. Các căn dành cho ưu tiên được bố trí lần lượt theo thứ tự 1 → 6 ở bảng trên cho đến khi hết phần căn ưu tiên.
+4. Trong cùng một nhóm ưu tiên, nếu số hồ sơ vượt số căn dành cho nhóm đó thì bốc thăm trong nhóm đó.
+5. Các đối tượng còn lại (đủ điều kiện mua nhưng không thuộc sáu nhóm ưu tiên trên, hoặc không còn suất ưu tiên) tiếp tục tham gia bốc thăm phần căn còn lại.
+
+### Ba tình huống đọc theo đúng hai lớp quy định
+
+Tình huống A — Công nhân KCN (khoản 6 Điều 76), không thuộc sáu nhóm điểm đ Điều 79:
+Đủ đối tượng–nhà ở–thu nhập thì vào danh sách đủ điều kiện, nhưng không được ưu tiên bố trí trước. Phải tham gia bốc thăm phần căn không dành riêng cho ưu tiên. Ví dụ thực tế nội thành: hơn 12.000 hồ sơ / 755 suất tại Lý Thường Kiệt — đủ điều kiện pháp lý chưa đồng nghĩa được chọn mua.
+
+Tình huống B — Người khuyết tật (thứ tự 3) nhưng số hồ sơ khuyết tật vượt chỉ tiêu căn ưu tiên của nhóm:
+Vẫn thuộc nhóm ưu tiên, nhưng phải bốc thăm trong nhóm khuyết tật. “Có ưu tiên” không có nghĩa chắc chắn nhận căn.
+
+Tình huống C — Người có từ 02 con đẻ trở lên (khoản 13 Điều 76 và thứ tự 5 điểm đ Điều 79, từ 01/7/2026):
+Vẫn phải đủ điều kiện nhà ở, thu nhập theo Điều 78 / NĐ 100 như các đối tượng mua khác. Khoản 13 mở cửa đối tượng và đồng thời xếp vào thứ tự ưu tiên bố trí; không miễn ba trụ cột pháp lý.
+
+### Việc cần làm trước khi tick ưu tiên trên đơn
+
+- [ ] Chốt đúng khoản Điều 76 của mình (1–13) — đây là cửa đối tượng
+- [ ] Nếu nghĩ mình thuộc điểm đ Điều 79: xác định đúng thứ tự 1–6 và cầm giấy tờ khớp nhóm đó
+- [ ] Không nhầm “thuộc 13 đối tượng” với “được ưu tiên bố trí căn”
+- [ ] Hỏi CĐT bằng văn bản: đợt này tính căn ưu tiên theo điểm đ Điều 79 thế nào, công bố danh sách ra sao
+- [ ] Nhớ: ưu tiên chỉ phát huy khi đã cùng đủ tiêu chuẩn và điều kiện; vượt chỉ tiêu trong nhóm vẫn phải bốc thăm
 
 ## Năm lỗi thường gặp ở bước nộp hồ sơ
 
