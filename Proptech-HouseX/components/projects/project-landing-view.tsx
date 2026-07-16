@@ -5,6 +5,7 @@ import { ensureNoxhLandingMedia } from "@/lib/content/noxh-stock-images";
 import { NOXH_REGION_TAGLINE } from "@/lib/content/messaging/noxh-public";
 import { ProjectLocationSection } from "@/components/projects/project-location-section";
 import { ProjectIntroVideo } from "@/components/projects/project-intro-video";
+import { ProjectDeveloperProfile } from "@/components/projects/project-developer-profile";
 import { getProjectMarketplaceListings } from "@/lib/data/listing";
 import type { ProjectLandingListingCard } from "@/lib/data/listing";
 import type { ArticleCardData } from "@/lib/data/article-types";
@@ -374,6 +375,10 @@ export function ProjectLandingContent({
               {project.description}
             </p>
           </section>
+        )}
+
+        {landing?.developerProfile && (
+          <ProjectDeveloperProfile profile={landing.developerProfile} />
         )}
 
         {landing && landing.amenities.length > 0 && (

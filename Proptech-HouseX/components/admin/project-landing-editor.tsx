@@ -181,6 +181,22 @@ function formToPayload(form: FormState) {
             caption: form.landing.introVideo.caption?.trim() || undefined,
           }
         : undefined,
+      developerProfile:
+        form.landing.developerProfile?.title?.trim() &&
+        form.landing.developerProfile.summary?.trim()
+          ? {
+              title: form.landing.developerProfile.title.trim(),
+              summary: form.landing.developerProfile.summary.trim(),
+              facts: (form.landing.developerProfile.facts ?? []).filter(
+                (f) => f.label.trim() && f.value.trim(),
+              ),
+              note: form.landing.developerProfile.note?.trim() || undefined,
+              sourceUrl:
+                form.landing.developerProfile.sourceUrl?.trim() || undefined,
+              sourceLabel:
+                form.landing.developerProfile.sourceLabel?.trim() || undefined,
+            }
+          : undefined,
     },
   };
 }
@@ -645,6 +661,126 @@ export function ProjectLandingEditor({
               className={inputClass}
               placeholder="Diễn viên Hùng Thuận trải nghiệm dự án…"
               disabled={!form.landing.introVideo?.url}
+            />
+          </label>
+        </div>
+      </section>
+
+      <section className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+        <h2 className="text-lg font-semibold text-slate-900">
+          Hồ sơ chủ đầu tư (công khai)
+        </h2>
+        <p className="mt-2 text-sm text-slate-500">
+          MST, niêm yết, trụ sở — không ghi giá/vốn hóa cổ phiếu. Seed DTA điền sẵn;
+          để trống tiêu đề để ẩn section.
+        </p>
+        <div className="mt-4 grid gap-4">
+          <label className={labelClass}>
+            Tiêu đề section
+            <input
+              value={form.landing.developerProfile?.title ?? ""}
+              onChange={(e) =>
+                setForm((prev) => ({
+                  ...prev,
+                  landing: {
+                    ...prev.landing,
+                    developerProfile: e.target.value.trim()
+                      ? {
+                          title: e.target.value,
+                          summary: prev.landing.developerProfile?.summary ?? "",
+                          facts: prev.landing.developerProfile?.facts ?? [],
+                          note: prev.landing.developerProfile?.note ?? "",
+                          sourceUrl:
+                            prev.landing.developerProfile?.sourceUrl ?? "",
+                          sourceLabel:
+                            prev.landing.developerProfile?.sourceLabel ?? "",
+                        }
+                      : undefined,
+                  },
+                }))
+              }
+              className={inputClass}
+              placeholder="Chủ đầu tư … là ai?"
+            />
+          </label>
+          <label className={labelClass}>
+            Tóm tắt
+            <textarea
+              rows={3}
+              value={form.landing.developerProfile?.summary ?? ""}
+              onChange={(e) =>
+                setForm((prev) => ({
+                  ...prev,
+                  landing: {
+                    ...prev.landing,
+                    developerProfile: {
+                      title: prev.landing.developerProfile?.title ?? "",
+                      summary: e.target.value,
+                      facts: prev.landing.developerProfile?.facts ?? [],
+                      note: prev.landing.developerProfile?.note ?? "",
+                      sourceUrl: prev.landing.developerProfile?.sourceUrl ?? "",
+                      sourceLabel:
+                        prev.landing.developerProfile?.sourceLabel ?? "",
+                    },
+                  },
+                }))
+              }
+              className={inputClass}
+              placeholder="Công ty Cổ phần …"
+              disabled={!form.landing.developerProfile?.title}
+            />
+          </label>
+          <label className={labelClass}>
+            Lưu ý công khai (tuỳ chọn)
+            <textarea
+              rows={2}
+              value={form.landing.developerProfile?.note ?? ""}
+              onChange={(e) =>
+                setForm((prev) => ({
+                  ...prev,
+                  landing: {
+                    ...prev.landing,
+                    developerProfile: {
+                      title: prev.landing.developerProfile?.title ?? "",
+                      summary: prev.landing.developerProfile?.summary ?? "",
+                      facts: prev.landing.developerProfile?.facts ?? [],
+                      note: e.target.value,
+                      sourceUrl: prev.landing.developerProfile?.sourceUrl ?? "",
+                      sourceLabel:
+                        prev.landing.developerProfile?.sourceLabel ?? "",
+                    },
+                  },
+                }))
+              }
+              className={inputClass}
+              placeholder="Cảnh báo HOSE / CBTT…"
+              disabled={!form.landing.developerProfile?.title}
+            />
+          </label>
+          <label className={labelClass}>
+            Link nguồn (Vietstock / HOSE)
+            <input
+              value={form.landing.developerProfile?.sourceUrl ?? ""}
+              onChange={(e) =>
+                setForm((prev) => ({
+                  ...prev,
+                  landing: {
+                    ...prev.landing,
+                    developerProfile: {
+                      title: prev.landing.developerProfile?.title ?? "",
+                      summary: prev.landing.developerProfile?.summary ?? "",
+                      facts: prev.landing.developerProfile?.facts ?? [],
+                      note: prev.landing.developerProfile?.note ?? "",
+                      sourceUrl: e.target.value,
+                      sourceLabel:
+                        prev.landing.developerProfile?.sourceLabel ?? "",
+                    },
+                  },
+                }))
+              }
+              className={inputClass}
+              placeholder="https://finance.vietstock.vn/…"
+              disabled={!form.landing.developerProfile?.title}
             />
           </label>
         </div>

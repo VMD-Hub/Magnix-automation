@@ -203,6 +203,22 @@ Host trên YouTube (không upload MP4 lên VPS). Trang công khai chỉ hiển t
 
 ---
 
+## Chủ đầu tư (Công ty Cổ phần Đệ Tam)
+
+Đối chiếu công khai (Vietstock / HOSE / MST) — **không** ghi giá cổ phiếu hay vốn hóa trên landing.
+
+| Field | Giá trị |
+|-------|---------|
+| **MST** | `0303118498` |
+| **Niêm yết** | DTA — HOSE từ 16/07/2010 |
+| **Trụ sở** | 2/6–2/8 Núi Thành, P.13, Q.Tân Bình, TP.HCM |
+| **Lãnh đạo** | CT HĐQT Trần Đức Lợi; TGĐ/ĐDPL Phạm Thị Kim Xuân |
+| **Hiển thị công khai** | Chỉ tóm tắt + facts (MST, niêm yết, trụ sở, lãnh đạo, dự án) — **không** hiện cảnh báo HOSE / link Vietstock trên landing |
+
+Schema: `landing.developerProfile` · Seed: `npm run db:reseed:dta`
+
+---
+
 ## Ảnh / tài sản admin PHẢI bổ sung
 
 1. Logo CĐT Đệ Tam (Developer) — 400×400 px

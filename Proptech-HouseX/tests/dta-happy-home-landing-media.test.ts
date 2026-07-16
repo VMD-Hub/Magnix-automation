@@ -6,7 +6,10 @@ import {
   DTA_HAPPY_HOME_IMAGES,
   dtaHappyHomeGallery,
 } from "../lib/content/dta-happy-home-images";
-import { buildDtaHappyHomeLanding } from "../lib/content/dta-happy-home-landing";
+import {
+  DTA_DEVELOPER_TAX_CODE,
+  buildDtaHappyHomeLanding,
+} from "../lib/content/dta-happy-home-landing";
 import { buildDtaHappyHomeMock } from "../lib/preview/dta-happy-home-mock";
 import { enrichProjectFromCatalog } from "../lib/data/project-public";
 import {
@@ -65,6 +68,21 @@ describe("DTA Happy Home landing media (nội bộ hóa /public)", () => {
     for (const item of gallery) {
       assert.ok(item.url.startsWith(LOCAL_PREFIX), `gallery hotlink: ${item.url}`);
     }
+  });
+
+  it("developerProfile có MST thật và mock dùng cùng taxCode", () => {
+    const landing = buildDtaHappyHomeLanding();
+    assert.equal(
+      landing.developerProfile?.facts.find((f) => f.label === "Mã số thuế")
+        ?.value,
+      DTA_DEVELOPER_TAX_CODE,
+    );
+    assert.equal(landing.developerProfile?.note, undefined);
+    assert.equal(landing.developerProfile?.sourceUrl, undefined);
+    assert.equal(
+      buildDtaHappyHomeMock().developer.taxCode,
+      DTA_DEVELOPER_TAX_CODE,
+    );
   });
 
   it("code luôn thắng: bản DB cũ 'đủ field' vẫn bị override bằng landing code", () => {

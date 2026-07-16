@@ -1,15 +1,73 @@
 import type { PrismaClient } from "@prisma/client";
 import {
   buildDtaHappyHomeOverviewData,
+  DTA_DEVELOPER_TAX_CODE,
   DTA_HAPPY_HOME_SLUG,
   DTA_PROJECT_DESCRIPTION,
 } from "@/lib/content/dta-happy-home-landing";
 import { DTA_HAPPY_HOME_IMAGES } from "@/lib/content/dta-happy-home-images";
 
-const DTA_DEVELOPER_TAX_CODE = "0314567890";
+/** MST stub cũ trong seed trước đây — migrate sang MST thật khi reseed. */
+const DTA_DEVELOPER_TAX_CODE_LEGACY = "0314567890";
+
 const DTA_SEO_TITLE = "DTA Happy Home Nhơn Trạch — Nhà ở xã hội từ 448 triệu";
 const DTA_SEO_DESC =
   "Nhà ở xã hội Happy Home DTA Nhơn Trạch: 2.192 căn, 16 block 5 tầng, giá 448–700 triệu/căn. Nguyễn Văn Cừ, Phước An. Hỗ trợ vay 70%.";
+
+const DTA_DEVELOPER_NAME = "Công ty Cổ phần Đệ Tam (DTA)";
+
+async function upsertDtaDeveloper(prisma: PrismaClient) {
+  const logoUrl = DTA_HAPPY_HOME_IMAGES.developerLogo;
+  const legacy = await prisma.developer.findUnique({
+    where: { taxCode: DTA_DEVELOPER_TAX_CODE_LEGACY },
+  });
+  const correct = await prisma.developer.findUnique({
+    where: { taxCode: DTA_DEVELOPER_TAX_CODE },
+  });
+
+  if (legacy && !correct) {
+    return prisma.developer.update({
+      where: { id: legacy.id },
+      data: {
+        taxCode: DTA_DEVELOPER_TAX_CODE,
+        name: DTA_DEVELOPER_NAME,
+        verified: true,
+        logoUrl,
+      },
+    });
+  }
+
+  if (legacy && correct && legacy.id !== correct.id) {
+    await prisma.project.updateMany({
+      where: { developerId: legacy.id },
+      data: { developerId: correct.id },
+    });
+    await prisma.developer.delete({ where: { id: legacy.id } });
+    return prisma.developer.update({
+      where: { id: correct.id },
+      data: {
+        name: DTA_DEVELOPER_NAME,
+        verified: true,
+        logoUrl,
+      },
+    });
+  }
+
+  return prisma.developer.upsert({
+    where: { taxCode: DTA_DEVELOPER_TAX_CODE },
+    update: {
+      name: DTA_DEVELOPER_NAME,
+      verified: true,
+      logoUrl,
+    },
+    create: {
+      name: DTA_DEVELOPER_NAME,
+      taxCode: DTA_DEVELOPER_TAX_CODE,
+      verified: true,
+      logoUrl,
+    },
+  });
+}
 
 /**
  * Upsert developer + project DTA Happy Home vào Postgres.
@@ -20,26 +78,14 @@ const DTA_SEO_DESC =
  * lên bản ghi DB (kể cả khi DB bị khôi phục từ backup cũ).
  */
 export async function seedDtaHappyHome(prisma: PrismaClient) {
-  const dtaDeveloper = await prisma.developer.upsert({
-    where: { taxCode: DTA_DEVELOPER_TAX_CODE },
-    update: {
-      name: "Công ty Cổ phần Đệ Tam (DTA)",
-      verified: true,
-      logoUrl: DTA_HAPPY_HOME_IMAGES.developerLogo,
-    },
-    create: {
-      name: "Công ty Cổ phần Đệ Tam (DTA)",
-      taxCode: DTA_DEVELOPER_TAX_CODE,
-      verified: true,
-      logoUrl: DTA_HAPPY_HOME_IMAGES.developerLogo,
-    },
-  });
+  const dtaDeveloper = await upsertDtaDeveloper(prisma);
 
   const dtaOverview = buildDtaHappyHomeOverviewData();
 
   const project = await prisma.project.upsert({
     where: { slug: DTA_HAPPY_HOME_SLUG },
     update: {
+      developerId: dtaDeveloper.id,
       status: "DANG_BAN",
       projectType: "NHA_O_XA_HOI",
       overviewData: dtaOverview as object,

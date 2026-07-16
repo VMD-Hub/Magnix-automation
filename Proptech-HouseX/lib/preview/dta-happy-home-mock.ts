@@ -5,6 +5,7 @@ import {
 import {
   buildDtaHappyHomeOverviewData,
   buildDtaHappyHomeLanding,
+  DTA_DEVELOPER_TAX_CODE,
   DTA_HAPPY_HOME_NAME,
   DTA_HAPPY_HOME_SLUG,
   DTA_PROJECT_DESCRIPTION,
@@ -47,7 +48,7 @@ export function buildDtaHappyHomeMock(): ProjectDetail {
     developer: {
       id: "preview-dta-dev",
       name: "Công ty Cổ phần Đệ Tam (DTA)",
-      taxCode: "0314567890",
+      taxCode: DTA_DEVELOPER_TAX_CODE,
       verified: true,
       logoUrl: DTA_HAPPY_HOME_IMAGES.developerLogo,
       deletedAt: null,

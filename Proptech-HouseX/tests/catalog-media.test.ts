@@ -54,6 +54,11 @@ describe("catalog media fallbacks", () => {
       landing.introVideo?.url,
       "https://www.youtube.com/shorts/t8Lx4NTnHos",
     );
+    assert.equal(landing.developerProfile?.facts[0]?.value, "0303118498");
+    assert.match(
+      landing.faqs.map((f) => f.q).join(" "),
+      /công ty đại chúng/i,
+    );
   });
 
   it("NOXH stock media fills risky external URLs and preserves DTA CĐT images", () => {

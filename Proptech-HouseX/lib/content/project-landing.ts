@@ -52,6 +52,21 @@ export const projectLandingIntroVideoSchema = z.object({
   caption: z.string().optional(),
 });
 
+/** Hồ sơ chủ đầu tư — giảm e ngại khách (MST, niêm yết, trụ sở…), không gắn giá cổ phiếu. */
+export const projectLandingDeveloperFactSchema = z.object({
+  label: z.string().min(1),
+  value: z.string().min(1),
+});
+
+export const projectLandingDeveloperProfileSchema = z.object({
+  title: z.string().min(1),
+  summary: z.string().min(1),
+  facts: z.array(projectLandingDeveloperFactSchema).default([]),
+  note: z.string().optional(),
+  sourceUrl: z.string().url().optional(),
+  sourceLabel: z.string().optional(),
+});
+
 export const projectLandingSchema = z.object({
   version: z.literal(1).default(1),
   heroSubtitle: z.string().optional(),
@@ -59,6 +74,8 @@ export const projectLandingSchema = z.object({
   heroImage: projectLandingHeroImageSchema.optional(),
   /** Video review / giới thiệu — embed YouTube hoặc file mp4. */
   introVideo: projectLandingIntroVideoSchema.optional(),
+  /** Hồ sơ CĐT công khai (niêm yết, MST, lãnh đạo…). */
+  developerProfile: projectLandingDeveloperProfileSchema.optional(),
   highlights: z.array(projectLandingBlockSchema).default([]),
   amenities: z.array(z.string().min(1)).default([]),
   /** Ảnh thiết kế: bản đồ khoảng cách tới tiện ích (trái trên desktop). */
@@ -84,6 +101,9 @@ export type ProjectLandingHeroImage = z.infer<
 >;
 export type ProjectLandingIntroVideo = z.infer<
   typeof projectLandingIntroVideoSchema
+>;
+export type ProjectLandingDeveloperProfile = z.infer<
+  typeof projectLandingDeveloperProfileSchema
 >;
 
 export const projectOverviewSchema = z

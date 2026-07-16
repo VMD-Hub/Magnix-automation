@@ -92,6 +92,19 @@ test("projectLandingSchema validates introVideo YouTube Shorts", () => {
   );
 });
 
+test("projectLandingSchema validates developerProfile", () => {
+  const landing = defaultProjectLanding("X");
+  landing.developerProfile = {
+    title: "Chủ đầu tư là ai?",
+    summary: "Công ty đại chúng niêm yết HOSE.",
+    facts: [{ label: "Mã số thuế", value: "0303118498" }],
+    note: "Lưu ý CBTT.",
+    sourceUrl: "https://finance.vietstock.vn/DTA/profile.htm",
+  };
+  const parsed = projectLandingSchema.safeParse(landing);
+  assert.equal(parsed.success, true);
+});
+
 test("project landing guidelines cover all form sections", () => {
   const ids = [
     "basic",

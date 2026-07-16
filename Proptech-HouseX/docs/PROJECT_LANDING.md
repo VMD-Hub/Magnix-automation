@@ -23,6 +23,7 @@ Sao chép: landing, loại hình sản phẩm (`unitTypes`), hồ sơ pháp lý 
 |-------|----------------|
 | `heroSubtitle` | Mô tả phụ dưới H1 |
 | `introVideo` | Video review / giới thiệu (YouTube, kể cả Shorts) |
+| `developerProfile` | Hồ sơ CĐT công khai (MST, niêm yết, trụ sở…) |
 | `highlights[]` | H3 — điểm nổi bật |
 | `amenities[]` | Tiện ích nội khu |
 | `locationMapImage` | Ảnh bản đồ minh hoạ khoảng cách (1 ảnh, 4:3) |

@@ -11,6 +11,9 @@ import {
 export const DTA_HAPPY_HOME_SLUG = "dta-happy-home-nhon-trach" as const;
 export const DTA_HAPPY_HOME_NAME = "DTA Happy Home Nhơn Trạch" as const;
 
+/** MST thật CTCP Đệ Tam (Vietstock / masothue) — không dùng mã stub cũ. */
+export const DTA_DEVELOPER_TAX_CODE = "0303118498" as const;
+
 export const DTA_LOCATION_NOTES = `DTA Happy Home nằm trong Khu đô thị DTA City, mặt tiền đường Nguyễn Văn Cừ, xã Phước An, huyện Nhơn Trạch — cửa ngõ khu công nghiệp Nhơn Trạch – Đồng Nai, thuận tiện cho công nhân và người lao động an cư gần nơi làm việc.
 
 Kết nối giao thông:
@@ -76,6 +79,10 @@ export function buildDtaHappyHomeLanding(): ProjectLanding {
       a: "Đúng. Happy Home là dự án nhà ở xã hội thuộc Khu đô thị DTA City do Công ty Cổ phần Đệ Tam làm chủ đầu tư, dành cho công nhân KCN, người thu nhập thấp và các nhóm đối tượng theo Luật Nhà ở.",
     },
     {
+      q: "Chủ đầu tư DTA Happy Home có phải công ty đại chúng không?",
+      a: "Có. Công ty Cổ phần Đệ Tam (DE TAM J.S.C) là công ty đại chúng; cổ phiếu mã DTA niêm yết trên HOSE từ 16/07/2010. Khách có thể tra cứu công bố thông tin trên sàn; HouseX không tư vấn chứng khoán.",
+    },
+    {
       q: "Ai được mua DTA Happy Home?",
       a: "Người thuộc các nhóm đối tượng NOXH theo quy định (công nhân trong/ngoài KCN, người thu nhập thấp tại đô thị, hộ nghèo/cận nghèo, CBCCVC…). Mỗi hộ/cá nhân chỉ đăng ký một dự án NOXH.",
     },
@@ -122,6 +129,35 @@ export function buildDtaHappyHomeLanding(): ProjectLanding {
     title: "Video review DTA Happy Home — Hùng Thuận",
     caption:
       "Diễn viên Hùng Thuận trải nghiệm và chia sẻ cảm nhận về dự án DTA Happy Home Nhơn Trạch.",
+  };
+  landing.developerProfile = {
+    title: "Chủ đầu tư DTA Happy Home là ai?",
+    summary:
+      "Công ty Cổ phần Đệ Tam (tên giao dịch: DE TAM J.S.C) là chủ đầu tư dự án DTA Happy Home trong Khu đô thị DTA City Nhơn Trạch. Doanh nghiệp thành lập năm 2003, hoạt động chủ yếu trong lĩnh vực phát triển bất động sản gắn khu công nghiệp và nhà ở xã hội.",
+    facts: [
+      {
+        label: "Mã số thuế",
+        value: DTA_DEVELOPER_TAX_CODE,
+      },
+      {
+        label: "Niêm yết",
+        value: "Cổ phiếu DTA trên HOSE từ 16/07/2010",
+      },
+      {
+        label: "Trụ sở",
+        value: "2/6–2/8 Núi Thành, Phường 13, Quận Tân Bình, TP. Hồ Chí Minh",
+      },
+      {
+        label: "Lãnh đạo",
+        value:
+          "Chủ tịch HĐQT Trần Đức Lợi; Tổng Giám đốc / đại diện pháp luật Phạm Thị Kim Xuân",
+      },
+      {
+        label: "Dự án tiêu biểu",
+        value:
+          "Khu đô thị DETACO / DTA City Nhơn Trạch (gồm Happy Home), biệt thự DTA Phú Quốc, dự án tại VSIP Bắc Ninh (theo hồ sơ công bố)",
+      },
+    ],
   };
   landing.gallery = dtaHappyHomeGallery();
   landing.ctaLabel = "Liên hệ tư vấn";
