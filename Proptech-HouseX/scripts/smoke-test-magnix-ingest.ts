@@ -21,10 +21,12 @@ async function main() {
     process.exit(1);
   }
 
-  const nk = `smoke:${Date.now()}`;
+  const uid = String(Date.now());
+  const uidSource = "smoke_test";
+  const nk = `${uidSource}:${uid}`;
   const payload = {
-    uid: String(Date.now()),
-    uid_source: "smoke_test",
+    uid,
+    uid_source: uidSource,
     normalized_key: nk,
     captured_at: new Date().toISOString(),
     text: "Smoke test Magnix ingest",
