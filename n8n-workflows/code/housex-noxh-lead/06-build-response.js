@@ -1,4 +1,10 @@
-const item = $input.first().json;
+let parsed = {};
+try {
+  parsed = $('Parse HouseX Event').item?.json || {};
+} catch {
+  // Manual/detail branches may not execute Parse HouseX Event.
+}
+const item = { ...parsed, ...$input.first().json };
 return [{
   json: {
     ok: item.ok !== false,

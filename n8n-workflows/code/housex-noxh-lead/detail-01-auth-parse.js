@@ -3,7 +3,10 @@
 const SECRET = $env.EVENTS_WEBHOOK_SECRET || '';
 const headers = $input.first().json.headers || {};
 const got = headers['x-events-secret'] || headers['X-Events-Secret'] || '';
-if (SECRET && got !== SECRET) {
+if (!SECRET) {
+  throw new Error('Server misconfigured: EVENTS_WEBHOOK_SECRET is required');
+}
+if (!got || got !== SECRET) {
   throw new Error('Unauthorized: invalid EVENTS_WEBHOOK_SECRET');
 }
 

@@ -23,7 +23,7 @@ console.log(
 console.log("");
 console.log("# Outbox → n8n / handlers (mỗi phút — cần EVENTS_WEBHOOK_URL)");
 console.log(
-  `* * * * * curl -fsS -H "Authorization: Bearer ${cronSecret}" ${site}/api/cron/dispatch-events`,
+  `* * * * * curl -fsS -X POST -H "Authorization: Bearer ${cronSecret}" ${site}/api/cron/dispatch-events`,
 );
 console.log("");
 console.log("# Recompute ranking (mỗi 6 giờ)");

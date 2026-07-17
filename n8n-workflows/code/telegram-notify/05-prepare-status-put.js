@@ -5,15 +5,21 @@ const SHEET_ID = '__GOOGLE_SHEET_ID__';
 const TAB = '__NOTIFICATION_EVENTS_TAB__';
 
 if (!item.sheet_logged || item.duplicate || item.skipped || !item.sheet_row) {
+  const reason =
+    item.sheet_error ||
+    item.reason ||
+    item.telegram_skip ||
+    item.telegram_error ||
+    null;
   return [{
     json: {
-      ok: item.ok !== false,
+      ok: item.ok !== false && !item.sheet_error,
       event_id: item.event_id,
       event_type: item.event_type,
       telegram_sent: item.telegram_sent === true,
       duplicate: item.duplicate === true,
       skipped: item.skipped === true,
-      reason: item.reason || item.telegram_skip || item.telegram_error || null,
+      reason,
       sheet_row: item.sheet_row || null,
       finished_at: new Date().toISOString(),
     },

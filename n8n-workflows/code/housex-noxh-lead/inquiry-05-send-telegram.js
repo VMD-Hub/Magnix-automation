@@ -28,11 +28,17 @@ try {
     timeout: 15000,
   });
 } catch (e) {
+  const detail = e.response?.data || e.cause?.response?.data;
   return [{
     json: {
       ...item,
       telegram_sent: false,
-      telegram_error: (e.message || String(e)).slice(0, 200),
+      telegram_error: (
+        detail?.description ||
+        detail?.error?.message ||
+        e.message ||
+        String(e)
+      ).slice(0, 200),
     },
   }];
 }

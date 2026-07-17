@@ -133,14 +133,14 @@ function verifyParity() {
 }
 
 const codes = {
+  rowsToObjects: read('00-rows-to-metrics-objects.js'),
   filterPending: read('01-filter-pending-rows.js'),
   normalizeRow: read('02-normalize-sheet-row.js'),
   runScore: buildScorePostNodeCode(),
-  sheetUpsert: read('04-sheet-upsert-scorecard.js')
-    .replace(/__GOOGLE_SHEET_ID__/g, PUBLIC.google_sheet_id)
-    .replace(/__CONTENT_SCORECARD_TAB__/g, PUBLIC.content_scorecard_tab || 'content_scorecard'),
   buildSummary: read('05-build-summary.js'),
 };
+
+const metricsRangeUrl = `https://sheets.googleapis.com/v4/spreadsheets/${PUBLIC.google_sheet_id}/values/${encodeURIComponent(`${PUBLIC.content_metrics_tab}!A:AA`)}`;
 
 const nodes = [
   {
@@ -163,24 +163,25 @@ const nodes = [
   },
   {
     parameters: {
-      authentication: 'serviceAccount',
-      documentId: {
-        __rl: true,
-        mode: 'id',
-        value: PUBLIC.google_sheet_id,
-      },
-      sheetName: {
-        __rl: true,
-        mode: 'name',
-        value: PUBLIC.content_metrics_tab,
-      },
-      options: { returnAllMatches: true },
+      authentication: 'predefinedCredentialType',
+      nodeCredentialType: 'googleApi',
+      requestMethod: 'GET',
+      url: metricsRangeUrl,
+      options: { timeout: 30000 },
     },
     id: 'cs03sheets',
     name: 'Read Metrics Sheet',
-    type: 'n8n-nodes-base.googleSheets',
-    typeVersion: 4.5,
+    type: 'n8n-nodes-base.httpRequest',
+    typeVersion: 4.2,
     position: [240, 300],
+  },
+  {
+    parameters: { jsCode: codes.rowsToObjects },
+    id: 'cs03rows',
+    name: 'Rows to Metrics Objects',
+    type: 'n8n-nodes-base.code',
+    typeVersion: 2,
+    position: [460, 300],
   },
   {
     parameters: { jsCode: codes.filterPending },
@@ -188,7 +189,7 @@ const nodes = [
     name: 'Filter Pending Rows',
     type: 'n8n-nodes-base.code',
     typeVersion: 2,
-    position: [520, 300],
+    position: [680, 300],
   },
   {
     parameters: {
@@ -251,11 +252,69 @@ const nodes = [
     position: [1480, 240],
   },
   {
-    parameters: { jsCode: codes.sheetUpsert },
+    parameters: {
+      authentication: 'serviceAccount',
+      operation: 'appendOrUpdate',
+      documentId: {
+        __rl: true,
+        mode: 'id',
+        value: PUBLIC.google_sheet_id,
+      },
+      sheetName: {
+        __rl: true,
+        mode: 'name',
+        value: PUBLIC.content_scorecard_tab || 'content_scorecard',
+      },
+      columns: {
+        mappingMode: 'defineBelow',
+        value: {
+          post_id: '={{ $json.post_id }}',
+          platform: '={{ $json.platform }}',
+          segment: '={{ $json.segment }}',
+          performance_score: '={{ $json.scorecard.performance_score }}',
+          ivi_pct: '={{ $json.scorecard.ivi_pct }}',
+          verdict: '={{ $json.scorecard.verdict }}',
+          primary_retention_metric: '={{ $json.scorecard.primary_retention?.metric ?? "" }}',
+          primary_retention_tier: '={{ $json.scorecard.primary_retention?.tier ?? "" }}',
+          ivi_tier: '={{ $json.scorecard.ivi_tier }}',
+          next_action: '={{ $json.next_action }}',
+          recommendations: '={{ JSON.stringify($json.scorecard.recommendations ?? []) }}',
+          scorecard_json: '={{ JSON.stringify($json.scorecard) }}',
+          analyzed_at: '={{ $json.scorecard.analyzed_at }}',
+          status: 'analyzed',
+        },
+        matchingColumns: ['post_id'],
+        schema: [
+          'post_id',
+          'platform',
+          'segment',
+          'performance_score',
+          'ivi_pct',
+          'verdict',
+          'primary_retention_metric',
+          'primary_retention_tier',
+          'ivi_tier',
+          'next_action',
+          'recommendations',
+          'scorecard_json',
+          'analyzed_at',
+          'status',
+        ].map((id) => ({
+          id,
+          displayName: id,
+          required: false,
+          defaultMatch: id === 'post_id',
+          display: true,
+          type: 'string',
+          canBeUsedToMatch: id === 'post_id',
+        })),
+      },
+      options: {},
+    },
     id: 'cs09sheet',
     name: 'Sheet Upsert Scorecard',
-    type: 'n8n-nodes-base.code',
-    typeVersion: 2,
+    type: 'n8n-nodes-base.googleSheets',
+    typeVersion: 4.5,
     position: [1720, 160],
   },
   {
@@ -368,7 +427,8 @@ const nodes = [
 const connections = {
   'Schedule Daily 10h': { main: [[{ node: 'Read Metrics Sheet', type: 'main', index: 0 }]] },
   'Manual Trigger': { main: [[{ node: 'Read Metrics Sheet', type: 'main', index: 0 }]] },
-  'Read Metrics Sheet': { main: [[{ node: 'Filter Pending Rows', type: 'main', index: 0 }]] },
+  'Read Metrics Sheet': { main: [[{ node: 'Rows to Metrics Objects', type: 'main', index: 0 }]] },
+  'Rows to Metrics Objects': { main: [[{ node: 'Filter Pending Rows', type: 'main', index: 0 }]] },
   'Filter Pending Rows': { main: [[{ node: 'IF Has Rows', type: 'main', index: 0 }]] },
   'IF Has Rows': {
     main: [

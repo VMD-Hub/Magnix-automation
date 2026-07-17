@@ -81,6 +81,19 @@ export interface OutboxPayloads {
     assignedBrokerId: string | null;
     createdAt: string;
   };
+  /** Form dịch vụ tại /tai-chinh, /dinh-gia, /noi-that và các landing liên kết. */
+  "lead.affiliate_contact": {
+    leadId: string;
+    vertical: string;
+    need: string | null;
+    message: string | null;
+    contact: {
+      name: string;
+      phone: string;
+      email: string | null;
+    };
+    createdAt: string;
+  };
   /**
    * tài chính (thu nhập, nợ xấu) — chỉ tier + contact + tín hiệu định tuyến để
    * n8n route (HOT→chuyên gia, WARM→gỡ hồ sơ, COLD→nurture). Chi tiết tài chính

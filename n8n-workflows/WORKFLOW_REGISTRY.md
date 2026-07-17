@@ -34,7 +34,7 @@
 - **Parse layer:** có/không — bắt buộc nếu có LLM node
 - **Notification:** workflow có approve / legal source needed / render review / blocked human action phải gửi Telegram theo `docs/TELEGRAM_APPROVAL_NOTIFICATIONS.md`
 - **LLM provider:** DeepSeek / Anthropic theo task — xem `docs/LLM_PROVIDER_POLICY.md`
-- **Credential:** `uid-ingest` — `MAGNIX_INGEST_SECRET` + `HOUSEX_PUBLIC_URL` (Postgres ingest); Drive credential cho archive. Agent 1 — `googleApi`, Drive SA, Apify, Anthropic. Agent 2 — `googleApi` + `DEEPSEEK_API_KEY` (ưu tiên) hoặc `ANTHROPIC_API_KEY`. Workflow content dùng Google Sheets làm ops queue/review.
+- **Credential:** `uid-ingest` — Header Auth `HouseX Magnix Ingest` (`x-magnix-ingest-secret`) cho Postgres ingest; Drive credential cho archive. Agent 1 — `googleApi`, Drive SA, Apify, Anthropic. Agent 2 — `googleApi` + `DEEPSEEK_API_KEY` (ưu tiên) hoặc `ANTHROPIC_API_KEY`. Workflow content dùng Google Sheets làm ops queue/review.
 - **Go-live:** YYYY-MM-DD hoặc `staging`
 
 ## Import lên n8n

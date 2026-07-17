@@ -19,7 +19,6 @@ const codes = {
   parseLlm: read('04-parse-llm-json.js'),
   merge: read('05-merge-uid-record.js'),
   deadLetter: read('06-dead-letter-parse.js'),
-  housexIngest: read('09-housex-postgres-ingest.js'),
   driveBackup: read('08-prepare-drive-backup.js'),
   buildResponse: read('10-build-webhook-response.js'),
 };
@@ -46,7 +45,7 @@ const nodes = [
   {
     parameters: {
       content:
-        '## UID Ingest — ADR-013\n**Webhook:** POST `/webhook/magnix/uid-ingest`\n**Store:** House X Postgres `POST /api/ingest/magnix-lead`\n**Archive:** Google Drive JSONL (best-effort)\n**Env:** `MAGNIX_INGEST_SECRET` = `MAGNIX_INGEST_SECRET` trên HouseX · `HOUSEX_PUBLIC_URL`',
+        '## UID Ingest — ADR-013\n**Webhook:** POST `/webhook/magnix/uid-ingest`\n**Store:** House X Postgres `POST /api/ingest/magnix-lead`\n**Archive:** Google Drive JSONL (best-effort)\n**Credential:** Header Auth `HouseX Magnix Ingest` (`x-magnix-ingest-secret`)',
       height: 200,
       width: 520,
     },
@@ -186,11 +185,21 @@ const nodes = [
     position: [1680, 300],
   },
   {
-    parameters: { jsCode: codes.housexIngest },
+    parameters: {
+      method: 'POST',
+      url: 'https://timnhaxahoi.com/api/ingest/magnix-lead',
+      authentication: 'genericCredentialType',
+      genericAuthType: 'httpHeaderAuth',
+      sendBody: true,
+      contentType: 'raw',
+      rawContentType: 'application/json',
+      body: '={{ JSON.stringify($json.data ?? $json.record ?? $json) }}',
+      options: { timeout: 20000 },
+    },
     id: 'a11housex01',
     name: 'HouseX Postgres Ingest',
-    type: 'n8n-nodes-base.code',
-    typeVersion: 2,
+    type: 'n8n-nodes-base.httpRequest',
+    typeVersion: 4.2,
     position: [1920, 300],
   },
   {

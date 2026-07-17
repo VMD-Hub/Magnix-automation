@@ -4,7 +4,10 @@
 const SECRET = $env.EVENTS_WEBHOOK_SECRET || '';
 const headers = $input.first().json.headers || {};
 const got = headers['x-events-secret'] || headers['X-Events-Secret'] || '';
-if (SECRET && got !== SECRET) {
+if (!SECRET) {
+  throw new Error('Server misconfigured: EVENTS_WEBHOOK_SECRET is required');
+}
+if (!got || got !== SECRET) {
   throw new Error('Unauthorized: invalid EVENTS_WEBHOOK_SECRET');
 }
 
@@ -63,6 +66,74 @@ if (type === 'lead.created') {
       sla_due_at: slaDue,
       created_at: String(p.createdAt || now),
       dedupe_key: `inquiry:${leadId}`,
+    },
+  }];
+}
+
+if (type === 'lead.affiliate_contact') {
+  const p = body.payload || {};
+  const leadId = String(p.leadId || '').trim();
+  if (!leadId) throw new Error('Validation: payload.leadId is required');
+
+  const contact = p.contact || {};
+  const vertical = String(p.vertical || 'ho-tro').trim().toLowerCase();
+  const verticalConfig = {
+    'tai-chinh': {
+      segment: 'finance',
+      label: 'Tư vấn tài chính / vay vốn',
+      opsStatus: 'new_inquiry_finance',
+    },
+    'dinh-gia': {
+      segment: 'valuation',
+      label: 'Định giá & thẩm định BĐS',
+      opsStatus: 'new_inquiry_valuation',
+    },
+    'noi-that': {
+      segment: 'interior',
+      label: 'Thiết kế & thi công nội thất',
+      opsStatus: 'new_inquiry_interior',
+    },
+    'ho-tro': {
+      segment: 'support',
+      label: 'Hỗ trợ House X',
+      opsStatus: 'new_inquiry_support',
+    },
+  };
+  const config = verticalConfig[vertical] || {
+    segment: 'service',
+    label: 'Tư vấn dịch vụ',
+    opsStatus: 'new_inquiry_service',
+  };
+
+  return [{
+    json: {
+      ok: true,
+      skipped: false,
+      event_path: 'inquiry',
+      path: 'events',
+      lead_id: leadId,
+      source: `affiliate:${vertical}`,
+      segment: config.segment,
+      intent_lane: config.segment,
+      message: [p.need ? `Nhu cầu: ${p.need}` : '', p.message || '']
+        .filter(Boolean)
+        .join(' · ')
+        .slice(0, 500),
+      contact_name: String(contact.name || '').slice(0, 80),
+      contact_phone: String(contact.phone || '').slice(0, 20),
+      contact_email: String(contact.email || '').slice(0, 120),
+      kind: 'service',
+      entity_name: config.label,
+      slug: vertical,
+      listing_code: '',
+      project_type: 'THUONG_MAI',
+      province: '',
+      public_url: `https://timnhaxahoi.com/${vertical}#tu-van`,
+      assigned_broker_id: '',
+      ops_status: config.opsStatus,
+      sla_due_at: new Date(Date.now() + 2 * 3600000).toISOString(),
+      created_at: String(p.createdAt || now),
+      dedupe_key: `affiliate:${leadId}`,
     },
   }];
 }
@@ -283,6 +354,56 @@ if (type === 'attribution.conflict') {
       ops_status: phase === 'resolved' ? 'conflict_resolved' : 'conflict_open',
       created_at: now,
       dedupe_key: `conflict:${conflictId}:${phase}`,
+    },
+  }];
+}
+
+if (type === 'lead.noxh_loan_quick_check') {
+  const p = body.payload || {};
+  const leadId = String(p.leadId || '').trim();
+  if (!leadId) throw new Error('Validation: payload.leadId is required');
+
+  const rawTier = String(p.tier || 'WARM').toUpperCase();
+  const tier = ['HOT', 'WARM', 'COLD'].includes(rawTier) ? rawTier : 'WARM';
+  const ageStatus = String(p.ageStatus || 'NEEDS_REVIEW').toUpperCase();
+  const contact = p.contact || {};
+  const reasonCode =
+    ageStatus === 'PROCEED'
+      ? 'loan_age_proceed'
+      : ageStatus === 'NOT_SUITABLE'
+        ? 'loan_age_not_suitable'
+        : 'loan_age_needs_review';
+  const slaHours = tier === 'HOT' ? 2 : tier === 'WARM' ? 24 : 72;
+
+  return [{
+    json: {
+      ok: true,
+      skipped: false,
+      event_path: 'noxh',
+      path: 'events',
+      lead_id: leadId,
+      tier,
+      overall: ageStatus,
+      credit_flag: 'NOT_CHECKED',
+      reason_codes: [reasonCode],
+      reason_codes_csv: reasonCode,
+      recommended_action:
+        tier === 'HOT'
+          ? 'Gọi tư vấn phương án vay NOXH trong 2h'
+          : tier === 'WARM'
+            ? 'Rà soát tuổi vay và hồ sơ trong 24h'
+            : 'Nurture phương án vay phù hợp',
+      rules_version: 'noxh-loan-quick-check-v1',
+      contact_name: String(contact.name || '').slice(0, 80),
+      contact_phone: String(contact.phone || '').slice(0, 20),
+      contact_email: String(contact.email || '').slice(0, 120),
+      ops_status: tier === 'HOT' ? 'new_hot' : tier === 'WARM' ? 'new_warm' : 'nurture',
+      assigned_to: '',
+      sla_due_at: new Date(Date.now() + slaHours * 3600000).toISOString(),
+      created_at: now,
+      dedupe_key: `noxh-loan-quick:${leadId}`,
+      has_credit_blocker: false,
+      has_credit_caution: false,
     },
   }];
 }

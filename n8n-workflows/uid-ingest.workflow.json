@@ -3,7 +3,7 @@
   "nodes": [
     {
       "parameters": {
-        "content": "## UID Ingest — ADR-013\n**Webhook:** POST `/webhook/magnix/uid-ingest`\n**Store:** House X Postgres `POST /api/ingest/magnix-lead`\n**Archive:** Google Drive JSONL (best-effort)\n**Env:** `MAGNIX_INGEST_SECRET` = `MAGNIX_INGEST_SECRET` trên HouseX · `HOUSEX_PUBLIC_URL`",
+        "content": "## UID Ingest — ADR-013\n**Webhook:** POST `/webhook/magnix/uid-ingest`\n**Store:** House X Postgres `POST /api/ingest/magnix-lead`\n**Archive:** Google Drive JSONL (best-effort)\n**Credential:** Header Auth `HouseX Magnix Ingest` (`x-magnix-ingest-secret`)",
         "height": 200,
         "width": 520
       },
@@ -215,12 +215,22 @@
     },
     {
       "parameters": {
-        "jsCode": "const base = String(\n  $env.HOUSEX_PUBLIC_URL || $env.NEXT_PUBLIC_SITE_URL || 'https://timnhaxahoi.com',\n).replace(/\\/$/, '');\nconst secret = String($env.MAGNIX_INGEST_SECRET || '').trim();\nconst url = `${base}/api/ingest/magnix-lead`;\n\nif (!secret) {\n  throw new Error('MAGNIX_INGEST_SECRET is required for Postgres ingest');\n}\n\nconst results = [];\n\nfor (const item of $input.all()) {\n  const raw = item.json;\n\n  if (!raw.ok) {\n    results.push({\n      json: {\n        ok: false,\n        error: raw.error || 'SKIP_INGEST',\n        message: raw.message || 'Classify or merge failed',\n        normalized_key: raw.normalized_key || null,\n      },\n    });\n    continue;\n  }\n\n  const record =\n    raw.data && typeof raw.data === 'object'\n      ? raw.data\n      : raw.record && typeof raw.record === 'object'\n        ? raw.record\n        : null;\n\n  if (!record?.normalized_key) {\n    results.push({\n      json: { ok: false, error: 'MISSING_RECORD', message: 'No merged UID record' },\n    });\n    continue;\n  }\n\n  const payload = {\n    uid: String(record.uid ?? ''),\n    uid_source: String(record.uid_source ?? 'unknown'),\n    normalized_key: String(record.normalized_key),\n    captured_at: String(record.captured_at ?? new Date().toISOString()),\n    text: record.text ?? null,\n    segment: String(record.segment ?? 'unclassified'),\n    score: Number(record.score ?? 0),\n    interest_key: record.interest_key ?? null,\n    tags: Array.isArray(record.tags) ? record.tags : [],\n    meta: record.meta && typeof record.meta === 'object' ? record.meta : {},\n    classify_method: String(record.classify_method ?? 'regex'),\n    consent_basis: record.consent_basis ?? null,\n    status: String(record.status ?? 'classified'),\n  };\n\n  const nk = payload.normalized_key;\n\n  try {\n    const res = await this.helpers.httpRequest({\n      method: 'POST',\n      url,\n      headers: {\n        'Content-Type': 'application/json',\n        'x-magnix-ingest-secret': secret,\n      },\n      body: payload,\n      json: true,\n      timeout: 20000,\n    });\n\n    const row = res?.data ?? res;\n    results.push({\n      json: {\n        ok: true,\n        storage: 'postgres_housex',\n        action: 'upsert',\n        id: row?.id ?? null,\n        normalized_key: row?.normalized_key ?? nk,\n        status: row?.status ?? payload.status,\n        record: payload,\n      },\n    });\n  } catch (e) {\n    const status = e.statusCode ?? e.httpCode ?? null;\n    results.push({\n      json: {\n        ok: false,\n        error: 'HOUSEX_INGEST_FAILED',\n        message: String(e.message || 'HouseX ingest request failed'),\n        http_status: status,\n        normalized_key: nk,\n      },\n    });\n  }\n}\n\nreturn results;"
+        "method": "POST",
+        "url": "https://timnhaxahoi.com/api/ingest/magnix-lead",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={{ JSON.stringify($json.data ?? $json.record ?? $json) }}",
+        "options": {
+          "timeout": 20000
+        }
       },
       "id": "a11housex01",
       "name": "HouseX Postgres Ingest",
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
       "position": [
         1920,
         300
@@ -273,7 +283,7 @@
     },
     {
       "parameters": {
-        "jsCode": "const item = $input.first().json;\n\nreturn [{\n  json: {\n    ok: item.ok === true,\n    storage: item.storage || (item.ok ? 'postgres_housex' : undefined),\n    action: item.action,\n    id: item.id,\n    normalized_key: item.normalized_key,\n    status: item.status,\n    record: item.record,\n    error: item.ok ? undefined : item.error,\n    message: item.ok ? undefined : item.message,\n    http_status: item.http_status,\n  },\n}];"
+        "jsCode": "const item = $input.first().json;\nconst row =\n  item.data && typeof item.data === 'object' && !Array.isArray(item.data)\n    ? item.data\n    : item;\nconst succeeded =\n  item.ok === true ||\n  (typeof row.id === 'string' && typeof row.normalized_key === 'string');\n\nreturn [{\n  json: {\n    ok: succeeded,\n    storage: item.storage || (succeeded ? 'postgres_housex' : undefined),\n    action: item.action,\n    id: row.id,\n    normalized_key: row.normalized_key,\n    status: row.status,\n    record: item.record,\n    error: succeeded ? undefined : item.error,\n    message: succeeded ? undefined : item.message,\n    http_status: item.http_status,\n  },\n}];"
       },
       "id": "a13wrapresp",
       "name": "Build Webhook Response",

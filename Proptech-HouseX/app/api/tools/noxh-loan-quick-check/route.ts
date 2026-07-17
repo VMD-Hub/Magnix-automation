@@ -6,6 +6,7 @@ import { normalizeVnPhone, isValidVnPhone } from "@/lib/phone";
 import { isRateLimited } from "@/lib/redis";
 import { ipHash } from "@/lib/api/request-meta";
 import { enqueueEvent } from "@/lib/events/outbox";
+import { forwardEventToWebhook } from "@/lib/events/handlers";
 import { screenLoanAge } from "@/lib/finance/noxh-loan-age-screen";
 import {
   noxhLoanQuickLeadMessage,
@@ -38,7 +39,7 @@ export async function POST(req: NextRequest) {
     const tier = quickCheckTier(screen.status);
     const message = noxhLoanQuickLeadMessage(screen, body);
 
-    const lead = await prisma.$transaction(async (tx) => {
+    const { lead, eventPayload } = await prisma.$transaction(async (tx) => {
       const customer = await tx.customer.upsert({
         where: { normalizedPhone },
         update: { name: body.name, email: body.email || undefined },
@@ -58,29 +59,40 @@ export async function POST(req: NextRequest) {
         },
       });
 
+      const eventPayload = {
+        leadId: createdLead.id,
+        tier,
+        ageStatus: screen.status,
+        currentAge: screen.currentAge,
+        ageAtLoanEnd: screen.ageAtLoanEnd,
+        region: body.region,
+        housingType: body.housingType,
+        incomeBand: body.incomeBand,
+        contact: {
+          name: body.name,
+          phone: body.phone,
+          email: body.email,
+        },
+      };
+
       await enqueueEvent(
         tx,
         "lead.noxh_loan_quick_check",
-        {
-          leadId: createdLead.id,
-          tier,
-          ageStatus: screen.status,
-          currentAge: screen.currentAge,
-          ageAtLoanEnd: screen.ageAtLoanEnd,
-          region: body.region,
-          housingType: body.housingType,
-          incomeBand: body.incomeBand,
-          contact: {
-            name: body.name,
-            phone: body.phone,
-            email: body.email,
-          },
-        },
+        eventPayload,
         `lead.noxh_loan_quick_check:${createdLead.id}`,
       );
 
-      return createdLead;
+      return { lead: createdLead, eventPayload };
     });
+
+    void forwardEventToWebhook("lead.noxh_loan_quick_check", eventPayload).catch(
+      (error) => {
+        console.error("[noxh-loan-quick-check] realtime forward failed", {
+          leadId: lead.id,
+          message: error instanceof Error ? error.message : String(error),
+        });
+      },
+    );
 
     return created({ id: lead.id, tier, screen: { status: screen.status } });
   } catch (err) {

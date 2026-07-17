@@ -1,6 +1,12 @@
 // Telegram Ops — attribution conflict opened / resolved.
 
-const item = $input.first().json;
+const sheetResult = $input.first().json || {};
+const source = $('Dedupe Conflict').item?.json || {};
+const item = {
+  ...source,
+  sheet_logged: !sheetResult.error,
+  sheet_error: sheetResult.error?.message || sheetResult.message || null,
+};
 if (item.skipped || item.duplicate) {
   return [{ json: { ...item, telegram_skip: item.reason || 'skipped' } }];
 }

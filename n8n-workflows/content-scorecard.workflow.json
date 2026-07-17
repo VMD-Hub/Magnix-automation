@@ -35,27 +35,33 @@
     },
     {
       "parameters": {
-        "authentication": "serviceAccount",
-        "documentId": {
-          "__rl": true,
-          "mode": "id",
-          "value": "1fYB4h_BTiKXa9O3lBah-tQonWpQOQMG2aSkSfPs6yU4"
-        },
-        "sheetName": {
-          "__rl": true,
-          "mode": "name",
-          "value": "content_metrics"
-        },
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleApi",
+        "requestMethod": "GET",
+        "url": "https://sheets.googleapis.com/v4/spreadsheets/1fYB4h_BTiKXa9O3lBah-tQonWpQOQMG2aSkSfPs6yU4/values/content_metrics!A%3AAA",
         "options": {
-          "returnAllMatches": true
+          "timeout": 30000
         }
       },
       "id": "cs03sheets",
       "name": "Read Metrics Sheet",
-      "type": "n8n-nodes-base.googleSheets",
-      "typeVersion": 4.5,
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
       "position": [
         240,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const values = $input.first().json.values || [];\nif (!Array.isArray(values) || values.length === 0) {\n  return [{ json: {} }];\n}\n\nconst headers = values[0].map((value) =>\n  String(value ?? '')\n    .trim()\n    .toLowerCase()\n);\n\nconst items = [];\nfor (let index = 1; index < values.length; index += 1) {\n  const row = Array.isArray(values[index]) ? values[index] : [];\n  if (!row.some((value) => String(value ?? '').trim())) continue;\n\n  const record = { row_number: index + 1 };\n  for (let column = 0; column < headers.length; column += 1) {\n    const header = headers[column];\n    if (header) record[header] = row[column] ?? '';\n  }\n  items.push({ json: record });\n}\n\nreturn items.length ? items : [{ json: {} }];"
+      },
+      "id": "cs03rows",
+      "name": "Rows to Metrics Objects",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        460,
         300
       ]
     },
@@ -68,7 +74,7 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        520,
+        680,
         300
       ]
     },
@@ -167,12 +173,174 @@
     },
     {
       "parameters": {
-        "jsCode": "const SHEET_ID = '1fYB4h_BTiKXa9O3lBah-tQonWpQOQMG2aSkSfPs6yU4';\nconst TAB = 'content_scorecard';\n\nconst HEADERS = [\n  'post_id',\n  'platform',\n  'segment',\n  'performance_score',\n  'ivi_pct',\n  'verdict',\n  'primary_retention_metric',\n  'primary_retention_tier',\n  'ivi_tier',\n  'next_action',\n  'recommendations',\n  'scorecard_json',\n  'analyzed_at',\n  'status',\n];\n\nfunction toRow(item) {\n  const scorecard = item.scorecard || {};\n  return [\n    String(item.post_id || ''),\n    String(item.platform || ''),\n    String(item.segment || ''),\n    Number(scorecard.performance_score ?? 0),\n    Number(scorecard.ivi_pct ?? 0),\n    String(scorecard.verdict || item.verdict || ''),\n    String(scorecard.primary_retention_metric || ''),\n    String(scorecard.primary_retention_tier || ''),\n    String(scorecard.ivi_tier || ''),\n    String(item.next_action || scorecard.next_action || scorecard.verdict || ''),\n    JSON.stringify(scorecard.recommendations || []),\n    JSON.stringify(scorecard).slice(0, 50000),\n    String(scorecard.analyzed_at || new Date().toISOString()),\n    item.ok === false ? 'failed' : 'analyzed',\n  ];\n}\n\nasync function sheetRequest(opts) {\n  return this.helpers.httpRequestWithAuthentication.call(this, 'googleApi', {\n    json: true,\n    ...opts,\n  });\n}\n\nconst base = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}`;\nconst readRange = `${TAB}!A:N`;\n\nlet existingByPostId = new Map();\nlet nextAppendRow = 2;\n\ntry {\n  const getRes = await sheetRequest.call(this, {\n    method: 'GET',\n    url: `${base}/values/${encodeURIComponent(readRange)}`,\n  });\n  const rows = getRes.values || [];\n\n  if (!rows.length) {\n    await sheetRequest.call(this, {\n      method: 'PUT',\n      url: `${base}/values/${encodeURIComponent(`${TAB}!A1:N1`)}?valueInputOption=USER_ENTERED`,\n      body: { values: [HEADERS] },\n    });\n  } else {\n    const headerRow = rows[0].map((h) => String(h ?? '').trim().toLowerCase());\n    const postIdx = headerRow.indexOf('post_id');\n    const keyCol = postIdx >= 0 ? postIdx : 0;\n    for (let i = 1; i < rows.length; i += 1) {\n      const postId = String(rows[i][keyCol] ?? '').trim();\n      if (postId) existingByPostId.set(postId, i + 1);\n    }\n    nextAppendRow = rows.length + 1;\n  }\n} catch (e) {\n  throw new Error(`Sheet read failed (${TAB}): ${e.message}. Tạo tab trước — xem CONTENT_SCORECARD_SETUP.md`);\n}\n\nconst results = [];\n\nfor (const item of $input.all()) {\n  const row = item.json;\n  if (!row.post_id) {\n    results.push({ json: { ok: false, error: 'MISSING_POST_ID', message: 'Cannot upsert scorecard without post_id' } });\n    continue;\n  }\n\n  const postId = String(row.post_id);\n  const rowValues = toRow(row);\n  const existingRow = existingByPostId.get(postId);\n\n  try {\n    if (existingRow) {\n      await sheetRequest.call(this, {\n        method: 'PUT',\n        url: `${base}/values/${encodeURIComponent(`${TAB}!A${existingRow}:N${existingRow}`)}?valueInputOption=USER_ENTERED`,\n        body: { values: [rowValues] },\n      });\n      results.push({ json: { ...row, ok: true, storage: 'sheet_content_scorecard', sheet_row: existingRow, action: 'update' } });\n    } else {\n      await sheetRequest.call(this, {\n        method: 'POST',\n        url: `${base}/values/${encodeURIComponent(`${TAB}!A:N`)}:append?valueInputOption=USER_ENTERED&insertDataOption=INSERT_ROWS`,\n        body: { values: [rowValues] },\n      });\n      existingByPostId.set(postId, nextAppendRow);\n      results.push({ json: { ...row, ok: true, storage: 'sheet_content_scorecard', sheet_row: nextAppendRow, action: 'create' } });\n      nextAppendRow += 1;\n    }\n  } catch (e) {\n    results.push({ json: { ...row, ok: false, error: 'SHEET_UPSERT_FAILED', message: e.message } });\n  }\n}\n\nreturn results;"
+        "authentication": "serviceAccount",
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "1fYB4h_BTiKXa9O3lBah-tQonWpQOQMG2aSkSfPs6yU4"
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "name",
+          "value": "content_scorecard"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "post_id": "={{ $json.post_id }}",
+            "platform": "={{ $json.platform }}",
+            "segment": "={{ $json.segment }}",
+            "performance_score": "={{ $json.scorecard.performance_score }}",
+            "ivi_pct": "={{ $json.scorecard.ivi_pct }}",
+            "verdict": "={{ $json.scorecard.verdict }}",
+            "primary_retention_metric": "={{ $json.scorecard.primary_retention?.metric ?? \"\" }}",
+            "primary_retention_tier": "={{ $json.scorecard.primary_retention?.tier ?? \"\" }}",
+            "ivi_tier": "={{ $json.scorecard.ivi_tier }}",
+            "next_action": "={{ $json.next_action }}",
+            "recommendations": "={{ JSON.stringify($json.scorecard.recommendations ?? []) }}",
+            "scorecard_json": "={{ JSON.stringify($json.scorecard) }}",
+            "analyzed_at": "={{ $json.scorecard.analyzed_at }}",
+            "status": "analyzed"
+          },
+          "matchingColumns": [
+            "post_id"
+          ],
+          "schema": [
+            {
+              "id": "post_id",
+              "displayName": "post_id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "platform",
+              "displayName": "platform",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "segment",
+              "displayName": "segment",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "performance_score",
+              "displayName": "performance_score",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "ivi_pct",
+              "displayName": "ivi_pct",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "verdict",
+              "displayName": "verdict",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "primary_retention_metric",
+              "displayName": "primary_retention_metric",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "primary_retention_tier",
+              "displayName": "primary_retention_tier",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "ivi_tier",
+              "displayName": "ivi_tier",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "next_action",
+              "displayName": "next_action",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "recommendations",
+              "displayName": "recommendations",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "scorecard_json",
+              "displayName": "scorecard_json",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "analyzed_at",
+              "displayName": "analyzed_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false
+            }
+          ]
+        },
+        "options": {}
       },
       "id": "cs09sheet",
       "name": "Sheet Upsert Scorecard",
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
       "position": [
         1720,
         160
@@ -321,6 +489,17 @@
       ]
     },
     "Read Metrics Sheet": {
+      "main": [
+        [
+          {
+            "node": "Rows to Metrics Objects",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Rows to Metrics Objects": {
       "main": [
         [
           {
