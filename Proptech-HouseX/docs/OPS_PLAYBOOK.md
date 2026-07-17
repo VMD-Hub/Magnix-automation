@@ -2,7 +2,8 @@
 
 > **Phiên bản:** 2026-07-11 · **Đối tượng:** Nhân viên Ops (pipeline lead & NOXH)  
 > **In PDF:** Mở `/admin/playbook` → nút **In / PDF** hoặc `Ctrl+P` → Save as PDF  
-> **Bản đầy đủ:** `NOXH_CASE_PIPELINE.md` · `LEAD_ATTRIBUTION_CONFLICT_RULES.md`
+> **Bản đầy đủ:** `NOXH_CASE_PIPELINE.md` · `LEAD_ATTRIBUTION_CONFLICT_RULES.md` ·
+> [ADR-015](../../.cursor/ADR-015-sales-conversion-operating-layer.md)
 
 ---
 
@@ -36,7 +37,7 @@ Sáng: Mở Lead marketing → lọc "Mới" → xử lý HOT/WARM trước
      → Mở Hồ sơ NOXH → milestone & giấy thiếu
      → Mở Xung đột (badge đỏ nếu có)
 Chiều: Magnix Inbound → triage UID mới
-Cuối ngày: Cập nhật trạng thái lead đã gọi → CONTACTED / QUALIFIED
+Cuối ngày: Cập nhật đúng shared lifecycle; không nâng state từ score/tier
 ```
 
 ### SLA gợi ý (tier wizard NOXH)
@@ -53,12 +54,21 @@ Cuối ngày: Cập nhật trạng thái lead đã gọi → CONTACTED / QUALIFI
 
 1. Chọn lead ở cột trái → đọc **Tóm tắt wizard NOXH** (thu nhập, DTI — chỉ Admin thấy).
 2. Lead cũ không có số VND: xem nhãn legacy hoặc nhờ khách submit lại wizard.
-3. Cập nhật **Trạng thái:** `Mới` → `Đã tiếp nhận` (vào pipeline) → `Đã liên hệ` (đã gọi).
+3. Cập nhật shared Lead lifecycle:
+   - `NEW` — chưa được Ops tiếp nhận/xử lý.
+   - `CONTACTED` — Ops đã tiếp nhận hoặc thực hiện contact attempt theo UI hiện hành;
+     không đồng nghĩa đã xác nhận nhu cầu.
+   - `QUALIFIED` — đã liên hệ và xác nhận nhu cầu tối thiểu.
+   - `WON` / `LOST` — terminal cho lead; không sửa lịch sử ngầm để mở lại.
 4. Chọn **Kịch bản nurture** phù hợp segment.
 5. Điền **Kênh liên hệ** (Zalo, email) nếu khác SĐT chính.
 6. **Ghi chú Ops** — ngắn gọn, không paste CCCD đầy đủ.
 
 **Không:** Đổi SĐT khóa chính trên Customer; hứa «chắc đủ điều kiện NOXH».
+
+Contact attempt, note, task và meeting hiện còn nằm ở các bề mặt chuyên biệt hoặc
+ghi chú. Shared `SalesActivity`/appointment contract là ADR-015 G1 backlog; cho tới
+khi triển khai, không dùng Sheet hay milestone M1–M5 làm activity ledger thay thế.
 
 ---
 
@@ -81,7 +91,7 @@ Wizard **tier HOT** tự tạo hồ sơ platform (`brokerId = null`). CTV chỉ 
 | Tình huống | Hành động Ops |
 |------------|---------------|
 | Ads/form trùng SĐT CTV đang lock | **Không ghi đè** — mở queue Xung đột |
-| CTV claim trong khi Ops đã `CONTACTED+` | Từ chối claim (hệ thống) — Ops giữ khách |
+| CTV claim trong khi Ops đã `CONTACTED`/`QUALIFIED` | Từ chối claim (hệ thống) — Ops giữ khách |
 | Lock CTV hết 20 ngày LV, không tiến độ | Ops có thể tiếp quản (theo rule) |
 | Đã cọc F1 (`UnitBooking`) | CTV giữ attribution — Ops hỗ trợ hậu kỳ |
 
@@ -102,7 +112,9 @@ Chi tiết: `LEAD_ATTRIBUTION_CONFLICT_RULES.md`.
 - **Không** chụp màn hình wizard có thu nhập/nợ gửi group chat công khai.
 - **Không** copy PII vào ticket ngoài hệ thống không mã hóa.
 - Log hệ thống không cần SĐT đầy đủ — dùng mã lead / mã hồ sơ.
-- Sheet `noxh_leads_detail` là archive tài chính — chỉ share trong nhóm Ops được phép.
+- Sheet `noxh_leads_detail` là sink legacy nhạy cảm, không phải SoR; chỉ dùng khi
+  mirror còn bật và giới hạn cho Ops được phép. Kế hoạch đích cần RBAC,
+  retention/deletion và audit theo ADR-015.
 
 ---
 

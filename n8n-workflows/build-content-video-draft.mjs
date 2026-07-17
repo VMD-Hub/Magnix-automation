@@ -11,6 +11,7 @@ import { extractSystemPrompt } from './code/shared/extract-prompt.mjs';
 import { withPipelineStub } from './code/shared/with-pipeline-stub.mjs';
 import { withLlmRouter } from './code/shared/with-llm-router.mjs';
 import { loadFireNotifyCode, wireNotifyAfter } from './code/shared/notify-wire.mjs';
+import { buildLegalValidatorNodeCode } from './code/shared/inject-legal-bundle.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const codeDir = path.join(__dirname, 'code', 'content-video-draft');
@@ -36,7 +37,7 @@ const llmProviders = PUBLIC.llm_task_providers || {};
 
 const codes = {
   parseFilter: withPipelineStub(
-    read('01-parse-filter-candidates.js')
+    buildLegalValidatorNodeCode(path.join(codeDir, '01-parse-filter-candidates.js'))
       .replace('__VIDEO_DRAFT_MIN_SCORE__', String(PUBLIC.video_draft_min_score ?? 70))
       .replace('__VIDEO_DRAFT_BATCH_SIZE__', String(PUBLIC.content_video_draft_batch_size ?? 3))
       .replace('__FORMAT_ROUTING_JSON__', JSON.stringify(FORMAT_ROUTING))

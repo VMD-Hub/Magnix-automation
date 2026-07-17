@@ -2,7 +2,8 @@
 
 > **Bản chuẩn** cho team và Cursor agent. Cập nhật: 2026-06-27.
 >
-> Triết lý: **two-tier LLM** (rẻ phân tích → premium publish pháp lý) · **Sheet = bộ nhớ** · **Execution không qua LLM**.
+> Triết lý: **two-tier LLM** (rẻ phân tích → premium publish pháp lý) ·
+> **Sheet = editorial workspace** · **Execution không qua LLM**.
 
 Tóm tắt kiến trúc: `ARCHITECTURE_MAGNIX.md` §8 · Router code: `n8n-workflows/code/shared/llm-router-n8n.js` · Config: `n8n-workflows/magnix-public-config.json` → `llm_task_providers`.
 
@@ -16,7 +17,7 @@ Tóm tắt kiến trúc: `ARCHITECTURE_MAGNIX.md` §8 · Router code: `n8n-workf
 | 2 | **DeepSeek = tier phân tích / structured JSON** (volume cao) | Dùng Anthropic cho classify hàng loạt |
 | 3 | **Anthropic = tier publish pháp lý L2** (NOXH / vay / định giá) | Dùng DeepSeek cho claim pháp lý cuối không qua Legal Pack |
 | 4 | **Legal Gate trước Agent 3 & 6** — `legal_retrieval_pack` inject ở Layer B | LLM tự bịa căn cứ pháp lý |
-| 5 | **Google Sheet = store of record** — insight, brief, draft, approve | Gemini/LLM context 1M token làm “nhớ 1 năm” |
+| 5 | **Google Sheet = editorial workspace** — insight, brief, draft, approve; không lưu authoritative lead/sales state | Gemini/LLM context 1M token làm “nhớ 1 năm” |
 | 6 | **Execution deterministic** — Creatomate, Meta API, Canva manual | Claude sinh prompt → API ảnh/video mỗi lần |
 | 7 | **Parse layer + QA L0–L3** sau mọi LLM output | Publish thẳng từ raw LLM |
 
@@ -39,7 +40,10 @@ Chi tiết Legal Gate: `docs/LEGAL_GATE_PIPELINE.md` · QA: `.cursor/QA_TIERS.md
 
 **Input thực tế:** ~8k dòng `content_queue` + editorial calendar — **không** quét PDF báo cáo thị trường (backlog riêng nếu cần).
 
-**Bộ nhớ dài hạn:** `meta.*` trên Sheet (`intake_v1`, `editorial_brief_v1`, …) — không nhét lịch sử vào context window.
+**Bộ nhớ editorial:** `meta.*` trên Sheet (`intake_v1`,
+`editorial_brief_v1`, …) — không nhét lịch sử vào context window. Postgres House X
+là store of record cho lead/ops theo ADR-013; hai phạm vi không dùng Sheet làm
+integration contract.
 
 ### Giai đoạn B — Content Generation (DeepSeek + Anthropic có chọn lọc)
 
@@ -123,7 +127,7 @@ Probe local: `node scripts/probe-deepseek.mjs`
 |----------|------------|
 | LLM fallback tier 3 | **Backlog** — chưa wire vào router |
 | Image cover (`content-page-cover`) | **Tắt** — free tier quota = 0 |
-| Long context “nhớ 1 năm” | **Không dùng** — dùng Sheet |
+| Long context “nhớ 1 năm” | **Không dùng** — dùng editorial data có audit trên Sheet |
 
 Khi bật billing Gemini: thêm vào `llm-router-n8n.js` sau DeepSeek/Anthropic — không thay Sheet.
 
@@ -148,7 +152,7 @@ Khi bật billing Gemini: thêm vào `llm-router-n8n.js` sau DeepSeek/Anthropic 
 ## 6. Anti-patterns (tránh)
 
 1. **Claude sinh prompt ảnh/video mỗi lần publish** — không reproducible, khó QA.
-2. **Gemini 1M context thay Google Sheet** — mất audit, tốn token, VPS không lưu lâu dài.
+2. **Gemini 1M context thay editorial workspace** — mất audit, tốn token, khó kiểm soát phiên bản.
 3. **Một model cho mọi agent** — classify 200 dòng/ngày không nên Sonnet.
 4. **Bỏ Legal Gate để “tiết kiệm bước”** — vi phạm `LEGAL_GATE_PIPELINE.md`.
 5. **Publish không L3** — vi phạm `.cursor/QA_TIERS.md`.
@@ -185,7 +189,7 @@ node scripts/probe-n8n-vps-env.mjs
 
 - [ ] Gemini fallback trong `llm-router-n8n.js`
 - [ ] Pipeline đọc báo cáo thị trường PDF → insight Sheet (tách khỏi social queue)
-- [ ] L2 `/devil` automated trên n8n cho Agent 3 legal output — **done** `content-draft` workflow
+- [x] L2 `/devil` automated trên n8n cho Agent 3 legal output — `content-draft` workflow
 - [ ] Agent 3 nhánh `fb_page_post` full wire
 
 ---

@@ -2,6 +2,9 @@
 
 > **Một file đọc trước** khi sửa Title QA / CTA / Disclaimer / Hook / Context.
 > Cập nhật: 2026-06-28 · Audit Sheet `Database_Magnix_Lead` (8329 dòng `content_queue`).
+>
+> **Phạm vi:** file này chỉ mô tả pipeline editorial/content; không định nghĩa hay
+> lưu sales CRM state. Sales conversion map: `.cursor/SALES_CONVERSION_PIPELINE_MAP.md`.
 
 ---
 

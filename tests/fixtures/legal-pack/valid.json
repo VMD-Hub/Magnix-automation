@@ -1,0 +1,14 @@
+{
+  "topic": "noxh_income",
+  "status": "verified",
+  "facts": [
+    {
+      "claim_id": "noxh_income_test_001",
+      "claim": "Điều kiện thu nhập phải đối chiếu theo hồ sơ và quy định áp dụng.",
+      "source_refs": ["noxh_source_test:article_1"]
+    }
+  ],
+  "forbidden_claims": ["Chắc chắn được duyệt"],
+  "disclaimer_required": true,
+  "needs_human_legal_source": false
+}

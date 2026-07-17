@@ -1,0 +1,10 @@
+{
+  "normalized_key": "fixture:oversized-legal-details",
+  "sheet_row": 42,
+  "detail_character": "X",
+  "detail_length": 75000,
+  "validation_errors": [
+    "LEGAL_PACK_STATUS_NOT_READY",
+    "FACT_MISSING_SOURCE_REFS"
+  ]
+}

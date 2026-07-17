@@ -2,6 +2,12 @@
 
 Workflow: **`housex-noxh-lead-route`** (Events Hub) · File: `housex-noxh-lead-route.workflow.json`
 
+> **Authority boundary (ADR-013/015):** House X API + Postgres giữ identity,
+> Lead/consent/lifecycle, attribution và conversion state. n8n chỉ consume event để
+> route/notify; các tab Sheet dưới đây là sink mirror/triage hiện hữu, tùy chọn và
+> không được ghi ngược thành CRM state. NOXH Case M1–M5 là nhánh chuyên biệt của
+> Journey P; nó không thay shared Lead lifecycle hoặc future Opportunity.
+
 Hai luồng lead inbound:
 
 | Luồng | Nguồn | Event | Telegram |
@@ -30,7 +36,7 @@ flowchart LR
   subgraph n8n
     OB --> WH[Webhook housex-events]
     RT --> WH
-    WH --> INQ[(Sheet housex_leads_inquiry)]
+    WH -. optional mirror .-> INQ[(Sheet housex_leads_inquiry)]
     WH --> TG[Telegram\nsegment NOXH vs CCTM]
   end
 ```
@@ -73,7 +79,9 @@ Envelope `lead.created`:
 | `TELEGRAM_CHAT_ID_LEAD_COMMERCIAL` / `TELEGRAM_CHAT_ID_OPS` | `segment=cctm` (lane CCTM / thương mại) |
 | `TELEGRAM_LEAD_INQUIRY_ENABLED` | `true` (mặc định) — tắt ping khi test |
 
-**Sheet tab:** `housex_leads_inquiry` — chạy `node scripts/init-magnix-sheet.mjs` nếu tab chưa có.
+**Sheet tab (optional mirror):** `housex_leads_inquiry` — chạy
+`node scripts/init-magnix-sheet.mjs` nếu vẫn bật mirror. Tab này không quyết định
+owner, status, consent hay dedupe.
 
 **Cột mới (P3):** `segment` (sau `project_type`). Tab đã tồn tại: chèn cột D `segment` trên Google Sheet hoặc chạy lại init trên tab trống — append workflow ghi `A:R`.
 
@@ -92,7 +100,7 @@ flowchart LR
   end
   subgraph n8n
     OB --> WH[Webhook housex-events]
-    WH --> NUR[(Sheet housex_leads_nurture)]
+    WH -. optional mirror .-> NUR[(Sheet housex_leads_nurture)]
     WH --> TG[Telegram Ops\nscript + channel hint]
   end
 ```
@@ -121,7 +129,7 @@ Envelope `lead.nurture`:
 
 **Dedupe:** cột A `dedupe_key` = `nurture:{leadId}:{trigger}:{scriptId}` (trùng HouseX outbox).
 
-**Sheet tab:** `housex_leads_nurture` — tạo tab + header:
+**Sheet tab (optional mirror):** `housex_leads_nurture` — nếu bật mirror, tạo tab + header:
 
 ```
 dedupe_key | lead_id | nurture_script_id | script_label | channel | trigger | segment | source |
@@ -156,7 +164,7 @@ flowchart LR
   end
   subgraph n8n
     OB --> WH[Webhook housex-events]
-    WH --> CF[(Sheet housex_attribution_conflicts)]
+    WH -. optional mirror .-> CF[(Sheet housex_attribution_conflicts)]
     WH --> TG[Telegram Ops]
   end
 ```
@@ -183,7 +191,9 @@ Envelope `attribution.conflict`:
 }
 ```
 
-**Dedupe Sheet:** `conflict:{conflictId}:{phase}` (outbox HouseX: `attribution.conflict:{phase}:{conflictId}`).
+**Dedupe mirror:** `conflict:{conflictId}:{phase}` (outbox HouseX:
+`attribution.conflict:{phase}:{conflictId}`). Conflict/attribution authoritative
+vẫn ở House X.
 
 **Sheet tab:** `housex_attribution_conflicts` — `node scripts/init-magnix-sheet.mjs`
 
@@ -243,12 +253,12 @@ flowchart LR
   subgraph n8n
     OB --> WH1[Webhook housex-events]
     DET --> WH2[Webhook housex-noxh-detail]
-    WH1 --> OPS[(Sheet noxh_leads_ops)]
+    WH1 -. optional mirror .-> OPS[(Sheet noxh_leads_ops)]
     WH1 --> TG{Tier?}
     TG -->|HOT| TG_HOT[Telegram HOT\nSLA 2h]
     TG -->|WARM| TG_WARM[Telegram WARM\nSLA 24h]
-    TG -->|COLD/OUT| NUR[Nurture only\nSheet]
-    WH2 --> DTL[(Sheet noxh_leads_detail\nPII tài chính)]
+    TG -->|COLD/OUT| NUR[Nurture only\nconsent-safe]
+    WH2 -. legacy best-effort .-> DTL[(Sheet noxh_leads_detail\nPII tài chính)]
   end
 ```
 
@@ -259,7 +269,7 @@ flowchart LR
 | Biến HouseX | Webhook n8n | Mục đích |
 |---|---|---|
 | `EVENTS_WEBHOOK_URL` | `https://<n8n>/webhook/magnix/housex-events` | Event **tin cậy** qua outbox — tier + contact, **không** PII tài chính |
-| `NOXH_DETAIL_WEBHOOK_URL` | `https://<n8n>/webhook/magnix/housex-noxh-detail` | Chi tiết thu nhập/nợ xấu/DTI → Sheet (best-effort) |
+| `NOXH_DETAIL_WEBHOOK_URL` | `https://<n8n>/webhook/magnix/housex-noxh-detail` | Legacy detail snapshot → restricted Sheet (best-effort; migration debt, không phải SoR) |
 | `EVENTS_WEBHOOK_SECRET` | Header `x-events-secret` | Auth chung cả hai webhook |
 
 Envelope từ HouseX outbox:
@@ -303,9 +313,11 @@ Envelope từ HouseX outbox:
 
 ---
 
-## Google Sheet tabs
+## Google Sheet tabs (optional/legacy mirrors)
 
-Chạy: `node scripts/init-magnix-sheet.mjs` (tạo tab nếu thiếu).
+Chạy `node scripts/init-magnix-sheet.mjs` chỉ khi mirror tương ứng còn được bật.
+Không cập nhật lifecycle/assignment trong các tab này; mọi thao tác authoritative
+phải qua House X Admin/API.
 
 ### `noxh_leads_ops` — vận hành & routing (không PII tài chính)
 
@@ -314,7 +326,9 @@ lead_id | tier | overall | credit_flag | reason_codes | recommended_action | rul
 contact_name | contact_phone | contact_email | ops_status | assigned_to | sla_due_at | created_at | meta
 ```
 
-Cột ops thủ công: `assigned_to`, cập nhật `ops_status` → `contacted` / `qualified` / `won` / `lost`.
+Các cột `assigned_to` / `ops_status` là projection legacy, không phải nơi chuyển
+Lead state. Semantics canonical xem ADR-015 và
+`.cursor/SALES_CONVERSION_PIPELINE_MAP.md`.
 
 ### `noxh_leads_detail` — chi tiết PII tài chính (chỉ từ detail webhook)
 
@@ -324,13 +338,19 @@ area_per_person | intend_to_borrow | existing_debt | card_limit | bad_debt | tim
 evaluation_reasons | credit_reasons | next_steps | rules_version | contact_* | created_at
 ```
 
-**Quy tắc:** Postgres HouseX không lưu thu nhập/nợ xấu — Sheet detail là nơi chuyên gia xem hồ sơ đầy đủ trước khi gọi.
+**Quy tắc:** Đây là sink legacy chứa PII nhạy cảm, không phải store of record hay
+operational lookup theo ADR-015. Giữ quyền truy cập tối thiểu trong lúc còn dùng;
+việc chuyển sang storage có RBAC/retention/audit phù hợp là unresolved migration
+debt.
 
 ---
 
-## Luồng F — NOXH Case pipeline (DNA-C)
+## Luồng F — NOXH Case pipeline chuyên biệt (DNA-C)
 
-Postgres `noxh_cases` là SoR. Outbox → cùng webhook `housex-events` → Telegram Ops (không ghi Sheet).
+Postgres `noxh_cases` là SoR cho milestone/checklist NOXH chuyên biệt. Outbox → cùng
+webhook `housex-events` → Telegram Ops (không ghi Sheet). Lead lifecycle chung vẫn
+ở House X; shared Opportunity/SalesActivity/ConversionOutcome chỉ được thêm theo
+ADR-015 G1/G2, không suy từ M1–M5.
 
 | Event | Khi nào | Telegram |
 |---|---|---|

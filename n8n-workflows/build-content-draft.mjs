@@ -9,6 +9,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { loadFireNotifyCode, wireNotifyAfter } from './code/shared/notify-wire.mjs';
 import { withLlmRouter } from './code/shared/with-llm-router.mjs';
+import { buildLegalValidatorNodeCode } from './code/shared/inject-legal-bundle.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const codeDir = path.join(__dirname, 'code', 'content-draft');
@@ -69,7 +70,9 @@ const read = (f) =>
 const llmProviders = PUBLIC.llm_task_providers || {};
 
 const codes = {
-  parseFilter: read('01-parse-filter-candidates.js')
+  parseFilter: buildLegalValidatorNodeCode(
+    path.join(codeDir, '01-parse-filter-candidates.js')
+  )
     .replace('__DRAFT_MIN_SCORE__', String(PUBLIC.draft_min_score ?? 70))
     .replace('__DRAFT_BATCH_SIZE__', String(PUBLIC.content_draft_batch_size ?? 5))
     .replace('__FORMAT_ROUTING_JSON__', JSON.stringify(FORMAT_ROUTING)),

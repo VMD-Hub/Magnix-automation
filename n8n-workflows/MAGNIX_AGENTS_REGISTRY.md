@@ -41,7 +41,10 @@ Listen → Classify → Editorial (+ Legal Pack) → ┬→ Lead Magnet → [L3]
 
 ## Nguyên tắc vận hành
 
-1. Sheet store-of-record + ops queue/review · VPS cron · không phụ thuộc máy local
+1. Google Sheet chỉ là **content editorial workspace** (`content_queue`,
+   `content_drafts`, `video_drafts`, `outreach_queue`) và L3 review; không phải
+   store of record hay write path cho lead/sales Ops. Postgres House X giữ
+   authoritative operational state theo ADR-013/015.
 2. LLM output → parse layer bắt buộc
 3. **Legal Gate** trước mọi bản publish pháp lý — Layer K (`legal-sources/`)
 4. L3 human duyệt **nội dung** (script/MP4) — không thay thế render auto

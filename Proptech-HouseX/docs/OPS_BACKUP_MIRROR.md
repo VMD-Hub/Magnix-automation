@@ -68,14 +68,64 @@ Chỉ khi chủ động chấp nhận lưu local-only mới bật:
 export HOUSEX_BACKUP_ALLOW_LOCAL_ONLY_RETENTION=true
 ```
 
-### Khôi phục (khi cần)
+### Xác minh restore an toàn (local)
+
+Không restore thẳng vào DB `housex`. Script xác minh chỉ chấp nhận PostgreSQL trên
+`localhost`, chỉ tạo một DB **chưa tồn tại** có prefix
+`housex_restore_verify_`, và yêu cầu confirmation trùng chính xác tên DB.
+
+Yêu cầu local: `psql` có trong `PATH`, PostgreSQL đang chạy và admin user có quyền
+`CREATE DATABASE`, `DROP DATABASE`, `pg_terminate_backend`.
 
 ```bash
-gunzip -c ~/backup/housex/housex-YYYY-MM-DD_HHMM.sql.gz | \
-  docker exec -i housex-postgres psql -U housex -d housex
+cd Proptech-HouseX
+npm run db:verify-restore -- \
+  --backup /path/to/housex-YYYY-MM-DD_HHMMSS.sql.gz \
+  --admin-url postgresql://housex:REDACTED@127.0.0.1:5432/postgres \
+  --target-db housex_restore_verify_20260717 \
+  --confirm-disposable housex_restore_verify_20260717 \
+  --evidence ./reports/restore-verify-20260717.json
 ```
 
-> **Khuyến nghị:** copy file `.sql.gz` sang Google Drive / máy khác — không để bản backup duy nhất trên cùng VPS.
+Có thể đặt admin URL trong `HOUSEX_RESTORE_VERIFY_ADMIN_URL` để tránh URL xuất hiện
+trong shell history. Không ghi credential vào evidence hoặc source control.
+`--checksum` mặc định là `<backup>.sha256`; `--psql` hoặc
+`HOUSEX_RESTORE_VERIFY_PSQL` dùng khi executable không nằm trong `PATH`.
+
+Script thực hiện theo thứ tự:
+
+1. kiểm tra file không rỗng, SHA-256, gzip và header `pg_dump` trước khi kết nối;
+2. từ chối DB target đã tồn tại, sau đó mới tạo DB disposable;
+3. restore với `ON_ERROR_STOP` trong một transaction;
+4. kiểm tra các bảng khóa `customers`, `leads`, `outbox_events`,
+   `inbound_uid_leads`, khả năng đọc/count, primary key, unique key quan trọng và
+   constraint đã validate;
+5. cleanup bằng ba lần gọi `psql` riêng: terminate connection, `DROP DATABASE`
+   ngoài transaction, rồi query `pg_database` để xác minh DB đã bị xóa; các bước
+   drop/verify vẫn được thử nếu terminate thất bại.
+
+Evidence JSON create-only có schema `housex.restore-verification.v1`, hash/size file,
+kết quả từng check, row count không chứa PII, trạng thái cleanup và mã lỗi bounded.
+Evidence không ghi raw stdout/stderr từ `psql`; lỗi chỉ có `code` và summary cố định
+đã sanitize. Chỉ khi query hậu-cleanup xác nhận DB không còn thì
+`cleanup.deletion_verified` và `cleanup.database_dropped` mới là `true`. Exit code
+khác `0` hoặc `cleanup.database_dropped=false` là verification thất bại.
+Không dùng evidence của lần thất bại làm bằng chứng DR.
+
+### Rollback / khi verification lỗi
+
+- Script không thay đổi DB nguồn hay DB `housex`; rollback bình thường là cleanup
+  tự drop DB disposable.
+- Nếu cleanup thất bại, dừng automation, kiểm tra process/permission local rồi drop
+  **đúng tên đã ghi trong evidence** bằng admin account. Không dùng wildcard.
+- Không retry bằng cách đổi target thành DB đang tồn tại hoặc bỏ confirmation.
+- Evidence là create-only; mỗi lần retry dùng tên DB và đường dẫn evidence mới.
+
+> **Giới hạn bằng chứng:** chạy local chỉ chứng minh artifact có thể restore trong
+> môi trường local. Việc backup đã được upload off-VPS, checksum object remote, tải
+> ngược từ off-site, và restore trên môi trường VPS/disaster-recovery thực tế là
+> bằng chứng vận hành **external**, phải được operator thực hiện và lưu riêng. Script
+> này cố ý không truy cập remote/VPS và không chứng minh các bước đó.
 
 ---
 
@@ -242,9 +292,11 @@ Kỳ vọng smoke: `OK — tab=ops_mirror inbound=N noxh=M rows=...`
 
 - [ ] `backup-postgres-vps.sh` chạy tay OK
 - [ ] `.sql.gz` pass `gzip -t` và `.sha256` pass `sha256sum -c`
+- [ ] Local disposable restore pass; evidence JSON có `result=passed` và `cleanup.database_dropped=true`
 - [ ] `npm run media:audit-orphans` đã review orphan/missing media
 - [ ] Cron backup + mirror trong `crontab -l`
 - [ ] `go-live:check-sheet-mirror` pass
 - [ ] `go-live:smoke-sheet-mirror` OK (không SKIP)
 - [ ] Tab `ops_mirror` có dữ liệu sau smoke
 - [ ] 1 file backup đã copy off-VPS (Drive)
+- [ ] Off-VPS upload/download/checksum và VPS/DR restore proof đã lưu external

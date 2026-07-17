@@ -16,7 +16,11 @@ marketplace tối ưu**, tập trung 4 bài toán sống còn:
 4. Hạ tầng tìm kiếm / geo / video không làm quá tải VPS.
 
 Triết lý kế thừa từ Magnix (`.cursorrules`): dedup theo `normalized_key`, QA phân tầng
-L0–L3, rule-engine trước LLM, VPS = compute-only (không lưu trữ nặng trên VPS).
+L0–L3, rule-engine trước LLM. Theo ADR-013, VPS hiện chạy compute
+(Next.js/n8n) **và Postgres House X store of record**; dữ liệu operational không
+được coi là an toàn nếu chỉ có volume trên VPS. `pg_dump` hằng ngày off-VPS là bắt
+buộc, kèm Drive JSONL best-effort cho snapshot/event phù hợp. Media nặng vẫn dùng
+object storage/managed provider, không đặt trên web-VPS.
 
 ## 2. Đánh giá hiện trạng (gaps)
 

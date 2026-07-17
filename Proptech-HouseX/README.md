@@ -3,13 +3,22 @@
 Sàn liên kết bất động sản đa phương (Developer / Broker free / Broker CTV / Customer).
 Module lõi: `Project · Listing · Broker · Referral`.
 
-> **Phạm vi hiện tại: Phase 1 + 2 + 3 đã hoàn thành (toàn bộ module).**
+> **Phạm vi hiện tại:** các module marketplace Phase 1–3 dưới đây đã có
+> implementation, nhưng đây **chưa** phải sales conversion system xuyên Journey
+> A/S/P hoàn chỉnh.
 > - Phase 1: `Developer`, `Project`, `ProjectUnitType`, `ProjectLegalDoc` + trang
 >   dự án SSR `/du-an/[slug]` (JSON-LD).
 > - Phase 2: `Broker`, `Listing`, `ListingMedia` + trang `/tin-dang/[code]` SSR +
 >   marketplace "ký gửi" trên trang dự án.
 > - Phase 3: `Customer`, `Lead`, `Referral`, `Commission` + attribution first-touch
 >   (cookie) + trigger hoa hồng khi WON + dashboard `/broker/[id]/hoa-hong`.
+
+Lớp Sales Conversion Operating Layer đã chốt contract/boundary ở
+[ADR-015](../.cursor/ADR-015-sales-conversion-operating-layer.md). Các entity/API
+shared còn thiếu (`ConsentRecord`, `Opportunity`, `SalesActivity`,
+`ConversionOutcome`) và journey adoption được theo dõi trong
+[SALES_CONVERSION_BACKLOG.md](docs/SALES_CONVERSION_BACKLOG.md); tên target trong
+tài liệu không hàm ý đã deploy.
 
 ## Kiến trúc & lộ trình tối ưu
 

@@ -29,9 +29,6 @@ function validateClassify(obj) {
   return { segment: obj.segment, score, interest_key: obj.interest_key };
 }
 
-const skeleton = $('Auth & Enrich Skeleton').first().json;
-const nk = String(skeleton?.normalized_key || '').trim();
-
 const res = $input.first().json;
 const raw =
   res.choices?.[0]?.message?.content ??
@@ -51,8 +48,6 @@ try {
       classify: null,
       classify_method: 'llm',
       parse_error: e.message,
-      raw_preview: String(raw).slice(0, 200),
-      normalized_key: nk || null,
     },
   }];
 }

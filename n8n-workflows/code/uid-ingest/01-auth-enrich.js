@@ -4,7 +4,10 @@
 const EXPECTED = $env.MAGNIX_WEBHOOK_TOKEN || '';
 const headers = $input.first().json.headers || {};
 const auth = headers.authorization || headers.Authorization || '';
-if (EXPECTED && auth !== `Bearer ${EXPECTED}`) {
+if (!EXPECTED) {
+  throw new Error('Configuration: MAGNIX_WEBHOOK_TOKEN is required');
+}
+if (auth !== `Bearer ${EXPECTED}`) {
   throw new Error('Unauthorized: invalid MAGNIX_WEBHOOK_TOKEN');
 }
 

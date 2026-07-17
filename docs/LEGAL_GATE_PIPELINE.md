@@ -68,6 +68,17 @@ Trường tối thiểu workflow phải kiểm:
 | `disclaimer_required` | Output phải có disclaimer |
 | `needs_human_legal_source` | `true` → **không** chạy Agent 3/4/6; fire Telegram |
 
+Validator dùng chung: `n8n-workflows/code/shared/legal-pack-validator.js`.
+Với segment pháp lý, gate chỉ pass khi mọi fact có `claim_id` + `source_refs[]`,
+`forbidden_claims[]` không rỗng, `disclaimer_required=true` và
+`needs_human_legal_source=false`. Nếu pack có `status`, chỉ
+`active|ready|verified` được chấp nhận.
+
+Layer B branch trước LLM. Gate fail sẽ xóa/không tạo `editorial_brief_v1`, ghi
+`meta.editorial_brief_status=blocked_legal_source`, `meta.legal_gate` cùng pack bị
+block, rồi route event `legal_source_needed` có `event_id` deterministic. Dòng bị
+block chỉ retry khi reviewer đặt `meta.legal_gate_retry_requested=true`.
+
 ## 6. Ba kênh phân phối
 
 | Kênh | Agent / script | Legal pack |
@@ -85,6 +96,9 @@ Chi tiết: `docs/NOXH_THREE_CHANNEL_ARCHITECTURE.md`.
 - [x] Bundle cho n8n VPS: `scripts/build-legal-pack-bundle.mjs` → `n8n-workflows/legal-pack-bundle.json`
 - [x] Layer B node **Attach Legal Pack**
 - [x] Agent 3 / 6 đọc pack từ `meta`
+- [x] Shared pack contract validator cho Layer B + Agent 3 / 3b / 6 candidate filters
+- [x] Layer B legal fail branch trước LLM: persist blocked metadata + dedup notification
+- [x] Automated valid/invalid fixtures + workflow topology test
 - [x] **Page Publish** workflow `content-page-publish` — xem `docs/CONTENT_PAGE_PUBLISH_SETUP.md`
 - [ ] Agent 4 outreach đọc pack (filter + prompt)
 - [ ] Agent 5 scorecard audit `source_refs` vs pack

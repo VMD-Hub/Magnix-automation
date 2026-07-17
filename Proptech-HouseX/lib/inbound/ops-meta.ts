@@ -63,6 +63,26 @@ export function mergeInboundOpsMeta(
   return base;
 }
 
+const SERVER_ONLY_INBOUND_META_KEYS = new Set<keyof InboundOpsMeta>([
+  "ops_status",
+  "ops_note",
+  "platform_lead_id",
+  "noxh_case_id",
+  "noxh_case_code",
+]);
+
+export function sanitizeInboundMetaForAdmin(
+  meta: unknown,
+): Record<string, unknown> {
+  if (!meta || typeof meta !== "object" || Array.isArray(meta)) return {};
+  return Object.fromEntries(
+    Object.entries(meta as Record<string, unknown>).filter(
+      ([key]) =>
+        !SERVER_ONLY_INBOUND_META_KEYS.has(key as keyof InboundOpsMeta),
+    ),
+  );
+}
+
 /** Mask UID for ops UI — không log PII đầy đủ. */
 export function maskInboundUid(uid: string): string {
   const s = String(uid).trim();

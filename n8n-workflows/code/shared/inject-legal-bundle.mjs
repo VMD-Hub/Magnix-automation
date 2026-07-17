@@ -10,8 +10,15 @@ const BUNDLE_PATH = join(__dirname, '..', '..', 'legal-pack-bundle.json');
 
 export function readLegalGateInline() {
   const config = readFileSync(join(__dirname, 'legal-gate-config.js'), 'utf8');
+  const validator = readFileSync(join(__dirname, 'legal-pack-validator.js'), 'utf8');
   const runtime = readFileSync(join(__dirname, 'legal-gate-n8n.js'), 'utf8');
-  return `${config}\n${runtime}`;
+  return `${config}\n${validator}\n${runtime}`;
+}
+
+export function readLegalValidatorInline() {
+  const config = readFileSync(join(__dirname, 'legal-gate-config.js'), 'utf8');
+  const validator = readFileSync(join(__dirname, 'legal-pack-validator.js'), 'utf8');
+  return `${config}\n${validator}`;
 }
 
 export function injectLegalBundle(code) {
@@ -30,4 +37,11 @@ export function injectLegalBundle(code) {
 export function buildLegalGateNodeCode(agentSnippetFile) {
   const snippet = readFileSync(agentSnippetFile, 'utf8');
   return injectLegalBundle(`${readLegalGateInline()}\n${snippet}`);
+}
+
+export function buildLegalValidatorNodeCode(agentSnippetFile) {
+  const snippet = readFileSync(agentSnippetFile, 'utf8');
+  return `${readLegalValidatorInline()}\n${snippet}`
+    .replace(/^\/\/[^\n]*\n(\/\/[^\n]*\n)*/gm, '')
+    .trim();
 }

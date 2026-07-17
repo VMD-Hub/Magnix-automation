@@ -103,11 +103,13 @@ for (let i = 1; i < rows.length; i++) {
   const LEGAL_SEGMENTS = new Set(['noxh_income', 'valuation', 'sme_credit']);
   if (LEGAL_SEGMENTS.has(segment)) {
     const pack = meta.legal_retrieval_pack;
-    if (!pack || pack.needs_human_legal_source === true) {
+    const legalValidation = validateLegalPack(pack);
+    if (!legalValidation.valid) {
       blockers.no_legal_pack = (blockers.no_legal_pack || 0) + 1;
       continue;
     }
     row.legal_retrieval_pack = pack;
+    row.legal_pack_validation = legalValidation;
   }
 
   const ensured = ensureIntakeV1(

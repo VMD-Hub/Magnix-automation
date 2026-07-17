@@ -301,7 +301,7 @@ const connections = {
     ],
   },
   'Dead Letter Parse Fail': {
-    main: [[{ node: 'Build Webhook Response', type: 'main', index: 0 }]],
+    main: [[{ node: 'HouseX Postgres Ingest', type: 'main', index: 0 }]],
   },
   'Prepare Drive Backup': {
     main: [[{ node: 'Drive Backup Upload', type: 'main', index: 0 }]],

@@ -26,38 +26,26 @@ function resolvePackFromBundle(segment, text) {
 function assessLegalGate(segment, pack) {
   const required = segmentRequiresLegalKb(segment);
   if (!required) {
-    return { required: false, pass: true, block_reason: null };
-  }
-  if (!pack) {
     return {
-      required: true,
-      pass: false,
-      block_reason: 'MISSING_LEGAL_PACK',
-      needs_human_legal_source: true,
+      required: false,
+      pass: true,
+      status: 'not_required',
+      block_reason: null,
+      validation_errors: [],
     };
   }
-  if (pack.needs_human_legal_source === true) {
-    return {
-      required: true,
-      pass: false,
-      block_reason: 'NEEDS_HUMAN_LEGAL_SOURCE',
-      needs_human_legal_source: true,
-    };
-  }
-  if (!Array.isArray(pack.facts) || pack.facts.length === 0) {
-    return {
-      required: true,
-      pass: false,
-      block_reason: 'EMPTY_LEGAL_FACTS',
-      needs_human_legal_source: true,
-    };
-  }
+
+  const validation = validateLegalPack(pack);
   return {
     required: true,
-    pass: true,
-    block_reason: null,
-    needs_human_legal_source: false,
-    fact_count: pack.facts.length,
+    pass: validation.valid,
+    status: validation.status,
+    block_reason: validation.errors[0] || null,
+    validation_errors: validation.errors,
+    needs_human_legal_source: !validation.valid,
+    fact_count: validation.fact_count,
+    claim_ids: validation.claim_ids || [],
+    source_ref_count: validation.source_ref_count || 0,
   };
 }
 

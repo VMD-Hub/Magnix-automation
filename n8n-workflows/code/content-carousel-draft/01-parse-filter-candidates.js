@@ -90,8 +90,10 @@ for (let i = 1; i < rows.length; i++) {
   const LEGAL_SEGMENTS = new Set(['noxh_income', 'valuation', 'sme_credit']);
   if (LEGAL_SEGMENTS.has(segment)) {
     const pack = meta.legal_retrieval_pack;
-    if (!pack || pack.needs_human_legal_source === true) continue;
+    const legalValidation = validateLegalPack(pack);
+    if (!legalValidation.valid) continue;
     row.legal_retrieval_pack = pack;
+    row.legal_pack_validation = legalValidation;
   }
 
   row.meta_parsed = meta;

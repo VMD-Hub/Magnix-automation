@@ -92,8 +92,10 @@ for (let i = 1; i < rows.length; i++) {
   if (LEGAL_SEGMENTS.has(segment)) {
     if (!meta.editorial_brief_v1) continue;
     const pack = meta.legal_retrieval_pack;
-    if (!pack || pack.needs_human_legal_source === true) continue;
+    const legalValidation = validateLegalPack(pack);
+    if (!legalValidation.valid) continue;
     row.legal_retrieval_pack = pack;
+    row.legal_pack_validation = legalValidation;
     row.editorial_brief_v1 = meta.editorial_brief_v1;
   }
 

@@ -147,6 +147,11 @@ Mo review: {review_url}
 
 Reminder phai dedupe theo `event_id`, khong spam moi lan cron chay.
 
+Layer B dung key deterministic:
+`layer-b:content_queue:{normalized_key}:legal_source_needed`. Workflow chi route
+event sau khi blocked metadata da ghi thanh cong vao `content_queue.meta`; webhook
+`telegram-notify` tiep tuc dedupe theo `event_id`.
+
 ## 8. Notification log
 
 Can co mot noi luu log notification, uu tien Google Sheet tab `notification_events`.
@@ -207,4 +212,12 @@ Voi bat ky workflow co human gate:
 - Tao notification event.
 - Gui Telegram hoac ghi `notification_status=failed`.
 - Chi khi event duoc resolved moi chuyen sang publish/render/send step.
+
+Track D da tu dong hoa:
+
+- [x] Layer B legal gate fail khong vao LLM.
+- [x] Persist `editorial_brief_status=blocked_legal_source` + validation errors.
+- [x] Route `legal_source_needed` sau persistence voi event ID deterministic.
+- [x] Telegram notify dedupe event dang `pending|sent|reminded`.
+- [ ] Staging: gan Google credential, bat env Telegram va xac minh mot message that.
 

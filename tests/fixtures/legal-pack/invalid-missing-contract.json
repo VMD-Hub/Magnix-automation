@@ -1,0 +1,11 @@
+{
+  "topic": "noxh_income",
+  "status": "draft",
+  "facts": [
+    {
+      "claim": "Claim không có định danh hoặc nguồn."
+    }
+  ],
+  "forbidden_claims": [],
+  "disclaimer_required": false
+}

@@ -2,7 +2,8 @@
 
 Trung tâm **Growth Hacking** độc lập — tự động hóa n8n, xử lý UID ngoại vi, sản xuất nội dung Inbound.
 
-> Repo tách riêng khỏi `Lifestyle_SuperApp`. Không import monorepo BDS; tích hợp chỉ qua HTTP API hoặc shared Sheet.
+> Repo tách riêng khỏi `Lifestyle_SuperApp`. Không import monorepo BDS; tích hợp
+> vận hành với House X qua documented HTTP API/events, không qua shared Sheet.
 
 ## Cấu trúc
 
@@ -32,11 +33,25 @@ Magnix-automation/
 
 ## Trạng thái hiện tại
 
-- **Giai đoạn 0 (Scaffolding):** hoàn tất — docs, rules, subagents, prompts 4 mạch.
-- **Giai đoạn 0.5 (Contract):** schema thống nhất, parse layer, QA tiers — xem `.cursor/`.
-- **Tiếp theo:** setup Google Sheet database + Drive archive folder → import `uid-ingest.workflow.json` → test curl.
+- **Storage (ADR-013):** Postgres House X là store of record cho lead/ops; Drive
+  JSONL + `pg_dump` off-VPS là lớp backup/archive. Google Sheet chỉ dùng cho
+  editorial workspace hoặc mirror read-only tùy chọn.
+- **Experience (ADR-014):** Zalo Mini App là frontend gọi House X API; không tạo
+  database hay auth store riêng.
+- **Sales conversion (ADR-015):** G0 contract/boundary đã chốt. `ConsentRecord`,
+  `Opportunity`, shared `SalesActivity` và `ConversionOutcome` vẫn triển khai theo
+  G1/G2 trong [delivery backlog](./Proptech-HouseX/docs/SALES_CONVERSION_BACKLOG.md);
+  không nên hiểu repo hiện đã có sales system xuyên Journey A/S/P hoàn chỉnh.
+- **Boundary:** Magnix sở hữu capture/normalize/classify và content automation;
+  House X sở hữu identity, consent, lifecycle, attribution và conversion state.
+
+Tham chiếu: [ADR-013](./.cursor/ADR-013-postgres-primary-storage.md) ·
+[ADR-014](./.cursor/ADR-014-zalo-miniapp.md) ·
+[ADR-015](./.cursor/ADR-015-sales-conversion-operating-layer.md) ·
+[pipeline map](./.cursor/SALES_CONVERSION_PIPELINE_MAP.md).
 
 ## Liên kết ngoài
 
 - n8n: `https://n8n.vmd.asia` — webhook `/webhook/magnix/{slug}`
-- **Lưu trữ lead/content:** [STORAGE_OPTIONS.md](./.cursor/STORAGE_OPTIONS.md) — Google Sheet primary + Drive archive
+- **Lưu trữ:** [STORAGE_OPTIONS.md](./.cursor/STORAGE_OPTIONS.md) — Postgres SoR;
+  Sheet editorial/mirror tùy chọn; Drive JSONL + off-VPS `pg_dump` archive/backup

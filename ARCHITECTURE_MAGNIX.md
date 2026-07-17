@@ -54,6 +54,8 @@ Magnix **orchestrate** qua n8n; logic nặng có thể gọi HTTP sang service t
 > **Zalo Mini App (ADR-014):** frontend `housex-zalo-miniapp/` · auth `POST /api/auth/zalo` trên Proptech-HouseX · Postgres SoR. Spec: `Proptech-HouseX/docs/ZALO_MINIAPP_SPEC.md`.
 >
 > **Thông báo CTV (chốt 2026-07):** mặc định **in-app** (`brokerNotification` → Mini App `/agent/thong-bao`); `ZALO_OA_NOTIFY_ENABLED=false` trên VPS. Zalo OA Open API **không** dùng cho milestone/conflict Ops — chỉ phase **quảng bá/chiến dịch** (gói OA Tăng trưởng khi cần). Chi tiết: `.cursor/ADR-014-zalo-miniapp.md` § Thông báo.
+>
+> **Sales Conversion Operating Layer (ADR-015):** lớp domain dùng chung dưới Journey A/S/P, nối acquisition touch → Lead → Opportunity → outcome. Magnix sở hữu capture/normalize/classify; House X sở hữu identity, lifecycle, consent authoritative, attribution và conversion state.
 
 ---
 
@@ -95,7 +97,7 @@ Mọi sink (Postgres / Drive archive) dùng **cùng contract** này. Chi tiết:
 | `tags` | **Code enrich** | Thường `[segment]` |
 | `meta` | Webhook | JSON mở rộng (campaign, post_id, geo) |
 | `classify_method` | **Code enrich** | `regex` \| `llm` |
-| `consent_basis` | Webhook (optional) | `organic` \| `partner` \| `ads` |
+| `consent_basis` | Webhook (optional) | Metadata provenance của acquisition (`organic` \| `partner` \| `ads`); **không** phải bằng chứng đồng ý liên hệ |
 | `status` | **Code enrich** | `raw` \| `classified` \| `review` \| `failed` |
 
 **Output LLM riêng** (chỉ 3 field — xem `ai-agents-prompts/n8n__uid-classify.md`):
@@ -126,7 +128,39 @@ Mọi sink (Postgres / Drive archive) dùng **cùng contract** này. Chi tiết:
 
 Luồng n8n: **Webhook → normalize/enrich skeleton → classify (regex | LLM) → parse JSON → merge full record → House X API / Postgres upsert/dedupe → Drive JSONL archive**.
 
-### 3.2 Inbound content production
+`consent_basis`, opt-in flag của campaign và source metadata chỉ mô tả bối cảnh thu
+nhận. Consent có hiệu lực theo purpose/channel phải được ghi và kiểm tra bằng
+**authoritative `ConsentRecord`** trong House X theo ADR-015; không được suy hoặc
+backfill consent từ UID/acquisition metadata.
+
+### 3.2 Sales Conversion Operating Layer (ADR-015)
+
+Đây là lớp vận hành ngang dùng chung dưới ba Journey **A — Advertising**,
+**S — Secondary** và **P — Primary**, không phải Journey thứ tư:
+
+```
+AcquisitionTouch (Magnix)
+        → Customer / Lead
+        → Opportunity (journey=A|S|P)
+        → SalesActivity + ConsentRecord
+        → ConversionOutcome
+```
+
+- **Magnix boundary:** webhook, normalize/classify, acquisition score, payload
+  idempotent và Drive archive sau khi House X ghi thành công.
+- **House X logical boundary:** API + transaction + Postgres authoritative cho
+  identity, Lead/Opportunity lifecycle, ConsentRecord, attribution và outcome.
+  “Logical” không đồng nghĩa phải tách microservice, database hay deployment; hiện
+  lớp này được triển khai trong `Proptech-HouseX`.
+- **Journey modules:** giữ legal/verification/inventory/payment/commission gate riêng;
+  conversion layer chỉ chuẩn hóa funnel, activity, consent và outbox semantics.
+- **Events:** mutation domain + event ghi cùng transaction qua House X outbox; consumer
+  dedupe theo `event_id`, payload cross-boundary phải minimize/mask PII.
+
+Lifecycle, API/event contracts, migration và gates G0–G2:
+`.cursor/ADR-015-sales-conversion-operating-layer.md`.
+
+### 3.3 Inbound content production
 
 **Sơ đồ đầy đủ (cập nhật):** `.cursor/PIPELINE_MAP.md` · Agent registry: `n8n-workflows/MAGNIX_AGENTS_REGISTRY.md`
 
@@ -170,7 +204,7 @@ Page Publish (cron) · Reels/carousel = manual asset + đăng tay
 
 **Definition of done:** workflow content phải tạo `product_type` và asset cụ thể theo `docs/CONTENT_PRODUCT_OUTPUTS.md` (Page post, website article, video package, carousel, lead magnet, outreach reply hoặc assembly package). Nếu cần approve / bổ sung nguồn / review render thì phải có Telegram notification event. Brief / outline / insight không được tính là sản phẩm cuối. Reels/carousel: LLM sinh script/slide copy; **Canva/CapCut + L3** là manual (owner).
 
-### 3.3 Webhooks (`webhooks/`)
+### 3.4 Webhooks (`webhooks/`)
 
 Dùng khi n8n cần logic TypeScript phức tạp (validate chữ ký, batch transform, rate limit).
 
@@ -222,8 +256,10 @@ ELSE classify_method=regex
         ▼
 Code: mergeUidRecord() → bản ghi đầy đủ §3.1
         │
-        ├─ Google Sheet upsert (dedupe normalized_key)
-        └─ Drive JSONL backup (fire-and-forget)
+        ▼
+House X API → Postgres upsert (dedupe normalized_key)
+        │
+        └─ Drive JSONL archive (best-effort, sau khi API success)
         │
         ▼
 Respond webhook JSON
@@ -318,4 +354,11 @@ Override VPS: `MAGNIX_LLM_<TASK>_PROVIDER=deepseek|anthropic` (xem policy doc).
 
 ## 9. Liên hệ với dự án khác
 
-Magnix có thể **gọi HTTP** sang pipeline BDS (vd: sync lead đã qualify) nhưng **không** share codebase. Contract chỉ qua API documented hoặc shared Sheet với schema cố định.
+Magnix gọi House X qua **documented HTTP API** và không import package nội bộ từ
+codebase khác. Với ADR-013/015, House X là **logical domain boundary** cho dữ liệu
+operational: API, transaction và Postgres authoritative hiện cùng nằm trong
+`Proptech-HouseX`, nhưng ranh giới này không cam kết deployment/service/database riêng.
+
+Google Sheet không phải integration contract cho lead ops hoặc conversion state; chỉ
+là mirror read-only/content editorial. Cross-boundary automation dùng API và
+transactional outbox event có schema/version, idempotency và PII minimization.

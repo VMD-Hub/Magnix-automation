@@ -11,6 +11,7 @@ import { extractSystemPrompt } from './code/shared/extract-prompt.mjs';
 import { withPipelineStub } from './code/shared/with-pipeline-stub.mjs';
 import { withLlmRouter } from './code/shared/with-llm-router.mjs';
 import { buildLegalGateNodeCode } from './code/shared/inject-legal-bundle.mjs';
+import { loadFireNotifyCode } from './code/shared/notify-wire.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const codeDir = path.join(__dirname, 'code', 'content-editorial-brief');
@@ -58,12 +59,19 @@ const codes = {
     .replace('__CONTENT_QUEUE_TAB__', PUBLIC.content_queue_tab),
   merge: read('05-merge-meta-brief.js'),
   track: read('06-track-sheet-ok.js'),
+  blockedPrepare: read('07-prepare-legal-blocked.js')
+    .replace('__GOOGLE_SHEET_ID__', PUBLIC.google_sheet_id)
+    .replace('__CONTENT_QUEUE_TAB__', PUBLIC.content_queue_tab),
+  blockedMerge: read('08-merge-legal-blocked-meta.js'),
+  blockedNotify: loadFireNotifyCode('../content-editorial-brief/09-fire-legal-notify.js', {
+    __CONTENT_QUEUE_TAB__: PUBLIC.content_queue_tab,
+  }),
 };
 
 const sheetQueueUrl = `https://sheets.googleapis.com/v4/spreadsheets/${PUBLIC.google_sheet_id}/values/${encodeURIComponent(`${PUBLIC.content_queue_tab}!A:O`)}`;
 
 const resetStats = `const data = $getWorkflowStaticData('global');
-data.eb_stats = { brief_ok: 0, brief_fail: 0, parse_fail: 0, llm_fail: 0, no_candidates: false, sheet_fail: 0 };
+data.eb_stats = { brief_ok: 0, brief_fail: 0, legal_blocked: 0, parse_fail: 0, llm_fail: 0, no_candidates: false, sheet_fail: 0 };
 return $input.all();`;
 
 const trackLlmFail = `const data = $getWorkflowStaticData('global');
@@ -78,11 +86,19 @@ data.eb_stats.parse_fail = (data.eb_stats.parse_fail || 0) + 1;
 data.eb_stats.brief_fail = (data.eb_stats.brief_fail || 0) + 1;
 return $input.all();`;
 
+const trackLegalBlocked = `const item = $input.first().json || {};
+const data = $getWorkflowStaticData('global');
+if (!data.eb_stats) data.eb_stats = {};
+data.eb_stats.legal_blocked = (data.eb_stats.legal_blocked || 0) + 1;
+data.eb_stats.brief_fail = (data.eb_stats.brief_fail || 0) + 1;
+return [{ json: { ...item, ok: true, legal_blocked: true } }];`;
+
 const summary = `const data = $getWorkflowStaticData('global');
 const stats = data.eb_stats || {};
 let hint = null;
 if ((stats.brief_ok || 0) === 0) {
   if (stats.no_candidates) hint = 'Không candidate — cần classified score≥70 + chưa editorial_brief_v1 (intake stub tự sinh nếu thiếu)';
+  else if ((stats.legal_blocked || 0) > 0) hint = 'Legal gate block — metadata đã lưu, notification legal_source_needed đã route';
   else if ((stats.llm_fail || 0) > 0) hint = 'LLM fail — kiểm tra DEEPSEEK/ANTHROPIC key';
   else if ((stats.parse_fail || 0) > 0) hint = 'Parse fail — xem node Parse Editorial Brief JSON';
   else if ((stats.sheet_fail || 0) > 0) hint = 'Ghi Sheet fail — gán googleApi trên HTTP PUT nodes';
@@ -237,6 +253,93 @@ return [{ json: { triggered: true, source: 'webhook', at: new Date().toISOString
     type: 'n8n-nodes-base.code',
     typeVersion: 2,
     position: pos(1320, 240),
+  },
+  {
+    parameters: {
+      conditions: {
+        options: { caseSensitive: true, leftValue: '', typeValidation: 'strict', version: 2 },
+        conditions: [
+          {
+            id: 'c1',
+            leftValue: '={{ $json.legal_gate.pass }}',
+            rightValue: '',
+            operator: { type: 'boolean', operation: 'true', singleValue: true },
+          },
+        ],
+        combinator: 'and',
+      },
+      options: {},
+    },
+    id: 'eb07ciflegal',
+    name: 'IF Legal Gate Pass',
+    type: 'n8n-nodes-base.if',
+    typeVersion: 2.2,
+    position: pos(1440, 240),
+  },
+  {
+    parameters: { jsCode: codes.blockedPrepare },
+    id: 'eb07dblockedprep',
+    name: 'Prepare Legal Block',
+    type: 'n8n-nodes-base.code',
+    typeVersion: 2,
+    position: pos(1560, 440),
+  },
+  {
+    parameters: {
+      method: 'GET',
+      url: '={{ $json.get_meta_url }}',
+      authentication: 'predefinedCredentialType',
+      nodeCredentialType: 'googleApi',
+      options: {},
+    },
+    id: 'eb07eblockedget',
+    name: 'HTTP GET blocked meta',
+    type: 'n8n-nodes-base.httpRequest',
+    typeVersion: 4.2,
+    position: pos(1800, 440),
+  },
+  {
+    parameters: { jsCode: codes.blockedMerge },
+    id: 'eb07fblockedmerge',
+    name: 'Merge Legal Block Meta',
+    type: 'n8n-nodes-base.code',
+    typeVersion: 2,
+    position: pos(2040, 440),
+  },
+  {
+    parameters: {
+      method: 'PUT',
+      url: '={{ $json.put_meta_url }}',
+      authentication: 'predefinedCredentialType',
+      nodeCredentialType: 'googleApi',
+      sendBody: true,
+      specifyBody: 'json',
+      jsonBody: '={{ JSON.stringify($json.meta_body) }}',
+      options: {},
+    },
+    id: 'eb07gblockedput',
+    name: 'HTTP PUT blocked meta',
+    type: 'n8n-nodes-base.httpRequest',
+    typeVersion: 4.2,
+    position: pos(2280, 440),
+    onError: 'continueRegularOutput',
+  },
+  {
+    parameters: { jsCode: codes.blockedNotify },
+    id: 'eb07hblockednotify',
+    name: 'Fire Legal Source Notify',
+    type: 'n8n-nodes-base.code',
+    typeVersion: 2,
+    position: pos(2520, 440),
+    onError: 'continueRegularOutput',
+  },
+  {
+    parameters: { jsCode: trackLegalBlocked },
+    id: 'eb07iblockedtrack',
+    name: 'Track Legal Blocked',
+    type: 'n8n-nodes-base.code',
+    typeVersion: 2,
+    position: pos(2760, 440),
   },
   {
     parameters: { jsCode: codes.llm },
@@ -431,7 +534,19 @@ const connections = {
       [{ node: 'Attach Legal Pack', type: 'main', index: 0 }],
     ],
   },
-  'Attach Legal Pack': { main: [[{ node: 'LLM Editorial Brief', type: 'main', index: 0 }]] },
+  'Attach Legal Pack': { main: [[{ node: 'IF Legal Gate Pass', type: 'main', index: 0 }]] },
+  'IF Legal Gate Pass': {
+    main: [
+      [{ node: 'LLM Editorial Brief', type: 'main', index: 0 }],
+      [{ node: 'Prepare Legal Block', type: 'main', index: 0 }],
+    ],
+  },
+  'Prepare Legal Block': { main: [[{ node: 'HTTP GET blocked meta', type: 'main', index: 0 }]] },
+  'HTTP GET blocked meta': { main: [[{ node: 'Merge Legal Block Meta', type: 'main', index: 0 }]] },
+  'Merge Legal Block Meta': { main: [[{ node: 'HTTP PUT blocked meta', type: 'main', index: 0 }]] },
+  'HTTP PUT blocked meta': { main: [[{ node: 'Fire Legal Source Notify', type: 'main', index: 0 }]] },
+  'Fire Legal Source Notify': { main: [[{ node: 'Track Legal Blocked', type: 'main', index: 0 }]] },
+  'Track Legal Blocked': { main: [[{ node: 'Loop Brief Candidates', type: 'main', index: 0 }]] },
   'LLM Editorial Brief': { main: [[{ node: 'IF LLM OK', type: 'main', index: 0 }]] },
   'IF LLM OK': {
     main: [

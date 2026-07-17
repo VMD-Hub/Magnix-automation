@@ -1,7 +1,10 @@
 # House X — NOXH Case Pipeline (DNA Ops)
 
 > **Store of record:** Postgres (`noxh_cases`, `case_documents`, …) — ADR-013.  
-> **Liên quan:** [DNA_COMPLETION.md](DNA_COMPLETION.md) · [OPS_BACKUP_MIRROR.md](OPS_BACKUP_MIRROR.md) · [LEAD_ATTRIBUTION_CONFLICT_RULES.md](LEAD_ATTRIBUTION_CONFLICT_RULES.md) · `lib/noxh-case/`
+> **Liên quan:** [DNA_COMPLETION.md](DNA_COMPLETION.md) · [OPS_BACKUP_MIRROR.md](OPS_BACKUP_MIRROR.md) · [LEAD_ATTRIBUTION_CONFLICT_RULES.md](LEAD_ATTRIBUTION_CONFLICT_RULES.md) · [ADR-015](../../.cursor/ADR-015-sales-conversion-operating-layer.md) · `lib/noxh-case/`
+>
+> `NoxhCase` M1–M5 là state chuyên biệt của Journey P. Nó không thay shared Lead
+> lifecycle và không tự tạo/advance Opportunity hoặc ConversionOutcome.
 
 ---
 
@@ -63,6 +66,11 @@ flowchart TB
 **Ops đổi milestone:** Admin → `/admin/noxh-cases` → chọn hồ sơ → milestone + ghi chú.  
 Event `noxh_case.milestone_changed` → notification in-app CTV (nếu đã claim).
 
+Shared Lead semantics là `NEW → CONTACTED → QUALIFIED → WON | LOST`:
+`CONTACTED` nghĩa Ops đã tiếp nhận/thực hiện contact attempt theo UI hiện hành;
+`QUALIFIED` chỉ sau khi đã liên hệ và xác nhận nhu cầu tối thiểu. Tier HOT và
+milestone M1 không tự nâng Lead state.
+
 ---
 
 ## 4. DNA-B — Wizard tier HOT → auto case
@@ -93,7 +101,7 @@ NOXH_WIZARD_HOT_AUTO_CASE=true
 | Rule | Giá trị |
 |------|---------|
 | Lock attribution | **20 ngày làm việc** từ claim (`CTV_CLAIM_LOCK_BUSINESS_DAYS`) |
-| Lead sàn “active” | Ops `CONTACTED+` trong 20 ngày → CTV khác **không** claim được |
+| Lead sàn “active” | Ops `CONTACTED`/`QUALIFIED` trong 20 ngày → CTV khác **không** claim được |
 | Self-referral | CTV không claim SĐT trùng SĐT broker |
 | Đóng băng vĩnh viễn | Khi `UnitBooking` chuyển cọc (`convertedAt`) |
 | Unlock dịch vụ | LMS `NOXH_CLAIM` — đậu «Đào tạo hội nhập CTV» |
@@ -107,6 +115,11 @@ NOXH_WIZARD_HOT_AUTO_CASE=true
 | Email / tin nhắn gốc | Ẩn |
 
 **Entry CTV:** Web `/moi-gioi/ho-so` · Mini App `/agent/ho-so` → «Thả lead».
+
+Lịch tư vấn và assist log hiện là control chuyên biệt của CTV/NOXH lock. Shared
+`SalesActivity` (contact attempt, note, task, meeting) và appointment/read model
+xuyên Journey A/S/P là ADR-015 G1/G2 backlog; không đồng nhất hai contract trước
+khi migration được duyệt.
 
 ---
 

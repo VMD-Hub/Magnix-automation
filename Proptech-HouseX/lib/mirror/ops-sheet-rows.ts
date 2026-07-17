@@ -45,7 +45,11 @@ type NoxhCaseMirrorRow = NoxhCase & {
   documents: { docType: NoxhDocType; status: NoxhDocStatus }[];
 };
 
-export function inboundLeadToMirrorRow(row: InboundUidLead): string[] {
+type InboundUidMirrorRow = Omit<InboundUidLead, "platformLeadId"> & {
+  platformLeadId?: string | null;
+};
+
+export function inboundLeadToMirrorRow(row: InboundUidMirrorRow): string[] {
   const ops = readInboundOpsMeta(row.meta);
   const tags = Array.isArray(row.tags)
     ? (row.tags as string[]).join(",")
@@ -66,7 +70,7 @@ export function inboundLeadToMirrorRow(row: InboundUidLead): string[] {
     row.status,
     ops.ops_status,
     ops.ops_note ?? "",
-    ops.platform_lead_id ?? "",
+    row.platformLeadId ?? ops.platform_lead_id ?? "",
     ops.noxh_case_code ?? "",
     tags,
   ];
@@ -91,7 +95,7 @@ export function noxhCaseToMirrorRow(row: NoxhCaseMirrorRow): string[] {
 
 export function buildOpsMirrorSheetValues(input: {
   syncedAt: string;
-  inbound: InboundUidLead[];
+  inbound: InboundUidMirrorRow[];
   noxhCases: NoxhCaseMirrorRow[];
 }): string[][] {
   const values: string[][] = [

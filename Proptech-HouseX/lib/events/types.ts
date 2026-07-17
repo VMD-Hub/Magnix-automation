@@ -1,6 +1,98 @@
 /** P2 — Event-driven outbox: catalog sự kiện + payload typed. */
 
 export interface OutboxPayloads {
+  "consent.recorded": {
+    consentRecordId: string;
+    subjectType: "LEAD" | "CUSTOMER";
+    subjectId: string;
+    purpose: string;
+    channel: string;
+    action: "GRANTED" | "DENIED" | "EXPIRED" | "SUPERSEDED";
+    occurredAt: string;
+    correlationId: string;
+    schemaVersion: 1;
+  };
+  "consent.withdrawn": {
+    consentRecordId: string;
+    subjectType: "LEAD" | "CUSTOMER";
+    subjectId: string;
+    purpose: string;
+    channel: string;
+    occurredAt: string;
+    correlationId: string;
+    schemaVersion: 1;
+  };
+  "lead.assignment_changed": {
+    assignmentId: string;
+    leadId: string;
+    ownerId: string;
+    status: "ASSIGNED" | "ACCEPTED" | "RELEASED" | "REASSIGNED";
+    occurredAt: string;
+    correlationId: string;
+    schemaVersion: 1;
+  };
+  "opportunity.created": {
+    opportunityId: string;
+    leadId: string;
+    journey: "A" | "S" | "P";
+    stage: "OPEN";
+    correlationId: string;
+    schemaVersion: 1;
+  };
+  "opportunity.stage_changed": {
+    opportunityId: string;
+    leadId: string;
+    journey: "A" | "S" | "P";
+    fromStage: string;
+    toStage: string;
+    correlationId: string;
+    schemaVersion: 1;
+  };
+  "sales.activity_recorded": {
+    activityId: string;
+    leadId: string;
+    opportunityId: string | null;
+    type: string;
+    channel: string | null;
+    occurredAt: string;
+    correlationId: string;
+    schemaVersion: 1;
+  };
+  "appointment.updated": {
+    appointmentId: string;
+    leadId: string;
+    opportunityId: string | null;
+    status: string;
+    channel: string;
+    scheduledAt: string;
+    correlationId: string;
+    schemaVersion: 1;
+  };
+  "buyer.match_recorded": {
+    buyerMatchId: string;
+    leadId: string;
+    buyerProfileId: string;
+    opportunityId: string | null;
+    projectRef: string | null;
+    listingRef: string | null;
+    unitRef: string | null;
+    score: number;
+    reasons: string[];
+    blockers: string[];
+    hasInventorySnapshot: boolean;
+    response: string;
+    correlationId: string;
+    schemaVersion: 1;
+  };
+  /** UID acquisition promoted to a platform lead; intentionally contains no PII. */
+  "acquisition.touch_promoted": {
+    touchId: string;
+    leadId: string;
+    uidSource: string;
+    segment: string;
+    projectId: string | null;
+    promotedAt: string;
+  };
   "lead.won": {
     leadId: string;
     status: string;

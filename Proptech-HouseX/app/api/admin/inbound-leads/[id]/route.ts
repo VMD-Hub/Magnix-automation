@@ -6,7 +6,11 @@ import {
   getInboundUidLeadForAdmin,
   updateInboundUidLeadOps,
 } from "@/lib/data/inbound-uid-lead";
-import { maskInboundUid, readInboundOpsMeta } from "@/lib/inbound/ops-meta";
+import {
+  maskInboundUid,
+  readInboundOpsMeta,
+  sanitizeInboundMetaForAdmin,
+} from "@/lib/inbound/ops-meta";
 import { OPS_STATUS_LABEL, segmentLabel } from "@/lib/inbound/segment-labels";
 import {
   inboundLeadConvertSchema,
@@ -26,14 +30,14 @@ function serializeInbound(row: NonNullable<Awaited<ReturnType<typeof getInboundU
     interestKey: row.interestKey,
     text: row.text,
     tags: row.tags,
-    meta: row.meta,
+    meta: sanitizeInboundMetaForAdmin(row.meta),
     classifyMethod: row.classifyMethod,
     consentBasis: row.consentBasis,
     magnixStatus: row.status,
     opsStatus: ops.ops_status,
     opsStatusLabel: OPS_STATUS_LABEL[ops.ops_status] ?? ops.ops_status,
     opsNote: ops.ops_note,
-    platformLeadId: ops.platform_lead_id,
+    platformLeadId: row.platformLeadId,
     noxhCaseId: ops.noxh_case_id,
     noxhCaseCode: ops.noxh_case_code,
     capturedAt: row.capturedAt.toISOString(),

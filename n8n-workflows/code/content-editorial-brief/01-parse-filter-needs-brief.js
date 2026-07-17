@@ -41,8 +41,14 @@ for (let i = 1; i < rows.length; i += 1) {
     if (key) row[key] = cells[j] ?? '';
   });
 
-  const meta = parseMeta(row.meta);
-  if (meta.editorial_brief_v1) continue;
+  const candidateMeta = parseMeta(row.meta_parsed);
+  const sheetMeta = parseMeta(row.meta);
+  const meta = { ...candidateMeta, ...sheetMeta };
+  if (sheetMeta.editorial_brief_v1) continue;
+  if (
+    sheetMeta.editorial_brief_status === 'blocked_legal_source'
+    && sheetMeta.legal_gate_retry_requested !== true
+  ) continue;
 
   const segment = String(row.segment || '').trim().toLowerCase();
   const score = Number(row.score || 0);

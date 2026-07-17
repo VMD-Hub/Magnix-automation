@@ -1,7 +1,11 @@
 # House X — Lead Ops vs Affiliate: Rule xung đột & map hệ thống
 
-> **Trạng thái:** Chốt nghiệp vụ (2026-07-10) — triển khai code theo phase bên dưới.  
-> **Liên quan:** [NOXH_CASE_PIPELINE.md](NOXH_CASE_PIPELINE.md) · [MINIAPP_TWO_LANES.md](MINIAPP_TWO_LANES.md) · `lib/noxh-case/attribution-claim.ts` · `lib/rules/attribution-lock.ts`
+> **Trạng thái:** Rule và các bề mặt Ops chính đã triển khai; bảng §10 phân biệt
+> phần live, partial và ADR-015 backlog.
+> **Liên quan:** [NOXH_CASE_PIPELINE.md](NOXH_CASE_PIPELINE.md) · [MINIAPP_TWO_LANES.md](MINIAPP_TWO_LANES.md) · [ADR-015](../../.cursor/ADR-015-sales-conversion-operating-layer.md) · `lib/noxh-case/attribution-claim.ts` · `lib/rules/attribution-lock.ts`
+>
+> House X/Postgres là authoritative cho owner, Lead state và conflict resolution.
+> n8n/Sheet nếu có chỉ notify/mirror, không được resolve conflict hay chuyển state.
 
 ---
 
@@ -41,7 +45,7 @@
 | `magnix:inbound` | UID Magnix → Admin inbound | Ops |
 | `ops:manual` | Admin nhập tay | Ops |
 
-**Kênh liên hệ** (lưu trên Lead/Customer meta — phase CRM-2): `phone`, `zalo`, `email`, `facebook` — phục vụ kịch bản nurture, không thay SĐT khóa chính.
+**Kênh liên hệ** (lưu trên Ops meta): `phone`, `zalo`, `email`, `facebook` — phục vụ kịch bản nurture, không thay SĐT khóa chính.
 
 ---
 
@@ -66,7 +70,7 @@ Thứ tự kiểm tra (`evaluateCtvClaim`):
 | Điều kiện | Kết quả | Hành động Ops |
 |-----------|---------|---------------|
 | `NoxhCase` ACTIVE + CTV lock còn hạn | **Không ghi đè** CTV | Tạo `Lead` Ops gắn `customerId`, trạng thái chờ; mở **Conflict queue** |
-| CTV lock **hết hạn** + không có tiến độ tư vấn (phase CRM-2) | Ops **ưu tiên** | Release lock (cron) → Ops tiếp quản |
+| CTV lock **hết hạn** + không có tiến độ tư vấn | Ops **ưu tiên** | Release lock (cron) → Ops tiếp quản |
 | `UnitBooking` đã cọc (`convertedAt`) | CTV **giữ vĩnh viễn** | Ops chỉ hỗ trợ hậu kỳ, không đổi attribution |
 
 ### 4.3 CTV vs CTV (hai affiliate cùng SĐT)
@@ -75,14 +79,14 @@ Thứ tự kiểm tra (`evaluateCtvClaim`):
 |-----------|---------|
 | CTV A đã claim, lock còn hạn | CTV B **từ chối** (`ACTIVE_CASE_OTHER_CTV`) |
 | CTV A lock hết hạn, không M3+ | CTV B **có thể** claim (first valid claim) |
-| Ops quyết định tranh chấp | Admin override (phase CRM-2) — ghi `AttributionEvent` |
+| Ops quyết định tranh chấp | Admin override — ghi audit/attribution event |
 
 ### 4.4 Referral link web (cookie) vs Ops
 
 | Điều kiện | Kết quả |
 |-----------|---------|
 | Khách vào qua link CTV, tạo `Lead` trong 30 ngày | `assignedBrokerId` = CTV (`attribution-lock`) |
-| Ops đã `CONTACTED+` trước khi có referral | **Giữ Ops** — referral ghi audit `conflict_kept` |
+| Ops đã `CONTACTED`/`QUALIFIED` trước khi có referral | **Giữ Ops** — referral ghi audit `conflict_kept` |
 | Self-referral (CTV = SĐT khách) | Bỏ referral (`self_referral_blocked`) |
 
 ---
@@ -92,7 +96,7 @@ Thứ tự kiểm tra (`evaluateCtvClaim`):
 | Tham số | Mặc định | Ý nghĩa |
 |---------|----------|---------|
 | `CTV_CLAIM_LOCK_BUSINESS_DAYS` | **20** (T2–T6) | CTV giữ quyền affiliate sau claim |
-| `PLATFORM_LEAD_ACTIVE_BUSINESS_DAYS` | **20** (T2–T6) | Ops `CONTACTED+` chặn claim CTV |
+| `PLATFORM_LEAD_ACTIVE_BUSINESS_DAYS` | **20** (T2–T6) | Ops `CONTACTED`/`QUALIFIED` chặn claim CTV |
 | `ATTRIBUTION_LOCK_DAYS` | **30** (calendar) | Lock referral web |
 
 Cron: `noxh-case-maintenance` — release lock hết hạn, SLA M1.
@@ -109,7 +113,7 @@ Khai báo tối thiểu khi claim:
 | `customerName` | Có | Tên gọi — **chưa cần** trùng CMND 100% |
 | `message` | Khuyến nghị | Bối cảnh giới thiệu |
 
-**Giữ lock** (phase CRM-2 — bổ sung code):
+**Giữ lock** (đã có ở nhánh NOXH/CTV):
 
 | Hành vi | Tần suất | Nếu thiếu |
 |---------|----------|-----------|
@@ -124,12 +128,14 @@ Khai báo tối thiểu khi claim:
 | `Lead.status` | Ops làm gì | Ảnh hưởng claim CTV |
 |---------------|------------|---------------------|
 | `NEW` | Phân loại nguồn + segment; gán kịch bản | Chưa chặn CTV |
-| `CONTACTED` | Ops đã tiếp nhận vào pipeline (chưa chắc đã gọi) | **Bật R4** trong 20 ngày LV |
-| `QUALIFIED` | Đã liên hệ / chăm sóc; đủ điều kiện tư vấn sâu | **Bật R4** trong 20 ngày LV |
+| `CONTACTED` | Ops đã tiếp nhận/thực hiện contact attempt theo UI hiện hành; chưa xác nhận nhu cầu | **Bật R4** trong 20 ngày LV |
+| `QUALIFIED` | Đã liên hệ và xác nhận nhu cầu tối thiểu | **Bật R4** trong 20 ngày LV |
 | `WON` | Chuyển hồ sơ / HĐMB | Ops giữ pipeline chính |
 | `LOST` | Nurture lại sau X ngày | Hết R4 → CTV có thể claim (nếu không case khác) |
 
-**Kịch bản nurture** (phase CRM-2): map `segment` (NOXH/CCTM) + `source` + tier tool → template OA/Telegram nội bộ.
+**Kịch bản nurture:** map `segment` (NOXH/CCTM) + `source` + tier tool → template
+được duyệt; gửi chỉ khi purpose/channel được phép. `ConsentRecord` authoritative
+vẫn là ADR-015 G1 backlog, nên provenance hoặc score không tự cấp quyền marketing.
 
 ---
 
@@ -141,9 +147,9 @@ Khi R4 hoặc Ops-vs-CTV tranh chấp:
 CTV claim bị chặn / Ops phát hiện trùng
         │
         ▼
-  Admin → Hàng đợi Xung đột (phase CRM-2)
+  Admin → Hàng đợi Xung đột
         │
-        ├─ Giữ Ops (mặc định nếu CONTACTED+ trong hạn)
+        ├─ Giữ Ops (mặc định nếu CONTACTED/QUALIFIED trong hạn)
         ├─ Chuyển CTV (hiếm — cần lý do + Ops lead)
         ├─ Chia lane (NOXH Ops / CCTM CTV) — chỉ khi 2 intent khác nhau
         └─ Đóng cả hai (khách trùng spam / sai SĐT)
@@ -169,8 +175,8 @@ CTV claim bị chặn / Ops phát hiện trùng
 | `/admin/inbound-leads` | A | UID Magnix → SĐT → Lead / NoxhCase |
 | `/admin/inbound-leads` (mở rộng) | A | Nguồn: zalo_ads / fanpage / manual |
 | `/admin/noxh-cases` | A + B | Milestone; `brokerId` null = Ops |
-| **Conflict queue** (mới) | A∩B | Duyệt xung đột SĐT |
-| Lead board (mới) | A | Danh sách ads lead, status, nurture |
+| `/admin/conflicts` | A∩B | Duyệt xung đột SĐT |
+| `/admin/ops-leads` | A | Danh sách lead, status, nurture |
 
 ### Mini App Agent (`housex-zalo-miniapp`)
 
@@ -185,18 +191,18 @@ CTV claim bị chặn / Ops phát hiện trùng
 
 ---
 
-## 10. Phase triển khai code
+## 10. Trạng thái triển khai
 
-| Phase | Việc | File / API gợi ý |
+| Phase | Việc | Trạng thái / file |
 |-------|------|------------------|
 | **CRM-R0** | ✅ Rule R1–R5 | `lib/noxh-case/attribution-claim.ts` |
-| **CRM-R1** | Chuẩn hóa `Lead.source` enum + UTM | `lib/leads/source.ts`, `POST /api/leads` |
-| **CRM-R2** | Conflict queue Admin | `AttributionConflict` table + `/admin/conflicts` |
-| **CRM-R3** | CTV lịch + tiến độ bắt buộc | `NoxhCase.consultScheduledAt`, validate trước gia hạn lock |
-| **CRM-R4** | Ops lead board + nurture meta | Lead `meta.channels`, `meta.nurtureScriptId` |
-| **CRM-R5** | Thông báo CTV xung đột (in-app); OA tùy chọn | `broker-in-app-notify.ts` · `broker-oa-notify.ts` nếu `ZALO_OA_NOTIFY_ENABLED` |
-| **CRM-R6** | n8n mirror conflict | `housex_attribution_conflicts` + Telegram Ops |
-| **CRM-R7** | Phân quyền Admin Ops vs Super | `ADMIN_OPS_SECRET` + middleware `/admin` |
+| **CRM-R1** | Chuẩn hóa `Lead.source` + UTM | **Partial/backlog** — không coi danh sách source đề xuất ở §3 là enum canonical đã deploy |
+| **CRM-R2** | Conflict queue Admin | **LIVE** — `AttributionConflict` + `/admin/conflicts` |
+| **CRM-R3** | CTV lịch + tiến độ | **LIVE cho NOXH/CTV** — `consultScheduledAt`, assist log; shared `SalesActivity`/appointment vẫn theo ADR-015 backlog |
+| **CRM-R4** | Ops lead board + nurture meta | **LIVE** — `/admin/ops-leads` + Ops meta |
+| **CRM-R5** | Thông báo CTV xung đột | **LIVE in-app**; OA marketing tùy chọn và mặc định tắt |
+| **CRM-R6** | n8n conflict mirror | **LIVE optional mirror** + Telegram Ops; không authoritative |
+| **CRM-R7** | Phân quyền Admin Ops vs Super | **LIVE** — `ADMIN_OPS_SECRET` + Admin role guard |
 
 ---
 

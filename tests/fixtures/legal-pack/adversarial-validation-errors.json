@@ -1,0 +1,12 @@
+{
+  "normalized_key": "fixture:adversarial-validation-errors",
+  "sheet_row": 43,
+  "error_count": 200,
+  "code_character": "\"",
+  "code_length": 5000,
+  "message_character": "\\",
+  "message_length": 20000,
+  "expected_max_errors": 20,
+  "expected_max_code_length": 120,
+  "expected_max_message_length": 240
+}
