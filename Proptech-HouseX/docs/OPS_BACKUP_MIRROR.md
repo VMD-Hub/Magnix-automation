@@ -290,9 +290,9 @@ Kỳ vọng smoke: `OK — tab=ops_mirror inbound=N noxh=M rows=...`
 
 ## 4. Checklist go-live Phase 3B
 
-- [ ] `backup-postgres-vps.sh` chạy tay OK
-- [ ] `.sql.gz` pass `gzip -t` và `.sha256` pass `sha256sum -c`
-- [ ] Local disposable restore pass; evidence JSON có `result=passed` và `cleanup.database_dropped=true`
+- [x] `backup-postgres-vps.sh` chạy tay OK (production VPS, 2026-07-17)
+- [x] `.sql.gz` pass `gzip -t` và `.sha256` pass `sha256sum -c`
+- [x] Local disposable restore pass; evidence JSON có `result=passed` và `cleanup.database_dropped=true` (`reports/restore-verify-20260717.json`)
 - [ ] `npm run media:audit-orphans` đã review orphan/missing media
 - [ ] Cron backup + mirror trong `crontab -l`
 - [ ] `go-live:check-sheet-mirror` pass

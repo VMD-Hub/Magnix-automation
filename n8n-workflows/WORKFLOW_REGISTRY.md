@@ -2,7 +2,7 @@
 
 | Slug | File | Trigger | QA tiers | Legal gate | Parse | Mô tả | Trạng thái |
 |------|------|---------|----------|------------|-------|-------|------------|
-| `uid-ingest` | `uid-ingest.workflow.json` | Webhook POST | L0 | Route (classify) | ✅ | House X Postgres `POST /api/ingest/magnix-lead` (dedupe `normalized_key`) + Drive JSONL archive | staging |
+| `uid-ingest` | `uid-ingest.workflow.json` | Webhook POST | L0 | Route (classify) | ✅ | House X Postgres `POST /api/ingest/magnix-lead` (dedupe `normalized_key`) + Drive JSONL archive | production · smoke pass 2026-07-17 |
 | `content-scorecard` | `content-scorecard.workflow.json` | Cron 10h + Manual | L0 | Audit refs | — | Sheet metrics → score.mjs logic → Sheet `content_scorecard` | staging |
 | `social-listening` | `social-listening.workflow.json` | Cron Mon 7h + Manual | L0 | Tag | ✅ | TikTok weekly → Claude → Sheet content_queue + dedupe | staging |
 | `social-listening-facebook` | `social-listening-facebook.workflow.json` | Cron Wed 7h + Manual | L0 | Tag | ✅ | Facebook page/group weekly → Claude → content_queue | staging |
@@ -22,6 +22,11 @@
 | `telegram-reminder` | `telegram-reminder.workflow.json` | Cron 30m + Manual | L0 | SLA legal | — | SLA reminder cho approval/render/legal | staging |
 | `telegram-resolver` | `telegram-resolver.workflow.json` | Cron 30m + Manual | L0 | — | — | Mark `notification_events` resolved khi Sheet approved | staging |
 
+> **Deployment snapshot 2026-07-17:** n8n API updated 17 existing workflows with
+> zero failures and preserved their active state. Rows other than `uid-ingest`
+> remain `staging` until a workflow-specific execution ID and masked sink assertion
+> are recorded; active/deployed alone is not functional smoke evidence.
+>
 > **Trade / swing / CRO** không thuộc Magnix — xem `TRADE_PROJECT.md` và repo `trading-intelligence`.
 
 ## Cột bắt buộc khi thêm dòng

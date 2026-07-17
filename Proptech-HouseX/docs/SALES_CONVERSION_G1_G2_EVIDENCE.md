@@ -1,8 +1,8 @@
-# Sales Conversion local G1/G2 evidence
+# Sales Conversion G1/G2 evidence
 
-Evidence scope: repository/local verification only. Runtime registry status remains
-**STAGING**. Nothing in this file proves a VPS, n8n, Telegram, backup, staging
-database, or production deployment.
+Repository/local verification is supplemented by the production deployment record
+below. Workflow-specific status remains **STAGING** unless that workflow has its own
+runtime execution evidence; deployment/activation alone is not a functional smoke.
 
 ## Local artifacts
 
@@ -43,18 +43,41 @@ Local result on 2026-07-17:
 - Full TypeScript output filtered for G1/G2 sales-conversion paths: **PASS — 0 errors**
 - Git diff check: **PASS** (line-ending warnings only)
 
-## External gates — NOT passed
+## Production deployment — 2026-07-17
 
-- **NOT PASSED — production migration:** neither G1 nor G2 migration was applied
-  to production by this work.
-- **NOT PASSED — n8n import/activation:** no workflow was imported, changed, or
-  activated.
-- **NOT PASSED — real backup restore:** no off-VPS backup or clean-room restore was
-  executed.
-- **NOT PASSED — Telegram delivery:** no real notification delivery was attempted
-  or observed.
-- **NOT PASSED — production/staging E2E:** the test is synthetic and deterministic;
-  it is not runtime evidence.
+- Git commit deployed: `065325c` (`966315b` architecture implementation plus ingest
+  smoke correction).
+- House X production DB connection check: **PASS**.
+- Production migrations applied: `20260717180000`,
+  `20260717190000`, `20260717200000`, `20260717210000`.
+- House X build + PM2 restart: **PASS**.
+- Site smoke: **PASS** on `http://127.0.0.1:3000` and
+  `https://timnhaxahoi.com`.
+- Production UID ingest smoke: **PASS** —
+  `smoke_test:1784300292816`.
+- n8n API deployment: **PASS** — 17 existing workflows updated, zero create/fail;
+  deployed workflows remained active.
+- Production VPS backup: **PASS** —
+  `/root/backup/housex/housex-2026-07-17_215605.sql.gz`, gzip/header/checksum valid.
+- Disposable restore drill: **PASS** — target
+  `housex_restore_verify_20260717`, required tables/keys present, cleanup verified
+  with `database_dropped=true`.
+- Evidence file on VPS:
+  `Proptech-HouseX/reports/restore-verify-20260717.json`.
 
-Local G1/G2 contract acceptance does not promote the deployment registry beyond
-**STAGING** and does not satisfy the ADR-015 production gate.
+## External gates — remaining
+
+- **NOT PASSED — off-VPS recovery:** backup upload/download/checksum from an
+  independent destination has not been demonstrated; the verified restore source
+  above remained on the production VPS.
+- **NOT PASSED — workflow-by-workflow smoke:** n8n deployment and active state are
+  proven, but each content/Telegram workflow still needs a masked execution ID and
+  sink assertion before its registry row moves from staging.
+- **NOT PASSED — Telegram delivery:** no real `legal_source_needed` delivery and
+  resolver cycle was observed in this deployment session.
+- **NOT PASSED — full sales journey E2E:** production UID ingest is proven, but the
+  complete assignment → qualification → appointment path still needs a controlled
+  production/staging fixture and DB assertions.
+
+This record proves the deployed foundation and UID ingest path. It does not promote
+unexecuted content, Telegram, or full sales-journey workflows beyond **STAGING**.
