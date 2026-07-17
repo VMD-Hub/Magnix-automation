@@ -109,7 +109,7 @@ fi
 printf 'ERROR: House X daily backup failed exit=%s; local retention remained fail-closed\n' "$SAFE_EXIT" >&2
 
 WEBHOOK_URL="${MAGNIX_TELEGRAM_NOTIFY_WEBHOOK_URL:-}"
-WEBHOOK_TOKEN="${MAGNIX_WEBHOOK_TOKEN:-}"
+WEBHOOK_TOKEN="${HOUSEX_BACKUP_ALERT_TOKEN:-}"
 if [[ ! "$WEBHOOK_URL" =~ ^https://[^[:space:]]+$ ]] ||
   [[ "$WEBHOOK_URL" == *\"* || "$WEBHOOK_URL" == *\\* ]] ||
   [[ "${#WEBHOOK_TOKEN}" -lt 16 || "${#WEBHOOK_TOKEN}" -gt 512 ]] ||

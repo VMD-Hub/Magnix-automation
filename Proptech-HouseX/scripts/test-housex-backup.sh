@@ -202,9 +202,27 @@ HOUSEX_BACKUP_OFFSITE_HOOK=$SCRIPT_DIR/housex-backup-offsite-upload.sh
 HOUSEX_BACKUP_OFFSITE_VERIFY_HOOK=$SCRIPT_DIR/housex-backup-offsite-verify.sh
 RCLONE_CONFIG=$RCLONE_CONFIG_FILE
 MAGNIX_TELEGRAM_NOTIFY_WEBHOOK_URL=https://n8n.invalid/webhook/magnix/telegram-notify
-MAGNIX_WEBHOOK_TOKEN=unit-test-token-123456789
+HOUSEX_BACKUP_ALERT_TOKEN=unit-test-token-123456789
 EOF_ENV
 export FAKE_CURL_PAYLOAD="$WORK_DIR/alert.json"
+SHARED_ONLY_ENV="$WORK_DIR/shared-token-only.env"
+cat > "$SHARED_ONLY_ENV" <<EOF_ENV
+HOUSEX_BACKUP_SCRIPT=$FAILING_BACKUP
+HOUSEX_BACKUP_OFFSITE_HOOK=$SCRIPT_DIR/housex-backup-offsite-upload.sh
+HOUSEX_BACKUP_OFFSITE_VERIFY_HOOK=$SCRIPT_DIR/housex-backup-offsite-verify.sh
+RCLONE_CONFIG=$RCLONE_CONFIG_FILE
+MAGNIX_TELEGRAM_NOTIFY_WEBHOOK_URL=https://n8n.invalid/webhook/magnix/telegram-notify
+MAGNIX_WEBHOOK_TOKEN=unit-test-token-123456789
+EOF_ENV
+rm -f -- "$FAKE_CURL_PAYLOAD"
+set +e
+SHARED_ONLY_OUTPUT="$(HOUSEX_BACKUP_ENV_FILE="$SHARED_ONLY_ENV" "$SCRIPT_DIR/housex-backup-cron.sh" 2>&1)"
+SHARED_ONLY_EXIT=$?
+set -e
+[[ "$SHARED_ONLY_EXIT" -eq 42 && ! -e "$FAKE_CURL_PAYLOAD" &&
+  "$SHARED_ONLY_OUTPUT" == *"configuration is missing or invalid"* ]] ||
+  fail "shared Magnix token was accepted for backup alert delivery"
+
 set +e
 WRAPPER_OUTPUT="$(HOUSEX_BACKUP_ENV_FILE="$ENV_FILE" "$SCRIPT_DIR/housex-backup-cron.sh" 2>&1)"
 WRAPPER_EXIT=$?
@@ -245,7 +263,7 @@ unset FAKE_CURL_RESPONSE_CAPTURE
 export FAKE_STAT_MODE=777
 expect_failure env HOUSEX_BACKUP_ENV_FILE="$ENV_FILE" "$SCRIPT_DIR/housex-backup-cron.sh"
 unset FAKE_STAT_MODE
-printf 'PASS alerts require delivery proof and runtime rejects unsafe modes\n'
+printf 'PASS alerts require dedicated credentials, delivery proof, and safe modes\n'
 
 RETENTION_DIR="$WORK_DIR/retention"
 mkdir -p "$RETENTION_DIR"

@@ -1,20 +1,39 @@
 // n8n Code: auth webhook + normalize notification event
 
-const EXPECTED = $env.MAGNIX_WEBHOOK_TOKEN || '';
-const headers = $input.first().json.headers || {};
-const auth = headers.authorization || headers.Authorization || '';
-if (EXPECTED && auth !== `Bearer ${EXPECTED}`) {
-  throw new Error('Unauthorized: invalid MAGNIX_WEBHOOK_TOKEN');
+const raw = $input.first()?.json;
+const safeRaw = raw && typeof raw === 'object' && !Array.isArray(raw) ? raw : {};
+let body = safeRaw.body;
+if (typeof body === 'string') {
+  try {
+    const parsed = JSON.parse(body);
+    body = parsed && typeof parsed === 'object' && !Array.isArray(parsed) ? parsed : {};
+  } catch {
+    body = {};
+  }
 }
+if (!body || typeof body !== 'object' || Array.isArray(body)) body = safeRaw;
 
-const raw = $input.first().json;
-const body = raw.body && typeof raw.body === 'object' ? raw.body : raw;
+const agent = String(body.agent || body.source_workflow || 'unknown');
+const expected = agent === 'House X Backup'
+  ? String($env.HOUSEX_BACKUP_ALERT_TOKEN || '')
+  : String($env.MAGNIX_WEBHOOK_TOKEN || '');
+const headers =
+  safeRaw.headers && typeof safeRaw.headers === 'object' && !Array.isArray(safeRaw.headers)
+    ? safeRaw.headers
+    : {};
+const supplied = typeof headers.authorization === 'string'
+  ? headers.authorization
+  : typeof headers.Authorization === 'string'
+    ? headers.Authorization
+    : '';
+if (!expected || supplied !== `Bearer ${expected}`) {
+  throw new Error('Unauthorized');
+}
 
 const event_id = String(body.event_id || '').trim();
 if (!event_id) throw new Error('Validation: event_id is required');
 
 const event_type = String(body.event_type || 'approval_needed').trim();
-const agent = String(body.agent || body.source_workflow || 'unknown').trim();
 const title = String(body.title || '(no title)').slice(0, 120);
 const segment = String(body.segment || '').slice(0, 40);
 const sheet_tab = String(body.sheet_tab || body.target_tab || '').trim();

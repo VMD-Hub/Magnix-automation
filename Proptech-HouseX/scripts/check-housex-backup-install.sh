@@ -106,9 +106,9 @@ check_executable "${HOUSEX_BACKUP_OFFSITE_VERIFY_HOOK:-}"
 [[ -x "${HOUSEX_BACKUP_SCRIPT:-}" ]] || die "HOUSEX_BACKUP_SCRIPT must be executable"
 [[ "${MAGNIX_TELEGRAM_NOTIFY_WEBHOOK_URL:-}" =~ ^https:// ]] ||
   die "HTTPS Telegram notify webhook URL is required"
-TOKEN="${MAGNIX_WEBHOOK_TOKEN:-}"
+TOKEN="${HOUSEX_BACKUP_ALERT_TOKEN:-}"
 [[ "${#TOKEN}" -ge 16 && "${#TOKEN}" -le 512 && "$TOKEN" != *[!A-Za-z0-9._~-]* ]] ||
-  die "Magnix webhook token is missing or invalid"
+  die "backup alert token is missing or invalid"
 
 printf 'OK House X backup install: crypt remote, permissions, hooks, alert config\n'
 printf '%s\n' '# Review, then add this idempotent line with crontab -e:'
