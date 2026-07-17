@@ -3,9 +3,6 @@
 import { Suspense } from "react";
 import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
-import { SiteHeader } from "@/components/layout/site-header";
-import { SiteFooter } from "@/components/layout/site-footer";
-import { EmailVerificationBanner } from "@/components/layout/header-auth";
 import {
   MiniAppEmbedProvider,
   useMiniAppEmbed,
@@ -15,9 +12,15 @@ import { isVuNguyenPersonalBrandPath } from "@/lib/personal-brand/vu-nguyen/nfc-
 
 function SiteChrome({
   children,
+  header,
+  verificationBanner,
+  footer,
   forceMinimal,
 }: {
   children: ReactNode;
+  header: ReactNode;
+  verificationBanner: ReactNode;
+  footer: ReactNode;
   /** Personal brand / shell không header site */
   forceMinimal?: boolean;
 }) {
@@ -34,15 +37,27 @@ function SiteChrome({
 
   return (
     <ThemeShell>
-      <SiteHeader />
-      <EmailVerificationBanner />
+      {header}
+      {verificationBanner}
       <main className="flex-1">{children}</main>
-      <SiteFooter />
+      {footer}
     </ThemeShell>
   );
 }
 
-function AppBodyChrome({ children }: { children: ReactNode }) {
+type AppBodyProps = {
+  children: ReactNode;
+  header: ReactNode;
+  verificationBanner: ReactNode;
+  footer: ReactNode;
+};
+
+function AppBodyChrome({
+  children,
+  header,
+  verificationBanner,
+  footer,
+}: AppBodyProps) {
   const pathname = usePathname() ?? "";
   const adminConsole = pathname.startsWith("/admin");
   const personalBrandShell = isVuNguyenPersonalBrandPath(pathname);
@@ -53,7 +68,14 @@ function AppBodyChrome({ children }: { children: ReactNode }) {
 
   return (
     <MiniAppEmbedProvider>
-      <SiteChrome forceMinimal={personalBrandShell}>{children}</SiteChrome>
+      <SiteChrome
+        forceMinimal={personalBrandShell}
+        header={header}
+        verificationBanner={verificationBanner}
+        footer={footer}
+      >
+        {children}
+      </SiteChrome>
     </MiniAppEmbedProvider>
   );
 }
@@ -62,17 +84,35 @@ function AppBodyChrome({ children }: { children: ReactNode }) {
  * Embed Mini App: ẩn header/footer web — điều hướng về home do thanh Mini App
  * («← Quay lại») + breadcrumb «Trang chủ» (postMessage), không thêm bar trùng.
  */
-export function AppBody({ children }: { children: ReactNode }) {
+export function AppBody({
+  children,
+  header,
+  verificationBanner,
+  footer,
+}: AppBodyProps) {
   const pathname = usePathname() ?? "";
   const maybePersonalBrand = isVuNguyenPersonalBrandPath(pathname);
 
   return (
     <Suspense
       fallback={
-        <SiteChrome forceMinimal={maybePersonalBrand}>{children}</SiteChrome>
+        <SiteChrome
+          forceMinimal={maybePersonalBrand}
+          header={header}
+          verificationBanner={verificationBanner}
+          footer={footer}
+        >
+          {children}
+        </SiteChrome>
       }
     >
-      <AppBodyChrome>{children}</AppBodyChrome>
+      <AppBodyChrome
+        header={header}
+        verificationBanner={verificationBanner}
+        footer={footer}
+      >
+        {children}
+      </AppBodyChrome>
     </Suspense>
   );
 }

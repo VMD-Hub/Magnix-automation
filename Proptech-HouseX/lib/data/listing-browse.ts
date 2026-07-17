@@ -1,7 +1,7 @@
 import type { ListingDetail, PublicListingDetail } from "@/lib/data/listing";
 import { prisma } from "@/lib/prisma";
 import type { ListingCardData } from "@/components/listings/listing-card";
-import type { TransactionType } from "@prisma/client";
+import type { Prisma, TransactionType } from "@prisma/client";
 import {
   INTERNAL_DEMO_LISTING_CODES,
   INTERNAL_DEMO_PROJECT_SLUGS,
@@ -90,33 +90,40 @@ function filterDemoCards(
   });
 }
 
-function paginateCatalog(
-  cards: ListingCardData[],
+export function buildListingBrowsePage(
+  dbPageItems: ListingCardData[],
+  dbTotal: number,
+  catalogItems: ListingCardData[],
   page: number,
   pageSize: number,
-  isCatalog = false,
 ): ListingBrowseResult {
-  const total = cards.length;
   const start = (page - 1) * pageSize;
+  const catalogStart = Math.max(0, start - dbTotal);
+  const catalogTake = Math.max(0, pageSize - dbPageItems.length);
+  const items = [
+    ...dbPageItems,
+    ...catalogItems.slice(catalogStart, catalogStart + catalogTake),
+  ];
+  const total = dbTotal + catalogItems.length;
+
   return {
-    items: cards.slice(start, start + pageSize),
+    items,
     pagination: {
       page,
       pageSize,
       total,
       totalPages: Math.max(1, Math.ceil(total / pageSize)),
     },
-    isCatalog: isCatalog || total > 0,
+    ...(total > 0 ? { isCatalog: true } : {}),
   };
 }
 
-/** Gộp tin DB + catalog go-live (DTA A10, …) — tránh trùng mã tin. */
-function mergeSaleBrowseCards(
-  dbItems: ListingCardData[],
+/** Catalog go-live (DTA A10, …) rồi demo dev — tránh trùng mã giữa hai nguồn. */
+function getSaleBrowseCatalogCards(
   params: ListingBrowseParams,
 ): ListingCardData[] {
-  const seen = new Set(dbItems.map((c) => c.code));
-  const merged = [...dbItems];
+  const seen = new Set<string>();
+  const merged: ListingCardData[] = [];
 
   const catalog = filterDemoCards(
     listCatalogSaleListingCards().map(enrichDtaListingCardTitle),
@@ -146,8 +153,9 @@ export async function browseListings(
 ): Promise<ListingBrowseResult> {
   const page = Math.max(1, params.page ?? 1);
   const pageSize = Math.min(100, Math.max(1, params.pageSize ?? 20));
+  const start = (page - 1) * pageSize;
 
-  const where = {
+  const where: Prisma.ListingWhereInput = {
     status: "ACTIVE" as const,
     deletedAt: null,
     code: { notIn: [...INTERNAL_DEMO_LISTING_CODES] },
@@ -168,34 +176,48 @@ export async function browseListings(
     ...(params.propertyType ? { propertyType: params.propertyType } : {}),
   };
 
-  let dbItems: ListingCardData[] = [];
+  const catalogItems =
+    params.transactionType === "SALE"
+      ? getSaleBrowseCatalogCards(params)
+      : [];
 
   try {
-    const rows = await prisma.listing.findMany({
-      where,
-      orderBy: [{ rankScore: "desc" }, { createdAt: "desc" }],
-      include: listingInclude,
-    });
-    dbItems = rows.map(toCard);
+    const [rows, dbTotal, duplicateRows] = await Promise.all([
+      prisma.listing.findMany({
+        where,
+        orderBy: [{ rankScore: "desc" }, { createdAt: "desc" }],
+        skip: start,
+        take: pageSize,
+        include: listingInclude,
+      }),
+      prisma.listing.count({ where }),
+      catalogItems.length > 0
+        ? prisma.listing.findMany({
+            where: {
+              AND: [
+                where,
+                { code: { in: catalogItems.map((item) => item.code) } },
+              ],
+            },
+            select: { code: true },
+          })
+        : Promise.resolve([]),
+    ]);
+    const duplicateCodes = new Set(duplicateRows.map((row) => row.code));
+    const deduplicatedCatalog = catalogItems.filter(
+      (item) => !duplicateCodes.has(item.code),
+    );
+    return buildListingBrowsePage(
+      rows.map(toCard),
+      dbTotal,
+      deduplicatedCatalog,
+      page,
+      pageSize,
+    );
   } catch {
     // DB offline — dùng catalog go-live bên dưới.
+    return buildListingBrowsePage([], 0, catalogItems, page, pageSize);
   }
-
-  if (params.transactionType === "SALE") {
-    const merged = mergeSaleBrowseCards(dbItems, params);
-    if (merged.length > 0) {
-      const usedCatalog = merged.length > dbItems.length || dbItems.length === 0;
-      return paginateCatalog(merged, page, pageSize, usedCatalog);
-    }
-  } else if (dbItems.length > 0) {
-    const filtered = filterDemoCards(dbItems, params);
-    return paginateCatalog(filtered, page, pageSize);
-  }
-
-  return {
-    items: [],
-    pagination: { page, pageSize, total: 0, totalPages: 1 },
-  };
 }
 
 type ListingWithEditorialTitle = PublicListingDetail;

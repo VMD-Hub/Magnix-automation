@@ -25,8 +25,6 @@ export function HouseXFooterLogo({ href = null, className }: Props) {
         alt={`${getBrandName()} — ${HOUSEX_FOOTER_TAGLINE}`}
         width={HOUSEX_FOOTER_LOGO_WIDTH}
         height={HOUSEX_FOOTER_LOGO_HEIGHT}
-        quality={100}
-        unoptimized
         sizes="(max-width: 640px) 220px, 300px"
         className="housex-footer-logo__img"
       />

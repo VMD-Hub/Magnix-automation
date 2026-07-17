@@ -37,8 +37,6 @@ export function HouseXHeaderLogo({
         width={HOUSEX_BRAND_LOGO_MARK_WIDTH}
         height={HOUSEX_BRAND_LOGO_MARK_HEIGHT}
         priority={priority}
-        quality={100}
-        unoptimized
         sizes="(max-width: 640px) 180px, 220px"
         className="housex-header-logo__img"
       />

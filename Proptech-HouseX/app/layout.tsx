@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 import { Inter, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { AppBody } from "@/components/layout/app-body";
+import { SiteHeader } from "@/components/layout/site-header";
+import { SiteFooter } from "@/components/layout/site-footer";
+import { EmailVerificationBanner } from "@/components/layout/header-auth";
 import { ThemeScript } from "@/components/theme/theme-script";
 import { UtmCapture } from "@/components/leads/utm-capture";
 import { getSiteUrl } from "@/lib/site-config";
@@ -59,7 +62,13 @@ export default function RootLayout({
         />
         <ThemeScript />
         <UtmCapture />
-        <AppBody>{children}</AppBody>
+        <AppBody
+          header={<SiteHeader />}
+          verificationBanner={<EmailVerificationBanner />}
+          footer={<SiteFooter />}
+        >
+          {children}
+        </AppBody>
       </body>
     </html>
   );

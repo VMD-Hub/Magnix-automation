@@ -10,6 +10,7 @@ import {
   ProjectLandingView,
 } from "@/components/projects/project-landing-view";
 import { getPublicProjectBySlug } from "@/lib/data/project-public";
+import { getProjectMarketplaceListings } from "@/lib/data/listing";
 import { getProjectInventoryForPage } from "@/lib/data/project-unit";
 import { getArticlesForProjectSlug } from "@/lib/data/article-public";
 import { getDemoProjectInventory } from "@/lib/preview/demo-project-inventory";
@@ -79,26 +80,26 @@ export default async function ProjectPage({ params, searchParams }: PageProps) {
   }
 
   const { project, marketplaceListings, source } = result;
-  const relatedArticles = await getArticlesForProjectSlug(project.slug, 6);
   const jsonLd = buildProjectJsonLd(project);
   const overview = parseProjectOverview(project.overviewData);
   const hasRichLanding =
     (overview.landing?.highlights.length ?? 0) > 0 ||
     (overview.landing?.gallery.length ?? 0) > 0;
-
-  let inventory = null;
-  if (source === "db") {
-    try {
-      inventory = await getProjectInventoryForPage(slug, inventoryFilters);
-    } catch {
-      inventory = getDemoProjectInventory(slug, inventoryFilters);
-    }
-  } else {
-    inventory = getDemoProjectInventory(slug, inventoryFilters);
-  }
-
   const useDirectLanding =
     source === "demo" || source === "catalog" || hasRichLanding;
+
+  const [relatedArticles, inventory, resolvedMarketplaceListings] =
+    await Promise.all([
+      getArticlesForProjectSlug(project.slug, 6),
+      source === "db"
+        ? getProjectInventoryForPage(slug, inventoryFilters).catch(() =>
+            getDemoProjectInventory(slug, inventoryFilters),
+          )
+        : Promise.resolve(getDemoProjectInventory(slug, inventoryFilters)),
+      source === "db" && !useDirectLanding
+        ? getProjectMarketplaceListings(project.id).catch(() => [])
+        : Promise.resolve(marketplaceListings),
+    ]);
 
   return (
     <>
@@ -112,7 +113,7 @@ export default async function ProjectPage({ params, searchParams }: PageProps) {
       {useDirectLanding ? (
         <ProjectLandingContent
           project={project}
-          marketplaceListings={marketplaceListings}
+          marketplaceListings={resolvedMarketplaceListings}
           relatedArticles={relatedArticles}
           inventory={inventory}
           inventoryFilters={inventoryFilters}
@@ -120,6 +121,7 @@ export default async function ProjectPage({ params, searchParams }: PageProps) {
       ) : (
         <ProjectLandingView
           project={project}
+          marketplaceListings={resolvedMarketplaceListings}
           relatedArticles={relatedArticles}
           inventory={inventory}
           inventoryFilters={inventoryFilters}

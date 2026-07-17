@@ -1,3 +1,4 @@
+import { cache } from "react";
 import type { ProjectDetail } from "@/lib/data/project";
 import type { ProjectLandingListingCard } from "@/lib/data/listing";
 import {
@@ -75,7 +76,7 @@ function getCatalogLanding(slug: string): PublicProjectResult | null {
 }
 
 /** Trang công khai — DB trước, catalog go-live, rồi demo dev. */
-export async function getPublicProjectBySlug(
+async function loadPublicProjectBySlug(
   slug: string,
 ): Promise<PublicProjectResult | null> {
   if (isInternalDemoProjectSlug(slug)) return null;
@@ -111,3 +112,9 @@ export async function getPublicProjectBySlug(
     source: "demo",
   };
 }
+
+/**
+ * Metadata và page cùng resolve một slug trong một render pass.
+ * React cache chỉ memoize theo request/render, không làm dữ liệu DB bị stale.
+ */
+export const getPublicProjectBySlug = cache(loadPublicProjectBySlug);

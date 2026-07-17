@@ -1,18 +1,13 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { Icon } from "@/components/icons";
 import { ButtonLink } from "@/components/ui/button";
 import { HouseXHeaderLogo } from "@/components/brand/housex-header-logo";
 import { HeaderAuth } from "@/components/layout/header-auth";
 import { EmbedAwareLink } from "@/components/miniapp/embed-links";
-import {
-  NEWS_HUB_PATH,
-  NEWS_HUB_TITLE,
-  NOXH_HANDBOOK_PATH,
-} from "@/lib/content/article-routes";
+import { NOXH_HANDBOOK_PATH } from "@/lib/content/article-routes";
 import { NOXH_HANDBOOK_TITLE } from "@/lib/content/messaging/noxh-public";
 import { cn } from "@/lib/ui/cn";
 
@@ -28,28 +23,8 @@ const NAV = [
   { label: NOXH_HANDBOOK_TITLE, href: NOXH_HANDBOOK_PATH },
 ] as const;
 
-/** Prefetch các trang catalog chính — phản hồi nhanh khi chuyển tab header. */
-const PREFETCH_HREFS = new Set<string>([
-  "/mua-ban",
-  "/cho-thue",
-  "/du-an",
-  "/tai-chinh",
-  "/dinh-gia",
-  "/cong-cu",
-  "/dich-vu",
-]);
-
 export function SiteHeader() {
-  const router = useRouter();
   const [open, setOpen] = useState(false);
-
-  useEffect(() => {
-    for (const item of NAV) {
-      if (PREFETCH_HREFS.has(item.href)) {
-        router.prefetch(item.href);
-      }
-    }
-  }, [router]);
 
   return (
     <header className="site-header-bar proptech-header-ruby sticky top-0 z-50 print:hidden">

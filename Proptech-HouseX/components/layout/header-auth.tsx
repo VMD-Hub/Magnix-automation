@@ -14,15 +14,28 @@ type AuthUser = {
   role?: string;
 };
 
+let authUserRequest: Promise<AuthUser | null> | null = null;
+
+function fetchAuthUser() {
+  if (!authUserRequest) {
+    authUserRequest = fetch("/api/auth/me")
+      .then((response) => response.json())
+      .then((json) => json.data?.user ?? null)
+      .catch(() => null)
+      .finally(() => {
+        authUserRequest = null;
+      });
+  }
+
+  return authUserRequest;
+}
+
 export function HeaderAuth() {
   const router = useRouter();
   const [user, setUser] = useState<AuthUser | null | undefined>(undefined);
 
   useEffect(() => {
-    fetch("/api/auth/me")
-      .then((r) => r.json())
-      .then((j) => setUser(j.data?.user ?? null))
-      .catch(() => setUser(null));
+    fetchAuthUser().then(setUser);
   }, []);
 
   async function logout() {
@@ -65,10 +78,10 @@ export function EmailVerificationBanner() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    fetch("/api/auth/me")
-      .then((r) => r.json())
-      .then((j) => setUser(j.data?.user ?? null))
-      .finally(() => setLoaded(true));
+    fetchAuthUser().then((authUser) => {
+      setUser(authUser);
+      setLoaded(true);
+    });
   }, []);
 
   if (!loaded || !user || user.emailVerified) return null;

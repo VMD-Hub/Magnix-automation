@@ -64,10 +64,38 @@ PEXELS_API_KEY=
 
 Restart container sau khi sửa env:
 
-```bash
-ssh -p 24700 root@103.57.221.93
-docker rm -f n8n && docker run -d --name n8n -p 5678:5678 --env-file /root/n8n.env -v n8n_data:/home/node/.n8n --restart unless-stopped n8nio/n8n
+```powershell
+# In version + image ID đang chạy (không lộ env/secrets)
+ssh -p 24700 root@103.57.221.93 "docker exec n8n n8n --version; docker inspect n8n --format='{{.Config.Image}} {{.Image}}'"
+
+# Generate env rồi redeploy đúng image ID hiện đang chạy (không tự major upgrade)
+node scripts/generate-n8n-vps-env.mjs
+node scripts/deploy-vps-n8n.mjs
 ```
+
+`deploy-vps-n8n.mjs` mặc định lấy immutable image ID của container hiện tại trước khi
+recreate. Chỉ đặt `N8N_IMAGE=n8nio/n8n:<exact-version>` khi chủ động nâng cấp đã test;
+không dùng tag trôi `n8nio/n8n` hoặc `latest`. Trước khi recreate, script tạo bản
+`n8n_data` + `/root/n8n.env` (chứa encryption key) trong `/root/backup/n8n`,
+kiểm tra checksum, giữ container cũ dưới tên `n8n-before-deploy`, rồi chỉ xóa
+container cũ sau khi `/healthz` của bản mới trả thành công. Nếu health check lỗi,
+script tự khôi phục container cũ.
+
+Thiết lập và kiểm tra retention trên VPS:
+
+```bash
+# Mặc định read-only, in version/image ID, disk, Docker, log và n8n retention.
+bash scripts/vps/measure-runtime-retention.sh
+
+# Xem trước rồi mới cài PM2/logrotate.
+bash scripts/vps/setup-runtime-log-retention.sh
+sudo bash scripts/vps/setup-runtime-log-retention.sh --apply
+
+# Apply housekeeping chỉ xoá dangling image >7 ngày + chạy logrotate.
+sudo bash scripts/vps/measure-runtime-retention.sh --apply
+```
+
+Các script trên không prune Docker volume, `pg_wal`, uploads hoặc backup.
 
 ---
 

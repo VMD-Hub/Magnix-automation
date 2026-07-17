@@ -54,6 +54,7 @@ export function ProfileVideo({ variant = "light" }: Props) {
           className="h-full w-full"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowFullScreen
+          loading="lazy"
         />
       </div>
     );

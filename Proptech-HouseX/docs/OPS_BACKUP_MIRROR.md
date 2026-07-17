@@ -42,6 +42,32 @@ export HOUSEX_BACKUP_RETENTION_DAYS=14
 export HOUSEX_PG_CONTAINER=housex-postgres
 ```
 
+Mỗi lần chạy dùng `flock` để chặn hai cron chạy chồng nhau. Dump được ghi vào
+file tạm, kiểm tra `gzip`, kiểm tra stream SQL không rỗng, tạo SHA-256 rồi mới
+atomic rename thành `housex-*.sql.gz`. Retention chỉ chạy sau các bước này và
+luôn giữ bản backup thành công mới nhất, kể cả khi retention đặt bằng `0`.
+
+### Off-site hook (bắt buộc trước khi tự động prune)
+
+Khi có nơi lưu off-VPS, cấu hình **cả hai** executable:
+
+```bash
+export HOUSEX_BACKUP_OFFSITE_HOOK=/opt/housex/bin/upload-backup
+export HOUSEX_BACKUP_OFFSITE_VERIFY_HOOK=/opt/housex/bin/verify-backup
+```
+
+Mỗi hook nhận hai argument: đường dẫn `.sql.gz` và `.sql.gz.sha256`. Upload
+chạy trước; verify phải kiểm tra object remote/checksum và exit `0`. Nếu một
+hook lỗi, thiếu hoặc không executable, backup local vẫn được giữ nhưng script
+exit lỗi và **không prune**. Nếu chưa cấu hình hook, script vẫn tạo backup mới
+nhưng mặc định bỏ qua retention để không xóa khi chưa có bản off-site đã verify.
+
+Chỉ khi chủ động chấp nhận lưu local-only mới bật:
+
+```bash
+export HOUSEX_BACKUP_ALLOW_LOCAL_ONLY_RETENTION=true
+```
+
 ### Khôi phục (khi cần)
 
 ```bash
@@ -53,7 +79,29 @@ gunzip -c ~/backup/housex/housex-YYYY-MM-DD_HHMM.sql.gz | \
 
 ---
 
-## 2. Google Sheet mirror
+## 2. Audit media listing local (read-only)
+
+Đối chiếu file trong `public/uploads/listings/` với URL local trong
+`listing_media`:
+
+```bash
+npm run media:audit-orphans
+npm run media:audit-orphans -- --format json --output ./reports/media-orphans.json
+```
+
+Report liệt kê:
+
+- file orphan trên disk (không có URL tương ứng trong Postgres);
+- URL local trong Postgres nhưng thiếu file trên disk;
+- tổng URL external/CDN không thuộc thư mục local.
+
+Script chỉ đọc filesystem và Postgres, không có chế độ delete/quarantine.
+`--output` dùng create-only và sẽ từ chối ghi đè report cũ. Có thể dùng
+`--uploads-dir` để audit một mount/restore copy khác.
+
+---
+
+## 3. Google Sheet mirror
 
 ### Chuẩn bị Sheet
 
@@ -190,9 +238,11 @@ Kỳ vọng smoke: `OK — tab=ops_mirror inbound=N noxh=M rows=...`
 
 ---
 
-## 3. Checklist go-live Phase 3B
+## 4. Checklist go-live Phase 3B
 
 - [ ] `backup-postgres-vps.sh` chạy tay OK
+- [ ] `.sql.gz` pass `gzip -t` và `.sha256` pass `sha256sum -c`
+- [ ] `npm run media:audit-orphans` đã review orphan/missing media
 - [ ] Cron backup + mirror trong `crontab -l`
 - [ ] `go-live:check-sheet-mirror` pass
 - [ ] `go-live:smoke-sheet-mirror` OK (không SKIP)

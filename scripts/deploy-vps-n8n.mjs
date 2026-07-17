@@ -21,6 +21,12 @@ const PORT = process.env.MAGNIX_VPS_PORT || '24700';
 const USER = process.env.MAGNIX_VPS_USER || 'root';
 const ENV_FILE = path.join(root, 'n8n-workflows/.env.vps.generated');
 const MERGED_FILE = path.join(root, 'n8n-workflows/.env.vps.merged');
+const N8N_IMAGE = (process.env.N8N_IMAGE || '').trim();
+
+if (N8N_IMAGE && !/^[a-zA-Z0-9][a-zA-Z0-9._/:@-]+$/.test(N8N_IMAGE)) {
+  console.error('N8N_IMAGE không hợp lệ; dùng image:tag hoặc image@sha256:digest');
+  process.exit(1);
+}
 
 const PRESERVE_KEYS = new Set([
   'N8N_ENCRYPTION_KEY',
@@ -112,15 +118,37 @@ const scpStatus = run('scp', ['-P', PORT, '-o', 'StrictHostKeyChecking=no', MERG
 if (scpStatus !== 0) {
   console.error('\nSSH/SCP thất bại — chạy thủ công trong PowerShell (nhập password VPS):');
   console.error(`  scp -P ${PORT} "${MERGED_FILE}" ${USER}@${HOST}:/root/n8n.env`);
-  console.error(`  ssh -p ${PORT} ${USER}@${HOST} "docker rm -f n8n; docker run -d --name n8n -p 5678:5678 --env-file /root/n8n.env -v n8n_data:/home/node/.n8n --restart unless-stopped n8nio/n8n"`);
+  console.error('  Sau đó chạy lại script để giữ đúng image ID đang deploy; không dùng tag latest/n8nio/n8n trôi.');
   process.exit(1);
 }
 
+const imageOverride = N8N_IMAGE ? `'${N8N_IMAGE}'` : "''";
 const remoteScript = [
-  'docker rm -f n8n 2>/dev/null || true',
-  'docker run -d --name n8n -p 5678:5678 --env-file /root/n8n.env -v n8n_data:/home/node/.n8n --restart unless-stopped n8nio/n8n',
-  'sleep 2',
+  'set -e',
+  `N8N_IMAGE_OVERRIDE=${imageOverride}`,
+  'N8N_BACKUP_CONTAINER=n8n-before-deploy',
+  'if docker inspect "$N8N_BACKUP_CONTAINER" >/dev/null 2>&1; then echo "ERROR: $N8N_BACKUP_CONTAINER already exists; inspect/remove it before deploy" >&2; exit 1; fi',
+  'CURRENT_N8N_IMAGE_ID="$(docker inspect n8n --format \'{{.Image}}\' 2>/dev/null || true)"',
+  'CURRENT_N8N_VERSION="$(docker exec n8n n8n --version 2>/dev/null || true)"',
+  'N8N_IMAGE_TO_RUN="${N8N_IMAGE_OVERRIDE:-$CURRENT_N8N_IMAGE_ID}"',
+  'test -n "$N8N_IMAGE_TO_RUN" || { echo "ERROR: no running n8n image; set N8N_IMAGE to an exact version/digest" >&2; exit 1; }',
+  'echo "Current n8n version=${CURRENT_N8N_VERSION:-unknown} image_id=${CURRENT_N8N_IMAGE_ID:-none}"',
+  'echo "Deploying pinned image=$N8N_IMAGE_TO_RUN"',
+  'BACKUP_STAMP="$(date +%F_%H%M%S)"',
+  'mkdir -p /root/backup/n8n',
+  'cp /root/n8n.env "/root/backup/n8n/n8n.env-${BACKUP_STAMP}"',
+  'chmod 600 "/root/backup/n8n/n8n.env-${BACKUP_STAMP}"',
+  'docker run --rm --entrypoint sh -v n8n_data:/data:ro -v /root/backup/n8n:/backup "$N8N_IMAGE_TO_RUN" -c "tar -czf /backup/n8n-data-${BACKUP_STAMP}.tgz -C /data ."',
+  'sha256sum "/root/backup/n8n/n8n-data-${BACKUP_STAMP}.tgz" > "/root/backup/n8n/n8n-data-${BACKUP_STAMP}.tgz.sha256"',
+  'echo "Backup verified: /root/backup/n8n/n8n-data-${BACKUP_STAMP}.tgz"',
+  'docker stop n8n',
+  'docker rename n8n "$N8N_BACKUP_CONTAINER"',
+  'if ! docker run -d --name n8n -p 5678:5678 --env-file /root/n8n.env -v n8n_data:/home/node/.n8n --restart unless-stopped --log-driver json-file --log-opt max-size=10m --log-opt max-file=5 "$N8N_IMAGE_TO_RUN"; then docker rm -f n8n 2>/dev/null || true; docker rename "$N8N_BACKUP_CONTAINER" n8n; docker start n8n; exit 1; fi',
+  'sleep 15',
+  'if ! curl -fsS http://127.0.0.1:5678/healthz >/dev/null; then docker logs --tail 100 n8n >&2 || true; docker rm -f n8n; docker rename "$N8N_BACKUP_CONTAINER" n8n; docker start n8n; echo "ERROR: n8n health check failed; rolled back" >&2; exit 1; fi',
   'docker ps --filter name=n8n --format "{{.Names}} {{.Status}}"',
+  'docker exec n8n n8n --version',
+  'docker rm "$N8N_BACKUP_CONTAINER"',
 ].join('; ');
 
 const sshStatus = run('ssh', ['-p', PORT, '-o', 'StrictHostKeyChecking=no', `${USER}@${HOST}`, remoteScript]);
