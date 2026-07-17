@@ -15,31 +15,50 @@ Postgres = store of record. Hai lớp an toàn bổ sung:
 
 ```bash
 cd /opt/housex/Proptech-HouseX
-chmod +x scripts/backup-postgres-vps.sh
-mkdir -p ~/backup/housex
-./scripts/backup-postgres-vps.sh
-ls -lh ~/backup/housex/
+chmod +x scripts/install-housex-backup.sh
+sudo ./scripts/install-housex-backup.sh
+# Điền secret chỉ trong /etc/housex/backup.env, không paste vào command/history.
 ```
 
-### Cron
+Installer copy backup/upload/verify vào `/usr/local/libexec/housex-backup/`, wrapper
+và checker vào `/usr/local/sbin/`, owner `root:root`, mode `0755`; env là `0600`.
+Nếu env đã tồn tại, installer giữ nội dung và chỉ siết owner/mode. Installer chỉ
+**in** cron để review, không đọc/ghi đè crontab. Runtime từ chối symlink, executable
+không thuộc root, executable/parent directory group-writable hoặc world-writable,
+và env không root-only. Vì vậy cron không chạy script trực tiếp trong deploy tree.
+
+### rclone Drive + crypt (OAuth là bước thủ công)
+
+1. Trên máy có browser, chạy `rclone config` và tạo remote backend Drive, ví dụ
+   `housex-drive`. OAuth consent/login trong browser là **manual boundary**; script,
+   CI và agent không được tự đăng nhập hoặc lưu token vào repo.
+2. Tạo remote thứ hai loại `crypt`, ví dụ `housex-crypt`, trỏ
+   `remote = housex-drive:housex-backup-encrypted`. Bật mã hóa filename và directory
+   name. Hook kiểm tra cả `type = crypt` lẫn backend trực tiếp bên dưới phải là
+   `type = drive`; local, SFTP và backend cùng VPS đều bị từ chối. Không dùng
+   `housex-drive:...` trực tiếp cho hook.
+3. Chuyển `rclone.conf` tới VPS ngoài repo, đặt owner `root:root`, mode `0600`.
+   Chạy `rclone config file` dưới root để xác nhận đúng file. Không log
+   `rclone config show` vì có credential đã obfuscate. Ghi absolute path vào
+   `RCLONE_CONFIG`; runtime/checker cũng từ chối symlink, non-root owner hoặc
+   group/other permission trên file và parent chain không an toàn.
+4. Trong `/etc/housex/backup.env`, đặt
+   `HOUSEX_BACKUP_RCLONE_REMOTE=housex-crypt:postgres`, URL webhook HTTPS và
+   `MAGNIX_WEBHOOK_TOKEN`. Giữ `HOUSEX_BACKUP_REQUIRE_OFFSITE=true`.
+
+Preflight chỉ đọc và in cron; không sửa crontab:
 
 ```bash
-npm run go-live:print-cron   # copy dòng backup + sheet-mirror
+/usr/local/sbin/housex-backup-check /etc/housex/backup.env
+HOUSEX_BACKUP_ENV_FILE=/etc/housex/backup.env /usr/local/sbin/housex-backup-cron
+npm run go-live:print-cron
 crontab -e
 ```
 
-Dòng mẫu:
+Dòng backup idempotent:
 
 ```cron
-15 2 * * * /opt/housex/Proptech-HouseX/scripts/backup-postgres-vps.sh >> /var/log/housex-backup.log 2>&1
-```
-
-### Biến tùy chọn
-
-```bash
-export HOUSEX_BACKUP_DIR=/root/backup/housex
-export HOUSEX_BACKUP_RETENTION_DAYS=14
-export HOUSEX_PG_CONTAINER=housex-postgres
+15 2 * * * HOUSEX_BACKUP_ENV_FILE=/etc/housex/backup.env /usr/local/sbin/housex-backup-cron >> /var/log/housex-backup.log 2>&1
 ```
 
 Mỗi lần chạy dùng `flock` để chặn hai cron chạy chồng nhau. Dump được ghi vào
@@ -47,26 +66,52 @@ file tạm, kiểm tra `gzip`, kiểm tra stream SQL không rỗng, tạo SHA-25
 atomic rename thành `housex-*.sql.gz`. Retention chỉ chạy sau các bước này và
 luôn giữ bản backup thành công mới nhất, kể cả khi retention đặt bằng `0`.
 
-### Off-site hook (bắt buộc trước khi tự động prune)
+### Off-site upload/verify và fail-closed retention
 
-Khi có nơi lưu off-VPS, cấu hình **cả hai** executable:
+Hai hook giữ nguyên interface `<backup.sql.gz> <backup.sql.gz.sha256>`. Upload
+kiểm tra checksum/gzip local rồi ghi hai object timestamp bất biến bằng
+`rclone copyto --immutable`. Verify tải **cả hai** object vào `mktemp`, tự kiểm tra
+trusted local checksum, yêu cầu checksum remote khớp chính xác hash/tên local,
+kiểm tra SHA-256/gzip và xóa temp trên mọi exit.
 
-```bash
-export HOUSEX_BACKUP_OFFSITE_HOOK=/opt/housex/bin/upload-backup
-export HOUSEX_BACKUP_OFFSITE_VERIFY_HOOK=/opt/housex/bin/verify-backup
-```
+Retention xác minh **từng object cũ** trước khi xóa. Thiếu checksum local hoặc object
+remote cũ không download/verify được thì giữ file đó và toàn backup run exit nonzero
+để monitoring thấy lỗi. Việc newest object pass không cấp quyền prune object khác.
 
-Mỗi hook nhận hai argument: đường dẫn `.sql.gz` và `.sql.gz.sha256`. Upload
-chạy trước; verify phải kiểm tra object remote/checksum và exit `0`. Nếu một
-hook lỗi, thiếu hoặc không executable, backup local vẫn được giữ nhưng script
-exit lỗi và **không prune**. Nếu chưa cấu hình hook, script vẫn tạo backup mới
-nhưng mặc định bỏ qua retention để không xóa khi chưa có bản off-site đã verify.
+Thiếu hook, upload lỗi, remote corruption hoặc verify lỗi đều làm backup exit
+nonzero, giữ backup local và **không prune**. Cron wrapper không phát lại raw
+docker/rclone output; nó ghi status bounded và POST event deterministic
+`housex-backup:YYYY-MM-DD:workflow_blocked` tới `telegram-notify`. Webhook tiếp tục
+dedupe theo `event_id`. Alert lỗi không thay đổi exit code backup.
 
-Chỉ khi chủ động chấp nhận lưu local-only mới bật:
+HTTP 200 chưa đủ chứng minh alert. Wrapper chỉ chấp nhận
+`telegram_sent:true`, hoặc duplicate response chính xác
+`ok:true, duplicate:true, skipped:true, reason:"DUPLICATE_EVENT_ID"` — nghĩa là
+event ID hôm đó đã được notify workflow ghi nhận trước đó. Response bị giới hạn
+4 KiB, parse kín và không log.
 
-```bash
-export HOUSEX_BACKUP_ALLOW_LOCAL_ONLY_RETENTION=true
-```
+Google Drive không có backend object lock/WORM trong cấu hình này.
+`rclone --immutable` chỉ là client-side protection của lần gọi đó; credential khác
+vẫn có thể sửa/xóa object. Dùng dedicated Drive account/folder với quyền tối thiểu,
+không share Editor rộng, và coi quarterly downloaded restore là control bắt buộc.
+
+### Rotation, theo dõi và restore drill
+
+- Rotate OAuth/rclone token và `MAGNIX_WEBHOOK_TOKEN` ít nhất mỗi 90 ngày hoặc ngay
+  khi nghi lộ; cập nhật file root-only bằng atomic replace, chạy preflight + backup
+  tay, rồi revoke credential cũ. Không gửi token qua chat/log.
+- Mỗi sáng kiểm tra có dòng `OK House X daily backup completed` trong log và không
+  có `workflow_blocked` chưa xử lý. Một alert/ngày được dedupe, nhưng lỗi phải được
+  xử lý ngay, không chờ alert kế tiếp.
+- Telegram không thể báo lỗi xảy ra trước khi env an toàn/credential được load
+  (env mất, owner/mode/parent sai, wrapper bị từ chối). Khuyến nghị thêm dead-man
+  bên ngoài VPS: wrapper ping heartbeat URL chỉ sau exit `0`, dịch vụ ngoài cảnh báo
+  nếu quá 26–30 giờ không có heartbeat. Heartbeat URL cũng phải nằm trong env
+  root-only; đây là khuyến nghị, chưa được script triển khai.
+- Hàng quý: chọn object từ **crypt remote**, download bằng rclone vào máy DR,
+  kiểm checksum/gzip, chạy `db:verify-restore` với DB disposable, lưu evidence
+  create-only ngoài VPS. Không dùng bản local VPS làm bằng chứng off-site.
+- Test hermetic không cần network: `npm run backup:test`.
 
 ### Xác minh restore an toàn (local)
 
@@ -298,5 +343,8 @@ Kỳ vọng smoke: `OK — tab=ops_mirror inbound=N noxh=M rows=...`
 - [ ] `go-live:check-sheet-mirror` pass
 - [ ] `go-live:smoke-sheet-mirror` OK (không SKIP)
 - [ ] Tab `ops_mirror` có dữ liệu sau smoke
-- [ ] 1 file backup đã copy off-VPS (Drive)
-- [ ] Off-VPS upload/download/checksum và VPS/DR restore proof đã lưu external
+- [ ] OAuth Drive + rclone crypt đã cấu hình thủ công dưới root, file mode `0600`
+- [ ] `/usr/local/sbin/housex-backup-check` pass và installed cron wrapper có trong `crontab -l`
+- [ ] Upload + independent download/checksum/gzip từ crypt remote pass
+- [ ] Alert `workflow_blocked` controlled test đã delivery/dedupe thực tế
+- [ ] Quarterly DR restore từ object off-site đã pass và evidence lưu external

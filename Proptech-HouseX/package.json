@@ -16,6 +16,7 @@
     "db:deploy": "prisma migrate deploy",
     "db:seed": "prisma db seed",
     "db:verify-restore": "node --import tsx scripts/verify-postgres-restore.ts",
+    "backup:test": "bash scripts/test-housex-backup.sh",
     "db:seed:vinhomes": "node --env-file=.env --import tsx scripts/seed-vinhomes-projects.ts",
     "db:seed:commercial": "node --env-file=.env --import tsx scripts/seed-commercial-landings.ts",
     "db:seed:noxh": "node --env-file=.env --import tsx scripts/seed-noxh-long-an.ts",

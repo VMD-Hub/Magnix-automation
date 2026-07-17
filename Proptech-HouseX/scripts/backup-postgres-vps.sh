@@ -4,8 +4,7 @@
 #   chmod +x scripts/backup-postgres-vps.sh
 #   ./scripts/backup-postgres-vps.sh
 #
-# Cron (xem npm run go-live:print-cron):
-#   15 2 * * * /opt/housex/Proptech-HouseX/scripts/backup-postgres-vps.sh >> /var/log/housex-backup.log 2>&1
+# Install with install-housex-backup.sh; cron invokes /usr/local/sbin/housex-backup-cron.
 
 set -euo pipefail
 
@@ -17,14 +16,18 @@ RETENTION_DAYS="${HOUSEX_BACKUP_RETENTION_DAYS:-14}"
 LOCK_FILE="${HOUSEX_BACKUP_LOCK_FILE:-$BACKUP_DIR/.backup.lock}"
 OFFSITE_HOOK="${HOUSEX_BACKUP_OFFSITE_HOOK:-}"
 OFFSITE_VERIFY_HOOK="${HOUSEX_BACKUP_OFFSITE_VERIFY_HOOK:-}"
-ALLOW_LOCAL_ONLY_RETENTION="${HOUSEX_BACKUP_ALLOW_LOCAL_ONLY_RETENTION:-false}"
+REQUIRE_OFFSITE="${HOUSEX_BACKUP_REQUIRE_OFFSITE:-true}"
 
 if ! [[ "$RETENTION_DAYS" =~ ^[0-9]+$ ]]; then
   echo "ERROR: HOUSEX_BACKUP_RETENTION_DAYS must be a non-negative integer" >&2
   exit 1
 fi
+if [[ "$REQUIRE_OFFSITE" != "true" && "$REQUIRE_OFFSITE" != "false" ]]; then
+  echo "ERROR: HOUSEX_BACKUP_REQUIRE_OFFSITE must be true or false" >&2
+  exit 1
+fi
 
-for command_name in docker flock gzip sha256sum find awk; do
+for command_name in docker flock gzip sha256sum find awk grep wc date basename mv rm du cut; do
   if ! command -v "$command_name" >/dev/null 2>&1; then
     echo "ERROR: required command not found: $command_name" >&2
     exit 1
@@ -99,23 +102,45 @@ if [[ -n "$OFFSITE_HOOK" || -n "$OFFSITE_VERIFY_HOOK" ]]; then
   "$OFFSITE_HOOK" "$FILE" "$CHECKSUM_FILE"
   "$OFFSITE_VERIFY_HOOK" "$FILE" "$CHECKSUM_FILE"
   OFFSITE_VERIFIED=true
+elif [[ "$REQUIRE_OFFSITE" == "true" ]]; then
+  echo "ERROR: off-site upload and verify hooks are required; local backup was kept and retention was not run" >&2
+  exit 1
 fi
 
 # This run's atomically published file is the newest successful backup.
 # Always exclude it, even when retention is zero or the system clock changes.
 NEWEST_SUCCESSFUL="$FILE"
-if [[ "$OFFSITE_VERIFIED" == true || "$ALLOW_LOCAL_ONLY_RETENTION" == true ]]; then
+RETENTION_FAILED=false
+if [[ "$OFFSITE_VERIFIED" == true ]]; then
   while IFS= read -r -d '' OLD_FILE; do
     if [[ "$OLD_FILE" == "$NEWEST_SUCCESSFUL" ]]; then
       continue
     fi
-    rm -f -- "$OLD_FILE" "${OLD_FILE}.sha256"
+    OLD_CHECKSUM="${OLD_FILE}.sha256"
+    if [[ ! -f "$OLD_CHECKSUM" ]]; then
+      echo "ERROR: retention preserved $(basename "$OLD_FILE"): trusted checksum is missing" >&2
+      RETENTION_FAILED=true
+      continue
+    fi
+    # Verification is per candidate. A valid newest object never authorizes
+    # deletion of an unrelated older local recovery point.
+    if ! "$OFFSITE_VERIFY_HOOK" "$OLD_FILE" "$OLD_CHECKSUM"; then
+      echo "ERROR: retention preserved $(basename "$OLD_FILE"): exact remote object could not be verified" >&2
+      RETENTION_FAILED=true
+      continue
+    fi
+    rm -f -- "$OLD_FILE" "$OLD_CHECKSUM"
   done < <(
     find "$BACKUP_DIR" -maxdepth 1 -type f -name 'housex-*.sql.gz' \
       -mtime +"$RETENTION_DAYS" -print0
   )
 else
-  echo "WARN: local retention skipped until off-site verification is configured; set HOUSEX_BACKUP_ALLOW_LOCAL_ONLY_RETENTION=true only if explicitly accepted"
+  echo "WARN: local retention skipped because off-site verification is unavailable"
+fi
+
+if [[ "$RETENTION_FAILED" == true ]]; then
+  echo "ERROR: one or more expired local backups were preserved because per-object off-site verification failed" >&2
+  exit 1
 fi
 
 SIZE="$(du -h "$FILE" | cut -f1)"

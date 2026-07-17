@@ -69,7 +69,15 @@ Local result on 2026-07-17:
 
 - **NOT PASSED — off-VPS recovery:** backup upload/download/checksum from an
   independent destination has not been demonstrated; the verified restore source
-  above remained on the production VPS.
+  above remained on the production VPS. Repository automation now includes
+  fail-closed rclone crypt upload, independent download verification, sanitized
+  deduplicated failure alerting and hermetic tests. Hardening additionally requires
+  a Drive-backed crypt target, root-owned installed executables, exact trusted
+  checksum matching and per-object remote verification before every local prune.
+  This is implementation
+  evidence only: OAuth setup, production cron installation, one real crypt-remote
+  round trip and a quarterly DR restore remain manual/external gates. Exact
+  runbook: `docs/OPS_BACKUP_MIRROR.md`.
 - **NOT PASSED — workflow-by-workflow smoke:** n8n deployment and active state are
   proven, but each content/Telegram workflow still needs a masked execution ID and
   sink assertion before its registry row moves from staging.
