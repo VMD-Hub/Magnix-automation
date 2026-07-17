@@ -101,6 +101,9 @@ if ((stats.carousel_ok || 0) === 0) {
   else if ((stats.parse_fail || 0) > 0) hint = 'Parse fail — xem Parse Carousel JSON';
   else if ((stats.l0_fail || 0) > 0) hint = 'L0 chặn — xem L0 Forbidden Check';
 }
+if ((stats.carousel_ok || 0) === 0 && !stats.no_candidates) {
+  throw new Error('CAROUSEL_DRAFT_FAILED: ' + (hint || 'Không tạo được carousel draft'));
+}
 return [{ json: {
   ok: true,
   workflow: 'content-carousel-draft',
