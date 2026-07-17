@@ -3,7 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { created, fail, handleApiError } from "@/lib/api/http";
 import { noxhLoanQuickLeadSchema } from "@/lib/validation/noxh-loan-quick-check";
 import { normalizeVnPhone, isValidVnPhone } from "@/lib/phone";
-import { isRateLimited } from "@/lib/redis";
+import { isRateLimited, kv } from "@/lib/redis";
 import { ipHash } from "@/lib/api/request-meta";
 import { enqueueEvent } from "@/lib/events/outbox";
 import { forwardEventToWebhook } from "@/lib/events/handlers";
@@ -38,6 +38,18 @@ export async function POST(req: NextRequest) {
     });
     const tier = quickCheckTier(screen.status);
     const message = noxhLoanQuickLeadMessage(screen, body);
+    const idemKey = req.headers.get("idempotency-key");
+    if (idemKey) {
+      const existingLeadId = await kv.get(`idem:noxh-loan-quick:${idemKey}`);
+      if (existingLeadId) {
+        return created({
+          id: existingLeadId,
+          tier,
+          screen: { status: screen.status },
+          deduplicated: true,
+        });
+      }
+    }
 
     const { lead, eventPayload } = await prisma.$transaction(async (tx) => {
       const customer = await tx.customer.upsert({
@@ -93,6 +105,10 @@ export async function POST(req: NextRequest) {
         });
       },
     );
+
+    if (idemKey) {
+      await kv.set(`idem:noxh-loan-quick:${idemKey}`, lead.id, 86_400);
+    }
 
     return created({ id: lead.id, tier, screen: { status: screen.status } });
   } catch (err) {

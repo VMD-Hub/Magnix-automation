@@ -1,5 +1,6 @@
 import { NextRequest } from "next/server";
-import { fail, handleApiError, ok } from "@/lib/api/http";
+import { handleApiError, ok } from "@/lib/api/http";
+import { cronAuthError } from "@/lib/api/cron-auth";
 import { runNoxhCaseMaintenance } from "@/lib/noxh-case/case-maintenance";
 
 export const dynamic = "force-dynamic";
@@ -7,13 +8,8 @@ export const dynamic = "force-dynamic";
 /** Cron — release lock 20 ngày LV + SLA M1. */
 export async function POST(req: NextRequest) {
   try {
-    const secret = process.env.CRON_SECRET;
-    if (secret) {
-      const auth = req.headers.get("authorization");
-      if (auth !== `Bearer ${secret}`) {
-        return fail(401, "UNAUTHORIZED", "Cron secret không hợp lệ.");
-      }
-    }
+    const authError = cronAuthError(req);
+    if (authError) return authError;
 
     const result = await runNoxhCaseMaintenance();
     return ok(result);

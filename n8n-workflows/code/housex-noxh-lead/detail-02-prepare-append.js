@@ -33,7 +33,7 @@ return [{
   json: {
     ...item,
     append_row,
-    append_url: `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent(`${TAB}!A:V`)}:append?valueInputOption=USER_ENTERED&insertDataOption=INSERT_ROWS`,
+    append_url: `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent(`${TAB}!A:V`)}:append?valueInputOption=RAW&insertDataOption=INSERT_ROWS`,
     append_body: { values: [append_row] },
   },
 }];

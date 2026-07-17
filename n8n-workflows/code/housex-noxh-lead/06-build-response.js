@@ -5,9 +5,18 @@ try {
   // Manual/detail branches may not execute Parse HouseX Event.
 }
 const item = { ...parsed, ...$input.first().json };
+const sheetFailed = item.sheet_logged === false || !!item.sheet_error;
+const telegramFailed = !!item.telegram_error;
+const requiredDeliveryFailed =
+  item.delivery_required === true && item.telegram_sent !== true;
+const deliveryOk =
+  item.ok !== false &&
+  !sheetFailed &&
+  !telegramFailed &&
+  !requiredDeliveryFailed;
 return [{
   json: {
-    ok: item.ok !== false,
+    ok: deliveryOk,
     workflow: 'housex-noxh-lead-route',
     path: item.path || 'events',
     lead_id: item.lead_id || null,
@@ -25,8 +34,17 @@ return [{
     conflict_kind: item.kind || null,
     duplicate: item.duplicate === true,
     skipped: item.skipped === true,
+    sheet_logged: item.sheet_logged !== false,
+    sheet_error: item.sheet_error || null,
     telegram_sent: item.telegram_sent === true,
-    reason: item.reason || item.telegram_skip || null,
+    telegram_error: item.telegram_error || null,
+    reason:
+      item.reason ||
+      item.sheet_error ||
+      item.telegram_error ||
+      (requiredDeliveryFailed ? item.telegram_skip || 'REQUIRED_DELIVERY_FAILED' : null) ||
+      item.telegram_skip ||
+      null,
     finished_at: new Date().toISOString(),
   },
 }];

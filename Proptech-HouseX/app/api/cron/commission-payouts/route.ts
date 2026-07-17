@@ -1,5 +1,6 @@
 import { NextRequest } from "next/server";
-import { fail, handleApiError, ok } from "@/lib/api/http";
+import { handleApiError, ok } from "@/lib/api/http";
+import { cronAuthError } from "@/lib/api/cron-auth";
 import { processCommissionPayoutBatch } from "@/lib/noxh-case/commission-accrual";
 import { isPayBatchDay } from "@/lib/noxh-case/commission-pay-cycle";
 
@@ -11,13 +12,8 @@ export const dynamic = "force-dynamic";
  */
 export async function POST(req: NextRequest) {
   try {
-    const secret = process.env.CRON_SECRET;
-    if (secret) {
-      const auth = req.headers.get("authorization");
-      if (auth !== `Bearer ${secret}`) {
-        return fail(401, "UNAUTHORIZED", "Cron secret không hợp lệ.");
-      }
-    }
+    const authError = cronAuthError(req);
+    if (authError) return authError;
 
     const force = req.nextUrl.searchParams.get("force") === "1";
     if (!force && !isPayBatchDay()) {

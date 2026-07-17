@@ -65,6 +65,8 @@ const codes = {
   dedupeConflict: replaceSheet(read('conflict-03-dedupe.js')),
   formatConflictTg: replaceSheet(read('conflict-04-format-telegram.js')),
   sendConflictTg: replaceSheet(read('nurture-05-send-telegram.js')),
+  formatOpsEventTg: replaceSheet(read('ops-event-04-format-telegram.js')),
+  sendOpsEventTg: replaceSheet(read('inquiry-05-send-telegram.js')),
 };
 
 const manualEvent = `return [{ json: {
@@ -276,7 +278,7 @@ const nodes = [
   },
   {
     parameters: { jsCode: manualInquiryCctm },
-    id: nid('nx', 22),
+    id: nid('nx', 65),
     name: 'Inject Manual CCTM Inquiry',
     type: 'n8n-nodes-base.code',
     typeVersion: 2,
@@ -393,6 +395,15 @@ const nodes = [
             },
             renameOutput: true,
             outputKey: 'attribution_conflict',
+          },
+          {
+            conditions: {
+              options: { caseSensitive: true, typeValidation: 'strict' },
+              conditions: [{ id: 'r7', leftValue: '={{ $json.event_path }}', rightValue: 'ops_event', operator: { type: 'string', operation: 'equals' } }],
+              combinator: 'and',
+            },
+            renameOutput: true,
+            outputKey: 'ops_event',
           },
         ],
       },
@@ -737,6 +748,22 @@ const nodes = [
     position: pos(2440, 1020),
   },
   {
+    parameters: { jsCode: codes.formatOpsEventTg },
+    id: nid('nx', 66),
+    name: 'Format Ops Event Telegram',
+    type: 'n8n-nodes-base.code',
+    typeVersion: 2,
+    position: pos(2200, 1160),
+  },
+  {
+    parameters: { jsCode: codes.sendOpsEventTg },
+    id: nid('nx', 67),
+    name: 'Send Ops Event Telegram',
+    type: 'n8n-nodes-base.code',
+    typeVersion: 2,
+    position: pos(2440, 1160),
+  },
+  {
     parameters: { jsCode: codes.prepareOps },
     id: nid('nx', 7),
     name: 'Prepare Ops Append',
@@ -824,7 +851,11 @@ const nodes = [
     position: pos(2680, 520),
   },
   {
-    parameters: { respondWith: 'json', responseBody: '={{ $json }}', options: {} },
+    parameters: {
+      respondWith: 'json',
+      responseBody: '={{ $json }}',
+      options: { responseCode: '={{ $json.ok === false ? 502 : 200 }}' },
+    },
     id: nid('nx', 15),
     name: 'Respond to Webhook',
     type: 'n8n-nodes-base.respondToWebhook',
@@ -881,8 +912,10 @@ const nodes = [
   },
   {
     parameters: {
-      jsCode: `const item = $('Prepare Detail Append').item?.json || $input.first().json;
-return [{ json: { ok: true, workflow: 'housex-noxh-lead-route', path: 'detail', lead_id: item.lead_id, tier: item.tier, finished_at: new Date().toISOString() } }];`,
+      jsCode: `const result = $input.first().json || {};
+const item = $('Prepare Detail Append').item?.json || result;
+const error = result.error?.message || result.message || null;
+return [{ json: { ok: !error, workflow: 'housex-noxh-lead-route', path: 'detail', lead_id: item.lead_id, tier: item.tier, sheet_logged: !error, sheet_error: error, finished_at: new Date().toISOString() } }];`,
     },
     id: nid('nx', 20),
     name: 'Build Detail Response',
@@ -927,6 +960,7 @@ const connections = {
       [{ node: 'Format Noxh Case Telegram', type: 'main', index: 0 }],
       [{ node: 'Prepare Nurture Append', type: 'main', index: 0 }],
       [{ node: 'Prepare Conflict Append', type: 'main', index: 0 }],
+      [{ node: 'Format Ops Event Telegram', type: 'main', index: 0 }],
       [{ node: 'Build Response', type: 'main', index: 0 }],
     ],
   },
@@ -980,6 +1014,8 @@ const connections = {
   'HTTP POST housex_attribution_conflicts': { main: [[{ node: 'Format Conflict Telegram', type: 'main', index: 0 }]] },
   'Format Conflict Telegram': { main: [[{ node: 'Send Conflict Telegram', type: 'main', index: 0 }]] },
   'Send Conflict Telegram': { main: [[{ node: 'Build Response', type: 'main', index: 0 }]] },
+  'Format Ops Event Telegram': { main: [[{ node: 'Send Ops Event Telegram', type: 'main', index: 0 }]] },
+  'Send Ops Event Telegram': { main: [[{ node: 'Build Response', type: 'main', index: 0 }]] },
   'Prepare Ops Append': { main: [[{ node: 'HTTP GET ops dedupe', type: 'main', index: 0 }]] },
   'HTTP GET ops dedupe': { main: [[{ node: 'Dedupe Ops', type: 'main', index: 0 }]] },
   'Dedupe Ops': { main: [[{ node: 'Duplicate?', type: 'main', index: 0 }]] },

@@ -19,6 +19,8 @@ import {
 } from "@/lib/rules/listing-content-gate";
 import { upsertCanonicalForListing } from "@/lib/data/canonical";
 import { reindexListingSafe } from "@/lib/search/reindex";
+import { enqueueEvent } from "@/lib/events/outbox";
+import type { OutboxPayloads } from "@/lib/events/types";
 import { assertPublishGate } from "@/lib/rules/listing-publish-gate";
 import { recomputeListingRanking } from "@/lib/data/ranking";
 import { isListingsApiRateLimited } from "@/lib/security/api-rate-limit";
@@ -234,6 +236,26 @@ export async function POST(req: NextRequest) {
               canonicalId,
             },
           });
+
+          if (createdListing.status === "PENDING_REVIEW") {
+            const eventPayload: OutboxPayloads["ops.request_created"] = {
+              requestId: createdListing.id,
+              kind: "listing_review",
+              title: `Tin ${createdListing.code} chờ duyệt`,
+              detail: `${createdListing.propertyType} · ${createdListing.district}, ${createdListing.province}`,
+              priority: "high",
+              source: "broker_listing_create",
+              contact: null,
+              adminUrl: `https://timnhaxahoi.com/admin/listings/${createdListing.id}`,
+              createdAt: createdListing.createdAt.toISOString(),
+            };
+            await enqueueEvent(
+              tx,
+              "ops.request_created",
+              eventPayload,
+              `ops.request_created:listing_review:${createdListing.id}:${createdListing.submittedAt?.toISOString() ?? createdListing.createdAt.toISOString()}`,
+            );
+          }
 
           return createdListing;
         });

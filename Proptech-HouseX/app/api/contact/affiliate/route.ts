@@ -3,7 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { created, fail, handleApiError } from "@/lib/api/http";
 import { affiliateContactSchema } from "@/lib/validation/contact";
 import { normalizeVnPhone, isValidVnPhone } from "@/lib/phone";
-import { isRateLimited } from "@/lib/redis";
+import { isRateLimited, kv } from "@/lib/redis";
 import { ipHash } from "@/lib/api/request-meta";
 import { enqueueEvent } from "@/lib/events/outbox";
 import { forwardEventToWebhook } from "@/lib/events/handlers";
@@ -24,6 +24,14 @@ export async function POST(req: NextRequest) {
 
     if (await isRateLimited(`contact:${ipHash(req)}`, RATE_MAX, RATE_WINDOW)) {
       return fail(429, "RATE_LIMITED", "Quá nhiều yêu cầu. Vui lòng thử lại sau.");
+    }
+
+    const idemKey = req.headers.get("idempotency-key");
+    if (idemKey) {
+      const existingLeadId = await kv.get(`idem:affiliate-contact:${idemKey}`);
+      if (existingLeadId) {
+        return created({ id: existingLeadId, received: true, deduplicated: true });
+      }
     }
 
     const needLine = body.need ? `[Nhu cầu: ${body.need}]` : "";
@@ -83,6 +91,10 @@ export async function POST(req: NextRequest) {
         });
       },
     );
+
+    if (idemKey) {
+      await kv.set(`idem:affiliate-contact:${idemKey}`, lead.id, 86_400);
+    }
 
     return created({ id: lead.id, received: true });
   } catch (err) {

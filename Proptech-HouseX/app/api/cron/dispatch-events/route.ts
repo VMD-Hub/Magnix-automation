@@ -1,6 +1,7 @@
 import { NextRequest } from "next/server";
 import { z } from "zod";
-import { fail, handleApiError, ok } from "@/lib/api/http";
+import { handleApiError, ok } from "@/lib/api/http";
+import { cronAuthError } from "@/lib/api/cron-auth";
 import { dispatchOutbox } from "@/lib/events/dispatcher";
 
 export const dynamic = "force-dynamic";
@@ -13,13 +14,8 @@ const querySchema = z.object({
 // Bảo vệ bằng header Authorization: Bearer <CRON_SECRET>.
 export async function POST(req: NextRequest) {
   try {
-    const secret = process.env.CRON_SECRET;
-    if (secret) {
-      const auth = req.headers.get("authorization");
-      if (auth !== `Bearer ${secret}`) {
-        return fail(401, "UNAUTHORIZED", "Cron secret không hợp lệ.");
-      }
-    }
+    const authError = cronAuthError(req);
+    if (authError) return authError;
 
     const { limit } = querySchema.parse(
       Object.fromEntries(req.nextUrl.searchParams),

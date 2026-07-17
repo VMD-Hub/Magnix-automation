@@ -15,6 +15,8 @@ import { assertPublishGate } from "@/lib/rules/listing-publish-gate";
 import { mediaCountsFor, recomputeListingRanking } from "@/lib/data/ranking";
 import { recordStatusChange } from "@/lib/data/status-history";
 import { resolveBrokerId } from "@/lib/api/current-broker";
+import { enqueueEvent } from "@/lib/events/outbox";
+import type { OutboxPayloads } from "@/lib/events/types";
 
 const CONTENT_FIELDS = [
   "description",
@@ -189,6 +191,27 @@ export async function PATCH(
             canonicalId,
           },
         });
+      }
+
+      if (submitForReview) {
+        const submittedAt = u.submittedAt ?? new Date();
+        const eventPayload: OutboxPayloads["ops.request_created"] = {
+          requestId: u.id,
+          kind: "listing_review",
+          title: `Tin ${u.code} chờ duyệt`,
+          detail: `${u.propertyType} · ${u.district}, ${u.province}`,
+          priority: "high",
+          source: "broker_listing_update",
+          contact: null,
+          adminUrl: `https://timnhaxahoi.com/admin/listings/${u.id}`,
+          createdAt: submittedAt.toISOString(),
+        };
+        await enqueueEvent(
+          tx,
+          "ops.request_created",
+          eventPayload,
+          `ops.request_created:listing_review:${u.id}:${submittedAt.toISOString()}`,
+        );
       }
 
       return u;

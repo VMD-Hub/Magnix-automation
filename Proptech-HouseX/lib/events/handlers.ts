@@ -13,7 +13,10 @@ export async function forwardEventToWebhook(
 ): Promise<void> {
   const url = process.env.EVENTS_WEBHOOK_URL;
   if (!url) {
-    console.log(`[outbox] (no EVENTS_WEBHOOK_URL) ${type}`, payload);
+    if (process.env.NODE_ENV === "production") {
+      throw new Error(`EVENTS_WEBHOOK_URL is required for outbox event ${type}`);
+    }
+    console.warn(`[outbox] skipped outside production (no EVENTS_WEBHOOK_URL): ${type}`);
     return;
   }
   const res = await fetch(url, {

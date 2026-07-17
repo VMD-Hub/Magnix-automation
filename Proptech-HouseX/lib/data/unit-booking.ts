@@ -15,6 +15,8 @@ import {
 import type { UnitBookingCreateInput } from "@/lib/validation/unit-booking";
 import { normalizeVnPhone, isValidVnPhone } from "@/lib/phone";
 import { resolveAttribution, type ReferralTouch } from "@/lib/rules/attribution-lock";
+import { enqueueEvent } from "@/lib/events/outbox";
+import type { OutboxPayloads } from "@/lib/events/types";
 
 const bookingInclude = {
   unit: { select: { id: true, code: true, status: true } },
@@ -80,7 +82,7 @@ export async function createUnitBooking(params: {
       code = generateUnitBookingCode();
     }
 
-    return tx.unitBooking.create({
+    const created = await tx.unitBooking.create({
       data: {
         code,
         projectId: resolved.unit!.projectId,
@@ -98,6 +100,33 @@ export async function createUnitBooking(params: {
       },
       include: bookingInclude,
     });
+
+    const eventPayload: OutboxPayloads["ops.request_created"] = {
+      requestId: created.id,
+      kind: "unit_booking",
+      title: `Giữ suất ${created.project.name} · ${created.unit.code}`,
+      detail: `Mã giữ suất ${created.code}${
+        created.expiresAt ? `; hết hạn ${created.expiresAt.toISOString()}` : ""
+      }`,
+      priority: "urgent",
+      source: "project_unit_booking",
+      contact: {
+        name: created.customerName,
+        phone: created.phone,
+        email: created.email,
+      },
+      adminUrl: `https://timnhaxahoi.com/admin/unit-bookings`,
+      createdAt: created.createdAt.toISOString(),
+    };
+
+    await enqueueEvent(
+      tx,
+      "ops.request_created",
+      eventPayload,
+      `ops.request_created:unit_booking:${created.id}`,
+    );
+
+    return created;
   });
 
   return { ok: true as const, booking };

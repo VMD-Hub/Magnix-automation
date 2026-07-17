@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useId, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { resolveContactFormIntent } from "@/lib/content/contact-form-routing";
 
@@ -53,6 +53,7 @@ export function AffiliateContactForm({
   defaultMessage?: string;
   compact?: boolean;
 }) {
+  const formId = useId();
   const intent = resolveContactFormIntent(defaultNeed);
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
@@ -93,7 +94,10 @@ export function AffiliateContactForm({
     try {
       const res = await fetch("/api/contact/affiliate", {
         method: "POST",
-        headers: { "content-type": "application/json" },
+        headers: {
+          "content-type": "application/json",
+          "idempotency-key": `${formId}-${phone.trim()}-${vertical}-${need || "general"}`,
+        },
         body: JSON.stringify({
           name,
           phone,

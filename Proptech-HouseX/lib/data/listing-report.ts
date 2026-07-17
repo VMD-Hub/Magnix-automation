@@ -1,7 +1,8 @@
 import { prisma } from "@/lib/prisma";
 import { normalizeVnPhone } from "@/lib/phone";
 import { enqueueEvent } from "@/lib/events/outbox";
-import { buildLeadCreatedPayload, forwardLeadCreatedBestEffort } from "@/lib/events/lead-inquiry";
+import { forwardEventToWebhook } from "@/lib/events/handlers";
+import type { OutboxPayloads } from "@/lib/events/types";
 import {
   listingReportAckEmail,
   listingReportEditorialEmail,
@@ -54,23 +55,38 @@ export async function submitListingReport(
       },
     });
 
-    const eventPayload = await buildLeadCreatedPayload(tx, created, {
-      name: body.name,
-      phone: body.phone,
-      email: body.email || undefined,
-    });
+    const eventPayload: OutboxPayloads["ops.request_created"] = {
+      requestId: created.id,
+      kind: "listing_report",
+      title: `Báo cáo tin ${listingCode} · ${reasonLabel}`,
+      detail: body.message.trim(),
+      priority: "high",
+      source: `listing_report:${body.reasonCode}`,
+      contact: {
+        name: body.name,
+        phone: body.phone,
+        email: body.email || null,
+      },
+      adminUrl: `https://timnhaxahoi.com/admin/listings/${listingId}`,
+      createdAt: created.createdAt.toISOString(),
+    };
 
     await enqueueEvent(
       tx,
-      "lead.created",
+      "ops.request_created",
       eventPayload,
-      `lead.created:${created.id}`,
+      `ops.request_created:listing_report:${created.id}`,
     );
 
     return { lead: created, eventPayload };
   });
 
-  void forwardLeadCreatedBestEffort(eventPayload);
+  void forwardEventToWebhook("ops.request_created", eventPayload).catch((error) => {
+    console.error("[listing-report] realtime forward failed", {
+      leadId: lead.id,
+      message: error instanceof Error ? error.message : String(error),
+    });
+  });
 
   const listingTitle = `${TRANSACTION_TYPE_LABEL[listingMeta.transactionType] ?? listingMeta.transactionType} · ${
     propertyTypeLabel(listingMeta.propertyType) ?? listingMeta.propertyType

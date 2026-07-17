@@ -408,8 +408,103 @@ if (type === 'lead.noxh_loan_quick_check') {
   }];
 }
 
+if (type === 'ops.request_created') {
+  const p = body.payload || {};
+  const requestId = String(p.requestId || '').trim();
+  if (!requestId) throw new Error('Validation: payload.requestId is required');
+
+  const contact = p.contact || {};
+  return [{
+    json: {
+      ok: true,
+      skipped: false,
+      event_path: 'ops_event',
+      path: 'events',
+      ops_event_type: type,
+      request_id: requestId,
+      ops_kind: String(p.kind || 'ops_request'),
+      ops_title: String(p.title || 'Yêu cầu vận hành mới').slice(0, 160),
+      ops_detail: String(p.detail || '').slice(0, 700),
+      ops_priority: String(p.priority || 'high'),
+      source: String(p.source || ''),
+      contact_name: String(contact.name || '').slice(0, 80),
+      contact_phone: String(contact.phone || '').slice(0, 20),
+      contact_email: String(contact.email || '').slice(0, 120),
+      public_url: String(p.adminUrl || ''),
+      created_at: String(p.createdAt || now),
+      dedupe_key: `ops:${p.kind || 'request'}:${requestId}`,
+    },
+  }];
+}
+
+if (type === 'lead.won') {
+  const p = body.payload || {};
+  const leadId = String(p.leadId || '').trim();
+  if (!leadId) throw new Error('Validation: payload.leadId is required');
+  return [{
+    json: {
+      ok: true,
+      skipped: false,
+      event_path: 'ops_event',
+      path: 'events',
+      ops_event_type: type,
+      request_id: leadId,
+      ops_kind: 'lead_won',
+      ops_title: `Lead ${leadId} đã WON`,
+      ops_detail: `Trạng thái: ${String(p.status || 'WON')}`,
+      ops_priority: 'high',
+      created_at: now,
+      dedupe_key: `lead-won:${leadId}`,
+    },
+  }];
+}
+
+if (type === 'commission.created') {
+  const p = body.payload || {};
+  const commissionId = String(p.commissionId || '').trim();
+  if (!commissionId) throw new Error('Validation: payload.commissionId is required');
+  return [{
+    json: {
+      ok: true,
+      skipped: false,
+      event_path: 'ops_event',
+      path: 'events',
+      ops_event_type: type,
+      request_id: commissionId,
+      ops_kind: 'commission_created',
+      ops_title: `Hoa hồng mới ${commissionId}`,
+      ops_detail: `Lead ${String(p.leadId || '')} · Broker ${String(p.brokerId || '')} · Giá trị ${String(p.amount || '')}`,
+      ops_priority: 'high',
+      created_at: now,
+      dedupe_key: `commission:${commissionId}`,
+    },
+  }];
+}
+
+if (type === 'promotion.spin_won') {
+  const p = body.payload || {};
+  const winId = String(p.winId || '').trim();
+  if (!winId) throw new Error('Validation: payload.winId is required');
+  return [{
+    json: {
+      ok: true,
+      skipped: false,
+      event_path: 'ops_event',
+      path: 'events',
+      ops_event_type: type,
+      request_id: winId,
+      ops_kind: 'promotion_win',
+      ops_title: `Trúng thưởng: ${String(p.prizeLabel || p.prizeTier || '')}`.slice(0, 160),
+      ops_detail: `Chiến dịch ${String(p.campaignName || p.campaignSlug || '')} · Mã đổi quà ${String(p.redemptionCode || '')}`,
+      ops_priority: 'normal',
+      created_at: String(p.wonAt || now),
+      dedupe_key: `promotion-win:${winId}`,
+    },
+  }];
+}
+
 if (type !== 'lead.noxh_checked') {
-  return [{ json: { ok: true, skipped: true, event_path: 'none', path: 'events', reason: 'UNSUPPORTED_EVENT', type } }];
+  throw new Error(`Unsupported HouseX event type: ${type || '(empty)'}`);
 }
 
 const p = body.payload || {};

@@ -141,6 +141,22 @@ export interface OutboxPayloads {
     normalizedPhoneHash: string;
     wonAt: string;
   };
+  /** Yêu cầu vận hành không thuộc lead tư vấn thông thường. */
+  "ops.request_created": {
+    requestId: string;
+    kind: "unit_booking" | "listing_review" | "listing_report";
+    title: string;
+    detail: string | null;
+    priority: "normal" | "high" | "urgent";
+    source: string;
+    contact: {
+      name: string | null;
+      phone: string | null;
+      email: string | null;
+    } | null;
+    adminUrl: string | null;
+    createdAt: string;
+  };
   /** Phase 0 — CTV thả lead NOXH. */
   "noxh_case.created": {
     caseId: string;

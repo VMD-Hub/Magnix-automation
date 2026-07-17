@@ -115,7 +115,7 @@ export async function POST(req: Request) {
         tx,
         "ctv.application_submitted",
         eventPayload,
-        `ctv.application_submitted:${createdApp.id}`,
+        `ctv.application_submitted:${createdApp.id}:${createdApp.updatedAt.toISOString()}`,
       );
 
       return { app: createdApp, eventPayload };
