@@ -125,8 +125,8 @@ export function AffiliateContactForm({
       <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-6 text-center">
         <p className="font-semibold text-emerald-900">Đã nhận yêu cầu tư vấn</p>
         <p className="mt-2 text-sm text-emerald-800">
-          Tư vấn viên hoặc trợ lý AI sẽ liên hệ trong giờ làm việc để làm rõ nhu cầu và
-          hướng dẫn bước tiếp theo.
+          Tư vấn viên HouseX sẽ liên hệ trong giờ làm việc để làm rõ nhu cầu và hướng
+          dẫn bước tiếp theo.
         </p>
       </div>
     );
@@ -144,8 +144,8 @@ export function AffiliateContactForm({
         <>
           <h2 className="text-lg font-bold text-slate-900">Để lại thông tin tư vấn</h2>
           <p className="mt-1 text-sm text-slate-600">
-            Tư vấn viên hoặc trợ lý AI HouseX sẽ làm rõ nhu cầu và phản hồi trong giờ làm
-            việc — không cam kết duyệt vay hay báo giá cố định tại đây.
+            Tư vấn viên HouseX sẽ làm rõ nhu cầu và phản hồi trong giờ làm việc — không
+            cam kết duyệt vay hay báo giá cố định tại đây.
           </p>
         </>
       ) : null}
