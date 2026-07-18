@@ -453,9 +453,9 @@ consent proof và PII thật không được đưa vào bằng chứng.
 - `repo_status: REPO-DONE`
 - `runtime_evidence: PRODUCTION-PROVEN` (2026-07-18 smoke
   `smoke-sc6-1784348544598` — dry-run; see `SALES_CONVERSION_G1_G2_EVIDENCE.md`).
-  Real channel send: harness `go-live:smoke-nurture-real` (fail-closed dual flag);
-  `runtime_evidence` for real OA/SMS remains **NOT_PROVIDED** — **BLOCKED** 2026-07-18
-  (`SMS_WEBHOOK_URL` unset on VPS). Configure webhook or OA path then re-run.
+  Real channel: **PRODUCTION-PROVEN** via smoke sink
+  `smoke-nurture-real-1784395274313` (sms SENT + withdraw; sink disabled after).
+  Carrier/n8n SMS remains optional Ops config.
 - Target gate: G2 after SC-0 and SC-5.
 
 **Owner boundary**

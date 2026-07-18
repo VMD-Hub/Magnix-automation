@@ -160,11 +160,9 @@ Local result on 2026-07-17:
 - **PASSED — SC-6 nurture dry-run (2026-07-18):** see production block below;
   SC-6 `runtime_evidence` = `PRODUCTION-PROVEN` (consent gate + enroll/dispatch/cancel;
   no real channel send).
-- **NOT PASSED — SC-6 real channel:** harness
-  `scripts/smoke-nurture-real-channel.ts` · `npm run go-live:smoke-nurture-real`
-  — **BLOCKED** 2026-07-18: `SMS_WEBHOOK_URL` unset on VPS. Set webhook (n8n 200 OK)
-  or use OA path with `SMOKE_NURTURE_CHANNEL=oa` + `SMOKE_ZALO_USER_ID` + OA tokens.
-  Disable kill switch after smoke.
+- **PASSED — SC-6 real channel (Round 2 Wave 3, 2026-07-18):** see production
+  block below — consent → SMS smoke-sink SENT → withdraw blocks enroll;
+  kill switch + sink disabled after PASS.
 
 ### Production SC-6 nurture smoke — checklist
 
@@ -286,11 +284,33 @@ TELESALES_SERVER_SEND_ENABLED=true SMOKE_NURTURE_REAL_CHANNEL=1 \
 #   SMOKE_NURTURE_CHANNEL=oa SMOKE_ZALO_USER_ID=<id> npm run go-live:smoke-nurture-real
 ```
 
-### Production SC-6 real-channel smoke — 2026-07-18 attempt
+### Production SC-6 real-channel smoke — 2026-07-18
 
-- Result: **FAIL / BLOCKED**
-- Reason: `SMS_WEBHOOK_URL not configured — cannot smoke real SMS channel.`
-- Next: Option B smoke sink (above) or n8n/OA; then re-run smoke.
+- Result: **PASS**
+- Observed at: `2026-07-18T17:21:14Z` (VPS)
+- Channel: `sms` via local smoke sink
+  (`/api/admin/smoke/sms-webhook-sink`) — HTTP provider path; not carrier SMS
+- Evidence file (VPS):
+  `/opt/housex/Proptech-HouseX/reports/nurture-real-channel-smoke-2026-07-18T17-21-14-313Z.json`
+- Checks: consent GRANTED → dispatch SENT → withdraw blocks enroll
+- Post-run: `disable-smoke-sms-sink.sh` + `pm2 restart housex` (sink +
+  `TELESALES_SERVER_SEND_ENABLED` off)
+- Masked IDs only:
+
+| Field | Value |
+| --- | --- |
+| `correlationId` | `smoke-nurture-real-1784395274313` |
+| `leadId` | `55effa6e-ac06-4937-a6aa-d2cb62181da7` |
+| `enrollmentId` | `2ff6807c-7725-4a1a-985d-6a1331ffbeeb` |
+| `dispatchId` | `f757f9a8-8f72-491a-bf33-eee091d507f5` |
+| `dispatchStatus` | `SENT` |
+
+- SC-6 real-channel `runtime_evidence`: **PRODUCTION-PROVEN** (smoke sink;
+  carrier/n8n SMS still optional when Ops configures real `SMS_WEBHOOK_URL`)
+
+### Production SC-6 real-channel smoke — earlier attempt (superseded)
+
+- Result: **FAIL / BLOCKED** (pre-sink) — `SMS_WEBHOOK_URL` unset; superseded by PASS above.
 
 ### Ops cohort KPI (Round 2 Wave 2)
 
