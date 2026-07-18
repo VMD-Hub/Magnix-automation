@@ -1,84 +1,164 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button";
+import {
+  fetchAuthUser,
+  initialsFromName,
+  type ClientAuthUser,
+} from "@/lib/auth/client-session";
+import {
+  accountHomeForRole,
+  postListingHrefForSession,
+} from "@/lib/auth/redirect";
 
-type AuthUser = {
-  id: string;
-  name: string;
-  phoneMasked: string;
-  email?: string | null;
-  emailVerified?: boolean;
-  role?: string;
-};
+export type { ClientAuthUser as AuthUser };
 
-let authUserRequest: Promise<AuthUser | null> | null = null;
-
-function fetchAuthUser() {
-  if (!authUserRequest) {
-    authUserRequest = fetch("/api/auth/me")
-      .then((response) => response.json())
-      .then((json) => json.data?.user ?? null)
-      .catch(() => null)
-      .finally(() => {
-        authUserRequest = null;
-      });
-  }
-
-  return authUserRequest;
-}
-
-export function HeaderAuth() {
+export function HeaderAuth({
+  user,
+  onUserChange,
+  postListingHref,
+}: {
+  /** Khi SiteHeader đã fetch — tránh double request. */
+  user?: ClientAuthUser | null | undefined;
+  onUserChange?: (user: ClientAuthUser | null) => void;
+  /** CTA đăng tin theo role — primary trong menu. */
+  postListingHref?: string;
+}) {
   const router = useRouter();
-  const [user, setUser] = useState<AuthUser | null | undefined>(undefined);
+  const menuId = useId();
+  const rootRef = useRef<HTMLDivElement>(null);
+  const [localUser, setLocalUser] = useState<ClientAuthUser | null | undefined>(
+    user,
+  );
+  const [open, setOpen] = useState(false);
+
+  const resolved = user !== undefined ? user : localUser;
 
   useEffect(() => {
-    fetchAuthUser().then(setUser);
-  }, []);
+    if (user !== undefined) return;
+    fetchAuthUser().then((authUser) => {
+      setLocalUser(authUser);
+      onUserChange?.(authUser);
+    });
+  }, [user, onUserChange]);
+
+  useEffect(() => {
+    if (user !== undefined) setLocalUser(user);
+  }, [user]);
+
+  useEffect(() => {
+    if (!open) return;
+    function onPointerDown(event: MouseEvent) {
+      if (!rootRef.current?.contains(event.target as Node)) {
+        setOpen(false);
+      }
+    }
+    function onKey(event: KeyboardEvent) {
+      if (event.key === "Escape") setOpen(false);
+    }
+    document.addEventListener("mousedown", onPointerDown);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("mousedown", onPointerDown);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [open]);
 
   async function logout() {
+    setOpen(false);
     await fetch("/api/auth/logout", { method: "POST" });
-    setUser(null);
+    setLocalUser(null);
+    onUserChange?.(null);
     router.refresh();
   }
 
-  if (user === undefined) {
-    return <span className="site-header-auth-skeleton" />;
+  if (resolved === undefined) {
+    return <span className="site-header-auth-skeleton" aria-hidden />;
   }
 
-  if (user) {
-    const accountHref =
-      user.role === "BROKER" ? "/moi-gioi/tai-khoan" : "/khach-hang/tai-khoan";
+  if (!resolved) {
     return (
-      <div className="flex items-center gap-2">
-        <Link href={accountHref} className="site-header-auth-user">
-          {user.name}
-        </Link>
-        <Button
-          type="button"
-          variant="ghost"
-          size="sm"
-          className="site-header-auth-ghost hidden sm:inline-flex"
-          onClick={logout}
-        >
-          Thoát
-        </Button>
-      </div>
+      <Link href="/dang-nhap" className="site-header-auth-link">
+        Đăng nhập
+      </Link>
     );
   }
 
+  const accountHref = accountHomeForRole(resolved.role ?? "CUSTOMER");
+  const isBroker = resolved.role === "BROKER";
+  const initials = initialsFromName(resolved.name);
+  const listingHref =
+    postListingHref ?? postListingHrefForSession(resolved.role);
+
   return (
-    <Link href="/dang-nhap" className="site-header-auth-link">
-      Đăng nhập
-    </Link>
+    <div className="site-header-account" ref={rootRef}>
+      <button
+        type="button"
+        className="site-header-account-trigger"
+        aria-expanded={open}
+        aria-controls={menuId}
+        aria-haspopup="menu"
+        aria-label="Tài khoản"
+        onClick={() => setOpen((v) => !v)}
+      >
+        <span className="site-header-account-avatar" aria-hidden>
+          {initials}
+        </span>
+        <span className="site-header-account-label">Tài khoản</span>
+      </button>
+      {open ? (
+        <div id={menuId} className="site-header-account-menu" role="menu">
+          <p className="site-header-account-menu-name">
+            Xin chào, {resolved.name.split(/\s+/).slice(-2).join(" ")}
+          </p>
+          <p className="site-header-account-menu-group">Chính</p>
+          <Link
+            href={accountHref}
+            role="menuitem"
+            className="site-header-account-menu-item"
+            onClick={() => setOpen(false)}
+          >
+            Hồ sơ &amp; hoạt động
+          </Link>
+          <Link
+            href={listingHref}
+            role="menuitem"
+            className="site-header-account-menu-item"
+            onClick={() => setOpen(false)}
+          >
+            Đăng tin
+          </Link>
+          {isBroker ? (
+            <Link
+              href="/moi-gioi/tin-cua-toi"
+              role="menuitem"
+              className="site-header-account-menu-item"
+              onClick={() => setOpen(false)}
+            >
+              Tin của tôi
+            </Link>
+          ) : null}
+          <div className="site-header-account-menu-divider" role="separator" />
+          <p className="site-header-account-menu-group">Khác</p>
+          <button
+            type="button"
+            role="menuitem"
+            className="site-header-account-menu-item site-header-account-menu-danger"
+            onClick={logout}
+          >
+            Đăng xuất
+          </button>
+        </div>
+      ) : null}
+    </div>
   );
 }
 
 /** Banner nhắc xác nhận email khi user đã đăng nhập nhưng chưa verify. */
 export function EmailVerificationBanner() {
-  const [user, setUser] = useState<AuthUser | null>(null);
+  const [user, setUser] = useState<ClientAuthUser | null>(null);
   const [loaded, setLoaded] = useState(false);
   const [msg, setMsg] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);

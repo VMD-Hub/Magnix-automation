@@ -1,10 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import type { AccountRole } from "@prisma/client";
-import { HouseXHeaderLogo } from "@/components/brand/housex-header-logo";
 import { Button } from "@/components/ui/button";
+import { fetchAuthUser } from "@/lib/auth/client-session";
 import { resolvePostAuthPath } from "@/lib/auth/redirect";
 import { BUYER_REGISTER } from "@/lib/content/messaging/buyer-discovery";
 import { BROKER_REGISTER } from "@/lib/content/messaging/broker-supply";
@@ -92,6 +92,30 @@ export function AuthForm({
     email: string;
     emailSent: boolean;
   } | null>(null);
+  const [sessionGate, setSessionGate] = useState<"checking" | "guest" | "redirecting">(
+    "checking",
+  );
+
+  // Client fallback nếu server chưa redirect (soft-nav / cache race).
+  useEffect(() => {
+    let cancelled = false;
+    fetchAuthUser().then((user) => {
+      if (cancelled) return;
+      if (!user?.role) {
+        setSessionGate("guest");
+        return;
+      }
+      setSessionGate("redirecting");
+      const dest = resolvePostAuthPath(
+        user.role === role ? nextPath : null,
+        user.role,
+      );
+      window.location.assign(dest);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [nextPath, role]);
 
   function goAfterAuth(actualRole: AccountRole) {
     // Luôn theo role thật trên server — tránh khách login form môi giới bị kẹt.
@@ -178,11 +202,23 @@ export function AuthForm({
 
   const [mode, setMode] = useState<"register" | "login">("register");
 
+  if (sessionGate === "checking" || sessionGate === "redirecting") {
+    return (
+      <p className="py-12 text-center text-sm text-slate-500">
+        {sessionGate === "redirecting"
+          ? "Bạn đã đăng nhập — đang chuyển vào Tài khoản…"
+          : "Đang tải…"}
+      </p>
+    );
+  }
+
   if (registerDone) {
     return (
       <div className="mx-auto w-full max-w-md">
-        <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
-          <h1 className="text-2xl font-bold text-slate-900">Đăng ký thành công</h1>
+        <div className="rounded-2xl border border-slate-200 bg-white p-6 sm:p-8">
+          <h1 className="text-2xl font-bold tracking-tight text-slate-900">
+            Đăng ký thành công
+          </h1>
           <p className="mt-2 text-sm text-slate-500">
             Tài khoản <strong>{copy.badge}</strong> đã được tạo và đăng nhập.
           </p>
@@ -213,21 +249,31 @@ export function AuthForm({
     );
   }
 
+  const heading =
+    mode === "login"
+      ? role === "BROKER"
+        ? "Chào mừng môi giới quay lại"
+        : "Chào mừng bạn quay lại"
+      : copy.title;
+  const sub =
+    mode === "login"
+      ? "Đăng nhập bằng số điện thoại và mật khẩu — vào Tài khoản chỉ trong vài giây."
+      : copy.subtitle;
+
   return (
     <div className="mx-auto w-full max-w-md">
-      <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
-        <div className="mb-6 text-center">
-          <div className="flex justify-center">
-            <HouseXHeaderLogo href="/" priority={false} surface="light" />
-          </div>
-          <span className="mt-2 inline-block rounded-full bg-brand-50 px-3 py-1 text-xs font-semibold text-brand-700">
+      <div className="rounded-2xl border border-slate-200 bg-white p-6 sm:p-8">
+        <div className="mb-6">
+          <p className="text-xs font-semibold uppercase tracking-wide text-brand-700">
             {copy.badge}
-          </span>
-          <h1 className="mt-3 text-2xl font-bold text-slate-900">{copy.title}</h1>
-          <p className="mt-1 text-sm text-slate-500">{copy.subtitle}</p>
+          </p>
+          <h1 className="mt-2 text-2xl font-bold tracking-tight text-slate-900">
+            {heading}
+          </h1>
+          <p className="mt-2 text-sm leading-relaxed text-slate-600">{sub}</p>
         </div>
 
-        <div className="mb-4 flex rounded-xl bg-slate-100 p-1">
+        <div className="mb-5 flex rounded-xl bg-slate-100 p-1">
           <button
             type="button"
             onClick={() => {
@@ -235,8 +281,10 @@ export function AuthForm({
               setError(null);
               setConflict(null);
             }}
-            className={`flex-1 rounded-lg py-2 text-sm font-semibold ${
-              mode === "register" ? "bg-white text-slate-900 shadow-sm" : "text-slate-500"
+            className={`flex-1 rounded-lg py-2.5 text-sm font-semibold transition-colors ${
+              mode === "register"
+                ? "bg-white text-slate-900"
+                : "text-slate-500 hover:text-slate-700"
             }`}
           >
             Đăng ký
@@ -248,8 +296,10 @@ export function AuthForm({
               setError(null);
               setConflict(null);
             }}
-            className={`flex-1 rounded-lg py-2 text-sm font-semibold ${
-              mode === "login" ? "bg-white text-slate-900 shadow-sm" : "text-slate-500"
+            className={`flex-1 rounded-lg py-2.5 text-sm font-semibold transition-colors ${
+              mode === "login"
+                ? "bg-white text-slate-900"
+                : "text-slate-500 hover:text-slate-700"
             }`}
           >
             Đăng nhập

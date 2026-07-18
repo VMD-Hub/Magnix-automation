@@ -1,9 +1,9 @@
 /** L2 — Góc nhìn người mua / tìm kiếm. */
 
 export const BUYER_REGISTER = {
-  title: "Đăng ký khách hàng",
+  title: "Tạo tài khoản để tìm nhà an toàn hơn",
   subtitle:
-    "Tìm mua, thuê BĐS — tin rõ ràng, liên hệ an toàn, công cụ hỗ trợ quyết định.",
+    "Lưu tin, dùng công cụ vay/NOXH và liên hệ khi bạn sẵn sàng — thông tin rõ, không bị làm phiền nếu bạn không muốn.",
   badge: "Khách hàng",
 } as const;
 

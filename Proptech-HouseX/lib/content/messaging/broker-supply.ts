@@ -1,9 +1,9 @@
 /** L4 — Môi giới đăng tin / supply side. */
 
 export const BROKER_REGISTER = {
-  title: "Đăng ký môi giới đăng tin",
+  title: "Bắt đầu đăng tin với House X",
   subtitle:
-    "Đăng tin chất lượng — tiếp cận khách đã xác nhận liên hệ. Nâng cấp CTV sau khi được duyệt.",
+    "Một tài khoản môi giới — đăng tin rõ ràng, tiếp cận khách đã xác nhận liên hệ. Có thể nâng cấp CTV sau khi được duyệt.",
   badge: "Môi giới",
 } as const;
 
