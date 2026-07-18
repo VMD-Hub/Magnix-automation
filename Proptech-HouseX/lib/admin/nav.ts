@@ -108,8 +108,8 @@ export const ADMIN_NAV_GROUPS: AdminNavGroup[] = [
     items: [
       {
         href: "/admin/conversion",
-        label: "Conversion",
-        title: "Journey P proposal / commit / outcome",
+        label: "Chuyển đổi",
+        title: "Funnel Journey P: đề xuất → cam kết → thắng/thua + nurture",
         roles: ["super", "ops"],
         matchPrefix: true,
       },

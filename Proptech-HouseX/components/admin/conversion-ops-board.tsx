@@ -68,6 +68,16 @@ const STAGES = [
   "CANCELLED",
 ] as const;
 
+const STAGE_LABEL: Record<(typeof STAGES)[number], string> = {
+  OPEN: "Mở",
+  DISCOVERY: "Tìm hiểu",
+  ACTIVE: "Đang tư vấn",
+  COMMITTED: "Đã cam kết (cọc/giữ chỗ)",
+  WON: "Thắng",
+  LOST: "Thua / mất deal",
+  CANCELLED: "Huỷ",
+};
+
 function idemKey(prefix: string) {
   return `${prefix}:${crypto.randomUUID()}`;
 }
@@ -293,6 +303,41 @@ export function ConversionOpsBoard() {
 
   return (
     <div className="space-y-4">
+      <details
+        open
+        className="rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-700"
+      >
+        <summary className="cursor-pointer font-semibold text-slate-900">
+          Hướng dẫn nhanh — dùng bảng này thế nào?
+        </summary>
+        <ol className="mt-3 list-decimal space-y-1.5 pl-5 text-slate-600">
+          <li>
+            Nhìn hàng đếm phía trên (funnel): tổng cơ hội theo từng bước và kết
+            quả WON/LOST.
+          </li>
+          <li>
+            Chọn bộ lọc <strong>Tất cả</strong> để xem danh sách; các tab stage
+            khác chỉ hiện cơ hội đang ở đúng bước đó (trống ≠ lỗi hệ thống).
+          </li>
+          <li>
+            <strong>Bấm một dòng</strong> trong bảng → panel bên phải mở chi
+            tiết (proposal, cọc, WON/LOST, nurture).
+          </li>
+          <li>
+            Thứ tự thao tác chuẩn: tạo <em>proposal</em> (chụp giá/căn) → nhập
+            mã booking/cọc → <em>COMMITTED</em> → ghi <em>WON</em> hoặc{" "}
+            <em>LOST</em>.
+          </li>
+          <li>
+            Nurture: chỉ Enroll khi đã có đồng ý marketing; Stop để dừng gửi.
+          </li>
+        </ol>
+        <p className="mt-3 text-xs text-slate-500">
+          ID hiển thị dạng rút gọn (không PII). Bản ghi smoke test (vd. stage
+          LOST) dùng để đối chiếu bằng chứng — an toàn khi xem.
+        </p>
+      </details>
+
       {msg ? (
         <p className="rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-700">
           {msg}
@@ -300,61 +345,77 @@ export function ConversionOpsBoard() {
       ) : null}
 
       {funnel ? (
-        <div className="flex flex-wrap gap-2 text-xs">
-          {Object.entries(funnel.stages).map(([stage, count]) => (
-            <span
-              key={stage}
-              className="rounded-full bg-slate-100 px-2.5 py-1 font-medium text-slate-700"
-            >
-              {stage}: {count}
-            </span>
-          ))}
-          {Object.entries(funnel.outcomes).map(([result, count]) => (
-            <span
-              key={result}
-              className="rounded-full bg-violet-100 px-2.5 py-1 font-medium text-violet-800"
-            >
-              {result}: {count}
-            </span>
-          ))}
+        <div>
+          <p className="mb-1.5 text-xs font-semibold uppercase tracking-wide text-slate-500">
+            Tóm tắt funnel Journey P
+          </p>
+          <div className="flex flex-wrap gap-2 text-xs">
+            {Object.entries(funnel.stages).map(([stage, count]) => (
+              <span
+                key={stage}
+                className="rounded-full bg-slate-100 px-2.5 py-1 font-medium text-slate-700"
+                title={STAGE_LABEL[stage as (typeof STAGES)[number]] ?? stage}
+              >
+                {STAGE_LABEL[stage as (typeof STAGES)[number]] ?? stage}: {count}
+              </span>
+            ))}
+            {Object.entries(funnel.outcomes).map(([result, count]) => (
+              <span
+                key={result}
+                className="rounded-full bg-violet-100 px-2.5 py-1 font-medium text-violet-800"
+              >
+                Kết quả {result}: {count}
+              </span>
+            ))}
+          </div>
         </div>
       ) : null}
 
-      <div className="flex flex-wrap gap-2">
-        <button
-          type="button"
-          onClick={() => setStageFilter("")}
-          className={cn(
-            "rounded-full px-3 py-1 text-xs font-semibold",
-            !stageFilter ? "bg-slate-900 text-white" : "bg-slate-100",
-          )}
-        >
-          Tất cả
-        </button>
-        {STAGES.map((stage) => (
+      <div>
+        <p className="mb-1.5 text-xs font-semibold uppercase tracking-wide text-slate-500">
+          Lọc theo bước
+        </p>
+        <div className="flex flex-wrap gap-2">
           <button
-            key={stage}
             type="button"
-            onClick={() => setStageFilter(stage)}
+            onClick={() => setStageFilter("")}
             className={cn(
               "rounded-full px-3 py-1 text-xs font-semibold",
-              stageFilter === stage ? "bg-slate-900 text-white" : "bg-slate-100",
+              !stageFilter ? "bg-slate-900 text-white" : "bg-slate-100",
             )}
           >
-            {stage}
+            Tất cả
           </button>
-        ))}
+          {STAGES.map((stage) => (
+            <button
+              key={stage}
+              type="button"
+              title={STAGE_LABEL[stage]}
+              onClick={() => setStageFilter(stage)}
+              className={cn(
+                "rounded-full px-3 py-1 text-xs font-semibold",
+                stageFilter === stage ? "bg-slate-900 text-white" : "bg-slate-100",
+              )}
+            >
+              {STAGE_LABEL[stage]}
+            </button>
+          ))}
+        </div>
       </div>
 
       <div className="grid gap-4 lg:grid-cols-[1fr_380px]">
-        <div className="overflow-hidden rounded-lg border border-slate-200">
+        <div>
+          <p className="mb-1.5 text-xs text-slate-500">
+            Danh sách cơ hội — bấm một dòng để xem / thao tác bên phải
+          </p>
+          <div className="overflow-hidden rounded-lg border border-slate-200">
           <table className="w-full text-left text-sm">
             <thead className="bg-slate-50 text-xs uppercase text-slate-500">
               <tr>
-                <th className="px-3 py-2">Opportunity</th>
-                <th className="px-3 py-2">Stage</th>
+                <th className="px-3 py-2">Cơ hội</th>
+                <th className="px-3 py-2">Bước</th>
                 <th className="px-3 py-2">Lead</th>
-                <th className="px-3 py-2">Unit</th>
+                <th className="px-3 py-2">Căn</th>
               </tr>
             </thead>
             <tbody>
@@ -370,8 +431,8 @@ export function ConversionOpsBoard() {
                     {msg?.includes("HOUSEX_CONVERSION_G2")
                       ? msg
                       : stageFilter
-                        ? `Không có opportunity ở stage ${stageFilter}.`
-                        : "Chưa có opportunity Journey P."}
+                        ? `Không có cơ hội ở bước “${STAGE_LABEL[stageFilter as (typeof STAGES)[number]] ?? stageFilter}”. Thử “Tất cả”.`
+                        : "Chưa có cơ hội Journey P."}
                   </td>
                 </tr>
               ) : (
@@ -387,7 +448,10 @@ export function ConversionOpsBoard() {
                     <td className="px-3 py-2 font-mono text-xs">
                       {row.id.slice(0, 8)}…
                     </td>
-                    <td className="px-3 py-2">{row.stage}</td>
+                    <td className="px-3 py-2">
+                      {STAGE_LABEL[row.stage as (typeof STAGES)[number]] ??
+                        row.stage}
+                    </td>
                     <td className="px-3 py-2 font-mono text-xs">
                       {row.leadId.slice(0, 8)}…
                     </td>
@@ -399,25 +463,44 @@ export function ConversionOpsBoard() {
               )}
             </tbody>
           </table>
+          </div>
         </div>
 
         <div className="space-y-3 rounded-lg border border-slate-200 p-3">
           {!selectedId || !selected ? (
-            <p className="text-sm text-slate-500">Chọn một opportunity.</p>
+            <div className="space-y-2 text-sm text-slate-600">
+              <p className="font-semibold text-slate-800">Chi tiết cơ hội</p>
+              <p>
+                Chưa chọn dòng nào. Hãy bấm một cơ hội bên trái (vd. bản smoke
+                đang ở bước Thua / mất deal).
+              </p>
+            </div>
           ) : (
             <>
               <div>
                 <p className="text-xs font-semibold uppercase text-slate-500">
-                  Chi tiết
+                  Chi tiết cơ hội
                 </p>
                 <p className="mt-1 font-mono text-xs">{selected.id}</p>
                 <p className="text-sm">
-                  {selected.stage} · journey {selected.journey}
+                  {STAGE_LABEL[selected.stage as (typeof STAGES)[number]] ??
+                    selected.stage}{" "}
+                  · Journey {selected.journey} (sơ cấp / NOXH)
                 </p>
               </div>
 
+              <div className="rounded-md border border-dashed border-slate-200 bg-slate-50 px-2.5 py-2 text-xs text-slate-600">
+                <p className="font-semibold text-slate-800">Bước trên panel này</p>
+                <ol className="mt-1 list-decimal space-y-0.5 pl-4">
+                  <li>Nhập / giữ mã căn → Tạo proposal (chụp giá tại thời điểm)</li>
+                  <li>Dán mã booking/cọc → COMMITTED</li>
+                  <li>Ghi kết quả WON hoặc LOST</li>
+                  <li>(Tuỳ chọn) Enroll / Stop nurture</li>
+                </ol>
+              </div>
+
               <label className="block text-xs font-medium text-slate-600">
-                Unit ref (proposal)
+                Mã căn (unit) — dùng khi tạo proposal
                 <input
                   className="mt-1 w-full rounded border border-slate-200 px-2 py-1.5 text-sm"
                   value={unitRef}
@@ -425,13 +508,13 @@ export function ConversionOpsBoard() {
                 />
               </label>
               <Button type="button" size="sm" onClick={() => void createProposal()}>
-                Tạo proposal snapshot
+                Tạo proposal (chụp giá/căn)
               </Button>
 
               <div className="space-y-1 text-xs">
-                <p className="font-semibold text-slate-600">Proposals</p>
+                <p className="font-semibold text-slate-600">Proposal đã tạo</p>
                 {proposals.length === 0 ? (
-                  <p className="text-slate-500">Chưa có</p>
+                  <p className="text-slate-500">Chưa có — tạo ở bước trên</p>
                 ) : (
                   proposals.map((p) => (
                     <p key={p.id} className="font-mono">
@@ -442,11 +525,12 @@ export function ConversionOpsBoard() {
               </div>
 
               <label className="block text-xs font-medium text-slate-600">
-                Booking / deposit id (commit & outcome)
+                Mã booking / cọc — bắt buộc khi COMMITTED / WON / LOST
                 <input
                   className="mt-1 w-full rounded border border-slate-200 px-2 py-1.5 text-sm"
                   value={bookingRef}
                   onChange={(e) => setBookingRef(e.target.value)}
+                  placeholder="UUID unit booking"
                 />
               </label>
               <div className="flex flex-wrap gap-2">
@@ -456,14 +540,14 @@ export function ConversionOpsBoard() {
                   variant="outline"
                   onClick={() => void commitWithBooking()}
                 >
-                  COMMITTED
+                  Đánh dấu đã cam kết
                 </Button>
                 <Button
                   type="button"
                   size="sm"
                   onClick={() => void recordOutcome("WON")}
                 >
-                  WON
+                  Thắng (WON)
                 </Button>
                 <Button
                   type="button"
@@ -471,23 +555,27 @@ export function ConversionOpsBoard() {
                   variant="outline"
                   onClick={() => void recordOutcome("LOST")}
                 >
-                  LOST
+                  Thua (LOST)
                 </Button>
               </div>
 
               {outcome ? (
                 <p className="text-xs text-slate-600">
-                  Outcome {outcome.result} · {outcome.reasonCode} ·{" "}
-                  {outcome.hasValue ? "hasValue" : "no value"}
+                  Kết quả đã ghi: {outcome.result} · lý do {outcome.reasonCode}{" "}
+                  · {outcome.hasValue ? "có giá trị" : "không gắn giá"}
                 </p>
               ) : null}
 
               <div className="border-t border-slate-100 pt-3">
                 <p className="text-xs font-semibold uppercase text-slate-500">
-                  Nurture (SC-6)
+                  Nurture (chăm sóc sau / marketing)
+                </p>
+                <p className="mt-1 text-xs text-slate-500">
+                  Chỉ enroll khi lead còn đồng ý nhận tin marketing trên kênh đã
+                  chọn. Stop = dừng nurture.
                 </p>
                 <label className="mt-2 flex items-center gap-2 text-xs text-slate-600">
-                  Channel
+                  Kênh
                   <select
                     className="rounded border border-slate-200 bg-white px-2 py-1"
                     value={nurtureChannel}
@@ -504,22 +592,22 @@ export function ConversionOpsBoard() {
                 </label>
                 {nurture ? (
                   <p className="mt-1 text-xs text-slate-600">
-                    eligible={String(nurture.eligible)} · consent=
-                    {nurture.action ?? "none"}
+                    Được gửi? {nurture.eligible ? "Có" : "Không"} · consent=
+                    {nurture.action ?? "chưa có"}
                     {nurture.suppressionReason
-                      ? ` · ${nurture.suppressionReason}`
+                      ? ` · chặn: ${nurture.suppressionReason}`
                       : ""}
-                    {nurture.nextTouch ? ` · next=${nurture.nextTouch}` : ""}
+                    {nurture.nextTouch ? ` · bước tiếp: ${nurture.nextTouch}` : ""}
                     {nurture.enrollment
-                      ? ` · enroll=${nurture.enrollment.status}`
+                      ? ` · enrollment: ${nurture.enrollment.status}`
                       : ""}
                     {nurture.lastDispatch
-                      ? ` · last=${nurture.lastDispatch.status}`
+                      ? ` · lần gửi gần: ${nurture.lastDispatch.status}`
                       : ""}
                   </p>
                 ) : (
                   <p className="mt-1 text-xs text-slate-500">
-                    Eligibility API chưa trả (thiếu consent hoặc lỗi mạng).
+                    Chưa đọc được eligibility (thiếu consent hoặc lỗi mạng).
                   </p>
                 )}
                 <div className="mt-2 flex flex-wrap gap-2">
@@ -530,7 +618,7 @@ export function ConversionOpsBoard() {
                     onClick={() => void enrollNurtureAction()}
                     disabled={!nurture?.eligible}
                   >
-                    Enroll
+                    Đăng ký nurture
                   </Button>
                   <Button
                     type="button"
@@ -538,7 +626,7 @@ export function ConversionOpsBoard() {
                     variant="outline"
                     onClick={() => void stopNurture()}
                   >
-                    Stop nurture
+                    Dừng nurture
                   </Button>
                 </div>
               </div>

@@ -8,8 +8,8 @@ export const metadata = {
 export default function AdminConversionPage() {
   return (
     <AdminShell
-      title="Sales conversion"
-      description="Journey P funnel — proposal, commit evidence, outcome và nurture eligibility (không hiện PII)."
+      title="Chuyển đổi bán hàng (Journey P)"
+      description="Theo dõi cơ hội từ lead → đề xuất căn → giữ chỗ/cọc → thắng/thua. Không hiện SĐT/email."
     >
       <ConversionOpsBoard />
     </AdminShell>
