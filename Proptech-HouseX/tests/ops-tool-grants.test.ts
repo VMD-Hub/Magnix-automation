@@ -17,6 +17,14 @@ test("handoff allowlist includes /ops/telesales", () => {
   assert.equal(isAllowedHandoffNext("/admin/ops-leads"), false);
 });
 
+test("resolveUserAccountForGrant requires phone or zalo id", async () => {
+  await assert.rejects(
+    () => resolveUserAccountForGrant({}),
+    (err: unknown) =>
+      err instanceof OpsToolGrantError && err.code === "VALIDATION",
+  );
+});
+
 test("isPlaceholderHouseXEmail detects zalo local emails", async () => {
   const { isPlaceholderHouseXEmail } = await import(
     "../lib/admin/ops-tool-grants"
