@@ -150,11 +150,10 @@ Local result on 2026-07-17:
   sink assertion before its registry row moves from staging.
 - **NOT PASSED — Telegram delivery:** no real `legal_source_needed` delivery and
   resolver cycle was observed in this deployment session.
-- **NOT PASSED — full sales journey E2E:** production UID ingest is proven, but the
-  complete assignment → qualification → appointment path still needs a controlled
-  production/staging fixture and DB assertions. **Harness Round 2:**
-  `scripts/smoke-sales-ops-e2e.ts` · `npm run go-live:smoke-sales-ops` (repo contract
-  test added). Run on VPS after pull; paste report into dated block below.
+- **PASSED — full sales journey E2E (Round 2 Wave 1, 2026-07-18):** see production
+  block below; SC-0…3 `runtime_evidence` = `PRODUCTION-PROVEN` for
+  assign→qualify→appointment path. Journey P proposal/deposit remains separate
+  SC-4/5 proof.
 - **PASSED — Journey P SC-4/SC-5 smoke (2026-07-18):** see production block above;
   SC-4/SC-5 `runtime_evidence` = `PRODUCTION-PROVEN` (Journey P). A/S COMMITTED
   remains fail-closed.
@@ -163,8 +162,9 @@ Local result on 2026-07-17:
   no real channel send).
 - **NOT PASSED — SC-6 real channel:** harness
   `scripts/smoke-nurture-real-channel.ts` · `npm run go-live:smoke-nurture-real`
-  (requires `TELESALES_SERVER_SEND_ENABLED=true` + `SMOKE_NURTURE_REAL_CHANNEL=1`;
-  prefer SMS webhook). Disable kill switch after smoke.
+  — **BLOCKED** 2026-07-18: `SMS_WEBHOOK_URL` unset on VPS. Set webhook (n8n 200 OK)
+  or use OA path with `SMOKE_NURTURE_CHANNEL=oa` + `SMOKE_ZALO_USER_ID` + OA tokens.
+  Disable kill switch after smoke.
 
 ### Production SC-6 nurture smoke — checklist
 
@@ -218,25 +218,79 @@ Path covered: consent → assign → accept → first_attempt/connected → qual
 BuyerProfile → appointment SCHEDULED→COMPLETED. Soft-marks lead LOST after.
 Rollback: none required (additive audit retained; disposable broker cleaned if seeded).
 
-### Production Sales Ops E2E smoke — pending VPS
+### Production Sales Ops E2E smoke — 2026-07-18
 
-- Result: **NOT RUN** from agent environment (2026-07-18) — SSH to VPS unreachable;
-  local Docker Postgres not available. Harness + contract test are REPO-DONE.
-- After VPS PASS: set SC-0…3 `runtime_evidence` = `PRODUCTION-PROVEN` with
-  correlation ID from `reports/sales-ops-e2e-*.json`; flip gate
-  **NOT PASSED — full sales journey E2E** → PASSED.
+- Result: **PASS**
+- Observed at: `2026-07-18T17:11:03Z` (VPS)
+- Evidence file (VPS):
+  `/opt/housex/Proptech-HouseX/reports/sales-ops-e2e-2026-07-18T17-11-03-711Z.json`
+- Path proven: consent → assign/accept → activity → QUALIFIED → BuyerProfile →
+  appointment SCHEDULED→COMPLETED → lead LOST
+- Masked IDs (from stdout; full set in report JSON):
+
+| Field | Value |
+| --- | --- |
+| `correlationId` | `smoke-ops-1784394663714` |
+| `appointmentStatus` | `COMPLETED` |
+| `leadStatusFinal` | `LOST` |
+
+- Note: first run logged a disposable-broker cleanup FK warning (`brokers_user_account_id_fkey`);
+  smoke still **PASS**. Cleanup order fixed in follow-up commit.
+- SC-0 / SC-1 / SC-2 / SC-3 `runtime_evidence`: **PRODUCTION-PROVEN** (this path)
+- Gate **full sales journey E2E**: **PASSED**
+
+### Production Ops cohort KPI — Round 2 Wave 2 baseline (2026-07-18)
+
+- Result: **OK** (aggregate window; not a substitute for 5-day human Ops adoption)
+- Observed at: `2026-07-18T17:11:15Z` (VPS)
+- Evidence file (VPS):
+  `/opt/housex/Proptech-HouseX/reports/sales-ops-cohort-kpi-2026-07-18T17-11-15-735Z.json`
+- Window: 5 days
+
+| Metric | Value |
+| --- | --- |
+| `leadsCreated` | 11 |
+| `assignmentsCreated` | 1 |
+| `assignmentsAccepted` | 1 |
+| `acceptRatePct` | 100 |
+| `leadsWithActivity` | 3 |
+| `activityCoverageVsLeadsPct` | 27.3 |
+| `leadsWithAppointment` | 1 |
+| `appointmentCoverageVsLeadsPct` | 9.1 |
+| `qualifiedOrTerminal` | 2 |
+| `qualifiedWithAppointment` | 1 |
+| `appointmentAfterQualifyPct` | 50 |
+
+- Cohort playbook: `OPS_PLAYBOOK.md` §4b-3 (start 2026-07-18). Re-run KPI daily during cohort.
 
 ### Production SC-6 real-channel smoke — checklist (Round 2 Wave 3)
 
 ```bash
 cd /opt/housex/Proptech-HouseX
-# Enable kill switch only for this run:
-# TELESALES_SERVER_SEND_ENABLED=true  (in .env or one-shot env)
-# SMS_WEBHOOK_URL must be configured for sms channel
+# Option A — n8n SMS webhook (carrier path):
+#   SMS_WEBHOOK_URL=https://<n8n>/webhook/telesales-sms
+
+# Option B — local smoke sink (HTTP provider path, no carrier):
+#   In .env (then build + pm2 restart housex):
+#     SMOKE_SMS_SINK_ENABLED=true
+#     SMS_WEBHOOK_URL=http://127.0.0.1:3000/api/admin/smoke/sms-webhook-sink
+#   TELESALES_SERVER_SEND_ENABLED=true SMOKE_NURTURE_REAL_CHANNEL=1 \
+#     SMOKE_NURTURE_CHANNEL=sms npm run go-live:smoke-nurture-real
+#   Then set SMOKE_SMS_SINK_ENABLED=false, SMS_WEBHOOK_URL="", 
+#   TELESALES_SERVER_SEND_ENABLED=false and pm2 restart
+
 TELESALES_SERVER_SEND_ENABLED=true SMOKE_NURTURE_REAL_CHANNEL=1 \
   SMOKE_NURTURE_CHANNEL=sms npm run go-live:smoke-nurture-real
-# Then set TELESALES_SERVER_SEND_ENABLED=false and pm2 restart
+# Or OA path (requires OA notify + follower):
+# TELESALES_SERVER_SEND_ENABLED=true SMOKE_NURTURE_REAL_CHANNEL=1 \
+#   SMOKE_NURTURE_CHANNEL=oa SMOKE_ZALO_USER_ID=<id> npm run go-live:smoke-nurture-real
 ```
+
+### Production SC-6 real-channel smoke — 2026-07-18 attempt
+
+- Result: **FAIL / BLOCKED**
+- Reason: `SMS_WEBHOOK_URL not configured — cannot smoke real SMS channel.`
+- Next: Option B smoke sink (above) or n8n/OA; then re-run smoke.
 
 ### Ops cohort KPI (Round 2 Wave 2)
 
@@ -247,5 +301,4 @@ COHORT_DAYS=5 npm run go-live:kpi-sales-ops-cohort
 Writes `reports/sales-ops-cohort-kpi-*.json` (aggregate counts/rates only).
 
 This record proves the deployed foundation and UID ingest path. It does not promote
-unexecuted content, Telegram, or full sales-journey workflows beyond **STAGING**.
-A/S COMMITTED remains fail-closed.
+unexecuted content, Telegram, or A/S COMMITTED beyond fail-closed.

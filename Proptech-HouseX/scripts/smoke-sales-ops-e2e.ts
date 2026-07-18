@@ -298,17 +298,25 @@ async function main() {
   });
 
   if (seededBrokerId) {
-    await prisma.leadAssignment.updateMany({
-      where: { ownerId: seededBrokerId, status: { in: ["ASSIGNED", "ACCEPTED"] } },
-      data: { status: "RELEASED", closedAt: new Date() },
-    });
     await prisma.lead.updateMany({
       where: { assignedBrokerId: seededBrokerId },
       data: { assignedBrokerId: null },
     });
-    await prisma.broker.delete({ where: { id: seededBrokerId } }).catch(() => undefined);
+    // Keep LeadAssignment + facts for audit; release active rows then delete
+    // assignment rows so broker/userAccount can be removed without FK noise.
+    await prisma.leadAssignment.updateMany({
+      where: { ownerId: seededBrokerId, status: { in: ["ASSIGNED", "ACCEPTED"] } },
+      data: { status: "RELEASED", closedAt: new Date() },
+    });
+    await prisma.leadAssignmentFact.deleteMany({
+      where: { assignment: { ownerId: seededBrokerId } },
+    });
+    await prisma.leadAssignment.deleteMany({
+      where: { ownerId: seededBrokerId },
+    });
+    await prisma.broker.delete({ where: { id: seededBrokerId } });
     if (seededUserId) {
-      await prisma.userAccount.delete({ where: { id: seededUserId } }).catch(() => undefined);
+      await prisma.userAccount.delete({ where: { id: seededUserId } });
     }
     ok("Disposable broker cleaned up");
   }

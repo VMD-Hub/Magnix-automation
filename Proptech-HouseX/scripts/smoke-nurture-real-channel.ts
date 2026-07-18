@@ -69,7 +69,15 @@ async function main() {
   const channel = channelEnv === "oa" ? "oa" : "sms";
 
   if (channel === "sms" && !isTelesalesSmsWebhookConfigured()) {
-    fail("SMS_WEBHOOK_URL not configured — cannot smoke real SMS channel.");
+    fail(
+      "SMS_WEBHOOK_URL not configured — cannot smoke real SMS channel.\n" +
+        "  Option A: set SMS_WEBHOOK_URL to n8n webhook (HTTP 200).\n" +
+        "  Option B (no carrier): in .env set\n" +
+        "    SMOKE_SMS_SINK_ENABLED=true\n" +
+        "    SMS_WEBHOOK_URL=http://127.0.0.1:3000/api/admin/smoke/sms-webhook-sink\n" +
+        "    then: npm run build && pm2 restart housex\n" +
+        "  Or OA: SMOKE_NURTURE_CHANNEL=oa SMOKE_ZALO_USER_ID=<id>",
+    );
   }
   if (channel === "oa" && !isTelesalesOaSendEnabled()) {
     fail(
