@@ -318,9 +318,9 @@ consent proof và PII thật không được đưa vào bằng chứng.
 
 **Status**
 
-- `repo_status: PLANNED`
+- `repo_status: REPO-DONE`
 - `runtime_evidence: NOT_PROVIDED`
-- Target gate: G2; blocked until G1 exit.
+- Target gate: G2 Journey P adoption (feature flag `HOUSEX_CONVERSION_G2_JOURNEY_P`).
 
 **Owner boundary**
 
@@ -379,9 +379,9 @@ consent proof và PII thật không được đưa vào bằng chứng.
 
 **Status**
 
-- `repo_status: PLANNED`
+- `repo_status: REPO-DONE`
 - `runtime_evidence: NOT_PROVIDED`
-- Target gate: G2 journey adoption.
+- Target gate: G2 Journey P adoption (feature flag `HOUSEX_CONVERSION_G2_JOURNEY_P`).
 
 **Owner boundary**
 

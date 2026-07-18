@@ -197,6 +197,108 @@ export type CommitEvidence = {
   referenceId: string;
 };
 
+export const PROPOSAL_TERMS_VERSION = "p-proposal-v1";
+
+export type ProposalInventorySnapshot = {
+  projectId: string;
+  unitId: string;
+  unitCode: string;
+  unitStatus: string;
+  price: string;
+  depositBookingId: string | null;
+};
+
+export function assertJourneyPConversionEnabled(enabled: boolean): void {
+  if (!enabled) {
+    throw new SalesCoreRuleError(
+      "FEATURE_DISABLED",
+      "Journey P conversion G2 is disabled.",
+    );
+  }
+}
+
+export function assertProposalFresh(input: {
+  snapshot: ProposalInventorySnapshot;
+  current: ProposalInventorySnapshot;
+}): void {
+  const fields: Array<keyof ProposalInventorySnapshot> = [
+    "projectId",
+    "unitId",
+    "unitCode",
+    "unitStatus",
+    "price",
+    "depositBookingId",
+  ];
+  for (const field of fields) {
+    if (String(input.snapshot[field] ?? "") !== String(input.current[field] ?? "")) {
+      throw new SalesCoreRuleError(
+        "PROPOSAL_STALE",
+        "Proposal inventory snapshot is stale; refresh before commit.",
+      );
+    }
+  }
+}
+
+export function assertProposalMatchesCommit(input: {
+  snapshot: ProposalInventorySnapshot;
+  bookingProjectId: string;
+  bookingUnitId: string;
+}): void {
+  if (
+    input.snapshot.projectId !== input.bookingProjectId ||
+    input.snapshot.unitId !== input.bookingUnitId
+  ) {
+    throw new SalesCoreRuleError(
+      "PROPOSAL_COMMIT_MISMATCH",
+      "Proposal subject must match commit booking project/unit.",
+    );
+  }
+}
+
+export function assertNoxhCaseAllowsCommit(
+  caseStatus: string | null | undefined,
+): void {
+  if (!caseStatus) return;
+  if (
+    caseStatus === "DECLINED" ||
+    caseStatus === "UNREACHABLE" ||
+    caseStatus === "RELEASED"
+  ) {
+    throw new SalesCoreRuleError(
+      "NOXH_CASE_BLOCKS_COMMIT",
+      "NOXH case status blocks commitment.",
+    );
+  }
+}
+
+const WON_REASON_CODES = new Set([
+  "DEPOSIT_CONFIRMED",
+  "CONTRACT_SIGNED",
+  "HANDOVER_COMPLETE",
+]);
+const LOST_REASON_CODES = new Set([
+  "BUYER_WITHDREW",
+  "INVENTORY_UNAVAILABLE",
+  "FINANCE_REJECTED",
+  "ELIGIBILITY_FAILED",
+  "COMPETITOR_WON",
+  "NO_RESPONSE",
+  "OTHER",
+]);
+
+export function assertOutcomeReasonCode(
+  result: "WON" | "LOST",
+  reasonCode: string,
+): void {
+  const allowed = result === "WON" ? WON_REASON_CODES : LOST_REASON_CODES;
+  if (!allowed.has(reasonCode)) {
+    throw new SalesCoreRuleError(
+      "INVALID_OUTCOME_REASON",
+      `Reason code is not valid for ${result}.`,
+    );
+  }
+}
+
 const JOURNEY_COMMIT_EVIDENCE: Record<
   "A" | "S" | "P",
   readonly CommitEvidenceReferenceType[]
@@ -345,6 +447,19 @@ export function assertOpportunityTransition(
       `Cannot transition opportunity from ${from} to ${to}.`,
     );
   }
+}
+
+export function assertOutcomeFromCommitted(
+  stage: OpportunityStage,
+  result: "WON" | "LOST",
+): void {
+  if (stage !== "COMMITTED") {
+    throw new SalesCoreRuleError(
+      "OUTCOME_REQUIRES_COMMITTED",
+      "Conversion outcome requires a COMMITTED opportunity.",
+    );
+  }
+  assertOpportunityTransition(stage, result);
 }
 
 export type AppointmentStatus =
@@ -496,6 +611,7 @@ const FORBIDDEN_EVENT_KEYS = new Set([
   "proofRef",
   "proofMetadata",
   "note",
+  "reasonDetail",
 ]);
 
 export function assertMinimizedEventPayload(

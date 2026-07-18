@@ -192,9 +192,45 @@ export const opportunityCommandSchema = z.discriminatedUnion("action", [
       occurredAt,
       correlationId: stableId,
       commitEvidence: commitEvidenceSchema.optional(),
+      proposalId: stableId.optional(),
     })
     .strict(),
 ]);
+
+export const proposalCommandSchema = z
+  .object({
+    opportunityId: stableId,
+    unitRef: stableId,
+    buyerMatchId: stableId.nullish(),
+    actorId: stableId,
+    correlationId: stableId,
+    generatedAt: z.coerce.date().optional(),
+  })
+  .strict();
+
+export const outcomeCommandSchema = z
+  .object({
+    opportunityId: stableId,
+    result: z.enum(["WON", "LOST"]),
+    reasonCode: shortText,
+    reasonDetail: z.string().trim().max(4_000).nullish(),
+    referenceType: z.enum(["UNIT_BOOKING", "DEPOSIT"]),
+    referenceId: stableReference,
+    value: z.string().regex(/^\d+(\.\d{1,2})?$/).nullish(),
+    currency: z.string().trim().length(3).nullish(),
+    referralId: stableId.nullish(),
+    brokerId: stableId.nullish(),
+    actorId: stableId,
+    occurredAt,
+    correlationId: stableId,
+  })
+  .strict();
+
+export const funnelQuerySchema = z
+  .object({
+    journey: z.enum(["A", "S", "P"]).default("P"),
+  })
+  .strict();
 
 export const activityCommandSchema = z
   .object({

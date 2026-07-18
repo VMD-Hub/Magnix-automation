@@ -129,31 +129,46 @@ test("synthetic G2 contract follows the ordered consent-safe conversion path", (
 
 test("G2 migration, API and event artifacts are additive and PII-minimized", async () => {
   const root = new URL("../", import.meta.url);
-  const [schema, migration, route, service, eventTypes] = await Promise.all([
-    readFile(new URL("prisma/schema.prisma", root), "utf8"),
-    readFile(
-      new URL(
-        "prisma/migrations/20260717200000_buyer_match_g2_slice/migration.sql",
-        root,
+  const [schema, migration, route, service, eventTypes, journeyPMigration] =
+    await Promise.all([
+      readFile(new URL("prisma/schema.prisma", root), "utf8"),
+      readFile(
+        new URL(
+          "prisma/migrations/20260717200000_buyer_match_g2_slice/migration.sql",
+          root,
+        ),
+        "utf8",
       ),
-      "utf8",
-    ),
-    readFile(
-      new URL("app/api/admin/conversion/matches/route.ts", root),
-      "utf8",
-    ),
-    readFile(new URL("lib/sales-core/service.ts", root), "utf8"),
-    readFile(new URL("lib/events/types.ts", root), "utf8"),
-  ]);
+      readFile(
+        new URL("app/api/admin/conversion/matches/route.ts", root),
+        "utf8",
+      ),
+      readFile(new URL("lib/sales-core/service.ts", root), "utf8"),
+      readFile(new URL("lib/events/types.ts", root), "utf8"),
+      readFile(
+        new URL(
+          "prisma/migrations/20260718100000_sales_conversion_g2_journey_p/migration.sql",
+          root,
+        ),
+        "utf8",
+      ),
+    ]);
 
   assert.match(schema, /model BuyerMatch \{/);
+  assert.match(schema, /model ProposalSnapshot \{/);
+  assert.match(schema, /model ConversionOutcome \{/);
   assert.match(migration, /CREATE TABLE "buyer_matches"/);
   assert.match(migration, /INVENTORY_FRESHNESS_UNKNOWN/);
+  assert.match(journeyPMigration, /CREATE TABLE "proposal_snapshots"/);
+  assert.match(journeyPMigration, /CREATE TABLE "conversion_outcomes"/);
   assert.match(route, /isAdminAuthorized/);
   assert.match(route, /requireIdempotencyKey/);
   assert.match(service, /buyerMatch\.findUnique/);
   assert.match(service, /"buyer\.match_recorded"/);
+  assert.match(service, /HOUSEX_CONVERSION_G2_JOURNEY_P/);
   assert.match(eventTypes, /"buyer\.match_recorded"/);
+  assert.match(eventTypes, /"conversion\.won"/);
+  assert.match(eventTypes, /"conversion\.lost"/);
 
   assert.doesNotThrow(() =>
     assertMinimizedEventPayload({

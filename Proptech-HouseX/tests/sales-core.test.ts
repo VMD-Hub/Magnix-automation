@@ -349,12 +349,77 @@ test("event minimization rejects identity, proof and financial fields", () => {
     "budgetMax",
     "proofMetadata",
     "note",
+    "reasonDetail",
   ]) {
     assert.throws(
       () => assertMinimizedEventPayload({ nested: { [key]: "secret" } }),
       /Forbidden event field/,
     );
   }
+});
+
+test("proposal freshness and NOXH commit gates", async () => {
+  const {
+    assertJourneyPConversionEnabled,
+    assertNoxhCaseAllowsCommit,
+    assertOutcomeFromCommitted,
+    assertOutcomeReasonCode,
+    assertProposalFresh,
+    assertProposalMatchesCommit,
+  } = await import("../lib/sales-core/domain");
+
+  assert.throws(
+    () => assertJourneyPConversionEnabled(false),
+    /FEATURE_DISABLED|disabled/i,
+  );
+  assert.doesNotThrow(() => assertJourneyPConversionEnabled(true));
+
+  const snapshot = {
+    projectId: "proj-1",
+    unitId: "unit-1",
+    unitCode: "A-01",
+    unitStatus: "AVAILABLE",
+    price: "1500000000",
+    depositBookingId: null,
+  };
+  assert.doesNotThrow(() =>
+    assertProposalFresh({ snapshot, current: { ...snapshot } }),
+  );
+  assert.throws(
+    () =>
+      assertProposalFresh({
+        snapshot,
+        current: { ...snapshot, price: "1600000000" },
+      }),
+    /PROPOSAL_STALE|stale/,
+  );
+  assert.throws(
+    () =>
+      assertProposalMatchesCommit({
+        snapshot,
+        bookingProjectId: "proj-2",
+        bookingUnitId: "unit-1",
+      }),
+    /PROPOSAL_COMMIT_MISMATCH|must match/,
+  );
+  assert.doesNotThrow(() => assertNoxhCaseAllowsCommit(null));
+  assert.doesNotThrow(() => assertNoxhCaseAllowsCommit("ACTIVE"));
+  assert.throws(
+    () => assertNoxhCaseAllowsCommit("DECLINED"),
+    /NOXH_CASE_BLOCKS_COMMIT|blocks/,
+  );
+  assert.doesNotThrow(() =>
+    assertOutcomeReasonCode("WON", "DEPOSIT_CONFIRMED"),
+  );
+  assert.throws(
+    () => assertOutcomeReasonCode("WON", "BUYER_WITHDREW"),
+    /INVALID_OUTCOME_REASON|not valid/,
+  );
+  assert.doesNotThrow(() => assertOutcomeFromCommitted("COMMITTED", "WON"));
+  assert.throws(
+    () => assertOutcomeFromCommitted("ACTIVE", "WON"),
+    /OUTCOME_REQUIRES_COMMITTED|COMMITTED/,
+  );
 });
 
 test("migration and services enforce idempotency without consent inference", async () => {

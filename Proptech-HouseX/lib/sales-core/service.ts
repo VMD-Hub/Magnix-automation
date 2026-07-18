@@ -18,21 +18,59 @@ import {
   assertBuyerReadyForMatching,
   assertCommitEvidence,
   assertGenericActivityType,
+  assertJourneyPConversionEnabled,
   assertMinimizedEventPayload,
+  assertNoxhCaseAllowsCommit,
   assertOpportunityTransition,
+  assertOutcomeFromCommitted,
+  assertOutcomeReasonCode,
   assertPrimaryCommitEvidenceRecord,
+  assertProposalFresh,
+  assertProposalMatchesCommit,
   assignmentFactDecision,
   assignmentSla,
   calculateProfileCompleteness,
+  PROPOSAL_TERMS_VERSION,
   resolveEffectiveConsent,
   scoreBuyerMatch,
   SalesCoreRuleError,
   type AssignmentFact,
   type CommitEvidence,
+  type ProposalInventorySnapshot,
 } from "./domain";
 import { toPrismaJsonObject } from "./json";
+import {
+  assertProjectAcceptsBookings,
+  assertUnitAcceptsBookings,
+} from "@/lib/rules/sale-eligibility-gate";
 
 type Tx = Prisma.TransactionClient;
+
+export function isJourneyPG2Enabled(): boolean {
+  return process.env.HOUSEX_CONVERSION_G2_JOURNEY_P === "true";
+}
+
+function decimalString(value: { toString(): string } | string | number): string {
+  return String(value);
+}
+
+function proposalInventoryFromUnit(unit: {
+  id: string;
+  projectId: string;
+  code: string;
+  status: string;
+  price: { toString(): string } | string;
+  depositBookingId: string | null;
+}): ProposalInventorySnapshot {
+  return {
+    projectId: unit.projectId,
+    unitId: unit.id,
+    unitCode: unit.code,
+    unitStatus: unit.status,
+    price: decimalString(unit.price),
+    depositBookingId: unit.depositBookingId,
+  };
+}
 
 function isUniqueConflict(error: unknown): boolean {
   return (
@@ -936,6 +974,7 @@ export async function transitionOpportunity(input: {
   correlationId: string;
   idempotencyKey: string;
   commitEvidence?: CommitEvidence;
+  proposalId?: string;
 }) {
   return prisma.$transaction(async (tx) => {
     await tx.$queryRaw`
@@ -951,12 +990,14 @@ export async function transitionOpportunity(input: {
     });
     if (!current) throw new SalesCoreRuleError("NOT_FOUND", "Opportunity not found.");
     if (priorActivity) {
-      const priorCommitEvidence =
+      const priorMeta =
         priorActivity.metadata &&
         typeof priorActivity.metadata === "object" &&
         !Array.isArray(priorActivity.metadata)
-          ? (priorActivity.metadata as Record<string, unknown>).commitEvidence
-          : undefined;
+          ? (priorActivity.metadata as Record<string, unknown>)
+          : {};
+      const priorCommitEvidence = priorMeta.commitEvidence;
+      const priorProposalId = priorMeta.proposalId;
       if (
         priorActivity.type !== "STATE_TRANSITION" ||
         priorActivity.opportunityId !== input.opportunityId ||
@@ -973,7 +1014,8 @@ export async function transitionOpportunity(input: {
                   input.occurredAt,
                 )
               : undefined,
-          )
+          ) ||
+        String(priorProposalId ?? "") !== String(input.proposalId ?? "")
       ) {
         idempotencyConflict();
       }
@@ -990,6 +1032,7 @@ export async function transitionOpportunity(input: {
     let commitEvidenceMetadata:
       | ReturnType<typeof reconciledCommitEvidenceAudit>
       | undefined;
+    let proposalMetadata: { proposalId: string } | undefined;
     if (current.stage === "ACTIVE" && input.toStage === "COMMITTED") {
       const evidence = input.commitEvidence;
       if (!evidence) {
@@ -998,6 +1041,20 @@ export async function transitionOpportunity(input: {
           "ACTIVE to COMMITTED requires commit evidence.",
         );
       }
+      const g2Enabled = isJourneyPG2Enabled();
+      if (!g2Enabled && input.proposalId) {
+        throw new SalesCoreRuleError(
+          "FEATURE_DISABLED",
+          "Journey P conversion G2 is disabled.",
+        );
+      }
+      if (g2Enabled && current.journey === "P" && !input.proposalId) {
+        throw new SalesCoreRuleError(
+          "PROPOSAL_REQUIRED",
+          "ACTIVE to COMMITTED on Journey P requires a fresh proposal snapshot.",
+        );
+      }
+
       await tx.$queryRaw`
         SELECT "id" FROM "unit_bookings"
         WHERE "id" = ${evidence.referenceId}
@@ -1006,7 +1063,16 @@ export async function transitionOpportunity(input: {
       const [lead, booking] = await Promise.all([
         tx.lead.findUnique({
           where: { id: current.leadId },
-          select: { customerId: true, projectId: true },
+          select: {
+            customerId: true,
+            projectId: true,
+            noxhCases: {
+              where: { caseStatus: { not: "COMPLETED" } },
+              orderBy: { createdAt: "desc" },
+              take: 1,
+              select: { caseStatus: true },
+            },
+          },
         }),
         tx.unitBooking.findUnique({
           where: { id: evidence.referenceId },
@@ -1016,7 +1082,16 @@ export async function transitionOpportunity(input: {
             customerId: true,
             projectId: true,
             unitId: true,
-            unit: { select: { depositBookingId: true } },
+            unit: {
+              select: {
+                id: true,
+                projectId: true,
+                code: true,
+                status: true,
+                price: true,
+                depositBookingId: true,
+              },
+            },
           },
         }),
       ]);
@@ -1041,6 +1116,44 @@ export async function transitionOpportunity(input: {
           unitDepositBookingId: booking.unit.depositBookingId,
         },
       });
+
+      if (g2Enabled && current.journey === "P") {
+        const proposalId = input.proposalId!;
+        const snapshot = await tx.proposalSnapshot.findUnique({
+          where: { id: proposalId },
+        });
+        if (
+          !snapshot ||
+          snapshot.opportunityId !== current.id ||
+          snapshot.leadId !== current.leadId ||
+          snapshot.journey !== "P"
+        ) {
+          throw new SalesCoreRuleError(
+            "PROPOSAL_NOT_FOUND",
+            "Proposal snapshot was not found for this opportunity.",
+          );
+        }
+        const snapshotInventory: ProposalInventorySnapshot = {
+          projectId: snapshot.projectRef,
+          unitId: snapshot.unitRef,
+          unitCode: snapshot.unitCode,
+          unitStatus: snapshot.unitStatus,
+          price: decimalString(snapshot.price),
+          depositBookingId: snapshot.depositBookingIdAtSnapshot,
+        };
+        assertProposalFresh({
+          snapshot: snapshotInventory,
+          current: proposalInventoryFromUnit(booking.unit),
+        });
+        assertProposalMatchesCommit({
+          snapshot: snapshotInventory,
+          bookingProjectId: booking.projectId,
+          bookingUnitId: booking.unitId,
+        });
+        assertNoxhCaseAllowsCommit(lead.noxhCases[0]?.caseStatus);
+        proposalMetadata = { proposalId };
+      }
+
       commitEvidenceMetadata = reconciledCommitEvidenceAudit(
         evidence,
         input.occurredAt,
@@ -1058,9 +1171,12 @@ export async function transitionOpportunity(input: {
         occurredAt: input.occurredAt,
         correlationId: input.correlationId,
         idempotencyKey: input.idempotencyKey,
-        metadata: commitEvidenceMetadata
-          ? { commitEvidence: commitEvidenceMetadata }
-          : {},
+        metadata: {
+          ...(commitEvidenceMetadata
+            ? { commitEvidence: commitEvidenceMetadata }
+            : {}),
+          ...(proposalMetadata ?? {}),
+        },
       },
     });
     const opportunity = await tx.opportunity.update({
@@ -1091,6 +1207,459 @@ export async function transitionOpportunity(input: {
     );
     return { opportunity, changed: true };
   });
+}
+
+export async function createProposalSnapshot(input: {
+  opportunityId: string;
+  unitRef: string;
+  buyerMatchId?: string | null;
+  actorId: string;
+  correlationId: string;
+  idempotencyKey: string;
+  generatedAt?: Date;
+}) {
+  assertJourneyPConversionEnabled(isJourneyPG2Enabled());
+  const generatedAt = input.generatedAt ?? new Date();
+  const sameInput = (row: {
+    opportunityId: string;
+    leadId: string;
+    journey: SalesJourney;
+    projectRef: string;
+    unitRef: string;
+    buyerMatchId: string | null;
+    actorId: string;
+    correlationId: string;
+  }) =>
+    row.opportunityId === input.opportunityId &&
+    row.unitRef === input.unitRef &&
+    row.buyerMatchId === (input.buyerMatchId ?? null) &&
+    row.actorId === input.actorId &&
+    row.correlationId === input.correlationId;
+
+  try {
+    return await prisma.$transaction(async (tx) => {
+      const prior = await tx.proposalSnapshot.findUnique({
+        where: { idempotencyKey: input.idempotencyKey },
+      });
+      if (prior) {
+        if (!sameInput(prior)) idempotencyConflict();
+        return { proposal: prior, created: false };
+      }
+
+      const opportunity = await tx.opportunity.findUnique({
+        where: { id: input.opportunityId },
+      });
+      if (!opportunity) {
+        throw new SalesCoreRuleError("NOT_FOUND", "Opportunity not found.");
+      }
+      if (opportunity.journey !== "P") {
+        throw new SalesCoreRuleError(
+          "PROPOSAL_JOURNEY_MISMATCH",
+          "Proposal snapshots are only supported for Journey P.",
+        );
+      }
+
+      await tx.$queryRaw`
+        SELECT "id" FROM "project_units"
+        WHERE "id" = ${input.unitRef}
+        FOR SHARE
+      `;
+      const unit = await tx.projectUnit.findUnique({
+        where: { id: input.unitRef },
+        select: {
+          id: true,
+          projectId: true,
+          code: true,
+          status: true,
+          price: true,
+          depositBookingId: true,
+          deletedAt: true,
+          project: { select: { status: true, type: true } },
+        },
+      });
+      if (!unit || unit.deletedAt) {
+        throw new SalesCoreRuleError("NOT_FOUND", "Project unit not found.");
+      }
+      const projectGate = assertProjectAcceptsBookings({
+        projectStatus: unit.project.status,
+        projectType: unit.project.type,
+      });
+      if (!projectGate.ok) {
+        throw new SalesCoreRuleError(projectGate.code, projectGate.message);
+      }
+      const unitGate = assertUnitAcceptsBookings(unit.status);
+      if (!unitGate.ok) {
+        throw new SalesCoreRuleError(unitGate.code, unitGate.message);
+      }
+      if (
+        opportunity.projectRef &&
+        opportunity.projectRef !== unit.projectId
+      ) {
+        throw new SalesCoreRuleError(
+          "PROPOSAL_PROJECT_MISMATCH",
+          "Unit project must match opportunity projectRef.",
+        );
+      }
+      if (opportunity.unitRef && opportunity.unitRef !== unit.id) {
+        throw new SalesCoreRuleError(
+          "PROPOSAL_UNIT_MISMATCH",
+          "Unit must match opportunity unitRef.",
+        );
+      }
+      if (input.buyerMatchId) {
+        const match = await tx.buyerMatch.findUnique({
+          where: { id: input.buyerMatchId },
+          select: { leadId: true, opportunityId: true },
+        });
+        if (
+          !match ||
+          match.leadId !== opportunity.leadId ||
+          (match.opportunityId &&
+            match.opportunityId !== opportunity.id)
+        ) {
+          throw new SalesCoreRuleError(
+            "BUYER_MATCH_MISMATCH",
+            "Buyer match must belong to the opportunity lead.",
+          );
+        }
+      }
+
+      const proposal = await tx.proposalSnapshot.create({
+        data: {
+          opportunityId: opportunity.id,
+          leadId: opportunity.leadId,
+          journey: "P",
+          projectRef: unit.projectId,
+          unitRef: unit.id,
+          buyerMatchId: input.buyerMatchId ?? null,
+          unitCode: unit.code,
+          unitStatus: unit.status,
+          price: unit.price,
+          currency: "VND",
+          depositBookingIdAtSnapshot: unit.depositBookingId,
+          termsVersion: PROPOSAL_TERMS_VERSION,
+          inventoryCheckedAt: generatedAt,
+          generatedAt,
+          actorId: input.actorId,
+          correlationId: input.correlationId,
+          idempotencyKey: input.idempotencyKey,
+        },
+      });
+      return { proposal, created: true };
+    });
+  } catch (error) {
+    if (!isUniqueConflict(error)) throw error;
+    const prior = await prisma.proposalSnapshot.findUnique({
+      where: { idempotencyKey: input.idempotencyKey },
+    });
+    if (!prior || !sameInput(prior)) idempotencyConflict();
+    return { proposal: prior, created: false };
+  }
+}
+
+export async function listProposalSnapshots(opportunityId: string) {
+  assertJourneyPConversionEnabled(isJourneyPG2Enabled());
+  return prisma.proposalSnapshot.findMany({
+    where: { opportunityId },
+    orderBy: { createdAt: "desc" },
+  });
+}
+
+export async function recordConversionOutcome(input: {
+  opportunityId: string;
+  result: "WON" | "LOST";
+  reasonCode: string;
+  reasonDetail?: string | null;
+  referenceType: "UNIT_BOOKING" | "DEPOSIT";
+  referenceId: string;
+  value?: string | null;
+  currency?: string | null;
+  referralId?: string | null;
+  brokerId?: string | null;
+  actorId: string;
+  occurredAt: Date;
+  correlationId: string;
+  idempotencyKey: string;
+}) {
+  assertJourneyPConversionEnabled(isJourneyPG2Enabled());
+  assertOutcomeReasonCode(input.result, input.reasonCode);
+
+  const sameInput = (row: {
+    opportunityId: string;
+    result: string;
+    reasonCode: string;
+    reasonDetail: string | null;
+    referenceType: string;
+    referenceId: string;
+    value: { toString(): string } | null;
+    currency: string | null;
+    referralId: string | null;
+    brokerId: string | null;
+    actorId: string;
+    occurredAt: Date;
+    correlationId: string;
+  }) =>
+    row.opportunityId === input.opportunityId &&
+    row.result === input.result &&
+    row.reasonCode === input.reasonCode &&
+    row.reasonDetail === (input.reasonDetail ?? null) &&
+    row.referenceType === input.referenceType &&
+    row.referenceId === input.referenceId &&
+    (row.value == null ? null : decimalString(row.value)) ===
+      (input.value ?? null) &&
+    row.currency === (input.currency ?? null) &&
+    row.referralId === (input.referralId ?? null) &&
+    row.brokerId === (input.brokerId ?? null) &&
+    row.actorId === input.actorId &&
+    sameDate(row.occurredAt, input.occurredAt) &&
+    row.correlationId === input.correlationId;
+
+  try {
+    return await prisma.$transaction(async (tx) => {
+      const prior = await tx.conversionOutcome.findUnique({
+        where: { idempotencyKey: input.idempotencyKey },
+      });
+      if (prior) {
+        if (!sameInput(prior)) idempotencyConflict();
+        const opportunity = await tx.opportunity.findUniqueOrThrow({
+          where: { id: prior.opportunityId },
+        });
+        return { outcome: prior, opportunity, created: false };
+      }
+
+      await tx.$queryRaw`
+        SELECT "id" FROM "opportunities"
+        WHERE "id" = ${input.opportunityId}
+        FOR UPDATE
+      `;
+      const opportunity = await tx.opportunity.findUnique({
+        where: { id: input.opportunityId },
+      });
+      if (!opportunity) {
+        throw new SalesCoreRuleError("NOT_FOUND", "Opportunity not found.");
+      }
+      if (opportunity.journey !== "P") {
+        throw new SalesCoreRuleError(
+          "OUTCOME_JOURNEY_MISMATCH",
+          "Conversion outcomes in this slice are Journey P only.",
+        );
+      }
+      assertOutcomeFromCommitted(opportunity.stage, input.result);
+
+      const existingOutcome = await tx.conversionOutcome.findUnique({
+        where: { opportunityId: opportunity.id },
+      });
+      if (existingOutcome) {
+        throw new SalesCoreRuleError(
+          "OUTCOME_ALREADY_RECORDED",
+          "Opportunity already has a terminal conversion outcome.",
+        );
+      }
+
+      await tx.$queryRaw`
+        SELECT "id" FROM "unit_bookings"
+        WHERE "id" = ${input.referenceId}
+        FOR SHARE
+      `;
+      const [lead, booking] = await Promise.all([
+        tx.lead.findUnique({
+          where: { id: opportunity.leadId },
+          select: { customerId: true, projectId: true },
+        }),
+        tx.unitBooking.findUnique({
+          where: { id: input.referenceId },
+          select: {
+            id: true,
+            status: true,
+            customerId: true,
+            projectId: true,
+            unitId: true,
+            referralId: true,
+            brokerId: true,
+            unit: {
+              select: {
+                price: true,
+                depositBookingId: true,
+              },
+            },
+          },
+        }),
+      ]);
+      if (!lead || !booking) {
+        throw new SalesCoreRuleError(
+          "OUTCOME_REFERENCE_NOT_FOUND",
+          "Commercial reference was not found.",
+        );
+      }
+      assertPrimaryCommitEvidenceRecord({
+        evidence: {
+          referenceType: input.referenceType,
+          referenceId: input.referenceId,
+        },
+        leadCustomerId: lead.customerId,
+        leadProjectId: lead.projectId,
+        opportunityProjectRef: opportunity.projectRef,
+        opportunityUnitRef: opportunity.unitRef,
+        record: {
+          id: booking.id,
+          status: booking.status,
+          customerId: booking.customerId,
+          projectId: booking.projectId,
+          unitId: booking.unitId,
+          unitDepositBookingId: booking.unit.depositBookingId,
+        },
+      });
+
+      const resolvedValue =
+        input.value ??
+        (input.result === "WON" ? decimalString(booking.unit.price) : null);
+      const resolvedCurrency =
+        input.currency ?? (resolvedValue != null ? "VND" : null);
+      if (
+        resolvedValue != null &&
+        decimalString(booking.unit.price) !== resolvedValue
+      ) {
+        throw new SalesCoreRuleError(
+          "OUTCOME_VALUE_MISMATCH",
+          "Outcome value must reconcile to unit price.",
+        );
+      }
+
+      const activity = await tx.salesActivity.create({
+        data: {
+          leadId: opportunity.leadId,
+          opportunityId: opportunity.id,
+          type: "STATE_TRANSITION",
+          fromState: opportunity.stage,
+          toState: input.result,
+          reason: input.reasonCode,
+          actorId: input.actorId,
+          occurredAt: input.occurredAt,
+          correlationId: input.correlationId,
+          idempotencyKey: `${input.idempotencyKey}:stage`,
+          metadata: {
+            outcomeReference: {
+              referenceType: input.referenceType,
+              referenceId: input.referenceId,
+            },
+          },
+        },
+      });
+      const updated = await tx.opportunity.update({
+        where: { id: opportunity.id },
+        data: { stage: input.result, reason: input.reasonCode },
+      });
+      const outcome = await tx.conversionOutcome.create({
+        data: {
+          opportunityId: opportunity.id,
+          leadId: opportunity.leadId,
+          journey: "P",
+          result: input.result,
+          reasonCode: input.reasonCode,
+          reasonDetail: input.reasonDetail ?? null,
+          referenceType: input.referenceType,
+          referenceId: input.referenceId,
+          value: resolvedValue,
+          currency: resolvedCurrency,
+          referralId: input.referralId ?? booking.referralId,
+          brokerId: input.brokerId ?? booking.brokerId,
+          actorId: input.actorId,
+          correlationId: input.correlationId,
+          idempotencyKey: input.idempotencyKey,
+          occurredAt: input.occurredAt,
+        },
+      });
+
+      const stagePayload = {
+        opportunityId: updated.id,
+        leadId: updated.leadId,
+        journey: updated.journey,
+        fromStage: opportunity.stage,
+        toStage: updated.stage,
+        correlationId: input.correlationId,
+        schemaVersion: 1 as const,
+      };
+      assertMinimizedEventPayload(stagePayload);
+      await enqueueEvent(
+        tx,
+        "opportunity.stage_changed",
+        stagePayload,
+        `opportunity.stage_changed:${activity.id}`,
+        {
+          aggregateType: "opportunity",
+          aggregateId: updated.id,
+          correlationId: input.correlationId,
+          occurredAt: input.occurredAt,
+        },
+      );
+
+      const outcomePayload = {
+        outcomeId: outcome.id,
+        opportunityId: outcome.opportunityId,
+        leadId: outcome.leadId,
+        journey: outcome.journey,
+        reasonCode: outcome.reasonCode,
+        referenceType: outcome.referenceType,
+        referenceId: outcome.referenceId,
+        hasValue: outcome.value != null,
+        correlationId: outcome.correlationId,
+        schemaVersion: 1 as const,
+      };
+      assertMinimizedEventPayload(outcomePayload);
+      const eventType =
+        input.result === "WON" ? "conversion.won" : "conversion.lost";
+      await enqueueEvent(
+        tx,
+        eventType,
+        outcomePayload,
+        `${eventType}:${outcome.id}`,
+        {
+          aggregateType: "conversion_outcome",
+          aggregateId: outcome.id,
+          correlationId: input.correlationId,
+          occurredAt: input.occurredAt,
+        },
+      );
+
+      return { outcome, opportunity: updated, created: true };
+    });
+  } catch (error) {
+    if (!isUniqueConflict(error)) throw error;
+    const prior = await prisma.conversionOutcome.findUnique({
+      where: { idempotencyKey: input.idempotencyKey },
+    });
+    if (!prior || !sameInput(prior)) idempotencyConflict();
+    const opportunity = await prisma.opportunity.findUniqueOrThrow({
+      where: { id: prior.opportunityId },
+    });
+    return { outcome: prior, opportunity, created: false };
+  }
+}
+
+export async function getConversionFunnel(input?: { journey?: SalesJourney }) {
+  assertJourneyPConversionEnabled(isJourneyPG2Enabled());
+  const journey = input?.journey ?? "P";
+  const [stages, outcomes] = await Promise.all([
+    prisma.opportunity.groupBy({
+      by: ["stage"],
+      where: { journey },
+      _count: { _all: true },
+    }),
+    prisma.conversionOutcome.groupBy({
+      by: ["result"],
+      where: { journey },
+      _count: { _all: true },
+    }),
+  ]);
+  return {
+    journey,
+    stages: Object.fromEntries(
+      stages.map((row) => [row.stage, row._count._all]),
+    ),
+    outcomes: Object.fromEntries(
+      outcomes.map((row) => [row.result, row._count._all]),
+    ),
+  };
 }
 
 export async function appendSalesActivity(input: {

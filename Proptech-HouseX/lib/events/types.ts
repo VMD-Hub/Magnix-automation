@@ -84,6 +84,32 @@ export interface OutboxPayloads {
     correlationId: string;
     schemaVersion: 1;
   };
+  /** SC-5 — terminal won; no PII, no monetary amount (hasValue only). */
+  "conversion.won": {
+    outcomeId: string;
+    opportunityId: string;
+    leadId: string;
+    journey: "A" | "S" | "P";
+    reasonCode: string;
+    referenceType: "UNIT_BOOKING" | "DEPOSIT";
+    referenceId: string;
+    hasValue: boolean;
+    correlationId: string;
+    schemaVersion: 1;
+  };
+  /** SC-5 — terminal lost; no PII, no reasonDetail. */
+  "conversion.lost": {
+    outcomeId: string;
+    opportunityId: string;
+    leadId: string;
+    journey: "A" | "S" | "P";
+    reasonCode: string;
+    referenceType: "UNIT_BOOKING" | "DEPOSIT";
+    referenceId: string;
+    hasValue: boolean;
+    correlationId: string;
+    schemaVersion: 1;
+  };
   /** UID acquisition promoted to a platform lead; intentionally contains no PII. */
   "acquisition.touch_promoted": {
     touchId: string;

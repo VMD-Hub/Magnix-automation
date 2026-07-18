@@ -192,6 +192,11 @@ tạo side effect lặp.
 | **G1 — Authoritative foundation** | Additive schema cho `ConsentRecord`, Opportunity/activity tối thiểu; idempotent APIs; transactional outbox. | Migration rollback-tested; duplicate/retry tests pass; withdrawal blocks marketing; RBAC/PII tests pass. |
 | **G2 — Journey adoption** | Journey A/S/P map subject, stages và outcomes; funnel read model; migrate legacy automation. | Mỗi journey có one end-to-end conversion path, no bypass legal/verification gates, reconciled metrics and rollback/runbook approved. |
 
+**G2 Journey P slice (SC-4/SC-5, repo):** `ProposalSnapshot` + `ConversionOutcome` dưới
+`/api/admin/conversion/{proposals,outcomes,funnel}`; bật bằng
+`HOUSEX_CONVERSION_G2_JOURNEY_P=true`. UnitBooking vẫn là authority deposit. A/S
+COMMITTED vẫn fail-closed. Runtime evidence production: chưa.
+
 Mỗi gate cần review schema/API riêng trước implementation. G2 không được bắt đầu cho
 journey nào khi G1 consent/idempotency controls chưa đạt.
 

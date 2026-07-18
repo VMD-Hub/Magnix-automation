@@ -15,7 +15,11 @@ export function requireIdempotencyKey(req: NextRequest): string {
 
 export function handleSalesCoreError(error: unknown) {
   if (error instanceof SalesCoreRuleError) {
-    const notFound = error.code === "NOT_FOUND";
+    if (error.code === "FEATURE_DISABLED") {
+      return fail(403, error.code, error.message);
+    }
+    const notFound =
+      error.code === "NOT_FOUND" || error.code.endsWith("_NOT_FOUND");
     return fail(
       notFound ? 404 : error.code.endsWith("_REQUIRED") ? 422 : 409,
       error.code,

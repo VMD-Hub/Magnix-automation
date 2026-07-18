@@ -8,13 +8,31 @@ runtime execution evidence; deployment/activation alone is not a functional smok
 
 - G1 migration: `20260717190000_sales_core_g1_foundation`
 - G2 SC-2 migration: `20260717200000_buyer_match_g2_slice`
-- Protected command surface: `/api/admin/conversion/*`, including `matches`
-- Deterministic contract test:
-  `tests/sales-conversion-g2-contract.test.ts`
+- G2 Journey P SC-4/SC-5 migration: `20260718100000_sales_conversion_g2_journey_p`
+- Protected command surface: `/api/admin/conversion/*`, including `matches`,
+  `proposals`, `outcomes`, `funnel`
+- Feature flag (default **off**): `HOUSEX_CONVERSION_G2_JOURNEY_P=true` enables
+  proposal/outcome/funnel APIs and requires a fresh `proposalId` on Journey P
+  ACTIVE→COMMITTED. When off, legacy UnitBooking-only commit path remains.
+- Deterministic contract tests:
+  `tests/sales-conversion-g2-contract.test.ts`,
+  `tests/sales-conversion-g2-journey-p.test.ts`
 - BuyerMatch is an explainable recommendation snapshot only. It cannot reserve
   inventory, assert legal eligibility, or mutate an opportunity.
 - Missing inventory snapshot is recorded as
   `INVENTORY_FRESHNESS_UNKNOWN`; `inventoryCheckedAt` remains null.
+
+### Journey P E2E contract (SC-4 + SC-5, repo)
+
+1. QUALIFIED lead → assignment/profile → BuyerMatch (optional)
+2. `POST /proposals` — immutable inventory snapshot
+3. Journey-native UnitBooking confirm / convert-to-deposit
+4. ACTIVE→COMMITTED with `commitEvidence` + `proposalId` (flag on); freshness enforced
+5. `POST /outcomes` WON/LOST with reason + commercial ref; value reconciles to unit price
+6. Outbox: `opportunity.stage_changed` + `conversion.won`/`conversion.lost` (minimized)
+
+A/S COMMITTED remains fail-closed. Runtime/production evidence for this slice:
+`NOT_PROVIDED`.
 
 ## Local verification commands
 
@@ -23,8 +41,8 @@ Run from `Proptech-HouseX` unless noted:
 ```text
 npx prisma format
 npx prisma validate
-node --import tsx --test tests/sales-core.test.ts tests/sales-conversion-g2-contract.test.ts
-npx eslint "app/api/admin/conversion/**/*.ts" "lib/sales-core/**/*.ts" "lib/validation/sales-core.ts" "lib/events/outbox.ts" "lib/events/types.ts" "tests/sales-core.test.ts" "tests/sales-conversion-g2-contract.test.ts"
+node --import tsx --test tests/sales-core.test.ts tests/sales-conversion-g2-contract.test.ts tests/sales-conversion-g2-journey-p.test.ts
+npx eslint "app/api/admin/conversion/**/*.ts" "lib/sales-core/**/*.ts" "lib/validation/sales-core.ts" "lib/events/outbox.ts" "lib/events/types.ts" "tests/sales-core.test.ts" "tests/sales-conversion-g2-contract.test.ts" "tests/sales-conversion-g2-journey-p.test.ts"
 git diff --check
 ```
 
