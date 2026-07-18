@@ -58,6 +58,7 @@ test("admin session: cookie cũ khi thiếu ADMIN_SECRET — không crash", () =
 test("admin roles: ops page vs super page", () => {
   assert.equal(isSuperAdminOnlyPage("/admin/ops-leads"), false);
   assert.equal(isSuperAdminOnlyPage("/admin/conflicts"), false);
+  assert.equal(isSuperAdminOnlyPage("/admin/conversion"), false);
   assert.equal(isSuperAdminOnlyPage("/admin/listings"), true);
   assert.equal(defaultAdminHome("ops"), "/admin/ops-leads");
 });

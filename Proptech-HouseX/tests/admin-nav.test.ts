@@ -6,13 +6,18 @@ import {
 } from "../lib/admin/nav.ts";
 
 describe("adminNavGroupsForRole", () => {
-  it("ops sees CRM and help groups", () => {
+  it("ops sees CRM, help, and sales (Conversion only)", () => {
     const groups = adminNavGroupsForRole("ops");
     const ids = groups.map((g) => g.id);
-    assert.deepEqual(ids, ["crm", "help"]);
+    assert.deepEqual(ids, ["crm", "help", "sales"]);
     const crm = groups.find((g) => g.id === "crm")!;
     assert.ok(crm.items.some((i) => i.href === "/admin/ops-leads"));
     assert.ok(!crm.items.some((i) => i.href === "/admin/ctv"));
+    const sales = groups.find((g) => g.id === "sales")!;
+    assert.deepEqual(
+      sales.items.map((i) => i.href),
+      ["/admin/conversion"],
+    );
     const help = groups.find((g) => g.id === "help")!;
     assert.ok(help.items.some((i) => i.href === "/admin/playbook"));
   });

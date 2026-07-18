@@ -75,7 +75,7 @@ function idemKey(prefix: string) {
 async function adminJson<T>(
   path: string,
   init?: RequestInit,
-): Promise<{ ok: boolean; status: number; data?: T; error?: string }> {
+): Promise<{ ok: boolean; status: number; data?: T; error?: string; code?: string }> {
   const res = await fetch(path, {
     ...init,
     headers: {
@@ -84,19 +84,22 @@ async function adminJson<T>(
       ...(init?.headers ?? {}),
     },
   });
-  if (res.status === 403) {
-    window.location.href = "/admin/login";
-    return { ok: false, status: 403, error: "FORBIDDEN" };
-  }
   const body = (await res.json().catch(() => ({}))) as {
     data?: T;
     error?: { code?: string; message?: string };
   };
+  const code = body.error?.code;
+  // Only bounce on real auth denial — FEATURE_DISABLED is not a session failure.
+  if (res.status === 403 && code !== "FEATURE_DISABLED") {
+    window.location.href = "/admin/login";
+    return { ok: false, status: 403, error: "FORBIDDEN", code };
+  }
   return {
     ok: res.ok,
     status: res.status,
     data: body.data,
     error: body.error?.message ?? body.error?.code,
+    code,
   };
 }
 
@@ -126,8 +129,13 @@ export function ConversionOpsBoard() {
       ),
       adminJson<FunnelData>(`/api/admin/conversion/funnel?journey=${journey}`),
     ]);
-    if (!listRes.ok) setMsg(listRes.error ?? "Không tải được opportunity");
-    else {
+    if (!listRes.ok) {
+      setMsg(
+        listRes.code === "FEATURE_DISABLED"
+          ? "Flag HOUSEX_CONVERSION_G2_JOURNEY_P chưa bật trên app (set true trong .env rồi pm2 restart --update-env)."
+          : (listRes.error ?? "Không tải được opportunity"),
+      );
+    } else {
       setItems(listRes.data?.items ?? []);
       setMsg(null);
     }

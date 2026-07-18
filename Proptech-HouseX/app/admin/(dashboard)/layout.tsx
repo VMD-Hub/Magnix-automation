@@ -15,13 +15,20 @@ export default async function AdminDashboardLayout({
   children: React.ReactNode;
 }) {
   const session = await getAdminSessionFromCookies();
-  const pathname = (await headers()).get("x-pathname") ?? "/admin";
+  const pathname = (await headers()).get("x-pathname");
 
   if (!session) {
-    redirect(`/admin/login?next=${encodeURIComponent(pathname)}`);
+    const next =
+      pathname && pathname.startsWith("/admin") ? pathname : "/admin";
+    redirect(`/admin/login?next=${encodeURIComponent(next)}`);
   }
 
-  if (session.role === "ops" && isSuperAdminOnlyPage(pathname)) {
+  // Missing x-pathname must not be treated as "/admin" (false super-only).
+  if (
+    session.role === "ops" &&
+    pathname &&
+    isSuperAdminOnlyPage(pathname)
+  ) {
     redirect(defaultAdminHome("ops"));
   }
 
