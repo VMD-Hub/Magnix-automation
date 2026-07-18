@@ -64,6 +64,9 @@ export function OpsLeadTelesalesPanel({
   const [note, setNote] = useState("");
   const [msg, setMsg] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const [sendOa, setSendOa] = useState(true);
+  const [sendSms, setSendSms] = useState(true);
+  const [serverMsg, setServerMsg] = useState<string | null>(null);
 
   const load = useCallback(async () => {
     const res = await fetch(`/api/admin/ops-leads/${leadId}/contact`);
@@ -121,6 +124,56 @@ export function OpsLeadTelesalesPanel({
     } catch {
       setMsg(`Copy thủ công: ${p}`);
     }
+  }
+
+  async function serverSend() {
+    const channels: Array<"oa" | "sms"> = [];
+    if (sendOa) channels.push("oa");
+    if (sendSms) channels.push("sms");
+    if (channels.length === 0) {
+      setServerMsg("Chọn ít nhất một kênh OA hoặc SMS.");
+      return;
+    }
+    setBusy(true);
+    setServerMsg(null);
+    const res = await fetch(`/api/admin/ops-leads/${leadId}/server-send`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Idempotency-Key": idemKey("server-send"),
+      },
+      body: JSON.stringify({
+        channels,
+        actorId: "ops-ui",
+        correlationId: idemKey("corr"),
+      }),
+    });
+    const json = await res.json();
+    setBusy(false);
+    if (!res.ok) {
+      setServerMsg(json.error?.message ?? "Gửi server thất bại.");
+      return;
+    }
+    const lines = (json.data?.results ?? []) as Array<{
+      channel: string;
+      status: string;
+      reason: string | null;
+    }>;
+    setServerMsg(
+      lines.length
+        ? lines
+            .map(
+              (r) =>
+                `${r.channel.toUpperCase()}: ${r.status}${
+                  r.reason ? ` (${r.reason})` : ""
+                }`,
+            )
+            .join(" · ")
+        : "Đã xử lý.",
+    );
+    if (json.data?.bundle) setBundle(json.data.bundle);
+    else void load();
+    onStatusMaybeChanged?.();
   }
 
   if (!bundle) {
@@ -215,6 +268,46 @@ export function OpsLeadTelesalesPanel({
       {bundle.deepLinks ? (
         <p className="text-[11px] text-slate-500">{bundle.deepLinks.zalo.hint}</p>
       ) : null}
+
+      <div className="rounded-md border border-slate-200 bg-white/90 p-2.5">
+        <p className="text-xs font-medium text-slate-800">
+          Gửi OA / SMS server (Phase 2)
+        </p>
+        <p className="mt-0.5 text-[11px] text-slate-500">
+          Cần marketing consent theo kênh. Deep-link phía trên vẫn dùng được khi chưa
+          bật server send.
+        </p>
+        <div className="mt-2 flex flex-wrap items-center gap-3">
+          <label className="flex items-center gap-1.5 text-[11px] text-slate-700">
+            <input
+              type="checkbox"
+              checked={sendOa}
+              onChange={(e) => setSendOa(e.target.checked)}
+            />
+            OA
+          </label>
+          <label className="flex items-center gap-1.5 text-[11px] text-slate-700">
+            <input
+              type="checkbox"
+              checked={sendSms}
+              onChange={(e) => setSendSms(e.target.checked)}
+            />
+            SMS
+          </label>
+          <Button
+            type="button"
+            size="sm"
+            variant="outline"
+            disabled={busy || (!sendOa && !sendSms)}
+            onClick={() => void serverSend()}
+          >
+            Gửi OA / SMS server
+          </Button>
+        </div>
+        {serverMsg ? (
+          <p className="mt-1.5 text-[11px] text-brand-800">{serverMsg}</p>
+        ) : null}
+      </div>
 
       <label className="block text-xs">
         <span className="font-medium text-slate-700">Ghi chú cuộc gọi (tuỳ chọn)</span>

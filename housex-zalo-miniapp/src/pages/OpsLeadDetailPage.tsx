@@ -5,6 +5,7 @@ import {
   checkTelesalesAccess,
   getOpsContact,
   recordContact,
+  serverSend,
 } from "@/services/ops-telesales";
 
 const CHIPS = [
@@ -25,6 +26,9 @@ export function OpsLeadDetailPage() {
   >(null);
   const [note, setNote] = useState("");
   const [msg, setMsg] = useState<string | null>(null);
+  const [sendOa, setSendOa] = useState(true);
+  const [sendSms, setSendSms] = useState(true);
+  const [busy, setBusy] = useState(false);
 
   async function reload() {
     if (!id) return;
@@ -64,6 +68,34 @@ export function OpsLeadDetailPage() {
       setNote("");
       void reload();
     }
+  }
+
+  async function onServerSend() {
+    if (!id) return;
+    const channels: Array<"oa" | "sms"> = [];
+    if (sendOa) channels.push("oa");
+    if (sendSms) channels.push("sms");
+    if (!channels.length) {
+      setMsg("Chọn OA hoặc SMS");
+      return;
+    }
+    setBusy(true);
+    const res = await serverSend(id, channels);
+    setBusy(false);
+    if (!res.ok) {
+      setMsg(res.error ?? "Gửi server thất bại");
+      return;
+    }
+    const lines = (res.data?.results ?? [])
+      .map(
+        (r) =>
+          `${r.channel.toUpperCase()}: ${r.status}${
+            r.reason ? ` (${r.reason})` : ""
+          }`,
+      )
+      .join(" · ");
+    setMsg(lines || "Đã xử lý");
+    void reload();
   }
 
   if (!bundle) {
@@ -128,6 +160,41 @@ export function OpsLeadDetailPage() {
         ) : (
           <p className="text-sm text-rose-600">Thiếu SĐT</p>
         )}
+      </div>
+
+      <div className="rounded-lg border border-slate-200 bg-white p-3">
+        <p className="text-xs font-semibold text-slate-800">
+          Gửi OA / SMS server
+        </p>
+        <p className="mt-0.5 text-[11px] text-slate-500">
+          Cần marketing consent. Deep-link phía trên vẫn dùng khi chưa bật server.
+        </p>
+        <div className="mt-2 flex flex-wrap items-center gap-3">
+          <label className="flex items-center gap-1 text-xs">
+            <input
+              type="checkbox"
+              checked={sendOa}
+              onChange={(e) => setSendOa(e.target.checked)}
+            />
+            OA
+          </label>
+          <label className="flex items-center gap-1 text-xs">
+            <input
+              type="checkbox"
+              checked={sendSms}
+              onChange={(e) => setSendSms(e.target.checked)}
+            />
+            SMS
+          </label>
+          <button
+            type="button"
+            disabled={busy || (!sendOa && !sendSms)}
+            className="rounded-lg bg-rose-800 px-3 py-1.5 text-xs font-semibold text-white disabled:opacity-50"
+            onClick={() => void onServerSend()}
+          >
+            Gửi server
+          </button>
+        </div>
       </div>
 
       <textarea

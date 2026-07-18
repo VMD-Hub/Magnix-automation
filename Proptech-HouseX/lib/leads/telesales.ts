@@ -1,6 +1,6 @@
 /**
  * CRM telesales Phase 1 — deep-link + activity log + call cooldown.
- * Không gửi OA/SMS gateway; không scrape Zalo.
+ * Phase 2 server send: lib/messaging/telesales-server-send.ts (không scrape Zalo).
  */
 
 export const CALL_COOLDOWN_HOURS = 4;

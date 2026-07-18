@@ -114,3 +114,24 @@ export function recordContact(
     }),
   });
 }
+
+export function serverSend(
+  leadId: string,
+  channels: Array<"oa" | "sms">,
+) {
+  return opsFetch<{
+    results: Array<{
+      channel: string;
+      status: string;
+      reason: string | null;
+    }>;
+  }>(`/api/admin/ops-leads/${leadId}/server-send`, {
+    method: "POST",
+    idempotency: `ops-mm-ss-${Date.now()}-${Math.random().toString(36).slice(2)}`,
+    body: JSON.stringify({
+      channels,
+      actorId: "ops-miniapp",
+      correlationId: `ops-mm-ss-${Date.now()}`,
+    }),
+  });
+}

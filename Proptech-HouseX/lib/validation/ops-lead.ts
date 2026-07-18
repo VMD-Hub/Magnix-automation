@@ -57,3 +57,12 @@ export const opsLeadContactSchema = z.object({
   actorId: z.string().trim().min(1).max(120).default("ops-ui"),
   correlationId: z.string().trim().min(1).max(200),
 });
+
+export const opsLeadServerSendSchema = z.object({
+  channels: z
+    .array(z.enum(["oa", "sms"]))
+    .min(1)
+    .max(2),
+  actorId: z.string().trim().min(1).max(120).default("ops-ui"),
+  correlationId: z.string().trim().min(1).max(200),
+});

@@ -104,6 +104,28 @@ Không tạo Task «Gọi lại» trùng khi đã có task mở cùng lead.
 
 **Consent:** nurture tự động (SC-6) vẫn cần marketing consent theo kênh — deep-link SMS/Zalo Phase 1 là thao tác tay Ops + log.
 
+### 4b-2. Telesales Phase 2 — OA / SMS từ server
+
+**Trigger:** nút **Gửi OA / SMS server** trên panel telesales (không auto sau `NO_ANSWER`). Deep-link Phase 1 giữ nguyên.
+
+| Env | Ý nghĩa |
+|-----|---------|
+| `TELESALES_SERVER_SEND_ENABLED` | Kill switch — mặc định `false`; API trả 403 khi tắt |
+| `ZALO_OA_NOTIFY_ENABLED` + token OA | Bật gửi OA CS (`sendOaCsText`) |
+| `SMS_WEBHOOK_URL` (+ `SMS_WEBHOOK_SECRET`) | n8n nhận payload SMS; thiếu URL → `SKIPPED` |
+
+**Luồng:** consent `marketing` + kênh `oa`/`sms` → enroll SC-6 (`telesales-miss-callback`) → gửi provider → `NurtureDispatch` (`SENT`/`FAILED`/`SKIPPED`) + SalesActivity.
+
+| Skip reason | Ý nghĩa |
+|-------------|---------|
+| `CONSENT_DENIED` | Chưa grant marketing theo kênh (không enroll) |
+| `NO_ZALO_USER_ID` | Lead chưa có `UserAccount.zaloUserId` |
+| `SMS_WEBHOOK_UNCONFIGURED` | Chưa cấu hình webhook |
+| `OA_DISABLED` | OA notify/token chưa sẵn |
+| `ALREADY_SENT_TODAY` | Đã `SENT` trên enrollment trong ngày |
+
+API: `POST /api/admin/ops-leads/:id/server-send` (cùng grant telesales + `Idempotency-Key`).
+
 ---
 
 ## 5. Hồ sơ NOXH — milestone M1→M5

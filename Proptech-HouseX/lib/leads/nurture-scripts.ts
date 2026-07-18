@@ -1,7 +1,10 @@
 import type { LeadSegment } from "@prisma/client";
 import { LEAD_SOURCE } from "@/lib/leads/source";
 
-export type NurtureScriptChannel = "oa" | "telegram" | "zalo" | "manual";
+export type NurtureScriptChannel = "oa" | "telegram" | "zalo" | "manual" | "sms";
+
+/** Phase 2 telesales — enroll thủ công từ server-send (không auto-resolve). */
+export const TELESALES_MISS_CALLBACK_SCRIPT_ID = "telesales-miss-callback";
 
 export type NurtureScript = {
   id: string;
@@ -73,6 +76,14 @@ export const NURTURE_SCRIPT_CATALOG: NurtureScript[] = [
     label: "Chung — Chào mừng Ops",
     description: "Script mặc định khi chưa map được segment/source.",
     channel: "manual",
+  },
+  {
+    id: TELESALES_MISS_CALLBACK_SCRIPT_ID,
+    label: "Telesales — miss call (OA/SMS server)",
+    description:
+      "Sau không nghe máy: gửi OA CS hoặc SMS value-first qua server + ghi NurtureDispatch.",
+    channel: "oa",
+    sources: ["ops:telesales-server"],
   },
 ];
 
