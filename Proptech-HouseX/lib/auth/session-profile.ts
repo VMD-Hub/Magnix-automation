@@ -16,6 +16,7 @@ export type SessionProfile = {
   brokerType?: string;
   ctvCode?: string | null;
   ctvApplicationStatus?: string | null;
+  opsTools?: { telesales: boolean };
 };
 
 export async function loadSessionProfile(
@@ -45,6 +46,16 @@ export async function loadSessionProfile(
 
   if (!account) return null;
 
+  const telesalesGrant = await prisma.opsToolGrant.findUnique({
+    where: {
+      userAccountId_tool: {
+        userAccountId: account.id,
+        tool: "TELESALES_CRM",
+      },
+    },
+    select: { status: true },
+  });
+
   return {
     id: account.id,
     role: account.role,
@@ -58,6 +69,7 @@ export async function loadSessionProfile(
     brokerType: account.broker?.brokerType,
     ctvCode: account.broker?.ctvCode,
     ctvApplicationStatus: account.broker?.ctvApplication?.status ?? null,
+    opsTools: { telesales: telesalesGrant?.status === "ACTIVE" },
   };
 }
 

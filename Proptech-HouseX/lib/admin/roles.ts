@@ -6,9 +6,8 @@ export const ADMIN_ROLE_LABEL: Record<AdminRole, string> = {
   ops: "Ops",
 };
 
-/** Trang chỉ dành cho Ops — pipeline lead / conflict / NOXH. */
+/** Trang Ops (không gồm telesales — telesales cần Super hoặc UserAccount grant). */
 export const OPS_ADMIN_PAGE_PREFIXES = [
-  "/admin/ops-leads",
   "/admin/conflicts",
   "/admin/inbound-leads",
   "/admin/noxh-cases",
@@ -16,10 +15,9 @@ export const OPS_ADMIN_PAGE_PREFIXES = [
   "/admin/conversion",
 ] as const;
 
-/** API Ops được phép (ngoài /api/admin/session). */
+/** API Ops được phép (ngoài /api/admin/session). ops-leads dùng grant gate riêng. */
 export const OPS_ADMIN_API_PREFIXES = [
   "/api/admin/queue-counts",
-  "/api/admin/ops-leads",
   "/api/admin/conflicts",
   "/api/admin/inbound-leads",
   "/api/admin/noxh-cases",
@@ -52,5 +50,5 @@ export function isSuperAdminOnlyApi(pathname: string): boolean {
 }
 
 export function defaultAdminHome(role: AdminRole): string {
-  return role === "ops" ? "/admin/ops-leads" : "/admin/ctv";
+  return role === "ops" ? "/admin/playbook" : "/admin/ctv";
 }

@@ -1,34 +1,24 @@
-import { HOUSEX_API_BASE } from "@/config";
+import { HOUSEX_API_BASE, TOKEN_STORAGE_KEY } from "@/config";
 
-const OPS_SECRET_KEY = "housex_ops_admin_secret";
-
-export function getOpsSecret(): string | null {
+function getBearer(): string | null {
   try {
-    return sessionStorage.getItem(OPS_SECRET_KEY);
+    return localStorage.getItem(TOKEN_STORAGE_KEY);
   } catch {
     return null;
   }
-}
-
-export function setOpsSecret(secret: string) {
-  sessionStorage.setItem(OPS_SECRET_KEY, secret.trim());
-}
-
-export function clearOpsSecret() {
-  sessionStorage.removeItem(OPS_SECRET_KEY);
 }
 
 async function opsFetch<T>(
   path: string,
   init?: RequestInit & { idempotency?: string },
 ): Promise<{ ok: boolean; status: number; data?: T; error?: string }> {
-  const secret = getOpsSecret();
-  if (!secret) {
-    return { ok: false, status: 401, error: "Chưa đăng nhập Ops" };
+  const token = getBearer();
+  if (!token) {
+    return { ok: false, status: 401, error: "Chưa đăng nhập Zalo / House X" };
   }
   const headers: Record<string, string> = {
     accept: "application/json",
-    "x-admin-secret": secret,
+    Authorization: `Bearer ${token}`,
     ...(init?.body ? { "content-type": "application/json" } : {}),
     ...(init?.idempotency ? { "Idempotency-Key": init.idempotency } : {}),
   };
@@ -48,21 +38,12 @@ async function opsFetch<T>(
   };
 }
 
-export async function opsLogin(secret: string) {
-  const res = await fetch(`${HOUSEX_API_BASE}/api/admin/session`, {
-    method: "POST",
-    headers: { "content-type": "application/json" },
-    body: JSON.stringify({ secret }),
-  });
-  const json = await res.json().catch(() => ({}));
-  if (!res.ok) {
-    return {
-      ok: false as const,
-      error: json?.error?.message ?? "Đăng nhập thất bại",
-    };
-  }
-  setOpsSecret(secret);
-  return { ok: true as const, role: json?.data?.role as string };
+export async function checkTelesalesAccess() {
+  return opsFetch<{
+    allowed: boolean;
+    tool: string;
+    reason: string | null;
+  }>("/api/ops/telesales/access");
 }
 
 export function listOpsLeads(status?: string) {
@@ -110,7 +91,10 @@ export function createHotLead(body: {
 }) {
   return opsFetch<{ leadId: string; created: boolean }>(
     "/api/admin/ops-leads",
-    { method: "POST", body: JSON.stringify({ ...body, actorId: "ops-miniapp" }) },
+    {
+      method: "POST",
+      body: JSON.stringify({ ...body, actorId: "ops-miniapp" }),
+    },
   );
 }
 

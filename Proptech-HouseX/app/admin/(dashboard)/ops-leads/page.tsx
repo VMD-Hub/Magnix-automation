@@ -9,7 +9,7 @@ export default function AdminOpsLeadsPage() {
   return (
     <AdminShell
       title="Lead marketing"
-      description="Pipeline lead từ Ads, form web và công cụ kiểm tra NOXH — nurture theo segment, không gán CTV."
+      description="Telesales pipeline (Super). Staff được duyệt dùng /ops/telesales hoặc Mini App #/ops — cấp quyền tại Quyền telesales."
     >
       <OpsLeadBoard />
     </AdminShell>

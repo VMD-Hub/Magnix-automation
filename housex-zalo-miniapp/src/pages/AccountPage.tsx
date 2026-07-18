@@ -359,6 +359,11 @@ export function AccountPage() {
             Vào không gian môi giới
           </Link>
         ) : null}
+        {user.opsTools?.telesales ? (
+          <Link className="btn secondary" to="/ops" style={{ marginBottom: 10 }}>
+            CRM Telesales
+          </Link>
+        ) : null}
         <button type="button" className="btn secondary" onClick={logout}>
           Đăng xuất
         </button>

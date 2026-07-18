@@ -68,7 +68,17 @@ Cuối ngày: Cập nhật đúng shared lifecycle; không nâng state từ scor
 
 ### 4b. Telesales CRM (mobile-first) — SOP Phase 1
 
-**Ranh giới:** gọi / SMS / Zalo / nhật ký = **Lead marketing** (+ Mini App Ops).  
+**Quyền truy cập**
+
+| Ai | Cách vào |
+|----|----------|
+| Super (`ADMIN_SECRET`) | `/admin/ops-leads` + cấp quyền tại `/admin/ops-grants` |
+| Nhân sự telesales | UserAccount (Zalo Mini App hoặc SĐT+MK) **đã được Super duyệt** → Mini App `#/ops` hoặc web `/ops/telesales` |
+| Chỉ `ADMIN_OPS_SECRET` | **Không** đủ quyền telesales |
+
+Quy trình: người dùng mở Mini App / đăng ký SĐT → Super nhập SĐT hoặc Zalo user id → Cấp `TELESALES_CRM` → vào tool.
+
+**Ranh giới:** gọi / SMS / Zalo / nhật ký = CRM telesales (không full console).  
 **Conversion** chỉ khi đã đàm thoại có nhu cầu rõ + hướng căn/dự án.
 
 ```

@@ -110,8 +110,10 @@ export const PLAYBOOK_SECTIONS: PlaybookSection[] = [
   {
     id: "telesales",
     title: "Telesales CRM (gọi → SMS/Zalo → ấm)",
-    subtitle: "Mobile-first trên Lead marketing / Mini App Ops — không dùng Conversion làm dialer.",
+    subtitle:
+      "Chỉ Super hoặc UserAccount đã được cấp TELESALES_CRM — Mini App #/ops hoặc /ops/telesales.",
     checklist: [
+      "Super cấp quyền tại /admin/ops-grants (SĐT hoặc Zalo id) trước.",
       "Thêm lead hot (SĐT) → chuẩn bị xem Zalo thủ công → Gọi điện trước.",
       "Sau mỗi cuộc gọi: chọn chip kết quả (bắt buộc ghi nhật ký).",
       "Không nghe: SMS + Zalo chào + Task gọi lại; khoá gọi 4 giờ.",

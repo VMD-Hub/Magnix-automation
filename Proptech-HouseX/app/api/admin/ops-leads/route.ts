@@ -1,7 +1,10 @@
 import type { NextRequest } from "next/server";
 import { fail, handleApiError, ok } from "@/lib/api/http";
 import { applyApiCors, corsPreflight } from "@/lib/api/cors";
-import { isAdminAuthorized } from "@/lib/admin/session";
+import {
+  OpsTelesalesAccessError,
+  requireOpsTelesalesAccess,
+} from "@/lib/admin/ops-telesales-access";
 import {
   countOpsLeadsByStatus,
   createOpsHotLead,
@@ -18,14 +21,14 @@ export function OPTIONS(req: NextRequest) {
   return corsPreflight(req);
 }
 
+function accessFail(err: OpsTelesalesAccessError, req: NextRequest) {
+  const status = err.code === "UNAUTHORIZED" ? 401 : 403;
+  return applyApiCors(fail(status, err.code, err.message), req);
+}
+
 export async function GET(req: NextRequest) {
   try {
-    if (!isAdminAuthorized(req)) {
-      return applyApiCors(
-        fail(403, "FORBIDDEN", "Không có quyền truy cập admin."),
-        req,
-      );
-    }
+    await requireOpsTelesalesAccess(req);
 
     const parsed = opsLeadListQuerySchema.parse({
       status: req.nextUrl.searchParams.get("status") ?? undefined,
@@ -44,20 +47,19 @@ export async function GET(req: NextRequest) {
       req,
     );
   } catch (err) {
+    if (err instanceof OpsTelesalesAccessError) return accessFail(err, req);
     return applyApiCors(handleApiError(err), req);
   }
 }
 
 export async function POST(req: NextRequest) {
   try {
-    if (!isAdminAuthorized(req)) {
-      return applyApiCors(
-        fail(403, "FORBIDDEN", "Không có quyền tạo lead Ops."),
-        req,
-      );
-    }
+    const access = await requireOpsTelesalesAccess(req);
     const body = opsLeadCreateSchema.parse(await req.json());
-    const created = await createOpsHotLead(body);
+    const created = await createOpsHotLead({
+      ...body,
+      actorId: body.actorId === "ops-ui" ? access.actorId : body.actorId,
+    });
     if (!created.lead) {
       return applyApiCors(
         fail(500, "CREATE_FAILED", "Không đọc lại được lead vừa tạo."),
@@ -73,6 +75,7 @@ export async function POST(req: NextRequest) {
       req,
     );
   } catch (err) {
+    if (err instanceof OpsTelesalesAccessError) return accessFail(err, req);
     if (err instanceof OpsLeadPatchError) {
       return applyApiCors(fail(422, err.code, err.message), req);
     }

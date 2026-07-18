@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import { useAuth } from "@/auth-context";
 import {
+  checkTelesalesAccess,
   getOpsContact,
-  getOpsSecret,
   recordContact,
 } from "@/services/ops-telesales";
 
@@ -17,10 +18,11 @@ const CHIPS = [
 
 export function OpsLeadDetailPage() {
   const { id } = useParams<{ id: string }>();
+  const { user, loading } = useAuth();
   const nav = useNavigate();
-  const [bundle, setBundle] = useState<Awaited<
-    ReturnType<typeof getOpsContact>
-  >["data"] | null>(null);
+  const [bundle, setBundle] = useState<
+    Awaited<ReturnType<typeof getOpsContact>>["data"] | null
+  >(null);
   const [note, setNote] = useState("");
   const [msg, setMsg] = useState<string | null>(null);
 
@@ -35,12 +37,20 @@ export function OpsLeadDetailPage() {
   }
 
   useEffect(() => {
-    if (!getOpsSecret()) {
-      nav("/ops", { replace: true });
-      return;
-    }
-    void reload();
-  }, [id, nav]);
+    if (loading) return;
+    void (async () => {
+      if (!user) {
+        nav("/ops", { replace: true });
+        return;
+      }
+      const access = await checkTelesalesAccess();
+      if (!access.ok || !access.data?.allowed) {
+        nav("/ops", { replace: true });
+        return;
+      }
+      void reload();
+    })();
+  }, [id, user, loading, nav]);
 
   const blocked =
     bundle?.callBlockedUntil &&
@@ -79,7 +89,8 @@ export function OpsLeadDetailPage() {
 
       {blocked ? (
         <p className="rounded-lg bg-amber-50 px-3 py-2 text-xs text-amber-900">
-          Khoá gọi đến {new Date(bundle.callBlockedUntil!).toLocaleString("vi-VN")}
+          Khoá gọi đến{" "}
+          {new Date(bundle.callBlockedUntil!).toLocaleString("vi-VN")}
         </p>
       ) : null}
 

@@ -58,9 +58,16 @@ export const ADMIN_NAV_GROUPS: AdminNavGroup[] = [
       {
         href: "/admin/ops-leads",
         label: "Lead marketing",
-        title: "Pipeline Ads, form web, tool NOXH",
-        roles: ["super", "ops"],
+        title: "Pipeline telesales — chỉ Super (staff dùng /ops/telesales)",
+        roles: ["super"],
         badge: "opsLeadsNew",
+        matchPrefix: true,
+      },
+      {
+        href: "/admin/ops-grants",
+        label: "Quyền telesales",
+        title: "Cấp / thu hồi CRM Telesales theo SĐT hoặc Zalo id",
+        roles: ["super"],
         matchPrefix: true,
       },
       {

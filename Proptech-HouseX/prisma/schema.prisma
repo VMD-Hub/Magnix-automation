@@ -602,6 +602,15 @@ enum AuthTokenType {
   PASSWORD_RESET
 }
 
+enum OpsToolCode {
+  TELESALES_CRM
+}
+
+enum OpsToolGrantStatus {
+  ACTIVE
+  REVOKED
+}
+
 /// Tài khoản đăng nhập thống nhất — khách hàng (CUSTOMER) hoặc môi giới đăng tin (BROKER).
 model UserAccount {
   id              String      @id @default(uuid())
@@ -619,12 +628,33 @@ model UserAccount {
   createdAt       DateTime    @default(now()) @map("created_at")
   updatedAt       DateTime    @updatedAt @map("updated_at")
 
-  customer   Customer?
-  broker     Broker?
-  authTokens UserAuthToken[]
+  customer       Customer?
+  broker         Broker?
+  authTokens     UserAuthToken[]
+  opsToolGrants  OpsToolGrant[]
 
   @@index([role])
   @@map("user_accounts")
+}
+
+/// Super Admin cấp quyền tool Ops trên Mini App / web telesales (không dùng AgentEntitlement CTV).
+model OpsToolGrant {
+  id            String             @id @default(uuid())
+  userAccountId String             @map("user_account_id")
+  tool          OpsToolCode        @default(TELESALES_CRM)
+  status        OpsToolGrantStatus @default(ACTIVE)
+  grantedBy     String             @map("granted_by")
+  note          String?
+  grantedAt     DateTime           @default(now()) @map("granted_at")
+  revokedAt     DateTime?          @map("revoked_at")
+  createdAt     DateTime           @default(now()) @map("created_at")
+  updatedAt     DateTime           @updatedAt @map("updated_at")
+
+  userAccount UserAccount @relation(fields: [userAccountId], references: [id], onDelete: Cascade)
+
+  @@unique([userAccountId, tool])
+  @@index([status, tool])
+  @@map("ops_tool_grants")
 }
 
 model Customer {

@@ -21,6 +21,7 @@ const ALLOWED_PREFIXES = [
 const ALLOWED_HANDOFF_NEXT = new Set([
   "/khach-hang/tai-khoan",
   "/moi-gioi/tai-khoan",
+  "/ops/telesales",
 ]);
 
 function normalizePath(raw: string): string {

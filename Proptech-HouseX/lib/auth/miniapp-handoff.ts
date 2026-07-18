@@ -10,6 +10,7 @@ export const HANDOFF_EXPIRES_IN_SEC = 60;
 const ALLOWED_NEXT = new Set([
   "/khach-hang/tai-khoan",
   "/moi-gioi/tai-khoan",
+  "/ops/telesales",
 ]);
 
 function secret(): string {

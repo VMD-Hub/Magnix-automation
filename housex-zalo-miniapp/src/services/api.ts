@@ -15,6 +15,7 @@ export type HouseXUser = {
   brokerType?: string;
   ctvCode?: string | null;
   ctvApplicationStatus?: string | null;
+  opsTools?: { telesales?: boolean };
 };
 
 type ApiOk<T> = { data: T };
