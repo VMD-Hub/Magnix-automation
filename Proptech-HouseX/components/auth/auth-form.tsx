@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { safeNextPath } from "@/lib/auth/redirect";
 import { BUYER_REGISTER } from "@/lib/content/messaging/buyer-discovery";
 import { BROKER_REGISTER } from "@/lib/content/messaging/broker-supply";
+import type { RegisterConflictDetails } from "@/lib/auth/register-conflict";
 
 const inputCls =
   "mt-1 h-11 w-full rounded-xl border border-slate-200 px-3 text-sm outline-none focus:border-brand-400 focus:ring-2 focus:ring-brand-100";
@@ -20,6 +21,56 @@ const ROLE_COPY: Record<
   CUSTOMER: BUYER_REGISTER,
   BROKER: BROKER_REGISTER,
 };
+
+function RegisterConflictPanel({
+  message,
+  details,
+  onSwitchLogin,
+}: {
+  message: string;
+  details: RegisterConflictDetails | null;
+  onSwitchLogin: () => void;
+}) {
+  const actions = details?.actions ?? ["login", "forgot_password", "miniapp"];
+  return (
+    <div className="rounded-xl border border-amber-200 bg-amber-50 px-3 py-3 text-sm text-amber-950">
+      <p className="font-medium">{message}</p>
+      <p className="mt-2 text-xs text-amber-900/80">
+        Đăng nhập bằng <strong>số điện thoại</strong>. Nếu còn quản lý email đã gắn
+        tài khoản, dùng Quên mật khẩu để nhận OTP.
+      </p>
+      <ul className="mt-3 space-y-2">
+        {actions.includes("login") ? (
+          <li>
+            <button
+              type="button"
+              className="font-semibold text-brand-800 underline"
+              onClick={onSwitchLogin}
+            >
+              Chuyển sang Đăng nhập
+            </button>
+          </li>
+        ) : null}
+        {actions.includes("forgot_password") ? (
+          <li>
+            <Link
+              href="/quen-mat-khau"
+              className="font-semibold text-brand-800 underline"
+            >
+              Quên mật khẩu — lấy lại bằng email OTP
+            </Link>
+          </li>
+        ) : null}
+        {actions.includes("miniapp") ? (
+          <li className="text-xs leading-relaxed text-amber-900/90">
+            Từng dùng <strong>Mini App Zalo</strong>? Mở lại Mini App House X (login
+            Zalo) → Tài khoản → đặt/gắn email + mật khẩu web, rồi đăng nhập tại đây.
+          </li>
+        ) : null}
+      </ul>
+    </div>
+  );
+}
 
 export function AuthForm({
   role,
@@ -37,6 +88,7 @@ export function AuthForm({
   const [marketingOptIn, setMarketingOptIn] = useState(true);
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [conflict, setConflict] = useState<RegisterConflictDetails | null>(null);
   const [loading, setLoading] = useState(false);
   const [registerDone, setRegisterDone] = useState<{
     email: string;
@@ -52,6 +104,7 @@ export function AuthForm({
   async function submitLogin(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
+    setConflict(null);
     setLoading(true);
     try {
       const res = await fetch("/api/auth/login", {
@@ -85,6 +138,7 @@ export function AuthForm({
   async function submitRegister(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
+    setConflict(null);
     setLoading(true);
     try {
       const res = await fetch("/api/auth/register", {
@@ -101,6 +155,15 @@ export function AuthForm({
       });
       const json = await res.json().catch(() => ({}));
       if (!res.ok) {
+        const code = json?.error?.code as string | undefined;
+        if (code === "PHONE_REGISTERED" || code === "EMAIL_REGISTERED") {
+          setConflict(
+            (json?.error?.details as RegisterConflictDetails | undefined) ??
+              null,
+          );
+          setError(json?.error?.message ?? "Tài khoản đã tồn tại.");
+          return;
+        }
         setError(json?.error?.message ?? "Không thể đăng ký.");
         return;
       }
@@ -169,7 +232,11 @@ export function AuthForm({
         <div className="mb-4 flex rounded-xl bg-slate-100 p-1">
           <button
             type="button"
-            onClick={() => setMode("register")}
+            onClick={() => {
+              setMode("register");
+              setError(null);
+              setConflict(null);
+            }}
             className={`flex-1 rounded-lg py-2 text-sm font-semibold ${
               mode === "register" ? "bg-white text-slate-900 shadow-sm" : "text-slate-500"
             }`}
@@ -178,7 +245,11 @@ export function AuthForm({
           </button>
           <button
             type="button"
-            onClick={() => setMode("login")}
+            onClick={() => {
+              setMode("login");
+              setError(null);
+              setConflict(null);
+            }}
             className={`flex-1 rounded-lg py-2 text-sm font-semibold ${
               mode === "login" ? "bg-white text-slate-900 shadow-sm" : "text-slate-500"
             }`}
@@ -288,8 +359,20 @@ export function AuthForm({
             </p>
           ) : null}
 
-          {error ? (
-            <p className="rounded-lg bg-rose-50 px-3 py-2 text-sm text-rose-700">{error}</p>
+          {error && conflict ? (
+            <RegisterConflictPanel
+              message={error}
+              details={conflict}
+              onSwitchLogin={() => {
+                setMode("login");
+                setConflict(null);
+                setError(null);
+              }}
+            />
+          ) : error ? (
+            <p className="rounded-lg bg-rose-50 px-3 py-2 text-sm text-rose-700">
+              {error}
+            </p>
           ) : null}
 
           <Button type="submit" className="w-full" disabled={loading || (mode === "register" && !termsAccepted)}>

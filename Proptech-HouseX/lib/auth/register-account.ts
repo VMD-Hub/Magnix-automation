@@ -10,6 +10,9 @@ import {
   buildAccountRegisteredPayload,
   forwardOutboxEventBestEffort,
 } from "@/lib/events/supply-signup";
+import { maskPhone } from "@/lib/privacy/phone";
+import { buildRegisterConflict } from "@/lib/auth/register-conflict";
+import type { RegisterConflictDetails } from "@/lib/auth/register-conflict";
 
 export type RegisterInput = AuthRegisterInput & { role: AccountRole };
 
@@ -24,14 +27,16 @@ export type RegisterResult = {
   customerId?: string;
 };
 
-import { maskPhone } from "@/lib/privacy/phone";
+export type RegisterFail = {
+  ok: false;
+  code: string;
+  message: string;
+  details?: RegisterConflictDetails;
+};
 
 export async function registerUserAccount(
   input: RegisterInput,
-): Promise<
-  | { ok: true; data: RegisterResult }
-  | { ok: false; code: string; message: string }
-> {
+): Promise<{ ok: true; data: RegisterResult } | RegisterFail> {
   const normalizedPhone = normalizeVnPhone(input.phone);
   if (!isValidVnPhone(normalizedPhone)) {
     return { ok: false, code: "INVALID_PHONE", message: "Số điện thoại không hợp lệ." };
@@ -42,26 +47,49 @@ export async function registerUserAccount(
 
   const phoneTaken = await prisma.userAccount.findUnique({
     where: { normalizedPhone },
-    select: { id: true, role: true },
+    select: {
+      id: true,
+      role: true,
+      zaloUserId: true,
+      passwordSetAt: true,
+    },
   });
   if (phoneTaken) {
-    const label = phoneTaken.role === "BROKER" ? "môi giới" : "khách hàng";
+    const conflict = buildRegisterConflict({
+      kind: "PHONE_REGISTERED",
+      role: phoneTaken.role,
+      hasZalo: Boolean(phoneTaken.zaloUserId),
+      passwordReady: Boolean(phoneTaken.passwordSetAt),
+    });
     return {
       ok: false,
       code: "PHONE_REGISTERED",
-      message: `Số điện thoại đã đăng ký tài khoản ${label}. Vui lòng đăng nhập.`,
+      message: conflict.message,
+      details: conflict.details,
     };
   }
 
   const emailTaken = await prisma.userAccount.findUnique({
     where: { email },
-    select: { id: true },
+    select: {
+      id: true,
+      role: true,
+      zaloUserId: true,
+      passwordSetAt: true,
+    },
   });
   if (emailTaken) {
+    const conflict = buildRegisterConflict({
+      kind: "EMAIL_REGISTERED",
+      role: emailTaken.role,
+      hasZalo: Boolean(emailTaken.zaloUserId),
+      passwordReady: Boolean(emailTaken.passwordSetAt),
+    });
     return {
       ok: false,
       code: "EMAIL_REGISTERED",
-      message: "Email đã được sử dụng. Vui lòng dùng email khác hoặc đăng nhập.",
+      message: conflict.message,
+      details: conflict.details,
     };
   }
 

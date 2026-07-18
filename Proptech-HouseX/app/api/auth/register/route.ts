@@ -26,6 +26,7 @@ export async function POST(req: NextRequest) {
           : 422,
         result.code,
         result.message,
+        result.details,
       );
     }
 

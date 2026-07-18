@@ -64,7 +64,13 @@ export async function sendEmail(
         }),
       });
       if (!res.ok) {
-        return { ok: false, error: `resend_${res.status}` };
+        const body = (await res.text().catch(() => "")).slice(0, 240);
+        return {
+          ok: false,
+          error: body
+            ? `resend_${res.status}:${body}`
+            : `resend_${res.status}`,
+        };
       }
       return { ok: true, provider: "resend" };
     } catch {
