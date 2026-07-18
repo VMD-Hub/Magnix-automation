@@ -20,7 +20,13 @@ export const PLAYBOOK_QUICK_LINKS: PlaybookQuickLink[] = [
   {
     href: "/admin/ops-leads",
     label: "Lead marketing",
-    description: "Pipeline Ads, form, tool NOXH — nurture & trạng thái",
+    description: "Pipeline + telesales (gọi/SMS/Zalo) & nurture",
+    roles: ["super", "ops"],
+  },
+  {
+    href: "/admin/conversion",
+    label: "Chuyển đổi",
+    description: "Funnel proposal → cam kết → WON/LOST (sau khi nóng)",
     roles: ["super", "ops"],
   },
   {
@@ -100,6 +106,27 @@ export const PLAYBOOK_SECTIONS: PlaybookSection[] = [
     bullets: [
       "Không hứa «chắc đủ điều kiện NOXH» — chỉ CĐT/Sở quyết định.",
     ],
+  },
+  {
+    id: "telesales",
+    title: "Telesales CRM (gọi → SMS/Zalo → ấm)",
+    subtitle: "Mobile-first trên Lead marketing / Mini App Ops — không dùng Conversion làm dialer.",
+    checklist: [
+      "Thêm lead hot (SĐT) → chuẩn bị xem Zalo thủ công → Gọi điện trước.",
+      "Sau mỗi cuộc gọi: chọn chip kết quả (bắt buộc ghi nhật ký).",
+      "Không nghe: SMS + Zalo chào + Task gọi lại; khoá gọi 4 giờ.",
+      "Không quan tâm dự án A → script Ấm lead dự án khác.",
+      "Chỉ sang Conversion khi đã đàm thoại + có hướng căn/dự án.",
+    ],
+    table: {
+      head: ["Chip", "Ý nghĩa"],
+      rows: [
+        ["Đàm thoại OK", "CONNECTED — xác nhận nhu cầu nếu được"],
+        ["Xin gửi thông tin", "CONNECTED + mở Zalo/OA + hẹn gọi lại"],
+        ["Không nghe", "CONTACT_ATTEMPT — SMS/Zalo + cooldown 4h"],
+        ["Không quan tâm dự án này", "Ấm lead cohort khác dự án"],
+      ],
+    },
   },
   {
     id: "noxh-cases",

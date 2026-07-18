@@ -3,6 +3,10 @@
 import { useCallback, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { NoxhWizardOpsSummary } from "@/components/admin/noxh-wizard-ops-summary";
+import {
+  OpsHotLeadCreateForm,
+  OpsLeadTelesalesPanel,
+} from "@/components/admin/ops-lead-telesales";
 import { notifyAdminQueueRefresh } from "@/components/admin/use-admin-queue-counts";
 import { cn } from "@/lib/ui/cn";
 import type { NoxhWizardSnapshot } from "@/lib/leads/noxh-wizard-snapshot";
@@ -145,13 +149,20 @@ export function OpsLeadBoard() {
   }
 
   return (
-    <div className="grid gap-4 lg:grid-cols-[1fr_380px]">
+    <div className="grid gap-4 lg:grid-cols-[1fr_400px]">
       <section className="overflow-hidden rounded-xl border border-slate-200/80 bg-white shadow-sm ring-1 ring-slate-900/5">
+        <OpsHotLeadCreateForm
+          onCreated={(id) => {
+            void load();
+            setSelectedId(id);
+            notifyAdminQueueRefresh();
+          }}
+        />
         <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 bg-slate-50/80 px-4 py-3">
           <div>
             <h2 className="font-semibold text-slate-900">Danh sách lead</h2>
             <p className="text-xs text-slate-500">
-              Chọn một dòng để cập nhật nurture & trạng thái pipeline
+              Chọn dòng → telesales (gọi/SMS/Zalo) + nurture & trạng thái
             </p>
           </div>
           <div className="flex flex-wrap gap-1">
@@ -229,7 +240,9 @@ export function OpsLeadBoard() {
 
       <aside className="rounded-xl border border-slate-200/80 bg-white p-4 shadow-sm ring-1 ring-slate-900/5">
         {!selectedId || !detail ? (
-          <p className="text-sm text-slate-500">Chọn lead để cập nhật nurture & trạng thái.</p>
+          <p className="text-sm text-slate-500">
+            Chọn lead để gọi / ghi nhật ký / nurture. Lead hot thêm bằng form phía trên.
+          </p>
         ) : (
           <div className="space-y-4">
             <div>
@@ -239,11 +252,19 @@ export function OpsLeadBoard() {
               </p>
               <p
                 className="mt-1 break-all font-mono text-[10px] text-slate-400"
-                title="Lead ID — dùng cho Sheet noxh_leads_detail cột A"
+                title="Lead ID"
               >
                 ID: {detail.id}
               </p>
             </div>
+
+            <OpsLeadTelesalesPanel
+              leadId={selectedId}
+              onStatusMaybeChanged={() => {
+                void load();
+                void loadDetail(selectedId);
+              }}
+            />
 
             <label className="block text-sm">
               <span className="font-medium text-slate-700">Trạng thái pipeline</span>

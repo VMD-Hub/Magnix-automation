@@ -21,6 +21,21 @@ import {
 } from "@/lib/leads/noxh-legacy-message";
 import { NOXH_OBJECT_GROUPS } from "@/lib/finance/noxh-rules";
 import type { NoxhObjectGroupId } from "@/lib/finance/noxh-rules";
+import { isValidVnPhone, normalizeVnPhone } from "@/lib/phone";
+import {
+  appendSalesActivity,
+  listSalesActivitiesForLead,
+} from "@/lib/sales-core/service";
+import {
+  CALLBACK_SLA_HOURS,
+  WARM_OTHER_PROJECTS_SCRIPT_ID,
+  callBlockedUntil,
+  mapResultToActivity,
+  smsDeepLink,
+  telDeepLink,
+  zaloOpenHint,
+  type TelesalesResult,
+} from "@/lib/leads/telesales";
 
 const OPS_EXCLUDED_SOURCES = new Set([
   LEAD_SOURCE.REFERRAL,
@@ -35,6 +50,9 @@ export const LEAD_SOURCE_LABELS: Record<string, string> = {
   [LEAD_SOURCE.MINIAPP_CONSULT]: "Mini App tư vấn",
   [LEAD_SOURCE.WEB_LEAD]: "Web form",
   [LEAD_SOURCE.OPS_MANUAL]: "Ops nhập tay",
+  [LEAD_SOURCE.HOT_MANUAL]: "Hot — nhập tay",
+  [LEAD_SOURCE.ADS_OFFLINE]: "Ads offline",
+  [LEAD_SOURCE.PARTNER]: "Đối tác / công ty",
   [LEAD_SOURCE.ORGANIC]: "Web (legacy)",
 };
 
@@ -339,3 +357,311 @@ export function countOpsLeadsByStatus(rows: { status: LeadStatus }[]) {
   }
   return counts;
 }
+
+const HOT_SOURCES = [
+  LEAD_SOURCE.HOT_MANUAL,
+  LEAD_SOURCE.ADS_OFFLINE,
+  LEAD_SOURCE.PARTNER,
+  LEAD_SOURCE.OPS_MANUAL,
+] as const;
+
+type HotLeadSource = (typeof HOT_SOURCES)[number];
+
+function resolveHotSource(source: string | undefined): HotLeadSource {
+  if (source && (HOT_SOURCES as readonly string[]).includes(source)) {
+    return source as HotLeadSource;
+  }
+  return LEAD_SOURCE.HOT_MANUAL;
+}
+
+export type CreateOpsHotLeadInput = {
+  name: string;
+  phone: string;
+  source?: string;
+  segment?: LeadSegment | null;
+  note?: string | null;
+  actorId: string;
+};
+
+export async function createOpsHotLead(input: CreateOpsHotLeadInput) {
+  const normalizedPhone = normalizeVnPhone(input.phone);
+  if (!isValidVnPhone(normalizedPhone)) {
+    throw new OpsLeadPatchError("INVALID_PHONE", "SĐT Việt Nam không hợp lệ.");
+  }
+  const source = resolveHotSource(input.source);
+  const displayPhone = digitsFromNormalized(normalizedPhone);
+  const name = input.name.trim() || "Khách hot";
+
+  const existing = await prisma.customer.findUnique({
+    where: { normalizedPhone },
+    select: { id: true },
+  });
+
+  const correlationId = `ops-hot-${Date.now()}`;
+  const result = await prisma.$transaction(async (tx) => {
+    const customer =
+      existing ??
+      (await tx.customer.create({
+        data: {
+          name,
+          phone: displayPhone,
+          normalizedPhone,
+        },
+      }));
+
+    if (existing) {
+      await tx.customer.update({
+        where: { id: customer.id },
+        data: { name },
+      });
+    }
+
+    const openLead = await tx.lead.findFirst({
+      where: {
+        customerId: customer.id,
+        status: { in: ["NEW", "CONTACTED", "QUALIFIED"] },
+        assignedBrokerId: null,
+        source: { notIn: [...OPS_EXCLUDED_SOURCES] },
+      },
+      orderBy: { createdAt: "desc" },
+    });
+    if (openLead) {
+      return { leadId: openLead.id, created: false as const, customerId: customer.id };
+    }
+
+    const opsMeta = mergeLeadOpsMeta(null, {
+      opsNote: input.note ?? null,
+      channels: { phone: displayPhone },
+    });
+
+    const lead = await tx.lead.create({
+      data: {
+        customerId: customer.id,
+        source,
+        segment: input.segment ?? null,
+        status: "NEW",
+        message: input.note ?? "Lead hot — Ops nhập tay",
+        opsMeta: opsMeta as Prisma.InputJsonValue,
+      },
+    });
+
+    return { leadId: lead.id, created: true as const, customerId: customer.id };
+  });
+
+  if (result.created) {
+    await appendSalesActivity({
+      leadId: result.leadId,
+      type: "TASK",
+      channel: "phone",
+      note: "Gọi lần 1",
+      reason: "CALL_FIRST",
+      actorId: input.actorId,
+      occurredAt: new Date(),
+      dueAt: new Date(),
+      correlationId: `${correlationId}:task`,
+      idempotencyKey: `${correlationId}:task`,
+      metadata: { telesales: true, hotCreate: true },
+    });
+  }
+
+  const row = await getOpsLeadForAdmin(result.leadId);
+  return { ...result, lead: row };
+}
+
+function digitsFromNormalized(normalized: string): string {
+  if (normalized.startsWith("+84")) return `0${normalized.slice(3)}`;
+  return normalized;
+}
+
+export async function getOpsLeadContactBundle(leadId: string) {
+  const row = await getOpsLeadForAdmin(leadId);
+  if (!row) return null;
+
+  const phone =
+    readLeadOpsMeta(row.opsMeta).channels.phone ?? row.customer?.phone ?? null;
+  const activities = await listSalesActivitiesForLead(leadId, 40);
+  const lastPhone = activities.find(
+    (a) =>
+      a.channel === "phone" &&
+      (a.type === "CONTACT_ATTEMPT" || a.type === "CONNECTED"),
+  );
+  const openCallback = activities.find(
+    (a) =>
+      a.type === "TASK" &&
+      a.reason === "CALL_BACK" &&
+      a.dueAt &&
+      a.dueAt.getTime() > Date.now() - 7 * 24 * 3_600_000,
+  );
+  const blockedUntil = callBlockedUntil(
+    lastPhone?.occurredAt ?? null,
+    lastPhone?.reason ?? null,
+  );
+
+  return {
+    detail: serializeOpsLeadDetail(row),
+    phone,
+    deepLinks: phone
+      ? {
+          tel: telDeepLink(phone),
+          sms: smsDeepLink(phone),
+          zalo: zaloOpenHint(phone),
+        }
+      : null,
+    lastContact: lastPhone
+      ? {
+          at: lastPhone.occurredAt.toISOString(),
+          type: lastPhone.type,
+          reason: lastPhone.reason,
+          channel: lastPhone.channel,
+          actorId: lastPhone.actorId,
+          note: lastPhone.note,
+        }
+      : null,
+    callBlockedUntil: blockedUntil?.toISOString() ?? null,
+    openCallbackTask: openCallback
+      ? {
+          id: openCallback.id,
+          dueAt: openCallback.dueAt?.toISOString() ?? null,
+          note: openCallback.note,
+        }
+      : null,
+    activities: activities.map((a) => ({
+      id: a.id,
+      type: a.type,
+      channel: a.channel,
+      note: a.note,
+      reason: a.reason,
+      actorId: a.actorId,
+      occurredAt: a.occurredAt.toISOString(),
+      dueAt: a.dueAt?.toISOString() ?? null,
+    })),
+    conversionHint:
+      "Chỉ sang /admin/conversion khi đã đàm thoại OK và có hướng căn/dự án cụ thể.",
+  };
+}
+
+export async function recordOpsTelesalesContact(input: {
+  leadId: string;
+  result: TelesalesResult;
+  note?: string | null;
+  actorId: string;
+  correlationId: string;
+  idempotencyKey: string;
+}) {
+  const row = await getOpsLeadForAdmin(input.leadId);
+  if (!row) {
+    throw new OpsLeadPatchError("NOT_FOUND", "Không tìm thấy lead Ops.");
+  }
+
+  const mapped = mapResultToActivity(input.result);
+  const now = new Date();
+
+  if (mapped.channel === "phone" && mapped.type !== "NOTE") {
+    const bundle = await getOpsLeadContactBundle(input.leadId);
+    if (
+      bundle?.callBlockedUntil &&
+      new Date(bundle.callBlockedUntil) > now &&
+      input.result === "NO_ANSWER"
+    ) {
+      // Allow logging NO_ANSWER only once in window — block repeat phone attempts
+    }
+    if (
+      bundle?.callBlockedUntil &&
+      new Date(bundle.callBlockedUntil) > now &&
+      (input.result === "CONNECTED" ||
+        input.result === "SEND_INFO" ||
+        input.result === "NO_ANSWER" ||
+        input.result === "WRONG_NUMBER" ||
+        input.result === "HARD_REJECT" ||
+        input.result === "NOT_THIS_PROJECT")
+    ) {
+      // Re-logging CONNECTED during cooldown is OK; blocking new call attempts:
+      // UI blocks Call button. Server: block NO_ANSWER spam only if last was also NO_ANSWER within window
+      if (
+        input.result === "NO_ANSWER" &&
+        bundle.lastContact?.reason === "NO_ANSWER"
+      ) {
+        throw new OpsLeadPatchError(
+          "CALL_COOLDOWN",
+          `Đang trong cửa sổ chống gọi trùng đến ${bundle.callBlockedUntil}. Dùng SMS/Zalo hoặc chờ Task gọi lại.`,
+        );
+      }
+    }
+  }
+
+  const { activity } = await appendSalesActivity({
+    leadId: input.leadId,
+    type: mapped.type,
+    channel: mapped.channel,
+    note: input.note ?? TELESALES_NOTE(input.result),
+    reason: input.result,
+    actorId: input.actorId,
+    occurredAt: now,
+    correlationId: input.correlationId,
+    idempotencyKey: input.idempotencyKey,
+    metadata: { telesales: true, result: input.result },
+  });
+
+  if (mapped.createCallbackTask) {
+    const open = await prisma.salesActivity.findFirst({
+      where: {
+        leadId: input.leadId,
+        type: "TASK",
+        reason: "CALL_BACK",
+        dueAt: { gte: new Date(now.getTime() - 24 * 3_600_000) },
+      },
+    });
+    if (!open) {
+      await appendSalesActivity({
+        leadId: input.leadId,
+        type: "TASK",
+        channel: "phone",
+        note: "Gọi lại sau miss / hẹn gửi tin",
+        reason: "CALL_BACK",
+        actorId: input.actorId,
+        occurredAt: now,
+        dueAt: new Date(now.getTime() + CALLBACK_SLA_HOURS * 3_600_000),
+        correlationId: `${input.correlationId}:callback`,
+        idempotencyKey: `${input.idempotencyKey}:callback`,
+        metadata: { telesales: true },
+      });
+    }
+  }
+
+  if (mapped.assignWarmScript) {
+    await patchOpsLeadForAdmin(input.leadId, {
+      nurtureScriptId: WARM_OTHER_PROJECTS_SCRIPT_ID,
+      status: mapped.suggestLeadStatus,
+      opsNote: input.note
+        ? `${readLeadOpsMeta(row.opsMeta).opsNote ?? ""}\n[Ấm] ${input.note}`.trim()
+        : undefined,
+    });
+  } else if (mapped.suggestLeadStatus) {
+    const terminal = row.status === "WON" || row.status === "LOST";
+    if (!terminal && row.status !== mapped.suggestLeadStatus) {
+      await patchOpsLeadForAdmin(input.leadId, {
+        status: mapped.suggestLeadStatus,
+      });
+    }
+  }
+
+  return {
+    activity,
+    bundle: await getOpsLeadContactBundle(input.leadId),
+  };
+}
+
+function TELESALES_NOTE(result: TelesalesResult): string {
+  const labels: Record<TelesalesResult, string> = {
+    CONNECTED: "Đàm thoại thành công",
+    SEND_INFO: "Khách xin gửi thông tin / kết bạn Zalo",
+    NO_ANSWER: "Không nghe máy / bận",
+    WRONG_NUMBER: "Sai số",
+    HARD_REJECT: "Từ chối cứng",
+    NOT_THIS_PROJECT: "Không quan tâm dự án hiện tại — ấm lead dự án khác",
+    SMS_SENT: "Ops mở SMS chào",
+    ZALO_OPENED: "Ops mở Zalo để xem / nhắn",
+  };
+  return labels[result];
+}
+

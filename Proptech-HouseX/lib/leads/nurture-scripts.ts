@@ -62,6 +62,13 @@ export const NURTURE_SCRIPT_CATALOG: NurtureScript[] = [
     sources: [LEAD_SOURCE.WEB_LEAD, LEAD_SOURCE.ORGANIC, LEAD_SOURCE.OPS_MANUAL],
   },
   {
+    id: "warm-other-projects",
+    label: "Ấm lead — dự án khác / chưa khớp",
+    description:
+      "Khách chưa quan tâm dự án hiện tại; nurture value-first checklist + mời xem option khác khi tiện.",
+    channel: "zalo",
+  },
+  {
     id: "generic-welcome",
     label: "Chung — Chào mừng Ops",
     description: "Script mặc định khi chưa map được segment/source.",

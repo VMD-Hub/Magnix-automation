@@ -66,9 +66,33 @@ Cuối ngày: Cập nhật đúng shared lifecycle; không nâng state từ scor
 
 **Không:** Đổi SĐT khóa chính trên Customer; hứa «chắc đủ điều kiện NOXH».
 
-Contact attempt, note, task và meeting hiện còn nằm ở các bề mặt chuyên biệt hoặc
-ghi chú. Shared `SalesActivity`/appointment contract là ADR-015 G1 backlog; cho tới
-khi triển khai, không dùng Sheet hay milestone M1–M5 làm activity ledger thay thế.
+### 4b. Telesales CRM (mobile-first) — SOP Phase 1
+
+**Ranh giới:** gọi / SMS / Zalo / nhật ký = **Lead marketing** (+ Mini App Ops).  
+**Conversion** chỉ khi đã đàm thoại có nhu cầu rõ + hướng căn/dự án.
+
+```
+Nhập SĐT hot → (tuỳ chọn) xem Zalo thủ công → Gọi điện trước
+  → chip kết quả → SMS/Zalo nếu miss → Task gọi lại / ấm lead
+  → Conversion khi nóng + có căn
+```
+
+| Bước | Việc Ops | Ghi hệ thống |
+|------|----------|--------------|
+| 0. Nhập | Form **Thêm lead hot** (SĐT, tên, nguồn `hot:manual` / `ads:offline` / `partner`) | Customer dedupe theo `normalizedPhone` + Task «Gọi lần 1» |
+| 1. Chuẩn bị | Nút **Mở Zalo** / copy SĐT — nhìn avatar/tên (không scrape) | Activity `ZALO_OPENED` (tuỳ chọn) |
+| 2. Gọi | Nút **Gọi** (`tel:`) — **không** gọi Zalo voice làm bước 1 | Sau gọi bắt buộc chọn chip kết quả |
+| 3a. Đàm thoại OK | Chip CONNECTED + note | `CONNECTED`; status → QUALIFIED nếu xác nhận nhu cầu |
+| 3b. Xin gửi tin | Chip SEND_INFO → mở Zalo kết bạn / OA | `CONNECTED` + Task gọi lại |
+| 3c. Không nghe | Chip NO_ANSWER → **SMS** + **Zalo** chào | `CONTACT_ATTEMPT`; **khoá gọi 4 giờ**; Task gọi lại `dueAt` +4h |
+| 3d. Sai số / từ chối | WRONG_NUMBER / HARD_REJECT | Có thể đóng LOST |
+| 3e. Không quan tâm dự án A | NOT_THIS_PROJECT | Gắn script **Ấm lead — dự án khác**; không gọi lại dự án A trong cooldown |
+| 4. Sang Conversion | Chỉ khi CONNECTED + có hướng căn | Proposal / cọc / WON-LOST trên `/admin/conversion` |
+
+**Chống gọi trùng:** sau `NO_ANSWER`, nút Gọi bị chặn đến hết cửa sổ 4 giờ (vẫn cho SMS/Zalo).  
+Không tạo Task «Gọi lại» trùng khi đã có task mở cùng lead.
+
+**Consent:** nurture tự động (SC-6) vẫn cần marketing consent theo kênh — deep-link SMS/Zalo Phase 1 là thao tác tay Ops + log.
 
 ---
 

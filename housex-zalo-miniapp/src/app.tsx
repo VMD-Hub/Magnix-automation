@@ -18,6 +18,9 @@ import { StartPage } from "@/pages/StartPage";
 import { ToolsHubPage } from "@/pages/ToolsHubPage";
 import { ServicesHubPage } from "@/pages/ServicesHubPage";
 import { ToolViewerPage } from "@/pages/ToolViewerPage";
+import { OpsLoginPage } from "@/pages/OpsLoginPage";
+import { OpsLeadsPage } from "@/pages/OpsLeadsPage";
+import { OpsLeadDetailPage } from "@/pages/OpsLeadDetailPage";
 import { WebViewPage } from "@/pages/WebViewPage";
 
 /** HashRouter — ổn định trên Zalo Mini App (CDN path không phải domain thật). */
@@ -27,6 +30,10 @@ export default function App() {
       <HashRouter>
         <Routes>
           <Route path="/start" element={<StartPage />} />
+          {/* Ops telesales — độc lập CTV auth */}
+          <Route path="/ops" element={<OpsLoginPage />} />
+          <Route path="/ops/leads" element={<OpsLeadsPage />} />
+          <Route path="/ops/leads/:id" element={<OpsLeadDetailPage />} />
           <Route element={<AppShell />}>
             <Route index element={<HomeGatePage />} />
             <Route path="noxh" element={<LaneHomePage lane="noxh" />} />

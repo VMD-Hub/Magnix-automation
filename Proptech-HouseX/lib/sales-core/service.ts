@@ -1766,6 +1766,25 @@ export async function getOpportunitySummary(opportunityId: string) {
   };
 }
 
+export async function listSalesActivitiesForLead(leadId: string, take = 40) {
+  return prisma.salesActivity.findMany({
+    where: { leadId },
+    orderBy: { occurredAt: "desc" },
+    take,
+    select: {
+      id: true,
+      type: true,
+      channel: true,
+      note: true,
+      reason: true,
+      actorId: true,
+      occurredAt: true,
+      dueAt: true,
+      createdAt: true,
+    },
+  });
+}
+
 export async function appendSalesActivity(input: {
   leadId: string;
   opportunityId?: string | null;

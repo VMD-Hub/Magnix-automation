@@ -30,3 +30,30 @@ export const opsLeadPatchSchema = z.object({
     })
     .optional(),
 });
+
+export const opsLeadCreateSchema = z.object({
+  name: z.string().trim().min(1).max(120),
+  phone: z.string().trim().min(8).max(30),
+  source: z
+    .enum(["hot:manual", "ads:offline", "partner", "ops:manual"])
+    .optional(),
+  segment: z.enum(["NOXH", "CCTM"]).nullable().optional(),
+  note: z.string().max(2000).nullable().optional(),
+  actorId: z.string().trim().min(1).max(120).default("ops-ui"),
+});
+
+export const opsLeadContactSchema = z.object({
+  result: z.enum([
+    "CONNECTED",
+    "SEND_INFO",
+    "NO_ANSWER",
+    "WRONG_NUMBER",
+    "HARD_REJECT",
+    "NOT_THIS_PROJECT",
+    "SMS_SENT",
+    "ZALO_OPENED",
+  ]),
+  note: z.string().max(2000).nullable().optional(),
+  actorId: z.string().trim().min(1).max(120).default("ops-ui"),
+  correlationId: z.string().trim().min(1).max(200),
+});
