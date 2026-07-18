@@ -156,10 +156,9 @@ Local result on 2026-07-17:
 - **PASSED — Journey P SC-4/SC-5 smoke (2026-07-18):** see production block above;
   SC-4/SC-5 `runtime_evidence` = `PRODUCTION-PROVEN` (Journey P). A/S COMMITTED
   remains fail-closed.
-- **AWAITING — SC-6 nurture dry-run:** after `npx prisma migrate deploy` for
-  `20260718120000_sales_conversion_sc6_nurture`, run
-  `npm run go-live:smoke-sc6` on VPS, attach `reports/sc6-nurture-smoke-*.json`
-  (IDs only), then flip SC-6 `runtime_evidence` to `PRODUCTION-PROVEN`.
+- **PASSED — SC-6 nurture dry-run (2026-07-18):** see production block below;
+  SC-6 `runtime_evidence` = `PRODUCTION-PROVEN` (consent gate + enroll/dispatch/cancel;
+  no real channel send).
 
 ### Production SC-6 nurture smoke — checklist
 
@@ -171,12 +170,34 @@ npm run build && pm2 restart housex
 npm run go-live:smoke-sc6
 ```
 
-Record below after pass: commit SHA, report path, masked IDs, confirmer.
-Rollback: Stop nurture on `/admin/conversion` (cancel enrollment) — no flag required;
-audit rows retained.
-
 Script: `scripts/smoke-sc6-nurture.ts` · npm `go-live:smoke-sc6`.
 Dry-run only (no real Zalo/OA/Telegram send).
+Rollback: Stop nurture on `/admin/conversion` (cancel enrollment) — audit retained.
+
+### Production SC-6 nurture smoke — 2026-07-18
+
+- Result: **PASS**
+- Observed at: `2026-07-18T04:22:24Z` (VPS)
+- Deployed commit: `24c305c`
+- Migration: `20260718120000_sales_conversion_sc6_nurture`
+- Evidence file (VPS):
+  `/opt/housex/Proptech-HouseX/reports/sc6-nurture-smoke-2026-07-18T04-22-24-597Z.json`
+- Checks observed: blocked without consent → eligible after grant → enroll
+  idempotent → dispatch SENT → cancel suppress → withdraw blocks enroll
+- Masked IDs only (no phone/email):
+
+| Field | Value |
+| --- | --- |
+| `correlationId` | `smoke-sc6-1784348544598` |
+| `leadId` | `9427fcf9-8399-4711-ad21-dc1c5df7b66f` |
+| `leadIdWithdraw` | `f4b5f00f-f7bf-4cf3-afaf-5b54ef9322ec` |
+| `enrollmentId` | `30b12202-7242-4578-aae2-98596b92ed67` |
+| `dispatchId` | `5a02cf8f-a9c1-4798-901a-3f135635c521` |
+| `cancelledEnrollmentId` | `a0f7dbd6-f05c-4a7d-922e-1e26aca5ff33` |
+
+- SC-6 `runtime_evidence`: **PRODUCTION-PROVEN** (dry-run; channel delivery still
+  Magnix/n8n responsibility)
 
 This record proves the deployed foundation and UID ingest path. It does not promote
 unexecuted content, Telegram, or full sales-journey workflows beyond **STAGING**.
+A/S COMMITTED remains fail-closed.

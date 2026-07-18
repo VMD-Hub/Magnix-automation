@@ -443,7 +443,8 @@ consent proof và PII thật không được đưa vào bằng chứng.
 **Status**
 
 - `repo_status: REPO-DONE`
-- `runtime_evidence: NOT_PROVIDED` (awaiting VPS `npm run go-live:smoke-sc6`)
+- `runtime_evidence: PRODUCTION-PROVEN` (2026-07-18 smoke
+  `smoke-sc6-1784348544598` — dry-run; see `SALES_CONVERSION_G1_G2_EVIDENCE.md`)
 - Target gate: G2 after SC-0 and SC-5.
 
 **Owner boundary**
