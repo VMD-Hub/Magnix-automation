@@ -44,22 +44,80 @@ async function main() {
   const normalizedPhone = `8490${phoneSuffix.padStart(7, "0")}`.slice(0, 11);
   const displayPhone = `090${phoneSuffix.padStart(7, "0")}`.slice(0, 10);
 
-  const unit = await prisma.projectUnit.findFirst({
+  const unitSelect = {
+    id: true,
+    code: true,
+    projectId: true,
+    price: true,
+    project: { select: { id: true, slug: true, name: true } },
+  } as const;
+
+  let unit = await prisma.projectUnit.findFirst({
     where: {
       deletedAt: null,
       status: "AVAILABLE",
       project: { status: "DANG_BAN", deletedAt: null },
     },
-    select: {
-      id: true,
-      code: true,
-      projectId: true,
-      price: true,
-      project: { select: { id: true, slug: true, name: true } },
-    },
+    select: unitSelect,
   });
+
+  let seededUnitId: string | null = null;
+  let seededProjectId: string | null = null;
   if (!unit) {
-    fail("No AVAILABLE unit on a DANG_BAN project — seed inventory first.");
+    const project = await prisma.project.findFirst({
+      where: { status: "DANG_BAN", deletedAt: null },
+      select: { id: true, slug: true, name: true },
+    });
+
+    let projectId: string;
+    let projectSlug: string;
+    if (project) {
+      projectId = project.id;
+      projectSlug = project.slug;
+    } else {
+      const tax = `SMK${Date.now().toString().slice(-10)}`;
+      const developer = await prisma.developer.create({
+        data: {
+          name: "Smoke Journey P Dev",
+          taxCode: tax,
+          verified: false,
+        },
+      });
+      const slug = `smoke-jp-${Date.now().toString(36)}`;
+      const created = await prisma.project.create({
+        data: {
+          developerId: developer.id,
+          slug,
+          name: "Smoke Journey P Project",
+          projectType: "THUONG_MAI",
+          status: "DANG_BAN",
+          province: "HN",
+          district: "Smoke",
+        },
+        select: { id: true, slug: true },
+      });
+      projectId = created.id;
+      projectSlug = created.slug;
+      seededProjectId = created.id;
+      ok(`Seeded disposable DANG_BAN project ${projectSlug}`);
+    }
+
+    const code = `SMK-JP-${Date.now().toString(36).toUpperCase()}`;
+    unit = await prisma.projectUnit.create({
+      data: {
+        projectId,
+        code,
+        price: 1_000_000_000,
+        status: "AVAILABLE",
+        block: "SMOKE",
+        floor: 1,
+        area: 50,
+        bedrooms: 2,
+      },
+      select: unitSelect,
+    });
+    seededUnitId = unit.id;
+    ok(`Seeded disposable unit ${code} on project ${projectSlug}`);
   }
 
   const customer = await prisma.customer.create({
@@ -192,6 +250,19 @@ async function main() {
     },
   });
 
+  if (seededUnitId) {
+    await prisma.projectUnit.update({
+      where: { id: seededUnitId },
+      data: { deletedAt: new Date(), status: "AVAILABLE" },
+    });
+  }
+  if (seededProjectId) {
+    await prisma.project.update({
+      where: { id: seededProjectId },
+      data: { deletedAt: new Date() },
+    });
+  }
+
   const evidence = {
     result: "passed",
     at: new Date().toISOString(),
@@ -209,8 +280,12 @@ async function main() {
       opportunityStage: committed.opportunity.stage,
       outcomeResult: outcome.result,
     },
+    seeded: {
+      unit: Boolean(seededUnitId),
+      project: Boolean(seededProjectId),
+    },
     outboxTypes: [...new Set(outbox.map((row) => row.type))],
-    note: "Synthetic fixture; phone not logged. Booking cancelled after smoke.",
+    note: "Synthetic fixture; phone not logged. Booking cancelled; disposable smoke unit/project soft-deleted.",
   };
 
   const reportsDir = path.join(process.cwd(), "reports");

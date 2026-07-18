@@ -406,7 +406,7 @@ export function ConversionOpsBoard() {
                 <Button
                   type="button"
                   size="sm"
-                  variant="secondary"
+                  variant="outline"
                   onClick={() => void commitWithBooking()}
                 >
                   COMMITTED
@@ -421,7 +421,7 @@ export function ConversionOpsBoard() {
                 <Button
                   type="button"
                   size="sm"
-                  variant="secondary"
+                  variant="outline"
                   onClick={() => void recordOutcome("LOST")}
                 >
                   LOST
@@ -456,7 +456,7 @@ export function ConversionOpsBoard() {
                   type="button"
                   size="sm"
                   className="mt-2"
-                  variant="secondary"
+                  variant="outline"
                   onClick={() => void stopNurture()}
                 >
                   Stop nurture
