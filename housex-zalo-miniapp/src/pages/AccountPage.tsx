@@ -313,23 +313,26 @@ export function AccountPage() {
         />
         {justLoggedIn ? (
           <p className="account-success" role="status">
-            Đăng nhập bằng Zalo thành công. SĐT liên hệ trên hồ sơ: {user.phoneMasked}.
+            Đăng nhập bằng Zalo thành công. SĐT liên hệ trên hồ sơ:{" "}
+            {user.phoneMasked}.
           </p>
         ) : null}
+
         <div className="card">
-          <p className="muted">
+          <p style={{ margin: 0, fontWeight: 600, fontSize: 14 }}>Hồ sơ</p>
+          <p className="muted" style={{ marginTop: 6 }}>
             SĐT: {user.phoneMasked}
             {user.ctvCode ? ` · Mã môi giới ${user.ctvCode}` : ""}
+            {user.email && !user.email.includes("@users.housex.local")
+              ? ` · ${user.email}`
+              : ""}
           </p>
         </div>
-        <MiniAccountPasswordCard
-          passwordReady={user.passwordReady}
-          defaultEmail={user.email ?? ""}
-        />
+
         {!canAgent ? (
           <div className="card account-lane-pick">
             <p className="muted" style={{ marginBottom: 8 }}>
-              Mục tiêu mua nhà
+              Tiếp theo — chọn mục tiêu mua nhà
             </p>
             <div className="account-lane-row">
               {(["noxh", "cctm"] as const).map((id) => (
@@ -344,11 +347,26 @@ export function AccountPage() {
               ))}
             </div>
           </div>
-        ) : null}
+        ) : (
+          <div style={{ marginBottom: 10 }}>
+            <Link className="btn" to="/agent" style={{ marginBottom: 8 }}>
+              Vào không gian môi giới
+            </Link>
+            <Link
+              className="btn secondary"
+              to="/agent/telesales"
+              style={{ marginBottom: 8 }}
+            >
+              Telesales (lead thuộc bạn)
+            </Link>
+          </div>
+        )}
+
         {err ? <p className="err">{err}</p> : null}
+
         <button
           type="button"
-          className="btn"
+          className="btn secondary"
           style={{ marginBottom: 10 }}
           disabled={busyHandoff}
           onClick={() => void openFullProfileWeb()}
@@ -357,8 +375,9 @@ export function AccountPage() {
             ? "Đang mở hồ sơ…"
             : canAgent
               ? "Hồ sơ môi giới trên web"
-              : "Xem hồ sơ đầy đủ"}
+              : "Xem hồ sơ đầy đủ trên web"}
         </button>
+
         {user.opsTools?.telesales ? (
           <div
             className="card"
@@ -368,19 +387,21 @@ export function AccountPage() {
               Bạn đã được cấp CRM Telesales
             </p>
             <p style={{ margin: "6px 0 10px", fontSize: 12, color: "#64748b" }}>
-              Nếu chưa có mật khẩu web: đặt trong mục Mật khẩu tài khoản (OTP
-              email). Rồi đăng nhập SĐT+MK trên mọi máy. Trên Zalo vào tool ngay.
+              {user.passwordReady
+                ? "Đăng nhập SĐT + mật khẩu trên mọi máy, hoặc mở tool ngay trên Zalo."
+                : "Để dùng trên máy khác: đặt mật khẩu ở mục Bảo mật bên dưới (OTP email). Trên Zalo có thể mở tool ngay."}
             </p>
             <Link className="btn secondary" to="/ops">
               Mở CRM Telesales
             </Link>
           </div>
         ) : null}
-        {canAgent ? (
-          <Link className="btn secondary" to="/agent" style={{ marginBottom: 10 }}>
-            Vào không gian môi giới
-          </Link>
-        ) : null}
+
+        <MiniAccountPasswordCard
+          passwordReady={user.passwordReady}
+          defaultEmail={user.email ?? ""}
+        />
+
         <button type="button" className="btn secondary" onClick={logout}>
           Đăng xuất
         </button>

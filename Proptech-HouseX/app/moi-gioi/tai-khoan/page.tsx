@@ -14,6 +14,7 @@ type Profile = {
   ctvCode?: string | null;
   ctvApplicationStatus?: string | null;
   passwordReady?: boolean;
+  phoneMasked?: string;
 };
 
 export default function BrokerAccountPage() {
@@ -43,62 +44,74 @@ export default function BrokerAccountPage() {
 
   return (
     <div className="mx-auto max-w-2xl space-y-8 py-10 container-px">
-      <div>
+      <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
         <h1 className="text-2xl font-bold text-slate-900">Tài khoản môi giới</h1>
         <p className="mt-1 text-slate-500">Xin chào, {user.name}</p>
+        {user.phoneMasked || user.ctvCode ? (
+          <p className="mt-2 text-sm text-slate-600">
+            {user.phoneMasked ? `SĐT ${user.phoneMasked}` : null}
+            {user.phoneMasked && user.ctvCode ? " · " : null}
+            {user.ctvCode ? `Mã ${user.ctvCode}` : null}
+          </p>
+        ) : null}
+      </div>
+
+      <div>
+        <h2 className="mb-3 text-sm font-semibold text-slate-700">
+          Việc cần làm
+        </h2>
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <Link
+            href="/moi-gioi/dang-tin"
+            className="rounded-2xl border border-slate-200 bg-white p-5 hover:border-brand-300"
+          >
+            <Icon.Building className="text-2xl text-brand-600" />
+            <p className="mt-2 font-semibold">Đăng tin mới</p>
+          </Link>
+          <Link
+            href="/moi-gioi/tin-cua-toi"
+            className="rounded-2xl border border-slate-200 bg-white p-5 hover:border-brand-300"
+          >
+            <Icon.FileCheck className="text-2xl text-brand-600" />
+            <p className="mt-2 font-semibold">Tin của tôi</p>
+          </Link>
+          <Link
+            href="/moi-gioi/ho-so"
+            className="rounded-2xl border border-slate-200 bg-white p-5 hover:border-brand-300"
+          >
+            <Icon.FileCheck className="text-2xl text-brand-600" />
+            <p className="mt-2 font-semibold">Hồ sơ NOXH (CTV)</p>
+            <p className="text-xs text-slate-500">Thả lead & theo dõi pipeline</p>
+          </Link>
+          <Link
+            href="/moi-gioi/telesales"
+            className="rounded-2xl border border-slate-200 bg-white p-5 hover:border-brand-300"
+          >
+            <Icon.Building className="text-2xl text-brand-600" />
+            <p className="mt-2 font-semibold">Telesales (CTV / Nội sàn)</p>
+            <p className="text-xs text-slate-500">
+              Gọi lead thuộc bạn — không pool Ops
+            </p>
+          </Link>
+          <Link
+            href="/moi-gioi/dang-ky-ctv"
+            className="rounded-2xl border border-slate-200 bg-white p-5 hover:border-brand-300 sm:col-span-2"
+          >
+            <Icon.BadgeCheck className="text-2xl text-brand-600" />
+            <p className="mt-2 font-semibold">
+              {user.ctvCode ? `Mã CTV: ${user.ctvCode}` : "Đăng ký CTV"}
+            </p>
+            {user.ctvApplicationStatus === "PENDING" ? (
+              <p className="text-xs text-amber-600">Đang chờ duyệt</p>
+            ) : null}
+          </Link>
+        </div>
       </div>
 
       <AccountPasswordPanel
         passwordReady={Boolean(user.passwordReady)}
         defaultEmail={user.email ?? ""}
       />
-
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        <Link
-          href="/moi-gioi/dang-tin"
-          className="rounded-2xl border border-slate-200 bg-white p-5 hover:border-brand-300"
-        >
-          <Icon.Building className="text-2xl text-brand-600" />
-          <p className="mt-2 font-semibold">Đăng tin mới</p>
-        </Link>
-        <Link
-          href="/moi-gioi/tin-cua-toi"
-          className="rounded-2xl border border-slate-200 bg-white p-5 hover:border-brand-300"
-        >
-          <Icon.FileCheck className="text-2xl text-brand-600" />
-          <p className="mt-2 font-semibold">Tin của tôi</p>
-        </Link>
-        <Link
-          href="/moi-gioi/ho-so"
-          className="rounded-2xl border border-slate-200 bg-white p-5 hover:border-brand-300"
-        >
-          <Icon.FileCheck className="text-2xl text-brand-600" />
-          <p className="mt-2 font-semibold">Hồ sơ NOXH (CTV)</p>
-          <p className="text-xs text-slate-500">Thả lead & theo dõi pipeline</p>
-        </Link>
-        <Link
-          href="/moi-gioi/telesales"
-          className="rounded-2xl border border-slate-200 bg-white p-5 hover:border-brand-300"
-        >
-          <Icon.Building className="text-2xl text-brand-600" />
-          <p className="mt-2 font-semibold">Telesales (CTV / Nội sàn)</p>
-          <p className="text-xs text-slate-500">
-            Gọi lead thuộc bạn — không pool Ops
-          </p>
-        </Link>
-        <Link
-          href="/moi-gioi/dang-ky-ctv"
-          className="rounded-2xl border border-slate-200 bg-white p-5 hover:border-brand-300 sm:col-span-2"
-        >
-          <Icon.BadgeCheck className="text-2xl text-brand-600" />
-          <p className="mt-2 font-semibold">
-            {user.ctvCode ? `Mã CTV: ${user.ctvCode}` : "Đăng ký CTV"}
-          </p>
-          {user.ctvApplicationStatus === "PENDING" ? (
-            <p className="text-xs text-amber-600">Đang chờ duyệt</p>
-          ) : null}
-        </Link>
-      </div>
     </div>
   );
 }
