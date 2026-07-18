@@ -443,7 +443,7 @@ consent proof và PII thật không được đưa vào bằng chứng.
 **Status**
 
 - `repo_status: REPO-DONE`
-- `runtime_evidence: NOT_PROVIDED`
+- `runtime_evidence: NOT_PROVIDED` (awaiting VPS `npm run go-live:smoke-sc6`)
 - Target gate: G2 after SC-0 and SC-5.
 
 **Owner boundary**

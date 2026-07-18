@@ -97,6 +97,23 @@ test("SC-6 artifacts: enrollment schema, APIs, events, nurture wrap", async () =
   assert.match(enrollRoute, /enrollNurture/);
 });
 
+test("SC-6 smoke script and enroll UI controls exist", async () => {
+  const root = new URL("../", import.meta.url);
+  const [smoke, pkg, board, service] = await Promise.all([
+    readFile(new URL("scripts/smoke-sc6-nurture.ts", root), "utf8"),
+    readFile(new URL("package.json", root), "utf8"),
+    readFile(new URL("components/admin/conversion-ops-board.tsx", root), "utf8"),
+    readFile(new URL("lib/sales-core/service.ts", root), "utf8"),
+  ]);
+  assert.match(smoke, /recordNurtureDispatchResult/);
+  assert.match(smoke, /WITHDRAWN/);
+  assert.match(pkg, /go-live:smoke-sc6/);
+  assert.match(board, /enrollNurtureAction/);
+  assert.match(board, /nextTouch/);
+  assert.match(service, /nextTouch/);
+  assert.match(service, /status: \{ in: \["ENROLLED", "ELIGIBLE"\] \}/);
+});
+
 test("Phase 2 conversion board and list APIs exist without PII fields", async () => {
   const root = new URL("../", import.meta.url);
   const [service, board, nav, roles, listRoute] = await Promise.all([

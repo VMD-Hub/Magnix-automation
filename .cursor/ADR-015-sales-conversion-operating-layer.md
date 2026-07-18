@@ -198,9 +198,10 @@ tạo side effect lặp.
 COMMITTED vẫn fail-closed. Runtime evidence production: **PASS** 2026-07-18
 (`smoke-jp-1784347761181`) — xem `Proptech-HouseX/docs/SALES_CONVERSION_G1_G2_EVIDENCE.md`.
 
-**SC-6 (repo):** `NurtureEnrollment` + eligibility/enroll/dispatch APIs; `lead.nurture`
-v1 vẫn enqueue nhưng fail-closed nếu thiếu marketing consent hoặc enrollment CANCELLED.
-Admin board: `/admin/conversion`.
+**SC-6 (repo + dry-run path):** `NurtureEnrollment` + eligibility/enroll/dispatch APIs;
+`lead.nurture` v1 vẫn enqueue nhưng fail-closed nếu thiếu marketing consent hoặc
+enrollment CANCELLED. Admin board: `/admin/conversion` (Enroll / Stop / next touch).
+Runtime evidence: chạy `npm run go-live:smoke-sc6` trên VPS.
 
 Mỗi gate cần review schema/API riêng trước implementation. G2 không được bắt đầu cho
 journey nào khi G1 consent/idempotency controls chưa đạt.

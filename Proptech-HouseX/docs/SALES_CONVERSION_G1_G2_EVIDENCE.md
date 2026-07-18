@@ -9,6 +9,7 @@ runtime execution evidence; deployment/activation alone is not a functional smok
 - G1 migration: `20260717190000_sales_core_g1_foundation`
 - G2 SC-2 migration: `20260717200000_buyer_match_g2_slice`
 - G2 Journey P SC-4/SC-5 migration: `20260718100000_sales_conversion_g2_journey_p`
+- G2 SC-6 nurture migration: `20260718120000_sales_conversion_sc6_nurture`
 - Protected command surface: `/api/admin/conversion/*`, including `matches`,
   `proposals`, `outcomes`, `funnel`
 - Feature flag (default **off**): `HOUSEX_CONVERSION_G2_JOURNEY_P=true` enables
@@ -155,8 +156,27 @@ Local result on 2026-07-17:
 - **PASSED — Journey P SC-4/SC-5 smoke (2026-07-18):** see production block above;
   SC-4/SC-5 `runtime_evidence` = `PRODUCTION-PROVEN` (Journey P). A/S COMMITTED
   remains fail-closed.
-- **SC-6 REPO-DONE:** `NurtureEnrollment` / dispatch APIs + consent gate on
-  `tryEnqueueLeadNurture`; UI panel on `/admin/conversion`. Runtime dry-run pending.
+- **AWAITING — SC-6 nurture dry-run:** after `npx prisma migrate deploy` for
+  `20260718120000_sales_conversion_sc6_nurture`, run
+  `npm run go-live:smoke-sc6` on VPS, attach `reports/sc6-nurture-smoke-*.json`
+  (IDs only), then flip SC-6 `runtime_evidence` to `PRODUCTION-PROVEN`.
+
+### Production SC-6 nurture smoke — checklist
+
+```bash
+cd /opt/housex && git pull --ff-only
+cd /opt/housex/Proptech-HouseX
+npx prisma migrate deploy
+npm run build && pm2 restart housex
+npm run go-live:smoke-sc6
+```
+
+Record below after pass: commit SHA, report path, masked IDs, confirmer.
+Rollback: Stop nurture on `/admin/conversion` (cancel enrollment) — no flag required;
+audit rows retained.
+
+Script: `scripts/smoke-sc6-nurture.ts` · npm `go-live:smoke-sc6`.
+Dry-run only (no real Zalo/OA/Telegram send).
 
 This record proves the deployed foundation and UID ingest path. It does not promote
 unexecuted content, Telegram, or full sales-journey workflows beyond **STAGING**.

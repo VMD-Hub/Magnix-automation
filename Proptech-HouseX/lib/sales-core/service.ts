@@ -2089,6 +2089,9 @@ export async function checkNurtureEligibility(input: {
       granted: false,
       action: null as string | null,
       suppressionReason: "ENROLLMENT_CANCELLED",
+      nextTouch: null as string | null,
+      enrollment: null,
+      lastDispatch: null,
     };
   }
 
@@ -2106,6 +2109,37 @@ export async function checkNurtureEligibility(input: {
     eligible = false;
     suppressionReason = "LEAD_ALREADY_WON";
   }
+
+  const activeEnrollment = await prisma.nurtureEnrollment.findFirst({
+    where: {
+      leadId: input.leadId,
+      purpose: input.purpose,
+      channel: input.channel,
+      status: { in: ["ENROLLED", "ELIGIBLE"] },
+    },
+    orderBy: { updatedAt: "desc" },
+    select: {
+      id: true,
+      status: true,
+      scriptId: true,
+      updatedAt: true,
+      dispatches: {
+        orderBy: { occurredAt: "desc" },
+        take: 1,
+        select: { status: true, occurredAt: true },
+      },
+    },
+  });
+  const lastDispatch = activeEnrollment?.dispatches[0] ?? null;
+  const nextTouch = activeEnrollment
+    ? lastDispatch
+      ? `dispatch:${lastDispatch.status}`
+      : activeEnrollment.scriptId
+        ? `script:${activeEnrollment.scriptId}`
+        : "enrolled_awaiting_dispatch"
+    : eligible
+      ? "ready_to_enroll"
+      : null;
 
   if (input.correlationId) {
     const payload = {
@@ -2138,6 +2172,21 @@ export async function checkNurtureEligibility(input: {
     granted: consent.granted,
     action: consent.action,
     suppressionReason,
+    nextTouch,
+    enrollment: activeEnrollment
+      ? {
+          id: activeEnrollment.id,
+          status: activeEnrollment.status,
+          scriptId: activeEnrollment.scriptId,
+          updatedAt: activeEnrollment.updatedAt.toISOString(),
+        }
+      : null,
+    lastDispatch: lastDispatch
+      ? {
+          status: lastDispatch.status,
+          occurredAt: lastDispatch.occurredAt.toISOString(),
+        }
+      : null,
   };
 }
 
@@ -2169,6 +2218,43 @@ export async function enrollNurture(input: {
           idempotencyConflict();
         }
         return { enrollment: prior, created: false };
+      }
+      const active = await tx.nurtureEnrollment.findMany({
+        where: {
+          leadId: input.leadId,
+          purpose: input.purpose,
+          channel: input.channel,
+          status: { in: ["ENROLLED", "ELIGIBLE"] },
+        },
+      });
+      if (active.length > 0) {
+        await tx.nurtureEnrollment.updateMany({
+          where: { id: { in: active.map((row) => row.id) } },
+          data: { status: "CANCELLED" },
+        });
+        const closed = await tx.nurtureEnrollment.findUniqueOrThrow({
+          where: { id: active[0]!.id },
+        });
+        // Stamp cancel idempotency on the closed row via a dedicated cancel audit
+        // when the closed row already has a different idempotency key.
+        if (closed.idempotencyKey === input.idempotencyKey) {
+          return { enrollment: closed, created: false };
+        }
+        const enrollment = await tx.nurtureEnrollment.create({
+          data: {
+            leadId: input.leadId,
+            opportunityId: input.opportunityId ?? null,
+            purpose: input.purpose,
+            channel: input.channel,
+            status: "CANCELLED",
+            scriptId: input.scriptId ?? closed.scriptId,
+            cohortKey: input.cohortKey ?? closed.cohortKey,
+            actorId: input.actorId,
+            correlationId: input.correlationId,
+            idempotencyKey: input.idempotencyKey,
+          },
+        });
+        return { enrollment, created: true };
       }
       const enrollment = await tx.nurtureEnrollment.create({
         data: {

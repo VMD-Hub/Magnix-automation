@@ -45,6 +45,17 @@ type NurtureEligibility = {
   granted: boolean;
   action: string | null;
   suppressionReason: string | null;
+  nextTouch?: string | null;
+  enrollment?: {
+    id: string;
+    status: string;
+    scriptId: string | null;
+    updatedAt: string;
+  } | null;
+  lastDispatch?: {
+    status: string;
+    occurredAt: string;
+  } | null;
 };
 
 const STAGES = [
@@ -99,6 +110,7 @@ export function ConversionOpsBoard() {
   const [outcome, setOutcome] = useState<OutcomeRow | null>(null);
   const [selected, setSelected] = useState<OpportunityRow | null>(null);
   const [nurture, setNurture] = useState<NurtureEligibility | null>(null);
+  const [nurtureChannel, setNurtureChannel] = useState("zalo");
   const [bookingRef, setBookingRef] = useState("");
   const [unitRef, setUnitRef] = useState("");
   const [msg, setMsg] = useState<string | null>(null);
@@ -123,29 +135,32 @@ export function ConversionOpsBoard() {
     setLoading(false);
   }, [journey, stageFilter]);
 
-  const loadDetail = useCallback(async (id: string) => {
-    const res = await adminJson<{
-      opportunity: OpportunityRow;
-      proposals: ProposalRow[];
-      outcome: OutcomeRow | null;
-    }>(`/api/admin/conversion/opportunities/${id}`);
-    if (!res.ok) {
-      setMsg(res.error ?? "Không tải chi tiết");
-      return;
-    }
-    setSelected(res.data?.opportunity ?? null);
-    setProposals(res.data?.proposals ?? []);
-    setOutcome(res.data?.outcome ?? null);
-    setUnitRef(res.data?.opportunity?.unitRef ?? "");
+  const loadDetail = useCallback(
+    async (id: string, channel = nurtureChannel) => {
+      const res = await adminJson<{
+        opportunity: OpportunityRow;
+        proposals: ProposalRow[];
+        outcome: OutcomeRow | null;
+      }>(`/api/admin/conversion/opportunities/${id}`);
+      if (!res.ok) {
+        setMsg(res.error ?? "Không tải chi tiết");
+        return;
+      }
+      setSelected(res.data?.opportunity ?? null);
+      setProposals(res.data?.proposals ?? []);
+      setOutcome(res.data?.outcome ?? null);
+      setUnitRef(res.data?.opportunity?.unitRef ?? "");
 
-    const leadId = res.data?.opportunity?.leadId;
-    if (leadId) {
-      const elig = await adminJson<NurtureEligibility>(
-        `/api/admin/conversion/nurture/eligibility?leadId=${encodeURIComponent(leadId)}&purpose=marketing&channel=zalo`,
-      );
-      setNurture(elig.ok ? (elig.data ?? null) : null);
-    } else setNurture(null);
-  }, []);
+      const leadId = res.data?.opportunity?.leadId;
+      if (leadId) {
+        const elig = await adminJson<NurtureEligibility>(
+          `/api/admin/conversion/nurture/eligibility?leadId=${encodeURIComponent(leadId)}&purpose=marketing&channel=${encodeURIComponent(channel)}`,
+        );
+        setNurture(elig.ok ? (elig.data ?? null) : null);
+      } else setNurture(null);
+    },
+    [nurtureChannel],
+  );
 
   useEffect(() => {
     void loadList();
@@ -230,6 +245,26 @@ export function ConversionOpsBoard() {
     }
   }
 
+  async function enrollNurtureAction() {
+    if (!selected?.leadId) return;
+    const res = await adminJson("/api/admin/conversion/nurture/enrollments", {
+      method: "POST",
+      headers: { "Idempotency-Key": idemKey("nurture-enroll") },
+      body: JSON.stringify({
+        action: "enroll",
+        leadId: selected.leadId,
+        purpose: "marketing",
+        channel: nurtureChannel,
+        scriptId: "noxh-zalo-ads-checklist",
+        opportunityId: selected.id,
+        actorId: "admin-ui",
+        correlationId: idemKey("corr"),
+      }),
+    });
+    setMsg(res.ok ? "Nurture enrolled" : res.error ?? "Lỗi enroll");
+    if (res.ok && selectedId) void loadDetail(selectedId);
+  }
+
   async function stopNurture() {
     if (!selected?.leadId) return;
     const res = await adminJson("/api/admin/conversion/nurture/enrollments", {
@@ -239,7 +274,7 @@ export function ConversionOpsBoard() {
         action: "cancel",
         leadId: selected.leadId,
         purpose: "marketing",
-        channel: "zalo",
+        channel: nurtureChannel,
         actorId: "admin-ui",
         correlationId: idemKey("corr"),
       }),
@@ -439,6 +474,22 @@ export function ConversionOpsBoard() {
                 <p className="text-xs font-semibold uppercase text-slate-500">
                   Nurture (SC-6)
                 </p>
+                <label className="mt-2 flex items-center gap-2 text-xs text-slate-600">
+                  Channel
+                  <select
+                    className="rounded border border-slate-200 bg-white px-2 py-1"
+                    value={nurtureChannel}
+                    onChange={(e) => {
+                      const next = e.target.value;
+                      setNurtureChannel(next);
+                      if (selectedId) void loadDetail(selectedId, next);
+                    }}
+                  >
+                    <option value="zalo">zalo</option>
+                    <option value="oa">oa</option>
+                    <option value="telegram">telegram</option>
+                  </select>
+                </label>
                 {nurture ? (
                   <p className="mt-1 text-xs text-slate-600">
                     eligible={String(nurture.eligible)} · consent=
@@ -446,21 +497,38 @@ export function ConversionOpsBoard() {
                     {nurture.suppressionReason
                       ? ` · ${nurture.suppressionReason}`
                       : ""}
+                    {nurture.nextTouch ? ` · next=${nurture.nextTouch}` : ""}
+                    {nurture.enrollment
+                      ? ` · enroll=${nurture.enrollment.status}`
+                      : ""}
+                    {nurture.lastDispatch
+                      ? ` · last=${nurture.lastDispatch.status}`
+                      : ""}
                   </p>
                 ) : (
                   <p className="mt-1 text-xs text-slate-500">
-                    Eligibility API chưa trả (SC-6 chưa bật hoặc thiếu consent).
+                    Eligibility API chưa trả (thiếu consent hoặc lỗi mạng).
                   </p>
                 )}
-                <Button
-                  type="button"
-                  size="sm"
-                  className="mt-2"
-                  variant="outline"
-                  onClick={() => void stopNurture()}
-                >
-                  Stop nurture
-                </Button>
+                <div className="mt-2 flex flex-wrap gap-2">
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant="outline"
+                    onClick={() => void enrollNurtureAction()}
+                    disabled={!nurture?.eligible}
+                  >
+                    Enroll
+                  </Button>
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant="outline"
+                    onClick={() => void stopNurture()}
+                  >
+                    Stop nurture
+                  </Button>
+                </div>
               </div>
             </>
           )}
