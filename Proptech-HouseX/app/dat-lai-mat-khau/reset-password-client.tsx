@@ -13,6 +13,7 @@ export default function ResetPasswordClient() {
   const params = useSearchParams();
   const router = useRouter();
   const token = params.get("token") ?? "";
+  const telesalesInvite = params.get("purpose") === "telesales";
 
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
@@ -46,7 +47,12 @@ export default function ResetPasswordClient() {
         return;
       }
       setDone(true);
-      setTimeout(() => router.push("/dang-nhap"), 2000);
+      const next =
+        (json?.data?.next as string | undefined) ||
+        (telesalesInvite
+          ? "/dang-nhap?next=/ops/telesales"
+          : "/dang-nhap");
+      setTimeout(() => router.push(next), 2000);
     } catch {
       setError("Lỗi kết nối.");
     } finally {
@@ -61,12 +67,24 @@ export default function ResetPasswordClient() {
           <div className="flex justify-center">
             <HouseXHeaderLogo href="/" priority={false} surface="light" />
           </div>
-          <h1 className="mt-3 text-2xl font-bold text-slate-900">Đặt lại mật khẩu</h1>
+          <h1 className="mt-3 text-2xl font-bold text-slate-900">
+            {telesalesInvite
+              ? "Xác nhận & đặt mật khẩu CRM Telesales"
+              : "Đặt lại mật khẩu"}
+          </h1>
+          {telesalesInvite ? (
+            <p className="mt-2 text-sm text-slate-600">
+              Bạn đã được cấp quyền CRM Telesales. Đặt mật khẩu riêng để đăng
+              nhập trên mọi thiết bị.
+            </p>
+          ) : null}
         </div>
 
         {done ? (
           <p className="mt-6 rounded-lg bg-brand-50 p-4 text-center text-sm text-brand-900">
-            Mật khẩu đã được cập nhật. Đang chuyển đến trang đăng nhập…
+            {telesalesInvite
+              ? "Đã lưu mật khẩu. Đang chuyển tới đăng nhập CRM Telesales…"
+              : "Mật khẩu đã được cập nhật. Đang chuyển đến trang đăng nhập…"}
           </p>
         ) : (
           <form onSubmit={submit} className="mt-6 space-y-4">
@@ -100,7 +118,11 @@ export default function ResetPasswordClient() {
               </p>
             ) : null}
             <Button type="submit" className="w-full" disabled={loading || !token}>
-              {loading ? "Đang lưu…" : "Lưu mật khẩu mới"}
+              {loading
+                ? "Đang lưu…"
+                : telesalesInvite
+                  ? "Xác nhận email & lưu mật khẩu"
+                  : "Lưu mật khẩu mới"}
             </Button>
           </form>
         )}

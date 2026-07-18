@@ -1,4 +1,4 @@
-import { NextRequest } from "next/server";
+import type { NextRequest } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { fail, handleApiError, ok } from "@/lib/api/http";
 import { resetPasswordSchema } from "@/lib/validation/auth";
@@ -20,10 +20,18 @@ export async function POST(req: NextRequest) {
 
     await prisma.userAccount.update({
       where: { id: consumed.userAccountId },
-      data: { passwordHash: hashPassword(body.password) },
+      data: {
+        passwordHash: hashPassword(body.password),
+        // Invite telesales / reset từ email thật → coi như đã xác nhận kênh email
+        emailVerified: true,
+        emailVerifiedAt: new Date(),
+      },
     });
 
-    return ok({ reset: true });
+    return ok({
+      reset: true,
+      next: "/dang-nhap?next=/ops/telesales",
+    });
   } catch (err) {
     return handleApiError(err);
   }

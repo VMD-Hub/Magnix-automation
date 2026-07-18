@@ -16,6 +16,9 @@ type GrantRow = {
     phoneMasked: string;
     zaloUserId: string | null;
     role: string;
+    emailMasked: string | null;
+    emailVerified: boolean;
+    needsInviteEmail: boolean;
   };
 };
 
@@ -24,6 +27,7 @@ export function OpsToolGrantsBoard() {
   const [status, setStatus] = useState<"ACTIVE" | "REVOKED" | "ALL">("ACTIVE");
   const [phone, setPhone] = useState("");
   const [zaloUserId, setZaloUserId] = useState("");
+  const [inviteEmail, setInviteEmail] = useState("");
   const [note, setNote] = useState("");
   const [msg, setMsg] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
@@ -53,6 +57,7 @@ export function OpsToolGrantsBoard() {
       body: JSON.stringify({
         phone: phone || undefined,
         zaloUserId: zaloUserId || undefined,
+        inviteEmail,
         note: note || null,
       }),
     });
@@ -61,9 +66,13 @@ export function OpsToolGrantsBoard() {
       setMsg(json.error?.message ?? "Cấp quyền thất bại.");
       return;
     }
-    setMsg(`Đã cấp: ${json.data.grant.user.name}`);
+    const invite = json.data?.invite;
+    setMsg(
+      `Đã cấp ${json.data.grant.user.name}. Đã gửi email đặt mật khẩu tới ${invite?.emailMasked ?? inviteEmail} (72 giờ).`,
+    );
     setPhone("");
     setZaloUserId("");
+    setInviteEmail("");
     setNote("");
     void load();
   }
@@ -82,6 +91,28 @@ export function OpsToolGrantsBoard() {
     void load();
   }
 
+  async function resend(id: string, fallbackEmail?: string | null) {
+    setMsg(null);
+    const email =
+      fallbackEmail ||
+      window.prompt("Email công việc để gửi lại lời mời (bỏ trống nếu đã có):") ||
+      undefined;
+    const res = await fetch(`/api/admin/ops-tool-grants/${id}/invite`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(email ? { inviteEmail: email } : {}),
+    });
+    const json = await res.json();
+    if (!res.ok) {
+      setMsg(json.error?.message ?? "Gửi lại thất bại.");
+      return;
+    }
+    setMsg(
+      `Đã gửi lại lời mời tới ${json.data?.invite?.emailMasked ?? "email đã gắn"}.`,
+    );
+    void load();
+  }
+
   return (
     <div className="space-y-4">
       <form
@@ -89,8 +120,9 @@ export function OpsToolGrantsBoard() {
         className="grid gap-2 rounded-xl border border-slate-200 bg-white p-4 sm:grid-cols-2"
       >
         <p className="sm:col-span-2 text-sm text-slate-600">
-          Người dùng phải có UserAccount (mở Mini App Zalo hoặc đăng ký SĐT) trước
-          khi cấp quyền CRM Telesales.
+          Người dùng phải có UserAccount (Mini App Zalo / đăng ký SĐT) trước.
+          Super nhập <strong>email công việc</strong> — hệ thống gửi link đặt mật
+          khẩu (72 giờ) để họ đăng nhập web trên mọi thiết bị.
         </p>
         <input
           className="rounded-md border border-slate-200 px-2 py-1.5 text-sm"
@@ -106,12 +138,20 @@ export function OpsToolGrantsBoard() {
         />
         <input
           className="rounded-md border border-slate-200 px-2 py-1.5 text-sm sm:col-span-2"
+          type="email"
+          required
+          placeholder="Email công việc * (nhận lời mời đặt mật khẩu)"
+          value={inviteEmail}
+          onChange={(e) => setInviteEmail(e.target.value)}
+        />
+        <input
+          className="rounded-md border border-slate-200 px-2 py-1.5 text-sm sm:col-span-2"
           placeholder="Ghi chú (tuỳ chọn)"
           value={note}
           onChange={(e) => setNote(e.target.value)}
         />
         <Button type="submit" size="sm" className="sm:w-fit">
-          Cấp quyền TELESALES_CRM
+          Cấp quyền + gửi email đặt MK
         </Button>
         {msg ? (
           <p className="text-xs text-brand-800 sm:col-span-2">{msg}</p>
@@ -131,7 +171,11 @@ export function OpsToolGrantsBoard() {
                 : "bg-slate-100 text-slate-700",
             )}
           >
-            {s === "ACTIVE" ? "Đang hiệu lực" : s === "REVOKED" ? "Đã thu hồi" : "Tất cả"}
+            {s === "ACTIVE"
+              ? "Đang hiệu lực"
+              : s === "REVOKED"
+                ? "Đã thu hồi"
+                : "Tất cả"}
           </button>
         ))}
       </div>
@@ -156,22 +200,35 @@ export function OpsToolGrantsBoard() {
                 </p>
                 <p className="text-xs text-slate-500">
                   {row.status} · {row.user.role}
+                  {row.user.emailMasked
+                    ? ` · ${row.user.emailMasked}${row.user.emailVerified ? " ✓" : " (chưa xác nhận MK)"}`
+                    : " · chưa gắn email thật"}
                   {row.user.zaloUserId
                     ? ` · zalo:${row.user.zaloUserId}`
-                    : " · chưa gắn Zalo"}
+                    : ""}
                   {" · "}
                   {new Date(row.grantedAt).toLocaleString("vi-VN")}
                 </p>
               </div>
               {row.status === "ACTIVE" ? (
-                <Button
-                  type="button"
-                  size="sm"
-                  variant="outline"
-                  onClick={() => void revoke(row.id)}
-                >
-                  Thu hồi
-                </Button>
+                <div className="flex flex-wrap gap-2">
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant="outline"
+                    onClick={() => void resend(row.id)}
+                  >
+                    Gửi lại lời mời
+                  </Button>
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant="outline"
+                    onClick={() => void revoke(row.id)}
+                  >
+                    Thu hồi
+                  </Button>
+                </div>
               ) : null}
             </li>
           ))}

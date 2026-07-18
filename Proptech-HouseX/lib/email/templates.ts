@@ -101,10 +101,58 @@ Nếu bạn không yêu cầu, hãy bỏ qua email này.
   return { to: "", subject, html, text, tags: ["auth", "password_reset"] };
 }
 
+/** Lời mời CRM Telesales — đặt mật khẩu để đăng nhập trên mọi thiết bị. */
+export function telesalesInviteEmail(
+  name: string,
+  setPasswordUrl: string,
+  loginUrl: string,
+): OutboundEmail {
+  const brand = getBrandName();
+  const subject = `Bạn đã được cấp quyền CRM Telesales — ${brand}`;
+  const text = `Xin chào ${name},
+
+Super Admin đã cấp quyền CRM Telesales trên ${brand}.
+
+1) Mở link sau để xác nhận email và đặt mật khẩu riêng (hiệu lực 72 giờ):
+${setPasswordUrl}
+
+2) Sau đó đăng nhập bằng SĐT + mật khẩu tại:
+${loginUrl}
+
+Chỉ bạn có mật khẩu này — không chia sẻ link email.
+
+— ${brand}`;
+
+  const html = transactionalEmailLayout(
+    subject,
+    `<p>Xin chào <strong>${name}</strong>,</p>
+<p>Super Admin đã cấp quyền <strong>CRM Telesales</strong> trên <strong>${brand}</strong>.</p>
+<p>Để dùng trên máy tính / trình duyệt bất kỳ, hãy <strong>đặt mật khẩu riêng</strong> (link hiệu lực <strong>72 giờ</strong>):</p>
+<p style="text-align:center;margin:28px 0">
+  <a href="${setPasswordUrl}" style="${EMAIL_CTA_STYLE}">Đặt mật khẩu &amp; xác nhận</a>
+</p>
+<p style="font-size:13px;color:#64748b">Hoặc copy link: ${setPasswordUrl}</p>
+<p>Sau khi đặt xong, đăng nhập SĐT + mật khẩu tại:<br>
+<a href="${loginUrl}">${loginUrl}</a></p>
+<p style="font-size:13px;color:#64748b">Link chỉ dành cho bạn — không chuyển tiếp email này.</p>`,
+    { allowReply: true },
+  );
+
+  return { to: "", subject, html, text, tags: ["ops", "telesales_invite"] };
+}
+
 export function buildVerifyUrl(token: string): string {
   return `${siteUrl()}/xac-nhan-email?token=${encodeURIComponent(token)}`;
 }
 
 export function buildResetUrl(token: string): string {
   return `${siteUrl()}/dat-lai-mat-khau?token=${encodeURIComponent(token)}`;
+}
+
+export function buildTelesalesLoginUrl(): string {
+  return `${siteUrl()}/dang-nhap?next=${encodeURIComponent("/ops/telesales")}`;
+}
+
+export function buildTelesalesSetPasswordUrl(token: string): string {
+  return `${siteUrl()}/dat-lai-mat-khau?token=${encodeURIComponent(token)}&purpose=telesales`;
 }

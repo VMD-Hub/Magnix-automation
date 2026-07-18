@@ -10,10 +10,12 @@ const TTL_HOURS: Record<AuthTokenType, number> = {
 export async function issueUserAuthToken(
   userAccountId: string,
   type: AuthTokenType,
+  ttlHours?: number,
 ): Promise<string> {
   const raw = generateSecureToken();
   const tokenHash = hashAuthToken(raw);
-  const expiresAt = new Date(Date.now() + TTL_HOURS[type] * 3_600_000);
+  const hours = ttlHours ?? TTL_HOURS[type];
+  const expiresAt = new Date(Date.now() + hours * 3_600_000);
 
   await prisma.$transaction([
     prisma.userAuthToken.updateMany({

@@ -73,10 +73,10 @@ Cuối ngày: Cập nhật đúng shared lifecycle; không nâng state từ scor
 | Ai | Cách vào |
 |----|----------|
 | Super (`ADMIN_SECRET`) | `/admin/ops-leads` + cấp quyền tại `/admin/ops-grants` |
-| Nhân sự telesales | UserAccount (Zalo Mini App hoặc SĐT+MK) **đã được Super duyệt** → Mini App `#/ops` hoặc web `/ops/telesales` |
+| Nhân sự telesales | UserAccount (Zalo) **được Super duyệt** + **email công việc** nhận link đặt MK (72h) → đăng nhập SĐT+MK tại `/ops/telesales` hoặc Mini App `#/ops` |
 | Chỉ `ADMIN_OPS_SECRET` | **Không** đủ quyền telesales |
 
-Quy trình: người dùng mở Mini App / đăng ký SĐT → Super nhập SĐT hoặc Zalo user id → Cấp `TELESALES_CRM` → vào tool.
+Quy trình: người dùng mở Mini App / đăng ký SĐT → Super nhập SĐT hoặc Zalo id **và email công việc** → Cấp `TELESALES_CRM` + gửi email đặt mật khẩu → user đặt MK → đăng nhập web mọi thiết bị. Super có thể **Gửi lại lời mời** nếu mail chưa tới.
 
 **Ranh giới:** gọi / SMS / Zalo / nhật ký = CRM telesales (không full console).  
 **Conversion** chỉ khi đã đàm thoại có nhu cầu rõ + hướng căn/dự án.

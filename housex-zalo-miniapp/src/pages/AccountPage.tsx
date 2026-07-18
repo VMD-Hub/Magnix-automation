@@ -354,14 +354,26 @@ export function AccountPage() {
               ? "Hồ sơ môi giới trên web"
               : "Xem hồ sơ đầy đủ"}
         </button>
+        {user.opsTools?.telesales ? (
+          <div
+            className="card"
+            style={{ marginBottom: 10, padding: 12, background: "#fef7f0" }}
+          >
+            <p style={{ margin: 0, fontSize: 13, fontWeight: 600 }}>
+              Bạn đã được cấp CRM Telesales
+            </p>
+            <p style={{ margin: "6px 0 10px", fontSize: 12, color: "#64748b" }}>
+              Kiểm tra email công việc để đặt mật khẩu (link 72 giờ), rồi đăng
+              nhập web trên mọi máy. Trên Zalo có thể vào tool ngay.
+            </p>
+            <Link className="btn secondary" to="/ops">
+              Mở CRM Telesales
+            </Link>
+          </div>
+        ) : null}
         {canAgent ? (
           <Link className="btn secondary" to="/agent" style={{ marginBottom: 10 }}>
             Vào không gian môi giới
-          </Link>
-        ) : null}
-        {user.opsTools?.telesales ? (
-          <Link className="btn secondary" to="/ops" style={{ marginBottom: 10 }}>
-            CRM Telesales
           </Link>
         ) : null}
         <button type="button" className="btn secondary" onClick={logout}>

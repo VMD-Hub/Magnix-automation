@@ -11,6 +11,21 @@ import {
   opsToolGrantListQuerySchema,
 } from "@/lib/validation/ops-tool-grant";
 
+function mapGrantError(err: OpsToolGrantError) {
+  const status =
+    err.code === "USER_NOT_FOUND"
+      ? 404
+      : err.code === "EMAIL_SEND_FAILED"
+        ? 502
+        : err.code === "EMAIL_IN_USE" ||
+            err.code === "INVALID_EMAIL" ||
+            err.code === "INVALID_PHONE" ||
+            err.code === "VALIDATION"
+          ? 422
+          : 400;
+  return fail(status, err.code, err.message);
+}
+
 export async function GET(req: NextRequest) {
   try {
     if (!isSuperAdminAuthorized(req)) {
@@ -33,24 +48,17 @@ export async function POST(req: NextRequest) {
       return fail(403, "FORBIDDEN", "Chỉ Super Admin được cấp quyền telesales.");
     }
     const body = opsToolGrantCreateSchema.parse(await req.json());
-    const grant = await grantOpsTool({
+    const result = await grantOpsTool({
       phone: body.phone,
       zaloUserId: body.zaloUserId,
+      inviteEmail: body.inviteEmail,
       note: body.note,
       tool: body.tool,
       grantedBy: "admin:super",
     });
-    return ok({ grant });
+    return ok(result);
   } catch (err) {
-    if (err instanceof OpsToolGrantError) {
-      const status =
-        err.code === "USER_NOT_FOUND"
-          ? 404
-          : err.code === "INVALID_PHONE" || err.code === "VALIDATION"
-            ? 422
-            : 400;
-      return fail(status, err.code, err.message);
-    }
+    if (err instanceof OpsToolGrantError) return mapGrantError(err);
     return handleApiError(err);
   }
 }
