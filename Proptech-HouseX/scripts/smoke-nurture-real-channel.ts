@@ -5,14 +5,13 @@
  *   TELESALES_SERVER_SEND_ENABLED=true
  *   SMOKE_NURTURE_REAL_CHANNEL=1
  *
- * Prefer SMS webhook path (safer synthetic). Requires SMS_WEBHOOK_URL configured.
- * OA path requires ZALO_OA_NOTIFY_ENABLED + a lead with zaloUserId — set
- *   SMOKE_NURTURE_CHANNEL=oa and SMOKE_ZALO_USER_ID=...
+ * SMS: set SMS_WEBHOOK_URL, OR leave it empty and the script auto-wires the
+ * local smoke sink (Next.js must have SMOKE_SMS_SINK_ENABLED=true + pm2 restart).
  *
- * Does NOT leave kill switch on. Callers must turn TELESALES_SERVER_SEND_ENABLED
- * back off after the run if it was only enabled for smoke.
+ * OA path: SMOKE_NURTURE_CHANNEL=oa SMOKE_ZALO_USER_ID=...
  *
- * Usage:
+ * Usage (sink path — recommended when no n8n SMS):
+ *   # once in .env: SMOKE_SMS_SINK_ENABLED=true  then build + pm2 restart
  *   TELESALES_SERVER_SEND_ENABLED=true SMOKE_NURTURE_REAL_CHANNEL=1 \
  *     npm run go-live:smoke-nurture-real
  *
@@ -33,6 +32,9 @@ import {
 import { isTelesalesSmsWebhookConfigured } from "../lib/messaging/sms-webhook-provider";
 import { isTelesalesOaSendEnabled } from "../lib/messaging/zalo-oa-provider";
 
+const DEFAULT_SMS_SINK_URL =
+  "http://127.0.0.1:3000/api/admin/smoke/sms-webhook-sink";
+
 function fail(msg: string): never {
   console.error(`FAIL — ${msg}`);
   process.exit(1);
@@ -49,6 +51,57 @@ function assert(cond: unknown, msg: string): asserts cond {
 function realChannelArmed(): boolean {
   const v = process.env.SMOKE_NURTURE_REAL_CHANNEL?.trim().toLowerCase();
   return v === "1" || v === "true" || v === "yes";
+}
+
+/** Empty SMS_WEBHOOK_URL in .env counts as unset — wire local sink for this process. */
+function ensureSmsWebhookForSmoke(): void {
+  const current = process.env.SMS_WEBHOOK_URL?.trim() ?? "";
+  if (current) return;
+  const sinkUrl =
+    process.env.SMOKE_SMS_SINK_URL?.trim() || DEFAULT_SMS_SINK_URL;
+  process.env.SMS_WEBHOOK_URL = sinkUrl;
+  ok(`Auto-wired SMS_WEBHOOK_URL → ${sinkUrl} (smoke sink)`);
+}
+
+async function probeSmsSink(url: string): Promise<void> {
+  if (!url.includes("/api/admin/smoke/sms-webhook-sink")) return;
+  try {
+    const res = await fetch(url, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        type: "telesales.sms",
+        leadId: "probe",
+        phone: "000",
+        text: "probe",
+        correlationId: "smoke-probe",
+        idempotencyKey: "smoke-probe",
+        sentAt: new Date().toISOString(),
+      }),
+      cache: "no-store",
+    });
+    if (res.status === 403) {
+      fail(
+        "SMS smoke sink is DISABLED on the running housex process.\n" +
+          "  In .env set: SMOKE_SMS_SINK_ENABLED=true\n" +
+          "  Then: npm run build && pm2 restart housex\n" +
+          "  Re-run this smoke. Disable SMOKE_SMS_SINK_ENABLED after PASS.",
+      );
+    }
+    if (res.status === 404) {
+      fail(
+        "SMS smoke sink route 404 — pull latest (69fc0f7+) and rebuild:\n" +
+          "  cd /opt/housex && git pull --ff-only && cd Proptech-HouseX\n" +
+          "  npm run build && pm2 restart housex",
+      );
+    }
+  } catch (err) {
+    fail(
+      `Cannot reach SMS webhook at ${url}: ${
+        err instanceof Error ? err.message : String(err)
+      }\n  Is pm2 housex online on :3000?`,
+    );
+  }
 }
 
 async function main() {
@@ -68,16 +121,12 @@ async function main() {
     .toLowerCase();
   const channel = channelEnv === "oa" ? "oa" : "sms";
 
-  if (channel === "sms" && !isTelesalesSmsWebhookConfigured()) {
-    fail(
-      "SMS_WEBHOOK_URL not configured — cannot smoke real SMS channel.\n" +
-        "  Option A: set SMS_WEBHOOK_URL to n8n webhook (HTTP 200).\n" +
-        "  Option B (no carrier): in .env set\n" +
-        "    SMOKE_SMS_SINK_ENABLED=true\n" +
-        "    SMS_WEBHOOK_URL=http://127.0.0.1:3000/api/admin/smoke/sms-webhook-sink\n" +
-        "    then: npm run build && pm2 restart housex\n" +
-        "  Or OA: SMOKE_NURTURE_CHANNEL=oa SMOKE_ZALO_USER_ID=<id>",
-    );
+  if (channel === "sms") {
+    ensureSmsWebhookForSmoke();
+    if (!isTelesalesSmsWebhookConfigured()) {
+      fail("SMS_WEBHOOK_URL still empty after auto-wire — unexpected.");
+    }
+    await probeSmsSink(process.env.SMS_WEBHOOK_URL!.trim());
   }
   if (channel === "oa" && !isTelesalesOaSendEnabled()) {
     fail(
