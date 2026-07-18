@@ -43,6 +43,8 @@ enum BrokerType {
   FREE
   CTV
   AGENCY
+  /// Nhân viên môi giới nội sàn House X — nhận lead Super phân bổ, SOP telesales scoped.
+  INTERNAL
 }
 
 /// ADR-009 — Nguồn hàng. Quyết định lớp xác minh tối thiểu + track vận hành.

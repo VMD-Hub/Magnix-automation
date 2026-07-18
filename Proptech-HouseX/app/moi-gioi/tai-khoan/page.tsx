@@ -77,6 +77,16 @@ export default function BrokerAccountPage() {
           <p className="text-xs text-slate-500">Thả lead & theo dõi pipeline</p>
         </Link>
         <Link
+          href="/moi-gioi/telesales"
+          className="rounded-2xl border border-slate-200 bg-white p-5 hover:border-brand-300"
+        >
+          <Icon.Building className="text-2xl text-brand-600" />
+          <p className="mt-2 font-semibold">Telesales (CTV / Nội sàn)</p>
+          <p className="text-xs text-slate-500">
+            Gọi lead thuộc bạn — không pool Ops
+          </p>
+        </Link>
+        <Link
           href="/moi-gioi/dang-ky-ctv"
           className="rounded-2xl border border-slate-200 bg-white p-5 hover:border-brand-300 sm:col-span-2"
         >

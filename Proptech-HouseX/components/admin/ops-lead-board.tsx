@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { NoxhWizardOpsSummary } from "@/components/admin/noxh-wizard-ops-summary";
+import { AssignInternalBrokerPanel } from "@/components/admin/assign-internal-broker-panel";
 import {
   OpsHotLeadCreateForm,
   OpsLeadTelesalesPanel,
@@ -263,6 +264,16 @@ export function OpsLeadBoard() {
               onStatusMaybeChanged={() => {
                 void load();
                 void loadDetail(selectedId);
+              }}
+            />
+
+            <AssignInternalBrokerPanel
+              leadId={selectedId}
+              onAssigned={() => {
+                setSelectedId(null);
+                setDetail(null);
+                notifyAdminQueueRefresh();
+                void load();
               }}
             />
 

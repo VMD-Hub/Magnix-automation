@@ -68,17 +68,29 @@ Cuối ngày: Cập nhật đúng shared lifecycle; không nâng state từ scor
 
 ### 4b. Telesales CRM (mobile-first) — SOP Phase 1
 
-**Quyền truy cập**
+**Ba lane (RBAC tách — không lẫn queue)**
+
+| Persona | Ai | Queue | Entry |
+|---------|-----|-------|-------|
+| **Ops** | `OpsToolGrant TELESALES_CRM` hoặc Super | Platform pool (`assignedBrokerId = null`, exclude referral/ctv_claim) | `/ops/telesales`, Mini App `#/ops` |
+| **Nội sàn** | `Broker.brokerType = INTERNAL` | Lead Super gán (`assignedBrokerId = self`) | `/moi-gioi/telesales`, Mini App `#/agent/telesales` |
+| **CTV** | `BrokerType CTV` | Lead/hồ sơ thuộc CTV only | Cùng agent telesales — **không** `#/ops` |
+
+**Dual grant:** tài khoản vừa CTV vừa `TELESALES_CRM` được phép nhưng lane tách — `#/ops` chỉ pool Ops; `#/agent/telesales` chỉ own/INTERNAL. CTV **không** đọc pool `assignedBrokerId = null`. R4 / claim window không đổi.
+
+**Quyền truy cập Ops**
 
 | Ai | Cách vào |
 |----|----------|
 | Super (`ADMIN_SECRET`) | `/admin/ops-leads` + cấp quyền tại `/admin/ops-grants` |
 | Nhân sự telesales | UserAccount được Super duyệt + email nhận thông báo → đặt MK trong **Tài khoản** (OTP 6 số) nếu chưa có → `/ops/telesales` hoặc Mini App `#/ops` |
 | Chỉ `ADMIN_OPS_SECRET` | **Không** đủ quyền telesales |
+| Nội sàn | Super đánh dấu INTERNAL tại `/admin/ops-grants` → gán lead trên board Ops → gọi trên lane agent |
+| CTV | Onboard + entitlement như hiện tại — SOP gọi chỉ trên lead/case own; unmask SĐT chỉ own |
 
-Quy trình: mở Mini App / đăng ký → Super cấp `TELESALES_CRM` + email thông báo → user **đặt mật khẩu tài khoản** (OTP, không magic-link) trong Tài khoản → đăng nhập web mọi thiết bị. **MK thuộc tài khoản**, không phải mật khẩu riêng của tool.
+Quy trình Ops: mở Mini App / đăng ký → Super cấp `TELESALES_CRM` + email thông báo → user **đặt mật khẩu tài khoản** (OTP, không magic-link) trong Tài khoản → đăng nhập web mọi thiết bị. **MK thuộc tài khoản**, không phải mật khẩu riêng của tool.
 
-**Ranh giới:** gọi / SMS / Zalo / nhật ký = CRM telesales (không full console).  
+**Ranh giới:** gọi / SMS / Zalo / nhật ký = CRM telesales (không full console). Phase 2 server OA/SMS **chỉ Ops**.  
 **Conversion** chỉ khi đã đàm thoại có nhu cầu rõ + hướng căn/dự án.
 
 ```

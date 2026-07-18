@@ -91,6 +91,12 @@ export function AgentHomePage() {
         <span className="tool-card-cta">Mở hồ sơ →</span>
       </Link>
 
+      <Link to="/agent/telesales" className="card tool-card">
+        <h2>Telesales</h2>
+        <p>Gọi lead thuộc bạn / nội sàn — không pool Ops</p>
+        <span className="tool-card-cta">Mở queue →</span>
+      </Link>
+
       <Link to="/agent/thong-bao" className="card tool-card">
         <h2>
           Thông báo

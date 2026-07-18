@@ -10,7 +10,7 @@ export const listingStatusEnum = z.enum([
   "SOLD",
   "REJECTED",
 ]);
-export const brokerTypeEnum = z.enum(["FREE", "CTV", "AGENCY"]);
+export const brokerTypeEnum = z.enum(["FREE", "CTV", "AGENCY", "INTERNAL"]);
 
 const mediaCreateSchema = z.object({
   url: z.string().url(),
