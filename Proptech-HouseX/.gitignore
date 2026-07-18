@@ -46,3 +46,6 @@ next-env.d.ts
 
 # Zalo OA refresh token sau rotate (auto-write, không commit)
 .zalo-oa-refresh
+
+# Local/VPS smoke & KPI reports (IDs only — still keep out of git)
+/reports/

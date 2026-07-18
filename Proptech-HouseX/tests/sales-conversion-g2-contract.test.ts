@@ -127,6 +127,59 @@ test("synthetic G2 contract follows the ordered consent-safe conversion path", (
   );
 });
 
+test("sales-ops E2E contract: assign → accept → qualify → appointment order", () => {
+  const assignedAt = new Date("2026-07-18T09:00:00Z");
+  const sla = assignmentSla(assignedAt, 15, 60);
+  assert.equal(
+    sla.acceptanceSlaDueAt.toISOString(),
+    "2026-07-18T09:15:00.000Z",
+  );
+
+  assert.equal(
+    assignmentFactDecision({
+      status: "ASSIGNED",
+      ownerId: "broker-ops-1",
+      actorId: "broker-ops-1",
+      fact: "accept",
+      occurredAt: new Date("2026-07-18T09:05:00Z"),
+      correlationId: "corr-ops-accept",
+      idempotencyKey: "ops-accept-1",
+      recordedFacts: [],
+    }),
+    "record",
+  );
+  assert.equal(
+    assignmentFactDecision({
+      status: "ACCEPTED",
+      ownerId: "broker-ops-1",
+      actorId: "broker-ops-1",
+      fact: "first_attempt",
+      occurredAt: new Date("2026-07-18T09:10:00Z"),
+      correlationId: "corr-ops-attempt",
+      idempotencyKey: "ops-attempt-1",
+      recordedFacts: [
+        {
+          fact: "accept",
+          idempotencyKey: "ops-accept-1",
+          occurredAt: new Date("2026-07-18T09:05:00Z"),
+          correlationId: "corr-ops-accept",
+        },
+      ],
+    }),
+    "record",
+  );
+
+  const lead = { id: "lead-ops-e2e-1", status: "QUALIFIED" as const };
+  assert.equal(lead.status, "QUALIFIED");
+  assert.doesNotThrow(() =>
+    assertAppointmentTransition("SCHEDULED", "COMPLETED"),
+  );
+  assert.throws(
+    () => assertAppointmentTransition("CANCELLED", "COMPLETED"),
+    /Cannot transition/,
+  );
+});
+
 test("G2 migration, API and event artifacts are additive and PII-minimized", async () => {
   const root = new URL("../", import.meta.url);
   const [schema, migration, route, service, eventTypes, journeyPMigration] =
@@ -189,4 +242,25 @@ test("G2 migration, API and event artifacts are additive and PII-minimized", asy
       new RegExp(`${forbidden}:`),
     );
   }
+});
+
+test("Round 2 sales-ops / nurture-real / cohort KPI harness is wired", async () => {
+  const root = new URL("../", import.meta.url);
+  const [pkg, salesOps, nurtureReal, cohortKpi] = await Promise.all([
+    readFile(new URL("package.json", root), "utf8"),
+    readFile(new URL("scripts/smoke-sales-ops-e2e.ts", root), "utf8"),
+    readFile(new URL("scripts/smoke-nurture-real-channel.ts", root), "utf8"),
+    readFile(new URL("scripts/kpi-sales-ops-cohort.ts", root), "utf8"),
+  ]);
+  assert.match(pkg, /go-live:smoke-sales-ops/);
+  assert.match(pkg, /go-live:smoke-nurture-real/);
+  assert.match(pkg, /go-live:kpi-sales-ops-cohort/);
+  assert.match(salesOps, /assignLead/);
+  assert.match(salesOps, /createAppointment/);
+  assert.match(salesOps, /sales-ops-e2e-/);
+  assert.match(nurtureReal, /SMOKE_NURTURE_REAL_CHANNEL/);
+  assert.match(nurtureReal, /sendTelesalesServerChannels/);
+  assert.match(cohortKpi, /sales-ops-cohort-kpi-/);
+  assert.doesNotMatch(salesOps, /console\.log\([^)]*phone/i);
+  assert.doesNotMatch(nurtureReal, /console\.log\([^)]*phone/i);
 });

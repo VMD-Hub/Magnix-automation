@@ -72,8 +72,11 @@ consent proof và PII thật không được đưa vào bằng chứng.
 
 **Status**
 
-- `repo_status: PLANNED`
-- `runtime_evidence: NOT_PROVIDED`
+- `repo_status: REPO-DONE` (ConsentRecord + conversion consents API; covered by
+  `go-live:smoke-sales-ops` consent step and SC-6 smoke grant/withdraw)
+- `runtime_evidence: NOT_PROVIDED` for full sales-ops E2E path — harness ready
+  (`scripts/smoke-sales-ops-e2e.ts`); promote after VPS PASS. UID ingest + SC-6
+  consent gate already PRODUCTION-PROVEN separately (see evidence doc).
 - Target gate: G1 authoritative foundation.
 
 **Owner boundary**
@@ -139,8 +142,10 @@ consent proof và PII thật không được đưa vào bằng chứng.
 
 **Status**
 
-- `repo_status: PLANNED`
-- `runtime_evidence: NOT_PROVIDED`
+- `repo_status: REPO-DONE` (LeadAssignment + facts accept/first_attempt/first_connected;
+  Ops/INTERNAL/CTV telesales lanes)
+- `runtime_evidence: NOT_PROVIDED` — promote with `go-live:smoke-sales-ops` VPS PASS
+  (assign → accept → SLA clocks).
 - Target gate: G1 after SC-0 controls.
 
 **Owner boundary**
@@ -202,8 +207,9 @@ consent proof và PII thật không được đưa vào bằng chứng.
 
 **Status**
 
-- `repo_status: PLANNED`
-- `runtime_evidence: NOT_PROVIDED`
+- `repo_status: REPO-DONE` (BuyerProfile/BuyerMatch + G2 migration; recommendation-only)
+- `runtime_evidence: NOT_PROVIDED` for Ops daily matching — profile upsert covered by
+  `go-live:smoke-sales-ops`; BuyerMatch APIs on prod without full Ops smoke.
 - Target gate: G1 model, G2 journey adoption.
 
 **Owner boundary**
@@ -260,8 +266,9 @@ consent proof và PII thật không được đưa vào bằng chứng.
 
 **Status**
 
-- `repo_status: PLANNED`
-- `runtime_evidence: NOT_PROVIDED`
+- `repo_status: REPO-DONE` (SalesActivity + Appointment APIs/services)
+- `runtime_evidence: NOT_PROVIDED` — promote with `go-live:smoke-sales-ops` VPS PASS
+  (activity → schedule → COMPLETED).
 - Target gate: G1 authoritative foundation.
 
 **Owner boundary**
@@ -444,7 +451,10 @@ consent proof và PII thật không được đưa vào bằng chứng.
 
 - `repo_status: REPO-DONE`
 - `runtime_evidence: PRODUCTION-PROVEN` (2026-07-18 smoke
-  `smoke-sc6-1784348544598` — dry-run; see `SALES_CONVERSION_G1_G2_EVIDENCE.md`)
+  `smoke-sc6-1784348544598` — dry-run; see `SALES_CONVERSION_G1_G2_EVIDENCE.md`).
+  Real channel send: harness `go-live:smoke-nurture-real` (fail-closed dual flag);
+  `runtime_evidence` for real OA/SMS remains **NOT_PROVIDED** until VPS PASS with
+  `SMOKE_NURTURE_REAL_CHANNEL=1`.
 - Target gate: G2 after SC-0 and SC-5.
 
 **Owner boundary**

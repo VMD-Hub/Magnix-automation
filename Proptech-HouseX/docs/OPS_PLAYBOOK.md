@@ -138,6 +138,44 @@ Không tạo Task «Gọi lại» trùng khi đã có task mở cùng lead.
 
 API: `POST /api/admin/ops-leads/:id/server-send` (cùng grant telesales + `Idempotency-Key`).
 
+### 4b-3. Sales Gap Round 2 — Ops daily cohort (Wave 2)
+
+**Cohort start:** 2026-07-18 · **Window:** 5 ngày làm việc · **Mục tiêu:** prove đường
+assign → chip kết quả → QUALIFIED → appointment trên conversion surface.
+
+| Vai trò | Số lượng | Entry |
+|---------|----------|-------|
+| Ops (`TELESALES_CRM`) | 1–2 | `/ops/telesales` hoặc Mini App `#/ops` |
+| INTERNAL (tuỳ chọn) | 0–1 | Super gán lead → `/moi-gioi/telesales` |
+
+**Checklist mỗi lead (ghi hệ thống, không Sheet):**
+
+1. Claim/assign (Ops pool hoặc Super gán INTERNAL) — đợi accept nếu có assignment SLA.
+2. Gọi + chip kết quả (`CONNECTED` / `NO_ANSWER` / …).
+3. Khi có nhu cầu rõ → `QUALIFIED`.
+4. Tạo appointment (site visit / call-back) trên `/admin/conversion` hoặc API conversion.
+5. Next action + note; không bypass proposal/deposit nếu chưa đủ bằng chứng Journey P.
+
+**KPI aggregate (không PII)** — chạy trên VPS:
+
+```bash
+COHORT_DAYS=5 npm run go-live:kpi-sales-ops-cohort
+```
+
+Theo dõi: accept rate, % lead có activity, % QUALIFIED có appointment.
+File: `reports/sales-ops-cohort-kpi-*.json`.
+
+**E2E harness (Wave 1)** trước khi đo cohort: `npm run go-live:smoke-sales-ops`.
+
+**Nurture kênh thật (Wave 3)** — chỉ sau Wave 1 PASS + consent:
+
+```bash
+TELESALES_SERVER_SEND_ENABLED=true SMOKE_NURTURE_REAL_CHANNEL=1 \
+  SMOKE_NURTURE_CHANNEL=sms npm run go-live:smoke-nurture-real
+```
+
+Tắt `TELESALES_SERVER_SEND_ENABLED` ngay sau smoke.
+
 ---
 
 ## 5. Hồ sơ NOXH — milestone M1→M5

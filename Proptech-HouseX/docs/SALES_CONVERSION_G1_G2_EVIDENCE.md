@@ -152,13 +152,19 @@ Local result on 2026-07-17:
   resolver cycle was observed in this deployment session.
 - **NOT PASSED — full sales journey E2E:** production UID ingest is proven, but the
   complete assignment → qualification → appointment path still needs a controlled
-  production/staging fixture and DB assertions.
+  production/staging fixture and DB assertions. **Harness Round 2:**
+  `scripts/smoke-sales-ops-e2e.ts` · `npm run go-live:smoke-sales-ops` (repo contract
+  test added). Run on VPS after pull; paste report into dated block below.
 - **PASSED — Journey P SC-4/SC-5 smoke (2026-07-18):** see production block above;
   SC-4/SC-5 `runtime_evidence` = `PRODUCTION-PROVEN` (Journey P). A/S COMMITTED
   remains fail-closed.
 - **PASSED — SC-6 nurture dry-run (2026-07-18):** see production block below;
   SC-6 `runtime_evidence` = `PRODUCTION-PROVEN` (consent gate + enroll/dispatch/cancel;
   no real channel send).
+- **NOT PASSED — SC-6 real channel:** harness
+  `scripts/smoke-nurture-real-channel.ts` · `npm run go-live:smoke-nurture-real`
+  (requires `TELESALES_SERVER_SEND_ENABLED=true` + `SMOKE_NURTURE_REAL_CHANNEL=1`;
+  prefer SMS webhook). Disable kill switch after smoke.
 
 ### Production SC-6 nurture smoke — checklist
 
@@ -197,6 +203,48 @@ Rollback: Stop nurture on `/admin/conversion` (cancel enrollment) — audit reta
 
 - SC-6 `runtime_evidence`: **PRODUCTION-PROVEN** (dry-run; channel delivery still
   Magnix/n8n responsibility)
+
+### Production Sales Ops E2E smoke — checklist (Round 2 Wave 1)
+
+```bash
+cd /opt/housex && git pull --ff-only
+cd /opt/housex/Proptech-HouseX
+npm run build && pm2 restart housex   # if pull changed app code
+npm run go-live:smoke-sales-ops
+```
+
+Script: `scripts/smoke-sales-ops-e2e.ts` · npm `go-live:smoke-sales-ops`.
+Path covered: consent → assign → accept → first_attempt/connected → qualify →
+BuyerProfile → appointment SCHEDULED→COMPLETED. Soft-marks lead LOST after.
+Rollback: none required (additive audit retained; disposable broker cleaned if seeded).
+
+### Production Sales Ops E2E smoke — pending VPS
+
+- Result: **NOT RUN** from agent environment (2026-07-18) — SSH to VPS unreachable;
+  local Docker Postgres not available. Harness + contract test are REPO-DONE.
+- After VPS PASS: set SC-0…3 `runtime_evidence` = `PRODUCTION-PROVEN` with
+  correlation ID from `reports/sales-ops-e2e-*.json`; flip gate
+  **NOT PASSED — full sales journey E2E** → PASSED.
+
+### Production SC-6 real-channel smoke — checklist (Round 2 Wave 3)
+
+```bash
+cd /opt/housex/Proptech-HouseX
+# Enable kill switch only for this run:
+# TELESALES_SERVER_SEND_ENABLED=true  (in .env or one-shot env)
+# SMS_WEBHOOK_URL must be configured for sms channel
+TELESALES_SERVER_SEND_ENABLED=true SMOKE_NURTURE_REAL_CHANNEL=1 \
+  SMOKE_NURTURE_CHANNEL=sms npm run go-live:smoke-nurture-real
+# Then set TELESALES_SERVER_SEND_ENABLED=false and pm2 restart
+```
+
+### Ops cohort KPI (Round 2 Wave 2)
+
+```bash
+COHORT_DAYS=5 npm run go-live:kpi-sales-ops-cohort
+```
+
+Writes `reports/sales-ops-cohort-kpi-*.json` (aggregate counts/rates only).
 
 This record proves the deployed foundation and UID ingest path. It does not promote
 unexecuted content, Telegram, or full sales-journey workflows beyond **STAGING**.
