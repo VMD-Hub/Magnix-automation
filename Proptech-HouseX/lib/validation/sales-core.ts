@@ -232,6 +232,56 @@ export const funnelQuerySchema = z
   })
   .strict();
 
+export const opportunityListQuerySchema = z
+  .object({
+    journey: z.enum(["A", "S", "P"]).default("P"),
+    stage: z
+      .enum([
+        "OPEN",
+        "DISCOVERY",
+        "ACTIVE",
+        "COMMITTED",
+        "WON",
+        "LOST",
+        "CANCELLED",
+      ])
+      .optional(),
+    limit: z.coerce.number().int().min(1).max(100).default(50),
+  })
+  .strict();
+
+export const nurtureEligibilityQuerySchema = z
+  .object({
+    leadId: stableId,
+    purpose: shortText.default("marketing"),
+    channel: shortText.default("zalo"),
+  })
+  .strict();
+
+export const nurtureEnrollmentCommandSchema = z
+  .object({
+    action: z.enum(["enroll", "cancel"]).default("enroll"),
+    leadId: stableId,
+    purpose: shortText.default("marketing"),
+    channel: shortText,
+    scriptId: shortText.nullish(),
+    cohortKey: shortText.nullish(),
+    opportunityId: stableId.nullish(),
+    actorId: stableId,
+    correlationId: stableId,
+  })
+  .strict();
+
+export const nurtureDispatchCommandSchema = z
+  .object({
+    enrollmentId: stableId,
+    status: z.enum(["SENT", "FAILED", "SKIPPED"]),
+    actorId: stableId,
+    occurredAt,
+    correlationId: stableId,
+  })
+  .strict();
+
 export const activityCommandSchema = z
   .object({
     leadId: stableId,

@@ -13,6 +13,7 @@ export const OPS_ADMIN_PAGE_PREFIXES = [
   "/admin/inbound-leads",
   "/admin/noxh-cases",
   "/admin/playbook",
+  "/admin/conversion",
 ] as const;
 
 /** API Ops được phép (ngoài /api/admin/session). */
@@ -22,6 +23,7 @@ export const OPS_ADMIN_API_PREFIXES = [
   "/api/admin/conflicts",
   "/api/admin/inbound-leads",
   "/api/admin/noxh-cases",
+  "/api/admin/conversion",
 ] as const;
 
 export function isOpsAdminPage(pathname: string): boolean {

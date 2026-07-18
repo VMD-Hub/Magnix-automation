@@ -11,6 +11,7 @@ import {
   type LeadContactChannels,
 } from "@/lib/leads/ops-meta";
 import { fromPrismaLeadSegment } from "@/lib/rules/lead-segment";
+import { getEffectiveConsent } from "@/lib/sales-core/service";
 
 type Tx = Prisma.TransactionClient;
 
@@ -103,6 +104,7 @@ export function buildLeadNurturePayload(input: {
 
 /**
  * Enqueue nurture outbox nếu script auto (oa/zalo/telegram) và chưa gửi trigger này.
+ * SC-6: yêu cầu effective marketing consent trước khi enqueue.
  * Trả về opsMeta đã merge dispatch log — null nếu không enqueue.
  */
 export async function tryEnqueueLeadNurture(
@@ -122,6 +124,31 @@ export async function tryEnqueueLeadNurture(
   if (hasNurtureBeenEnqueued(input.opsMeta, scriptId, input.trigger)) {
     return null;
   }
+
+  const script = getNurtureScript(scriptId);
+  if (!script || !isAutoNurtureChannel(script.channel)) return null;
+
+  // SC-6 gate: purpose=marketing + script channel must have effective consent.
+  const consent = await getEffectiveConsent({
+    subjectType: "LEAD",
+    subjectId: input.leadId,
+    purpose: "marketing",
+    channel: script.channel,
+  });
+  if (!consent.granted) {
+    return null;
+  }
+
+  const cancelled = await tx.nurtureEnrollment.findFirst({
+    where: {
+      leadId: input.leadId,
+      purpose: "marketing",
+      channel: script.channel,
+      status: "CANCELLED",
+    },
+    select: { id: true },
+  });
+  if (cancelled) return null;
 
   const ops = readLeadOpsMeta(input.opsMeta);
   const payload = buildLeadNurturePayload({

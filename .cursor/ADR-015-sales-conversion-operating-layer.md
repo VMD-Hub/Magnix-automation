@@ -195,7 +195,12 @@ tạo side effect lặp.
 **G2 Journey P slice (SC-4/SC-5, repo):** `ProposalSnapshot` + `ConversionOutcome` dưới
 `/api/admin/conversion/{proposals,outcomes,funnel}`; bật bằng
 `HOUSEX_CONVERSION_G2_JOURNEY_P=true`. UnitBooking vẫn là authority deposit. A/S
-COMMITTED vẫn fail-closed. Runtime evidence production: chưa.
+COMMITTED vẫn fail-closed. Runtime evidence production: chờ
+`go-live:smoke-journey-p` trên VPS.
+
+**SC-6 (repo):** `NurtureEnrollment` + eligibility/enroll/dispatch APIs; `lead.nurture`
+v1 vẫn enqueue nhưng fail-closed nếu thiếu marketing consent hoặc enrollment CANCELLED.
+Admin board: `/admin/conversion`.
 
 Mỗi gate cần review schema/API riêng trước implementation. G2 không được bắt đầu cho
 journey nào khi G1 consent/idempotency controls chưa đạt.

@@ -104,8 +104,15 @@ export const ADMIN_NAV_GROUPS: AdminNavGroup[] = [
   {
     id: "sales",
     label: "Sales & CTV",
-    roles: ["super"],
+    roles: ["super", "ops"],
     items: [
+      {
+        href: "/admin/conversion",
+        label: "Conversion",
+        title: "Journey P proposal / commit / outcome",
+        roles: ["super", "ops"],
+        matchPrefix: true,
+      },
       {
         href: "/admin/unit-bookings",
         label: "Giữ suất F1",

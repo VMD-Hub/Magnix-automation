@@ -32,7 +32,26 @@ runtime execution evidence; deployment/activation alone is not a functional smok
 6. Outbox: `opportunity.stage_changed` + `conversion.won`/`conversion.lost` (minimized)
 
 A/S COMMITTED remains fail-closed. Runtime/production evidence for this slice:
-`NOT_PROVIDED`.
+see **Production Journey P smoke — checklist** below (fill after VPS run).
+
+### Production Journey P smoke — checklist (Phase 1)
+
+Run on House X VPS after pull of G2 commit:
+
+```bash
+cd /opt/housex && git pull --ff-only
+cd /opt/housex/Proptech-HouseX
+# Ensure .env has HOUSEX_CONVERSION_G2_JOURNEY_P=true (keep on after pass)
+grep '^HOUSEX_CONVERSION_G2_JOURNEY_P=' .env
+npm run build && pm2 restart housex
+HOUSEX_CONVERSION_G2_JOURNEY_P=true npm run go-live:smoke-journey-p
+```
+
+Record in the dated production block below: commit SHA, flag state, report JSON path
+under `reports/journey-p-smoke-*.json` (IDs only), confirmer, rollback owner
+(`HOUSEX_CONVERSION_G2_JOURNEY_P=false` + PM2 restart).
+
+Script: `scripts/smoke-journey-p-conversion.ts` · npm `go-live:smoke-journey-p`.
 
 ## Local verification commands
 
@@ -104,6 +123,12 @@ Local result on 2026-07-17:
 - **NOT PASSED — full sales journey E2E:** production UID ingest is proven, but the
   complete assignment → qualification → appointment path still needs a controlled
   production/staging fixture and DB assertions.
+- **AWAITING — Journey P SC-4/SC-5 smoke:** run
+  `HOUSEX_CONVERSION_G2_JOURNEY_P=true npm run go-live:smoke-journey-p` on VPS,
+  attach `reports/journey-p-smoke-*.json` (IDs only), then flip SC-4/SC-5
+  `runtime_evidence` to `PRODUCTION-PROVEN`.
+- **SC-6 REPO-DONE:** `NurtureEnrollment` / dispatch APIs + consent gate on
+  `tryEnqueueLeadNurture`; UI panel on `/admin/conversion`. Runtime dry-run pending.
 
 This record proves the deployed foundation and UID ingest path. It does not promote
 unexecuted content, Telegram, or full sales-journey workflows beyond **STAGING**.

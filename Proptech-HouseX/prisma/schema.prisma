@@ -181,6 +181,20 @@ enum OutcomeReferenceType {
   DEPOSIT
 }
 
+enum NurtureEnrollmentStatus {
+  ELIGIBLE
+  ENROLLED
+  SUPPRESSED
+  COMPLETED
+  CANCELLED
+}
+
+enum NurtureDispatchStatus {
+  SENT
+  FAILED
+  SKIPPED
+}
+
 /**
  * Phân khúc intent Khách — two lanes Mini App / CRM.
  */
@@ -707,6 +721,7 @@ model Lead {
   opportunities         Opportunity[]
   proposalSnapshots     ProposalSnapshot[]
   conversionOutcomes    ConversionOutcome[]
+  nurtureEnrollments    NurtureEnrollment[]
   salesActivities       SalesActivity[]
   appointments          Appointment[]
 
@@ -970,6 +985,46 @@ model ConversionOutcome {
   @@index([leadId, occurredAt(sort: Desc)])
   @@index([journey, result])
   @@map("conversion_outcomes")
+}
+
+/// ADR-015 SC-6 — consent-safe nurture enrollment (subject = leadId only).
+model NurtureEnrollment {
+  id             String                  @id @default(uuid())
+  leadId         String                  @map("lead_id")
+  opportunityId  String?                 @map("opportunity_id")
+  purpose        String
+  channel        String
+  status         NurtureEnrollmentStatus @default(ENROLLED)
+  scriptId       String?                 @map("script_id")
+  cohortKey      String?                 @map("cohort_key")
+  actorId        String                  @map("actor_id")
+  correlationId  String                  @map("correlation_id")
+  idempotencyKey String                  @unique @map("idempotency_key")
+  createdAt      DateTime                @default(now()) @map("created_at")
+  updatedAt      DateTime                @updatedAt @map("updated_at")
+
+  lead      Lead              @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  dispatches NurtureDispatch[]
+
+  @@index([leadId, purpose, channel])
+  @@index([status, updatedAt])
+  @@map("nurture_enrollments")
+}
+
+model NurtureDispatch {
+  id             String                @id @default(uuid())
+  enrollmentId   String                @map("enrollment_id")
+  status         NurtureDispatchStatus
+  actorId        String                @map("actor_id")
+  occurredAt     DateTime              @map("occurred_at")
+  correlationId  String                @map("correlation_id")
+  idempotencyKey String                @unique @map("idempotency_key")
+  createdAt      DateTime              @default(now()) @map("created_at")
+
+  enrollment NurtureEnrollment @relation(fields: [enrollmentId], references: [id], onDelete: Cascade)
+
+  @@index([enrollmentId, occurredAt(sort: Desc)])
+  @@map("nurture_dispatches")
 }
 
 /// Append-only sales timeline. Notes remain protected and are excluded from events.

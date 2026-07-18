@@ -110,6 +110,25 @@ export interface OutboxPayloads {
     correlationId: string;
     schemaVersion: 1;
   };
+  /** SC-6 — eligibility check; no contact PII. Maps alongside lead.nurture v1. */
+  "nurture.eligibility_checked": {
+    leadId: string;
+    purpose: string;
+    channel: string;
+    eligible: boolean;
+    suppressionReason: string | null;
+    correlationId: string;
+    schemaVersion: 1;
+  };
+  /** SC-6 — dispatch audit writeback. */
+  "nurture.dispatch_recorded": {
+    enrollmentId: string;
+    dispatchId: string;
+    leadId: string;
+    status: "SENT" | "FAILED" | "SKIPPED";
+    correlationId: string;
+    schemaVersion: 1;
+  };
   /** UID acquisition promoted to a platform lead; intentionally contains no PII. */
   "acquisition.touch_promoted": {
     touchId: string;

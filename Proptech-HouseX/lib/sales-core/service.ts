@@ -19,6 +19,7 @@ import {
   assertCommitEvidence,
   assertGenericActivityType,
   assertJourneyPConversionEnabled,
+  assertMarketingDeliveryAllowed,
   assertMinimizedEventPayload,
   assertNoxhCaseAllowsCommit,
   assertOpportunityTransition,
@@ -1274,7 +1275,7 @@ export async function createProposalSnapshot(input: {
           price: true,
           depositBookingId: true,
           deletedAt: true,
-          project: { select: { status: true, type: true } },
+          project: { select: { status: true, projectType: true } },
         },
       });
       if (!unit || unit.deletedAt) {
@@ -1282,7 +1283,7 @@ export async function createProposalSnapshot(input: {
       }
       const projectGate = assertProjectAcceptsBookings({
         projectStatus: unit.project.status,
-        projectType: unit.project.type,
+        projectType: unit.project.projectType,
       });
       if (!projectGate.ok) {
         throw new SalesCoreRuleError(projectGate.code, projectGate.message);
@@ -1662,6 +1663,109 @@ export async function getConversionFunnel(input?: { journey?: SalesJourney }) {
   };
 }
 
+export async function listOpportunities(input: {
+  journey?: SalesJourney;
+  stage?: OpportunityStage;
+  limit?: number;
+}) {
+  assertJourneyPConversionEnabled(isJourneyPG2Enabled());
+  const limit = Math.min(Math.max(input.limit ?? 50, 1), 100);
+  const items = await prisma.opportunity.findMany({
+    where: {
+      ...(input.journey ? { journey: input.journey } : {}),
+      ...(input.stage ? { stage: input.stage } : {}),
+    },
+    orderBy: { updatedAt: "desc" },
+    take: limit,
+    select: {
+      id: true,
+      leadId: true,
+      journey: true,
+      stage: true,
+      projectRef: true,
+      listingRef: true,
+      unitRef: true,
+      reason: true,
+      updatedAt: true,
+      createdAt: true,
+    },
+  });
+  return { items, limit };
+}
+
+export async function getOpportunitySummary(opportunityId: string) {
+  assertJourneyPConversionEnabled(isJourneyPG2Enabled());
+  const opportunity = await prisma.opportunity.findUnique({
+    where: { id: opportunityId },
+    select: {
+      id: true,
+      leadId: true,
+      journey: true,
+      stage: true,
+      projectRef: true,
+      listingRef: true,
+      unitRef: true,
+      reason: true,
+      updatedAt: true,
+      createdAt: true,
+    },
+  });
+  if (!opportunity) {
+    throw new SalesCoreRuleError("NOT_FOUND", "Opportunity not found.");
+  }
+  const [proposals, outcome] = await Promise.all([
+    prisma.proposalSnapshot.findMany({
+      where: { opportunityId },
+      orderBy: { createdAt: "desc" },
+      take: 10,
+      select: {
+        id: true,
+        projectRef: true,
+        unitRef: true,
+        unitCode: true,
+        unitStatus: true,
+        price: true,
+        currency: true,
+        termsVersion: true,
+        generatedAt: true,
+        createdAt: true,
+      },
+    }),
+    prisma.conversionOutcome.findUnique({
+      where: { opportunityId },
+      select: {
+        id: true,
+        result: true,
+        reasonCode: true,
+        referenceType: true,
+        referenceId: true,
+        value: true,
+        currency: true,
+        occurredAt: true,
+      },
+    }),
+  ]);
+  return {
+    opportunity,
+    proposals: proposals.map((row) => ({
+      ...row,
+      price: String(row.price),
+    })),
+    outcome: outcome
+      ? {
+          id: outcome.id,
+          result: outcome.result,
+          reasonCode: outcome.reasonCode,
+          referenceType: outcome.referenceType,
+          referenceId: outcome.referenceId,
+          hasValue: outcome.value != null,
+          currency: outcome.currency,
+          occurredAt: outcome.occurredAt,
+        }
+      : null,
+  };
+}
+
 export async function appendSalesActivity(input: {
   leadId: string;
   opportunityId?: string | null;
@@ -1956,4 +2060,269 @@ async function enqueueAppointmentEvent(
       occurredAt,
     },
   );
+}
+
+export async function checkNurtureEligibility(input: {
+  leadId: string;
+  purpose: string;
+  channel: string;
+  correlationId?: string;
+}) {
+  const lead = await prisma.lead.findUnique({
+    where: { id: input.leadId },
+    select: { id: true, status: true },
+  });
+  if (!lead) throw new SalesCoreRuleError("NOT_FOUND", "Lead not found.");
+
+  const cancelled = await prisma.nurtureEnrollment.findFirst({
+    where: {
+      leadId: input.leadId,
+      purpose: input.purpose,
+      channel: input.channel,
+      status: "CANCELLED",
+    },
+    orderBy: { updatedAt: "desc" },
+  });
+  if (cancelled) {
+    return {
+      eligible: false,
+      granted: false,
+      action: null as string | null,
+      suppressionReason: "ENROLLMENT_CANCELLED",
+    };
+  }
+
+  const consent = await getEffectiveConsent({
+    subjectType: "LEAD",
+    subjectId: input.leadId,
+    purpose: input.purpose,
+    channel: input.channel,
+  });
+  let eligible = consent.granted;
+  let suppressionReason: string | null = consent.granted
+    ? null
+    : "CONSENT_NOT_GRANTED";
+  if (eligible && lead.status === "WON") {
+    eligible = false;
+    suppressionReason = "LEAD_ALREADY_WON";
+  }
+
+  if (input.correlationId) {
+    const payload = {
+      leadId: input.leadId,
+      purpose: input.purpose,
+      channel: input.channel,
+      eligible,
+      suppressionReason,
+      correlationId: input.correlationId,
+      schemaVersion: 1 as const,
+    };
+    assertMinimizedEventPayload(payload);
+    await prisma.$transaction(async (tx) => {
+      await enqueueEvent(
+        tx,
+        "nurture.eligibility_checked",
+        payload,
+        `nurture.eligibility_checked:${input.leadId}:${input.purpose}:${input.channel}:${input.correlationId}`,
+        {
+          aggregateType: "lead",
+          aggregateId: input.leadId,
+          correlationId: input.correlationId!,
+        },
+      );
+    });
+  }
+
+  return {
+    eligible,
+    granted: consent.granted,
+    action: consent.action,
+    suppressionReason,
+  };
+}
+
+export async function enrollNurture(input: {
+  leadId: string;
+  purpose: string;
+  channel: string;
+  scriptId?: string | null;
+  cohortKey?: string | null;
+  opportunityId?: string | null;
+  actorId: string;
+  correlationId: string;
+  idempotencyKey: string;
+  action?: "enroll" | "cancel";
+}) {
+  const action = input.action ?? "enroll";
+  if (action === "cancel") {
+    return prisma.$transaction(async (tx) => {
+      const prior = await tx.nurtureEnrollment.findUnique({
+        where: { idempotencyKey: input.idempotencyKey },
+      });
+      if (prior) {
+        if (
+          prior.leadId !== input.leadId ||
+          prior.purpose !== input.purpose ||
+          prior.channel !== input.channel ||
+          prior.status !== "CANCELLED"
+        ) {
+          idempotencyConflict();
+        }
+        return { enrollment: prior, created: false };
+      }
+      const enrollment = await tx.nurtureEnrollment.create({
+        data: {
+          leadId: input.leadId,
+          opportunityId: input.opportunityId ?? null,
+          purpose: input.purpose,
+          channel: input.channel,
+          status: "CANCELLED",
+          scriptId: input.scriptId ?? null,
+          cohortKey: input.cohortKey ?? null,
+          actorId: input.actorId,
+          correlationId: input.correlationId,
+          idempotencyKey: input.idempotencyKey,
+        },
+      });
+      return { enrollment, created: true };
+    });
+  }
+
+  const eligibility = await checkNurtureEligibility({
+    leadId: input.leadId,
+    purpose: input.purpose,
+    channel: input.channel,
+  });
+  if (!eligibility.eligible) {
+    throw new SalesCoreRuleError(
+      "NURTURE_NOT_ELIGIBLE",
+      eligibility.suppressionReason ?? "Nurture enrollment blocked.",
+    );
+  }
+  assertMarketingDeliveryAllowed({
+    granted: eligibility.granted,
+    action: (eligibility.action as never) ?? null,
+    occurredAt: null,
+  });
+
+  try {
+    return await prisma.$transaction(async (tx) => {
+      const prior = await tx.nurtureEnrollment.findUnique({
+        where: { idempotencyKey: input.idempotencyKey },
+      });
+      if (prior) {
+        if (
+          prior.leadId !== input.leadId ||
+          prior.purpose !== input.purpose ||
+          prior.channel !== input.channel ||
+          prior.status !== "ENROLLED"
+        ) {
+          idempotencyConflict();
+        }
+        return { enrollment: prior, created: false };
+      }
+      const enrollment = await tx.nurtureEnrollment.create({
+        data: {
+          leadId: input.leadId,
+          opportunityId: input.opportunityId ?? null,
+          purpose: input.purpose,
+          channel: input.channel,
+          status: "ENROLLED",
+          scriptId: input.scriptId ?? null,
+          cohortKey: input.cohortKey ?? null,
+          actorId: input.actorId,
+          correlationId: input.correlationId,
+          idempotencyKey: input.idempotencyKey,
+        },
+      });
+      return { enrollment, created: true };
+    });
+  } catch (error) {
+    if (!isUniqueConflict(error)) throw error;
+    const prior = await prisma.nurtureEnrollment.findUnique({
+      where: { idempotencyKey: input.idempotencyKey },
+    });
+    if (!prior) idempotencyConflict();
+    return { enrollment: prior, created: false };
+  }
+}
+
+export async function recordNurtureDispatchResult(input: {
+  enrollmentId: string;
+  status: "SENT" | "FAILED" | "SKIPPED";
+  actorId: string;
+  occurredAt: Date;
+  correlationId: string;
+  idempotencyKey: string;
+}) {
+  try {
+    return await prisma.$transaction(async (tx) => {
+      const prior = await tx.nurtureDispatch.findUnique({
+        where: { idempotencyKey: input.idempotencyKey },
+      });
+      if (prior) {
+        if (
+          prior.enrollmentId !== input.enrollmentId ||
+          prior.status !== input.status
+        ) {
+          idempotencyConflict();
+        }
+        return { dispatch: prior, created: false };
+      }
+      const enrollment = await tx.nurtureEnrollment.findUnique({
+        where: { id: input.enrollmentId },
+      });
+      if (!enrollment) {
+        throw new SalesCoreRuleError("NOT_FOUND", "Enrollment not found.");
+      }
+      if (
+        enrollment.status === "CANCELLED" ||
+        enrollment.status === "SUPPRESSED"
+      ) {
+        throw new SalesCoreRuleError(
+          "NURTURE_ENROLLMENT_CLOSED",
+          "Cannot record dispatch on closed enrollment.",
+        );
+      }
+      const dispatch = await tx.nurtureDispatch.create({
+        data: {
+          enrollmentId: enrollment.id,
+          status: input.status,
+          actorId: input.actorId,
+          occurredAt: input.occurredAt,
+          correlationId: input.correlationId,
+          idempotencyKey: input.idempotencyKey,
+        },
+      });
+      const payload = {
+        enrollmentId: enrollment.id,
+        dispatchId: dispatch.id,
+        leadId: enrollment.leadId,
+        status: dispatch.status,
+        correlationId: input.correlationId,
+        schemaVersion: 1 as const,
+      };
+      assertMinimizedEventPayload(payload);
+      await enqueueEvent(
+        tx,
+        "nurture.dispatch_recorded",
+        payload,
+        `nurture.dispatch_recorded:${dispatch.id}`,
+        {
+          aggregateType: "nurture_enrollment",
+          aggregateId: enrollment.id,
+          correlationId: input.correlationId,
+          occurredAt: input.occurredAt,
+        },
+      );
+      return { dispatch, created: true };
+    });
+  } catch (error) {
+    if (!isUniqueConflict(error)) throw error;
+    const prior = await prisma.nurtureDispatch.findUnique({
+      where: { idempotencyKey: input.idempotencyKey },
+    });
+    if (!prior) idempotencyConflict();
+    return { dispatch: prior, created: false };
+  }
 }
