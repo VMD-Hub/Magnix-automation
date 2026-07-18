@@ -29,7 +29,23 @@ export async function POST(req: NextRequest) {
       where: { normalizedPhone },
     });
 
-    if (!account || !verifyPassword(body.password, account.passwordHash)) {
+    if (!account) {
+      return fail(
+        401,
+        "INVALID_CREDENTIALS",
+        "Số điện thoại hoặc mật khẩu không đúng.",
+      );
+    }
+
+    if (!account.passwordHash || !account.passwordSetAt) {
+      return fail(
+        401,
+        "NO_PASSWORD",
+        "Tài khoản chưa đặt mật khẩu web. Mở Mini App House X → Tài khoản → Bảo mật (OTP email), hoặc dùng Quên mật khẩu nếu đã có email.",
+      );
+    }
+
+    if (!verifyPassword(body.password, account.passwordHash)) {
       return fail(
         401,
         "INVALID_CREDENTIALS",

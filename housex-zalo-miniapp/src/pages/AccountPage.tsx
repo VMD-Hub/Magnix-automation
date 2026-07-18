@@ -5,6 +5,7 @@ import { MiniAccountPasswordCard } from "@/components/MiniAccountPasswordCard";
 import { useAuth } from "@/auth-context";
 import { AUTH_DEV_BYPASS, HOUSEX_API_BASE } from "@/config";
 import { createMiniappHandoff } from "@/services/api";
+import { openAccountHandoffWeb } from "@/services/open-handoff-web";
 import {
   completeZaloLoginWithPhone,
   loginViaZaloMiniApp,
@@ -105,12 +106,8 @@ export function AccountPage() {
         canAgent ? "/moi-gioi/tai-khoan" : "/khach-hang/tai-khoan",
       );
       const { code } = await createMiniappHandoff();
-      const q = new URLSearchParams({
-        handoff: "1",
-        code,
-        next,
-      });
-      navigate(`/mo?${q.toString()}`);
+      // Top-level Zalo webview — không iframe #/mo (cookie bị chặn → màn «đăng nhập lại»).
+      await openAccountHandoffWeb({ code, nextPath: next });
     } catch (ex) {
       setErr(
         ex instanceof Error
@@ -374,8 +371,8 @@ export function AccountPage() {
           {busyHandoff
             ? "Đang mở hồ sơ…"
             : canAgent
-              ? "Hồ sơ môi giới trên web"
-              : "Xem hồ sơ đầy đủ trên web"}
+              ? "Mở hồ sơ môi giới trên web"
+              : "Mở hồ sơ đầy đủ trên web"}
         </button>
 
         {user.opsTools?.telesales ? (

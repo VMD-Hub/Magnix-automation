@@ -2,11 +2,10 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import type { AccountRole } from "@prisma/client";
 import { HouseXHeaderLogo } from "@/components/brand/housex-header-logo";
 import { Button } from "@/components/ui/button";
-import { safeNextPath } from "@/lib/auth/redirect";
+import { resolvePostAuthPath } from "@/lib/auth/redirect";
 import { BUYER_REGISTER } from "@/lib/content/messaging/buyer-discovery";
 import { BROKER_REGISTER } from "@/lib/content/messaging/broker-supply";
 import type { RegisterConflictDetails } from "@/lib/auth/register-conflict";
@@ -79,7 +78,6 @@ export function AuthForm({
   role: AccountRole;
   nextPath: string;
 }) {
-  const router = useRouter();
   const copy = ROLE_COPY[role];
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
@@ -95,11 +93,19 @@ export function AuthForm({
     emailSent: boolean;
   } | null>(null);
 
-  const redirectTo = safeNextPath(nextPath);
-  const revealSuffix = redirectTo.includes("?") ? "&reveal=1" : "?reveal=1";
-  const afterCustomer =
-    redirectTo.startsWith("/tin-dang/") ? `${redirectTo}${revealSuffix}` : redirectTo;
-  const afterBroker = "/moi-gioi/tai-khoan";
+  function goAfterAuth(actualRole: AccountRole) {
+    // Luôn theo role thật trên server — tránh khách login form môi giới bị kẹt.
+    const dest = resolvePostAuthPath(
+      actualRole === role ? nextPath : null,
+      actualRole,
+    );
+    const finalDest =
+      actualRole === "CUSTOMER" && dest.startsWith("/tin-dang/")
+        ? `${dest}${dest.includes("?") ? "&" : "?"}reveal=1`
+        : dest;
+    // Hard navigate: gắn cookie + header auth chắc chắn (tránh soft push về /).
+    window.location.assign(finalDest);
+  }
 
   async function submitLogin(e: React.FormEvent) {
     e.preventDefault();
@@ -109,6 +115,7 @@ export function AuthForm({
     try {
       const res = await fetch("/api/auth/login", {
         method: "POST",
+        credentials: "same-origin",
         headers: { "content-type": "application/json" },
         body: JSON.stringify({ phone, password }),
       });
@@ -117,20 +124,10 @@ export function AuthForm({
         setError(json?.error?.message ?? "Không thể đăng nhập.");
         return;
       }
-      const userRole = json.data?.user?.role as AccountRole | undefined;
-      const dest =
-        userRole === "BROKER"
-          ? role === "BROKER"
-            ? afterBroker
-            : redirectTo
-          : role === "CUSTOMER"
-            ? afterCustomer
-            : redirectTo;
-      router.push(dest);
-      router.refresh();
+      const userRole = (json.data?.user?.role as AccountRole | undefined) ?? role;
+      goAfterAuth(userRole);
     } catch {
       setError("Lỗi kết nối.");
-    } finally {
       setLoading(false);
     }
   }
@@ -143,6 +140,7 @@ export function AuthForm({
     try {
       const res = await fetch("/api/auth/register", {
         method: "POST",
+        credentials: "same-origin",
         headers: { "content-type": "application/json" },
         body: JSON.stringify({
           role,
@@ -186,7 +184,7 @@ export function AuthForm({
         <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
           <h1 className="text-2xl font-bold text-slate-900">Đăng ký thành công</h1>
           <p className="mt-2 text-sm text-slate-500">
-            Tài khoản <strong>{copy.badge}</strong> đã được tạo.
+            Tài khoản <strong>{copy.badge}</strong> đã được tạo và đăng nhập.
           </p>
           <div className="mt-4 space-y-2 text-sm text-slate-600">
             {registerDone.emailSent ? (
@@ -196,19 +194,19 @@ export function AuthForm({
               </p>
             ) : (
               <p className="rounded-lg bg-amber-50 p-3 text-amber-900">
-                Chưa gửi được email xác nhận — bạn có thể gửi lại sau khi đăng nhập.
+                Chưa gửi được email xác nhận — bạn có thể gửi lại trong Tài khoản.
               </p>
             )}
+            <p className="text-slate-500">
+              Bước tiếp theo: vào trang Tài khoản để xem hồ sơ và hoạt động.
+            </p>
           </div>
           <Button
             type="button"
             className="mt-6 w-full"
-            onClick={() => {
-              router.push(role === "BROKER" ? afterBroker : afterCustomer);
-              router.refresh();
-            }}
+            onClick={() => goAfterAuth(role)}
           >
-            Tiếp tục
+            Vào Tài khoản
           </Button>
         </div>
       </div>

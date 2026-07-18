@@ -21,7 +21,8 @@ export default async function LoginPage({ searchParams }: PageProps) {
         <Link href="/dang-ky" className="font-semibold text-brand-700">
           đăng ký mới
         </Link>
-        . Đăng nhập dùng chung SĐT + mật khẩu.
+        . Đăng nhập bằng SĐT + mật khẩu — sau đó vào{" "}
+        <strong>Tài khoản</strong> (khách hoặc môi giới).
       </p>
       {/* Mặc định form khách — broker chuyển tab hoặc dùng /dang-ky/moi-gioi */}
       <AuthForm role="CUSTOMER" nextPath={nextPath} />

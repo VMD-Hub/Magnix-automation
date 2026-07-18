@@ -14,8 +14,6 @@ import {
   sanitizeMiniNavigatePath,
 } from "@/services/embed-bridge";
 import {
-  accountHandoffConsumeUrl,
-  sanitizeHandoffNext,
   sanitizeWebPath,
   webAbsoluteUrl,
 } from "@/services/webview";
@@ -33,8 +31,7 @@ function isServiceWebPath(path: string | null): boolean {
 }
 
 /** Nhãn người dùng — không hiện path kỹ thuật kiểu /dinh-gia. */
-function viewerTitle(path: string | null, handoff: boolean): string {
-  if (handoff) return "Hồ sơ";
+function viewerTitle(path: string | null): string {
   if (!path) return "House X";
   if (path.startsWith("/dinh-gia")) return "Định giá";
   if (path.includes("vay-mua-nha")) return "Vay mua nhà";
@@ -53,8 +50,7 @@ function viewerTitle(path: string | null, handoff: boolean): string {
 
 /**
  * Nhúng trang House X trong khung Mini App.
- * Path: /mo/tai-chinh/vay-mua-nha (splat) · legacy ?p= · handoff ?handoff=1
- * Thanh app gọn: Quay lại + tiêu đề — không path kỹ thuật, không «Mở rộng».
+ * Path: /mo/tai-chinh/... — handoff hồ sơ dùng openWebview (không iframe).
  */
 export function WebViewPage() {
   const navigate = useNavigate();
@@ -63,8 +59,6 @@ export function WebViewPage() {
   const { "*": splat } = useParams();
   const [params] = useSearchParams();
   const isHandoff = params.get("handoff") === "1";
-  const handoffCode = params.get("code")?.trim() ?? "";
-  const handoffNext = sanitizeHandoffNext(params.get("next"));
 
   const requested = useMemo(
     () => webPathFromMoLocation(pathname, params.get("p"), splat),
@@ -77,23 +71,18 @@ export function WebViewPage() {
   );
 
   const src = useMemo(() => {
-    if (isHandoff && handoffCode) {
-      return accountHandoffConsumeUrl(handoffCode, handoffNext);
-    }
     if (!safePath) return null;
     return webAbsoluteUrl(safePath);
-  }, [isHandoff, handoffCode, handoffNext, safePath]);
+  }, [safePath]);
 
-  const back = isHandoff
-    ? "/tai-khoan"
-    : safePath?.startsWith("/cong-cu")
-      ? "/cong-cu"
-      : isServiceWebPath(safePath)
-        ? "/dich-vu"
-        : homePath;
+  const back = safePath?.startsWith("/cong-cu")
+    ? "/cong-cu"
+    : isServiceWebPath(safePath)
+      ? "/dich-vu"
+      : homePath;
 
-  const backLabel = isHandoff ? "← Tài khoản" : "← Quay lại";
-  const title = viewerTitle(safePath, isHandoff);
+  const backLabel = "← Quay lại";
+  const title = viewerTitle(safePath);
 
   useEffect(() => {
     function onMessage(e: MessageEvent) {
@@ -107,7 +96,32 @@ export function WebViewPage() {
     return () => window.removeEventListener("message", onMessage);
   }, [navigate, homePath]);
 
-  if (!isHandoff && (!safePath || !src)) {
+  if (isHandoff) {
+    return (
+      <div className="tool-viewer">
+        <div className="tool-viewer-bar">
+          <Link to="/tai-khoan" className="tool-viewer-back">
+            ← Tài khoản
+          </Link>
+          <span className="tool-viewer-title">Hồ sơ web</span>
+          <span className="tool-viewer-bar-spacer" aria-hidden />
+        </div>
+        <div className="tool-viewer-error">
+          <h2>Mở hồ sơ ngoài khung nhúng</h2>
+          <p className="muted">
+            Phiên đăng nhập web không gắn được trong khung Mini App (cookie bị
+            chặn). Quay lại Tài khoản và bấm «Mở hồ sơ … trên web» — Zalo sẽ mở
+            cửa sổ riêng với phiên đúng.
+          </p>
+          <Link to="/tai-khoan" className="btn">
+            Về Tài khoản
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
+  if (!safePath || !src) {
     return (
       <div className="tool-viewer">
         <div className="tool-viewer-bar">

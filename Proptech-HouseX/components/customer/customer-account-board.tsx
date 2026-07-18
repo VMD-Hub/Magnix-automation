@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { ButtonLink } from "@/components/ui/button";
 import { AccountPasswordPanel } from "@/components/auth/account-password-panel";
+import { useMiniAppEmbed } from "@/components/miniapp/miniapp-embed-context";
 import { LEAD_STATUS_LABEL, UNIT_BOOKING_STATUS_LABEL } from "@/lib/format";
 import { cn } from "@/lib/ui/cn";
 
@@ -103,6 +104,7 @@ function giftFulfillmentLabel(status: string) {
 }
 
 export function CustomerAccountBoard() {
+  const embed = useMiniAppEmbed();
   const [profile, setProfile] = useState<Profile | null | undefined>(undefined);
   const [leads, setLeads] = useState<LeadRow[]>([]);
   const [bookings, setBookings] = useState<BookingRow[]>([]);
@@ -146,7 +148,25 @@ export function CustomerAccountBoard() {
   if (!profile) {
     return (
       <div className="mx-auto max-w-md py-16 text-center">
-        <p className="text-slate-600">Vui lòng đăng nhập tài khoản khách hàng.</p>
+        {embed ? (
+          <>
+            <p className="font-medium text-slate-900">
+              Phiên web chưa gắn từ Mini App
+            </p>
+            <p className="mt-2 text-sm text-slate-600">
+              Bạn đã đăng nhập trong Mini App, nhưng khung nhúng không giữ được
+              cookie đăng nhập. Quay lại tab Tài khoản Mini App và bấm «Mở hồ sơ
+              … trên web» để Zalo mở cửa sổ riêng.
+            </p>
+            <p className="mt-4 text-xs text-slate-500">
+              Hoặc đăng nhập lại trên trang này bằng SĐT + mật khẩu (nếu đã đặt).
+            </p>
+          </>
+        ) : (
+          <p className="text-slate-600">
+            Vui lòng đăng nhập tài khoản khách hàng.
+          </p>
+        )}
         <div className="mt-4 flex justify-center gap-3">
           <ButtonLink href="/dang-nhap?next=/khach-hang/tai-khoan">
             Đăng nhập

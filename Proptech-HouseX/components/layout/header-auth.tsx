@@ -52,11 +52,17 @@ export function HeaderAuth() {
     const accountHref =
       user.role === "BROKER" ? "/moi-gioi/tai-khoan" : "/khach-hang/tai-khoan";
     return (
-      <div className="hidden items-center gap-2 sm:flex">
+      <div className="flex items-center gap-2">
         <Link href={accountHref} className="site-header-auth-user">
           {user.name}
         </Link>
-        <Button type="button" variant="ghost" size="sm" className="site-header-auth-ghost" onClick={logout}>
+        <Button
+          type="button"
+          variant="ghost"
+          size="sm"
+          className="site-header-auth-ghost hidden sm:inline-flex"
+          onClick={logout}
+        >
           Thoát
         </Button>
       </div>
@@ -64,7 +70,7 @@ export function HeaderAuth() {
   }
 
   return (
-    <Link href="/dang-nhap" className="site-header-auth-link hidden sm:inline">
+    <Link href="/dang-nhap" className="site-header-auth-link">
       Đăng nhập
     </Link>
   );
