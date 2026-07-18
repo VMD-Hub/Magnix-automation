@@ -8,28 +8,60 @@ import { Button } from "@/components/ui/button";
 const inputCls =
   "mt-1 h-11 w-full rounded-xl border border-slate-200 px-3 text-sm outline-none focus:border-brand-400 focus:ring-2 focus:ring-brand-100";
 
+/** Quên mật khẩu — OTP 6 số qua email (không magic-link). */
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState("");
-  const [sent, setSent] = useState(false);
+  const [otp, setOtp] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirm, setConfirm] = useState("");
+  const [otpSent, setOtpSent] = useState(false);
+  const [done, setDone] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
-  async function submit(e: React.FormEvent) {
+  async function sendOtp(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
     setLoading(true);
     try {
-      const res = await fetch("/api/auth/forgot-password", {
+      const res = await fetch("/api/auth/password/request-otp", {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({ email, purpose: "RESET_PASSWORD" }),
       });
       const json = await res.json().catch(() => ({}));
       if (!res.ok) {
-        setError(json?.error?.message ?? "Không thể gửi yêu cầu.");
+        setError(json?.error?.message ?? "Không thể gửi mã.");
         return;
       }
-      setSent(true);
+      setOtpSent(true);
+    } catch {
+      setError("Lỗi kết nối.");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function reset(e: React.FormEvent) {
+    e.preventDefault();
+    if (password !== confirm) {
+      setError("Mật khẩu xác nhận không khớp.");
+      return;
+    }
+    setError(null);
+    setLoading(true);
+    try {
+      const res = await fetch("/api/auth/password/reset", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ email, otp, password }),
+      });
+      const json = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        setError(json?.error?.message ?? "Không thể đặt lại mật khẩu.");
+        return;
+      }
+      setDone(true);
     } catch {
       setError("Lỗi kết nối.");
     } finally {
@@ -46,18 +78,20 @@ export default function ForgotPasswordPage() {
           </div>
           <h1 className="mt-3 text-2xl font-bold text-slate-900">Quên mật khẩu</h1>
           <p className="mt-1 text-sm text-slate-500">
-            Nhập email đã đăng ký — chúng tôi gửi link đặt lại mật khẩu (hiệu lực
-            1 giờ).
+            Nhận <strong>mã OTP 6 số</strong> qua email (hiệu lực 10 phút). House
+            X không yêu cầu bạn bấm link lạ trong email.
           </p>
         </div>
 
-        {sent ? (
+        {done ? (
           <div className="mt-6 rounded-lg bg-brand-50 p-4 text-sm text-brand-900">
-            Nếu email tồn tại trong hệ thống, bạn sẽ nhận được hướng dẫn đặt lại
-            mật khẩu. Kiểm tra cả hộp thư spam.
+            Đã đặt lại mật khẩu.{" "}
+            <Link href="/dang-nhap" className="font-semibold underline">
+              Đăng nhập
+            </Link>
           </div>
-        ) : (
-          <form onSubmit={submit} className="mt-6 space-y-4">
+        ) : !otpSent ? (
+          <form onSubmit={(e) => void sendOtp(e)} className="mt-6 space-y-4">
             <label className="block">
               <span className="text-sm font-medium text-slate-700">Email</span>
               <input
@@ -67,7 +101,6 @@ export default function ForgotPasswordPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className={inputCls}
-                placeholder="email@example.com"
               />
             </label>
             {error ? (
@@ -76,7 +109,56 @@ export default function ForgotPasswordPage() {
               </p>
             ) : null}
             <Button type="submit" className="w-full" disabled={loading}>
-              {loading ? "Đang gửi…" : "Gửi link đặt lại mật khẩu"}
+              {loading ? "Đang gửi…" : "Gửi mã OTP"}
+            </Button>
+          </form>
+        ) : (
+          <form onSubmit={(e) => void reset(e)} className="mt-6 space-y-4">
+            <p className="text-sm text-slate-600">
+              Nếu email tồn tại, mã đã được gửi tới <strong>{email}</strong>.
+            </p>
+            <label className="block">
+              <span className="text-sm font-medium text-slate-700">Mã OTP</span>
+              <input
+                inputMode="numeric"
+                pattern="\d{6}"
+                required
+                value={otp}
+                onChange={(e) => setOtp(e.target.value)}
+                className={inputCls}
+              />
+            </label>
+            <label className="block">
+              <span className="text-sm font-medium text-slate-700">
+                Mật khẩu mới
+              </span>
+              <input
+                type="password"
+                required
+                minLength={6}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className={inputCls}
+              />
+            </label>
+            <label className="block">
+              <span className="text-sm font-medium text-slate-700">Xác nhận</span>
+              <input
+                type="password"
+                required
+                minLength={6}
+                value={confirm}
+                onChange={(e) => setConfirm(e.target.value)}
+                className={inputCls}
+              />
+            </label>
+            {error ? (
+              <p className="rounded-lg bg-rose-50 px-3 py-2 text-sm text-rose-700">
+                {error}
+              </p>
+            ) : null}
+            <Button type="submit" className="w-full" disabled={loading}>
+              {loading ? "Đang lưu…" : "Đặt lại mật khẩu"}
             </Button>
           </form>
         )}

@@ -16,6 +16,7 @@ export type HouseXUser = {
   ctvCode?: string | null;
   ctvApplicationStatus?: string | null;
   opsTools?: { telesales?: boolean };
+  passwordReady?: boolean;
 };
 
 type ApiOk<T> = { data: T };

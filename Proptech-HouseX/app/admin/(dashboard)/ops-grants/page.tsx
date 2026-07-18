@@ -9,7 +9,7 @@ export default function AdminOpsGrantsPage() {
   return (
     <AdminShell
       title="Quyền CRM Telesales"
-      description="Cấp quyền theo SĐT/Zalo id + email công việc. Hệ thống gửi link đặt mật khẩu (72 giờ) để staff đăng nhập web trên mọi thiết bị."
+      description="Cấp quyền tool theo SĐT/Zalo id + email thông báo. Mật khẩu đặt trong Tài khoản (OTP) — không phải MK riêng của tool."
     >
       <OpsToolGrantsBoard />
     </AdminShell>

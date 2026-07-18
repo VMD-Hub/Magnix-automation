@@ -156,3 +156,73 @@ export function buildTelesalesLoginUrl(): string {
 export function buildTelesalesSetPasswordUrl(token: string): string {
   return `${siteUrl()}/dat-lai-mat-khau?token=${encodeURIComponent(token)}&purpose=telesales`;
 }
+
+/** OTP đặt/đổi mật khẩu — chỉ mã số, không CTA link (chống phishing). */
+export function passwordOtpEmail(
+  name: string,
+  code: string,
+  purpose: "SET_PASSWORD" | "RESET_PASSWORD",
+): OutboundEmail {
+  const brand = getBrandName();
+  const action =
+    purpose === "SET_PASSWORD" ? "đặt mật khẩu" : "đặt lại mật khẩu";
+  const subject = `Mã xác minh ${action} — ${brand}`;
+  const text = `Xin chào ${name},
+
+Mã xác minh để ${action} tài khoản ${brand}:
+${code}
+
+Mã hiệu lực 10 phút. Chỉ nhập mã này trong app/web House X chính thức.
+
+${brand} KHÔNG yêu cầu bạn bấm vào link lạ trong email để đặt mật khẩu.
+Nếu bạn không yêu cầu mã này, hãy bỏ qua email.
+
+— ${brand}`;
+
+  const html = transactionalEmailLayout(
+    subject,
+    `<p>Xin chào <strong>${name}</strong>,</p>
+<p>Mã xác minh để <strong>${action}</strong> tài khoản <strong>${brand}</strong>:</p>
+<p style="text-align:center;margin:28px 0;font-size:32px;letter-spacing:0.35em;font-weight:bold;color:#9B111E">${code}</p>
+<p>Mã hiệu lực <strong>10 phút</strong>. Chỉ nhập trong ứng dụng / website House X chính thức.</p>
+<p style="font-size:13px;color:#64748b"><strong>${brand} không yêu cầu bạn bấm link lạ</strong> trong email để đặt mật khẩu. Nếu không phải bạn yêu cầu, bỏ qua email này.</p>`,
+  );
+
+  return { to: "", subject, html, text, tags: ["auth", "password_otp"] };
+}
+
+/** Thông báo đã được cấp tool — không gửi magic-link đặt MK. */
+export function telesalesGrantNotifyEmail(
+  name: string,
+  accountUrl: string,
+  loginUrl: string,
+): OutboundEmail {
+  const brand = getBrandName();
+  const subject = `Bạn đã được cấp quyền CRM Telesales — ${brand}`;
+  const text = `Xin chào ${name},
+
+Super Admin đã cấp quyền CRM Telesales trên ${brand}.
+
+Nếu chưa có mật khẩu web: mở Tài khoản → Đặt mật khẩu (nhận mã OTP qua email).
+Sau đó đăng nhập: ${loginUrl}
+
+Quyền tool không phải mật khẩu riêng — mật khẩu thuộc tài khoản House X của bạn.
+
+— ${brand}`;
+
+  const html = transactionalEmailLayout(
+    subject,
+    `<p>Xin chào <strong>${name}</strong>,</p>
+<p>Super Admin đã cấp quyền <strong>CRM Telesales</strong> trên <strong>${brand}</strong>.</p>
+<p>Nếu chưa đặt mật khẩu cho tài khoản: vào <strong>Tài khoản</strong> → <strong>Đặt mật khẩu</strong> (hệ thống gửi <strong>mã OTP</strong> vào email — không cần bấm link lạ).</p>
+<p>Đăng nhập web: <a href="${loginUrl}">${loginUrl}</a></p>
+<p style="font-size:13px;color:#64748b">Quyền tool chỉ là tiện ích bổ sung — mật khẩu thuộc tài khoản House X, dùng chung web và Mini App.</p>`,
+    { allowReply: true },
+  );
+
+  return { to: "", subject, html, text, tags: ["ops", "telesales_grant"] };
+}
+
+export function buildAccountPasswordHintUrl(): string {
+  return `${siteUrl()}/khach-hang/tai-khoan`;
+}

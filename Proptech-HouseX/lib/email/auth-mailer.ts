@@ -1,12 +1,13 @@
 import { issueUserAuthToken } from "@/lib/data/auth-tokens";
 import { sendEmail } from "@/lib/email/send";
 import {
+  buildAccountPasswordHintUrl,
   buildResetUrl,
   buildTelesalesLoginUrl,
-  buildTelesalesSetPasswordUrl,
   buildVerifyUrl,
+  passwordOtpEmail,
   passwordResetEmail,
-  telesalesInviteEmail,
+  telesalesGrantNotifyEmail,
   verifyEmailEmail,
 } from "@/lib/email/templates";
 
@@ -32,16 +33,25 @@ export async function sendPasswordResetEmail(
   return { sent: result.ok };
 }
 
-/** Super cấp TELESALES_CRM → email đặt mật khẩu (72h) + hướng dẫn /ops/telesales. */
-export async function sendTelesalesInviteEmail(
-  userAccountId: string,
+export async function sendPasswordOtpEmail(
+  name: string,
+  email: string,
+  code: string,
+  purpose: "SET_PASSWORD" | "RESET_PASSWORD",
+): Promise<{ sent: boolean }> {
+  const tpl = passwordOtpEmail(name, code, purpose);
+  const result = await sendEmail({ ...tpl, to: email });
+  return { sent: result.ok };
+}
+
+/** Thông báo đã cấp CRM Telesales — hướng dẫn đặt MK trong Tài khoản (OTP). */
+export async function sendTelesalesGrantNotifyEmail(
   name: string,
   email: string,
 ): Promise<{ sent: boolean }> {
-  const token = await issueUserAuthToken(userAccountId, "PASSWORD_RESET", 72);
-  const tpl = telesalesInviteEmail(
+  const tpl = telesalesGrantNotifyEmail(
     name,
-    buildTelesalesSetPasswordUrl(token),
+    buildAccountPasswordHintUrl(),
     buildTelesalesLoginUrl(),
   );
   const result = await sendEmail({ ...tpl, to: email });

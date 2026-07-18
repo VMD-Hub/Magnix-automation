@@ -75,6 +75,7 @@ export async function registerUserAccount(
         email,
         marketingOptIn: input.marketingOptIn ?? true,
         passwordHash,
+        passwordSetAt: new Date(),
       },
     });
 

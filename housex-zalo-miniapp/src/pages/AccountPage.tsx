@@ -1,6 +1,7 @@
 import { useEffect, useState, type FormEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { PageBrandHeader } from "@/components/PageBrandHeader";
+import { MiniAccountPasswordCard } from "@/components/MiniAccountPasswordCard";
 import { useAuth } from "@/auth-context";
 import { AUTH_DEV_BYPASS, HOUSEX_API_BASE } from "@/config";
 import { createMiniappHandoff } from "@/services/api";
@@ -321,6 +322,10 @@ export function AccountPage() {
             {user.ctvCode ? ` · Mã môi giới ${user.ctvCode}` : ""}
           </p>
         </div>
+        <MiniAccountPasswordCard
+          passwordReady={user.passwordReady}
+          defaultEmail={user.email ?? ""}
+        />
         {!canAgent ? (
           <div className="card account-lane-pick">
             <p className="muted" style={{ marginBottom: 8 }}>
@@ -363,8 +368,8 @@ export function AccountPage() {
               Bạn đã được cấp CRM Telesales
             </p>
             <p style={{ margin: "6px 0 10px", fontSize: 12, color: "#64748b" }}>
-              Kiểm tra email công việc để đặt mật khẩu (link 72 giờ), rồi đăng
-              nhập web trên mọi máy. Trên Zalo có thể vào tool ngay.
+              Nếu chưa có mật khẩu web: đặt trong mục Mật khẩu tài khoản (OTP
+              email). Rồi đăng nhập SĐT+MK trên mọi máy. Trên Zalo vào tool ngay.
             </p>
             <Link className="btn secondary" to="/ops">
               Mở CRM Telesales

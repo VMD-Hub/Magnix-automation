@@ -4,13 +4,16 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Icon } from "@/components/icons";
 import { ButtonLink } from "@/components/ui/button";
+import { AccountPasswordPanel } from "@/components/auth/account-password-panel";
 
 type Profile = {
   role: string;
   name: string;
+  email?: string;
   brokerId?: string;
   ctvCode?: string | null;
   ctvApplicationStatus?: string | null;
+  passwordReady?: boolean;
 };
 
 export default function BrokerAccountPage() {
@@ -39,11 +42,18 @@ export default function BrokerAccountPage() {
   }
 
   return (
-    <div className="mx-auto max-w-2xl py-10 container-px">
-      <h1 className="text-2xl font-bold text-slate-900">Tài khoản môi giới</h1>
-      <p className="mt-1 text-slate-500">Xin chào, {user.name}</p>
+    <div className="mx-auto max-w-2xl space-y-8 py-10 container-px">
+      <div>
+        <h1 className="text-2xl font-bold text-slate-900">Tài khoản môi giới</h1>
+        <p className="mt-1 text-slate-500">Xin chào, {user.name}</p>
+      </div>
 
-      <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <AccountPasswordPanel
+        passwordReady={Boolean(user.passwordReady)}
+        defaultEmail={user.email ?? ""}
+      />
+
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         <Link
           href="/moi-gioi/dang-tin"
           className="rounded-2xl border border-slate-200 bg-white p-5 hover:border-brand-300"

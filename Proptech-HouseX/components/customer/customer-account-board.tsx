@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { ButtonLink } from "@/components/ui/button";
+import { AccountPasswordPanel } from "@/components/auth/account-password-panel";
 import { LEAD_STATUS_LABEL, UNIT_BOOKING_STATUS_LABEL } from "@/lib/format";
 import { cn } from "@/lib/ui/cn";
 
@@ -11,6 +12,7 @@ type Profile = {
   email: string;
   emailVerified: boolean;
   phoneMasked: string;
+  passwordReady?: boolean;
 };
 
 type LeadRow = {
@@ -179,6 +181,11 @@ export function CustomerAccountBoard() {
           </p>
         )}
       </div>
+
+      <AccountPasswordPanel
+        passwordReady={Boolean(profile.passwordReady)}
+        defaultEmail={profile.email}
+      />
 
       <section>
         <h2 className="text-lg font-bold text-slate-900">Quà tặng (NOXH)</h2>

@@ -602,6 +602,11 @@ enum AuthTokenType {
   PASSWORD_RESET
 }
 
+enum EmailOtpPurpose {
+  SET_PASSWORD
+  RESET_PASSWORD
+}
+
 enum OpsToolCode {
   TELESALES_CRM
 }
@@ -623,18 +628,40 @@ model UserAccount {
   emailVerifiedAt DateTime?   @map("email_verified_at")
   marketingOptIn  Boolean     @default(true) @map("marketing_opt_in")
   passwordHash    String      @map("password_hash")
+  /// null = chưa đặt MK dùng được trên web (thường Zalo-only).
+  passwordSetAt   DateTime?   @map("password_set_at")
   /// Zalo user id (Mini App / OA) — ADR-014
   zaloUserId      String?     @unique @map("zalo_user_id")
   createdAt       DateTime    @default(now()) @map("created_at")
   updatedAt       DateTime    @updatedAt @map("updated_at")
 
-  customer       Customer?
-  broker         Broker?
-  authTokens     UserAuthToken[]
-  opsToolGrants  OpsToolGrant[]
+  customer         Customer?
+  broker           Broker?
+  authTokens       UserAuthToken[]
+  opsToolGrants    OpsToolGrant[]
+  emailOtpChallenges EmailOtpChallenge[]
 
   @@index([role])
   @@map("user_accounts")
+}
+
+/// OTP 6 số gửi email — đặt/quên mật khẩu (hash, không plaintext).
+model EmailOtpChallenge {
+  id            String          @id @default(uuid())
+  purpose       EmailOtpPurpose
+  email         String
+  codeHash      String          @map("code_hash")
+  userAccountId String?         @map("user_account_id")
+  expiresAt     DateTime        @map("expires_at")
+  attempts      Int             @default(0)
+  consumedAt    DateTime?       @map("consumed_at")
+  createdAt     DateTime        @default(now()) @map("created_at")
+
+  userAccount UserAccount? @relation(fields: [userAccountId], references: [id], onDelete: Cascade)
+
+  @@index([email, purpose, createdAt])
+  @@index([userAccountId, purpose])
+  @@map("email_otp_challenges")
 }
 
 /// Super Admin cấp quyền tool Ops trên Mini App / web telesales (không dùng AgentEntitlement CTV).

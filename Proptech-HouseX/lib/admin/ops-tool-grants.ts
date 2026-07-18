@@ -3,7 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { normalizeVnPhone, isValidVnPhone } from "@/lib/phone";
 import { maskPhone } from "@/lib/privacy/phone";
 import { normalizeEmail } from "@/lib/email/normalize";
-import { sendTelesalesInviteEmail } from "@/lib/email/auth-mailer";
+import { sendTelesalesGrantNotifyEmail } from "@/lib/email/auth-mailer";
 import { TELESALES_TOOL } from "@/lib/admin/ops-telesales-access";
 
 export class OpsToolGrantError extends Error {
@@ -216,23 +216,23 @@ export async function attachInviteEmailAndSend(input: {
 
   let sent = false;
   try {
-    const result = await sendTelesalesInviteEmail(account.id, account.name, email);
+    const result = await sendTelesalesGrantNotifyEmail(account.name, email);
     sent = result.sent;
   } catch (err) {
     console.error(
-      "[ops-tool-grants] invite email failed:",
+      "[ops-tool-grants] grant notify email failed:",
       err instanceof Error ? err.message : err,
     );
     throw new OpsToolGrantError(
       "EMAIL_SEND_FAILED",
-      "Cấp quyền xong nhưng gửi email thất bại. Kiểm tra cấu hình mail rồi bấm Gửi lại lời mời.",
+      "Cấp quyền xong nhưng gửi email thông báo thất bại. Kiểm tra mail rồi bấm Gửi lại.",
     );
   }
 
   if (!sent) {
     throw new OpsToolGrantError(
       "EMAIL_SEND_FAILED",
-      "Cấp quyền xong nhưng gửi email thất bại. Kiểm tra cấu hình mail rồi bấm Gửi lại lời mời.",
+      "Cấp quyền xong nhưng gửi email thông báo thất bại. Kiểm tra mail rồi bấm Gửi lại.",
     );
   }
 

@@ -68,7 +68,7 @@ export function OpsToolGrantsBoard() {
     }
     const invite = json.data?.invite;
     setMsg(
-      `Đã cấp ${json.data.grant.user.name}. Đã gửi email đặt mật khẩu tới ${invite?.emailMasked ?? inviteEmail} (72 giờ).`,
+      `Đã cấp ${json.data.grant.user.name}. Đã gửi thông báo tới ${invite?.emailMasked ?? inviteEmail}. User đặt MK trong Tài khoản (OTP).`,
     );
     setPhone("");
     setZaloUserId("");
@@ -121,8 +121,9 @@ export function OpsToolGrantsBoard() {
       >
         <p className="sm:col-span-2 text-sm text-slate-600">
           Người dùng phải có UserAccount (Mini App Zalo / đăng ký SĐT) trước.
-          Super nhập <strong>email công việc</strong> — hệ thống gửi link đặt mật
-          khẩu (72 giờ) để họ đăng nhập web trên mọi thiết bị.
+          Super nhập <strong>email công việc</strong> để gửi thông báo đã được
+          cấp tool. Mật khẩu đặt trong <strong>Tài khoản</strong> (OTP email) —
+          không phải mật khẩu riêng của tool.
         </p>
         <input
           className="rounded-md border border-slate-200 px-2 py-1.5 text-sm"
@@ -151,7 +152,7 @@ export function OpsToolGrantsBoard() {
           onChange={(e) => setNote(e.target.value)}
         />
         <Button type="submit" size="sm" className="sm:w-fit">
-          Cấp quyền + gửi email đặt MK
+          Cấp quyền + gửi email thông báo
         </Button>
         {msg ? (
           <p className="text-xs text-brand-800 sm:col-span-2">{msg}</p>
@@ -218,7 +219,7 @@ export function OpsToolGrantsBoard() {
                     variant="outline"
                     onClick={() => void resend(row.id)}
                   >
-                    Gửi lại lời mời
+                    Gửi lại thông báo
                   </Button>
                   <Button
                     type="button"

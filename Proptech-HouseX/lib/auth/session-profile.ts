@@ -17,6 +17,8 @@ export type SessionProfile = {
   ctvCode?: string | null;
   ctvApplicationStatus?: string | null;
   opsTools?: { telesales: boolean };
+  /** true nếu đã đặt MK dùng được trên web (không phải Zalo-only). */
+  passwordReady?: boolean;
 };
 
 export async function loadSessionProfile(
@@ -32,6 +34,7 @@ export async function loadSessionProfile(
       email: true,
       emailVerified: true,
       marketingOptIn: true,
+      passwordSetAt: true,
       customer: { select: { id: true } },
       broker: {
         select: {
@@ -70,6 +73,7 @@ export async function loadSessionProfile(
     ctvCode: account.broker?.ctvCode,
     ctvApplicationStatus: account.broker?.ctvApplication?.status ?? null,
     opsTools: { telesales: telesalesGrant?.status === "ACTIVE" },
+    passwordReady: Boolean(account.passwordSetAt),
   };
 }
 
