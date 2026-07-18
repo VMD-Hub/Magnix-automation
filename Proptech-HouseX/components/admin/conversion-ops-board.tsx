@@ -78,6 +78,161 @@ const STAGE_LABEL: Record<(typeof STAGES)[number], string> = {
   CANCELLED: "Huỷ",
 };
 
+type StagePlaybook = {
+  meaning: string;
+  dataMeans: string;
+  howToUse: string[];
+  script: string;
+};
+
+const STAGE_PLAYBOOK: Record<(typeof STAGES)[number], StagePlaybook> = {
+  OPEN: {
+    meaning:
+      "Cơ hội vừa mở từ lead đủ điều kiện — chưa gọi/chưa xác nhận nhu cầu sâu.",
+    dataMeans:
+      "Mỗi dòng = 1 cơ hội gắn lead + (có thể) căn/dự án. ID rút gọn, không hiện SĐT trên bảng này.",
+    howToUse: [
+      "Mở Lead marketing / hồ sơ NOXH để xem kênh liên hệ (SĐT nằm ở đó, không trên bảng Conversion).",
+      "Ưu tiên lead có segment NOXH / nguồn Ads-form mới trong 24–48h.",
+      "Sau khi gọi xong và có nhu cầu rõ → chuyển bước Tìm hiểu / Đang tư vấn (qua API hoặc quy trình Ops).",
+    ],
+    script:
+      "Chào anh/chị, em là trợ lý House X. Em thấy anh/chị quan tâm nhà ở xã hội / dự án sơ cấp — em gửi giúp checklist điều kiện thu nhập & hồ sơ cần chuẩn bị (miễn phí). Anh/chị tiện Zalo hay gọi ngắn 3 phút ạ?",
+  },
+  DISCOVERY: {
+    meaning:
+      "Đang làm rõ nhu cầu: ngân sách, khu vực, tiến độ, đủ điều kiện NOXH hay không.",
+    dataMeans:
+      "Lead đã được tiếp cận sơ bộ; chưa chốt căn cụ thể. Cột Căn có thể còn trống.",
+    howToUse: [
+      "Hỏi 4 điểm: thu nhập/hộ khẩu (NOXH), ngân sách, thời điểm cần nhà, ưu tiên khu vực.",
+      "Gửi lead magnet phù hợp (checklist NOXH / file dòng tiền vay) trước khi đề xuất căn.",
+      "Khi đã khớp căn khả thi → chuyển Đang tư vấn và tạo proposal.",
+    ],
+    script:
+      "Em gửi anh/chị checklist 1 trang: điều kiện NOXH + 5 giấy tờ hay thiếu. Anh/chị xem giúp em 2 mục mình đã đủ / chưa đủ — em dựa vào đó gợi ý căn phù hợp, không ép đặt chỗ ạ.",
+  },
+  ACTIVE: {
+    meaning:
+      "Đang tư vấn căn cụ thể: so sánh option, giải thích giá/tiến độ/điều kiện.",
+    dataMeans:
+      "Thường đã có mã căn (Unit). Đây là lúc tạo proposal = chụp giá & trạng thái căn tại thời điểm tư vấn.",
+    howToUse: [
+      "Nhập mã căn → Tạo proposal (bắt buộc trước khi cam kết nếu flag G2 bật).",
+      "Giải thích proposal: giá snapshot, không tự khóa căn.",
+      "Khi khách đồng ý giữ chỗ/cọc → lấy mã booking từ Giữ suất F1 rồi bấm Đánh dấu đã cam kết.",
+    ],
+    script:
+      "Em chốt giúp anh/chị 1 phương án: căn …, giá tại thời điểm tư vấn …, hướng/diện tích …. Em gửi bản tóm tắt (proposal) để anh/chị đối chiếu — nếu ưng, bước tiếp theo là giữ suất/cọc theo quy trình dự án, em hỗ trợ checklist nộp hồ sơ.",
+  },
+  COMMITTED: {
+    meaning:
+      "Đã có bằng chứng cam kết journey-native (giữ chỗ / cọc UnitBooking). Chưa phải thắng cuối.",
+    dataMeans:
+      "Cần mã booking/cọc hợp lệ. Proposal phải còn 'tươi' so với tồn kho hiện tại.",
+    howToUse: [
+      "Đối chiếu booking trên Giữ suất F1 với opportunity này.",
+      "Theo dõi hoàn tất hồ sơ / thanh toán theo mốc dự án.",
+      "Khi deal đóng → ghi Thắng hoặc Thua (không để treo COMMITTED lâu).",
+    ],
+    script:
+      "Em xác nhận anh/chị đã giữ suất/cọc mã …. Em gửi lịch hồ sơ cần bổ sung trong … ngày tới và đầu mối hỗ trợ. Có gì vướng pháp lý/vay, anh/chị nhắn em để ưu tiên xử lý — không spam tin bán thêm ạ.",
+  },
+  WON: {
+    meaning: "Deal thắng — đã ghi outcome WON (có lý do + tham chiếu thương mại).",
+    dataMeans:
+      "Cơ hội kết thúc thành công. Funnel đếm vào Kết quả WON. Không nên sửa lung tung.",
+    howToUse: [
+      "Đối soát với booking/HĐ bên journey P.",
+      "Chỉ nurture service/onboarding nếu policy cho phép (không marketing nếu khách rút consent).",
+      "Dùng làm mẫu báo cáo / đào tạo CTV.",
+    ],
+    script:
+      "Chúc mừng anh/chị đã hoàn tất bước …. Em gửi checklist bàn giao / tiến độ tiếp theo và kênh hỗ trợ sau bán. Anh/chị cần gì về hồ sơ vay hay lịch thanh toán, cứ nhắn em.",
+  },
+  LOST: {
+    meaning:
+      "Deal thua / mất — đã ghi outcome LOST. Vẫn có thể nurture dài hạn nếu còn consent.",
+    dataMeans:
+      "Bản smoke test cũng hiện ở đây (an toàn để học UI). Lý do LOST nằm ở panel khi chọn dòng.",
+    howToUse: [
+      "Đọc lý do LOST → phân loại (giá / điều kiện / chọn dự án khác / không liên lạc được).",
+      "Nếu còn marketing consent → Đăng ký nurture (checklist/value), không gọi chèo kéo.",
+      "Không mở lại COMMITTED trừ khi có quy trình reopen chính thức.",
+    ],
+    script:
+      "Cảm ơn anh/chị đã dành thời gian. Em hiểu lần này chưa khớp. Em xin phép gửi thỉnh thoảng 1 checklist/ cập nhật điều kiện NOXH hữu ích (không gọi liên tục). Nếu sau này anh/chị muốn xem lại, cứ nhắn em — em hỗ trợ lại từ đầu ạ.",
+  },
+  CANCELLED: {
+    meaning: "Cơ hội bị huỷ chủ động (khách rút / Ops đóng / trùng).",
+    dataMeans: "Không còn trong luồng bán active. Thường không commit/outcome tiếp.",
+    howToUse: [
+      "Kiểm tra có opportunity/lead trùng không.",
+      "Nếu huỷ nhầm — tạo opportunity mới theo quy trình, không 'sửa' tay status lung tung.",
+      "Rút consent / Stop nurture nếu khách yêu cầu.",
+    ],
+    script:
+      "Em ghi nhận yêu cầu dừng hỗ trợ deal này. Nếu anh/chị muốn ngưng nhận tin, em hỗ trợ rút đăng ký ngay. Sau này cần lại House X, anh/chị cứ liên hệ kênh chính thức ạ.",
+  },
+};
+
+const ALL_PLAYBOOK: StagePlaybook = {
+  meaning:
+    "Xem mọi cơ hội Journey P mọi bước. Dùng khi muốn tìm bản ghi (vd. smoke LOST) hoặc rà toàn funnel.",
+  dataMeans:
+    "Số trên funnel = đếm theo stage/outcome. Bảng bên trái = danh sách đã lọc. Panel phải = giải thích bước + thao tác khi chọn dòng.",
+  howToUse: [
+    "Bấm từng bộ lọc để đọc giải thích bước (ý nghĩa + kịch bản).",
+    "Chọn Tất cả → bấm dòng cần xem → làm proposal / cam kết / WON-LOST / nurture.",
+    "Sang Lead marketing nếu cần SĐT hoặc ghi chú liên hệ.",
+  ],
+  script:
+    "Chọn đúng bộ lọc bước trước khi gọi — mỗi bước có mục tiêu khác nhau (làm rõ nhu cầu ≠ chốt cọc).",
+};
+
+function StageGuideCard({
+  title,
+  playbook,
+}: {
+  title: string;
+  playbook: StagePlaybook;
+}) {
+  return (
+    <div className="space-y-3 text-sm text-slate-700">
+      <div>
+        <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+          Đang xem bước
+        </p>
+        <p className="mt-0.5 text-base font-semibold text-slate-900">{title}</p>
+      </div>
+      <div>
+        <p className="text-xs font-semibold text-slate-800">Ý nghĩa</p>
+        <p className="mt-0.5 text-slate-600">{playbook.meaning}</p>
+      </div>
+      <div>
+        <p className="text-xs font-semibold text-slate-800">Dữ liệu trên bảng nói gì?</p>
+        <p className="mt-0.5 text-slate-600">{playbook.dataMeans}</p>
+      </div>
+      <div>
+        <p className="text-xs font-semibold text-slate-800">Khai thác thế nào?</p>
+        <ul className="mt-1 list-disc space-y-1 pl-4 text-slate-600">
+          {playbook.howToUse.map((line) => (
+            <li key={line}>{line}</li>
+          ))}
+        </ul>
+      </div>
+      <div className="rounded-md border border-emerald-100 bg-emerald-50/80 px-2.5 py-2">
+        <p className="text-xs font-semibold text-emerald-900">
+          Kịch bản tiếp xúc (value-first)
+        </p>
+        <p className="mt-1 text-xs leading-relaxed text-emerald-950/90">
+          “{playbook.script}”
+        </p>
+      </div>
+    </div>
+  );
+}
+
 function idemKey(prefix: string) {
   return `${prefix}:${crypto.randomUUID()}`;
 }
@@ -373,7 +528,7 @@ export function ConversionOpsBoard() {
 
       <div>
         <p className="mb-1.5 text-xs font-semibold uppercase tracking-wide text-slate-500">
-          Lọc theo bước
+          Lọc theo bước — bấm từng mục để xem giải thích + kịch bản bên phải
         </p>
         <div className="flex flex-wrap gap-2">
           <button
@@ -468,18 +623,35 @@ export function ConversionOpsBoard() {
 
         <div className="space-y-3 rounded-lg border border-slate-200 p-3">
           {!selectedId || !selected ? (
-            <div className="space-y-2 text-sm text-slate-600">
-              <p className="font-semibold text-slate-800">Chi tiết cơ hội</p>
-              <p>
-                Chưa chọn dòng nào. Hãy bấm một cơ hội bên trái (vd. bản smoke
-                đang ở bước Thua / mất deal).
-              </p>
-            </div>
+            <StageGuideCard
+              title={
+                stageFilter
+                  ? STAGE_LABEL[stageFilter as (typeof STAGES)[number]] ??
+                    stageFilter
+                  : "Tất cả bước"
+              }
+              playbook={
+                stageFilter && stageFilter in STAGE_PLAYBOOK
+                  ? STAGE_PLAYBOOK[stageFilter as (typeof STAGES)[number]]
+                  : ALL_PLAYBOOK
+              }
+            />
           ) : (
             <>
+              <StageGuideCard
+                title={
+                  STAGE_LABEL[selected.stage as (typeof STAGES)[number]] ??
+                  selected.stage
+                }
+                playbook={
+                  STAGE_PLAYBOOK[selected.stage as (typeof STAGES)[number]] ??
+                  ALL_PLAYBOOK
+                }
+              />
+              <div className="border-t border-slate-100 pt-3">
               <div>
                 <p className="text-xs font-semibold uppercase text-slate-500">
-                  Chi tiết cơ hội
+                  Thao tác trên cơ hội đã chọn
                 </p>
                 <p className="mt-1 font-mono text-xs">{selected.id}</p>
                 <p className="text-sm">
@@ -489,15 +661,16 @@ export function ConversionOpsBoard() {
                 </p>
               </div>
 
-              <div className="rounded-md border border-dashed border-slate-200 bg-slate-50 px-2.5 py-2 text-xs text-slate-600">
-                <p className="font-semibold text-slate-800">Bước trên panel này</p>
+              <div className="mt-3 rounded-md border border-dashed border-slate-200 bg-slate-50 px-2.5 py-2 text-xs text-slate-600">
+                <p className="font-semibold text-slate-800">Thứ tự nút bên dưới</p>
                 <ol className="mt-1 list-decimal space-y-0.5 pl-4">
                   <li>Nhập / giữ mã căn → Tạo proposal (chụp giá tại thời điểm)</li>
-                  <li>Dán mã booking/cọc → COMMITTED</li>
-                  <li>Ghi kết quả WON hoặc LOST</li>
-                  <li>(Tuỳ chọn) Enroll / Stop nurture</li>
+                  <li>Dán mã booking/cọc → Đánh dấu đã cam kết</li>
+                  <li>Ghi kết quả Thắng hoặc Thua</li>
+                  <li>(Tuỳ chọn) Đăng ký / Dừng nurture</li>
                 </ol>
               </div>
+
 
               <label className="block text-xs font-medium text-slate-600">
                 Mã căn (unit) — dùng khi tạo proposal
@@ -629,6 +802,7 @@ export function ConversionOpsBoard() {
                     Dừng nurture
                   </Button>
                 </div>
+              </div>
               </div>
             </>
           )}
