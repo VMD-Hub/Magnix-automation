@@ -32,7 +32,7 @@ runtime execution evidence; deployment/activation alone is not a functional smok
 6. Outbox: `opportunity.stage_changed` + `conversion.won`/`conversion.lost` (minimized)
 
 A/S COMMITTED remains fail-closed. Runtime/production evidence for this slice:
-see **Production Journey P smoke — checklist** below (fill after VPS run).
+**PASS** — see **Production Journey P smoke — 2026-07-18** below.
 
 ### Production Journey P smoke — checklist (Phase 1)
 
@@ -52,6 +52,35 @@ under `reports/journey-p-smoke-*.json` (IDs only), confirmer, rollback owner
 (`HOUSEX_CONVERSION_G2_JOURNEY_P=false` + PM2 restart).
 
 Script: `scripts/smoke-journey-p-conversion.ts` · npm `go-live:smoke-journey-p`.
+
+### Production Journey P smoke — 2026-07-18
+
+- Result: **PASS**
+- Observed at: `2026-07-18T04:09:21Z` (VPS)
+- Deployed commits (lineage): `811e581` (ops UI + SC-6) + `0a6020c` (build/smoke unblock)
+- Flag: `HOUSEX_CONVERSION_G2_JOURNEY_P=true` (leave **on**)
+- Evidence file (VPS):
+  `/opt/housex/Proptech-HouseX/reports/journey-p-smoke-2026-07-18T04-09-21-180Z.json`
+- Fixture note: seeded disposable unit `SMK-JP-MRPUL48S` on project
+  `dta-happy-home-nhon-trach` (soft-deleted after smoke)
+- Masked IDs only (no phone/email):
+
+| Field | Value |
+| --- | --- |
+| `correlationId` | `smoke-jp-1784347761181` |
+| `leadId` | `004e7d7f-548a-4a59-a285-584409e9f1b4` |
+| `opportunityId` | `4997c52f-7bc4-48de-bda2-434d2fdf3391` |
+| `proposalId` | `fc1767c1-9b72-4382-83cc-8d278b89c1fe` |
+| `bookingId` | `60f55881-970e-4a8b-b3c0-68ff51667054` |
+| `outcomeId` | `6e64ba54-6c95-4bb8-b513-cca7a4ab76ea` |
+| `projectId` | `5916cc24-bbbd-4217-9721-1cbfeb1e8c47` |
+| `unitId` | `66821699-7773-4ae0-be5f-63467f79b289` |
+| `opportunityStage` | `COMMITTED` |
+| `outcomeResult` | `LOST` |
+
+- Outbox types observed: `opportunity.stage_changed`, `conversion.lost`
+- Rollback owner: set `HOUSEX_CONVERSION_G2_JOURNEY_P=false` then `pm2 restart housex`
+- SC-4 / SC-5 `runtime_evidence`: **PRODUCTION-PROVEN** (Journey P only; A/S still fail-closed)
 
 ## Local verification commands
 
@@ -123,10 +152,9 @@ Local result on 2026-07-17:
 - **NOT PASSED — full sales journey E2E:** production UID ingest is proven, but the
   complete assignment → qualification → appointment path still needs a controlled
   production/staging fixture and DB assertions.
-- **AWAITING — Journey P SC-4/SC-5 smoke:** run
-  `HOUSEX_CONVERSION_G2_JOURNEY_P=true npm run go-live:smoke-journey-p` on VPS,
-  attach `reports/journey-p-smoke-*.json` (IDs only), then flip SC-4/SC-5
-  `runtime_evidence` to `PRODUCTION-PROVEN`.
+- **PASSED — Journey P SC-4/SC-5 smoke (2026-07-18):** see production block above;
+  SC-4/SC-5 `runtime_evidence` = `PRODUCTION-PROVEN` (Journey P). A/S COMMITTED
+  remains fail-closed.
 - **SC-6 REPO-DONE:** `NurtureEnrollment` / dispatch APIs + consent gate on
   `tryEnqueueLeadNurture`; UI panel on `/admin/conversion`. Runtime dry-run pending.
 

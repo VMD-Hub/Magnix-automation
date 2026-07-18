@@ -319,7 +319,8 @@ consent proof và PII thật không được đưa vào bằng chứng.
 **Status**
 
 - `repo_status: REPO-DONE`
-- `runtime_evidence: NOT_PROVIDED`
+- `runtime_evidence: PRODUCTION-PROVEN` (Journey P; 2026-07-18 smoke
+  `smoke-jp-1784347761181` — see `SALES_CONVERSION_G1_G2_EVIDENCE.md`)
 - Target gate: G2 Journey P adoption (feature flag `HOUSEX_CONVERSION_G2_JOURNEY_P`).
 
 **Owner boundary**
@@ -380,7 +381,8 @@ consent proof và PII thật không được đưa vào bằng chứng.
 **Status**
 
 - `repo_status: REPO-DONE`
-- `runtime_evidence: NOT_PROVIDED`
+- `runtime_evidence: PRODUCTION-PROVEN` (Journey P; 2026-07-18 smoke
+  `smoke-jp-1784347761181` — see `SALES_CONVERSION_G1_G2_EVIDENCE.md`)
 - Target gate: G2 Journey P adoption (feature flag `HOUSEX_CONVERSION_G2_JOURNEY_P`).
 
 **Owner boundary**

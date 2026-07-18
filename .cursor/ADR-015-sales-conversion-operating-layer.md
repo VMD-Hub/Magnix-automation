@@ -192,11 +192,11 @@ tạo side effect lặp.
 | **G1 — Authoritative foundation** | Additive schema cho `ConsentRecord`, Opportunity/activity tối thiểu; idempotent APIs; transactional outbox. | Migration rollback-tested; duplicate/retry tests pass; withdrawal blocks marketing; RBAC/PII tests pass. |
 | **G2 — Journey adoption** | Journey A/S/P map subject, stages và outcomes; funnel read model; migrate legacy automation. | Mỗi journey có one end-to-end conversion path, no bypass legal/verification gates, reconciled metrics and rollback/runbook approved. |
 
-**G2 Journey P slice (SC-4/SC-5, repo):** `ProposalSnapshot` + `ConversionOutcome` dưới
+**G2 Journey P slice (SC-4/SC-5):** `ProposalSnapshot` + `ConversionOutcome` dưới
 `/api/admin/conversion/{proposals,outcomes,funnel}`; bật bằng
 `HOUSEX_CONVERSION_G2_JOURNEY_P=true`. UnitBooking vẫn là authority deposit. A/S
-COMMITTED vẫn fail-closed. Runtime evidence production: chờ
-`go-live:smoke-journey-p` trên VPS.
+COMMITTED vẫn fail-closed. Runtime evidence production: **PASS** 2026-07-18
+(`smoke-jp-1784347761181`) — xem `Proptech-HouseX/docs/SALES_CONVERSION_G1_G2_EVIDENCE.md`.
 
 **SC-6 (repo):** `NurtureEnrollment` + eligibility/enroll/dispatch APIs; `lead.nurture`
 v1 vẫn enqueue nhưng fail-closed nếu thiếu marketing consent hoặc enrollment CANCELLED.
