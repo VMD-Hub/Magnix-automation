@@ -52,11 +52,13 @@ export function EmbedAwareLink({
   children,
   className,
   onClick,
+  role,
 }: {
   href: string;
   children: ReactNode;
   className?: string;
   onClick?: () => void;
+  role?: string;
 }) {
   const resolved = useEmbedAwareHref(href);
   const embed = useMiniAppEmbed();
@@ -66,6 +68,7 @@ export function EmbedAwareLink({
       <a
         href="/"
         className={className}
+        role={role}
         onClick={(e) => {
           e.preventDefault();
           goMiniAppHome();
@@ -79,14 +82,14 @@ export function EmbedAwareLink({
 
   if (embed && resolved.startsWith("http")) {
     return (
-      <a href={resolved} className={className} onClick={onClick}>
+      <a href={resolved} className={className} role={role} onClick={onClick}>
         {children}
       </a>
     );
   }
 
   return (
-    <Link href={resolved} className={className} onClick={onClick}>
+    <Link href={resolved} className={className} role={role} onClick={onClick}>
       {children}
     </Link>
   );
