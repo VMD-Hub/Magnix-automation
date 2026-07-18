@@ -367,7 +367,11 @@ export function ConversionOpsBoard() {
               ) : items.length === 0 ? (
                 <tr>
                   <td className="px-3 py-4 text-slate-500" colSpan={4}>
-                    Không có opportunity (flag G2 phải bật).
+                    {msg?.includes("HOUSEX_CONVERSION_G2")
+                      ? msg
+                      : stageFilter
+                        ? `Không có opportunity ở stage ${stageFilter}.`
+                        : "Chưa có opportunity Journey P."}
                   </td>
                 </tr>
               ) : (
