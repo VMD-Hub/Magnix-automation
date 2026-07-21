@@ -8,6 +8,7 @@ import {
   approveContentQueue,
   getContentQueueById,
   markContentQueuePublished,
+  publishContentQueueToWeb,
   rejectContentQueue,
   submitContentQueueL3,
   updateContentQueueItem,
@@ -80,6 +81,13 @@ export async function POST(req: NextRequest, { params }: Ctx) {
       if (body.action === "reject") {
         return ok(await rejectContentQueue(id, reviewedBy, body.rejectReason));
       }
+      if (body.action === "publish_web") {
+        return ok(
+          await publishContentQueueToWeb(id, {
+            publishNow: body.publishNow,
+          }),
+        );
+      }
       return ok(await markContentQueuePublished(id));
     } catch (inner) {
       if (inner instanceof Error) {
@@ -94,6 +102,13 @@ export async function POST(req: NextRequest, { params }: Ctx) {
             409,
             "INVALID_STATUS",
             "Không thể chuyển trạng thái từ status hiện tại.",
+          );
+        }
+        if (inner.message === "ARTICLE_MISSING") {
+          return fail(
+            409,
+            "ARTICLE_MISSING",
+            "articleId gắn với queue không còn trong CMS — xóa liên kết hoặc tạo bài mới.",
           );
         }
         if (inner.message === "GATE_FAILED") {

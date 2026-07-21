@@ -60,4 +60,9 @@ export const contentQueueStatusActionSchema = z.discriminatedUnion("action", [
     rejectReason: z.string().min(5).max(2000),
   }),
   z.object({ action: z.literal("mark_published") }),
+  z.object({
+    action: z.literal("publish_web"),
+    /** true = tạo/đưa article PUBLISHED; false = chỉ nháp DRAFT + gắn articleId. */
+    publishNow: z.boolean().optional().default(true),
+  }),
 ]);

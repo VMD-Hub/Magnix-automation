@@ -92,10 +92,12 @@ export const PLAYBOOK_SECTIONS: PlaybookSection[] = [
       "Trước publish trả lời đủ 3 câu: nỗi đau? tool nào? câu CTA hành động?",
       "Duyệt trên /admin/content-queue — hệ thống chặn L3 nếu thiếu cta_tool_id.",
       "Đo submit 2 tool / tuần — không chỉ đếm số bài đã đăng.",
+      "Sau L3: Publish web ngay (hoặc nháp CMS) — bài luôn có CTA tool.",
     ],
     bullets: [
       "Không viết tool mới trong Q này — phân phối 2 tool NƠXH hiện có.",
       "Không Ads / Zalo Group product — ưu tiên SEO Q&A + Mini App.",
+      "Content queue → publish_web đóng vòng SEO trong Admin (không nhảy Sheet).",
     ],
   },
   {

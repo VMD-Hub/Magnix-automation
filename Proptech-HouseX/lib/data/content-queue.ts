@@ -7,11 +7,16 @@ import {
 import { prisma } from "@/lib/prisma";
 import { assertContentQueueReadyForL3 } from "@/lib/content/content-queue-gates";
 import {
+  buildArticleBodyFromQueue,
+  slugifyArticleTitle,
+} from "@/lib/content/content-queue-article";
+import {
   EMPTY_L3_CHECKLIST,
   getNoxhCtaTool,
   type L3ContentChecklist,
   type NoxhCtaToolId,
 } from "@/lib/content/noxh-cta-tools";
+import { createArticleFromAdmin } from "@/lib/data/article-admin";
 import { randomUUID } from "node:crypto";
 
 function checklistToJson(
@@ -243,6 +248,116 @@ export async function markContentQueuePublished(
     data: {
       status: "PUBLISHED",
       publishedAt: row.publishedAt ?? new Date(),
+    },
+    include: includeArticle,
+  });
+}
+
+async function allocateUniqueArticleSlug(title: string): Promise<string> {
+  const base = slugifyArticleTitle(title);
+  for (let i = 0; i < 20; i += 1) {
+    const slug = i === 0 ? base : `${base}-${i + 1}`;
+    const hit = await prisma.article.findUnique({
+      where: { slug },
+      select: { id: true },
+    });
+    if (!hit) return slug;
+  }
+  return `${base}-${Date.now().toString(36)}`;
+}
+
+/**
+ * P1 — tạo/publish bài CMS từ queue, luôn nhúng CTA tool NƠXH.
+ * - publishNow=false: article DRAFT, queue vẫn APPROVED (gắn articleId)
+ * - publishNow=true: article PUBLISHED, queue → PUBLISHED
+ */
+export async function publishContentQueueToWeb(
+  id: string,
+  opts: { publishNow?: boolean } = {},
+): Promise<ContentQueueWithArticle> {
+  const publishNow = opts.publishNow !== false;
+  const row = await getContentQueueById(id);
+  if (!row) throw new Error("NOT_FOUND");
+  if (row.status !== "APPROVED" && row.status !== "PUBLISHED") {
+    throw new Error("INVALID_STATUS");
+  }
+  gateOrThrow(row);
+
+  const tool = getNoxhCtaTool(row.ctaToolId);
+  if (!tool) throw new Error("GATE_FAILED");
+
+  const body = buildArticleBodyFromQueue(row);
+  const excerpt =
+    row.painPoint?.trim().slice(0, 500) ||
+    `Kiểm tra nhanh: ${tool.title}`;
+
+  if (row.articleId) {
+    const existing = await prisma.article.findUnique({
+      where: { id: row.articleId },
+    });
+    if (!existing) throw new Error("ARTICLE_MISSING");
+
+    await prisma.article.update({
+      where: { id: existing.id },
+      data: {
+        title: row.title,
+        excerpt,
+        body,
+        ...(publishNow
+          ? {
+              status: "PUBLISHED" as const,
+              publishedAt: existing.publishedAt ?? new Date(),
+            }
+          : {}),
+        seoTitle: row.title.slice(0, 200),
+        seoDesc: excerpt.slice(0, 320),
+      },
+    });
+
+    if (!publishNow) {
+      const refreshed = await getContentQueueById(id);
+      if (!refreshed) throw new Error("NOT_FOUND");
+      return refreshed;
+    }
+
+    return prisma.contentQueueItem.update({
+      where: { id },
+      data: {
+        status: "PUBLISHED",
+        publishedAt: row.publishedAt ?? new Date(),
+        publishChannel: row.publishChannel ?? "WEBSITE",
+      },
+      include: includeArticle,
+    });
+  }
+
+  const slug = await allocateUniqueArticleSlug(row.title);
+  const article = await createArticleFromAdmin({
+    slug,
+    title: row.title,
+    excerpt,
+    body,
+    status: publishNow ? "PUBLISHED" : "DRAFT",
+    publishedAt: publishNow ? new Date().toISOString() : null,
+    coverImageUrl: null,
+    authorName: "House X",
+    seoTitle: row.title.slice(0, 200),
+    seoDesc: excerpt.slice(0, 320),
+    tagSlugs: [],
+    projectIds: [],
+  });
+
+  return prisma.contentQueueItem.update({
+    where: { id },
+    data: {
+      articleId: article.id,
+      publishChannel: row.publishChannel ?? "WEBSITE",
+      ...(publishNow
+        ? {
+            status: "PUBLISHED" as const,
+            publishedAt: new Date(),
+          }
+        : {}),
     },
     include: includeArticle,
   });

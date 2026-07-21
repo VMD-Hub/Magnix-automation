@@ -1,4 +1,4 @@
-# Content Queue Admin (House X) — P0
+# Content Queue Admin (House X) — P0 + P1 publish web
 
 > Super-only · CTA tool NƠXH bắt buộc trước L3 · thay dần Sheet `content_queue` cho vận hành duyệt.
 
@@ -25,22 +25,32 @@ Source of truth code: `lib/content/noxh-cta-tools.ts`.
 
 Thiếu 1 → API trả `422 GATE_FAILED`.
 
-## UI / API
+## Actions
 
-| | |
+| Action | Ý nghĩa |
 |---|---|
-| Admin | `/admin/content-queue` |
-| List/Create | `GET/POST /api/admin/content-queue` |
-| Update/Actions | `PATCH/POST /api/admin/content-queue/[id]` |
-| Actions | `submit_l3` · `approve` · `reject` · `mark_published` |
+| `submit_l3` | INTAKE/REJECTED → PENDING_L3 |
+| `approve` / `reject` | L3 |
+| `publish_web` | **P1** — tạo/cập nhật `Article` CMS kèm CTA tool; `publishNow=true` → PUBLISHED |
+| `mark_published` | Chỉ đánh dấu queue (đăng tay FB/short) |
 
 Status: `INTAKE` → `PENDING_L3` → `APPROVED` → `PUBLISHED` (hoặc `REJECTED`).
+
+## P1 — Publish web
+
+Từ item **APPROVED** (CTA đủ):
+
+1. **Publish web ngay** → tạo `Article` status PUBLISHED + body markdown có link tool → queue `PUBLISHED`
+2. **Tạo nháp CMS** → `Article` DRAFT, sửa thêm tại `/admin/articles/[id]`, rồi publish_web lại
+3. Public URL: `/tin-tuc/cam-nang-noxh/[slug]`
+
+Body luôn có section **Kiểm tra nhanh (CTA)** — không publish bài trống CTA.
 
 ## Quan hệ Sheet / n8n
 
 - n8n vẫn có thể ghi Sheet `content_queue` (pipeline listen/classify).
-- House X Postgres `content_queue_items` = **mặt kính Super L3 + CTA**.
-- Field `sheet_key` optional để lần dấu item Sheet; sync tự động = backlog P1.
+- House X Postgres `content_queue_items` = **mặt kính Super L3 + CTA + publish web**.
+- Field `sheet_key` optional; sync tự động Sheet → Postgres = backlog sau.
 
 ## Migration
 

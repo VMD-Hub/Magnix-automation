@@ -11,6 +11,7 @@ import {
   type NoxhCtaToolId,
   parseL3Checklist,
 } from "@/lib/content/noxh-cta-tools";
+import { articlePath } from "@/lib/content/article-routes";
 
 type StatusFilter =
   | "PENDING_L3"
@@ -168,6 +169,12 @@ export function ContentQueueBoard() {
   const [mode, setMode] = useState<"list" | "create" | "edit">("list");
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editingStatus, setEditingStatus] = useState<string | null>(null);
+  const [editingArticle, setEditingArticle] = useState<{
+    id: string;
+    slug: string;
+    title: string;
+    status: string;
+  } | null>(null);
   const [form, setForm] = useState<FormState>(emptyForm);
 
   const load = useCallback(async () => {
@@ -211,6 +218,7 @@ export function ContentQueueBoard() {
     setMode("create");
     setEditingId(null);
     setEditingStatus(null);
+    setEditingArticle(null);
     setForm(emptyForm);
     setMessage(null);
     setError(null);
@@ -220,6 +228,7 @@ export function ContentQueueBoard() {
     setMode("edit");
     setEditingId(item.id);
     setEditingStatus(item.status);
+    setEditingArticle(item.article);
     setForm(itemToForm(item));
     setMessage(null);
     setError(null);
@@ -229,6 +238,7 @@ export function ContentQueueBoard() {
     setMode("list");
     setEditingId(null);
     setEditingStatus(null);
+    setEditingArticle(null);
     setForm(emptyForm);
     setRejectReason("");
   }
@@ -299,7 +309,13 @@ export function ContentQueueBoard() {
   }
 
   async function runAction(
-    action: "submit_l3" | "approve" | "reject" | "mark_published",
+    action:
+      | "submit_l3"
+      | "approve"
+      | "reject"
+      | "mark_published"
+      | "publish_web",
+    publishNow?: boolean,
   ) {
     if (!editingId) return;
     if (action === "reject" && rejectReason.trim().length < 5) {
@@ -311,7 +327,11 @@ export function ContentQueueBoard() {
     setMessage(null);
     try {
       // Persist form before gate actions
-      if (action === "submit_l3" || action === "approve") {
+      if (
+        action === "submit_l3" ||
+        action === "approve" ||
+        action === "publish_web"
+      ) {
         const patch = await fetch(`/api/admin/content-queue/${editingId}`, {
           method: "PATCH",
           credentials: "include",
@@ -343,7 +363,9 @@ export function ContentQueueBoard() {
         body: JSON.stringify(
           action === "reject"
             ? { action, rejectReason: rejectReason.trim() }
-            : { action },
+            : action === "publish_web"
+              ? { action, publishNow: publishNow !== false }
+              : { action },
         ),
       });
       const json = await res.json();
@@ -355,6 +377,9 @@ export function ContentQueueBoard() {
         return;
       }
       setEditingStatus(json.data.status);
+      if (json.data.article) {
+        setEditingArticle(json.data.article);
+      }
       setMessage(
         action === "approve"
           ? "Đã duyệt L3."
@@ -362,7 +387,11 @@ export function ContentQueueBoard() {
             ? "Đã gửi chờ L3."
             : action === "reject"
               ? "Đã từ chối."
-              : "Đã đánh dấu published.",
+              : action === "publish_web"
+                ? publishNow === false
+                  ? "Đã tạo bài nháp trên CMS."
+                  : "Đã publish bài web + đánh dấu queue published."
+                : "Đã đánh dấu published.",
       );
       setRejectReason("");
       await load();
@@ -591,16 +620,70 @@ export function ContentQueueBoard() {
             </>
           ) : null}
           {editingStatus === "APPROVED" ? (
+            <>
+              <Button
+                type="button"
+                disabled={actionLoading}
+                onClick={() => void runAction("publish_web", true)}
+              >
+                Publish web ngay
+              </Button>
+              <Button
+                type="button"
+                variant="outline"
+                disabled={actionLoading}
+                onClick={() => void runAction("publish_web", false)}
+              >
+                Tạo nháp CMS
+              </Button>
+              <Button
+                type="button"
+                variant="outline"
+                disabled={actionLoading}
+                onClick={() => void runAction("mark_published")}
+              >
+                Đánh dấu đã đăng (tay)
+              </Button>
+            </>
+          ) : null}
+          {editingStatus === "PUBLISHED" && editingArticle ? (
             <Button
               type="button"
               variant="outline"
               disabled={actionLoading}
-              onClick={() => void runAction("mark_published")}
+              onClick={() => void runAction("publish_web", true)}
             >
-              Đánh dấu đã đăng
+              Đồng bộ lại bài web
             </Button>
           ) : null}
         </div>
+
+        {editingArticle ? (
+          <p className="text-sm text-slate-600">
+            CMS:{" "}
+            <a
+              className="font-medium text-sky-700 underline"
+              href={`/admin/articles/${editingArticle.id}`}
+            >
+              {editingArticle.title}
+            </a>
+            {" · "}
+            <span className="text-slate-500">{editingArticle.status}</span>
+            {editingArticle.status === "PUBLISHED" ? (
+              <>
+                {" · "}
+                <a
+                  className="font-medium text-sky-700 underline"
+                  href={articlePath(editingArticle.slug)}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Xem public
+                </a>
+              </>
+            ) : null}
+          </p>
+        ) : null}
       </div>
     );
   }
