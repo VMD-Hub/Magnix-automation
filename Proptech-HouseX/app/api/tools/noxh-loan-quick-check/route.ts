@@ -12,6 +12,9 @@ import {
   noxhLoanQuickLeadMessage,
   quickCheckTier,
 } from "@/lib/finance/noxh-loan-quick-lead";
+import { grantMarketingEmailConsent } from "@/lib/sales-core/marketing-email-consent";
+import { tryEnrollNoxhWelcomeAfterConsent } from "@/lib/messaging/email-nurture-server-send";
+import { LEAD_SOURCE } from "@/lib/leads/source";
 
 const RATE_MAX = Number(process.env.LEAD_RATE_MAX ?? "20");
 const RATE_WINDOW = Number(process.env.LEAD_RATE_WINDOW_SEC ?? "3600");
@@ -96,6 +99,31 @@ export async function POST(req: NextRequest) {
 
       return { lead: createdLead, eventPayload };
     });
+
+    const email = typeof body.email === "string" ? body.email.trim() : "";
+    if (body.marketingEmailOptIn && email) {
+      const consentResult = await grantMarketingEmailConsent({
+        leadId: lead.id,
+        source: LEAD_SOURCE.TOOL_NOXH_LOAN_QUICK,
+        proofType: "tool_opt_in",
+        proofRef: email,
+      });
+      if (!consentResult.granted) {
+        console.error("[noxh-loan-quick] marketing email consent not recorded", {
+          reason: consentResult.reason,
+        });
+      } else {
+        const welcome = await tryEnrollNoxhWelcomeAfterConsent({
+          leadId: lead.id,
+          correlationId: `noxh-loan:${lead.id}`,
+        });
+        if (!welcome.enrolled) {
+          console.error("[noxh-loan-quick] email welcome enroll skipped", {
+            reason: welcome.reason,
+          });
+        }
+      }
+    }
 
     void forwardEventToWebhook("lead.noxh_loan_quick_check", eventPayload).catch(
       (error) => {

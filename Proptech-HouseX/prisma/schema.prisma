@@ -878,6 +878,7 @@ model Lead {
   nurtureEnrollments    NurtureEnrollment[]
   salesActivities       SalesActivity[]
   appointments          Appointment[]
+  emailEngagementEvents EmailEngagementEvent[]
 
   @@index([status])
   @@index([assignedBrokerId, status])
@@ -1166,19 +1167,49 @@ model NurtureEnrollment {
 }
 
 model NurtureDispatch {
-  id             String                @id @default(uuid())
-  enrollmentId   String                @map("enrollment_id")
-  status         NurtureDispatchStatus
-  actorId        String                @map("actor_id")
-  occurredAt     DateTime              @map("occurred_at")
-  correlationId  String                @map("correlation_id")
-  idempotencyKey String                @unique @map("idempotency_key")
-  createdAt      DateTime              @default(now()) @map("created_at")
+  id                String                @id @default(uuid())
+  enrollmentId      String                @map("enrollment_id")
+  status            NurtureDispatchStatus
+  actorId           String                @map("actor_id")
+  occurredAt        DateTime              @map("occurred_at")
+  correlationId     String                @map("correlation_id")
+  idempotencyKey    String                @unique @map("idempotency_key")
+  /// ADR-017 P2 — Resend/webhook message id for bounce correlation.
+  providerMessageId String?               @map("provider_message_id")
+  /// Soft metadata: abVariant, sequenceId, stepIndex, subject, campaignKey.
+  metadata          Json                  @default("{}")
+  createdAt         DateTime              @default(now()) @map("created_at")
 
-  enrollment NurtureEnrollment @relation(fields: [enrollmentId], references: [id], onDelete: Cascade)
+  enrollment         NurtureEnrollment      @relation(fields: [enrollmentId], references: [id], onDelete: Cascade)
+  engagementEvents   EmailEngagementEvent[]
 
   @@index([enrollmentId, occurredAt(sort: Desc)])
+  @@index([providerMessageId])
   @@map("nurture_dispatches")
+}
+
+/// ADR-017 P2 — append-only open/click/bounce/complaint (no full email PII).
+model EmailEngagementEvent {
+  id                String   @id @default(uuid())
+  type              String
+  leadId            String?  @map("lead_id")
+  enrollmentId      String?  @map("enrollment_id")
+  dispatchId        String?  @map("dispatch_id")
+  providerMessageId String?  @map("provider_message_id")
+  campaignKey       String?  @map("campaign_key")
+  payload           Json     @default("{}")
+  occurredAt        DateTime @map("occurred_at")
+  idempotencyKey    String   @unique @map("idempotency_key")
+  createdAt         DateTime @default(now()) @map("created_at")
+
+  lead     Lead?            @relation(fields: [leadId], references: [id], onDelete: SetNull)
+  dispatch NurtureDispatch? @relation(fields: [dispatchId], references: [id], onDelete: SetNull)
+
+  @@index([type, occurredAt(sort: Desc)])
+  @@index([leadId, occurredAt(sort: Desc)])
+  @@index([providerMessageId])
+  @@index([campaignKey, type])
+  @@map("email_engagement_events")
 }
 
 /// Append-only sales timeline. Notes remain protected and are excluded from events.

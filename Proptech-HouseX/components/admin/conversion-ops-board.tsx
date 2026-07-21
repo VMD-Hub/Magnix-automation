@@ -761,6 +761,8 @@ export function ConversionOpsBoard() {
                     <option value="zalo">zalo</option>
                     <option value="oa">oa</option>
                     <option value="telegram">telegram</option>
+                    <option value="sms">sms</option>
+                    <option value="email">email</option>
                   </select>
                 </label>
                 {nurture ? (

@@ -36,6 +36,16 @@ import {
   CUSTOMER_NOTIFY_TYPE,
 } from "@/lib/data/customer-notification";
 import { WAITLIST_NO_COLD_CALL } from "@/lib/content/messaging/interest-waitlist-copy";
+import { grantMarketingEmailConsent } from "@/lib/sales-core/marketing-email-consent";
+import {
+  EMAIL_NURTURE_CHANNEL,
+  MARKETING_PURPOSE,
+} from "@/lib/sales-core/marketing-email-consent";
+import { tryEnrollWaitlistDigestAfterConsent } from "@/lib/messaging/email-campaign-send";
+import { enrollNurture } from "@/lib/sales-core/service";
+import { WEEKLY_NEWSLETTER_SCRIPT_ID } from "@/lib/leads/nurture-scripts";
+import { tryEnrollCctmUtilityAfterConsent } from "@/lib/messaging/email-p3-campaigns";
+import { SalesCoreRuleError } from "@/lib/sales-core/domain";
 
 const LEAD_RATE_MAX = Number(process.env.LEAD_RATE_MAX ?? "20");
 const LEAD_RATE_WINDOW_SEC = Number(process.env.LEAD_RATE_WINDOW_SEC ?? "3600");
@@ -243,6 +253,58 @@ export async function POST(req: NextRequest) {
     });
 
     void forwardLeadCreatedBestEffort(eventPayload);
+
+    const emailOptIn = body.marketingEmailOptIn === true;
+    const emailAddr = typeof body.email === "string" ? body.email.trim() : "";
+    if (emailOptIn && emailAddr) {
+      const prefs = parseChannelPreferences(body.channelPreference);
+      const withEmail = prefs.includes("email")
+        ? prefs
+        : [...prefs, "email" as const];
+      // Preference alone is not consent — grant ledger explicitly.
+      const grant = await grantMarketingEmailConsent({
+        leadId: lead.id,
+        source: lead.source,
+        proofType: "web_form_checkbox",
+        proofRef: emailAddr,
+      });
+      if (grant.granted) {
+        if (isWaitlistCapture(parseLeadCaptureType(body.captureType), null)) {
+          await tryEnrollWaitlistDigestAfterConsent({
+            leadId: lead.id,
+            correlationId: `lead-waitlist-email:${lead.id}`,
+          });
+        }
+        // Newsletter cohort: mọi opt-in email form (waitlist hoặc consult) có thể nhận bản tin.
+        try {
+          await enrollNurture({
+            leadId: lead.id,
+            purpose: MARKETING_PURPOSE,
+            channel: EMAIL_NURTURE_CHANNEL,
+            scriptId: WEEKLY_NEWSLETTER_SCRIPT_ID,
+            cohortKey: "weekly_newsletter",
+            actorId: "system:lead-capture",
+            correlationId: `newsletter-enroll:${lead.id}`,
+            idempotencyKey: `email-campaign:weekly_newsletter:${lead.id}:enroll`,
+            action: "enroll",
+          });
+        } catch (err) {
+          if (!(err instanceof SalesCoreRuleError)) {
+            console.error("[leads] newsletter enroll failed", err);
+          }
+        }
+        if (lead.segment === "CCTM") {
+          await tryEnrollCctmUtilityAfterConsent({
+            leadId: lead.id,
+            correlationId: `lead-cctm-email:${lead.id}`,
+          });
+        }
+        // Best-effort: reflect email in channelPreference if client omitted it.
+        if (!prefs.includes("email") && withEmail.length > 0) {
+          void withEmail;
+        }
+      }
+    }
 
     if (idemKey) {
       await kv.set(`idem:lead:${idemKey}`, lead.id, IDEMPOTENCY_TTL_SEC);

@@ -1,10 +1,31 @@
 import type { LeadSegment } from "@prisma/client";
 import { LEAD_SOURCE } from "@/lib/leads/source";
 
-export type NurtureScriptChannel = "oa" | "telegram" | "zalo" | "manual" | "sms";
+export type NurtureScriptChannel =
+  | "oa"
+  | "telegram"
+  | "zalo"
+  | "manual"
+  | "sms"
+  | "email";
 
 /** Phase 2 telesales — enroll thủ công từ server-send (không auto-resolve). */
 export const TELESALES_MISS_CALLBACK_SCRIPT_ID = "telesales-miss-callback";
+
+/** ADR-017 P0 — Welcome email sau tool NOXH (dispatch E1–E3 = P1). */
+export const NOXH_TOOL_EMAIL_WELCOME_SCRIPT_ID = "noxh-tool-email-welcome";
+
+/** ADR-017 P0 — Digest email phụ cho waitlist (chỉ khi ConsentRecord email). */
+export const WAITLIST_EMAIL_DIGEST_SCRIPT_ID = "waitlist-email-digest";
+
+/** ADR-017 P2 — Newsletter tuần (opt-in marketing email). */
+export const WEEKLY_NEWSLETTER_SCRIPT_ID = "weekly-newsletter";
+
+/** ADR-017 P3 — 1-shot re-engage sau ~90 ngày không tương tác. */
+export const INACTIVE_REENGAGE_SCRIPT_ID = "email-inactive-reengage";
+
+/** ADR-017 P3 — CCTM / utility BĐS email cohort. */
+export const CCTM_UTILITY_EMAIL_SCRIPT_ID = "cctm-utility-email";
 
 export type NurtureScript = {
   id: string;
@@ -39,6 +60,15 @@ export const NURTURE_SCRIPT_CATALOG: NurtureScript[] = [
     label: "NOXH — Sau tool kiểm tra điều kiện",
     description: "Tóm tắt kết quả tool + đề xuất bước gỡ hồ sơ nếu WARM.",
     channel: "oa",
+    segment: "NOXH",
+    sources: [LEAD_SOURCE.TOOL_NOXH_CHECK, LEAD_SOURCE.TOOL_NOXH_LOAN_QUICK],
+  },
+  {
+    id: NOXH_TOOL_EMAIL_WELCOME_SCRIPT_ID,
+    label: "NOXH — Welcome email sau tool (ADR-017)",
+    description:
+      "Chuỗi Welcome E1–E3: lead magnet / lỗi hồ sơ / dự án SoR. P0 = catalog + consent; gửi = P1.",
+    channel: "email",
     segment: "NOXH",
     sources: [LEAD_SOURCE.TOOL_NOXH_CHECK, LEAD_SOURCE.TOOL_NOXH_LOAN_QUICK],
   },
@@ -89,6 +119,36 @@ export const NURTURE_SCRIPT_CATALOG: NurtureScript[] = [
     sources: [LEAD_SOURCE.WAITLIST_PROJECT],
   },
   {
+    id: WAITLIST_EMAIL_DIGEST_SCRIPT_ID,
+    label: "Waitlist — email digest phụ (ADR-017)",
+    description:
+      "ADR-016: in-app mặc định. Email chỉ khi ConsentRecord channel=email; cadence thưa.",
+    channel: "email",
+    sources: [LEAD_SOURCE.WAITLIST_PROJECT],
+  },
+  {
+    id: WEEKLY_NEWSLETTER_SCRIPT_ID,
+    label: "Newsletter tuần — NOXH / House X (ADR-017 P2)",
+    description:
+      "Bản tin 1 thư/tuần cho cohort opt-in marketing email. A/B subject 10–20%.",
+    channel: "email",
+  },
+  {
+    id: INACTIVE_REENGAGE_SCRIPT_ID,
+    label: "Inactive — re-engage 1-shot (ADR-017 P3)",
+    description:
+      "Sau ~90 ngày không open/click: một thư xác nhận; không tương tác → suppress.",
+    channel: "email",
+  },
+  {
+    id: CCTM_UTILITY_EMAIL_SCRIPT_ID,
+    label: "CCTM — Utility công cụ BĐS (ADR-017 P3)",
+    description:
+      "Cohort nhà thương mại / CTV quan tâm công cụ — value-first, 1 CTA /cong-cu.",
+    channel: "email",
+    segment: "CCTM",
+  },
+  {
     id: "warm-other-projects",
     label: "Ấm lead — dự án khác / chưa khớp",
     description:
@@ -126,7 +186,9 @@ export function resolveNurtureScriptId(input: {
 
   const scored = NURTURE_SCRIPT_CATALOG.filter((script) => {
     const sourceMatch =
-      !script.sources || script.sources.length === 0 || script.sources.includes(source);
+      script.sources && script.sources.length > 0
+        ? script.sources.includes(source)
+        : script.id === "generic-welcome";
     const segmentMatch =
       script.segment === undefined || script.segment === null || script.segment === segment;
     return sourceMatch && segmentMatch;
@@ -138,6 +200,9 @@ export function resolveNurtureScriptId(input: {
       if (s.sources?.includes(source)) n += 4;
       if (s.segment === segment) n += 2;
       if (s.id === "generic-welcome") n -= 10;
+      // ADR-017 P0: email catalog sẵn nhưng auto-resolve vẫn ưu tiên OA/Zalo;
+      // dispatcher Welcome email = P1 (enroll explicit theo script id).
+      if (s.channel === "email") n -= 3;
       return n;
     };
     return score(b) - score(a);

@@ -458,6 +458,10 @@ consent proof và PII thật không được đưa vào bằng chứng.
   Real channel: **PRODUCTION-PROVEN** via smoke sink
   `smoke-nurture-real-1784395274313` (sms SENT + withdraw; sink disabled after).
   Carrier/n8n SMS remains optional Ops config.
+- **Email channel (ADR-017):** architecture accepted 2026-07-21 — **P0–P3 REPO scaffold**
+  (consent → Welcome → newsletter/digest → ESP sync / inactive / CCTM).
+  Kill switch `EMAIL_NURTURE_SEND_ENABLED`; ESP `EMAIL_ESP_ADAPTER`.
+  Spec: `.cursor/ADR-017-email-nurture-channel.md`.
 - Target gate: G2 after SC-0 and SC-5.
 
 **Owner boundary**
@@ -465,6 +469,8 @@ consent proof và PII thật không được đưa vào bằng chứng.
 - House X owns effective consent, lifecycle/outcome and dispatch-result audit.
 - Magnix owns approved nurture content, scheduling and channel delivery after a
   consent decision; it writes delivery/activity result back through House X.
+- ADR-017: same boundary for email — House X eligibility/consent/suppress;
+  Magnix sequence copy (Agent 8) + DeliveryAdapter send.
 
 **Dependency/gate**
 

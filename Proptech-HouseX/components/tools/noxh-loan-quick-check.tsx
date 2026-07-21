@@ -306,6 +306,10 @@ export function NoxhLoanAdvisoryForm({
         setError("Vui lòng đồng ý nhận tư vấn qua email.");
         return;
       }
+      if (!email.trim()) {
+        setError("Vui lòng nhập email để nhận tư vấn.");
+        return;
+      }
       setError(null);
       setLoading(true);
       try {
@@ -319,6 +323,7 @@ export function NoxhLoanAdvisoryForm({
             name: name.trim(),
             phone: phone.trim(),
             email: email.trim() || undefined,
+            marketingEmailOptIn: consent,
             region,
             housingType,
             incomeBand,

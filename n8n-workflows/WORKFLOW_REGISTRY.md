@@ -18,6 +18,7 @@
 | `housex-noxh-lead-route` | `housex-noxh-lead-route.workflow.json` | Webhook POST ×2 + Manual | L0 | — | ✅ | **HouseX Events Hub:** toàn bộ 15 typed events; form/NOXH/supply → Sheet + Telegram, Ops request/WON/hoa hồng/trúng thưởng → Telegram; sink lỗi trả 502 để outbox retry | staging |
 | `housex-noxh-nurture` | `housex-noxh-nurture.workflow.json` | Cron 9h + Manual | L0 | — | — | **HouseX NOXH:** COLD/OUT → email nurture (Resend) + meta `nurture_sent_at` | staging |
 | `content-video-render` | `content-video-render.workflow.json` | Cron 9:45 + Manual | L3 | L0 text | — | Agent 7: assembly/render package (1/batch) | staging v2 |
+| `email-sequence-draft` | — (prompt only) | Manual | L0–L3 | **Consume** | ✅ | **Agent 8 (ADR-017):** draft EmailSequenceStep — `ai-agents-prompts/n8n__email-sequence-draft.md`; House X Welcome stub + `EMAIL_NURTURE_SEND_ENABLED`; n8n Wait E2/E3 later | stub · P1 |
 | `telegram-notify` | `telegram-notify.workflow.json` | Webhook POST | L0 | Escalate | — | Central notify incl. `legal_source_needed` | staging |
 | `telegram-reminder` | `telegram-reminder.workflow.json` | Cron 30m + Manual | L0 | SLA legal | — | SLA reminder cho approval/render/legal | staging |
 | `telegram-resolver` | `telegram-resolver.workflow.json` | Cron 30m + Manual | L0 | — | — | Mark `notification_events` resolved khi Sheet approved | staging |

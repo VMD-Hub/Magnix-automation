@@ -142,6 +142,11 @@ Tiêu đề H1 + các H2/H3 **phải là câu hỏi** khách thật hay hỏi (P
 [Soft — lead magnet hoặc inbox tư vấn, không hard sell]
 ```
 
+### 4b. Email nurture / newsletter (ADR-017 · Agent 8)
+
+Format `email_nurture` hoặc `email_newsletter`. Quy tắc **1-1-1**. Output JSON theo
+`ai-agents-prompts/n8n__email-sequence-draft.md`. **L3** trước blast sequence mới.
+
 ### 4. Kịch bản video 60 giây (TikTok/Shorts)
 
 Timing tổng ~55–60s. Ghi **lời thoại + gợi ý visual**.

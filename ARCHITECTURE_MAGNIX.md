@@ -58,6 +58,8 @@ Magnix **orchestrate** qua n8n; logic nặng có thể gọi HTTP sang service t
 > **Sales Conversion Operating Layer (ADR-015):** lớp domain dùng chung dưới Journey A/S/P, nối acquisition touch → Lead → Opportunity → outcome. Magnix sở hữu capture/normalize/classify; House X sở hữu identity, lifecycle, consent authoritative, attribution và conversion state.
 >
 > **Interest / Waitlist / long-term nurture (ADR-016):** lane tách khỏi telesales nóng — đăng ký nhận tin dự án sớm / chưa chọn dự án; mặc định cập nhật **in-app Mini App** (không gọi chỉ vì đăng ký); nuôi bằng chính sách–tiến độ–tin mở bán; gọi chỉ khi opt-in tư vấn hoặc launch + voice consent. **Thang tin:** báo (T1) → Sở (T2 upgrade) → hồ sơ (T3) → SoR mở bán (T4); không đợi Sở mới discovery. **Tách:** mã tầng/allowlist/watchlist MST = vận hành; người đọc chỉ thấy copy + disclaimer + citation + chip brand. Chi tiết: `.cursor/ADR-016-interest-waitlist-nurture-lane.md` · allowlist `Proptech-HouseX/docs/INFO_TRUST_LADDER_ALLOWLIST.md` · sponsor `Proptech-HouseX/docs/NOXH_SPONSOR_WATCHLIST.md`.
+>
+> **Email Nurture Channel (ADR-017):** email marketing = **channel SC-6** (`channel=email`), không ESP SoR riêng. House X: ConsentRecord + eligibility + enroll/dispatch + unsubscribe/bounce. Magnix: Agent 8 + schedule. DeliveryAdapter `type=marketing.email`. **P0–P3 scaffold:** Welcome, newsletter/digest, A/B, ESP sync outbound (`EMAIL_ESP_ADAPTER`), inactive re-engage, CCTM utility. Kill switch `EMAIL_NURTURE_SEND_ENABLED`. Chi tiết: `.cursor/ADR-017-email-nurture-channel.md`.
 
 ---
 

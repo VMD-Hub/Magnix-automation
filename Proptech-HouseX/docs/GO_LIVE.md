@@ -75,7 +75,7 @@ Email local: không cần Resend — `[email:dev]` log ra console khi đăng ký
 | 1.3 | Copy env production | `cp .env.production.example .env` → điền giá trị |
 | 1.4 | Sinh secret | `npm run go-live:secrets` |
 | 1.5 | Kiểm tra env | `npm run go-live:check-env` (trên VPS sau khi set biến) |
-| 1.6 | Email gửi | Resend **hoặc** n8n `EMAIL_WEBHOOK_URL` — verify SPF/DKIM domain |
+| 1.6 | Email gửi | Resend **hoặc** n8n `EMAIL_WEBHOOK_URL` — verify SPF/DKIM/**DMARC** domain (xem Bước 9 + ADR-017) |
 
 Biến **bắt buộc:** `DATABASE_URL`, `REDIS_URL`, `NEXT_PUBLIC_SITE_URL`, `AUTH_SECRET`, `ADMIN_SECRET`, `CRON_SECRET`, email provider.
 
@@ -154,20 +154,57 @@ Hoặc dán thủ công (thay `$CRON_SECRET` và domain):
 **Resend (khuyến nghị):**
 
 1. Tạo API key tại [resend.com](https://resend.com)
-2. Verify domain `timnhaxahoi.com` (SPF + DKIM)
+2. Verify domain `timnhaxahoi.com` (**SPF + DKIM + DMARC**)
+   - Transactional: `noreply@…` (OTP, listing) — giữ như hiện tại.
+   - Marketing nurture (ADR-017): ưu tiên subdomain riêng (`m.` / `mail.`) khi scale
+     blast; P0 có thể cùng domain nếu volume thấp nhưng **DMARC bắt buộc**.
+   - DMARC gợi ý: `v=DMARC1; p=none; rua=mailto:dmarc@timnhaxahoi.com` (monitor
+     trước, siết `p=quarantine` sau khi sạch).
 3. Trên VPS `.env`:
    ```bash
    RESEND_API_KEY=re_...
    EMAIL_FROM="House X <noreply@timnhaxahoi.com>"
    NEXT_PUBLIC_EDITORIAL_EMAIL="hotro@timnhaxahoi.com"
+   # Optional: tách secret ký link hủy đăng ký marketing (mặc định = AUTH_SECRET)
+   # EMAIL_UNSUBSCRIBE_SECRET=...
    pm2 restart housex --update-env
    ```
-4. Test:
+4. Test transactional:
    ```bash
    EMAIL_TEST_TO=your@email.com npm run go-live:smoke-email
    ```
+5. **ADR-017 P0 — marketing consent / unsubscribe (chưa gửi drip):**
+   - Tool NOXH checkbox → `ConsentRecord` `purpose=marketing` + `channel=email`
+   - One-click: `/huy-dang-ky-email?token=…` → `POST /api/consent/email-unsubscribe`
+   - Spec: `.cursor/ADR-017-email-nurture-channel.md`
+6. **ADR-017 P1 — Welcome drip (kill switch):**
+   ```bash
+   EMAIL_NURTURE_SEND_ENABLED=true   # VPS — chỉ khi SPF/DKIM/DMARC OK
+   EMAIL_NURTURE_SEND_ENABLED=1 npm run go-live:smoke-email-nurture
+   ```
+   - DeliveryAdapter: `type=marketing.email` + `unsubscribe_url` (webhook/Resend/dev_log)
+   - Auto E1 sau tool opt-in khi kill switch bật; E2/E3 gọi `dispatchNoxhWelcomeEmailStep` (n8n Wait sau)
+   - Agent 8 prompt: `ai-agents-prompts/n8n__email-sequence-draft.md` (L3 trước blast)
+7. **ADR-017 P2 — newsletter / waitlist digest / bounce / KPI:**
+   ```bash
+   npx prisma migrate deploy
+   EMAIL_NURTURE_SEND_ENABLED=1 npm run go-live:smoke-email-nurture-p2
+   npm run go-live:kpi-email-nurture
+   ```
+   - Waitlist form: checkbox email digest → ConsentRecord + enroll digest/newsletter
+   - Cron: `POST /api/cron/email-nurture-weekly` (Bearer CRON_SECRET)
+   - Webhook: `POST /api/webhooks/email-provider` (bounce/complaint → suppress)
+   - A/B subject ~15% deterministic
+8. **ADR-017 P3 — ESP sync / inactive / CCTM:**
+   ```bash
+   EMAIL_ESP_ADAPTER=dry_run npm run go-live:sync-esp-audience
+   EMAIL_NURTURE_SEND_ENABLED=1 EMAIL_ESP_ADAPTER=dry_run npm run go-live:smoke-email-nurture-p3
+   ```
+   - Cron: `POST /api/cron/email-nurture-hygiene?task=all`
+   - Brevo thật: `EMAIL_ESP_ADAPTER=brevo` + `BREVO_API_KEY` (+ optional `BREVO_LIST_ID`)
+   - Audience SoR vẫn là Postgres — ESP chỉ mirror outbound
 
-**n8n webhook (Magnix):** set `EMAIL_WEBHOOK_URL` + `EMAIL_WEBHOOK_SECRET` — payload `{ type: "transactional.email", to, subject, html, text }`.
+**n8n webhook (Magnix):** set `EMAIL_WEBHOOK_URL` + `EMAIL_WEBHOOK_SECRET` — payload transactional `{ type: "transactional.email", … }` hoặc marketing `{ type: "marketing.email", unsubscribe_url, sequence_id, step_index, … }`. Inbound events: cùng secret vào `/api/webhooks/email-provider`.
 
 ---
 
@@ -182,6 +219,11 @@ Hoặc dán thủ công (thay `$CRON_SECRET` và domain):
 | `npm run go-live:check-env` | Validate env bắt buộc |
 | `npm run go-live:smoke-listings` | Smoke gửi duyệt tin + admin approve |
 | `npm run go-live:smoke-email` | Test email prod (Resend/webhook) |
+| `npm run go-live:smoke-email-nurture` | ADR-017 P1 Welcome smoke |
+| `npm run go-live:smoke-email-nurture-p2` | ADR-017 P2 newsletter + bounce suppress |
+| `npm run go-live:smoke-email-nurture-p3` | ADR-017 P3 CCTM + reengage + ESP dry_run |
+| `npm run go-live:sync-esp-audience` | Sync audience House X → ESP adapter |
+| `npm run go-live:kpi-email-nurture` | KPI sent/open/CTR/unsub (aggregate) |
 | `npm run go-live:print-cron` | In crontab mẫu VPS |
 | `npm run db:seed:vinhomes` | Seed 3 landing Vinhomes → `/du-an` — xem [DEPLOY_VINHOMES.md](DEPLOY_VINHOMES.md) |
 | `npm run db:seed:agent-services` | Catalog + quiz Agent (`CTV_ONBOARDING`, `LEGAL_BROKER_BASICS`, `HOUSEX_AGENT_GUIDE`, `NGUON_KHACH_VAY`, `PHAP_LY_BDS`, `HOUSEX_INSURANCE`, `THAM_DINH_BDS`, `NOXH_CLAIM`, `LISTING_POST`) |

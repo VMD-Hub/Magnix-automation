@@ -33,6 +33,8 @@ export const noxhLoanQuickLeadSchema = z.object({
   name: z.string().trim().min(2),
   phone: z.string().trim().min(8),
   email: z.string().trim().email().optional().or(z.literal("")),
+  /** ADR-017 — chỉ grant ConsentRecord khi true và có email hợp lệ. */
+  marketingEmailOptIn: z.boolean().optional().default(false),
   region,
   housingType,
   incomeBand,

@@ -36,6 +36,8 @@ export const noxhLeadSchema = z.object({
   name: z.string().trim().min(2, "Họ tên tối thiểu 2 ký tự.").max(120),
   phone: z.string().trim().min(8, "Số điện thoại không hợp lệ.").max(20),
   email: z.string().trim().email("Email không hợp lệ."),
+  /** ADR-017 — checkbox opt-in marketing email → ConsentRecord channel=email. */
+  marketingEmailOptIn: z.boolean().optional().default(false),
   input: noxhEligibilityInputSchema,
 });
 

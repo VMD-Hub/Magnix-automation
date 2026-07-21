@@ -323,6 +323,7 @@ export function NoxhEligibilityWizard() {
           name: name.trim(),
           phone: phone.trim(),
           email: email.trim(),
+          marketingEmailOptIn: consent,
           input: {
             objectGroup: objectGroup ?? "NONE",
             ownsHomeInProvince: ownsHome === true,

@@ -103,7 +103,7 @@ export function buildLeadNurturePayload(input: {
 }
 
 /**
- * Enqueue nurture outbox nếu script auto (oa/zalo/telegram) và chưa gửi trigger này.
+ * Enqueue nurture outbox nếu script auto (oa/zalo/telegram/sms/email) và chưa gửi trigger này.
  * SC-6: yêu cầu effective marketing consent trước khi enqueue.
  * Trả về opsMeta đã merge dispatch log — null nếu không enqueue.
  */

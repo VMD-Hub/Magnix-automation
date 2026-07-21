@@ -50,6 +50,7 @@ export function LeadContactForm({
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [consent, setConsent] = useState(false);
+  const [emailDigestOptIn, setEmailDigestOptIn] = useState(false);
   const [loading, setLoading] = useState(false);
   const [done, setDone] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -81,8 +82,18 @@ export function LeadContactForm({
     setError(null);
     setLoading(true);
     try {
+      if (waitlist && emailDigestOptIn && !email.trim()) {
+        setError("Nhập email nếu muốn nhận bản tin / digest qua email.");
+        setLoading(false);
+        return;
+      }
       const utm = readStoredLeadUtm();
-      const body: Record<string, string | undefined | object> = {
+      const channelPreference = waitlist
+        ? emailDigestOptIn
+          ? ["in_app", "email"]
+          : ["in_app"]
+        : ["voice_call", "in_app"];
+      const body: Record<string, string | boolean | undefined | object | string[]> = {
         name: name.trim(),
         phone: phone.trim(),
         email: email.trim() || undefined,
@@ -90,9 +101,8 @@ export function LeadContactForm({
         listingId,
         projectId,
         captureType: waitlist ? "waitlist" : "consult_request",
-        ...(waitlist
-          ? { channelPreference: ["in_app"] }
-          : { channelPreference: ["voice_call", "in_app"] }),
+        channelPreference,
+        marketingEmailOptIn: waitlist ? emailDigestOptIn : false,
         ...(utm ? { utm } : {}),
       };
 
@@ -295,6 +305,22 @@ export function LeadContactForm({
           )}
         </span>
       </label>
+
+      {waitlist ? (
+        <label className="mt-2 flex items-start gap-2 text-xs text-slate-600">
+          <input
+            type="checkbox"
+            checked={emailDigestOptIn}
+            onChange={(e) => setEmailDigestOptIn(e.target.checked)}
+            className="mt-0.5 rounded border-slate-300"
+          />
+          <span>
+            Nhận thêm bản tin / digest tiến độ qua <strong>email</strong> (kênh
+            phụ — cập nhật chính vẫn trên thông báo tài khoản). Có thể hủy bất
+            cứ lúc nào.
+          </span>
+        </label>
+      ) : null}
 
       {error && <p className="mt-2 text-xs text-red-600">{error}</p>}
 

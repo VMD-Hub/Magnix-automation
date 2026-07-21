@@ -51,6 +51,11 @@ export const leadCreateSchema = z
       .array(z.enum(["in_app", "oa", "sms", "email", "voice_call"]))
       .max(5)
       .optional(),
+    /**
+     * ADR-017 P2 — opt-in email marketing riêng (waitlist digest / newsletter).
+     * Không suy từ checkbox liên hệ chung.
+     */
+    marketingEmailOptIn: z.boolean().optional().default(false),
   })
   .refine((d) => !!d.listingId || !!d.projectId, {
     message: "Lead cần gắn với ít nhất listingId hoặc projectId.",

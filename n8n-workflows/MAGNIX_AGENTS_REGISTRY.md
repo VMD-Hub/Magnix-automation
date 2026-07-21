@@ -19,9 +19,12 @@
 | 5 | Scorecard | `content-scorecard` | Audit `source_refs` | verdict, IVI | 10:00 |
 | 6 | Video Script **v3** | `content-video-draft` | **Consume** pack | `video_drafts` + beats_json | 09:15 · 3 |
 | 7 | Video Render **v2** | `content-video-render` | L0 text on-screen | MP4 / render package | 09:45 · 1 |
+| **8** | **Email Sequence** | `email-sequence-draft` (stub) | **Consume** + L3 | `EmailSequenceStep` JSON | Manual |
 | **P** | **Page Publish** | `content-page-publish` | L0 + đã L3 | FB Page post live | 10/14/18h · 3 |
 
 **Layer B** bắt buộc trước Agent 3 và 6. **Page Publish** chạy sau L3 `approved` trên `content_drafts` — xem `docs/CONTENT_PAGE_PUBLISH_SETUP.md`.
+
+**Agent 8 (ADR-017):** prompt `ai-agents-prompts/n8n__email-sequence-draft.md` — sinh subject/preheader/body/CTA cho SC-6 `channel=email`. Workflow n8n JSON chưa deploy; House X P1 dùng stub Welcome E1–E3 + DeliveryAdapter. **L3 bắt buộc** trước blast sequence mới / newsletter.
 
 **LLM routing** (`magnix-public-config.json` → `llm_task_providers`): **DeepSeek** cho classify · Layer B · outreach · video script; **Anthropic** cho Agent 3 segment pháp lý (`noxh_income` / `valuation` / `sme_credit`). Cả hai key nên có trên VPS — fallback tự động. **Bản chuẩn:** `docs/LLM_PROVIDER_POLICY.md` · `ARCHITECTURE_MAGNIX.md` §8.
 

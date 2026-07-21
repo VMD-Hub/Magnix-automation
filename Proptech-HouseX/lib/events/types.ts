@@ -350,7 +350,7 @@ export interface OutboxPayloads {
     nurtureScriptId: string;
     scriptLabel: string;
     scriptDescription: string;
-    channel: "oa" | "telegram" | "zalo" | "manual" | "sms";
+    channel: "oa" | "telegram" | "zalo" | "manual" | "sms" | "email";
     trigger: "on_create" | "status_contacted";
     segment: "noxh" | "cctm" | null;
     source: string;

@@ -51,6 +51,20 @@ console.log(
   `0 */6 * * * curl -fsS -X POST -H "Authorization: Bearer ${cronSecret}" ${site}/api/cron/sheet-mirror`,
 );
 console.log("");
+console.log(
+  "# Email nurture weekly (ADR-017 P2) — chỉ khi EMAIL_NURTURE_SEND_ENABLED=true",
+);
+console.log(
+  `0 9 * * 2 curl -fsS -X POST -H "Authorization: Bearer ${cronSecret}" "${site}/api/cron/email-nurture-weekly?kind=both&limit=50"`,
+);
+console.log("");
+console.log(
+  "# Email nurture hygiene P3 — ESP sync + inactive reengage/suppress (Thứ 4 09:30)",
+);
+console.log(
+  `30 9 * * 3 curl -fsS -X POST -H "Authorization: Bearer ${cronSecret}" "${site}/api/cron/email-nurture-hygiene?task=all&limit=50"`,
+);
+console.log("");
 console.log("# Postgres backup + crypt off-site verify — hàng ngày 02:15 (ADR-013)");
 console.log(
   `15 2 * * * HOUSEX_BACKUP_ENV_FILE=/etc/housex/backup.env /usr/local/sbin/housex-backup-cron >> /var/log/housex-backup.log 2>&1`,

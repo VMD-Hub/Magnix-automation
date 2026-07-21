@@ -2359,6 +2359,9 @@ export async function recordNurtureDispatchResult(input: {
   occurredAt: Date;
   correlationId: string;
   idempotencyKey: string;
+  /** ADR-017 P2 */
+  providerMessageId?: string | null;
+  metadata?: Record<string, unknown>;
 }) {
   try {
     return await prisma.$transaction(async (tx) => {
@@ -2397,6 +2400,8 @@ export async function recordNurtureDispatchResult(input: {
           occurredAt: input.occurredAt,
           correlationId: input.correlationId,
           idempotencyKey: input.idempotencyKey,
+          providerMessageId: input.providerMessageId ?? null,
+          metadata: toPrismaJsonObject(input.metadata ?? {}),
         },
       });
       const payload = {

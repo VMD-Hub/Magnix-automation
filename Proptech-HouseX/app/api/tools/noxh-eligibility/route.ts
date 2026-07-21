@@ -20,6 +20,9 @@ import {
   ensurePlatformNoxhCaseFromWizardHot,
   shouldAutoCreatePlatformCaseForWizardTier,
 } from "@/lib/noxh-case/wizard-hot-case";
+import { grantMarketingEmailConsent } from "@/lib/sales-core/marketing-email-consent";
+import { tryEnrollNoxhWelcomeAfterConsent } from "@/lib/messaging/email-nurture-server-send";
+import { LEAD_SOURCE } from "@/lib/leads/source";
 
 const RATE_MAX = Number(process.env.LEAD_RATE_MAX ?? "20");
 const RATE_WINDOW = Number(process.env.LEAD_RATE_WINDOW_SEC ?? "3600");
@@ -164,6 +167,30 @@ export async function POST(req: NextRequest) {
 
       return createdLead;
     });
+
+    if (body.marketingEmailOptIn) {
+      const consentResult = await grantMarketingEmailConsent({
+        leadId: lead.id,
+        source: LEAD_SOURCE.TOOL_NOXH_CHECK,
+        proofType: "tool_opt_in",
+        proofRef: body.email,
+      });
+      if (!consentResult.granted) {
+        console.error("[noxh] marketing email consent not recorded", {
+          reason: consentResult.reason,
+        });
+      } else {
+        const welcome = await tryEnrollNoxhWelcomeAfterConsent({
+          leadId: lead.id,
+          correlationId: `noxh-elig:${lead.id}`,
+        });
+        if (!welcome.enrolled) {
+          console.error("[noxh] email welcome enroll skipped", {
+            reason: welcome.reason,
+          });
+        }
+      }
+    }
 
     let noxhCaseCode: string | undefined;
     if (shouldAutoCreatePlatformCaseForWizardTier(classification.tier)) {
