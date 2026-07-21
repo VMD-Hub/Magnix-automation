@@ -24,6 +24,12 @@ export const PLAYBOOK_QUICK_LINKS: PlaybookQuickLink[] = [
     roles: ["super"],
   },
   {
+    href: "/admin/tool-analytics",
+    label: "Tool analytics",
+    description: "KPI: bài CTA → lead tool NƠXH → CRM",
+    roles: ["super"],
+  },
+  {
     href: "/admin/ops-leads",
     label: "Lead marketing",
     description: "Pipeline + telesales (gọi/SMS/Zalo) & nurture",

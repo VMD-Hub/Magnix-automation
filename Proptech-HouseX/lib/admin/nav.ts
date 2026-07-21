@@ -36,6 +36,14 @@ export const ADMIN_NAV_GROUPS: AdminNavGroup[] = [
         matchPrefix: true,
       },
       {
+        href: "/admin/tool-analytics",
+        label: "Tool analytics",
+        title:
+          "KPI tool — content CTA → lead submit → CRM (ưu tiên 2 tool NƠXH)",
+        roles: ["super"],
+        matchPrefix: true,
+      },
+      {
         href: "/admin/listings",
         label: "Tin đăng CTV",
         title: "Duyệt tin môi giới đăng bán (listing)",
