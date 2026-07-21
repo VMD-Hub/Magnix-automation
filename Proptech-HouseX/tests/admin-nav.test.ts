@@ -11,7 +11,12 @@ describe("adminNavGroupsForRole", () => {
     const ids = groups.map((g) => g.id);
     assert.deepEqual(ids, ["crm", "help", "sales"]);
     const crm = groups.find((g) => g.id === "crm")!;
-    assert.ok(crm.items.some((i) => i.href === "/admin/ops-leads"));
+    // Lead marketing / grants = Super only; staff telesales dùng /ops/telesales
+    assert.ok(!crm.items.some((i) => i.href === "/admin/ops-leads"));
+    assert.ok(!crm.items.some((i) => i.href === "/admin/ops-grants"));
+    assert.ok(crm.items.some((i) => i.href === "/admin/noxh-cases"));
+    assert.ok(crm.items.some((i) => i.href === "/admin/conflicts"));
+    assert.ok(crm.items.some((i) => i.href === "/admin/inbound-leads"));
     assert.ok(!crm.items.some((i) => i.href === "/admin/ctv"));
     const sales = groups.find((g) => g.id === "sales")!;
     assert.deepEqual(
