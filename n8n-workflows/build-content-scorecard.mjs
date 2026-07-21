@@ -253,6 +253,61 @@ const nodes = [
   },
   {
     parameters: {
+      jsCode: `function envFlagOn(name, defaultOn) {
+  const raw = $env[name];
+  if (raw == null || String(raw).trim() === '') return defaultOn;
+  const v = String(raw).trim().toLowerCase();
+  if (['1', 'true', 'yes', 'on'].includes(v)) return true;
+  if (['0', 'false', 'no', 'off'].includes(v)) return false;
+  return defaultOn;
+}
+function scorecardWriteEnabled() {
+  const raw = $env.CONTENT_SCORECARD_SHEET_WRITE_ENABLED;
+  if (raw != null && String(raw).trim() !== '') {
+    return envFlagOn('CONTENT_SCORECARD_SHEET_WRITE_ENABLED', true);
+  }
+  return envFlagOn('CONTENT_SHEET_WRITEBACK_ENABLED', true);
+}
+const on = scorecardWriteEnabled();
+return $input.all().map((item) => ({
+  json: {
+    ...item.json,
+    sheet_write_ok: on,
+    sheet_write_skipped: !on,
+    ...(on ? {} : { reason: 'CONTENT_SHEET_WRITEBACK_DISABLED' }),
+  },
+}));`,
+    },
+    id: 'cs08bgate',
+    name: 'Gate Sheet Writeback',
+    type: 'n8n-nodes-base.code',
+    typeVersion: 2,
+    position: [1600, 160],
+  },
+  {
+    parameters: {
+      conditions: {
+        options: { caseSensitive: true, leftValue: '', typeValidation: 'strict', version: 2 },
+        conditions: [
+          {
+            id: 'c-wb',
+            leftValue: '={{ $json.sheet_write_ok }}',
+            rightValue: '',
+            operator: { type: 'boolean', operation: 'true', singleValue: true },
+          },
+        ],
+        combinator: 'and',
+      },
+      options: {},
+    },
+    id: 'cs08bifwb',
+    name: 'IF Writeback On',
+    type: 'n8n-nodes-base.if',
+    typeVersion: 2.2,
+    position: [1720, 160],
+  },
+  {
+    parameters: {
       authentication: 'serviceAccount',
       operation: 'appendOrUpdate',
       documentId: {
@@ -315,7 +370,7 @@ const nodes = [
     name: 'Sheet Upsert Scorecard',
     type: 'n8n-nodes-base.googleSheets',
     typeVersion: 4.5,
-    position: [1720, 160],
+    position: [1960, 80],
   },
   {
     parameters: {
@@ -401,7 +456,7 @@ const nodes = [
     name: 'Update Sheet Row',
     type: 'n8n-nodes-base.googleSheets',
     typeVersion: 4.5,
-    position: [1960, 160],
+    position: [2200, 80],
     onError: 'continueRegularOutput',
   },
   {
@@ -410,7 +465,7 @@ const nodes = [
     name: 'Build Run Summary',
     type: 'n8n-nodes-base.code',
     typeVersion: 2,
-    position: [2200, 300],
+    position: [2440, 300],
   },
   {
     parameters: {
@@ -423,7 +478,6 @@ const nodes = [
     position: [1000, 420],
   },
 ];
-
 const connections = {
   'Schedule Daily 10h': { main: [[{ node: 'Read Metrics Sheet', type: 'main', index: 0 }]] },
   'Manual Trigger': { main: [[{ node: 'Read Metrics Sheet', type: 'main', index: 0 }]] },
@@ -439,6 +493,13 @@ const connections = {
   'Normalize Sheet Row': { main: [[{ node: 'Run score.mjs Logic', type: 'main', index: 0 }]] },
   'Run score.mjs Logic': { main: [[{ node: 'IF Score OK', type: 'main', index: 0 }]] },
   'IF Score OK': {
+    main: [
+      [{ node: 'Gate Sheet Writeback', type: 'main', index: 0 }],
+      [{ node: 'Build Run Summary', type: 'main', index: 0 }],
+    ],
+  },
+  'Gate Sheet Writeback': { main: [[{ node: 'IF Writeback On', type: 'main', index: 0 }]] },
+  'IF Writeback On': {
     main: [
       [{ node: 'Sheet Upsert Scorecard', type: 'main', index: 0 }],
       [{ node: 'Build Run Summary', type: 'main', index: 0 }],

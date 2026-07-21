@@ -20,7 +20,7 @@ Khớp ADR-013: Sheet = editorial workspace tạm; Admin = vận hành.
 | **1** | Sync `content_queue` Sheet → Postgres + field `scheduled_at` trên Admin | **Done** (`5042b19`) |
 | **2** | Model + UI `content_drafts` (xem/sửa/L3) + sync Sheet | **Done** |
 | **3** | n8n `content-page-publish` đọc Postgres + honor `scheduled_at` | **Done** |
-| 4 | Sheet mirror optional / dual-write tắt dần | Backlog |
+| **4** | Sheet write-back optional (metrics / scorecard) | **Done** |
 
 ## Slice 1 — Contract
 
@@ -116,9 +116,26 @@ Lib: `lib/content/content-page-publish-due.ts` · `lib/data/content-page-publish
 
 - `/admin/content-drafts`: kênh **Facebook Page** + **Lịch đăng** sau L3
 
-## Slice 4+ (backlog)
+## Slice 4 — Sheet write-back optional
 
-Sheet mirror optional / dual-write tắt dần.
+Sau P4.3, Postgres = SoR publish/duyệt. Sheet còn:
+
+| Giữ | Tắt dần (P4.4) |
+|---|---|
+| Research: listen / classify / Agent 3 → `content_queue` / `content_drafts` | Append `content_metrics` sau Page Publish |
+| Admin sync Sheet → Postgres (1 chiều) | Upsert `content_scorecard` khi không cần audit Sheet |
+
+### Env n8n
+
+| Env | Default | Ý nghĩa |
+|---|---|---|
+| `CONTENT_SHEET_WRITEBACK_ENABLED` | `true` | Umbrella — set `false` để tắt write-back audit |
+| `CONTENT_METRICS_SHEET_WRITE_ENABLED` | inherit | Override metrics append |
+| `CONTENT_SCORECARD_SHEET_WRITE_ENABLED` | inherit | Override scorecard upsert |
+
+Khuyến nghị VPS sau ổn định Page Publish Postgres: `CONTENT_SHEET_WRITEBACK_ENABLED=false`.
+
+Không đụng: `MAGNIX_SHEET_MIRROR_ENABLED` (ops_mirror ADR-013).
 
 ## VERIFY
 
@@ -127,3 +144,4 @@ Sheet mirror optional / dual-write tắt dần.
 - [x] Approve L3 + schedule không bị sync xóa
 - [x] Unit test map / merge / L3 gate / due schedule
 - [x] n8n Page Publish → Postgres fetch + mark
+- [x] P4.4 write-back flags (metrics / scorecard) + unit test

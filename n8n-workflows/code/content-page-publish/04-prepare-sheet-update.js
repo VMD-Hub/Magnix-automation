@@ -1,7 +1,25 @@
 // n8n Code: chuẩn bị POST mark Postgres sau Graph publish (P4.3)
+// P4.4: metrics Sheet append optional via CONTENT_*_SHEET_WRITE* env
 
 const SHEET_ID = '__GOOGLE_SHEET_ID__';
 const METRICS_TAB = '__CONTENT_METRICS_TAB__';
+
+function envFlagOn(name, defaultOn) {
+  const raw = $env[name];
+  if (raw == null || String(raw).trim() === '') return defaultOn;
+  const v = String(raw).trim().toLowerCase();
+  if (['1', 'true', 'yes', 'on'].includes(v)) return true;
+  if (['0', 'false', 'no', 'off'].includes(v)) return false;
+  return defaultOn;
+}
+
+function contentMetricsSheetWriteEnabled() {
+  const raw = $env.CONTENT_METRICS_SHEET_WRITE_ENABLED;
+  if (raw != null && String(raw).trim() !== '') {
+    return envFlagOn('CONTENT_METRICS_SHEET_WRITE_ENABLED', true);
+  }
+  return envFlagOn('CONTENT_SHEET_WRITEBACK_ENABLED', true);
+}
 
 const item = $input.first().json;
 const loopRow = $('Loop Page Publish').item?.json || {};
@@ -15,6 +33,7 @@ const base = String(
   $env.HOUSEX_PUBLIC_URL || $env.NEXT_PUBLIC_SITE_URL || 'https://timnhaxahoi.com',
 ).replace(/\/$/, '');
 
+const metricsWrite = contentMetricsSheetWriteEnabled();
 const out = {
   ...item,
   id: draftId,
@@ -36,7 +55,11 @@ const out = {
     Authorization: `Bearer ${String($env.CRON_SECRET || '').trim()}`,
     'Content-Type': 'application/json',
   },
-  need_metrics_append: item.publish_ok === true && Boolean(item.fb_post_id),
+  need_metrics_append:
+    metricsWrite &&
+    item.publish_ok === true &&
+    Boolean(item.fb_post_id),
+  metrics_sheet_write_enabled: metricsWrite,
 };
 
 if (out.need_metrics_append) {

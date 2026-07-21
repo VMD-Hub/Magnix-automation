@@ -59,13 +59,25 @@ CRON_SECRET=<cùng giá trị House X .env>
 
 Auth: `Authorization: Bearer CRON_SECRET`.
 
-## 5. Rebuild n8n
+## 5. P4.4 — tắt metrics Sheet (optional)
+
+Sau khi Postgres mark ổn định, trên n8n env:
+
+```bash
+CONTENT_SHEET_WRITEBACK_ENABLED=false
+# hoặc chỉ metrics:
+# CONTENT_METRICS_SHEET_WRITE_ENABLED=false
+```
+
+Page Publish vẫn mark Postgres; không append `content_metrics`.
+
+## 6. Rebuild n8n
 
 ```bash
 node n8n-workflows/build-content-page-publish.mjs
 # import/push content-page-publish.workflow.json
 ```
 
-## 6. Legacy Sheet
+## 7. Legacy Sheet
 
 Agent 3 vẫn có thể ghi Sheet `content_drafts`; sync P4.2 → Admin. Page Publish **không** đọc Sheet trực tiếp nữa.

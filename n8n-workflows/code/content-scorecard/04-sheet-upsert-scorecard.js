@@ -1,8 +1,26 @@
 // n8n Code: Google Sheet upsert tab content_scorecard (dedupe post_id)
 // Gán credential googleApi trên node này.
+// P4.4: skip Sheet write khi CONTENT_SHEET_WRITEBACK_ENABLED / CONTENT_SCORECARD_SHEET_WRITE_ENABLED = false
 
 const SHEET_ID = '__GOOGLE_SHEET_ID__';
 const TAB = '__CONTENT_SCORECARD_TAB__';
+
+function envFlagOn(name, defaultOn) {
+  const raw = $env[name];
+  if (raw == null || String(raw).trim() === '') return defaultOn;
+  const v = String(raw).trim().toLowerCase();
+  if (['1', 'true', 'yes', 'on'].includes(v)) return true;
+  if (['0', 'false', 'no', 'off'].includes(v)) return false;
+  return defaultOn;
+}
+
+function contentScorecardSheetWriteEnabled() {
+  const raw = $env.CONTENT_SCORECARD_SHEET_WRITE_ENABLED;
+  if (raw != null && String(raw).trim() !== '') {
+    return envFlagOn('CONTENT_SCORECARD_SHEET_WRITE_ENABLED', true);
+  }
+  return envFlagOn('CONTENT_SHEET_WRITEBACK_ENABLED', true);
+}
 
 const HEADERS = [
   'post_id',
@@ -39,6 +57,18 @@ function toRow(item) {
     String(scorecard.analyzed_at || new Date().toISOString()),
     item.ok === false ? 'failed' : 'analyzed',
   ];
+}
+
+if (!contentScorecardSheetWriteEnabled()) {
+  return $input.all().map((item) => ({
+    json: {
+      ...item.json,
+      ok: item.json.ok !== false,
+      storage: 'skipped_sheet_writeback',
+      sheet_write_skipped: true,
+      reason: 'CONTENT_SHEET_WRITEBACK_DISABLED',
+    },
+  }));
 }
 
 async function sheetRequest(opts) {
@@ -118,4 +148,3 @@ for (const item of $input.all()) {
 }
 
 return results;
-
