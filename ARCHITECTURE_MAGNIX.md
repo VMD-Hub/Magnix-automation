@@ -56,6 +56,8 @@ Magnix **orchestrate** qua n8n; logic nặng có thể gọi HTTP sang service t
 > **Thông báo CTV (chốt 2026-07):** mặc định **in-app** (`brokerNotification` → Mini App `/agent/thong-bao`); `ZALO_OA_NOTIFY_ENABLED=false` trên VPS. Zalo OA Open API **không** dùng cho milestone/conflict Ops — chỉ phase **quảng bá/chiến dịch** (gói OA Tăng trưởng khi cần). Chi tiết: `.cursor/ADR-014-zalo-miniapp.md` § Thông báo.
 >
 > **Sales Conversion Operating Layer (ADR-015):** lớp domain dùng chung dưới Journey A/S/P, nối acquisition touch → Lead → Opportunity → outcome. Magnix sở hữu capture/normalize/classify; House X sở hữu identity, lifecycle, consent authoritative, attribution và conversion state.
+>
+> **Interest / Waitlist / long-term nurture (ADR-016):** lane tách khỏi telesales nóng — đăng ký nhận tin dự án sớm / chưa chọn dự án; mặc định cập nhật **in-app Mini App** (không gọi chỉ vì đăng ký); nuôi bằng chính sách–tiến độ–tin mở bán; gọi chỉ khi opt-in tư vấn hoặc launch + voice consent. Chi tiết: `.cursor/ADR-016-interest-waitlist-nurture-lane.md`.
 
 ---
 

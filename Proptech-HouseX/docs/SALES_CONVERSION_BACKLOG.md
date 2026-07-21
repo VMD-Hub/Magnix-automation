@@ -1,9 +1,10 @@
 # Sales Conversion Operating Layer — Delivery Backlog
 
-> Backlog triển khai ADR-015 và
-> `.cursor/SALES_CONVERSION_PIPELINE_MAP.md`. House X là nguồn sự thật cho identity,
-> consent và sales lifecycle; Magnix chỉ sở hữu acquisition/orchestration và các
-> consumer dùng event đã giảm thiểu PII.
+> Backlog triển khai ADR-015,
+> `.cursor/SALES_CONVERSION_PIPELINE_MAP.md`, và lane Interest/Waitlist
+> (ADR-016). House X là nguồn sự thật cho identity, consent và sales lifecycle;
+> Magnix chỉ sở hữu acquisition/orchestration và các consumer dùng event đã giảm
+> thiểu PII.
 
 ## Cách đọc trạng thái và bằng chứng
 
@@ -43,6 +44,7 @@ consent proof và PII thật không được đưa vào bằng chứng.
 | SC-5 Outcome + revenue attribution | G2 | SC-4 commitment evidence; attribution rules | Funnel read model preparation | SC-6 feedback; reconciled KPIs |
 | SC-6 Lifecycle nurture/reactivation/referral | G2 | SC-0 withdrawal suppression; SC-5 outcomes | Consent-safe content/notification work | Closed-loop growth |
 | SC-7 Reporting/migration/retention | G0 → G2 | Contract inventory; then SC-0…SC-6 by slice | Backup/restore, docs drift, staging harness | Production go-live and audit closure |
+| SC-8 Interest / Waitlist / long-term nurture | G1 → G2 | ADR-016; SC-0; SC-6 scripts; ADR-014 in-app | Editorial tin sớm (Magnix); P0 copy | Launch notify + Mini App neo; tách SLA hot |
 
 ## Parallel workstream sequencing
 
@@ -581,11 +583,65 @@ consent proof và PII thật không được đưa vào bằng chứng.
   resumes from migration checkpoint. Database restore is disaster recovery, not the
   normal rollback for additive schema.
 
+## SC-8 — Interest / Waitlist / long-term OA–Mini App nurture
+
+**Status**
+
+- `repo_status: PLANNED` — **P0 DONE** (2026-07-21): channel-commitment copy +
+  waitlist form intent on `SAP_MO_BAN` + Ops playbook section; P1–P4 still open.
+  Architecture: ADR-016.
+- `runtime_evidence: NOT_PROVIDED` (P0 is copy/UX; captureType routing = P1)
+- Target gate: G1 controls for capture/consent; G2 for launch-notify + nurture cohort.
+
+**Owner boundary**
+
+- House X: InterestCapture, channel preference, consent, Mini App profile/eligibility,
+  in-app notify, LaunchTrigger enqueue, no auto telesales from waitlist.
+- Magnix: editorial tin sớm / chính sách / tiến độ, nurture content + scheduling after
+  House X eligibility; value-first copy (không spam, không framing mất mát giả).
+
+**Architecture reference**
+
+- `.cursor/ADR-016-interest-waitlist-nurture-lane.md`
+- Pointer: `ARCHITECTURE_MAGNIX.md` (ADR-016 callout)
+
+**Hard rules (from ADR-016)**
+
+- Default channel for waitlist = **in-app Mini App** (optional OA when enabled +
+  consent). **No voice call** solely because the user registered for updates.
+- Voice/telesales only after explicit «Tôi muốn được tư vấn» or launch + voice
+  opt-in.
+- CTA/form must state: không gọi điện chỉ vì đăng ký nhận cập nhật.
+- Success metrics: Mini App account, profile completeness, eligibility pass, notify
+  open — **not** waitlist call volume.
+
+**Phases**
+
+| Phase | Scope |
+|-------|--------|
+| P0 | Copy cam kết kênh + Ops playbook (không gọi waitlist) |
+| P1 | `captureType=waitlist` + preference; tách HOT SLA/notify |
+| P2 | Mini App account + hồ sơ + bài lọc đối tượng + inbox |
+| P3 | SC-6 scripts policy/progress/launch + LaunchTrigger |
+| P4 | SC-7 KPI slice waitlist vs hot vs conversion |
+
+**Dependency/gate**
+
+- SC-0 effective consent / withdrawal; SC-6 enrollment/dispatch patterns.
+- ADR-014 in-app notification patterns (extend customer cohort, not only CTV).
+- Editorial QA L0–L3 for policy/progress content.
+
+**Acceptance (when promoted)**
+
+- Waitlist capture never enters HOT call SLA by default.
+- Launch flip notifies waitlist cohort in-app idempotently before any call path.
+- Withdrawal suppresses nurture; consult opt-in is explicit and audited.
+
 ## Gate evidence checklist
 
 ### G0
 
-- [ ] ADR-015, architecture and pipeline map vocabulary/ownership agree.
+- [ ] ADR-015 (+ ADR-016 Interest/Waitlist), architecture and pipeline map vocabulary/ownership agree.
 - [ ] Current/target schema, API, UI and event inventory reviewed.
 - [ ] PII/event minimization, consent taxonomy and legacy mapping approved.
 - [ ] Repository check passes; this does not claim VPS/n8n deployment.

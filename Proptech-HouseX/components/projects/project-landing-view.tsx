@@ -14,6 +14,11 @@ import { ProjectRelatedArticles } from "@/components/articles/project-related-ar
 import { FallbackImage } from "@/components/ui/fallback-image";
 import { ProjectInventorySection } from "@/components/projects/project-inventory-section";
 import { LeadContactForm } from "@/components/leads/lead-contact-form";
+import {
+  interestWaitlistCtaCopy,
+  interestWaitlistFormCopy,
+  leadCaptureIntentForProjectStatus,
+} from "@/lib/content/messaging/interest-waitlist-copy";
 import type { ProjectInventoryPageData } from "@/lib/data/project-unit";
 import type { ProjectInventoryPageFilters } from "@/lib/validation/project-unit";
 import { FaqAnswerText } from "@/components/content/faq-answer-body";
@@ -84,6 +89,8 @@ export function ProjectLandingContent({
     landingRaw && isNoxh
       ? ensureNoxhLandingMedia(landingRaw, project.slug)
       : landingRaw;
+  const captureIntent = leadCaptureIntentForProjectStatus(project.status);
+  const waitlist = captureIntent === "waitlist";
 
   const stats: { label: string; value: string }[] = [];
   if (overview.totalUnits != null)
@@ -645,20 +652,33 @@ export function ProjectLandingContent({
         <section id="project-lead-form" className="scroll-mt-24">
           <LeadContactForm
             projectId={project.id}
-            title={`Tư vấn ${project.name}`}
+            intent={captureIntent}
+            title={
+              waitlist
+                ? interestWaitlistFormCopy.titleWithName(project.name)
+                : `Tư vấn ${project.name}`
+            }
             defaultOpen
-            placeholderMessage="Ví dụ: quan tâm 2PN, ngân sách 4 tỷ, muốn xem thực tế…"
+            placeholderMessage={
+              waitlist
+                ? interestWaitlistFormCopy.placeholderMessage
+                : "Ví dụ: quan tâm 2PN, ngân sách 4 tỷ, muốn xem thực tế…"
+            }
           />
         </section>
 
         {landing?.ctaLabel && landing.ctaHref && (
           <section className="overflow-hidden rounded-2xl bg-gradient-to-br from-brand-600 to-brand-800 px-6 py-10 text-center text-white sm:px-10 sm:py-12">
             <h2 className="text-2xl font-bold sm:text-3xl">
-              Quan tâm {project.name}?
+              {waitlist
+                ? interestWaitlistCtaCopy.bannerHeadline(project.name)
+                : `Quan tâm ${project.name}?`}
             </h2>
             <p className="mx-auto mt-3 max-w-xl text-base text-brand-100">
               {landing.ctaSubtext ??
-                "Tư vấn chi tiết hơn về dự án — liên hệ với chúng tôi."}
+                (waitlist
+                  ? interestWaitlistCtaCopy.bannerSubtext
+                  : "Tư vấn chi tiết hơn về dự án — liên hệ với chúng tôi.")}
             </p>
             <Link
               href={landing.ctaHref}

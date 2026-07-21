@@ -235,9 +235,10 @@ export const PROJECT_LANDING_GUIDES: Record<
     title: "CTA cuối trang",
     summary: "Nút kêu gọi hành động — dẫn về form liên hệ hoặc trang nội bộ HouseX.",
     tips: [
-      "Nhãn nút: hành động rõ (vd. “Liên hệ tư vấn”, “Đăng ký nhận bảng giá”).",
-      "Link: đường dẫn nội bộ bắt đầu bằng `/` (vd. `/lien-he`).",
-      "Không dùng disclaimer kiểu “thông tin tham khảo / không phải CĐT” — làm giảm uy tín. Dùng lời mời tư vấn: “Tư vấn chi tiết hơn về dự án — liên hệ với chúng tôi”.",
+      "Dự án đang bán: nhãn CTA kiểu «Liên hệ tư vấn».",
+      "Dự án sắp mở bán / tin sớm: «Đăng ký nhận thông tin dự án» — kèm ý «Không gọi điện chỉ vì đăng ký nhận cập nhật» (ADR-016).",
+      "Link: đường dẫn nội bộ bắt đầu bằng `/` (vd. `#project-lead-form` hoặc `/lien-he`).",
+      "Không dùng disclaimer kiểu “thông tin tham khảo / không phải CĐT”. Waitlist: mời cập nhật tiến độ qua Mini App; đang bán: mời tư vấn chi tiết.",
     ],
     limits: [
       { label: "Dòng mời tư vấn", value: "≤ 120 ký tự" },

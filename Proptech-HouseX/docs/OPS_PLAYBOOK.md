@@ -216,6 +216,17 @@ Panel **Gợi ý cuộc gọi — NOXH** hiện trên web Ops + Mini App khi `le
 
 Thiếu hạn đợt / số căn → **soft mode** (không framing mất mát mạnh). CCTM cue = phase sau.
 
+### 4b-5. Interest / Waitlist (ADR-016) — tách khỏi gọi nóng
+
+Khách **đăng ký nhận tin** dự án sớm / chưa chọn dự án: mặc định chỉ cập nhật qua
+**thông báo Mini App** (không gọi điện chỉ vì đăng ký). Nuôi bằng chính sách, tiến độ,
+tin mở bán. Gọi telesales chỉ khi khách xin tư vấn hoặc sau mở bán + đồng ý kênh gọi.
+
+Chi tiết kiến trúc: `.cursor/ADR-016-interest-waitlist-nurture-lane.md` · backlog SC-8.
+**P0 (2026-07-21):** form dự án `SAP_MO_BAN` dùng copy waitlist + cam kết không cold-call;
+Console `/admin/playbook` có mục Waitlist. **P1+** (captureType / tách queue) chưa ship —
+Ops vẫn **không** áp SLA gọi HOT cho cohort đăng ký nhận tin.
+
 ---
 
 ## 5. Hồ sơ NOXH — milestone M1→M5

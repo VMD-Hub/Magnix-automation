@@ -153,6 +153,19 @@ export const PLAYBOOK_SECTIONS: PlaybookSection[] = [
     },
   },
   {
+    id: "waitlist",
+    title: "Đăng ký nhận tin / Waitlist",
+    subtitle:
+      "Khách sợ bị gọi telesales — cohort này không dùng SLA gọi nóng (ADR-016).",
+    bullets: [
+      "Đăng ký nhận tin ≠ xin tư vấn gọi ngay. Không gọi chỉ vì có SĐT waitlist.",
+      "Mặc định: cập nhật in-app / tài khoản (OA khi bật + consent).",
+      "Chỉ gọi khi khách xin tư vấn, hoặc sau mở bán + khách đồng ý kênh gọi.",
+      "Khuyến khích Mini App + hồ sơ + bài lọc đối tượng — không ép gọi.",
+      "Nhắc khách (và ghi nhớ Ops): «Không gọi điện chỉ vì bạn đăng ký nhận cập nhật.»",
+    ],
+  },
+  {
     id: "noxh-cases",
     title: "Hồ sơ NOXH (M1→M5)",
     table: {
