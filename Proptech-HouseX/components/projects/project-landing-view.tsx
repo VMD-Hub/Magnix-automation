@@ -145,8 +145,7 @@ export function ProjectLandingContent({
           <>
             <FallbackImage
               src={heroImage.url}
-              alt=""
-              aria-hidden
+              alt={heroImage.alt?.trim() || `${project.name} — ảnh dự án`}
               className="lux-hero-project-photo lux-hero-photo absolute inset-0 h-full w-full object-cover object-center opacity-30"
               fetchPriority="high"
             />
@@ -252,7 +251,7 @@ export function ProjectLandingContent({
                 {project.developer.logoUrl && (
                   <FallbackImage
                     src={project.developer.logoUrl}
-                    alt=""
+                    alt={`Logo ${project.developer.name}`}
                     className="h-10 w-10 rounded-lg bg-white object-contain p-0.5"
                   />
                 )}

@@ -9,10 +9,14 @@ export const NEWS_HUB_PATH = "/tin-tuc" as const;
 export const NEWS_HUB_TITLE = "Tin tức" as const;
 
 export const NEWS_HUB_SEO_TITLE =
-  "Tin tức bất động sản — Kiến thức & cẩm nang | HouseX" as const;
+  "Tin tức bất động sản — kiến thức & cẩm nang" as const;
 
 export const NEWS_HUB_INTRO =
   "Cập nhật biến động thị trường bất động sản, lộ trình mua nhà ở xã hội và phân tích thực tế theo từng chuyên mục — đọc đúng chỗ, quyết định có căn cứ." as const;
+
+/** Meta description riêng hub tin tức (70–160 ký tự). */
+export const NEWS_HUB_SEO_DESCRIPTION =
+  "Tin tức và cẩm nang BĐS trên House X: nhà ở xã hội, vay mua nhà, dự án và kiến thức thực tế — giúp bạn quyết định có căn cứ." as const;
 
 /** Segment silo NOXH. */
 export const NOXH_HANDBOOK_SEGMENT = "cam-nang-noxh" as const;

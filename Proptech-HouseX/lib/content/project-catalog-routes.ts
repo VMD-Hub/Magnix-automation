@@ -23,10 +23,10 @@ export {
 } from "@/lib/content/project-catalog-paths";
 
 export const COMMERCIAL_CATALOG_SEO_TITLE =
-  "Dự án thương mại — BĐS TP.HCM & vùng ven | HouseX" as const;
+  "Dự án thương mại — TP.HCM & vùng ven" as const;
 
 export const COMMERCIAL_CATALOG_SEO_DESCRIPTION =
-  "Danh mục dự án bất động sản thương mại trên HouseX: căn hộ, nhà phố, đô thị mới tại TP.HCM và các tỉnh lân cận." as const;
+  "Danh mục dự án BĐS thương mại trên House X: căn hộ, nhà phố và đô thị mới tại TP.HCM cùng các tỉnh lân cận — thông tin giá và tiến độ minh bạch." as const;
 
 export function buildProjectCatalogMetadata(
   projectType: ProjectCatalogDbType | undefined,
@@ -39,13 +39,13 @@ export function buildProjectCatalogMetadata(
     ? NOXH_CATALOG_SEO_TITLE
     : isCommercial
       ? COMMERCIAL_CATALOG_SEO_TITLE
-      : "Dự án bất động sản";
+      : "Dự án bất động sản trên House X";
 
   const description = isNoxh
     ? NOXH_CATALOG_SEO_DESCRIPTION
     : isCommercial
       ? COMMERCIAL_CATALOG_SEO_DESCRIPTION
-      : "Danh mục dự án thương mại và NOXH trên HouseX.";
+      : "Danh mục dự án thương mại và nhà ở xã hội trên House X — giá, tiến độ và điều kiện mua có căn cứ.";
 
   return {
     title,

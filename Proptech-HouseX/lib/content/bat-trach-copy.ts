@@ -1,9 +1,9 @@
 /** Copy trang /cong-cu/xem-huong-nha — công cụ xem hướng nhà theo Bát trạch. */
 
 export const BAT_TRACH_COPY = {
-  metaTitle: "Xem hướng nhà theo tuổi 2026 — La bàn Bát trạch (Đông/Tây tứ mệnh)",
+  metaTitle: "Xem hướng nhà theo tuổi — Bát trạch 2026",
   metaDescription:
-    "Công cụ xem hướng nhà hợp tuổi chuẩn Bát trạch miễn phí: nhập năm sinh âm lịch và giới tính để biết cung mệnh, Đông tứ mệnh hay Tây tứ mệnh, cùng sơ đồ 4 hướng tốt (Sinh Khí, Thiên Y, Diên Niên, Phục Vị) và 4 hướng xấu cần tránh.",
+    "Công cụ xem hướng nhà hợp tuổi chuẩn Bát trạch miễn phí: cung mệnh, Đông/Tây tứ mệnh và sơ đồ 4 hướng tốt — Sinh Khí, Thiên Y, Diên Niên, Phục Vị.",
   kicker: "House X · Phong thủy nhà ở",
   title: "Xem hướng nhà theo tuổi chuẩn Bát trạch",
   subtitle:

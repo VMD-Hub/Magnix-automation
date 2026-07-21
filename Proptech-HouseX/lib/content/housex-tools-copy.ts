@@ -3,9 +3,9 @@ import { articlePath } from "@/lib/content/article-routes";
 /** Copy trang /cong-cu — ngôn ngữ người mua nhà, không jargon Proptech. */
 
 export const TOOLS_HUB_COPY = {
-  metaTitle: "Công cụ mua nhà — HouseX",
+  metaTitle: "Công cụ mua nhà miễn phí",
   metaDescription:
-    "12+ công cụ miễn phí: tính vay, NOXH, xem hướng nhà, tuổi xây dựng, dự toán chi phí xây nhà, chọn màu sơn — trên House X.",
+    "Công cụ miễn phí trên House X: tính vay, kiểm tra NOXH, xem hướng nhà, tuổi xây dựng và dự toán chi phí — dùng ngay trên trình duyệt.",
   kicker: "HouseX · Công cụ",
   title: "Công cụ mua nhà thông minh",
   subtitle:
@@ -18,9 +18,9 @@ export const TOOLS_HUB_COPY = {
 } as const;
 
 export const LOAN_CALC_COPY = {
-  metaTitle: "Tính khoản vay mua nhà — Lịch trả nợ & PDF | HouseX",
+  metaTitle: "Tính khoản vay mua nhà — lịch trả nợ PDF",
   metaDescription:
-    "Tính khoản vay mua bất động sản theo dư nợ giảm dần hoặc trả góp đều: số tiền trả hàng tháng, tổng lãi, lịch trả nợ chi tiết và xuất PDF miễn phí.",
+    "Tính khoản vay mua nhà theo dư nợ giảm dần hoặc trả góp đều: tiền trả hàng tháng, tổng lãi, lịch trả nợ chi tiết và xuất PDF miễn phí trên House X.",
   kicker: "Máy tính vay mua nhà",
   title: "Tính khoản vay mua nhà",
   subtitle:
@@ -33,9 +33,9 @@ export const LOAN_CALC_COPY = {
 } as const;
 
 export const LOAN_AFFORDABILITY_COPY = {
-  metaTitle: "Tính hạn mức vay mua nhà theo thu nhập 2026 | HouseX",
+  metaTitle: "Tính hạn mức vay theo thu nhập 2026",
   metaDescription:
-    "Ước tính hạn mức vay mua nhà theo thu nhập, DTI, chi phí sinh hoạt/đầu người, đồng vay vợ chồng và CIC — mô phỏng cách ngân hàng thẩm định. Miễn phí.",
+    "Ước tính hạn mức vay mua nhà theo thu nhập, DTI, chi phí sinh hoạt, đồng vay vợ chồng và CIC — mô phỏng cách ngân hàng thẩm định. Miễn phí trên House X.",
   kicker: "Máy tính hạn mức vay",
   title: "Tính hạn mức vay mua nhà",
   subtitle:
@@ -48,9 +48,9 @@ export const LOAN_AFFORDABILITY_COPY = {
 } as const;
 
 export const NOXH_CHECK_COPY = {
-  metaTitle: "Kiểm tra điều kiện mua nhà ở xã hội (NOXH) 2026 | HouseX",
+  metaTitle: "Kiểm tra điều kiện mua NOXH 2026",
   metaDescription:
-    "Tự kiểm tra điều kiện mua NOXH theo Luật Nhà ở 2023 và Nghị định 100/2024 (sửa đổi bởi NĐ 136/2026): đối tượng, nhà ở, thu nhập 25/35/50 triệu và khả năng vay. Miễn phí, có kết quả ngay.",
+    "Tự kiểm tra điều kiện mua nhà ở xã hội theo Luật Nhà ở 2023 và NĐ 100/2024 (sửa NĐ 136/2026): đối tượng, nhà ở, thu nhập và khả năng vay. Miễn phí trên House X.",
   kicker: "HouseX · Công cụ",
   title: "Kiểm tra điều kiện mua nhà ở xã hội",
   subtitle:
@@ -63,9 +63,9 @@ export const NOXH_CHECK_COPY = {
 } as const;
 
 export const NOXH_LOAN_ASSESSMENT_HUB_COPY = {
-  metaTitle: "Thẩm định vay NOXH — Bộ công cụ miễn phí | House X",
+  metaTitle: "Thẩm định vay NOXH — bộ công cụ miễn phí",
   metaDescription:
-    "Tự thẩm định vay mua nhà ở xã hội: kiểm tra nhanh thời hạn vay, tính hạn mức theo thu nhập, lịch trả nợ — trước khi đặt cọc. Không thay quyết định ngân hàng.",
+    "Tự thẩm định vay mua nhà ở xã hội: kiểm tra thời hạn vay, hạn mức theo thu nhập và lịch trả nợ trước khi đặt cọc. Tham khảo — không thay quyết định ngân hàng.",
   kicker: "House X · Công cụ NOXH",
   title: "Thẩm định vay mua nhà ở xã hội",
   subtitle:

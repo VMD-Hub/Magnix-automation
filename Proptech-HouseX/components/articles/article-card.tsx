@@ -92,7 +92,7 @@ export function ArticleCardCompact({ article }: { article: ArticleCardData }) {
         // eslint-disable-next-line @next/next/no-img-element
         <img
           src={coverUrl}
-          alt=""
+          alt={article.coverImageAlt ?? article.title}
           className="h-20 w-28 shrink-0 rounded-lg object-cover"
         />
       ) : usePhongThuyCover ? (

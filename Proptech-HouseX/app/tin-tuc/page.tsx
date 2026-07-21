@@ -3,6 +3,7 @@ import Link from "next/link";
 import {
   NEWS_HUB_INTRO,
   NEWS_HUB_PATH,
+  NEWS_HUB_SEO_DESCRIPTION,
   NEWS_HUB_SEO_TITLE,
   NEWS_HUB_TITLE,
   NOXH_HANDBOOK_PATH,
@@ -19,7 +20,7 @@ export const revalidate = 300;
 export async function generateMetadata(): Promise<Metadata> {
   return {
     title: NEWS_HUB_SEO_TITLE,
-    description: NEWS_HUB_INTRO,
+    description: NEWS_HUB_SEO_DESCRIPTION,
     alternates: {
       canonical: `${getSiteUrl()}${NEWS_HUB_PATH}`,
     },

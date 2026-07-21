@@ -19,10 +19,10 @@ export const NOXH_REGION_TAGLINE =
 export const NOXH_CATALOG_TITLE = "Nhà ở xã hội miền Nam" as const;
 
 export const NOXH_CATALOG_SEO_TITLE =
-  "Nhà ở xã hội miền Nam — cơ hội an cư cho người lao động | HouseX" as const;
+  "Nhà ở xã hội miền Nam — an cư người lao động" as const;
 
 export const NOXH_CATALOG_SEO_DESCRIPTION =
-  "Danh mục dự án nhà ở xã hội miền Nam trên HouseX: Long An, Đồng Nai, TP.HCM, Cần Thơ. Thông tin giá, mặt bằng, điều kiện mua và hỗ trợ vay — cơ hội an cư cho người lao động và công nhân KCN." as const;
+  "Danh mục NOXH miền Nam trên House X: Long An, Đồng Nai, TP.HCM, Cần Thơ — giá, mặt bằng, điều kiện mua và hỗ trợ vay cho người lao động." as const;
 
 export const NOXH_CATALOG_FAQ_HEADING =
   "Câu hỏi thường gặp về điều kiện mua nhà ở xã hội" as const;
@@ -30,7 +30,11 @@ export const NOXH_CATALOG_FAQ_HEADING =
 export const NOXH_HANDBOOK_TITLE = "Cẩm nang NOXH" as const;
 
 export const NOXH_HANDBOOK_SEO_TITLE =
-  "Cẩm nang NOXH — Mua nhà xã hội minh bạch, an tâm | HouseX" as const;
+  "Cẩm nang NOXH — mua nhà xã hội minh bạch" as const;
+
+/** Meta description riêng — không dùng INTRO dài trên trang. */
+export const NOXH_HANDBOOK_SEO_DESCRIPTION =
+  "Cẩm nang nhà ở xã hội trên House X: điều kiện mua, hồ sơ, quy trình và vay NOXH — thông tin có căn cứ để bạn kiểm tra trước khi quyết định." as const;
 
 export const NOXH_HANDBOOK_INTRO =
   "Mua nhà ở xã hội cần thông tin có căn cứ — không dựa vào tin đồn hay lời giới thiệu miệng. Cẩm nang này hệ thống hóa tiến độ dự án, khung pháp lý và phương án tài chính từ chuyên gia, giúp bạn chủ động kiểm tra điều kiện, hồ sơ và khả năng vay trước khi quyết định." as const;

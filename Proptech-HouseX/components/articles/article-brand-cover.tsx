@@ -46,7 +46,7 @@ export function ArticleBrandCover({
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={HERO_BRAND_SKYLINE.src}
-            alt=""
+            alt={HERO_BRAND_SKYLINE.alt}
             className="article-brand-cover__photo"
             style={{ objectPosition }}
             loading="lazy"

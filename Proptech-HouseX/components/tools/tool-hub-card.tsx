@@ -28,8 +28,7 @@ function ToolCardImage({ tool }: { tool: ToolCardDef }) {
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={toolCardImage(tool.id)}
-          alt=""
-          aria-hidden
+          alt={tool.title}
           className={cn(
             "h-full w-full object-cover transition-transform duration-500",
             tool.ready && "group-hover:scale-105",
@@ -130,8 +129,7 @@ export function ToolServiceCard({ href, title, intro, image, imageWebp }: Servic
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={image}
-            alt=""
-            aria-hidden
+            alt={title}
             className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
           />
         </picture>

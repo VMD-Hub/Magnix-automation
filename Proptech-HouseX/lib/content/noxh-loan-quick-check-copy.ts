@@ -3,9 +3,9 @@
 import { noxhLoanClusterArticleLinks } from "@/lib/content/articles/noxh-loan-cluster-map-2026";
 
 export const NOXH_LOAN_QUICK_COPY = {
-  metaTitle: "Kiểm tra nhanh thời hạn vay NOXH | HouseX",
+  metaTitle: "Kiểm tra nhanh thời hạn vay NOXH",
   metaDescription:
-    "Ước tính tuổi cuối kỳ vay theo năm sinh — biết sớm thời hạn vay NOXH có khả thi hay không, trước khi nộp hồ sơ hoặc đặt cọc. Miễn phí, không thay thế ngân hàng.",
+    "Ước tính tuổi cuối kỳ vay theo năm sinh — biết sớm thời hạn vay NOXH có khả thi hay không, trước khi nộp hồ sơ hoặc đặt cọc. Miễn phí trên House X.",
   kicker: "HouseX · Kiểm tra sơ bộ",
   title: "Kiểm tra nhanh thời hạn vay mua nhà ở xã hội",
   subtitle:

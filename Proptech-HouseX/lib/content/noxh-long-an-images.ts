@@ -10,7 +10,7 @@ export const NOXH_LA_IMAGES = {
   },
   logo: "/images/projects/la-home/logo.png",
   map: {
-    url: "/images/projects/la-home/map.jpg",
+    url: "/images/projects/la-home/map.webp",
     alt: "Vị trí NOXH LA Home Lương Hòa",
     caption: "KĐT sinh thái LA Home — cửa ngõ Bến Lức giáp TP.HCM",
   },
@@ -33,7 +33,7 @@ export const NOXH_MY_HANH_IMAGES = {
   },
   logo: null,
   map: {
-    url: "/images/projects/nam-long-can-tho/map.jpg",
+    url: "/images/projects/nam-long-can-tho/map.webp",
     alt: "Khu vực Mỹ Hạnh Nam, Đức Hòa",
     caption: "Gần QL1A — giáp ranh TP.HCM (minh hoạ khu vực)",
   },

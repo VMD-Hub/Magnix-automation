@@ -16,6 +16,10 @@ import { getArticlesForProjectSlug } from "@/lib/data/article-public";
 import { getDemoProjectInventory } from "@/lib/preview/demo-project-inventory";
 import { parseProjectInventoryPageFilters } from "@/lib/validation/project-unit";
 import { buildProjectJsonLd } from "@/lib/seo/json-ld";
+import {
+  normalizeSeoDescription,
+  normalizeSeoTitle,
+} from "@/lib/seo/meta-text";
 import { getSiteUrl } from "@/lib/site-config";
 import { resolveLandingHeroImage, parseProjectOverview } from "@/lib/content/project-landing";
 
@@ -37,11 +41,12 @@ export async function generateMetadata({
   }
 
   const { project } = result;
-  const title = project.seoTitle ?? project.name;
-  const description =
+  const title = normalizeSeoTitle(project.seoTitle ?? project.name);
+  const description = normalizeSeoDescription(
     project.seoDesc ??
-    project.description?.slice(0, 160) ??
-    `${project.name} tại ${project.district}, ${project.province}.`;
+      project.description?.slice(0, 200) ??
+      `${project.name} tại ${project.district}, ${project.province} — thông tin giá, tiến độ và mặt bằng trên House X.`,
+  );
   const siteUrl = getSiteUrl();
   const canonical = `${siteUrl}/du-an/${project.slug}`;
   const overview = parseProjectOverview(project.overviewData);
@@ -57,9 +62,9 @@ export async function generateMetadata({
       url: canonical,
       type: "website",
       images: hero?.url
-        ? [{ url: hero.url }]
+        ? [{ url: hero.url, alt: hero.alt ?? project.name }]
         : project.developer?.logoUrl
-          ? [{ url: project.developer.logoUrl }]
+          ? [{ url: project.developer.logoUrl, alt: project.developer.name }]
           : undefined,
     },
   };

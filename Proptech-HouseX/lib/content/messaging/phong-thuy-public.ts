@@ -16,10 +16,10 @@ export const PHONG_THUY_HUB_INTRO =
   "House X tổng hợp phong thủy nhà ở theo hướng thực dụng: công cụ tính toán minh bạch (Bát trạch, tuổi động thổ, Ngũ hành) và bài viết giải thích từng khái niệm — giúp bạn tham khảo trước khi chọn hướng cửa, năm xây hoặc màu nội thất." as const;
 
 export const PHONG_THUY_HUB_SEO_TITLE =
-  "Phong thủy nhà ở — xem hướng nhà, tuổi xây, màu sơn theo mệnh" as const;
+  "Phong thủy nhà ở — hướng nhà, tuổi xây, màu sơn" as const;
 
 export const PHONG_THUY_HUB_SEO_DESCRIPTION =
-  "Phong thủy nhà ở trên House X: công cụ xem hướng nhà Bát trạch, kiểm tra tuổi xây nhà (Kim Lâu, Hoang Ốc, Tam Tai), chọn màu sơn Ngũ hành và phong thủy bàn làm việc — kèm bài kiến thức biên tập." as const;
+  "Phong thủy nhà ở trên House X: xem hướng Bát trạch, tuổi xây (Kim Lâu, Hoang Ốc, Tam Tai), màu sơn Ngũ hành — kèm bài kiến thức biên tập." as const;
 
 export const PHONG_THUY_TOOLS_HEADING = "Công cụ phong thủy miễn phí" as const;
 

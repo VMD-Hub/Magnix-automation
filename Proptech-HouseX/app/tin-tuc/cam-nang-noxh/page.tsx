@@ -11,6 +11,7 @@ import {
 import {
   NOXH_HANDBOOK_INTRO,
   NOXH_HANDBOOK_PATH,
+  NOXH_HANDBOOK_SEO_DESCRIPTION,
   NOXH_HANDBOOK_SEO_TITLE,
   NOXH_HANDBOOK_TITLE,
 } from "@/lib/content/messaging/noxh-public";
@@ -25,7 +26,7 @@ type PageProps = {
 export async function generateMetadata(): Promise<Metadata> {
   return {
     title: NOXH_HANDBOOK_SEO_TITLE,
-    description: NOXH_HANDBOOK_INTRO,
+    description: NOXH_HANDBOOK_SEO_DESCRIPTION,
     alternates: {
       canonical: `${getSiteUrl()}${NOXH_HANDBOOK_PATH}`,
     },

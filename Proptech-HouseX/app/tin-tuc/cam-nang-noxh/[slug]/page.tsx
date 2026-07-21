@@ -30,6 +30,10 @@ import {
   NOXH_HANDBOOK_TITLE,
 } from "@/lib/content/messaging/noxh-public";
 import { getSiteUrl } from "@/lib/site-config";
+import {
+  normalizeSeoDescription,
+  normalizeSeoTitle,
+} from "@/lib/seo/meta-text";
 
 export const revalidate = 300;
 
@@ -45,9 +49,10 @@ export async function generateMetadata({
   const { article: raw } = result;
   const article = applyEditorialMedia(raw);
   const siteUrl = getSiteUrl();
-  const title = article.seoTitle ?? article.title;
-  const description =
-    article.seoDesc ?? article.excerpt ?? article.title.slice(0, 160);
+  const title = normalizeSeoTitle(article.seoTitle ?? article.title);
+  const description = normalizeSeoDescription(
+    article.seoDesc ?? article.excerpt ?? article.title.slice(0, 160),
+  );
   const canonical = `${siteUrl}${articlePath(article.slug)}`;
   const ogImage = article.coverImageUrl
     ? absoluteArticleImageUrl(article.coverImageUrl, siteUrl)
