@@ -51,6 +51,22 @@ type Counts = {
   total: number;
 };
 
+type FormState = {
+  tier: string;
+  pressUrl: string;
+  sxdUrl: string;
+  groupSlug: string;
+  channelSlug: string;
+  provinceHint: string;
+  roleHint: string;
+  resolveStatus: string;
+  opsNotes: string;
+  readerTitle: string;
+  readerBody: string;
+  readerDisclaimer: string;
+  ctaLabel: string;
+};
+
 const TABS: { key: StatusFilter; label: string }[] = [
   { key: "PENDING_L3", label: "Chờ L3" },
   { key: "PACKAGED", label: "Đã đóng gói" },
@@ -61,7 +77,47 @@ const TABS: { key: StatusFilter; label: string }[] = [
   { key: "ALL", label: "Tất cả" },
 ];
 
+const WIZARD_STEPS = [
+  { id: 0, label: "1. Nguồn (ops)" },
+  { id: 1, label: "2. Bản người đọc" },
+  { id: 2, label: "3. Xem lại & duyệt" },
+] as const;
+
 const TIER_OPTIONS = ["T1_PRESS", "T2_SXD", "T3_DOSSIER", "T4_SOR"] as const;
+
+const emptyForm: FormState = {
+  tier: "T1_PRESS",
+  pressUrl: "",
+  sxdUrl: "",
+  groupSlug: "",
+  channelSlug: "",
+  provinceHint: "",
+  roleHint: "",
+  resolveStatus: "",
+  opsNotes: "",
+  readerTitle: "",
+  readerBody: "",
+  readerDisclaimer: DEFAULT_T1_READER_DISCLAIMER,
+  ctaLabel: "Đăng ký nhận cập nhật",
+};
+
+function itemToForm(item: EarlySignalItem): FormState {
+  return {
+    tier: item.tier,
+    pressUrl: item.pressUrl ?? "",
+    sxdUrl: item.sxdUrl ?? "",
+    groupSlug: item.groupSlug ?? "",
+    channelSlug: item.channelSlug ?? "",
+    provinceHint: item.provinceHint ?? "",
+    roleHint: item.roleHint ?? "",
+    resolveStatus: item.resolveStatus ?? "",
+    opsNotes: item.opsNotes ?? "",
+    readerTitle: item.readerTitle ?? "",
+    readerBody: item.readerBody ?? "",
+    readerDisclaimer: item.readerDisclaimer ?? DEFAULT_T1_READER_DISCLAIMER,
+    ctaLabel: item.ctaLabel ?? "Đăng ký nhận cập nhật",
+  };
+}
 
 function statusBadge(status: string) {
   const map: Record<string, string> = {
@@ -100,22 +156,6 @@ function formatDate(iso: string | null) {
   });
 }
 
-const emptyForm = {
-  tier: "T1_PRESS" as string,
-  pressUrl: "",
-  sxdUrl: "",
-  groupSlug: "",
-  channelSlug: "",
-  provinceHint: "",
-  roleHint: "",
-  resolveStatus: "",
-  opsNotes: "",
-  readerTitle: "",
-  readerBody: "",
-  readerDisclaimer: DEFAULT_T1_READER_DISCLAIMER,
-  ctaLabel: "Đăng ký nhận cập nhật",
-};
-
 export function EarlySignalReviewBoard() {
   const [filter, setFilter] = useState<StatusFilter>("PENDING_L3");
   const [items, setItems] = useState<EarlySignalItem[]>([]);
@@ -128,17 +168,18 @@ export function EarlySignalReviewBoard() {
     published: 0,
     total: 0,
   });
-  const [selectedId, setSelectedId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState(false);
   const [rejectReason, setRejectReason] = useState("");
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [showCreate, setShowCreate] = useState(false);
-  const [form, setForm] = useState(emptyForm);
-  const [editForm, setEditForm] = useState(emptyForm);
 
-  const selected = items.find((i) => i.id === selectedId) ?? null;
+  /** null = hàng đợi; create | edit = wizard trong AdminShell */
+  const [wizardKind, setWizardKind] = useState<"create" | "edit" | null>(null);
+  const [wizardStep, setWizardStep] = useState(0);
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editingStatus, setEditingStatus] = useState<string | null>(null);
+  const [form, setForm] = useState<FormState>(emptyForm);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -154,19 +195,17 @@ export function EarlySignalReviewBoard() {
         setItems([]);
         return;
       }
-      const nextItems: EarlySignalItem[] = json.data.items ?? [];
-      setItems(nextItems);
-      setCounts(json.data.counts ?? {
-        pendingL3: 0,
-        packaged: 0,
-        captured: 0,
-        approved: 0,
-        rejected: 0,
-        published: 0,
-        total: 0,
-      });
-      setSelectedId((prev) =>
-        prev && nextItems.some((i) => i.id === prev) ? prev : null,
+      setItems(json.data.items ?? []);
+      setCounts(
+        json.data.counts ?? {
+          pendingL3: 0,
+          packaged: 0,
+          captured: 0,
+          approved: 0,
+          rejected: 0,
+          published: 0,
+          total: 0,
+        },
       );
     } catch {
       setError("Lỗi mạng khi tải tin sớm.");
@@ -179,24 +218,38 @@ export function EarlySignalReviewBoard() {
     void load();
   }, [load]);
 
-  useEffect(() => {
-    if (!selected) return;
-    setEditForm({
-      tier: selected.tier,
-      pressUrl: selected.pressUrl ?? "",
-      sxdUrl: selected.sxdUrl ?? "",
-      groupSlug: selected.groupSlug ?? "",
-      channelSlug: selected.channelSlug ?? "",
-      provinceHint: selected.provinceHint ?? "",
-      roleHint: selected.roleHint ?? "",
-      resolveStatus: selected.resolveStatus ?? "",
-      opsNotes: selected.opsNotes ?? "",
-      readerTitle: selected.readerTitle ?? "",
-      readerBody: selected.readerBody ?? "",
-      readerDisclaimer: selected.readerDisclaimer ?? DEFAULT_T1_READER_DISCLAIMER,
-      ctaLabel: selected.ctaLabel ?? "Đăng ký nhận cập nhật",
-    });
-  }, [selected]);
+  function openCreate() {
+    setWizardKind("create");
+    setWizardStep(0);
+    setEditingId(null);
+    setEditingStatus(null);
+    setForm(emptyForm);
+    setMessage(null);
+    setError(null);
+  }
+
+  function openEdit(item: EarlySignalItem) {
+    setWizardKind("edit");
+    setWizardStep(0);
+    setEditingId(item.id);
+    setEditingStatus(item.status);
+    setForm(itemToForm(item));
+    setMessage(null);
+    setError(null);
+  }
+
+  function closeWizard() {
+    setWizardKind(null);
+    setWizardStep(0);
+    setEditingId(null);
+    setEditingStatus(null);
+    setForm(emptyForm);
+    setRejectReason("");
+  }
+
+  function patchForm(partial: Partial<FormState>) {
+    setForm((prev) => ({ ...prev, ...partial }));
+  }
 
   async function runAction(
     id: string,
@@ -207,9 +260,7 @@ export function EarlySignalReviewBoard() {
     setError(null);
     try {
       const payload =
-        action === "reject"
-          ? { action, rejectReason }
-          : { action };
+        action === "reject" ? { action, rejectReason } : { action };
       const res = await fetch(`/api/admin/early-signals/${id}`, {
         method: "POST",
         credentials: "include",
@@ -225,6 +276,8 @@ export function EarlySignalReviewBoard() {
         setError((json?.error?.message ?? "Thao tác thất bại") + detail);
         return;
       }
+      const next: EarlySignalItem = json.data;
+      setEditingStatus(next.status);
       setMessage(
         action === "approve"
           ? "Đã duyệt L3 — chưa auto-nurture."
@@ -234,6 +287,9 @@ export function EarlySignalReviewBoard() {
       );
       setRejectReason("");
       await load();
+      if (action === "approve" || action === "reject" || action === "mark_published") {
+        closeWizard();
+      }
     } catch {
       setError("Lỗi mạng khi cập nhật trạng thái.");
     } finally {
@@ -251,30 +307,32 @@ export function EarlySignalReviewBoard() {
         credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          tier: editForm.tier,
-          pressUrl: editForm.pressUrl || null,
-          sxdUrl: editForm.sxdUrl || null,
-          groupSlug: editForm.groupSlug || null,
-          channelSlug: editForm.channelSlug || null,
-          provinceHint: editForm.provinceHint || null,
-          roleHint: editForm.roleHint || null,
-          resolveStatus: editForm.resolveStatus || null,
-          opsNotes: editForm.opsNotes || null,
-          readerTitle: editForm.readerTitle || null,
-          readerBody: editForm.readerBody || null,
-          readerDisclaimer: editForm.readerDisclaimer || null,
-          ctaLabel: editForm.ctaLabel || null,
+          tier: form.tier,
+          pressUrl: form.pressUrl || null,
+          sxdUrl: form.sxdUrl || null,
+          groupSlug: form.groupSlug || null,
+          channelSlug: form.channelSlug || null,
+          provinceHint: form.provinceHint || null,
+          roleHint: form.roleHint || null,
+          resolveStatus: form.resolveStatus || null,
+          opsNotes: form.opsNotes || null,
+          readerTitle: form.readerTitle || null,
+          readerBody: form.readerBody || null,
+          readerDisclaimer: form.readerDisclaimer || null,
+          ctaLabel: form.ctaLabel || null,
         }),
       });
       const json = await res.json();
       if (!res.ok) {
         setError(json?.error?.message ?? "Không lưu được.");
-        return;
+        return false;
       }
-      setMessage("Đã lưu dossier / preview.");
+      setMessage("Đã lưu.");
       await load();
+      return true;
     } catch {
       setError("Lỗi mạng khi lưu.");
+      return false;
     } finally {
       setActionLoading(false);
     }
@@ -310,17 +368,29 @@ export function EarlySignalReviewBoard() {
         setError(json?.error?.message ?? "Không tạo được.");
         return;
       }
-      setShowCreate(false);
-      setForm(emptyForm);
+      const created: EarlySignalItem = json.data;
+      setMessage("Đã tạo intake — tiếp tục đóng gói / gửi L3 nếu sẵn sàng.");
+      setWizardKind("edit");
+      setEditingId(created.id);
+      setEditingStatus(created.status);
+      setForm(itemToForm(created));
+      setWizardStep(2);
       setFilter("CAPTURED");
-      setSelectedId(json.data.id);
-      setMessage("Đã tạo intake tin sớm — đang ở tab Intake.");
-      // load() sẽ chạy khi filter đổi sang CAPTURED
     } catch {
       setError("Lỗi mạng khi tạo.");
     } finally {
       setActionLoading(false);
     }
+  }
+
+  function canGoNextFromStep(step: number): boolean {
+    if (step === 0) {
+      return Boolean(form.pressUrl.trim() || form.sxdUrl.trim());
+    }
+    if (step === 1) {
+      return Boolean(form.readerTitle.trim() && form.readerBody.trim());
+    }
+    return true;
   }
 
   function tabCount(key: StatusFilter) {
@@ -333,6 +403,306 @@ export function EarlySignalReviewBoard() {
     return counts.total;
   }
 
+  /* —— Wizard (giữ trong AdminShell — không full-page ngoài chrome) —— */
+  if (wizardKind) {
+    return (
+      <div className="space-y-4">
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <Button type="button" variant="ghost" size="sm" onClick={closeWizard}>
+            ← Về hàng đợi
+          </Button>
+          {editingStatus ? statusBadge(editingStatus) : null}
+        </div>
+
+        <ol className="flex flex-wrap gap-2">
+          {WIZARD_STEPS.map((s) => (
+            <li key={s.id}>
+              <button
+                type="button"
+                onClick={() => setWizardStep(s.id)}
+                className={cn(
+                  "rounded-full px-3 py-1.5 text-sm font-medium",
+                  wizardStep === s.id
+                    ? "bg-brand-700 text-white"
+                    : "bg-slate-100 text-slate-700 hover:bg-slate-200",
+                )}
+              >
+                {s.label}
+              </button>
+            </li>
+          ))}
+        </ol>
+
+        {message ? (
+          <p className="rounded-lg bg-emerald-50 px-3 py-2 text-sm text-emerald-800">
+            {message}
+          </p>
+        ) : null}
+        {error ? (
+          <p className="rounded-lg bg-rose-50 px-3 py-2 text-sm text-rose-800">
+            {error}
+          </p>
+        ) : null}
+
+        <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm ring-1 ring-slate-900/5">
+          {wizardStep === 0 ? (
+            <div className="grid gap-3 md:grid-cols-2">
+              <p className="md:col-span-2 text-sm text-slate-600">
+                Bước ops — nguồn tin (không hiện khách).
+              </p>
+              <Field label="Tier">
+                <select
+                  className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"
+                  value={form.tier}
+                  onChange={(e) => patchForm({ tier: e.target.value })}
+                >
+                  {TIER_OPTIONS.map((t) => (
+                    <option key={t} value={t}>
+                      {t}
+                    </option>
+                  ))}
+                </select>
+              </Field>
+              <Field label="Tỉnh / khu vực (gợi ý)">
+                <input
+                  className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"
+                  value={form.provinceHint}
+                  onChange={(e) => patchForm({ provinceHint: e.target.value })}
+                />
+              </Field>
+              <Field label="Press URL *">
+                <input
+                  className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"
+                  value={form.pressUrl}
+                  onChange={(e) => patchForm({ pressUrl: e.target.value })}
+                  placeholder="https://…"
+                />
+              </Field>
+              <Field label="Sở URL">
+                <input
+                  className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"
+                  value={form.sxdUrl}
+                  onChange={(e) => patchForm({ sxdUrl: e.target.value })}
+                />
+              </Field>
+              <Field label="groupSlug (CĐT / brand)">
+                <input
+                  className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"
+                  value={form.groupSlug}
+                  onChange={(e) => patchForm({ groupSlug: e.target.value })}
+                  placeholder="vd. vingroup, nam-long"
+                />
+              </Field>
+              <Field label="channelSlug (phân phối)">
+                <input
+                  className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"
+                  value={form.channelSlug}
+                  onChange={(e) => patchForm({ channelSlug: e.target.value })}
+                  placeholder="vd. kim-oanh — không = CĐT"
+                />
+              </Field>
+              <div className="md:col-span-2">
+                <Field label="Ghi chú ops">
+                  <textarea
+                    className="min-h-20 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"
+                    value={form.opsNotes}
+                    onChange={(e) => patchForm({ opsNotes: e.target.value })}
+                  />
+                </Field>
+              </div>
+            </div>
+          ) : null}
+
+          {wizardStep === 1 ? (
+            <div className="grid gap-3">
+              <p className="text-sm text-slate-600">
+                Bước người đọc — đúng copy khách sẽ thấy.
+              </p>
+              <Field label="Tiêu đề *">
+                <input
+                  className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"
+                  value={form.readerTitle}
+                  onChange={(e) => patchForm({ readerTitle: e.target.value })}
+                />
+              </Field>
+              <Field label="Nội dung *">
+                <textarea
+                  className="min-h-32 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"
+                  value={form.readerBody}
+                  onChange={(e) => patchForm({ readerBody: e.target.value })}
+                />
+              </Field>
+              <Field label="Disclaimer * (T1 bắt buộc)">
+                <textarea
+                  className="min-h-20 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"
+                  value={form.readerDisclaimer}
+                  onChange={(e) =>
+                    patchForm({ readerDisclaimer: e.target.value })
+                  }
+                />
+              </Field>
+              <Field label="Nhãn CTA">
+                <input
+                  className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"
+                  value={form.ctaLabel}
+                  onChange={(e) => patchForm({ ctaLabel: e.target.value })}
+                />
+              </Field>
+            </div>
+          ) : null}
+
+          {wizardStep === 2 ? (
+            <div className="space-y-4">
+              <p className="text-sm text-slate-600">
+                Xem lại như khách — rồi lưu / đóng gói / gửi L3 / duyệt.
+              </p>
+              <section className="rounded-xl border border-brand-100 bg-brand-50/40 p-4">
+                <p className="text-xs font-medium uppercase tracking-wide text-brand-800">
+                  Preview người đọc
+                </p>
+                <h3 className="mt-2 text-xl font-semibold text-slate-900">
+                  {form.readerTitle || "(Chưa có tiêu đề)"}
+                </h3>
+                <p className="mt-3 whitespace-pre-wrap text-sm leading-relaxed text-slate-700">
+                  {form.readerBody || "—"}
+                </p>
+                <p className="mt-4 rounded-lg bg-amber-50 px-3 py-2 text-sm text-amber-900">
+                  {form.readerDisclaimer || DEFAULT_T1_READER_DISCLAIMER}
+                </p>
+                <Button type="button" className="mt-4" disabled>
+                  {form.ctaLabel || "Đăng ký nhận cập nhật"}
+                </Button>
+                {form.channelSlug ? (
+                  <p className="mt-3 text-xs text-slate-500">
+                    Đơn vị tư vấn/phân phối (phụ): {form.channelSlug}
+                  </p>
+                ) : null}
+              </section>
+
+              <div className="flex flex-wrap gap-2">
+                {wizardKind === "create" ? (
+                  <Button
+                    type="button"
+                    disabled={actionLoading || !canGoNextFromStep(1)}
+                    onClick={() => void createItem()}
+                  >
+                    Tạo intake (CAPTURED)
+                  </Button>
+                ) : null}
+                {wizardKind === "edit" && editingId && editingStatus !== "PUBLISHED" ? (
+                  <Button
+                    type="button"
+                    variant="outline"
+                    disabled={actionLoading}
+                    onClick={() => void saveEdit(editingId)}
+                  >
+                    Lưu thay đổi
+                  </Button>
+                ) : null}
+                {wizardKind === "edit" &&
+                  editingId &&
+                  (editingStatus === "CAPTURED" ||
+                    editingStatus === "REJECTED" ||
+                    editingStatus === "PACKAGED") && (
+                    <Button
+                      type="button"
+                      disabled={actionLoading}
+                      onClick={async () => {
+                        const ok = await saveEdit(editingId);
+                        if (ok) await runAction(editingId, "package");
+                      }}
+                    >
+                      Lưu & đóng gói
+                    </Button>
+                  )}
+                {wizardKind === "edit" &&
+                  editingId &&
+                  (editingStatus === "PACKAGED" || editingStatus === "REJECTED") && (
+                    <Button
+                      type="button"
+                      disabled={actionLoading}
+                      onClick={() => void runAction(editingId, "submit_l3")}
+                    >
+                      Gửi duyệt L3
+                    </Button>
+                  )}
+                {wizardKind === "edit" &&
+                  editingId &&
+                  editingStatus === "PENDING_L3" && (
+                    <>
+                      <Button
+                        type="button"
+                        disabled={actionLoading}
+                        onClick={() => void runAction(editingId, "approve")}
+                      >
+                        Duyệt L3
+                      </Button>
+                      <input
+                        className="min-w-[200px] flex-1 rounded-lg border border-slate-300 px-3 py-2 text-sm"
+                        placeholder="Lý do từ chối (≥5 ký tự)"
+                        value={rejectReason}
+                        onChange={(e) => setRejectReason(e.target.value)}
+                      />
+                      <Button
+                        type="button"
+                        variant="outline"
+                        disabled={
+                          actionLoading || rejectReason.trim().length < 5
+                        }
+                        onClick={() => void runAction(editingId, "reject")}
+                      >
+                        Từ chối
+                      </Button>
+                    </>
+                  )}
+                {wizardKind === "edit" &&
+                  editingId &&
+                  editingStatus === "APPROVED" && (
+                    <Button
+                      type="button"
+                      variant="outline"
+                      disabled={actionLoading}
+                      onClick={() => void runAction(editingId, "mark_published")}
+                    >
+                      Đánh dấu đã đăng
+                    </Button>
+                  )}
+              </div>
+            </div>
+          ) : null}
+        </div>
+
+        <div className="sticky bottom-0 z-10 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-slate-200 bg-white/95 px-4 py-3 shadow-sm backdrop-blur">
+          <Button
+            type="button"
+            variant="outline"
+            disabled={wizardStep === 0}
+            onClick={() => setWizardStep((s) => Math.max(0, s - 1))}
+          >
+            ← Lùi
+          </Button>
+          <span className="text-xs text-slate-500">
+            Bước {wizardStep + 1}/{WIZARD_STEPS.length}
+          </span>
+          {wizardStep < 2 ? (
+            <Button
+              type="button"
+              disabled={!canGoNextFromStep(wizardStep)}
+              onClick={() => setWizardStep((s) => Math.min(2, s + 1))}
+            >
+              Tiếp →
+            </Button>
+          ) : (
+            <Button type="button" variant="ghost" onClick={closeWizard}>
+              Xong / về hàng đợi
+            </Button>
+          )}
+        </div>
+      </div>
+    );
+  }
+
+  /* —— Hàng đợi —— */
   return (
     <div className="space-y-4">
       <div className="flex flex-wrap items-center justify-between gap-3">
@@ -345,7 +715,7 @@ export function EarlySignalReviewBoard() {
               className={cn(
                 "rounded-full px-3 py-1.5 text-sm font-medium",
                 filter === tab.key
-                  ? "bg-slate-900 text-white"
+                  ? "bg-brand-700 text-white"
                   : "bg-slate-100 text-slate-700 hover:bg-slate-200",
               )}
             >
@@ -353,17 +723,8 @@ export function EarlySignalReviewBoard() {
             </button>
           ))}
         </div>
-        <Button
-          type="button"
-          onClick={() => {
-            setShowCreate((v) => {
-              const next = !v;
-              if (next) setSelectedId(null);
-              return next;
-            });
-          }}
-        >
-          {showCreate ? "Đóng form thêm" : "Thêm tin sớm"}
+        <Button type="button" onClick={openCreate}>
+          Thêm tin sớm
         </Button>
       </div>
 
@@ -378,381 +739,41 @@ export function EarlySignalReviewBoard() {
         </p>
       ) : null}
 
-      {showCreate ? (
-        <div className="grid gap-3 rounded-xl border border-slate-200 bg-white p-4 md:grid-cols-2">
-          <Field label="Tier">
-            <select
-              className="w-full rounded border px-2 py-1.5 text-sm"
-              value={form.tier}
-              onChange={(e) => setForm({ ...form, tier: e.target.value })}
-            >
-              {TIER_OPTIONS.map((t) => (
-                <option key={t} value={t}>
-                  {t}
-                </option>
-              ))}
-            </select>
-          </Field>
-          <Field label="Press URL">
-            <input
-              className="w-full rounded border px-2 py-1.5 text-sm"
-              value={form.pressUrl}
-              onChange={(e) => setForm({ ...form, pressUrl: e.target.value })}
-            />
-          </Field>
-          <Field label="Sở URL">
-            <input
-              className="w-full rounded border px-2 py-1.5 text-sm"
-              value={form.sxdUrl}
-              onChange={(e) => setForm({ ...form, sxdUrl: e.target.value })}
-            />
-          </Field>
-          <Field label="groupSlug (CĐT)">
-            <input
-              className="w-full rounded border px-2 py-1.5 text-sm"
-              value={form.groupSlug}
-              onChange={(e) => setForm({ ...form, groupSlug: e.target.value })}
-            />
-          </Field>
-          <Field label="channelSlug">
-            <input
-              className="w-full rounded border px-2 py-1.5 text-sm"
-              value={form.channelSlug}
-              onChange={(e) => setForm({ ...form, channelSlug: e.target.value })}
-            />
-          </Field>
-          <Field label="Tiêu đề người đọc">
-            <input
-              className="w-full rounded border px-2 py-1.5 text-sm"
-              value={form.readerTitle}
-              onChange={(e) => setForm({ ...form, readerTitle: e.target.value })}
-            />
-          </Field>
-          <div className="md:col-span-2">
-            <Field label="Nội dung người đọc">
-              <textarea
-                className="min-h-24 w-full rounded border px-2 py-1.5 text-sm"
-                value={form.readerBody}
-                onChange={(e) => setForm({ ...form, readerBody: e.target.value })}
-              />
-            </Field>
-          </div>
-          <div className="md:col-span-2">
-            <Field label="Disclaimer người đọc">
-              <textarea
-                className="min-h-16 w-full rounded border px-2 py-1.5 text-sm"
-                value={form.readerDisclaimer}
-                onChange={(e) =>
-                  setForm({ ...form, readerDisclaimer: e.target.value })
-                }
-              />
-            </Field>
-          </div>
-          <div className="md:col-span-2">
-            <Button type="button" disabled={actionLoading} onClick={() => void createItem()}>
-              Tạo CAPTURED
-            </Button>
-          </div>
-        </div>
-      ) : null}
-
-      <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)]">
-        <div className="overflow-hidden rounded-xl border border-slate-200 bg-white">
-          {loading ? (
-            <p className="p-4 text-sm text-slate-500">Đang tải…</p>
-          ) : items.length === 0 ? (
-            <p className="p-4 text-sm text-slate-500">Không có bản ghi.</p>
-          ) : (
-            <ul className="divide-y divide-slate-100">
-              {items.map((item) => (
-                <li key={item.id}>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setShowCreate(false);
-                      setSelectedId(item.id);
-                    }}
-                    className={cn(
-                      "flex w-full flex-col gap-1 px-4 py-3 text-left hover:bg-slate-50",
-                      selectedId === item.id && "bg-amber-50",
-                    )}
-                  >
-                    <div className="flex items-center justify-between gap-2">
-                      <span className="font-medium text-slate-900">
-                        {item.readerTitle || "(Chưa có tiêu đề)"}
-                      </span>
-                      {statusBadge(item.status)}
-                    </div>
-                    <span className="text-xs text-slate-500">
-                      {item.tier}
-                      {item.groupSlug ? ` · brand:${item.groupSlug}` : ""}
-                      {item.channelSlug ? ` · channel:${item.channelSlug}` : ""}
-                      {" · "}
-                      {formatDate(item.createdAt)}
+      <div className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm ring-1 ring-slate-900/5">
+        {loading ? (
+          <p className="p-4 text-sm text-slate-500">Đang tải…</p>
+        ) : items.length === 0 ? (
+          <p className="p-6 text-sm text-slate-500">
+            Không có bản ghi. Bấm «Thêm tin sớm» — wizard 3 bước trong House X
+            Admin (không rời đầu trang).
+          </p>
+        ) : (
+          <ul className="divide-y divide-slate-100">
+            {items.map((item) => (
+              <li key={item.id}>
+                <button
+                  type="button"
+                  onClick={() => openEdit(item)}
+                  className="flex w-full flex-col gap-1 px-4 py-3 text-left hover:bg-brand-50/50"
+                >
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="font-medium text-slate-900">
+                      {item.readerTitle || "(Chưa có tiêu đề)"}
                     </span>
-                  </button>
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
-
-        <div className="space-y-4">
-          {!selected ? (
-            <p className="rounded-xl border border-dashed border-slate-200 p-6 text-sm text-slate-500">
-              Chọn một tin để xem ops dossier + preview người đọc.
-            </p>
-          ) : (
-            <>
-              <section className="rounded-xl border border-slate-200 bg-slate-50 p-4">
-                <h2 className="text-sm font-semibold text-slate-800">
-                  Ops dossier (nội bộ)
-                </h2>
-                <dl className="mt-3 grid gap-2 text-sm md:grid-cols-2">
-                  <Row label="Status" value={selected.status} />
-                  <Row label="Tier" value={selected.tier} />
-                  <Row label="groupSlug" value={selected.groupSlug ?? "—"} />
-                  <Row label="channelSlug" value={selected.channelSlug ?? "—"} />
-                  <Row label="roleHint" value={selected.roleHint ?? "—"} />
-                  <Row label="resolve" value={selected.resolveStatus ?? "—"} />
-                  <Row
-                    label="Press"
-                    value={
-                      selected.pressUrl ? (
-                        <a
-                          className="text-sky-700 underline"
-                          href={selected.pressUrl}
-                          target="_blank"
-                          rel="noreferrer"
-                        >
-                          Mở nguồn
-                        </a>
-                      ) : (
-                        "—"
-                      )
-                    }
-                  />
-                  <Row
-                    label="Sở"
-                    value={
-                      selected.sxdUrl ? (
-                        <a
-                          className="text-sky-700 underline"
-                          href={selected.sxdUrl}
-                          target="_blank"
-                          rel="noreferrer"
-                        >
-                          Mở Sở
-                        </a>
-                      ) : (
-                        "—"
-                      )
-                    }
-                  />
-                  <Row
-                    label="Dự án"
-                    value={
-                      selected.project
-                        ? `${selected.project.name} (${selected.project.status})`
-                        : "—"
-                    }
-                  />
-                </dl>
-                {selected.rejectReason ? (
-                  <p className="mt-2 text-sm text-rose-700">
-                    Lý do từ chối: {selected.rejectReason}
-                  </p>
-                ) : null}
-
-                {selected.status !== "PUBLISHED" ? (
-                  <div className="mt-4 grid gap-2 md:grid-cols-2">
-                    <Field label="Tier">
-                      <select
-                        className="w-full rounded border px-2 py-1.5 text-sm"
-                        value={editForm.tier}
-                        onChange={(e) =>
-                          setEditForm({ ...editForm, tier: e.target.value })
-                        }
-                      >
-                        {TIER_OPTIONS.map((t) => (
-                          <option key={t} value={t}>
-                            {t}
-                          </option>
-                        ))}
-                      </select>
-                    </Field>
-                    <Field label="groupSlug">
-                      <input
-                        className="w-full rounded border px-2 py-1.5 text-sm"
-                        value={editForm.groupSlug}
-                        onChange={(e) =>
-                          setEditForm({ ...editForm, groupSlug: e.target.value })
-                        }
-                      />
-                    </Field>
-                    <Field label="Press URL">
-                      <input
-                        className="w-full rounded border px-2 py-1.5 text-sm"
-                        value={editForm.pressUrl}
-                        onChange={(e) =>
-                          setEditForm({ ...editForm, pressUrl: e.target.value })
-                        }
-                      />
-                    </Field>
-                    <Field label="Sở URL">
-                      <input
-                        className="w-full rounded border px-2 py-1.5 text-sm"
-                        value={editForm.sxdUrl}
-                        onChange={(e) =>
-                          setEditForm({ ...editForm, sxdUrl: e.target.value })
-                        }
-                      />
-                    </Field>
-                    <div className="md:col-span-2">
-                      <Field label="Tiêu đề người đọc">
-                        <input
-                          className="w-full rounded border px-2 py-1.5 text-sm"
-                          value={editForm.readerTitle}
-                          onChange={(e) =>
-                            setEditForm({
-                              ...editForm,
-                              readerTitle: e.target.value,
-                            })
-                          }
-                        />
-                      </Field>
-                    </div>
-                    <div className="md:col-span-2">
-                      <Field label="Body người đọc">
-                        <textarea
-                          className="min-h-24 w-full rounded border px-2 py-1.5 text-sm"
-                          value={editForm.readerBody}
-                          onChange={(e) =>
-                            setEditForm({
-                              ...editForm,
-                              readerBody: e.target.value,
-                            })
-                          }
-                        />
-                      </Field>
-                    </div>
-                    <div className="md:col-span-2">
-                      <Field label="Disclaimer">
-                        <textarea
-                          className="min-h-16 w-full rounded border px-2 py-1.5 text-sm"
-                          value={editForm.readerDisclaimer}
-                          onChange={(e) =>
-                            setEditForm({
-                              ...editForm,
-                              readerDisclaimer: e.target.value,
-                            })
-                          }
-                        />
-                      </Field>
-                    </div>
-                    <div className="md:col-span-2">
-                      <Button
-                        type="button"
-                        variant="outline"
-                        disabled={actionLoading}
-                        onClick={() => void saveEdit(selected.id)}
-                      >
-                        Lưu dossier / preview
-                      </Button>
-                    </div>
+                    {statusBadge(item.status)}
                   </div>
-                ) : null}
-              </section>
-
-              <section className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
-                <p className="text-xs font-medium uppercase tracking-wide text-slate-500">
-                  Preview người đọc
-                </p>
-                <h3 className="mt-2 text-xl font-semibold text-slate-900">
-                  {editForm.readerTitle || selected.readerTitle || "(Chưa có tiêu đề)"}
-                </h3>
-                <p className="mt-3 whitespace-pre-wrap text-sm leading-relaxed text-slate-700">
-                  {editForm.readerBody || selected.readerBody || "—"}
-                </p>
-                <p className="mt-4 rounded-lg bg-amber-50 px-3 py-2 text-sm text-amber-900">
-                  {editForm.readerDisclaimer ||
-                    selected.readerDisclaimer ||
-                    DEFAULT_T1_READER_DISCLAIMER}
-                </p>
-                <Button type="button" className="mt-4" disabled>
-                  {editForm.ctaLabel || selected.ctaLabel || "Đăng ký nhận cập nhật"}
-                </Button>
-                {selected.channelSlug ? (
-                  <p className="mt-3 text-xs text-slate-500">
-                    Đơn vị tư vấn/phân phối (phụ): {selected.channelSlug} — không
-                    thay CĐT trên filter.
-                  </p>
-                ) : null}
-              </section>
-
-              <div className="flex flex-wrap gap-2">
-                {(selected.status === "CAPTURED" ||
-                  selected.status === "REJECTED" ||
-                  selected.status === "PACKAGED") && (
-                  <Button
-                    type="button"
-                    disabled={actionLoading}
-                    onClick={() => void runAction(selected.id, "package")}
-                  >
-                    Đóng gói (PACKAGED)
-                  </Button>
-                )}
-                {(selected.status === "PACKAGED" ||
-                  selected.status === "REJECTED") && (
-                  <Button
-                    type="button"
-                    disabled={actionLoading}
-                    onClick={() => void runAction(selected.id, "submit_l3")}
-                  >
-                    Gửi duyệt L3
-                  </Button>
-                )}
-                {selected.status === "PENDING_L3" && (
-                  <>
-                    <Button
-                      type="button"
-                      disabled={actionLoading}
-                      onClick={() => void runAction(selected.id, "approve")}
-                    >
-                      Duyệt L3
-                    </Button>
-                    <div className="flex min-w-[240px] flex-1 gap-2">
-                      <input
-                        className="flex-1 rounded border px-2 py-1.5 text-sm"
-                        placeholder="Lý do từ chối (≥5 ký tự)"
-                        value={rejectReason}
-                        onChange={(e) => setRejectReason(e.target.value)}
-                      />
-                      <Button
-                        type="button"
-                        variant="outline"
-                        disabled={actionLoading || rejectReason.trim().length < 5}
-                        onClick={() => void runAction(selected.id, "reject")}
-                      >
-                        Từ chối
-                      </Button>
-                    </div>
-                  </>
-                )}
-                {selected.status === "APPROVED" && (
-                  <Button
-                    type="button"
-                    variant="outline"
-                    disabled={actionLoading}
-                    onClick={() => void runAction(selected.id, "mark_published")}
-                  >
-                    Đánh dấu đã đăng
-                  </Button>
-                )}
-              </div>
-            </>
-          )}
-        </div>
+                  <span className="text-xs text-slate-500">
+                    {item.tier}
+                    {item.groupSlug ? ` · ${item.groupSlug}` : ""}
+                    {" · "}
+                    {formatDate(item.createdAt)}
+                    {" · mở wizard →"}
+                  </span>
+                </button>
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
     </div>
   );
@@ -770,20 +791,5 @@ function Field({
       <span className="mb-1 block font-medium text-slate-700">{label}</span>
       {children}
     </label>
-  );
-}
-
-function Row({
-  label,
-  value,
-}: {
-  label: string;
-  value: ReactNode;
-}) {
-  return (
-    <div>
-      <dt className="text-xs text-slate-500">{label}</dt>
-      <dd className="font-medium text-slate-800">{value}</dd>
-    </div>
   );
 }

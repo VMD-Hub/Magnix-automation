@@ -1,27 +1,19 @@
+import type { Metadata } from "next";
+import { AdminShell } from "@/components/admin/admin-shell";
 import { EarlySignalReviewBoard } from "@/components/admin/early-signal-review-board";
 
-export const metadata = {
-  title: "Duyệt tin sớm | House X Admin",
+export const metadata: Metadata = {
+  title: "Tin sớm NOXH | House X Admin",
+  robots: { index: false, follow: false },
 };
 
 export default function EarlySignalsAdminPage() {
   return (
-    <div className="space-y-4">
-      <div>
-        <h1 className="text-2xl font-semibold text-slate-900">
-          Tin sớm NOXH (Early Signal)
-        </h1>
-        <p className="mt-1 max-w-3xl text-sm text-slate-600">
-          Hàng đợi tin báo/CĐT — khác «Tin đăng CTV». Tổng hợp → preview người đọc →
-          Chủ quản duyệt L3 trước khi đưa tin chính thức. Không auto-nurture khi duyệt.
-          Doc:{" "}
-          <code className="rounded bg-slate-100 px-1 text-xs">
-            docs/EARLY_SIGNAL_REVIEW.md
-          </code>
-          .
-        </p>
-      </div>
+    <AdminShell
+      title="Tin sớm NOXH"
+      description="Hàng đợi tin báo/CĐT — khác Tin đăng CTV. Wizard 3 bước trong Admin House X: nguồn → bản người đọc → xem lại & duyệt L3. Không auto-nurture."
+    >
       <EarlySignalReviewBoard />
-    </div>
+    </AdminShell>
   );
 }
