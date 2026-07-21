@@ -109,27 +109,46 @@ export const PLAYBOOK_SECTIONS: PlaybookSection[] = [
   },
   {
     id: "telesales",
-    title: "Telesales CRM (gọi → SMS/Zalo → ấm)",
+    title: "Telesales — gọi, nhắn tin, giữ khách ấm",
     subtitle:
-      "3 lane: Ops (TELESALES_CRM / #/ops) · Nội sàn (INTERNAL / #/agent/telesales) · CTV own — không lẫn pool.",
+      "Ba đội làm trên ba danh sách riêng. Dùng đúng màn hình của đội mình — không lấy lead của đội khác.",
+    bullets: [
+      "Ops (House X): làm việc trên danh sách lead công ty chưa gán môi giới — mở /ops/telesales hoặc Mini App mục Ops.",
+      "Nội sàn: chỉ lead Chủ quản đã gán cho bạn — mở /moi-gioi/telesales hoặc Mini App mục Telesales môi giới.",
+      "CTV: chỉ khách / hồ sơ NOXH của mình — không vào danh sách Ops.",
+      "Một người vừa là CTV vừa được cấp quyền Ops: vẫn mở hai màn hình riêng; Ops = lead công ty, môi giới = lead của mình.",
+    ],
     checklist: [
-      "Ops: Super cấp TELESALES_CRM tại /admin/ops-grants trước.",
-      "Nội sàn: Super đánh dấu BrokerType.INTERNAL + gán lead trên board Ops.",
-      "CTV: chỉ lead/hồ sơ thuộc mình — không GET pool assignedBrokerId=null.",
-      "Thêm lead hot (Ops) → xem Zalo thủ công → Gọi điện trước.",
-      "Sau mỗi cuộc gọi: chọn chip kết quả (bắt buộc ghi nhật ký).",
-      "Không nghe: SMS + Zalo chào + Task gọi lại; khoá gọi 4 giờ.",
-      "Phase 2 OA/SMS server chỉ Ops — CTV/nội sàn Phase 1 deep-link.",
-      "Chỉ sang Conversion khi đã đàm thoại + có hướng căn/dự án.",
+      "Lần đầu: nhờ Chủ quản cấp quyền Telesales tại /admin/ops-grants (Ops), hoặc đánh dấu Nội sàn rồi gán lead trên bảng Ops.",
+      "Lead nóng mới: thêm SĐT → mở Zalo xem nhanh tên/avatar → gọi điện trước (không gọi voice Zalo làm bước 1).",
+      "Sau mỗi cuộc gọi: bắt buộc bấm một nút kết quả trên màn hình để ghi nhật ký — không bỏ qua.",
+      "Không nghe máy: gửi SMS + tin Zalo chào → hệ thống khoá gọi lại 4 giờ và tạo việc «Gọi lại».",
+      "Gửi OA / SMS từ hệ thống (nút riêng): chỉ Ops khi Chủ quản đã bật. Nội sàn và CTV dùng nút mở SMS/Zalo trên điện thoại.",
+      "Chỉ sang màn Chuyển đổi khi đã nói chuyện được và khách có hướng căn / dự án rõ.",
     ],
     table: {
-      head: ["Lane / Chip", "Ý nghĩa"],
+      head: ["Sau cuộc gọi — chọn nút", "Việc tiếp theo"],
       rows: [
-        ["Ops pool", "assignedBrokerId null — #/ops"],
-        ["Nội sàn", "assignedBrokerId = INTERNAL broker"],
-        ["CTV own", "assignedBrokerId hoặc NoxhCase.brokerId = CTV"],
-        ["Đàm thoại OK", "CONNECTED — xác nhận nhu cầu nếu được"],
-        ["Không nghe", "CONTACT_ATTEMPT — SMS/Zalo + cooldown 4h"],
+        [
+          "Đàm thoại OK",
+          "Xác nhận nhu cầu nếu được; khi có hướng căn → sang Chuyển đổi",
+        ],
+        [
+          "Xin gửi thông tin",
+          "Gửi checklist / tóm tắt qua Zalo — hẹn gọi lại",
+        ],
+        [
+          "Không nghe",
+          "SMS + Zalo chào · chờ 4 giờ mới gọi lại (nút Gọi bị khoá tạm)",
+        ],
+        [
+          "Không quan tâm dự án này",
+          "Giữ ấm bằng script dự án khác — không gọi lại dự án cũ trong thời gian chờ",
+        ],
+        [
+          "Sai số / Từ chối cứng",
+          "Có thể đóng lead mất; ghi lý do ngắn — không nurture ép",
+        ],
       ],
     },
   },

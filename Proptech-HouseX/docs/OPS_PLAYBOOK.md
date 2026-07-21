@@ -66,55 +66,60 @@ Cuối ngày: Cập nhật đúng shared lifecycle; không nâng state từ scor
 
 **Không:** Đổi SĐT khóa chính trên Customer; hứa «chắc đủ điều kiện NOXH».
 
-### 4b. Telesales CRM (mobile-first) — SOP Phase 1
+### 4b. Telesales — gọi, nhắn tin, giữ khách ấm (SOP)
 
-**Ba lane (RBAC tách — không lẫn queue)**
+> Bản rút gọn trên Console: `/admin/playbook` → mục **Telesales**.
 
-| Persona | Ai | Queue | Entry |
-|---------|-----|-------|-------|
-| **Ops** | `OpsToolGrant TELESALES_CRM` hoặc Super | Platform pool (`assignedBrokerId = null`, exclude referral/ctv_claim) | `/ops/telesales`, Mini App `#/ops` |
-| **Nội sàn** | `Broker.brokerType = INTERNAL` | Lead Super gán (`assignedBrokerId = self`) | `/moi-gioi/telesales`, Mini App `#/agent/telesales` |
-| **CTV** | `BrokerType CTV` | Lead/hồ sơ thuộc CTV only | Cùng agent telesales — **không** `#/ops` |
+#### Ai làm gì, mở đâu
 
-**Dual grant:** tài khoản vừa CTV vừa `TELESALES_CRM` được phép nhưng lane tách — `#/ops` chỉ pool Ops; `#/agent/telesales` chỉ own/INTERNAL. CTV **không** đọc pool `assignedBrokerId = null`. R4 / claim window không đổi.
+Ba đội **không dùng chung một danh sách lead**. Dùng đúng màn hình của đội mình.
 
-**Quyền truy cập Ops**
+| Đội | Bạn là ai | Lead bạn được thấy | Mở ở đâu |
+|-----|-----------|--------------------|----------|
+| **Ops** | Nhân sự House X được Chủ quản cấp quyền Telesales | Lead công ty **chưa** gán môi giới | `/ops/telesales` · Mini App → **Ops** |
+| **Nội sàn** | Nhân viên sàn House X (Chủ quản đánh dấu Nội sàn) | Lead Chủ quản **đã gán** cho bạn | `/moi-gioi/telesales` · Mini App → **Telesales môi giới** |
+| **CTV** | Cộng tác viên | Chỉ khách / hồ sơ NOXH **của mình** | Web/Mini App môi giới — **không** vào Ops |
 
-| Ai | Cách vào |
-|----|----------|
-| Super (`ADMIN_SECRET`) | `/admin/ops-leads` + cấp quyền tại `/admin/ops-grants` |
-| Nhân sự telesales | UserAccount được Super duyệt + email nhận thông báo → đặt MK trong **Tài khoản** (OTP 6 số) nếu chưa có → `/ops/telesales` hoặc Mini App `#/ops` |
-| Chỉ `ADMIN_OPS_SECRET` | **Không** đủ quyền telesales |
-| Nội sàn | Super đánh dấu INTERNAL tại `/admin/ops-grants` → gán lead trên board Ops → gọi trên lane agent |
-| CTV | Onboard + entitlement như hiện tại — SOP gọi chỉ trên lead/case own; unmask SĐT chỉ own |
+- Vừa CTV vừa có quyền Ops: hai màn hình riêng — Ops = lead công ty; môi giới = lead của mình.
+- Quyền Ops **không** đi kèm mật khẩu riêng của tool: đăng ký → Chủ quản cấp quyền + email → đặt mật khẩu tài khoản (OTP trong **Tài khoản**) → đăng nhập mọi thiết bị.
+- Chỉ mật khẩu Ops Admin (`ADMIN_OPS_SECRET`) **không** đủ để vào telesales.
 
-Quy trình Ops: mở Mini App / đăng ký → Super cấp `TELESALES_CRM` + email thông báo → user **đặt mật khẩu tài khoản** (OTP, không magic-link) trong Tài khoản → đăng nhập web mọi thiết bị. **MK thuộc tài khoản**, không phải mật khẩu riêng của tool.
-
-**Ranh giới:** gọi / SMS / Zalo / nhật ký = CRM telesales (không full console). Phase 2 server OA/SMS **chỉ Ops**.  
-**Conversion** chỉ khi đã đàm thoại có nhu cầu rõ + hướng căn/dự án.
+#### Quy trình một lead (làm theo thứ tự)
 
 ```
-Nhập SĐT hot → (tuỳ chọn) xem Zalo thủ công → Gọi điện trước
-  → chip kết quả → SMS/Zalo nếu miss → Task gọi lại / ấm lead
-  → Conversion khi nóng + có căn
+Thêm SĐT nóng → xem Zalo nhanh (tên/avatar) → Gọi điện trước
+  → chọn nút kết quả → SMS/Zalo nếu không nghe → việc «Gọi lại» / giữ ấm
+  → sang Chuyển đổi khi đã nói chuyện + có hướng căn
 ```
 
-| Bước | Việc Ops | Ghi hệ thống |
-|------|----------|--------------|
-| 0. Nhập | Form **Thêm lead hot** (SĐT, tên, nguồn `hot:manual` / `ads:offline` / `partner`) | Customer dedupe theo `normalizedPhone` + Task «Gọi lần 1» |
-| 1. Chuẩn bị | Nút **Mở Zalo** / copy SĐT — nhìn avatar/tên (không scrape) | Activity `ZALO_OPENED` (tuỳ chọn) |
-| 2. Gọi | Nút **Gọi** (`tel:`) — **không** gọi Zalo voice làm bước 1 | Sau gọi bắt buộc chọn chip kết quả |
-| 3a. Đàm thoại OK | Chip CONNECTED + note | `CONNECTED`; status → QUALIFIED nếu xác nhận nhu cầu |
-| 3b. Xin gửi tin | Chip SEND_INFO → mở Zalo kết bạn / OA | `CONNECTED` + Task gọi lại |
-| 3c. Không nghe | Chip NO_ANSWER → **SMS** + **Zalo** chào | `CONTACT_ATTEMPT`; **khoá gọi 4 giờ**; Task gọi lại `dueAt` +4h |
-| 3d. Sai số / từ chối | WRONG_NUMBER / HARD_REJECT | Có thể đóng LOST |
-| 3e. Không quan tâm dự án A | NOT_THIS_PROJECT | Gắn script **Ấm lead — dự án khác**; không gọi lại dự án A trong cooldown |
-| 4. Sang Conversion | Chỉ khi CONNECTED + có hướng căn | Proposal / cọc / WON-LOST trên `/admin/conversion` |
+| Bước | Việc làm | Ghi trên hệ thống |
+|------|----------|-------------------|
+| 0. Nhập | Form **Thêm lead hot** (SĐT, tên, nguồn: tay / ads offline / đối tác) | Trùng SĐT được gộp; tạo việc «Gọi lần 1» |
+| 1. Chuẩn bị | Nút **Mở Zalo** / copy SĐT — nhìn avatar/tên (không cào dữ liệu) | Có thể ghi «đã mở Zalo» |
+| 2. Gọi | Nút **Gọi** — **không** dùng voice Zalo làm bước 1 | Sau gọi **bắt buộc** chọn nút kết quả |
+| 3a. Đàm thoại OK | Nút tương ứng + ghi chú ngắn | Có thể đánh đủ điều kiện nếu nhu cầu rõ |
+| 3b. Xin gửi tin | Mở Zalo kết bạn / OA, gửi checklist | Hẹn gọi lại |
+| 3c. Không nghe | **SMS** + **Zalo** chào | **Khoá gọi 4 giờ**; việc «Gọi lại» sau 4 giờ |
+| 3d. Sai số / từ chối | Nút tương ứng | Có thể đóng lead mất |
+| 3e. Không quan tâm dự án A | Nút tương ứng | Script **Ấm lead — dự án khác**; không gọi lại A trong thời gian chờ |
+| 4. Sang Chuyển đổi | Chỉ khi đã đàm thoại + có hướng căn | Proposal / cọc / thắng-thua trên `/admin/conversion` |
 
-**Chống gọi trùng:** sau `NO_ANSWER`, nút Gọi bị chặn đến hết cửa sổ 4 giờ (vẫn cho SMS/Zalo).  
-Không tạo Task «Gọi lại» trùng khi đã có task mở cùng lead.
+**Chống gọi trùng:** sau «Không nghe», nút Gọi bị khoá 4 giờ (vẫn gửi được SMS/Zalo). Không tạo hai việc «Gọi lại» trùng cho cùng lead.
 
-**Consent:** nurture tự động (SC-6) vẫn cần marketing consent theo kênh — deep-link SMS/Zalo Phase 1 là thao tác tay Ops + log.
+**Gửi OA/SMS từ hệ thống** (nút riêng, Phase 2): chỉ Ops khi Chủ quản đã bật. Nội sàn/CTV dùng nút mở SMS/Zalo trên điện thoại. Nurture tự động vẫn cần khách đồng ý marketing theo kênh.
+
+<details>
+<summary>Chi tiết kỹ thuật (Chủ quản / triển khai)</summary>
+
+| Persona | Điều kiện hệ thống | Queue |
+|---------|-------------------|-------|
+| Ops | `OpsToolGrant TELESALES_CRM` hoặc Super | `assignedBrokerId = null` (loại referral / ctv_claim) |
+| Nội sàn | `Broker.brokerType = INTERNAL` | `assignedBrokerId = self` |
+| CTV | `BrokerType CTV` | Own lead / `NoxhCase.brokerId` — không đọc pool null |
+
+Chip → activity: `CONNECTED` · `SEND_INFO` · `NO_ANSWER` (`CONTACT_ATTEMPT` + cooldown) · `WRONG_NUMBER` / `HARD_REJECT` · `NOT_THIS_PROJECT`. R4 / claim window không đổi.
+
+</details>
 
 ### 4b-2. Telesales Phase 2 — OA / SMS từ server
 
