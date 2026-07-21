@@ -29,15 +29,15 @@ export const ADMIN_NAV_GROUPS: AdminNavGroup[] = [
     items: [
       {
         href: "/admin/listings",
-        label: "Duyệt tin đăng",
-        title: "Duyệt tin môi giới đăng bán",
+        label: "Tin đăng CTV",
+        title: "Duyệt tin môi giới đăng bán (listing)",
         roles: ["super"],
         matchPrefix: true,
       },
       {
         href: "/admin/early-signals",
-        label: "Duyệt tin sớm",
-        title: "Early Signal Review — L3 trước publish/nurture tin NOXH",
+        label: "Tin sớm NOXH",
+        title: "Early Signal — duyệt tin báo/CĐT trước publish (không phải tin đăng CTV)",
         roles: ["super"],
         matchPrefix: true,
       },

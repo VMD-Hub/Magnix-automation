@@ -154,18 +154,26 @@ export function EarlySignalReviewBoard() {
         setItems([]);
         return;
       }
-      setItems(json.data.items ?? []);
-      setCounts(json.data.counts ?? counts);
-      if (selectedId && !(json.data.items ?? []).some((i: EarlySignalItem) => i.id === selectedId)) {
-        setSelectedId(null);
-      }
+      const nextItems: EarlySignalItem[] = json.data.items ?? [];
+      setItems(nextItems);
+      setCounts(json.data.counts ?? {
+        pendingL3: 0,
+        packaged: 0,
+        captured: 0,
+        approved: 0,
+        rejected: 0,
+        published: 0,
+        total: 0,
+      });
+      setSelectedId((prev) =>
+        prev && nextItems.some((i) => i.id === prev) ? prev : null,
+      );
     } catch {
       setError("Lỗi mạng khi tải tin sớm.");
     } finally {
       setLoading(false);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- counts bootstrap only
-  }, [filter, selectedId]);
+  }, [filter]);
 
   useEffect(() => {
     void load();
@@ -306,8 +314,8 @@ export function EarlySignalReviewBoard() {
       setForm(emptyForm);
       setFilter("CAPTURED");
       setSelectedId(json.data.id);
-      setMessage("Đã tạo intake tin sớm.");
-      await load();
+      setMessage("Đã tạo intake tin sớm — đang ở tab Intake.");
+      // load() sẽ chạy khi filter đổi sang CAPTURED
     } catch {
       setError("Lỗi mạng khi tạo.");
     } finally {
@@ -345,8 +353,17 @@ export function EarlySignalReviewBoard() {
             </button>
           ))}
         </div>
-        <Button type="button" onClick={() => setShowCreate((v) => !v)}>
-          {showCreate ? "Đóng form" : "Thêm tin sớm"}
+        <Button
+          type="button"
+          onClick={() => {
+            setShowCreate((v) => {
+              const next = !v;
+              if (next) setSelectedId(null);
+              return next;
+            });
+          }}
+        >
+          {showCreate ? "Đóng form thêm" : "Thêm tin sớm"}
         </Button>
       </div>
 
@@ -451,7 +468,10 @@ export function EarlySignalReviewBoard() {
                 <li key={item.id}>
                   <button
                     type="button"
-                    onClick={() => setSelectedId(item.id)}
+                    onClick={() => {
+                      setShowCreate(false);
+                      setSelectedId(item.id);
+                    }}
                     className={cn(
                       "flex w-full flex-col gap-1 px-4 py-3 text-left hover:bg-slate-50",
                       selectedId === item.id && "bg-amber-50",
