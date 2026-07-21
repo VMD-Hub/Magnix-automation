@@ -267,6 +267,22 @@ enum EarlySignalRoleHint {
   CHANNEL
 }
 
+/// Magnix content factory — Super L3 queue (CTA tool bắt buộc trước approve).
+enum ContentQueueStatus {
+  INTAKE
+  PENDING_L3
+  APPROVED
+  REJECTED
+  PUBLISHED
+}
+
+enum ContentQueueChannel {
+  WEBSITE
+  FB_PAGE
+  SHORT_VIDEO
+  ZALO_OA
+}
+
 enum EarlySignalResolveStatus {
   LINKED
   UNLINKED
@@ -492,6 +508,7 @@ model Article {
   tags     ArticleTagLink[]
   projects ArticleProject[]
   earlySignals EarlySignalBrief[]
+  contentQueueItems ContentQueueItem[]
 
   @@index([status, publishedAt])
   @@map("articles")
@@ -556,6 +573,45 @@ model EarlySignalBrief {
   @@index([tier])
   @@index([projectId])
   @@map("early_signal_briefs")
+}
+
+/// Hàng đợi nội dung Magnix trên House X Admin — thay dần Sheet content_queue cho Super L3.
+model ContentQueueItem {
+  id             String               @id @default(uuid())
+  /// Dedupe: editorial:{uuid} hoặc sheet:{normalized_key} khi sync.
+  normalizedKey  String               @unique @map("normalized_key")
+  title          String
+  /// Nỗi đau / góc bài (bắt buộc trước L3).
+  painPoint      String?              @map("pain_point") @db.Text
+  bodyPreview    String?              @map("body_preview") @db.Text
+  segment        String?
+  score          Int?
+  status         ContentQueueStatus   @default(INTAKE)
+  publishChannel ContentQueueChannel? @map("publish_channel")
+  /// noxh-check | noxh-loan-quick — bắt buộc trước approve L3.
+  ctaToolId      String?              @map("cta_tool_id")
+  ctaLabel       String?              @map("cta_label")
+  ctaHref        String?              @map("cta_href")
+  sourceUrl      String?              @map("source_url")
+  /// Link Sheet content_queue.normalized_key (optional).
+  sheetKey       String?              @map("sheet_key")
+  articleId      String?              @map("article_id")
+  /// { pain: bool, ctaTool: bool, ctaCopy: bool }
+  l3Checklist    Json?                @map("l3_checklist")
+  opsNotes       String?              @map("ops_notes") @db.Text
+  reviewedAt     DateTime?            @map("reviewed_at")
+  reviewedBy     String?              @map("reviewed_by")
+  rejectReason   String?              @map("reject_reason") @db.Text
+  publishedAt    DateTime?            @map("published_at")
+  createdAt      DateTime             @default(now()) @map("created_at")
+  updatedAt      DateTime             @updatedAt @map("updated_at")
+
+  article Article? @relation(fields: [articleId], references: [id], onDelete: SetNull)
+
+  @@index([status, createdAt])
+  @@index([ctaToolId])
+  @@index([sheetKey])
+  @@map("content_queue_items")
 }
 
 model Broker {

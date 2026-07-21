@@ -18,6 +18,12 @@ export type PlaybookSection = {
 
 export const PLAYBOOK_QUICK_LINKS: PlaybookQuickLink[] = [
   {
+    href: "/admin/content-queue",
+    label: "Content queue",
+    description: "Magnix L3 — mỗi bài 1 CTA tool NƠXH",
+    roles: ["super"],
+  },
+  {
     href: "/admin/ops-leads",
     label: "Lead marketing",
     description: "Pipeline + telesales (gọi/SMS/Zalo) & nurture",
@@ -77,10 +83,27 @@ export const PLAYBOOK_SECTIONS: PlaybookSection[] = [
     },
   },
   {
+    id: "content-cta",
+    title: "Content → CTA tool NƠXH",
+    subtitle:
+      "Thiếu lead + không Ads: mọi bài publish phải đổ vào tool. Bài không CTA tool = lãng phí.",
+    checklist: [
+      "Chọn đúng 1 CTA: /cong-cu/dieu-kien-noxh (điều kiện/hồ sơ) hoặc /cong-cu/kiem-tra-vay-noxh (vay).",
+      "Trước publish trả lời đủ 3 câu: nỗi đau? tool nào? câu CTA hành động?",
+      "Duyệt trên /admin/content-queue — hệ thống chặn L3 nếu thiếu cta_tool_id.",
+      "Đo submit 2 tool / tuần — không chỉ đếm số bài đã đăng.",
+    ],
+    bullets: [
+      "Không viết tool mới trong Q này — phân phối 2 tool NƠXH hiện có.",
+      "Không Ads / Zalo Group product — ưu tiên SEO Q&A + Mini App.",
+    ],
+  },
+  {
     id: "daily",
     title: "Luồng hàng ngày",
     bullets: [
       "Sáng: Lead «Mới» → ưu tiên HOT/WARM → Hồ sơ NOXH → Xung đột (badge đỏ).",
+      "Giữa ngày (Super): Content queue → gắn CTA tool → L3 → publish.",
       "Chiều: Magnix Inbound → triage UID.",
       "Cuối ngày: Lead đã gọi → Đã tiếp nhận / Đã liên hệ.",
     ],

@@ -28,6 +28,14 @@ export const ADMIN_NAV_GROUPS: AdminNavGroup[] = [
     roles: ["super"],
     items: [
       {
+        href: "/admin/content-queue",
+        label: "Content queue",
+        title:
+          "Magnix content factory — L3 bắt buộc CTA tool NƠXH (điều kiện / vay)",
+        roles: ["super"],
+        matchPrefix: true,
+      },
+      {
         href: "/admin/listings",
         label: "Tin đăng CTV",
         title: "Duyệt tin môi giới đăng bán (listing)",
