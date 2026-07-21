@@ -8,7 +8,7 @@
 
 | Lớp | File / surface | Nội dung |
 |-----|----------------|----------|
-| **Vận hành** | Doc này + ADR-016 + playbook §4b-5 (cột ops) + `NOXH_SPONSOR_WATCHLIST.md` | Mã tầng, baseUrl Sở, `VERIFIED/DOWN`, metadata `tier`/`pressUrl`/`sxdUrl`, SponsorGroup alias |
+| **Vận hành** | Doc này + ADR-016 + playbook §4b-5 (cột ops) + `NOXH_SPONSOR_WATCHLIST.md` + `RE_SERVICE_ORG_REGISTRY_OPS.md` | Mã tầng, baseUrl Sở, `VERIFIED/DOWN`, metadata `tier`/`pressUrl`/`sxdUrl`, SponsorGroup alias; registry sàn/môi giới nội bộ |
 | **Người đọc** | Bài / landing / notify / trust panel đã biên tập | Disclaimer tiếng Việt + citation đã chọn + chip brand (nhãn khách) — map ADR-016 |
 
 Mỗi item tin sớm **nội bộ** nên ghi: `tier` + `pressUrl?` + `sxdUrl?` + `projectId?`.
@@ -96,5 +96,6 @@ Thiếu Sở → giữ T1 + disclaimer reader; fallback UBND `*.gov.vn` chỉ kh
 
 - ADR: `.cursor/ADR-016-interest-waitlist-nurture-lane.md` (Information trust ladder + hai lớp bề mặt)
 - Sponsor / CĐT keyword watchlist: `docs/NOXH_SPONSOR_WATCHLIST.md`
+- Registry tổ chức KD dịch vụ BĐS (sàn / môi giới, địa giới mới–cũ): `docs/RE_SERVICE_ORG_REGISTRY_OPS.md` (**ops only**)
 - Ops claim: `docs/OPS_PLAYBOOK.md` §4b-5
 - Code media refs (public citation subset): `lib/content/editorial-trust.ts`

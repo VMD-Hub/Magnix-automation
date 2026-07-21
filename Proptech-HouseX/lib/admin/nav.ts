@@ -42,6 +42,14 @@ export const ADMIN_NAV_GROUPS: AdminNavGroup[] = [
         matchPrefix: true,
       },
       {
+        href: "/admin/re-service-orgs",
+        label: "Registry DV BĐS",
+        title:
+          "Tổ chức KD dịch vụ BĐS (sàn / môi giới) — tài sản dữ liệu nội bộ, chỉ Chủ quản",
+        roles: ["super"],
+        matchPrefix: true,
+      },
+      {
         href: "/admin/articles",
         label: "Tin tức",
         title: "Bài viết & tin tức",

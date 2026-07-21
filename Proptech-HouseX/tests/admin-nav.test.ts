@@ -26,6 +26,21 @@ describe("adminNavGroupsForRole", () => {
     const ids = adminNavGroupsForRole("super").map((g) => g.id);
     assert.deepEqual(ids, ["content", "crm", "help", "sales"]);
   });
+
+  it("super content includes registry DV BĐS; ops does not", () => {
+    const superContent = adminNavGroupsForRole("super").find(
+      (g) => g.id === "content",
+    )!;
+    assert.ok(
+      superContent.items.some((i) => i.href === "/admin/re-service-orgs"),
+    );
+    const opsGroups = adminNavGroupsForRole("ops");
+    assert.ok(
+      !opsGroups.some((g) =>
+        g.items.some((i) => i.href === "/admin/re-service-orgs"),
+      ),
+    );
+  });
 });
 
 describe("isAdminNavActive", () => {

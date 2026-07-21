@@ -61,6 +61,7 @@ test("admin roles: ops page vs super page", () => {
   assert.equal(isSuperAdminOnlyPage("/admin/conflicts"), false);
   assert.equal(isSuperAdminOnlyPage("/admin/conversion"), false);
   assert.equal(isSuperAdminOnlyPage("/admin/listings"), true);
+  assert.equal(isSuperAdminOnlyPage("/admin/re-service-orgs"), true);
   assert.equal(defaultAdminHome("ops"), "/admin/playbook");
 });
 
