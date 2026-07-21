@@ -11,9 +11,10 @@ describe("adminNavGroupsForRole", () => {
     const ids = groups.map((g) => g.id);
     assert.deepEqual(ids, ["crm", "help", "sales"]);
     const crm = groups.find((g) => g.id === "crm")!;
-    // Lead marketing / grants = Super only; staff telesales dùng /ops/telesales
+    // Lead marketing / grants / email marketing = Super only; staff telesales dùng /ops/telesales
     assert.ok(!crm.items.some((i) => i.href === "/admin/ops-leads"));
     assert.ok(!crm.items.some((i) => i.href === "/admin/ops-grants"));
+    assert.ok(!crm.items.some((i) => i.href === "/admin/email-marketing"));
     assert.ok(crm.items.some((i) => i.href === "/admin/noxh-cases"));
     assert.ok(crm.items.some((i) => i.href === "/admin/conflicts"));
     assert.ok(crm.items.some((i) => i.href === "/admin/inbound-leads"));
@@ -45,6 +46,16 @@ describe("adminNavGroupsForRole", () => {
         g.items.some((i) => i.href === "/admin/re-service-orgs"),
       ),
     );
+  });
+
+  it("super CRM includes Email marketing next to Lead marketing", () => {
+    const crm = adminNavGroupsForRole("super").find((g) => g.id === "crm")!;
+    const hrefs = crm.items.map((i) => i.href);
+    assert.ok(hrefs.includes("/admin/email-marketing"));
+    assert.ok(hrefs.includes("/admin/ops-leads"));
+    const emailIdx = hrefs.indexOf("/admin/email-marketing");
+    const leadsIdx = hrefs.indexOf("/admin/ops-leads");
+    assert.ok(emailIdx === leadsIdx + 1);
   });
 });
 

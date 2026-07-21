@@ -79,6 +79,13 @@ export const ADMIN_NAV_GROUPS: AdminNavGroup[] = [
         matchPrefix: true,
       },
       {
+        href: "/admin/email-marketing",
+        label: "Email marketing",
+        title: "Nurture email ADR-017 — KPI, enroll, gửi/dừng (Super)",
+        roles: ["super"],
+        matchPrefix: true,
+      },
+      {
         href: "/admin/ops-grants",
         label: "Quyền telesales",
         title: "Cấp / thu hồi CRM Telesales theo SĐT hoặc Zalo id",

@@ -124,6 +124,7 @@ export const PLAYBOOK_SECTIONS: PlaybookSection[] = [
       "Sau mỗi cuộc gọi: bắt buộc bấm một nút kết quả trên màn hình để ghi nhật ký — không bỏ qua.",
       "Không nghe máy: gửi SMS + tin Zalo chào → hệ thống khoá gọi lại 4 giờ và tạo việc «Gọi lại».",
       "Gửi OA / SMS từ hệ thống (nút riêng): chỉ Ops khi Chủ quản đã bật. Nội sàn và CTV dùng nút mở SMS/Zalo trên điện thoại.",
+      "Email nurture (ADR-017): Chủ quản mở /admin/email-marketing — KPI, consent, enroll/gửi/dừng. Không thay hàng đợi gọi telesales.",
       "Chỉ sang màn Chuyển đổi khi đã nói chuyện được và khách có hướng căn / dự án rõ.",
     ],
     table: {
