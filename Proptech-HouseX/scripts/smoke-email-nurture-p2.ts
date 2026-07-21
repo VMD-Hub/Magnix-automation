@@ -20,6 +20,7 @@ import { isEmailNurtureSendEnabled } from "../lib/messaging/email-nurture-server
 import { handleProviderEmailEvent } from "../lib/email/email-provider-events";
 import { pickAbSubject, isoWeekCampaignKey } from "../lib/email/ab-subject";
 import { WEEKLY_NEWSLETTER_SUBJECTS } from "../lib/email/weekly-newsletter";
+import { cleanupSmokeEmailFixture } from "./cleanup-smoke-email-fixture";
 
 function fail(msg: string): never {
   console.error(`FAIL — ${msg}`);
@@ -160,10 +161,8 @@ async function main() {
   await writeFile(out, JSON.stringify(report, null, 2), "utf8");
   ok(`Wrote ${out}`);
 
-  await prisma.lead.delete({ where: { id: lead.id } }).catch(() => undefined);
-  await prisma.customer
-    .delete({ where: { id: customer.id } })
-    .catch(() => undefined);
+  await cleanupSmokeEmailFixture({ leadId: lead.id, customerId: customer.id });
+  ok("Cleaned synthetic lead/customer");
 }
 
 main()

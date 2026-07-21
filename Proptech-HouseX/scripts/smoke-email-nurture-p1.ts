@@ -24,6 +24,7 @@ import {
   dispatchNoxhWelcomeEmailStep,
   isEmailNurtureSendEnabled,
 } from "../lib/messaging/email-nurture-server-send";
+import { cleanupSmokeEmailFixture } from "./cleanup-smoke-email-fixture";
 
 function fail(msg: string): never {
   console.error(`FAIL — ${msg}`);
@@ -195,8 +196,7 @@ async function main() {
   await writeFile(outPath, JSON.stringify(report, null, 2), "utf8");
   ok(`Wrote ${outPath}`);
 
-  await prisma.lead.delete({ where: { id: lead.id } }).catch(() => undefined);
-  await prisma.customer.delete({ where: { id: customer.id } }).catch(() => undefined);
+  await cleanupSmokeEmailFixture({ leadId: lead.id, customerId: customer.id });
   ok("Cleaned synthetic lead/customer");
 }
 
