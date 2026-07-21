@@ -1,6 +1,6 @@
-// n8n Code: cập nhật cpp_stats sau ghi Sheet
+// n8n Code: cập nhật cpp_stats sau mark Postgres
 
-const prep = $('Prepare Sheet Update').item.json;
+const prep = $('Prepare Postgres Mark').item.json;
 
 const data = $getWorkflowStaticData('global');
 if (!data.cpp_stats) data.cpp_stats = { publish_ok: 0, publish_fail: 0, l0_fail: 0 };
@@ -17,7 +17,7 @@ if (prep.need_metrics_append === true) {
 return [{
   json: {
     ok: prep.publish_ok === true,
-    sheet_row: prep.sheet_row,
+    id: prep.id || prep.draft_id,
     normalized_key: prep.normalized_key,
     fb_post_id: prep.fb_post_id || null,
     fb_permalink: prep.fb_permalink || null,

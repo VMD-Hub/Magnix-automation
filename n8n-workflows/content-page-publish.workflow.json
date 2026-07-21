@@ -1,11 +1,11 @@
 {
-  "name": "Magnix — Facebook Page Publish (content_drafts → Graph API)",
+  "name": "Magnix — Facebook Page Publish (Postgres → Graph API)",
   "nodes": [
     {
       "parameters": {
-        "content": "## Page Publish\n- **10h / 14h / 18h VN** · max **3**/lần\n- Input: `content_drafts` status=**approved**\n- meta: `target_channel=facebook_page`, `scheduled_at` (ISO)\n- Env: `CONTENT_PAGE_PUBLISH_ENABLED`, `META_PAGE_ID` (Page ID, **không** App ID), `META_PAGE_ACCESS_TOKEN` (Page token + `pages_manage_posts`)\n- **googleApi** bắt buộc trên Fetch + PUT/POST Sheet",
-        "height": 220,
-        "width": 480
+        "content": "## Page Publish (P4.3)\n- **10h / 14h / 18h VN** · max **3**/lần\n- Input: Postgres `content_drafts` via House X cron API\n- Due: status=**APPROVED** + FB_PAGE/meta + `scheduled_at` ≤ now\n- Env: `CONTENT_PAGE_PUBLISH_ENABLED`, `META_PAGE_*`, `HOUSEX_PUBLIC_URL`, `CRON_SECRET`\n- Write-back: POST mark Postgres (metrics Sheet optional)",
+        "height": 240,
+        "width": 520
       },
       "id": "cpp00note",
       "name": "Sticky Note",
@@ -50,13 +50,20 @@
     {
       "parameters": {
         "method": "GET",
-        "url": "https://sheets.googleapis.com/v4/spreadsheets/1fYB4h_BTiKXa9O3lBah-tQonWpQOQMG2aSkSfPs6yU4/values/content_drafts!A%3AN",
-        "authentication": "predefinedCredentialType",
-        "nodeCredentialType": "googleApi",
+        "url": "={{ ($env.HOUSEX_PUBLIC_URL || 'https://timnhaxahoi.com').replace(/\\/$/, '') + '/api/cron/content-page-publish-due?limit=3' }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $env.CRON_SECRET }}"
+            }
+          ]
+        },
         "options": {}
       },
       "id": "cpp03fetch",
-      "name": "Fetch content_drafts",
+      "name": "Fetch due drafts (House X)",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
@@ -66,7 +73,7 @@
     },
     {
       "parameters": {
-        "jsCode": "const BATCH = 3;\r\nconst TZ_OFFSET_MIN = 7 * 60; // Asia/Ho_Chi_Minh fallback khi parse scheduled_at không có offset\r\n\r\nfunction parseMeta(raw) {\r\n  if (!raw) return {};\r\n  try {\r\n    return typeof raw === 'string' ? JSON.parse(raw) : raw;\r\n  } catch {\r\n    return {};\r\n  }\r\n}\r\n\r\nfunction parseScheduledMs(value) {\r\n  const s = String(value || '').trim();\r\n  if (!s) return null;\r\n  const d = new Date(s);\r\n  if (Number.isNaN(d.getTime())) return null;\r\n  return d.getTime();\r\n}\r\n\r\nfunction nowMs() {\r\n  return Date.now();\r\n}\r\n\r\nconst enabled = String($env.CONTENT_PAGE_PUBLISH_ENABLED || '').toLowerCase() === 'true';\r\nif (!enabled) {\r\n  return [{\r\n    json: {\r\n      empty: true,\r\n      message: 'CONTENT_PAGE_PUBLISH_ENABLED không bật — set true trên VPS',\r\n    },\r\n  }];\r\n}\r\n\r\nconst pageId = String($env.META_PAGE_ID || '').trim();\r\nconst token = String($env.META_PAGE_ACCESS_TOKEN || '').trim();\r\nif (!pageId || !token) {\r\n  return [{\r\n    json: {\r\n      empty: true,\r\n      message: 'Thiếu META_PAGE_ID hoặc META_PAGE_ACCESS_TOKEN',\r\n    },\r\n  }];\r\n}\r\n\r\nconst res = $input.first().json;\r\nconst rows = Array.isArray(res.values) ? res.values : [];\r\nif (rows.length < 2) {\r\n  return [{ json: { empty: true, message: 'content_drafts trống' } }];\r\n}\r\n\r\nconst headers = rows[0].map((x) => String(x ?? '').trim().toLowerCase());\r\nconst out = [];\r\nconst blockers = {\r\n  not_approved: 0,\r\n  already_published: 0,\r\n  wrong_channel: 0,\r\n  wrong_format: 0,\r\n  not_due: 0,\r\n  empty_body: 0,\r\n};\r\n\r\nfor (let i = 1; i < rows.length; i++) {\r\n  const cells = rows[i];\r\n  if (!cells?.some((c) => String(c ?? '').trim())) continue;\r\n\r\n  const row = { sheet_row: i + 1 };\r\n  headers.forEach((key, j) => {\r\n    if (key) row[key] = cells[j] ?? '';\r\n  });\r\n\r\n  const status = String(row.status || '').trim().toLowerCase();\r\n  const meta = parseMeta(row.meta);\r\n\r\n  if (status !== 'approved') {\r\n    blockers.not_approved += 1;\r\n    continue;\r\n  }\r\n  if (meta.page_published === true || meta.fb_post_id) {\r\n    blockers.already_published += 1;\r\n    continue;\r\n  }\r\n\r\n  const channel = String(meta.target_channel || '').trim().toLowerCase();\r\n  const productType = String(row.product_type || '').trim().toLowerCase();\r\n  const wantsPage =\r\n    channel === 'facebook_page'\r\n    || channel === 'fb_page'\r\n    || productType === 'fb_page_post'\r\n    || meta.schedule_page_publish === true;\r\n\r\n  if (!wantsPage) {\r\n    blockers.wrong_channel += 1;\r\n    continue;\r\n  }\r\n\r\n  const fmt = String(meta.content_format || meta.product_type || 'fb_page_post').trim().toLowerCase();\r\n  const pagePublishFormats = new Set(['fb_page_post', 'fb_page_post_image']);\r\n  if (!pagePublishFormats.has(fmt)) {\r\n    blockers.wrong_format += 1;\r\n    continue;\r\n  }\r\n\r\n  const scheduledMs = parseScheduledMs(meta.scheduled_at);\r\n  if (scheduledMs != null && scheduledMs > nowMs()) {\r\n    blockers.not_due += 1;\r\n    continue;\r\n  }\r\n\r\n  const body =\r\n    String(meta.publish_body || '').trim()\r\n    || String(row.artifact_markdown || '').trim()\r\n    || String(row.hook_line || '').trim();\r\n\r\n  if (body.length < 40) {\r\n    blockers.empty_body += 1;\r\n    continue;\r\n  }\r\n\r\n  row.meta_parsed = meta;\r\n  row.page_id = pageId;\r\n  out.push({ json: row });\r\n  if (out.length >= BATCH) break;\r\n}\r\n\r\nif (!out.length) {\r\n  return [{\r\n    json: {\r\n      empty: true,\r\n      message: 'Không có bài Page due — cần status=approved, meta.target_channel=facebook_page, scheduled_at<=now',\r\n      blockers,\r\n    },\r\n  }];\r\n}\r\n\r\nreturn out;"
+        "jsCode": "const BATCH = 3;\r\n\r\nconst enabled = String($env.CONTENT_PAGE_PUBLISH_ENABLED || '').toLowerCase() === 'true';\r\nif (!enabled) {\r\n  return [{\r\n    json: {\r\n      empty: true,\r\n      message: 'CONTENT_PAGE_PUBLISH_ENABLED không bật — set true trên VPS',\r\n    },\r\n  }];\r\n}\r\n\r\nconst pageId = String($env.META_PAGE_ID || '').trim();\r\nconst token = String($env.META_PAGE_ACCESS_TOKEN || '').trim();\r\nif (!pageId || !token) {\r\n  return [{\r\n    json: {\r\n      empty: true,\r\n      message: 'Thiếu META_PAGE_ID hoặc META_PAGE_ACCESS_TOKEN',\r\n    },\r\n  }];\r\n}\r\n\r\nconst res = $input.first().json || {};\r\nconst payload = res.data && typeof res.data === 'object' ? res.data : res;\r\nconst items = Array.isArray(payload.items) ? payload.items : [];\r\nconst blockers = payload.blockers || null;\r\n\r\nif (!items.length) {\r\n  return [{\r\n    json: {\r\n      empty: true,\r\n      message:\r\n        'Không có bài Page due trên Postgres — cần APPROVED + FB_PAGE/meta + scheduled_at<=now (Admin /admin/content-drafts)',\r\n      blockers,\r\n      scanned: payload.scanned ?? 0,\r\n    },\r\n  }];\r\n}\r\n\r\nconst out = [];\r\nfor (const item of items) {\r\n  if (!item?.id) continue;\r\n  out.push({\r\n    json: {\r\n      id: item.id,\r\n      draft_id: item.id,\r\n      normalized_key: item.normalized_key,\r\n      title: item.title,\r\n      hook_line: item.hook_line,\r\n      artifact_markdown: item.artifact_markdown,\r\n      cta_opt_in: item.cta_opt_in,\r\n      disclaimer: item.disclaimer,\r\n      segment: item.segment,\r\n      export_hint: item.export_hint,\r\n      status: item.status,\r\n      publish_channel: item.publish_channel,\r\n      scheduled_at: item.scheduled_at,\r\n      sheet_key: item.sheet_key,\r\n      product_type: item.product_type || 'fb_page_post',\r\n      meta_parsed: item.meta_parsed || {},\r\n      page_id: pageId,\r\n    },\r\n  });\r\n  if (out.length >= BATCH) break;\r\n}\r\n\r\nif (!out.length) {\r\n  return [{\r\n    json: {\r\n      empty: true,\r\n      message: 'Due list rỗng hoặc thiếu id',\r\n      blockers,\r\n    },\r\n  }];\r\n}\r\n\r\nreturn out;"
       },
       "id": "cpp04filter",
       "name": "Parse Filter Due Posts",
@@ -139,7 +146,7 @@
     },
     {
       "parameters": {
-        "jsCode": "const FORBIDDEN = [\r\n  /cam kết.*duyệt/i,\r\n  /lãi suất\\s*\\d+([.,]\\d+)?\\s*%/i,\r\n  /đảm bảo.*(vay|duyệt)/i,\r\n  /100%\\s*(thành công|duyệt)/i,\r\n];\r\n\r\nfunction stripMarkdownHeavy(md) {\r\n  return String(md || '')\r\n    .replace(/```[\\s\\S]*?```/g, '')\r\n    .replace(/\\|[-:\\s|]+\\|/g, '')\r\n    .replace(/\\|/g, ' ')\r\n    .replace(/#{1,6}\\s/g, '')\r\n    .replace(/\\*\\*/g, '')\r\n    .replace(/\\n{3,}/g, '\\n\\n')\r\n    .trim();\r\n}\r\n\r\nfunction excerpt(text, max = 6000) {\r\n  const t = String(text || '').trim();\r\n  if (t.length <= max) return t;\r\n  return `${t.slice(0, max - 1)}…`;\r\n}\r\n\r\nconst row = $('Loop Page Publish').item?.json || $input.first().json;\r\nconst meta = row.meta_parsed || {};\r\n\r\nconst hook = String(row.hook_line || meta.hook || '').trim();\r\nconst bodyRaw = String(meta.publish_body || row.artifact_markdown || '').trim();\r\nconst body = excerpt(stripMarkdownHeavy(bodyRaw), 5500);\r\nconst cta = String(row.cta_opt_in || meta.cta || '').trim();\r\nconst disclaimer = String(row.disclaimer || meta.disclaimer || '').trim();\r\nconst hashtags = Array.isArray(meta.hashtags)\r\n  ? meta.hashtags.map(String).join(' ')\r\n  : String(meta.hashtags || '#NOXH #nhàởxãhội').trim();\r\n\r\nconst parts = [];\r\nif (hook) parts.push(hook);\r\nif (body) parts.push(body);\r\nif (cta) parts.push(cta);\r\nif (disclaimer) parts.push(disclaimer);\r\nif (hashtags) parts.push(hashtags);\r\n\r\nconst message = parts.join('\\n\\n').trim().slice(0, 63000);\r\n\r\nconst hits = FORBIDDEN.filter((re) => re.test(message)).map((re) => re.source);\r\nif (hits.length) {\r\n  return [{\r\n    json: {\r\n      ok: false,\r\n      error: 'L0_FORBIDDEN',\r\n      l0_hits: hits,\r\n      sheet_row: row.sheet_row,\r\n      normalized_key: row.normalized_key,\r\n    },\r\n  }];\r\n}\r\n\r\nconst link = String(meta.publish_link || meta.link || meta.drive_pack_url || '').trim();\r\nconst imageUrl = String(meta.publish_image_url || meta.cover_image_url || '').trim();\r\nconst pinAfter = meta.pin_after_publish === true;\r\n\r\nreturn [{\r\n  json: {\r\n    ok: true,\r\n    sheet_row: row.sheet_row,\r\n    normalized_key: row.normalized_key,\r\n    segment: row.segment,\r\n    title: String(row.title || '').slice(0, 200),\r\n    message,\r\n    link: link || null,\r\n    publish_image_url: imageUrl || null,\r\n    pin_after_publish: pinAfter,\r\n    page_id: row.page_id || $env.META_PAGE_ID,\r\n    product_type: row.product_type || meta.product_type || 'fb_page_post',\r\n  },\r\n}];"
+        "jsCode": "const FORBIDDEN = [\r\n  /cam kết.*duyệt/i,\r\n  /lãi suất\\s*\\d+([.,]\\d+)?\\s*%/i,\r\n  /đảm bảo.*(vay|duyệt)/i,\r\n  /100%\\s*(thành công|duyệt)/i,\r\n];\r\n\r\nfunction stripMarkdownHeavy(md) {\r\n  return String(md || '')\r\n    .replace(/```[\\s\\S]*?```/g, '')\r\n    .replace(/\\|[-:\\s|]+\\|/g, '')\r\n    .replace(/\\|/g, ' ')\r\n    .replace(/#{1,6}\\s/g, '')\r\n    .replace(/\\*\\*/g, '')\r\n    .replace(/\\n{3,}/g, '\\n\\n')\r\n    .trim();\r\n}\r\n\r\nfunction excerpt(text, max = 6000) {\r\n  const t = String(text || '').trim();\r\n  if (t.length <= max) return t;\r\n  return `${t.slice(0, max - 1)}…`;\r\n}\r\n\r\nconst row = $('Loop Page Publish').item?.json || $input.first().json;\r\nconst meta = row.meta_parsed || {};\r\n\r\nconst hook = String(row.hook_line || meta.hook || '').trim();\r\nconst bodyRaw = String(meta.publish_body || row.artifact_markdown || '').trim();\r\nconst body = excerpt(stripMarkdownHeavy(bodyRaw), 5500);\r\nconst cta = String(row.cta_opt_in || meta.cta || '').trim();\r\nconst disclaimer = String(row.disclaimer || meta.disclaimer || '').trim();\r\nconst hashtags = Array.isArray(meta.hashtags)\r\n  ? meta.hashtags.map(String).join(' ')\r\n  : String(meta.hashtags || '#NOXH #nhàởxãhội').trim();\r\n\r\nconst parts = [];\r\nif (hook) parts.push(hook);\r\nif (body) parts.push(body);\r\nif (cta) parts.push(cta);\r\nif (disclaimer) parts.push(disclaimer);\r\nif (hashtags) parts.push(hashtags);\r\n\r\nconst message = parts.join('\\n\\n').trim().slice(0, 63000);\r\n\r\nconst hits = FORBIDDEN.filter((re) => re.test(message)).map((re) => re.source);\r\nconst draftId = row.id || row.draft_id || null;\r\n\r\nif (hits.length) {\r\n  return [{\r\n    json: {\r\n      ok: false,\r\n      error: 'L0_FORBIDDEN',\r\n      l0_hits: hits,\r\n      id: draftId,\r\n      draft_id: draftId,\r\n      normalized_key: row.normalized_key,\r\n    },\r\n  }];\r\n}\r\n\r\nconst link = String(meta.publish_link || meta.link || meta.drive_pack_url || '').trim();\r\nconst imageUrl = String(meta.publish_image_url || meta.cover_image_url || '').trim();\r\nconst pinAfter = meta.pin_after_publish === true;\r\n\r\nreturn [{\r\n  json: {\r\n    ok: true,\r\n    id: draftId,\r\n    draft_id: draftId,\r\n    normalized_key: row.normalized_key,\r\n    segment: row.segment,\r\n    title: String(row.title || '').slice(0, 200),\r\n    message,\r\n    link: link || null,\r\n    publish_image_url: imageUrl || null,\r\n    pin_after_publish: pinAfter,\r\n    page_id: row.page_id || $env.META_PAGE_ID,\r\n    product_type: row.product_type || meta.product_type || 'fb_page_post',\r\n  },\r\n}];"
       },
       "id": "cpp08build",
       "name": "Build Facebook Message",
@@ -200,10 +207,10 @@
     },
     {
       "parameters": {
-        "jsCode": "const SHEET_ID = '1fYB4h_BTiKXa9O3lBah-tQonWpQOQMG2aSkSfPs6yU4';\r\nconst DRAFTS_TAB = 'content_drafts';\r\nconst METRICS_TAB = 'content_metrics';\r\n\r\nconst item = $input.first().json;\r\nconst row = item.sheet_row;\r\nif (!row) {\r\n  return [{ json: { ok: false, skip: true, reason: 'NO_SHEET_ROW' } }];\r\n}\r\n\r\nconst loopRow = $('Loop Page Publish').item?.json || {};\r\nconst existingMeta = loopRow.meta_parsed || {};\r\n\r\nconst metaPatch = {\r\n  ...existingMeta,\r\n  page_published: item.publish_ok === true,\r\n  published_at: item.published_at || new Date().toISOString(),\r\n  fb_post_id: item.fb_post_id || null,\r\n  fb_permalink: item.fb_permalink || null,\r\n  publish_error: item.publish_error || null,\r\n  publish_agent: 'content-page-publish',\r\n  publish_mode: item.publish_mode || null,\r\n  pin_after_publish: item.pin_after_publish === true,\r\n};\r\n\r\nconst metaStr = JSON.stringify(metaPatch).slice(0, 50000);\r\nconst status = item.publish_ok ? 'published' : 'approved';\r\n\r\nconst out = {\r\n  ...item,\r\n  sheet_row: row,\r\n  sheet_batch_url: `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values:batchUpdate`,\r\n  sheet_batch_body: {\r\n    valueInputOption: 'USER_ENTERED',\r\n    data: [\r\n      { range: `${DRAFTS_TAB}!J${row}`, values: [[status]] },\r\n      { range: `${DRAFTS_TAB}!N${row}`, values: [[metaStr]] },\r\n    ],\r\n  },\r\n  need_metrics_append: item.publish_ok === true && Boolean(item.fb_post_id),\r\n};\r\n\r\nif (out.need_metrics_append) {\r\n  out.metrics_append_url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent(`${METRICS_TAB}!A:F`)}:append?valueInputOption=USER_ENTERED&insertDataOption=INSERT_ROWS`;\r\n  out.metrics_append_body = {\r\n    values: [[\r\n      String(item.fb_post_id),\r\n      'fb_page',\r\n      String(item.segment || ''),\r\n      String(item.title || '').slice(0, 200),\r\n      new Date().toISOString(),\r\n      'pending',\r\n    ]],\r\n  };\r\n}\r\n\r\nreturn [{ json: out }];"
+        "jsCode": "const SHEET_ID = '1fYB4h_BTiKXa9O3lBah-tQonWpQOQMG2aSkSfPs6yU4';\r\nconst METRICS_TAB = 'content_metrics';\r\n\r\nconst item = $input.first().json;\r\nconst loopRow = $('Loop Page Publish').item?.json || {};\r\nconst draftId = item.id || item.draft_id || loopRow.id || loopRow.draft_id;\r\n\r\nif (!draftId) {\r\n  return [{ json: { ok: false, skip: true, reason: 'NO_DRAFT_ID' } }];\r\n}\r\n\r\nconst base = String(\r\n  $env.HOUSEX_PUBLIC_URL || $env.NEXT_PUBLIC_SITE_URL || 'https://timnhaxahoi.com',\r\n).replace(/\\/$/, '');\r\n\r\nconst out = {\r\n  ...item,\r\n  id: draftId,\r\n  draft_id: draftId,\r\n  normalized_key: item.normalized_key || loopRow.normalized_key || null,\r\n  segment: item.segment || loopRow.segment || null,\r\n  title: item.title || loopRow.title || null,\r\n  housex_mark_url: `${base}/api/cron/content-page-publish-due`,\r\n  housex_mark_body: {\r\n    id: draftId,\r\n    publish_ok: item.publish_ok === true,\r\n    fb_post_id: item.fb_post_id || null,\r\n    fb_permalink: item.fb_permalink || null,\r\n    publish_error: item.publish_error || null,\r\n    publish_mode: item.publish_mode || null,\r\n    pin_after_publish: item.pin_after_publish === true,\r\n  },\r\n  housex_mark_headers: {\r\n    Authorization: `Bearer ${String($env.CRON_SECRET || '').trim()}`,\r\n    'Content-Type': 'application/json',\r\n  },\r\n  need_metrics_append: item.publish_ok === true && Boolean(item.fb_post_id),\r\n};\r\n\r\nif (out.need_metrics_append) {\r\n  out.metrics_append_url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent(`${METRICS_TAB}!A:F`)}:append?valueInputOption=USER_ENTERED&insertDataOption=INSERT_ROWS`;\r\n  out.metrics_append_body = {\r\n    values: [[\r\n      String(item.fb_post_id),\r\n      'fb_page',\r\n      String(out.segment || ''),\r\n      String(out.title || '').slice(0, 200),\r\n      new Date().toISOString(),\r\n      'pending',\r\n    ]],\r\n  };\r\n}\r\n\r\nreturn [{ json: out }];"
       },
       "id": "cpp11prepare",
-      "name": "Prepare Sheet Update",
+      "name": "Prepare Postgres Mark",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
@@ -214,16 +221,23 @@
     {
       "parameters": {
         "method": "POST",
-        "url": "={{ $json.sheet_batch_url }}",
-        "authentication": "predefinedCredentialType",
-        "nodeCredentialType": "googleApi",
+        "url": "={{ $json.housex_mark_url }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $env.CRON_SECRET }}"
+            }
+          ]
+        },
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={{ $json.sheet_batch_body }}",
+        "jsonBody": "={{ $json.housex_mark_body }}",
         "options": {}
       },
       "id": "cpp11batch",
-      "name": "POST Draft Sheet Batch",
+      "name": "POST House X Mark",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
@@ -244,7 +258,7 @@
           "conditions": [
             {
               "id": "c1",
-              "leftValue": "={{ $(\"Prepare Sheet Update\").item.json.need_metrics_append }}",
+              "leftValue": "={{ $(\"Prepare Postgres Mark\").item.json.need_metrics_append }}",
               "rightValue": "",
               "operator": {
                 "type": "boolean",
@@ -269,12 +283,12 @@
     {
       "parameters": {
         "method": "POST",
-        "url": "={{ $(\"Prepare Sheet Update\").item.json.metrics_append_url }}",
+        "url": "={{ $(\"Prepare Postgres Mark\").item.json.metrics_append_url }}",
         "authentication": "predefinedCredentialType",
         "nodeCredentialType": "googleApi",
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={{ $(\"Prepare Sheet Update\").item.json.metrics_append_body }}",
+        "jsonBody": "={{ $(\"Prepare Postgres Mark\").item.json.metrics_append_body }}",
         "options": {}
       },
       "id": "cpp11postmetrics",
@@ -289,10 +303,10 @@
     },
     {
       "parameters": {
-        "jsCode": "const prep = $('Prepare Sheet Update').item.json;\r\n\r\nconst data = $getWorkflowStaticData('global');\r\nif (!data.cpp_stats) data.cpp_stats = { publish_ok: 0, publish_fail: 0, l0_fail: 0 };\r\n\r\nif (prep.publish_ok) data.cpp_stats.publish_ok += 1;\r\nelse data.cpp_stats.publish_fail += 1;\r\n\r\nlet metricsAppended = false;\r\nif (prep.need_metrics_append === true) {\r\n  const m = $input.first().json || {};\r\n  metricsAppended = Boolean(m.updates || m.spreadsheetId || m.updatedRange);\r\n}\r\n\r\nreturn [{\r\n  json: {\r\n    ok: prep.publish_ok === true,\r\n    sheet_row: prep.sheet_row,\r\n    normalized_key: prep.normalized_key,\r\n    fb_post_id: prep.fb_post_id || null,\r\n    fb_permalink: prep.fb_permalink || null,\r\n    metrics_appended: metricsAppended,\r\n    publish_error: prep.publish_error || null,\r\n  },\r\n}];"
+        "jsCode": "const prep = $('Prepare Postgres Mark').item.json;\r\n\r\nconst data = $getWorkflowStaticData('global');\r\nif (!data.cpp_stats) data.cpp_stats = { publish_ok: 0, publish_fail: 0, l0_fail: 0 };\r\n\r\nif (prep.publish_ok) data.cpp_stats.publish_ok += 1;\r\nelse data.cpp_stats.publish_fail += 1;\r\n\r\nlet metricsAppended = false;\r\nif (prep.need_metrics_append === true) {\r\n  const m = $input.first().json || {};\r\n  metricsAppended = Boolean(m.updates || m.spreadsheetId || m.updatedRange);\r\n}\r\n\r\nreturn [{\r\n  json: {\r\n    ok: prep.publish_ok === true,\r\n    id: prep.id || prep.draft_id,\r\n    normalized_key: prep.normalized_key,\r\n    fb_post_id: prep.fb_post_id || null,\r\n    fb_permalink: prep.fb_permalink || null,\r\n    metrics_appended: metricsAppended,\r\n    publish_error: prep.publish_error || null,\r\n  },\r\n}];"
       },
       "id": "cpp11finalize",
-      "name": "Finalize Sheet Update",
+      "name": "Finalize Publish Mark",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
@@ -302,7 +316,7 @@
     },
     {
       "parameters": {
-        "jsCode": "const prep = $('Prepare Sheet Update').item?.json || $('POST Facebook Page Feed').item?.json || {};\r\n\r\nif (!prep.publish_ok || !prep.pin_after_publish || !prep.fb_post_id) {\r\n  return [{ json: { pin_notify_skipped: true, reason: 'NO_PIN_REQUEST' } }];\r\n}\r\n\r\nconst enabled = String($env.TELEGRAM_APPROVAL_ENABLED || '').toLowerCase() === 'true';\r\nif (!enabled) {\r\n  return [{\r\n    json: {\r\n      pin_notify_skipped: true,\r\n      reason: 'TELEGRAM_APPROVAL_ENABLED',\r\n      fb_post_id: prep.fb_post_id,\r\n      fb_permalink: prep.fb_permalink,\r\n    },\r\n  }];\r\n}\r\n\r\nconst token = $env.MAGNIX_WEBHOOK_TOKEN || '';\r\nconst base = String($env.N8N_PUBLIC_URL || 'https://n8n.vmd.asia').replace(/\\/$/, '');\r\nconst eventId = `pin:${prep.fb_post_id}:${Date.now()}`;\r\n\r\nconst body = {\r\n  event_id: eventId,\r\n  event_type: 'pin_page_post_requested',\r\n  title: prep.title || 'Facebook Page post',\r\n  message: [\r\n    '📌 **Ghim bài trên Page** (Meta API không hỗ trợ ghim đầy đủ — thao tác tay)',\r\n    '',\r\n    `Post: ${prep.fb_permalink || prep.fb_post_id}`,\r\n    `Sheet row: ${prep.sheet_row || '—'}`,\r\n    '',\r\n    'Meta Business Suite → Page → Posts → Ghim',\r\n  ].join('\\n'),\r\n  sheet_row: prep.sheet_row,\r\n  meta: {\r\n    fb_post_id: prep.fb_post_id,\r\n    fb_permalink: prep.fb_permalink,\r\n    pin_after_publish: true,\r\n  },\r\n};\r\n\r\ntry {\r\n  await this.helpers.httpRequest({\r\n    method: 'POST',\r\n    url: `${base}/webhook/magnix/telegram-notify`,\r\n    headers: {\r\n      Authorization: token ? `Bearer ${token}` : '',\r\n      'Content-Type': 'application/json',\r\n    },\r\n    body,\r\n    json: true,\r\n    timeout: 15000,\r\n  });\r\n  return [{ json: { pin_notify_fired: true, event_id: eventId, fb_post_id: prep.fb_post_id } }];\r\n} catch (e) {\r\n  return [{ json: { pin_notify_fired: false, pin_notify_error: e.message || 'NOTIFY_FAIL', fb_post_id: prep.fb_post_id } }];\r\n}"
+        "jsCode": "const prep = $('Prepare Postgres Mark').item?.json || $('POST Facebook Page Feed').item?.json || {};\r\n\r\nif (!prep.publish_ok || !prep.pin_after_publish || !prep.fb_post_id) {\r\n  return [{ json: { pin_notify_skipped: true, reason: 'NO_PIN_REQUEST' } }];\r\n}\r\n\r\nconst enabled = String($env.TELEGRAM_APPROVAL_ENABLED || '').toLowerCase() === 'true';\r\nif (!enabled) {\r\n  return [{\r\n    json: {\r\n      pin_notify_skipped: true,\r\n      reason: 'TELEGRAM_APPROVAL_ENABLED',\r\n      fb_post_id: prep.fb_post_id,\r\n      fb_permalink: prep.fb_permalink,\r\n    },\r\n  }];\r\n}\r\n\r\nconst token = $env.MAGNIX_WEBHOOK_TOKEN || '';\r\nconst base = String($env.N8N_PUBLIC_URL || 'https://n8n.vmd.asia').replace(/\\/$/, '');\r\nconst eventId = `pin:${prep.fb_post_id}:${Date.now()}`;\r\n\r\nconst body = {\r\n  event_id: eventId,\r\n  event_type: 'pin_page_post_requested',\r\n  title: prep.title || 'Facebook Page post',\r\n  message: [\r\n    '📌 **Ghim bài trên Page** (Meta API không hỗ trợ ghim đầy đủ — thao tác tay)',\r\n    '',\r\n    `Post: ${prep.fb_permalink || prep.fb_post_id}`,\r\n    `Draft: ${prep.id || prep.draft_id || prep.normalized_key || '—'}`,\r\n    '',\r\n    'Meta Business Suite → Page → Posts → Ghim',\r\n  ].join('\\n'),\r\n  draft_id: prep.id || prep.draft_id || null,\r\n  meta: {\r\n    fb_post_id: prep.fb_post_id,\r\n    fb_permalink: prep.fb_permalink,\r\n    pin_after_publish: true,\r\n  },\r\n};\r\n\r\ntry {\r\n  await this.helpers.httpRequest({\r\n    method: 'POST',\r\n    url: `${base}/webhook/magnix/telegram-notify`,\r\n    headers: {\r\n      Authorization: token ? `Bearer ${token}` : '',\r\n      'Content-Type': 'application/json',\r\n    },\r\n    body,\r\n    json: true,\r\n    timeout: 15000,\r\n  });\r\n  return [{ json: { pin_notify_fired: true, event_id: eventId, fb_post_id: prep.fb_post_id } }];\r\n} catch (e) {\r\n  return [{ json: { pin_notify_fired: false, pin_notify_error: e.message || 'NOTIFY_FAIL', fb_post_id: prep.fb_post_id } }];\r\n}"
       },
       "id": "cpp11pinnotify",
       "name": "Notify Pin Request",
@@ -329,7 +343,7 @@
     },
     {
       "parameters": {
-        "jsCode": "const data = $getWorkflowStaticData('global');\nconst stats = data.cpp_stats || {};\nlet hint = null;\nif ((stats.publish_ok || 0) === 0) {\n  if (stats.no_candidates) hint = 'Không candidate — cần approved + fb_page_post|fb_page_post_image + scheduled_at<=now';\n  else if ((stats.l0_fail || 0) > 0) hint = 'L0 forbidden — sửa nội dung trên Sheet';\n  else if ((stats.publish_fail || 0) > 0) hint = 'Graph API fail — kiểm tra META_PAGE_ACCESS_TOKEN + quyền pages_manage_posts';\n  else hint = 'Bật CONTENT_PAGE_PUBLISH_ENABLED=true và điền META_PAGE_ID';\n}\nreturn [{ json: {\n  ok: true,\n  workflow: 'content-page-publish',\n  stats,\n  batch_size: 3,\n  hint,\n  finished_at: new Date().toISOString(),\n}}];"
+        "jsCode": "const data = $getWorkflowStaticData('global');\nconst stats = data.cpp_stats || {};\nlet hint = null;\nif ((stats.publish_ok || 0) === 0) {\n  if (stats.no_candidates) hint = 'Không candidate — sync Sheet→Admin, APPROVED + kênh FB_PAGE + lịch <= now';\n  else if ((stats.l0_fail || 0) > 0) hint = 'L0 forbidden — sửa nội dung trên /admin/content-drafts';\n  else if ((stats.publish_fail || 0) > 0) hint = 'Graph API fail — kiểm tra META_PAGE_ACCESS_TOKEN + quyền pages_manage_posts';\n  else hint = 'Bật CONTENT_PAGE_PUBLISH_ENABLED=true và điền META_PAGE_ID + CRON_SECRET + HOUSEX_PUBLIC_URL';\n}\nreturn [{ json: {\n  ok: true,\n  workflow: 'content-page-publish',\n  source: 'postgres',\n  stats,\n  batch_size: 3,\n  hint,\n  finished_at: new Date().toISOString(),\n}}];"
       },
       "id": "cpp13summary",
       "name": "Build Summary",
@@ -359,7 +373,7 @@
       "main": [
         [
           {
-            "node": "Fetch content_drafts",
+            "node": "Fetch due drafts (House X)",
             "type": "main",
             "index": 0
           }
@@ -370,14 +384,14 @@
       "main": [
         [
           {
-            "node": "Fetch content_drafts",
+            "node": "Fetch due drafts (House X)",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Fetch content_drafts": {
+    "Fetch due drafts (House X)": {
       "main": [
         [
           {
@@ -479,25 +493,25 @@
       "main": [
         [
           {
-            "node": "Prepare Sheet Update",
+            "node": "Prepare Postgres Mark",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Prepare Sheet Update": {
+    "Prepare Postgres Mark": {
       "main": [
         [
           {
-            "node": "POST Draft Sheet Batch",
+            "node": "POST House X Mark",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "POST Draft Sheet Batch": {
+    "POST House X Mark": {
       "main": [
         [
           {
@@ -519,7 +533,7 @@
         ],
         [
           {
-            "node": "Finalize Sheet Update",
+            "node": "Finalize Publish Mark",
             "type": "main",
             "index": 0
           }
@@ -530,14 +544,14 @@
       "main": [
         [
           {
-            "node": "Finalize Sheet Update",
+            "node": "Finalize Publish Mark",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Finalize Sheet Update": {
+    "Finalize Publish Mark": {
       "main": [
         [
           {
@@ -597,6 +611,9 @@
     },
     {
       "name": "facebook"
+    },
+    {
+      "name": "p4.3"
     }
   ],
   "meta": {

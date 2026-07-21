@@ -1,6 +1,6 @@
 // n8n Code: Telegram nhắc L3 ghim bài (Meta API ghim hạn chế)
 
-const prep = $('Prepare Sheet Update').item?.json || $('POST Facebook Page Feed').item?.json || {};
+const prep = $('Prepare Postgres Mark').item?.json || $('POST Facebook Page Feed').item?.json || {};
 
 if (!prep.publish_ok || !prep.pin_after_publish || !prep.fb_post_id) {
   return [{ json: { pin_notify_skipped: true, reason: 'NO_PIN_REQUEST' } }];
@@ -30,11 +30,11 @@ const body = {
     '📌 **Ghim bài trên Page** (Meta API không hỗ trợ ghim đầy đủ — thao tác tay)',
     '',
     `Post: ${prep.fb_permalink || prep.fb_post_id}`,
-    `Sheet row: ${prep.sheet_row || '—'}`,
+    `Draft: ${prep.id || prep.draft_id || prep.normalized_key || '—'}`,
     '',
     'Meta Business Suite → Page → Posts → Ghim',
   ].join('\n'),
-  sheet_row: prep.sheet_row,
+  draft_id: prep.id || prep.draft_id || null,
   meta: {
     fb_post_id: prep.fb_post_id,
     fb_permalink: prep.fb_permalink,

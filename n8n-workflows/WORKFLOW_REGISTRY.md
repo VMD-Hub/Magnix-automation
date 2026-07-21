@@ -12,7 +12,7 @@
 | `content-carousel-draft` | `content-carousel-draft.workflow.json` | Cron 9:20 + Manual | L0 | **Consume** | ✅ | Agent 3b: `carousel_image` → slides trong meta (3/batch) | staging |
 | `outreach-queue` | `outreach-queue.workflow.json` | Cron 9:30 + Manual | L0–L1 + L3 | Consume | ✅ | Agent 4: Zalo script → outreach_queue (+ warmth, Phase 0 tracking cols) · SOP `docs/OUTBOUND_RUNBOOK.md` | staging |
 | `content-video-draft` | `content-video-draft.workflow.json` | Cron 9:15 + Manual | L0–L3 | **Consume** | ✅ | Agent 6: video production package (3/batch) | staging |
-| `content-page-publish` | `content-page-publish.workflow.json` | Cron 10/14/18h + Manual | L0 | Consume | — | **Page Publish:** `content_drafts` approved → Graph API feed | staging |
+| `content-page-publish` | `content-page-publish.workflow.json` | Cron 10/14/18h + Manual | L0 | Consume | — | **Page Publish P4.3:** Postgres due API → Graph feed → mark Postgres | staging |
 | `content-page-cover` | `content-page-cover.workflow.json` | Cron 9:30 + Manual | L0 | — | — | **Page Cover:** Gemini image → Drive → `meta.publish_image_url` | staging |
 | `content-housex-article` | `content-housex-article.workflow.json` | Webhook POST + Manual | L0 + voice gate + L3 | **Consume** | ✅ | **HouseX PR:** webhook `/magnix/housex-article` → LLM PR → Sheet `housex_articles` | staging |
 | `housex-noxh-lead-route` | `housex-noxh-lead-route.workflow.json` | Webhook POST ×2 + Manual | L0 | — | ✅ | **HouseX Events Hub:** toàn bộ 15 typed events; form/NOXH/supply → Sheet + Telegram, Ops request/WON/hoa hồng/trúng thưởng → Telegram; sink lỗi trả 502 để outbox retry | staging |

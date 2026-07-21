@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Build content-page-publish — đăng bài Facebook Page từ content_drafts (L3 approved)
+ * Build content-page-publish — FB Page từ Postgres ContentDraft (P4.3)
  * Run: node n8n-workflows/build-content-page-publish.mjs
  */
 
@@ -30,11 +30,10 @@ const codes = {
   ),
   buildMessage: read('02-build-facebook-message.js'),
   postFacebook: read('03-post-facebook.js'),
-  prepareSheet: read('04-prepare-sheet-update.js')
+  prepareMark: read('04-prepare-sheet-update.js')
     .replace('__GOOGLE_SHEET_ID__', PUBLIC.google_sheet_id)
-    .replace('__CONTENT_DRAFTS_TAB__', PUBLIC.content_drafts_tab)
     .replace('__CONTENT_METRICS_TAB__', PUBLIC.content_metrics_tab),
-  finalizeSheet: read('05-finalize-sheet-update.js'),
+  finalizeMark: read('05-finalize-sheet-update.js'),
   notifyPin: read('06-notify-pin-request.js'),
   trackL0: read('05-track-l0-fail.js'),
 };
@@ -44,8 +43,6 @@ const httpGoogle = {
   nodeCredentialType: 'googleApi',
 };
 
-const sheetDraftsUrl = `https://sheets.googleapis.com/v4/spreadsheets/${PUBLIC.google_sheet_id}/values/${encodeURIComponent(`${PUBLIC.content_drafts_tab}!A:N`)}`;
-
 const resetStats = `const data = $getWorkflowStaticData('global');
 data.cpp_stats = { publish_ok: 0, publish_fail: 0, l0_fail: 0 };
 return $input.all();`;
@@ -54,14 +51,15 @@ const summary = `const data = $getWorkflowStaticData('global');
 const stats = data.cpp_stats || {};
 let hint = null;
 if ((stats.publish_ok || 0) === 0) {
-  if (stats.no_candidates) hint = 'Không candidate — cần approved + fb_page_post|fb_page_post_image + scheduled_at<=now';
-  else if ((stats.l0_fail || 0) > 0) hint = 'L0 forbidden — sửa nội dung trên Sheet';
+  if (stats.no_candidates) hint = 'Không candidate — sync Sheet→Admin, APPROVED + kênh FB_PAGE + lịch <= now';
+  else if ((stats.l0_fail || 0) > 0) hint = 'L0 forbidden — sửa nội dung trên /admin/content-drafts';
   else if ((stats.publish_fail || 0) > 0) hint = 'Graph API fail — kiểm tra META_PAGE_ACCESS_TOKEN + quyền pages_manage_posts';
-  else hint = 'Bật CONTENT_PAGE_PUBLISH_ENABLED=true và điền META_PAGE_ID';
+  else hint = 'Bật CONTENT_PAGE_PUBLISH_ENABLED=true và điền META_PAGE_ID + CRON_SECRET + HOUSEX_PUBLIC_URL';
 }
 return [{ json: {
   ok: true,
   workflow: 'content-page-publish',
+  source: 'postgres',
   stats,
   batch_size: ${batch},
   hint,
@@ -80,9 +78,9 @@ const nodes = [
   {
     parameters: {
       content:
-        '## Page Publish\n- **10h / 14h / 18h VN** · max **3**/lần\n- Input: `content_drafts` status=**approved**\n- meta: `target_channel=facebook_page`, `scheduled_at` (ISO)\n- Env: `CONTENT_PAGE_PUBLISH_ENABLED`, `META_PAGE_ID` (Page ID, **không** App ID), `META_PAGE_ACCESS_TOKEN` (Page token + `pages_manage_posts`)\n- **googleApi** bắt buộc trên Fetch + PUT/POST Sheet',
-      height: 220,
-      width: 480,
+        '## Page Publish (P4.3)\n- **10h / 14h / 18h VN** · max **3**/lần\n- Input: Postgres `content_drafts` via House X cron API\n- Due: status=**APPROVED** + FB_PAGE/meta + `scheduled_at` ≤ now\n- Env: `CONTENT_PAGE_PUBLISH_ENABLED`, `META_PAGE_*`, `HOUSEX_PUBLIC_URL`, `CRON_SECRET`\n- Write-back: POST mark Postgres (metrics Sheet optional)',
+      height: 240,
+      width: 520,
     },
     id: 'cpp00note',
     name: 'Sticky Note',
@@ -113,13 +111,20 @@ const nodes = [
   {
     parameters: {
       method: 'GET',
-      url: sheetDraftsUrl,
-      authentication: 'predefinedCredentialType',
-      nodeCredentialType: 'googleApi',
+      url: `={{ ($env.HOUSEX_PUBLIC_URL || 'https://timnhaxahoi.com').replace(/\\/$/, '') + '/api/cron/content-page-publish-due?limit=${batch}' }}`,
+      sendHeaders: true,
+      headerParameters: {
+        parameters: [
+          {
+            name: 'Authorization',
+            value: '=Bearer {{ $env.CRON_SECRET }}',
+          },
+        ],
+      },
       options: {},
     },
     id: 'cpp03fetch',
-    name: 'Fetch content_drafts',
+    name: 'Fetch due drafts (House X)',
     type: 'n8n-nodes-base.httpRequest',
     typeVersion: 4.2,
     position: pos(240, 300),
@@ -210,9 +215,9 @@ const nodes = [
     onError: 'continueRegularOutput',
   },
   {
-    parameters: { jsCode: codes.prepareSheet },
+    parameters: { jsCode: codes.prepareMark },
     id: 'cpp11prepare',
-    name: 'Prepare Sheet Update',
+    name: 'Prepare Postgres Mark',
     type: 'n8n-nodes-base.code',
     typeVersion: 2,
     position: pos(2160, 160),
@@ -220,15 +225,23 @@ const nodes = [
   {
     parameters: {
       method: 'POST',
-      url: '={{ $json.sheet_batch_url }}',
-      ...httpGoogle,
+      url: '={{ $json.housex_mark_url }}',
+      sendHeaders: true,
+      headerParameters: {
+        parameters: [
+          {
+            name: 'Authorization',
+            value: '=Bearer {{ $env.CRON_SECRET }}',
+          },
+        ],
+      },
       sendBody: true,
       specifyBody: 'json',
-      jsonBody: '={{ $json.sheet_batch_body }}',
+      jsonBody: '={{ $json.housex_mark_body }}',
       options: {},
     },
     id: 'cpp11batch',
-    name: 'POST Draft Sheet Batch',
+    name: 'POST House X Mark',
     type: 'n8n-nodes-base.httpRequest',
     typeVersion: 4.2,
     position: pos(2400, 160),
@@ -241,7 +254,7 @@ const nodes = [
         conditions: [
           {
             id: 'c1',
-            leftValue: '={{ $("Prepare Sheet Update").item.json.need_metrics_append }}',
+            leftValue: '={{ $("Prepare Postgres Mark").item.json.need_metrics_append }}',
             rightValue: '',
             operator: { type: 'boolean', operation: 'true', singleValue: true },
           },
@@ -259,11 +272,11 @@ const nodes = [
   {
     parameters: {
       method: 'POST',
-      url: '={{ $("Prepare Sheet Update").item.json.metrics_append_url }}',
+      url: '={{ $("Prepare Postgres Mark").item.json.metrics_append_url }}',
       ...httpGoogle,
       sendBody: true,
       specifyBody: 'json',
-      jsonBody: '={{ $("Prepare Sheet Update").item.json.metrics_append_body }}',
+      jsonBody: '={{ $("Prepare Postgres Mark").item.json.metrics_append_body }}',
       options: {},
     },
     id: 'cpp11postmetrics',
@@ -274,9 +287,9 @@ const nodes = [
     onError: 'continueRegularOutput',
   },
   {
-    parameters: { jsCode: codes.finalizeSheet },
+    parameters: { jsCode: codes.finalizeMark },
     id: 'cpp11finalize',
-    name: 'Finalize Sheet Update',
+    name: 'Finalize Publish Mark',
     type: 'n8n-nodes-base.code',
     typeVersion: 2,
     position: pos(3120, 160),
@@ -317,11 +330,15 @@ const nodes = [
 ];
 
 const connections = {
-  'Schedule Page Publish': { main: [[{ node: 'Fetch content_drafts', type: 'main', index: 0 }]] },
-  "When clicking 'Execute workflow'": {
-    main: [[{ node: 'Fetch content_drafts', type: 'main', index: 0 }]],
+  'Schedule Page Publish': {
+    main: [[{ node: 'Fetch due drafts (House X)', type: 'main', index: 0 }]],
   },
-  'Fetch content_drafts': { main: [[{ node: 'Parse Filter Due Posts', type: 'main', index: 0 }]] },
+  "When clicking 'Execute workflow'": {
+    main: [[{ node: 'Fetch due drafts (House X)', type: 'main', index: 0 }]],
+  },
+  'Fetch due drafts (House X)': {
+    main: [[{ node: 'Parse Filter Due Posts', type: 'main', index: 0 }]],
+  },
   'Parse Filter Due Posts': { main: [[{ node: 'IF Has Candidates', type: 'main', index: 0 }]] },
   'IF Has Candidates': {
     main: [
@@ -343,31 +360,35 @@ const connections = {
       [{ node: 'Track L0 Fail', type: 'main', index: 0 }],
     ],
   },
-  'POST Facebook Page Feed': { main: [[{ node: 'Prepare Sheet Update', type: 'main', index: 0 }]] },
-  'Prepare Sheet Update': { main: [[{ node: 'POST Draft Sheet Batch', type: 'main', index: 0 }]] },
-  'POST Draft Sheet Batch': { main: [[{ node: 'IF Append Metrics', type: 'main', index: 0 }]] },
+  'POST Facebook Page Feed': {
+    main: [[{ node: 'Prepare Postgres Mark', type: 'main', index: 0 }]],
+  },
+  'Prepare Postgres Mark': { main: [[{ node: 'POST House X Mark', type: 'main', index: 0 }]] },
+  'POST House X Mark': { main: [[{ node: 'IF Append Metrics', type: 'main', index: 0 }]] },
   'IF Append Metrics': {
     main: [
       [{ node: 'POST content_metrics', type: 'main', index: 0 }],
-      [{ node: 'Finalize Sheet Update', type: 'main', index: 0 }],
+      [{ node: 'Finalize Publish Mark', type: 'main', index: 0 }],
     ],
   },
-  'POST content_metrics': { main: [[{ node: 'Finalize Sheet Update', type: 'main', index: 0 }]] },
-  'Finalize Sheet Update': { main: [[{ node: 'Notify Pin Request', type: 'main', index: 0 }]] },
+  'POST content_metrics': {
+    main: [[{ node: 'Finalize Publish Mark', type: 'main', index: 0 }]],
+  },
+  'Finalize Publish Mark': { main: [[{ node: 'Notify Pin Request', type: 'main', index: 0 }]] },
   'Notify Pin Request': { main: [[{ node: 'Loop Page Publish', type: 'main', index: 0 }]] },
   'Track L0 Fail': { main: [[{ node: 'Loop Page Publish', type: 'main', index: 0 }]] },
   'No Candidates Summary': { main: [[{ node: 'Build Summary', type: 'main', index: 0 }]] },
 };
 
 const workflow = {
-  name: 'Magnix — Facebook Page Publish (content_drafts → Graph API)',
+  name: 'Magnix — Facebook Page Publish (Postgres → Graph API)',
   nodes,
   connections,
   pinData: {},
   active: false,
   settings: { executionOrder: 'v1' },
   staticData: null,
-  tags: [{ name: 'magnix' }, { name: 'content-page-publish' }, { name: 'facebook' }],
+  tags: [{ name: 'magnix' }, { name: 'content-page-publish' }, { name: 'facebook' }, { name: 'p4.3' }],
   meta: { templateCredsSetupCompleted: false },
 };
 

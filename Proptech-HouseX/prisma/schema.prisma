@@ -283,6 +283,15 @@ enum ContentQueueChannel {
   ZALO_OA
 }
 
+/// P4.2 — Magnix content_drafts trên Admin (L3 + CTA).
+enum ContentDraftStatus {
+  DRAFT
+  PENDING_L3
+  APPROVED
+  REJECTED
+  PUBLISHED
+}
+
 /// P3 — danh sách target B2B (Công đoàn / HR / KCN). Không CRM đầy đủ.
 enum PartnerTargetKind {
   UNION
@@ -527,6 +536,7 @@ model Article {
   projects ArticleProject[]
   earlySignals EarlySignalBrief[]
   contentQueueItems ContentQueueItem[]
+  contentDrafts ContentDraft[]
 
   @@index([status, publishedAt])
   @@map("articles")
@@ -639,6 +649,51 @@ model ContentQueueItem {
   @@index([sheetKey])
   @@index([scheduledAt])
   @@map("content_queue_items")
+}
+
+/// Magnix Agent 3 drafts — Super xem/sửa/L3 (P4.2).
+model ContentDraft {
+  id                   String               @id @default(uuid())
+  /// sheet-draft:{source}::{slug(title)}::{ymd}
+  normalizedKey        String               @unique @map("normalized_key")
+  sheetKey             String?              @unique @map("sheet_key")
+  sourceNormalizedKey  String?              @map("source_normalized_key")
+  title                String
+  hookLine             String?              @map("hook_line") @db.Text
+  artifactMarkdown     String?              @map("artifact_markdown") @db.Text
+  ctaOptIn             String?              @map("cta_opt_in") @db.Text
+  disclaimer           String?              @db.Text
+  exportHint           String?              @map("export_hint")
+  segment              String?
+  qaTier               String?              @map("qa_tier")
+  source               String?
+  status               ContentDraftStatus   @default(DRAFT)
+  sheetStatus          String?              @map("sheet_status")
+  publishChannel       ContentQueueChannel? @map("publish_channel")
+  ctaToolId            String?              @map("cta_tool_id")
+  ctaLabel             String?              @map("cta_label")
+  ctaHref              String?              @map("cta_href")
+  l3Checklist          Json?                @map("l3_checklist")
+  articleId            String?              @map("article_id")
+  opsNotes             String?              @map("ops_notes") @db.Text
+  reviewedAt           DateTime?            @map("reviewed_at")
+  reviewedBy           String?              @map("reviewed_by")
+  rejectReason         String?              @map("reject_reason") @db.Text
+  publishedAt          DateTime?            @map("published_at")
+  scheduledAt          DateTime?            @map("scheduled_at")
+  sheetSyncedAt        DateTime?            @map("sheet_synced_at")
+  sheetCreatedAt       String?              @map("sheet_created_at")
+  meta                 Json?
+  createdAt            DateTime             @default(now()) @map("created_at")
+  updatedAt            DateTime             @updatedAt @map("updated_at")
+
+  article Article? @relation(fields: [articleId], references: [id], onDelete: SetNull)
+
+  @@index([status, createdAt])
+  @@index([ctaToolId])
+  @@index([scheduledAt])
+  @@index([sourceNormalizedKey])
+  @@map("content_drafts")
 }
 
 /// Target outreach B2B tay — Super 1h/tuần; không thay CRM sales.

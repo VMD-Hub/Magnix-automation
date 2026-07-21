@@ -58,6 +58,11 @@ Spec đầy đủ: `docs/CONTENT_QUEUE_P4_SPEC.md`.
 
 - Nút **Sync từ Sheet** → `POST /api/admin/content-queue/sync`
 - Field `scheduled_at` trên editor + tab **Lịch đăng**
+
+## P4.2 — Content drafts
+
+- UI: `/admin/content-drafts` · sync tab Sheet `content_drafts`
+- Doc: `docs/CONTENT_DRAFTS_ADMIN.md` · spec slice 2 trong `CONTENT_QUEUE_P4_SPEC.md`
 - Env VPS: `GOOGLE_SERVICE_ACCOUNT_JSON` + `MAGNIX_CONTENT_SHEET_ID` (hoặc `MAGNIX_GOOGLE_SHEET_ID` / `GOOGLE_SHEET_MIRROR_ID`)
 - Tab Sheet: `MAGNIX_CONTENT_QUEUE_TAB` (default `content_queue`)
 

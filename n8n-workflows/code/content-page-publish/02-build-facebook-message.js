@@ -46,13 +46,16 @@ if (hashtags) parts.push(hashtags);
 const message = parts.join('\n\n').trim().slice(0, 63000);
 
 const hits = FORBIDDEN.filter((re) => re.test(message)).map((re) => re.source);
+const draftId = row.id || row.draft_id || null;
+
 if (hits.length) {
   return [{
     json: {
       ok: false,
       error: 'L0_FORBIDDEN',
       l0_hits: hits,
-      sheet_row: row.sheet_row,
+      id: draftId,
+      draft_id: draftId,
       normalized_key: row.normalized_key,
     },
   }];
@@ -65,7 +68,8 @@ const pinAfter = meta.pin_after_publish === true;
 return [{
   json: {
     ok: true,
-    sheet_row: row.sheet_row,
+    id: draftId,
+    draft_id: draftId,
     normalized_key: row.normalized_key,
     segment: row.segment,
     title: String(row.title || '').slice(0, 200),

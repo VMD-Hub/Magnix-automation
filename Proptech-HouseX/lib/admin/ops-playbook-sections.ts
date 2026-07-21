@@ -24,6 +24,12 @@ export const PLAYBOOK_QUICK_LINKS: PlaybookQuickLink[] = [
     roles: ["super"],
   },
   {
+    href: "/admin/content-drafts",
+    label: "Content drafts",
+    description: "Agent 3 — xem/sửa/L3 bản nháp Sheet",
+    roles: ["super"],
+  },
+  {
     href: "/admin/tool-analytics",
     label: "Tool analytics",
     description: "KPI: bài CTA → lead tool NƠXH → CRM",
@@ -102,14 +108,15 @@ export const PLAYBOOK_SECTIONS: PlaybookSection[] = [
     checklist: [
       "Chọn đúng 1 CTA: /cong-cu/dieu-kien-noxh (điều kiện/hồ sơ) hoặc /cong-cu/kiem-tra-vay-noxh (vay).",
       "Trước publish trả lời đủ 3 câu: nỗi đau? tool nào? câu CTA hành động?",
-      "Duyệt trên /admin/content-queue — hệ thống chặn L3 nếu thiếu cta_tool_id.",
+      "Duyệt trên /admin/content-queue hoặc /admin/content-drafts — chặn L3 nếu thiếu cta_tool_id.",
       "Đo submit 2 tool / tuần — không chỉ đếm số bài đã đăng.",
-      "Sau L3: Publish web ngay (hoặc nháp CMS) — bài luôn có CTA tool.",
+      "Sau L3 (queue): Publish web ngay (hoặc nháp CMS) — bài luôn có CTA tool.",
     ],
     bullets: [
       "Không viết tool mới trong Q này — phân phối 2 tool NƠXH hiện có.",
       "Không Ads / Zalo Group product — ưu tiên SEO Q&A + Mini App.",
       "Content queue → publish_web đóng vòng SEO trong Admin (không nhảy Sheet).",
+      "Content drafts = Agent 3 artifact — sync Sheet rồi L3 trên Admin.",
       "B2B: chỉ /admin/partner-targets + outreach tay ≤1h/tuần — chưa có partner thật cũng chỉ target list.",
     ],
   },
@@ -118,7 +125,7 @@ export const PLAYBOOK_SECTIONS: PlaybookSection[] = [
     title: "Luồng hàng ngày",
     bullets: [
       "Sáng: Lead «Mới» → ưu tiên HOT/WARM → Hồ sơ NOXH → Xung đột (badge đỏ).",
-      "Giữa ngày (Super): Content queue → gắn CTA tool → L3 → publish.",
+      "Giữa ngày (Super): Content queue / drafts → gắn CTA tool → L3 → publish.",
       "Chiều: Magnix Inbound → triage UID.",
       "Cuối ngày: Lead đã gọi → Đã tiếp nhận / Đã liên hệ.",
     ],

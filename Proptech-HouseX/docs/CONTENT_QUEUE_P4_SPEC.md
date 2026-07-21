@@ -6,9 +6,10 @@
 
 | Vai trò | Hệ thống |
 |---|---|
-| **SoR biên tập (duyệt, CTA, schedule, publish)** | Postgres `content_queue_items` (+ drafts sau) |
+| **SoR biên tập (duyệt, CTA, schedule, publish)** | Postgres `content_queue_items` + `content_drafts` |
 | **Nguồn nghiên cứu n8n** | Sheet `content_queue` / `content_drafts` (ghi tiếp) |
-| **Sync** | Sheet → Postgres (1 chiều, upsert). Admin **không** ghi ngược Sheet ở P4 slice 1 |
+| **Sync** | Sheet → Postgres (1 chiều, upsert). Admin **không** ghi ngược Sheet ở P4 |
+| **Page Publish** | n8n đọc Postgres due API (P4.3), không đọc Sheet |
 
 Khớp ADR-013: Sheet = editorial workspace tạm; Admin = vận hành.
 
@@ -16,9 +17,9 @@ Khớp ADR-013: Sheet = editorial workspace tạm; Admin = vận hành.
 
 | Slice | Việc | Status |
 |---|---|---|
-| **1 (now)** | Sync `content_queue` Sheet → Postgres + field `scheduled_at` trên Admin | **Implement** |
-| 2 | Model + UI `content_drafts` (xem/sửa/L3) | Backlog |
-| 3 | n8n `content-page-publish` đọc Postgres + honor `scheduled_at` | Backlog |
+| **1** | Sync `content_queue` Sheet → Postgres + field `scheduled_at` trên Admin | **Done** (`5042b19`) |
+| **2** | Model + UI `content_drafts` (xem/sửa/L3) + sync Sheet | **Done** |
+| **3** | n8n `content-page-publish` đọc Postgres + honor `scheduled_at` | **Done** |
 | 4 | Sheet mirror optional / dual-write tắt dần | Backlog |
 
 ## Slice 1 — Contract
@@ -65,15 +66,64 @@ Khi row đã tồn tại:
 - Field **Lịch đăng** (`scheduled_at`) trên editor
 - Tab/filter **Đã lên lịch** (có `scheduled_at`, chưa PUBLISHED)
 
-## Slice 2+ (không làm trong PR này)
+## Slice 2 — content_drafts Admin
 
-- `content_drafts` table + board
-- Push schedule → n8n Graph publish
-- Outreach queue UI
+### Postgres `content_drafts`
+
+Upsert key: `normalized_key` = `sheet-draft:{source_normalized_key}::{slug(title)}::{created_at|ymd}`  
+`sheet_key` = phần sau `sheet-draft:`.
+
+Fields chính: title, hookLine, artifactMarkdown, ctaOptIn, disclaimer, segment, qaTier, sheetStatus, sourceNormalizedKey, status, CTA tool + L3 checklist, scheduledAt, sheetSyncedAt.
+
+### Map Sheet status
+
+| Sheet | Admin |
+|---|---|
+| `approved` | `APPROVED` |
+| `published` | `PUBLISHED` |
+| `rejected` | `REJECTED` |
+| `pending` / `pending_l3` | `PENDING_L3` |
+| `draft` / khác | `DRAFT` |
+
+### Upsert rules
+
+- Luôn cập nhật body/hook/segment từ Sheet nếu Admin status = `DRAFT`
+- Không đè: ctaToolId, l3Checklist, scheduledAt, articleId; không hạ status đã qua DRAFT
+
+### API / UI
+
+- `/admin/content-drafts` · `GET/POST /api/admin/content-drafts` · `PATCH/POST .../[id]` · `POST .../sync`
+- L3 bắt buộc CTA tool NƠXH (cùng allowlist queue)
+- Tab: DRAFT / PENDING_L3 / APPROVED / SCHEDULED / …
+
+## Slice 3 — Page Publish từ Postgres
+
+### API (machine, `CRON_SECRET`)
+
+- `GET /api/cron/content-page-publish-due?limit=3` — APPROVED due (FB_PAGE / meta) · cột `scheduled_at` ưu tiên · fallback `meta.scheduled_at`
+- `POST /api/cron/content-page-publish-due` — mark `PUBLISHED` + patch `meta.fb_post_id`
+
+Lib: `lib/content/content-page-publish-due.ts` · `lib/data/content-page-publish.ts`
+
+### n8n
+
+- Fetch Sheet → **Fetch House X due**
+- Write-back Sheet → **POST House X mark** (metrics Sheet optional)
+- Rebuild: `node n8n-workflows/build-content-page-publish.mjs`
+- Doc: `docs/CONTENT_PAGE_PUBLISH_SETUP.md`
+
+### Admin
+
+- `/admin/content-drafts`: kênh **Facebook Page** + **Lịch đăng** sau L3
+
+## Slice 4+ (backlog)
+
+Sheet mirror optional / dual-write tắt dần.
 
 ## VERIFY
 
-- [ ] Migration deploy OK
-- [ ] Sync upsert idempotent theo `sheet_key`
-- [ ] Approve L3 + set schedule không bị sync xóa
-- [ ] Unit test map status + merge rules
+- [x] Migration `20260721210000_content_drafts`
+- [x] Sync upsert idempotent theo `normalized_key` / `sheet_key`
+- [x] Approve L3 + schedule không bị sync xóa
+- [x] Unit test map / merge / L3 gate / due schedule
+- [x] n8n Page Publish → Postgres fetch + mark

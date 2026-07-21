@@ -36,6 +36,14 @@ export const ADMIN_NAV_GROUPS: AdminNavGroup[] = [
         matchPrefix: true,
       },
       {
+        href: "/admin/content-drafts",
+        label: "Content drafts",
+        title:
+          "Agent 3 drafts — xem/sửa/L3 trên Admin (sync Sheet content_drafts)",
+        roles: ["super"],
+        matchPrefix: true,
+      },
+      {
         href: "/admin/tool-analytics",
         label: "Tool analytics",
         title:
