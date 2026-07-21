@@ -5,7 +5,7 @@ import type {
   EarlySignalStatus,
   EarlySignalTier,
 } from "@prisma/client";
-import { prisma } from "@/lib/db";
+import { prisma } from "@/lib/prisma";
 import {
   assertEarlySignalReadyForL3,
   DEFAULT_T1_READER_DISCLAIMER,
