@@ -159,11 +159,21 @@ assign → chip kết quả → QUALIFIED → appointment trên conversion surfa
 **KPI aggregate (không PII)** — chạy trên VPS:
 
 ```bash
+cd /opt/housex/Proptech-HouseX
 COHORT_DAYS=5 npm run go-live:kpi-sales-ops-cohort
 ```
 
 Theo dõi: accept rate, % lead có activity, % QUALIFIED có appointment.
 File: `reports/sales-ops-cohort-kpi-*.json`.
+
+**Nhật ký cohort (điền sau mỗi lần KPI):**
+
+| Ngày | KPI chạy? | Ops dùng telesales? | Ghi chú (không PII) |
+|------|-----------|---------------------|---------------------|
+| 2026-07-18 | ✅ baseline | — | accept 100%; appt@qualify 50% |
+| 2026-07-21 | ✅ mid | ☐ cần Ops | activity 33.3%↑; assign vẫn 1; appt@qualify 33.3%↓ |
+| 2026-07-22 | ☐ | ☐ | |
+| 2026-07-23 | ☐ | ☐ | đóng cửa sổ 5 ngày làm việc |
 
 **E2E harness (Wave 1)** trước khi đo cohort: `npm run go-live:smoke-sales-ops`.
 

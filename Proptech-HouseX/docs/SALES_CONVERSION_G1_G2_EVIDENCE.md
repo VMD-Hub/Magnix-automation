@@ -261,6 +261,32 @@ Rollback: none required (additive audit retained; disposable broker cleaned if s
 
 - Cohort playbook: `OPS_PLAYBOOK.md` §4b-3 (start 2026-07-18). Re-run KPI daily during cohort.
 
+### Production Ops cohort KPI — mid-window (2026-07-21)
+
+- Result: **OK**
+- Observed at: `2026-07-21T01:43:29Z` (VPS) / local wall `2026-07-21 08:43 +07`
+- Evidence file (VPS):
+  `/opt/housex/Proptech-HouseX/reports/sales-ops-cohort-kpi-2026-07-21T01-43-29-051Z.json`
+- Window: 5 days (rolling)
+
+| Metric | 2026-07-18 | 2026-07-21 | Δ |
+| --- | --- | --- | --- |
+| `leadsCreated` | 11 | 12 | +1 |
+| `assignmentsCreated` | 1 | 1 | 0 |
+| `assignmentsAccepted` | 1 | 1 | 0 |
+| `acceptRatePct` | 100 | 100 | 0 |
+| `leadsWithActivity` | 3 | 4 | +1 |
+| `activityCoverageVsLeadsPct` | 27.3 | 33.3 | +6.0 |
+| `leadsWithAppointment` | 1 | 1 | 0 |
+| `appointmentCoverageVsLeadsPct` | 9.1 | 8.3 | −0.8 |
+| `qualifiedOrTerminal` | 2 | 3 | +1 |
+| `qualifiedWithAppointment` | 1 | 1 | 0 |
+| `appointmentAfterQualifyPct` | 50 | 33.3 | −16.7 |
+
+- Đọc nhanh: activity coverage tăng; assignment vẫn = 1 (chưa thấy Ops claim/assign thêm
+  trên cửa sổ 5 ngày). `appointmentAfterQualifyPct` giảm vì có thêm qualified/terminal
+  chưa gắn appointment — ưu tiên checklist bước 4 trên lead QUALIFIED mới.
+
 ### Production SC-6 real-channel smoke — checklist (Round 2 Wave 3)
 
 ```bash
