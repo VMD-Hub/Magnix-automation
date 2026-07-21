@@ -31,6 +31,9 @@ export const interestWaitlistFormCopy = {
   successTitle: "Đã ghi nhận đăng ký nhận tin",
   successBody: `${WAITLIST_NO_COLD_CALL} ${WAITLIST_CHANNEL_DEFAULT} ${WAITLIST_MINIAPP_VALUE}`,
   successAccountCta: "Mở tài khoản / Mini App",
+  successEligibilityCta: "Làm bài lọc đối tượng NOXH",
+  successEligibilityHref: "/cong-cu/dieu-kien-noxh",
+  successNotificationsHref: "/khach-hang/tai-khoan",
   compactTrigger: "Đăng ký nhận tin (không gọi làm phiền)",
 } as const;
 

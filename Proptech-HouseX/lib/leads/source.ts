@@ -18,6 +18,8 @@ export const LEAD_SOURCE = {
   PARTNER: "partner",
   REFERRAL: "referral",
   CTV_CLAIM: "ctv_claim",
+  /** ADR-016 — đăng ký nhận tin dự án (không HOT call). */
+  WAITLIST_PROJECT: "waitlist:project",
   /** Legacy — map sang web:lead khi ingest form web. */
   ORGANIC: "organic",
 } as const;
@@ -74,6 +76,7 @@ const KNOWN_SOURCES = new Set<string>([
   LEAD_SOURCE.PARTNER,
   LEAD_SOURCE.REFERRAL,
   LEAD_SOURCE.CTV_CLAIM,
+  LEAD_SOURCE.WAITLIST_PROJECT,
   LEAD_SOURCE.ORGANIC,
 ]);
 

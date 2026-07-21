@@ -89,6 +89,10 @@ export function LeadContactForm({
         message: message.trim() || undefined,
         listingId,
         projectId,
+        captureType: waitlist ? "waitlist" : "consult_request",
+        ...(waitlist
+          ? { channelPreference: ["in_app"] }
+          : { channelPreference: ["voice_call", "in_app"] }),
         ...(utm ? { utm } : {}),
       };
 
@@ -147,14 +151,21 @@ export function LeadContactForm({
           )}
         </p>
         {waitlist ? (
-          <p className="mt-3 text-sm">
+          <div className="mt-3 flex flex-col items-center gap-2 text-sm sm:flex-row sm:justify-center">
             <a
               href="/khach-hang/tai-khoan"
               className="font-semibold text-emerald-900 underline"
             >
               {interestWaitlistFormCopy.successAccountCta}
             </a>
-          </p>
+            <span className="hidden text-emerald-700 sm:inline">·</span>
+            <a
+              href={interestWaitlistFormCopy.successEligibilityHref}
+              className="font-semibold text-emerald-900 underline"
+            >
+              {interestWaitlistFormCopy.successEligibilityCta}
+            </a>
+          </div>
         ) : null}
       </div>
     );

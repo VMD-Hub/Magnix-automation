@@ -9,10 +9,13 @@ import type { TelesalesCallCuePayload } from "@/lib/leads/telesales-call-cues";
 type ContactBundle = {
   phone: string | null;
   deepLinks: {
-    tel: string;
+    tel: string | null;
     sms: string;
     zalo: { copyPhone: string; hint: string };
   } | null;
+  voiceCallAllowed?: boolean;
+  waitlist?: boolean;
+  waitlistHint?: string | null;
   lastContact: {
     at: string;
     type: string;
@@ -216,6 +219,12 @@ export function OpsLeadTelesalesPanel({
         <p className="text-xs text-slate-500">Chưa có nhật ký gọi trên lead này.</p>
       )}
 
+      {bundle.waitlistHint ? (
+        <p className="rounded-md border border-sky-200 bg-sky-50 px-2 py-1.5 text-xs text-sky-950">
+          {bundle.waitlistHint}
+        </p>
+      ) : null}
+
       {callBlocked ? (
         <p className="rounded-md border border-amber-200 bg-amber-50 px-2 py-1.5 text-xs text-amber-900">
           Đang khoá gọi đến{" "}
@@ -246,12 +255,19 @@ export function OpsLeadTelesalesPanel({
             <Button
               type="button"
               size="sm"
-              disabled={Boolean(callBlocked)}
+              disabled={
+                Boolean(callBlocked) ||
+                bundle.voiceCallAllowed === false ||
+                !bundle.deepLinks.tel
+              }
               onClick={() => {
-                window.location.href = bundle.deepLinks!.tel;
+                if (!bundle.deepLinks?.tel) return;
+                window.location.href = bundle.deepLinks.tel;
               }}
             >
-              Gọi điện
+              {bundle.voiceCallAllowed === false
+                ? "Gọi (chặn — waitlist)"
+                : "Gọi điện"}
             </Button>
             <Button
               type="button"

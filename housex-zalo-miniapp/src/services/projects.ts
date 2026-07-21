@@ -191,6 +191,8 @@ export async function createProjectLead(input: {
   projectId: string;
   message?: string;
   segment?: "noxh" | "cctm";
+  captureType?: "waitlist" | "consult_request";
+  channelPreference?: Array<"in_app" | "oa" | "sms" | "email" | "voice_call">;
 }): Promise<{ id: string }> {
   const idem =
     typeof crypto !== "undefined" && "randomUUID" in crypto
@@ -198,6 +200,7 @@ export async function createProjectLead(input: {
       : `mini-${Date.now()}-${input.phone}`;
 
   const utm = readStoredLeadUtm();
+  const waitlist = input.captureType === "waitlist";
 
   return apiFetch<{ id: string }>("/api/leads", {
     method: "POST",
@@ -208,6 +211,9 @@ export async function createProjectLead(input: {
       projectId: input.projectId,
       message: input.message,
       ...(input.segment ? { segment: input.segment } : {}),
+      captureType: input.captureType ?? "consult_request",
+      channelPreference: input.channelPreference ??
+        (waitlist ? ["in_app"] : ["voice_call", "in_app"]),
       ...(utm ? { utm } : {}),
     }),
   });

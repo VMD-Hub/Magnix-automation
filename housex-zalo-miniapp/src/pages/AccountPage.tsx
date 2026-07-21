@@ -324,6 +324,13 @@ export function AccountPage() {
               ? ` · ${user.email}`
               : ""}
           </p>
+          {!canAgent ? (
+            <p style={{ marginTop: 10 }}>
+              <Link to="/thong-bao" className="btn secondary">
+                Thông báo nhận tin dự án
+              </Link>
+            </p>
+          ) : null}
         </div>
 
         {!canAgent ? (

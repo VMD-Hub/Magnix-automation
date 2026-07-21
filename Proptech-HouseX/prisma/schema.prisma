@@ -705,8 +705,32 @@ model Customer {
   promotionWins         PromotionWin[]
   attributionConflicts  AttributionConflict[]
   consentRecords        ConsentRecord[]
+  notifications         CustomerNotification[]
 
   @@map("customers")
+}
+
+/// ADR-016 P2 — thông báo in-app cho khách (waitlist / tiến độ / mở bán).
+model CustomerNotification {
+  id         String    @id @default(uuid())
+  customerId String    @map("customer_id")
+  type       String
+  title      String
+  body       String    @db.Text
+  projectId  String?   @map("project_id")
+  leadId     String?   @map("lead_id")
+  href       String?
+  /// Idempotency — vd. waitlist_launch:{projectId}:{customerId}
+  dedupeKey  String?   @unique @map("dedupe_key")
+  readAt     DateTime? @map("read_at")
+  createdAt  DateTime  @default(now()) @map("created_at")
+
+  customer Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
+
+  @@index([customerId, readAt])
+  @@index([customerId, createdAt])
+  @@index([projectId, type])
+  @@map("customer_notifications")
 }
 
 /// Token một lần: xác nhận email, đặt lại mật khẩu (chỉ lưu hash).

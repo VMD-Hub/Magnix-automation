@@ -159,6 +159,7 @@ export const PLAYBOOK_SECTIONS: PlaybookSection[] = [
       "Khách sợ bị gọi telesales — cohort này không dùng SLA gọi nóng (ADR-016).",
     bullets: [
       "Đăng ký nhận tin ≠ xin tư vấn gọi ngay. Không gọi chỉ vì có SĐT waitlist.",
+      "Hệ thống: captureType=waitlist → nguồn waitlist:project; preference in_app; nút Gọi bị chặn.",
       "Mặc định: cập nhật in-app / tài khoản (OA khi bật + consent).",
       "Chỉ gọi khi khách xin tư vấn, hoặc sau mở bán + khách đồng ý kênh gọi.",
       "Khuyến khích Mini App + hồ sơ + bài lọc đối tượng — không ép gọi.",

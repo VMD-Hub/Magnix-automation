@@ -182,6 +182,7 @@ export interface OutboxPayloads {
   };
   /**
    * Khác luồng tool NOXH — ưu tiên push Telegram tư vấn kịp thời.
+   * Waitlist (ADR-016): hotNotify=false — không SLA gọi / không push hot.
    */
   "lead.created": {
     leadId: string;
@@ -199,6 +200,13 @@ export interface OutboxPayloads {
     } | null;
     /** Intent lane — `noxh` | `cctm` (null nếu lead cũ / không suy được). */
     segment: "noxh" | "cctm" | null;
+    /** ADR-016 P1 */
+    captureType?: "waitlist" | "consult_request" | "hot_manual" | null;
+    channelPreference?: Array<
+      "in_app" | "oa" | "sms" | "email" | "voice_call"
+    >;
+    /** false = không forward Telegram/HOT realtime. */
+    hotNotify?: boolean;
     message: string | null;
     contact: {
       name: string;

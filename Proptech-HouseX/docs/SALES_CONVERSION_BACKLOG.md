@@ -587,10 +587,9 @@ consent proof và PII thật không được đưa vào bằng chứng.
 
 **Status**
 
-- `repo_status: PLANNED` — **P0 DONE** (2026-07-21): channel-commitment copy +
-  waitlist form intent on `SAP_MO_BAN` + Ops playbook section; P1–P4 still open.
-  Architecture: ADR-016.
-- `runtime_evidence: NOT_PROVIDED` (P0 is copy/UX; captureType routing = P1)
+- `repo_status: REPO-DONE` — **P0–P4** (2026-07-21): copy, captureType, CustomerNotification,
+  LaunchTrigger, Mini App waitlist + inbox, `go-live:kpi-waitlist`. Architecture: ADR-016.
+- `runtime_evidence: NOT_PROVIDED` (cần migrate + deploy VPS + smoke form `SAP_MO_BAN`)
 - Target gate: G1 controls for capture/consent; G2 for launch-notify + nurture cohort.
 
 **Owner boundary**

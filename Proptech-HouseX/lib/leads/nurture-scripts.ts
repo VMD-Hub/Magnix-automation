@@ -65,6 +65,30 @@ export const NURTURE_SCRIPT_CATALOG: NurtureScript[] = [
     sources: [LEAD_SOURCE.WEB_LEAD, LEAD_SOURCE.ORGANIC, LEAD_SOURCE.OPS_MANUAL],
   },
   {
+    id: "waitlist-progress-updates",
+    label: "Waitlist — cập nhật tiến độ (in-app)",
+    description:
+      "ADR-016: không gọi điện; nurture thưa chính sách/tiến độ qua Mini App / OA khi consent.",
+    channel: "manual",
+    sources: [LEAD_SOURCE.WAITLIST_PROJECT],
+  },
+  {
+    id: "waitlist-policy-digest",
+    label: "Waitlist — tin chính sách / điều kiện",
+    description:
+      "Cadence thưa: điều kiện NOXH, vay, đối tượng — value-first, không framing mất mát.",
+    channel: "manual",
+    sources: [LEAD_SOURCE.WAITLIST_PROJECT],
+  },
+  {
+    id: "waitlist-launch-open",
+    label: "Waitlist — tín hiệu mở bán",
+    description:
+      "Khi dự án DANG_BAN: ưu tiên in-app notify (LaunchTrigger); gọi chỉ sau opt-in.",
+    channel: "manual",
+    sources: [LEAD_SOURCE.WAITLIST_PROJECT],
+  },
+  {
     id: "warm-other-projects",
     label: "Ấm lead — dự án khác / chưa khớp",
     description:

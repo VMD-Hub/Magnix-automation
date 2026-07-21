@@ -32,10 +32,20 @@ export function ProjectDetailPage() {
   const [okMsg, setOkMsg] = useState<string | null>(null);
   const [formErr, setFormErr] = useState<string | null>(null);
   const [showForm, setShowForm] = useState(false);
+  const waitlist = project?.status === "SAP_MO_BAN";
 
   useEffect(() => {
     if (user?.name) setName(user.name);
   }, [user?.name]);
+
+  useEffect(() => {
+    if (!project) return;
+    if (project.status === "SAP_MO_BAN") {
+      setMessage("Tôi muốn đăng ký nhận cập nhật tiến độ dự án này.");
+    } else {
+      setMessage("Tôi muốn được tư vấn dự án này.");
+    }
+  }, [project?.id, project?.status]);
 
   useEffect(() => {
     let alive = true;
@@ -72,6 +82,7 @@ export function ProjectDetailPage() {
     setFormErr(null);
     setOkMsg(null);
     try {
+      const isWaitlist = project.status === "SAP_MO_BAN";
       await createProjectLead({
         name: name.trim(),
         phone: phone.trim(),
@@ -80,8 +91,16 @@ export function ProjectDetailPage() {
         segment:
           segmentFromProjectType(project.projectType) ??
           segmentForLane(getPreferredLane() ?? "noxh"),
+        captureType: isWaitlist ? "waitlist" : "consult_request",
+        channelPreference: isWaitlist
+          ? ["in_app"]
+          : ["voice_call", "in_app"],
       });
-      setOkMsg("Đã gửi yêu cầu. Chuyên viên House X sẽ liên hệ sớm.");
+      setOkMsg(
+        isWaitlist
+          ? "Đã ghi nhận đăng ký nhận tin. Không gọi điện chỉ vì đăng ký — cập nhật qua thông báo. Nên mở Tài khoản + bài lọc đối tượng NOXH."
+          : "Đã gửi yêu cầu. Chuyên viên House X sẽ liên hệ sớm.",
+      );
       setMessage("");
       setShowForm(false);
     } catch (ex) {
@@ -289,12 +308,37 @@ export function ProjectDetailPage() {
 
       <div className="landing-cta-spacer" />
 
+      {okMsg ? (
+        <div className="card">
+          <p className="ok">{okMsg}</p>
+          {waitlist ? (
+            <div className="flex flex-wrap gap-2 mt-2">
+              <Link to="/tai-khoan" className="btn secondary">
+                Tài khoản
+              </Link>
+              <Link to="/thong-bao" className="btn secondary">
+                Thông báo
+              </Link>
+              <Link to="/cong-cu" className="btn secondary">
+                Bài lọc đối tượng
+              </Link>
+            </div>
+          ) : null}
+        </div>
+      ) : null}
+
       {showForm ? (
         <form className="card landing-form-panel" onSubmit={onSubmit}>
-          <h2>{landing?.ctaLabel ?? "Để lại SĐT tư vấn"}</h2>
+          <h2>
+            {waitlist
+              ? "Đăng ký nhận thông tin dự án"
+              : (landing?.ctaLabel ?? "Để lại SĐT tư vấn")}
+          </h2>
           <p className="muted" style={{ marginBottom: 10 }}>
-            {landing?.ctaSubtext ??
-              "Không cam kết duyệt vay — chuyên viên House X tư vấn theo hồ sơ thật."}
+            {waitlist
+              ? "Không gọi điện chỉ vì bạn đăng ký nhận cập nhật. Ưu tiên thông báo trên Mini App."
+              : (landing?.ctaSubtext ??
+                "Không cam kết duyệt vay — chuyên viên House X tư vấn theo hồ sơ thật.")}
           </p>
           <input
             className="input"
@@ -319,9 +363,12 @@ export function ProjectDetailPage() {
             rows={2}
           />
           {formErr ? <p className="err">{formErr}</p> : null}
-          {okMsg ? <p className="ok">{okMsg}</p> : null}
           <button className="btn" type="submit" disabled={busy}>
-            {busy ? "Đang gửi…" : "Gửi yêu cầu tư vấn"}
+            {busy
+              ? "Đang gửi…"
+              : waitlist
+                ? "Đăng ký nhận cập nhật"
+                : "Gửi yêu cầu tư vấn"}
           </button>
           <button
             type="button"
@@ -340,7 +387,9 @@ export function ProjectDetailPage() {
           className="btn"
           onClick={() => setShowForm(true)}
         >
-          {landing?.ctaLabel ?? "Liên hệ tư vấn ngay"}
+          {waitlist
+            ? "Đăng ký nhận tin (không gọi làm phiền)"
+            : (landing?.ctaLabel ?? "Liên hệ tư vấn ngay")}
         </button>
       </div>
     </div>

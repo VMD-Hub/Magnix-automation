@@ -23,6 +23,7 @@ import { OpsLeadsPage } from "@/pages/OpsLeadsPage";
 import { OpsLeadDetailPage } from "@/pages/OpsLeadDetailPage";
 import { AgentTelesalesPage } from "@/pages/AgentTelesalesPage";
 import { AgentTelesalesDetailPage } from "@/pages/AgentTelesalesDetailPage";
+import { CustomerNotificationsPage } from "@/pages/CustomerNotificationsPage";
 import { WebViewPage } from "@/pages/WebViewPage";
 
 /** HashRouter — ổn định trên Zalo Mini App (CDN path không phải domain thật). */
@@ -49,6 +50,7 @@ export default function App() {
             <Route path="mo" element={<WebViewPage />} />
             <Route path="mo/*" element={<WebViewPage />} />
             <Route path="tai-khoan" element={<AccountPage />} />
+            <Route path="thong-bao" element={<CustomerNotificationsPage />} />
             <Route path="agent" element={<AgentHomePage />} />
             <Route path="agent/dich-vu" element={<AgentServicesPage />} />
             <Route

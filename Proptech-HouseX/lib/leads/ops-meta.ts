@@ -4,6 +4,13 @@ import {
   readNoxhWizardSnapshot,
   type NoxhWizardSnapshot,
 } from "@/lib/leads/noxh-wizard-snapshot";
+import {
+  defaultChannelPreferencesForCapture,
+  parseChannelPreferences,
+  parseLeadCaptureType,
+  type LeadCaptureType,
+  type LeadChannelPreference,
+} from "@/lib/leads/capture-type";
 
 /** Kênh liên hệ phục vụ nurture — không thay SĐT khóa chính trên Customer. */
 export type LeadContactChannels = {
@@ -19,6 +26,10 @@ export type LeadOpsMeta = {
   opsNote: string | null;
   /** Snapshot wizard NOXH — chỉ Admin, có số tiền cụ thể. */
   wizardSnapshot?: NoxhWizardSnapshot | null;
+  /** ADR-016 — waitlist vs consult vs hot. */
+  captureType?: LeadCaptureType | null;
+  /** ADR-016 — kênh khách đồng ý (waitlist mặc định in_app). */
+  channelPreference?: LeadChannelPreference[];
 };
 
 const EMPTY_CHANNELS: LeadContactChannels = {};
@@ -52,6 +63,8 @@ export function readLeadOpsMeta(meta: unknown): LeadOpsMeta {
           : null,
     opsNote: typeof m.opsNote === "string" ? m.opsNote : null,
     wizardSnapshot: readNoxhWizardSnapshot(m),
+    captureType: parseLeadCaptureType(m.captureType),
+    channelPreference: parseChannelPreferences(m.channelPreference),
   };
 }
 
@@ -62,6 +75,8 @@ export function mergeLeadOpsMeta(
     nurtureScriptId: string | null;
     opsNote: string | null;
     wizardSnapshot: NoxhWizardSnapshot | null;
+    captureType: LeadCaptureType | null;
+    channelPreference: LeadChannelPreference[];
   }>,
 ): Record<string, unknown> {
   const current = readLeadOpsMeta(meta);
@@ -87,6 +102,12 @@ export function mergeLeadOpsMeta(
   if (patch.wizardSnapshot !== undefined) {
     base.wizardSnapshot = patch.wizardSnapshot;
   }
+  if (patch.captureType !== undefined) {
+    base.captureType = patch.captureType;
+  }
+  if (patch.channelPreference !== undefined) {
+    base.channelPreference = patch.channelPreference;
+  }
 
   return base;
 }
@@ -97,7 +118,17 @@ export function buildInitialLeadOpsMeta(input: {
   segment: LeadSegment | null;
   source: string;
   wizardSnapshot?: NoxhWizardSnapshot;
+  captureType?: LeadCaptureType | null;
+  channelPreference?: LeadChannelPreference[];
 }): Record<string, unknown> {
+  const captureType = input.captureType ?? null;
+  const channelPreference =
+    input.channelPreference && input.channelPreference.length > 0
+      ? input.channelPreference
+      : captureType
+        ? defaultChannelPreferencesForCapture(captureType)
+        : [];
+
   return {
     channels: {
       phone: input.phone,
@@ -109,6 +140,8 @@ export function buildInitialLeadOpsMeta(input: {
     }),
     opsNote: null,
     ...(input.wizardSnapshot ? { wizardSnapshot: input.wizardSnapshot } : {}),
+    ...(captureType ? { captureType } : {}),
+    ...(channelPreference.length > 0 ? { channelPreference } : {}),
   };
 }
 

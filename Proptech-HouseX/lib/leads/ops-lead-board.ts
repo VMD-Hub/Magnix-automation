@@ -37,12 +37,25 @@ import {
   type TelesalesResult,
 } from "@/lib/leads/telesales";
 import { resolveCallCueForLead } from "@/lib/leads/telesales-project-facts";
+import {
+  isWaitlistCapture,
+  voiceCallAllowedForCapture,
+} from "@/lib/leads/capture-type";
+import { WAITLIST_NO_COLD_CALL } from "@/lib/content/messaging/interest-waitlist-copy";
 
 const OPS_EXCLUDED_SOURCES = new Set([
   LEAD_SOURCE.REFERRAL,
   LEAD_SOURCE.CTV_CLAIM,
 ]);
 
+/** Telesales call queue — không gồm waitlist (ADR-016). Marketing board vẫn thấy. */
+export function isExcludedFromTelesalesCallQueue(row: {
+  source: string;
+  opsMeta?: unknown;
+}): boolean {
+  const ops = readLeadOpsMeta(row.opsMeta);
+  return isWaitlistCapture(ops.captureType, row.source);
+}
 export const LEAD_SOURCE_LABELS: Record<string, string> = {
   [LEAD_SOURCE.ZALO_ADS]: "Zalo Ads",
   [LEAD_SOURCE.FANPAGE]: "Fanpage",
@@ -54,6 +67,7 @@ export const LEAD_SOURCE_LABELS: Record<string, string> = {
   [LEAD_SOURCE.HOT_MANUAL]: "Hot — nhập tay",
   [LEAD_SOURCE.ADS_OFFLINE]: "Ads offline",
   [LEAD_SOURCE.PARTNER]: "Đối tác / công ty",
+  [LEAD_SOURCE.WAITLIST_PROJECT]: "Waitlist — nhận tin dự án",
   [LEAD_SOURCE.ORGANIC]: "Web (legacy)",
 };
 
@@ -269,6 +283,7 @@ export function serializeOpsLeadListItem(row: OpsLeadWithRelations) {
   const script = getNurtureScript(ops.nurtureScriptId);
   const phone =
     ops.channels.phone ?? row.customer?.phone ?? null;
+  const waitlist = isWaitlistCapture(ops.captureType, row.source);
 
   return {
     id: row.id,
@@ -277,6 +292,10 @@ export function serializeOpsLeadListItem(row: OpsLeadWithRelations) {
     source: row.source,
     sourceLabel: LEAD_SOURCE_LABELS[row.source] ?? row.source,
     segment: row.segment,
+    captureType: ops.captureType ?? null,
+    channelPreference: ops.channelPreference ?? [],
+    waitlist,
+    voiceCallAllowed: voiceCallAllowedForCapture(ops.captureType, row.source),
     customerName: row.customer?.name ?? null,
     phoneMasked: maskLeadPhone(phone),
     nurtureScriptId: ops.nurtureScriptId,
@@ -503,15 +522,27 @@ export async function getOpsLeadContactBundle(leadId: string) {
     projectId: row.projectId,
   });
 
+  const ops = readLeadOpsMeta(row.opsMeta);
+  const voiceCallAllowed = voiceCallAllowedForCapture(
+    ops.captureType,
+    row.source,
+  );
+  const waitlist = isWaitlistCapture(ops.captureType, row.source);
+
   return {
     detail: serializeOpsLeadDetail(row),
     phone,
     deepLinks: phone
       ? {
-          tel: telDeepLink(phone),
+          tel: voiceCallAllowed ? telDeepLink(phone) : null,
           sms: smsDeepLink(phone),
           zalo: zaloOpenHint(phone),
         }
+      : null,
+    voiceCallAllowed,
+    waitlist,
+    waitlistHint: waitlist
+      ? `${WAITLIST_NO_COLD_CALL} Cohort nhận tin — cập nhật in-app; chỉ gọi khi khách xin tư vấn hoặc sau mở bán + opt-in.`
       : null,
     lastContact: lastPhone
       ? {
@@ -541,9 +572,10 @@ export async function getOpsLeadContactBundle(leadId: string) {
       occurredAt: a.occurredAt.toISOString(),
       dueAt: a.dueAt?.toISOString() ?? null,
     })),
-    conversionHint:
-      "Chỉ sang /admin/conversion khi đã đàm thoại OK và có hướng căn/dự án cụ thể.",
-    callCue,
+    conversionHint: waitlist
+      ? "Waitlist: chưa sang Conversion / gọi nóng. Giữ ấm bằng cập nhật; gọi chỉ khi opt-in tư vấn."
+      : "Chỉ sang /admin/conversion khi đã đàm thoại OK và có hướng căn/dự án cụ thể.",
+    callCue: waitlist ? null : callCue,
     deferredSegment,
   };
 }

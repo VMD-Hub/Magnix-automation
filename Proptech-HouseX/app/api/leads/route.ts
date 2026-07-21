@@ -16,6 +16,7 @@ import {
 import { resolveLeadSegmentPrisma } from "@/lib/rules/lead-segment-resolve";
 import {
   LEAD_CHANNEL_HEADER,
+  LEAD_SOURCE,
   parseLeadChannelHeader,
   resolveLeadSource,
 } from "@/lib/leads/source";
@@ -23,6 +24,18 @@ import { buildInitialLeadOpsMeta, readLeadOpsMeta } from "@/lib/leads/ops-meta";
 import { tryEnqueueLeadNurture } from "@/lib/leads/nurture-auto";
 import type { Prisma } from "@prisma/client";
 import { queueConflictFromOpsLead } from "@/lib/attribution/conflict";
+import {
+  defaultChannelPreferencesForCapture,
+  isWaitlistCapture,
+  parseChannelPreferences,
+  parseLeadCaptureType,
+  WAITLIST_LEAD_SOURCE,
+} from "@/lib/leads/capture-type";
+import {
+  createCustomerNotification,
+  CUSTOMER_NOTIFY_TYPE,
+} from "@/lib/data/customer-notification";
+import { WAITLIST_NO_COLD_CALL } from "@/lib/content/messaging/interest-waitlist-copy";
 
 const LEAD_RATE_MAX = Number(process.env.LEAD_RATE_MAX ?? "20");
 const LEAD_RATE_WINDOW_SEC = Number(process.env.LEAD_RATE_WINDOW_SEC ?? "3600");
@@ -33,8 +46,7 @@ export async function OPTIONS(req: NextRequest) {
 }
 
 // POST /api/leads — khách submit form liên hệ.
-// P0: identity resolution (normalizedPhone) + attribution lock (chống lộn cò)
-//     + idempotency key + rate limit theo IP.
+// ADR-016 P1: captureType=waitlist → source waitlist:project, không HOT notify/SLA.
 export async function POST(req: NextRequest) {
   try {
     const body = leadCreateSchema.parse(await req.json());
@@ -110,16 +122,36 @@ export async function POST(req: NextRequest) {
 
       const segment = await resolveLeadSegmentPrisma(tx, body);
 
+      const captureType = parseLeadCaptureType(body.captureType);
+      const channelPreference =
+        parseChannelPreferences(body.channelPreference).length > 0
+          ? parseChannelPreferences(body.channelPreference)
+          : captureType
+            ? defaultChannelPreferencesForCapture(captureType)
+            : [];
+      const waitlist = isWaitlistCapture(captureType, null);
+
       const channel =
         parseLeadChannelHeader(req.headers.get(LEAD_CHANNEL_HEADER)) ??
         (body.source?.toLowerCase() === "zalo_miniapp" ? "miniapp" : "web");
 
-      const { source, sourceMeta } = resolveLeadSource({
+      let { source, sourceMeta } = resolveLeadSource({
         bodySource: body.source,
         utm: body.utm,
         channel,
         referralAssigned: !!attribution.assignedBrokerId,
       });
+
+      if (waitlist) {
+        // Referral attribution vẫn giữ assignedBrokerId; source đánh dấu waitlist
+        // để tách HOT notify / SLA gọi.
+        source = WAITLIST_LEAD_SOURCE;
+        sourceMeta = {
+          ...(sourceMeta ?? {}),
+          rawSource: body.source ?? LEAD_SOURCE.WEB_LEAD,
+          channel,
+        };
+      }
 
       const created = await tx.lead.create({
         data: {
@@ -135,6 +167,8 @@ export async function POST(req: NextRequest) {
             email: body.email,
             segment,
             source,
+            captureType,
+            channelPreference,
           }) as Prisma.InputJsonValue,
           segment,
           message: body.message,
@@ -142,7 +176,22 @@ export async function POST(req: NextRequest) {
       });
 
       let finalLead = created;
-      if (!attribution.assignedBrokerId) {
+      // Waitlist: không auto-enqueue nurture gọi/Zalo “trong 24h” — script manual.
+      // P2: tạo thông báo in-app chào + CTA tài khoản / bài lọc đối tượng.
+      if (waitlist && created.customerId) {
+        await createCustomerNotification(tx, {
+          customerId: created.customerId,
+          type: CUSTOMER_NOTIFY_TYPE.WAITLIST_WELCOME,
+          title: "Đã ghi nhận đăng ký nhận tin",
+          body: `${WAITLIST_NO_COLD_CALL} Cập nhật sẽ hiện trong thông báo tài khoản. Nên hoàn thiện hồ sơ và làm bài lọc đối tượng NOXH.`,
+          projectId: body.projectId ?? null,
+          leadId: created.id,
+          href: "/khach-hang/tai-khoan",
+          dedupeKey: `waitlist_welcome:${created.id}`,
+        });
+      }
+
+      if (!attribution.assignedBrokerId && !waitlist) {
         const ops = readLeadOpsMeta(created.opsMeta);
         const nurtureMeta = await tryEnqueueLeadNurture(tx, {
           leadId: created.id,
@@ -165,11 +214,16 @@ export async function POST(req: NextRequest) {
         }
       }
 
-      const eventPayload = await buildLeadCreatedPayload(tx, finalLead, {
-        name: body.name,
-        phone: body.phone,
-        email: body.email,
-      });
+      const eventPayload = await buildLeadCreatedPayload(
+        tx,
+        finalLead,
+        {
+          name: body.name,
+          phone: body.phone,
+          email: body.email,
+        },
+        { captureType, channelPreference },
+      );
 
       await enqueueEvent(
         tx,

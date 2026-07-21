@@ -41,6 +41,16 @@ export const leadCreateSchema = z
     utm_term: z.string().max(200).optional(),
     /** Intent lane — Mini App gửi `noxh` | `cctm`; server suy ra từ project nếu thiếu. */
     segment: leadSegmentInputSchema.optional(),
+    /**
+     * ADR-016 — `waitlist` = nhận tin (không cold-call);
+     * `consult_request` = xin tư vấn; omit = consult (legacy).
+     */
+    captureType: z.enum(["waitlist", "consult_request", "hot_manual"]).optional(),
+    /** ADR-016 — kênh khách đồng ý; waitlist mặc định server = in_app. */
+    channelPreference: z
+      .array(z.enum(["in_app", "oa", "sms", "email", "voice_call"]))
+      .max(5)
+      .optional(),
   })
   .refine((d) => !!d.listingId || !!d.projectId, {
     message: "Lead cần gắn với ít nhất listingId hoặc projectId.",

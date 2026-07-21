@@ -19,6 +19,8 @@ type OpsLeadRow = {
   source: string;
   sourceLabel: string;
   segment: string | null;
+  waitlist?: boolean;
+  voiceCallAllowed?: boolean;
   customerName: string | null;
   phoneMasked: string | null;
   nurtureScriptId: string | null;
@@ -214,6 +216,11 @@ export function OpsLeadBoard() {
                         {row.segment ? ` · ${row.segment}` : ""}
                         {row.projectName ? ` · ${row.projectName}` : ""}
                       </p>
+                      {row.waitlist ? (
+                        <p className="mt-1 text-xs font-medium text-sky-800">
+                          Waitlist — không gọi nóng (in-app)
+                        </p>
+                      ) : null}
                       {row.nurtureScriptLabel ? (
                         <p className="mt-1 text-xs text-brand-700">
                           Nurture: {row.nurtureScriptLabel}

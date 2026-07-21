@@ -144,10 +144,10 @@ DISCOVER (editorial / OA / landing tin sớm)
 | Phase | Deliverable | Gate |
 |-------|-------------|------|
 | **P0** | Copy cam kết kênh trên CTA/form waitlist + playbook Ops («không gọi waitlist») | **DONE** 2026-07-21 (L3: Chủ quản duyệt wording khi publish) |
-| **P1** | `captureType=waitlist` + preference kênh trên capture path; tách khỏi HOT notify/SLA | Contract test + Ops smoke nhẹ |
-| **P2** | Mini App: đăng ký nhận tin → khuyến khích account + hồ sơ + eligibility; inbox in-app | ADR-014 patterns |
-| **P3** | SC-6 scripts: policy / progress / launch; LaunchTrigger idempotent | Consent smoke |
-| **P4** | SC-7 slice KPI: waitlist vs hot vs conversion | Reporting only |
+| **P1** | `captureType=waitlist` + preference kênh trên capture path; tách khỏi HOT notify/SLA | **DONE** 2026-07-21 |
+| **P2** | Mini App: đăng ký nhận tin → khuyến khích account + hồ sơ + eligibility; inbox in-app | **DONE** 2026-07-21 |
+| **P3** | SC-6 scripts: policy / progress / launch; LaunchTrigger idempotent | **DONE** 2026-07-21 |
+| **P4** | SC-7 slice KPI: waitlist vs hot vs conversion | **DONE** 2026-07-21 (`go-live:kpi-waitlist`) |
 
 ## Acceptance (architecture)
 
@@ -157,14 +157,18 @@ DISCOVER (editorial / OA / landing tin sớm)
 - [x] Nurture = tin tức / chính sách / tiến độ; launch notify trước gọi.
 - [x] Ownership Magnix content vs House X SoR/consent rõ.
 - [x] **P0** copy + playbook Ops — `lib/content/messaging/interest-waitlist-copy.ts`; form `intent=waitlist` khi `SAP_MO_BAN`; `/admin/playbook` mục Waitlist.
-- [ ] P1–P4 product — theo backlog SC-8.
+- [x] **P1** `captureType` + `channelPreference` trên `/api/leads`; `source=waitlist:project`; `hotNotify=false`; Ops badge + chặn nút Gọi; script `waitlist-progress-updates`.
+- [x] **P2** `CustomerNotification` + `/api/customer/notifications` + Mini App `#/thong-bao`; waitlist capture trên ProjectDetail; CTA tài khoản / eligibility.
+- [x] **P3** LaunchTrigger trên `PATCH` status `SAP_MO_BAN`→`DANG_BAN`; scripts policy/progress/launch.
+- [x] **P4** `npm run go-live:kpi-waitlist` — aggregate waitlist vs hot.
 
 ## Consequences
 
 **Positive:** OA/Mini App trở thành neo uy tín dài hạn; giảm sợ gọi; lead sạch hơn khi
 mở bán; Ops không lẫn SLA; cạnh tranh bằng tin đúng thay vì tin ảo.
 
-**Trade-off:** Cần kỷ luật copy + routing; tạm thời form `SAP_MO_BAN` vẫn có thể lẫn
-hot cho đến P1; in-app notify khách cần mở rộng model thông báo (hiện mạnh ở CTV).
+**Trade-off:** Cần `prisma migrate deploy` trên VPS cho `customer_notifications`. Admin
+project editor đổi status ngoài route PATCH status cần gọi chung LaunchTrigger (nếu
+chưa đi qua API status).
 
 **Rollback product:** tắt CTA waitlist / không enroll SC-6 waitlist; hot lane không đổi.
