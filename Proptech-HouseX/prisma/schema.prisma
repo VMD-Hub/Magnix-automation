@@ -283,6 +283,24 @@ enum ContentQueueChannel {
   ZALO_OA
 }
 
+/// P3 — danh sách target B2B (Công đoàn / HR / KCN). Không CRM đầy đủ.
+enum PartnerTargetKind {
+  UNION
+  HR
+  KCN
+  ENTERPRISE
+  OTHER
+}
+
+enum PartnerTargetStatus {
+  TARGET
+  CONTACTED
+  MEETING
+  PARTNER
+  PAUSED
+  DROP
+}
+
 enum EarlySignalResolveStatus {
   LINKED
   UNLINKED
@@ -612,6 +630,27 @@ model ContentQueueItem {
   @@index([ctaToolId])
   @@index([sheetKey])
   @@map("content_queue_items")
+}
+
+/// Target outreach B2B tay — Super 1h/tuần; không thay CRM sales.
+model PartnerTarget {
+  id             String              @id @default(uuid())
+  orgName        String              @map("org_name")
+  kind           PartnerTargetKind   @default(OTHER)
+  areaHint       String?             @map("area_hint")
+  contactName    String?             @map("contact_name")
+  /// Một kênh liên hệ (SĐT / email / Zalo) — không SoR consent marketing.
+  contactChannel String?             @map("contact_channel")
+  status         PartnerTargetStatus @default(TARGET)
+  nextAction     String?             @map("next_action")
+  nextActionAt   DateTime?           @map("next_action_at")
+  notes          String?             @db.Text
+  createdAt      DateTime            @default(now()) @map("created_at")
+  updatedAt      DateTime            @updatedAt @map("updated_at")
+
+  @@index([status, nextActionAt])
+  @@index([kind])
+  @@map("partner_targets")
 }
 
 model Broker {

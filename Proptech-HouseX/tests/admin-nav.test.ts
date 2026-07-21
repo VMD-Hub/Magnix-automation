@@ -33,12 +33,13 @@ describe("adminNavGroupsForRole", () => {
     assert.deepEqual(ids, ["content", "crm", "help", "sales"]);
   });
 
-  it("super content includes content-queue then tool-analytics; ops does not", () => {
+  it("super content includes content-queue, tool-analytics, partner-targets; ops does not", () => {
     const superContent = adminNavGroupsForRole("super").find(
       (g) => g.id === "content",
     )!;
     assert.equal(superContent.items[0]?.href, "/admin/content-queue");
     assert.equal(superContent.items[1]?.href, "/admin/tool-analytics");
+    assert.equal(superContent.items[2]?.href, "/admin/partner-targets");
     assert.ok(
       superContent.items.some((i) => i.href === "/admin/re-service-orgs"),
     );

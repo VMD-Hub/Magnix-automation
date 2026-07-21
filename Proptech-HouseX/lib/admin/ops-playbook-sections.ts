@@ -30,6 +30,12 @@ export const PLAYBOOK_QUICK_LINKS: PlaybookQuickLink[] = [
     roles: ["super"],
   },
   {
+    href: "/admin/partner-targets",
+    label: "Partner targets",
+    description: "B2B Công đoàn/HR/KCN — list tay ≤1h/tuần",
+    roles: ["super"],
+  },
+  {
     href: "/admin/ops-leads",
     label: "Lead marketing",
     description: "Pipeline + telesales (gọi/SMS/Zalo) & nurture",
@@ -104,6 +110,7 @@ export const PLAYBOOK_SECTIONS: PlaybookSection[] = [
       "Không viết tool mới trong Q này — phân phối 2 tool NƠXH hiện có.",
       "Không Ads / Zalo Group product — ưu tiên SEO Q&A + Mini App.",
       "Content queue → publish_web đóng vòng SEO trong Admin (không nhảy Sheet).",
+      "B2B: chỉ /admin/partner-targets + outreach tay ≤1h/tuần — chưa có partner thật cũng chỉ target list.",
     ],
   },
   {

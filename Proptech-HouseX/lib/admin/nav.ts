@@ -44,6 +44,14 @@ export const ADMIN_NAV_GROUPS: AdminNavGroup[] = [
         matchPrefix: true,
       },
       {
+        href: "/admin/partner-targets",
+        label: "Partner targets",
+        title:
+          "B2B target list — Công đoàn / HR / KCN (outreach tay, không CRM)",
+        roles: ["super"],
+        matchPrefix: true,
+      },
+      {
         href: "/admin/listings",
         label: "Tin đăng CTV",
         title: "Duyệt tin môi giới đăng bán (listing)",
