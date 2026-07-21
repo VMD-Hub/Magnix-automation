@@ -38,6 +38,17 @@ export type CallCueMustCover = {
   hint: string;
 };
 
+/** Tình huống đặc thù — expand khi gặp (vd. cắt máu). */
+export type CallCueSituation = {
+  id: string;
+  title: string;
+  principle: string;
+  steps: string[];
+  exampleLines: string[];
+  boundary: string;
+  verifyQuestions: string[];
+};
+
 /** Facts from project master — null = chưa có trên SoR, không bịa. */
 export type TelesalesProjectFacts = {
   projectId: string | null;
@@ -62,6 +73,7 @@ export type TelesalesCallCuePayload = {
   diagnoseQuestions: string[];
   mustCover: CallCueMustCover[];
   techniques: CallCueTechnique[];
+  situations: CallCueSituation[];
   chipHints: Partial<Record<CallCueChipHintId, string>>;
   projectFacts: TelesalesProjectFacts;
   /** True when loss-frame / price cues should stay soft (missing master facts). */
@@ -157,6 +169,38 @@ export const NOXH_CHIP_HINTS: Partial<Record<CallCueChipHintId, string>> = {
   HARD_REJECT: "Ghi lý do ngắn — không nurture ép.",
 };
 
+/** Khách đòi cắt hoa hồng / «cắt máu» — không đua xuống đáy. */
+export const NOXH_SITUATION_COMMISSION_CUT: CallCueSituation = {
+  id: "commission_cut_pressure",
+  title: "Khách đòi cắt hoa hồng / cắt máu",
+  principle:
+    "Đừng thi cắt máu. Tách «ưu đãi dự án/CĐT» khỏi «cắt hoa hồng cá nhân» → mời kiểm chứng → bán quy trình + dữ liệu → im lặng.",
+  steps: [
+    "Đồng cảm — công nhận anh/chị đang so sánh chi phí, không phán xét bên kia.",
+    "Tách 2 loại giảm: chính sách dự án/đợt (có số liệu master) ≠ cắt hoa hồng cá nhân.",
+    "Định vị lại: minh bạch hồ sơ + pháp lý + đồng hành; không hứa vượt thẩm quyền.",
+    "Đưa câu kiểm chứng để khách hỏi bên kia (văn bản / kênh công ty).",
+    "Câu hỏi chốt + im lặng — để khách chọn quy trình sạch vs lời giảm chưa kiểm chứng.",
+  ],
+  exampleLines: [
+    "Em hiểu anh/chị đang so sánh vì ai cũng muốn tối ưu chi phí. Có hai việc dễ nhầm: (1) ưu đãi theo chính sách dự án/đợt — em gửi số liệu master để đối chiếu; (2) cắt hoa hồng cá nhân — em không làm cách đó vì không minh bạch và dễ hứa vượt quyền.",
+    "Em cạnh tranh bằng thông tin đúng, đủ điều kiện, và người chịu trách nhiệm đến bước hồ sơ — không bằng cuộc đua cắt máu.",
+    "Nếu bên kia thật có thẩm quyền, anh/chị nên xin xác nhận qua kênh công ty hoặc văn bản — điều đó tốt cho anh/chị. Phía em giữ đúng khung quy định; em có thể leo thang ưu đãi thật theo chính sách dự án nếu có.",
+    "Anh/chị chọn em vì tin quy trình và dữ liệu, hay vì một lời giảm hoa hồng chưa kiểm chứng được ạ? [im lặng]",
+  ],
+  boundary:
+    "Ranh giới cứng (nói một lần, giữ vững): Em không cắt hoa hồng cá nhân. Em hỗ trợ trong khung chính sách dự án/công ty. Nếu khách chỉ chốt theo ai cắt nhiều hơn — buông lịch sự, để lại checklist, giữ cửa.",
+  verifyQuestions: [
+    "Ưu đãi này là của CĐT/đợt mở bán hay cắt hoa hồng anh/chị?",
+    "Có xác nhận qua công ty hoặc văn bản không?",
+    "Nếu sau này không đúng như đã nói, ai chịu trách nhiệm?",
+  ],
+};
+
+export const NOXH_SITUATIONS: CallCueSituation[] = [
+  NOXH_SITUATION_COMMISSION_CUT,
+];
+
 export function buildNoxhCallCuePayload(
   facts: TelesalesProjectFacts,
 ): TelesalesCallCuePayload {
@@ -172,6 +216,7 @@ export function buildNoxhCallCuePayload(
     diagnoseQuestions: NOXH_DIAGNOSE_QUESTIONS,
     mustCover: NOXH_MUST_COVER,
     techniques: NOXH_TECHNIQUES,
+    situations: NOXH_SITUATIONS,
     chipHints: NOXH_CHIP_HINTS,
     projectFacts: facts,
     softMode,

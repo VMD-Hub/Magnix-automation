@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { test } from "node:test";
 import {
   NOXH_MUST_COVER,
+  NOXH_SITUATION_COMMISSION_CUT,
   NOXH_TECHNIQUES,
   buildNoxhCallCuePayload,
   type TelesalesProjectFacts,
@@ -31,6 +32,10 @@ test("NOXH call cue catalog has must-cover and 4 techniques", () => {
   assert.equal(payload.softMode, true);
   assert.match(payload.openingLine, /House X/i);
   assert.ok(payload.flowSteps.length >= 5);
+  assert.equal(payload.situations.length, 1);
+  assert.equal(payload.situations[0]?.id, NOXH_SITUATION_COMMISSION_CUT.id);
+  assert.match(payload.situations[0]!.title, /cắt máu/i);
+  assert.ok(payload.situations[0]!.verifyQuestions.length >= 3);
 });
 
 test("softMode clears when deadline and promo units exist", () => {

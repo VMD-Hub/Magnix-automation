@@ -85,6 +85,12 @@ export function getOpsContact(leadId: string) {
       openingLine: string;
       flowSteps: string[];
       mustCover: Array<{ id: string; label: string; hint: string }>;
+      situations?: Array<{
+        id: string;
+        title: string;
+        principle: string;
+        boundary: string;
+      }>;
       projectFacts: {
         projectName: string | null;
         priceFromLabel: string | null;

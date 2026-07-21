@@ -42,6 +42,9 @@ export function TelesalesCallCuePanel({
   const [checked, setChecked] = useState<Record<string, boolean>>({});
   const [openExample, setOpenExample] = useState<string | null>(null);
   const [showDiagnose, setShowDiagnose] = useState(false);
+  const [openSituation, setOpenSituation] = useState<string | null>(
+    "commission_cut_pressure",
+  );
 
   useEffect(() => {
     setChecked(loadChecked(leadId));
@@ -203,6 +206,72 @@ export function TelesalesCallCuePanel({
               </label>
             </li>
           ))}
+        </ul>
+      </div>
+
+      <div>
+        <p className="mb-1 text-[11px] font-medium text-slate-800">
+          Tình huống đặc thù
+        </p>
+        <ul className="space-y-1.5">
+          {(callCue.situations ?? []).map((s) => {
+            const open = openSituation === s.id;
+            return (
+              <li
+                key={s.id}
+                className="rounded border border-rose-200 bg-rose-50/70 px-2 py-1.5"
+              >
+                <button
+                  type="button"
+                  className="w-full text-left"
+                  onClick={() =>
+                    setOpenSituation((cur) => (cur === s.id ? null : s.id))
+                  }
+                >
+                  <p className="text-[11px] font-semibold text-rose-950">
+                    {s.title} {open ? "▾" : "▸"}
+                  </p>
+                  <p className="text-[11px] text-rose-900/90">{s.principle}</p>
+                </button>
+                {open ? (
+                  <div className="mt-1.5 space-y-1.5 border-t border-rose-100 pt-1.5">
+                    <p className="text-[10px] font-medium uppercase tracking-wide text-rose-900">
+                      Các bước
+                    </p>
+                    <ol className="list-decimal space-y-0.5 pl-4 text-[11px] text-slate-800">
+                      {s.steps.map((step) => (
+                        <li key={step}>{step}</li>
+                      ))}
+                    </ol>
+                    <p className="text-[10px] font-medium uppercase tracking-wide text-rose-900">
+                      Gợi ý lời (ý chính — không đọc thuộc)
+                    </p>
+                    <ul className="space-y-1">
+                      {s.exampleLines.map((line) => (
+                        <li
+                          key={line.slice(0, 48)}
+                          className="rounded bg-white/80 px-1.5 py-1 text-[11px] italic text-slate-700"
+                        >
+                          {line}
+                        </li>
+                      ))}
+                    </ul>
+                    <p className="text-[11px] font-medium text-slate-900">
+                      {s.boundary}
+                    </p>
+                    <p className="text-[10px] font-medium uppercase tracking-wide text-rose-900">
+                      Câu khách nên hỏi bên kia
+                    </p>
+                    <ul className="list-disc space-y-0.5 pl-4 text-[11px] text-slate-700">
+                      {s.verifyQuestions.map((q) => (
+                        <li key={q}>{q}</li>
+                      ))}
+                    </ul>
+                  </div>
+                ) : null}
+              </li>
+            );
+          })}
         </ul>
       </div>
 

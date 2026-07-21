@@ -89,6 +89,11 @@ export function AgentTelesalesDetailPage() {
               <li key={m.id}>{m.label}</li>
             ))}
           </ul>
+          {(bundle.callCue.situations ?? []).map((s) => (
+            <p key={s.id} className="text-[11px] text-rose-900">
+              <span className="font-semibold">{s.title}:</span> {s.principle}
+            </p>
+          ))}
         </div>
       ) : null}
 

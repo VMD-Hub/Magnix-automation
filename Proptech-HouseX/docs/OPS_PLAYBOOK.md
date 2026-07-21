@@ -190,7 +190,7 @@ Tắt `TELESALES_SERVER_SEND_ENABLED` ngay sau smoke.
 
 Panel **Gợi ý cuộc gọi — NOXH** hiện trên web Ops + Mini App khi `lead.segment = NOXH`.
 
-- Cue + must-cover + 4 kỹ thuật (không teleprompter).
+- Cue + must-cover + 4 kỹ thuật + tình huống **«Khách đòi cắt hoa hồng / cắt máu»** (không teleprompter; không đua cắt máu).
 - Số liệu `[giá]`, `[hạn đợt]`, `[số căn ưu đãi]` lấy từ master dự án:
   - `ProjectUnitType.priceFrom` / unit AVAILABLE (giá từ)
   - `overviewData.telesalesFacts` (JSON trên Project):

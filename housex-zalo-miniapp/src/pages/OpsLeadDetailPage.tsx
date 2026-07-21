@@ -152,6 +152,16 @@ export function OpsLeadDetailPage() {
               </li>
             ))}
           </ul>
+          {(bundle.callCue.situations ?? []).map((s) => (
+            <div
+              key={s.id}
+              className="rounded border border-rose-200 bg-rose-50/80 px-2 py-1.5"
+            >
+              <p className="text-[11px] font-semibold text-rose-950">{s.title}</p>
+              <p className="text-[11px] text-rose-900/90">{s.principle}</p>
+              <p className="mt-0.5 text-[10px] text-slate-700">{s.boundary}</p>
+            </div>
+          ))}
           {bundle.callCue.softMode ? (
             <p className="text-[10px] text-amber-900">
               Soft mode: thiếu hạn đợt/ưu đãi trên master — đừng framing mất mát mạnh.
