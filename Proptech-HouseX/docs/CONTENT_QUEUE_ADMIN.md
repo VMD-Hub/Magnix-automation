@@ -1,4 +1,4 @@
-# Content Queue Admin (House X) — P0 + P1 publish web
+# Content Queue Admin (House X) — P0 + P1 publish web + P4 slice 1
 
 > Super-only · CTA tool NƠXH bắt buộc trước L3 · thay dần Sheet `content_queue` cho vận hành duyệt.
 
@@ -52,7 +52,18 @@ Body luôn có section **Kiểm tra nhanh (CTA)** — không publish bài trốn
 - House X Postgres `content_queue_items` = **mặt kính Super L3 + CTA + publish web**.
 - Field `sheet_key` optional; sync tự động Sheet → Postgres = backlog sau.
 
-## Migration
+## P4 slice 1 — Sync Sheet + lịch đăng
+
+Spec đầy đủ: `docs/CONTENT_QUEUE_P4_SPEC.md`.
+
+- Nút **Sync từ Sheet** → `POST /api/admin/content-queue/sync`
+- Field `scheduled_at` trên editor + tab **Lịch đăng**
+- Env VPS: `GOOGLE_SERVICE_ACCOUNT_JSON` + `MAGNIX_CONTENT_SHEET_ID` (hoặc `MAGNIX_GOOGLE_SHEET_ID` / `GOOGLE_SHEET_MIRROR_ID`)
+- Tab Sheet: `MAGNIX_CONTENT_QUEUE_TAB` (default `content_queue`)
+
+Migration: `20260721200000_content_queue_schedule_sync`
+
+## Migration (P0 table)
 
 `prisma/migrations/20260721180000_content_queue_items`
 

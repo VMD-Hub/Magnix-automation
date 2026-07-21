@@ -19,6 +19,7 @@ type StatusFilter =
   | "APPROVED"
   | "REJECTED"
   | "PUBLISHED"
+  | "SCHEDULED"
   | "ALL";
 
 type ContentQueueItem = {
@@ -38,6 +39,10 @@ type ContentQueueItem = {
   sheetKey: string | null;
   opsNotes: string | null;
   l3Checklist: unknown;
+  scheduledAt: string | null;
+  sheetSyncedAt: string | null;
+  platform: string | null;
+  sheetStatus: string | null;
   reviewedAt: string | null;
   reviewedBy: string | null;
   rejectReason: string | null;
@@ -52,6 +57,7 @@ type Counts = {
   approved: number;
   rejected: number;
   published: number;
+  scheduled: number;
   total: number;
   missingCta: number;
 };
@@ -66,12 +72,14 @@ type FormState = {
   sourceUrl: string;
   sheetKey: string;
   opsNotes: string;
+  scheduledAt: string;
   l3Checklist: L3ContentChecklist;
 };
 
 const TABS: { key: StatusFilter; label: string }[] = [
   { key: "PENDING_L3", label: "Chờ L3" },
   { key: "INTAKE", label: "Intake" },
+  { key: "SCHEDULED", label: "Lịch đăng" },
   { key: "APPROVED", label: "Đã duyệt" },
   { key: "REJECTED", label: "Từ chối" },
   { key: "PUBLISHED", label: "Đã đăng" },
@@ -95,8 +103,24 @@ const emptyForm: FormState = {
   sourceUrl: "",
   sheetKey: "",
   opsNotes: "",
+  scheduledAt: "",
   l3Checklist: { ...EMPTY_L3_CHECKLIST },
 };
+
+function toLocalInput(iso: string | null): string {
+  if (!iso) return "";
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return "";
+  const pad = (n: number) => String(n).padStart(2, "0");
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+}
+
+function fromLocalInput(local: string): string | null {
+  if (!local.trim()) return null;
+  const d = new Date(local);
+  if (Number.isNaN(d.getTime())) return null;
+  return d.toISOString();
+}
 
 function itemToForm(item: ContentQueueItem): FormState {
   const tool = NOXH_CTA_TOOLS.find((t) => t.id === item.ctaToolId);
@@ -110,6 +134,7 @@ function itemToForm(item: ContentQueueItem): FormState {
     sourceUrl: item.sourceUrl ?? "",
     sheetKey: item.sheetKey ?? "",
     opsNotes: item.opsNotes ?? "",
+    scheduledAt: toLocalInput(item.scheduledAt),
     l3Checklist: parseL3Checklist(item.l3Checklist),
   };
 }
@@ -158,11 +183,13 @@ export function ContentQueueBoard() {
     approved: 0,
     rejected: 0,
     published: 0,
+    scheduled: 0,
     total: 0,
     missingCta: 0,
   });
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState(false);
+  const [syncLoading, setSyncLoading] = useState(false);
   const [rejectReason, setRejectReason] = useState("");
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -199,6 +226,7 @@ export function ContentQueueBoard() {
           approved: 0,
           rejected: 0,
           published: 0,
+          scheduled: 0,
           total: 0,
           missingCta: 0,
         },
@@ -243,6 +271,37 @@ export function ContentQueueBoard() {
     setRejectReason("");
   }
 
+  async function syncFromSheet() {
+    setSyncLoading(true);
+    setError(null);
+    setMessage(null);
+    try {
+      const res = await fetch("/api/admin/content-queue/sync", {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ limit: 100, minScore: 70 }),
+      });
+      const json = await res.json();
+      if (!res.ok) {
+        setError(
+          json?.error?.message ??
+            "Sync thất bại — kiểm tra GOOGLE_SERVICE_ACCOUNT_JSON + MAGNIX_CONTENT_SHEET_ID trên VPS.",
+        );
+        return;
+      }
+      const r = json.data;
+      setMessage(
+        `Sync OK: +${r.created} mới · ${r.updated} cập nhật · quét ${r.scanned} dòng Sheet.`,
+      );
+      await load();
+    } catch {
+      setError("Lỗi mạng khi sync Sheet.");
+    } finally {
+      setSyncLoading(false);
+    }
+  }
+
   function onCtaToolChange(id: NoxhCtaToolId | "") {
     const tool = NOXH_CTA_TOOLS.find((t) => t.id === id);
     setForm((f) => ({
@@ -271,6 +330,7 @@ export function ContentQueueBoard() {
       sheetKey: form.sheetKey.trim() || null,
       opsNotes: form.opsNotes.trim() || null,
       l3Checklist: form.l3Checklist,
+      scheduledAt: fromLocalInput(form.scheduledAt),
     };
     try {
       const res =
@@ -347,6 +407,7 @@ export function ContentQueueBoard() {
             sheetKey: form.sheetKey.trim() || null,
             opsNotes: form.opsNotes.trim() || null,
             l3Checklist: form.l3Checklist,
+            scheduledAt: fromLocalInput(form.scheduledAt),
           }),
         });
         if (!patch.ok) {
@@ -552,6 +613,22 @@ export function ContentQueueBoard() {
             />
           </label>
 
+          <label className="block space-y-1 text-sm md:col-span-2">
+            <span className="font-medium">Lịch đăng (P4)</span>
+            <input
+              type="datetime-local"
+              className="w-full rounded-md border border-slate-200 px-3 py-2"
+              value={form.scheduledAt}
+              onChange={(e) =>
+                setForm((f) => ({ ...f, scheduledAt: e.target.value }))
+              }
+            />
+            <span className="text-xs text-slate-500">
+              Sync Sheet không ghi đè field này. Publish tự động theo lịch =
+              slice P4 sau.
+            </span>
+          </label>
+
           <div className="md:col-span-2 space-y-2 rounded-md border border-amber-200 bg-amber-50 p-3">
             <p className="text-sm font-semibold text-amber-900">
               Checklist L3 — thiếu 1 mục = không duyệt
@@ -707,16 +784,33 @@ export function ContentQueueBoard() {
               {tab.label}
               {tab.key === "PENDING_L3" ? ` (${counts.pendingL3})` : ""}
               {tab.key === "INTAKE" ? ` (${counts.intake})` : ""}
+              {tab.key === "SCHEDULED" ? ` (${counts.scheduled})` : ""}
             </button>
           ))}
         </div>
-        <Button type="button" onClick={openCreate}>
-          + Thêm bài
-        </Button>
+        <div className="flex flex-wrap gap-2">
+          <Button
+            type="button"
+            variant="outline"
+            disabled={syncLoading}
+            onClick={() => void syncFromSheet()}
+          >
+            {syncLoading ? "Đang sync…" : "Sync từ Sheet"}
+          </Button>
+          <Button type="button" onClick={openCreate}>
+            + Thêm bài
+          </Button>
+        </div>
       </div>
 
+      {message ? (
+        <p className="rounded-md bg-emerald-50 px-3 py-2 text-sm text-emerald-800">
+          {message}
+        </p>
+      ) : null}
+
       <p className="text-sm text-slate-600">
-        Tổng {counts.total} · Thiếu CTA tool:{" "}
+        Tổng {counts.total} · Lịch đăng: {counts.scheduled} · Thiếu CTA tool:{" "}
         <span className="font-semibold text-rose-700">{counts.missingCta}</span>
       </p>
 
@@ -753,6 +847,14 @@ export function ContentQueueBoard() {
                         {item.ctaHref ?? item.ctaToolId}
                       </span>
                     )}
+                    {item.scheduledAt ? (
+                      <span className="rounded-full bg-violet-100 px-2 py-0.5 text-xs font-medium text-violet-800">
+                        Lịch {formatDate(item.scheduledAt)}
+                      </span>
+                    ) : null}
+                    {item.platform ? (
+                      <span className="text-xs text-slate-400">{item.platform}</span>
+                    ) : null}
                   </div>
                   <p className="truncate font-medium text-slate-900">
                     {item.title}

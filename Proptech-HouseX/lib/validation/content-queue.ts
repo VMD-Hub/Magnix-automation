@@ -7,6 +7,7 @@ export const contentQueueStatusSchema = z.enum([
   "APPROVED",
   "REJECTED",
   "PUBLISHED",
+  "SCHEDULED",
   "ALL",
 ]);
 
@@ -34,6 +35,11 @@ const optionalUrl = z
   .optional()
   .transform((v) => (v === "" || v === undefined ? null : v));
 
+const optionalDateTime = z
+  .union([z.string().datetime(), z.literal(""), z.null()])
+  .optional()
+  .transform((v) => (v === "" || v === undefined ? null : v));
+
 export const contentQueueCreateSchema = z.object({
   title: z.string().trim().min(3).max(240),
   painPoint: z.string().trim().max(2000).optional().nullable(),
@@ -48,9 +54,15 @@ export const contentQueueCreateSchema = z.object({
   articleId: z.string().uuid().optional().nullable(),
   opsNotes: z.string().max(4000).optional().nullable(),
   l3Checklist: l3ChecklistSchema.optional().nullable(),
+  scheduledAt: optionalDateTime,
 });
 
 export const contentQueueUpdateSchema = contentQueueCreateSchema.partial();
+
+export const contentQueueSyncSchema = z.object({
+  limit: z.number().int().min(1).max(500).optional().default(100),
+  minScore: z.number().int().min(0).max(100).optional().default(70),
+});
 
 export const contentQueueStatusActionSchema = z.discriminatedUnion("action", [
   z.object({ action: z.literal("submit_l3") }),

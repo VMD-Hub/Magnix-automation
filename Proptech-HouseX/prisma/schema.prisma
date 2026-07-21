@@ -621,6 +621,14 @@ model ContentQueueItem {
   reviewedBy     String?              @map("reviewed_by")
   rejectReason   String?              @map("reject_reason") @db.Text
   publishedAt    DateTime?            @map("published_at")
+  /// P4 — lịch đăng dự kiến (Super). Sync Sheet không ghi đè nếu đã set.
+  scheduledAt    DateTime?            @map("scheduled_at")
+  /// Lần sync gần nhất từ Sheet content_queue.
+  sheetSyncedAt  DateTime?            @map("sheet_synced_at")
+  /// Platform scrape (tiktok, fb, …).
+  platform       String?
+  /// Status thô trên Sheet (audit).
+  sheetStatus    String?              @map("sheet_status")
   createdAt      DateTime             @default(now()) @map("created_at")
   updatedAt      DateTime             @updatedAt @map("updated_at")
 
@@ -629,6 +637,7 @@ model ContentQueueItem {
   @@index([status, createdAt])
   @@index([ctaToolId])
   @@index([sheetKey])
+  @@index([scheduledAt])
   @@map("content_queue_items")
 }
 

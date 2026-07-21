@@ -48,7 +48,14 @@ export type ContentQueueWriteInput = {
   articleId?: string | null;
   opsNotes?: string | null;
   l3Checklist?: L3ContentChecklist | null;
+  scheduledAt?: string | null;
 };
+
+function parseScheduledAt(raw: string | null | undefined): Date | null {
+  if (raw == null || raw === "") return null;
+  const d = new Date(raw);
+  return Number.isNaN(d.getTime()) ? null : d;
+}
 
 function resolveCtaFields(ctaToolId: string | null | undefined, ctaLabel?: string | null) {
   const tool = getNoxhCtaTool(ctaToolId);
@@ -67,8 +74,19 @@ function resolveCtaFields(ctaToolId: string | null | undefined, ctaLabel?: strin
 }
 
 export async function listContentQueueForAdmin(
-  status: ContentQueueStatus | "ALL",
+  status: ContentQueueStatus | "ALL" | "SCHEDULED",
 ): Promise<ContentQueueWithArticle[]> {
+  if (status === "SCHEDULED") {
+    return prisma.contentQueueItem.findMany({
+      where: {
+        scheduledAt: { not: null },
+        status: { not: "PUBLISHED" },
+      },
+      include: includeArticle,
+      orderBy: [{ scheduledAt: "asc" }],
+      take: 200,
+    });
+  }
   return prisma.contentQueueItem.findMany({
     where: status === "ALL" ? undefined : { status },
     include: includeArticle,
@@ -111,6 +129,7 @@ export async function createContentQueueItem(
       articleId: input.articleId ?? null,
       opsNotes: input.opsNotes ?? null,
       l3Checklist: checklistToJson(input.l3Checklist ?? EMPTY_L3_CHECKLIST),
+      scheduledAt: parseScheduledAt(input.scheduledAt),
       status: "INTAKE",
     },
     include: includeArticle,
@@ -160,6 +179,9 @@ export async function updateContentQueueItem(
       ...(input.opsNotes !== undefined ? { opsNotes: input.opsNotes } : {}),
       ...(input.l3Checklist !== undefined
         ? { l3Checklist: checklistToJson(input.l3Checklist) }
+        : {}),
+      ...(input.scheduledAt !== undefined
+        ? { scheduledAt: parseScheduledAt(input.scheduledAt) }
         : {}),
     },
     include: includeArticle,

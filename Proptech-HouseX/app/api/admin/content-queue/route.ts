@@ -23,7 +23,9 @@ export async function GET(req: NextRequest) {
     });
 
     const [items, all] = await Promise.all([
-      listContentQueueForAdmin(parsed.status as ContentQueueStatus | "ALL"),
+      listContentQueueForAdmin(
+        parsed.status as ContentQueueStatus | "ALL" | "SCHEDULED",
+      ),
       listContentQueueForAdmin("ALL"),
     ]);
 
@@ -33,6 +35,9 @@ export async function GET(req: NextRequest) {
       approved: all.filter((i) => i.status === "APPROVED").length,
       rejected: all.filter((i) => i.status === "REJECTED").length,
       published: all.filter((i) => i.status === "PUBLISHED").length,
+      scheduled: all.filter(
+        (i) => i.scheduledAt != null && i.status !== "PUBLISHED",
+      ).length,
       total: all.length,
       missingCta: all.filter(
         (i) =>
