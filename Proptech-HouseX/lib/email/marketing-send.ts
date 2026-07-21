@@ -25,6 +25,34 @@ function maskTo(to: string): string {
   return to.replace(/(.{2}).*(@.*)/, "$1***$2");
 }
 
+/** Resend rejects duplicate tag names (e.g. hardcoded marketing + mail.tags). */
+export function buildResendMarketingTags(input: {
+  sequenceId: string;
+  stepIndex: number;
+  abVariant?: "A" | "B" | null;
+  tags?: string[];
+}): { name: string; value: string }[] {
+  const out: { name: string; value: string }[] = [
+    { name: "marketing", value: "1" },
+    { name: "sequence", value: input.sequenceId.slice(0, 40) },
+    { name: "step", value: String(input.stepIndex) },
+  ];
+  if (input.abVariant) {
+    out.push({ name: "ab", value: input.abVariant });
+  }
+  const used = new Set(out.map((t) => t.name.toLowerCase()));
+  for (const raw of input.tags ?? []) {
+    const name = raw.trim().slice(0, 40);
+    if (!name) continue;
+    const key = name.toLowerCase();
+    if (used.has(key)) continue;
+    used.add(key);
+    out.push({ name, value: "1" });
+    if (out.length >= 8) break;
+  }
+  return out;
+}
+
 /**
  * ADR-017 — DeliveryAdapter marketing (tách khỏi transactional sendEmail).
  * Provider order: EMAIL_WEBHOOK_URL → Resend → dev_log.
@@ -104,18 +132,12 @@ export async function sendMarketingEmail(
             { name: "List-Unsubscribe", value: `<${mail.unsubscribeUrl}>` },
             { name: "List-Unsubscribe-Post", value: "List-Unsubscribe=One-Click" },
           ],
-          tags: [
-            { name: "marketing", value: "1" },
-            { name: "sequence", value: mail.sequenceId.slice(0, 40) },
-            { name: "step", value: String(mail.stepIndex) },
-            ...(mail.abVariant
-              ? [{ name: "ab", value: mail.abVariant }]
-              : []),
-            ...(mail.tags ?? []).slice(0, 2).map((name) => ({
-              name: name.slice(0, 40),
-              value: "1",
-            })),
-          ],
+          tags: buildResendMarketingTags({
+            sequenceId: mail.sequenceId,
+            stepIndex: mail.stepIndex,
+            abVariant: mail.abVariant,
+            tags: mail.tags,
+          }),
         }),
       });
       if (!res.ok) {

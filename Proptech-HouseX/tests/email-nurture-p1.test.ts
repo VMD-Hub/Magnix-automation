@@ -7,7 +7,7 @@ import {
   getNoxhWelcomeStep,
   resolveWelcomeCtaUrl,
 } from "../lib/email/noxh-welcome-sequence.ts";
-import { sendMarketingEmail } from "../lib/email/marketing-send.ts";
+import { sendMarketingEmail, buildResendMarketingTags } from "../lib/email/marketing-send.ts";
 import { NOXH_TOOL_EMAIL_WELCOME_SCRIPT_ID } from "../lib/leads/nurture-scripts.ts";
 
 describe("ADR-017 P1 — Welcome sequence + marketing adapter", () => {
@@ -17,6 +17,19 @@ describe("ADR-017 P1 — Welcome sequence + marketing adapter", () => {
     delete process.env.RESEND_API_KEY;
   });
 
+  it("dedupes Resend marketing tag when mail.tags also has marketing", () => {
+    const tags = buildResendMarketingTags({
+      sequenceId: "noxh-tool-email-welcome",
+      stepIndex: 1,
+      tags: ["marketing", "noxh_welcome", "e1"],
+    });
+    const names = tags.map((t) => t.name);
+    assert.equal(names.filter((n) => n === "marketing").length, 1);
+    assert.ok(names.includes("noxh_welcome"));
+    assert.ok(names.includes("e1"));
+    assert.ok(names.includes("sequence"));
+    assert.ok(names.includes("step"));
+  });
   it("defines E1–E3 with delay metadata for n8n", () => {
     assert.equal(NOXH_WELCOME_SEQUENCE_ID, NOXH_TOOL_EMAIL_WELCOME_SCRIPT_ID);
     assert.equal(NOXH_WELCOME_STEPS.length, 3);
