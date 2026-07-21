@@ -1,7 +1,8 @@
-import type {
-  ContentQueueChannel,
-  ContentQueueItem,
-  ContentQueueStatus,
+import {
+  Prisma,
+  type ContentQueueChannel,
+  type ContentQueueItem,
+  type ContentQueueStatus,
 } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { assertContentQueueReadyForL3 } from "@/lib/content/content-queue-gates";
@@ -12,6 +13,13 @@ import {
   type NoxhCtaToolId,
 } from "@/lib/content/noxh-cta-tools";
 import { randomUUID } from "node:crypto";
+
+function checklistToJson(
+  value: L3ContentChecklist | null,
+): Prisma.InputJsonValue | Prisma.NullableJsonNullValueInput {
+  if (value === null) return Prisma.JsonNull;
+  return value as Prisma.InputJsonValue;
+}
 
 export type ContentQueueWithArticle = ContentQueueItem & {
   article: { id: string; slug: string; title: string; status: string } | null;
@@ -97,7 +105,7 @@ export async function createContentQueueItem(
       sheetKey: input.sheetKey ?? null,
       articleId: input.articleId ?? null,
       opsNotes: input.opsNotes ?? null,
-      l3Checklist: input.l3Checklist ?? EMPTY_L3_CHECKLIST,
+      l3Checklist: checklistToJson(input.l3Checklist ?? EMPTY_L3_CHECKLIST),
       status: "INTAKE",
     },
     include: includeArticle,
@@ -146,7 +154,7 @@ export async function updateContentQueueItem(
       ...(input.articleId !== undefined ? { articleId: input.articleId } : {}),
       ...(input.opsNotes !== undefined ? { opsNotes: input.opsNotes } : {}),
       ...(input.l3Checklist !== undefined
-        ? { l3Checklist: input.l3Checklist }
+        ? { l3Checklist: checklistToJson(input.l3Checklist) }
         : {}),
     },
     include: includeArticle,
