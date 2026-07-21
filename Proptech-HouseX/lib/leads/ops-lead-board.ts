@@ -36,6 +36,7 @@ import {
   zaloOpenHint,
   type TelesalesResult,
 } from "@/lib/leads/telesales";
+import { resolveCallCueForLead } from "@/lib/leads/telesales-project-facts";
 
 const OPS_EXCLUDED_SOURCES = new Set([
   LEAD_SOURCE.REFERRAL,
@@ -497,6 +498,11 @@ export async function getOpsLeadContactBundle(leadId: string) {
     lastPhone?.reason ?? null,
   );
 
+  const { callCue, deferredSegment } = await resolveCallCueForLead({
+    segment: row.segment,
+    projectId: row.projectId,
+  });
+
   return {
     detail: serializeOpsLeadDetail(row),
     phone,
@@ -537,6 +543,8 @@ export async function getOpsLeadContactBundle(leadId: string) {
     })),
     conversionHint:
       "Chỉ sang /admin/conversion khi đã đàm thoại OK và có hướng căn/dự án cụ thể.",
+    callCue,
+    deferredSegment,
   };
 }
 

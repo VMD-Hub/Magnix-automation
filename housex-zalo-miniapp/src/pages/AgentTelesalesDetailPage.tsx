@@ -80,6 +80,18 @@ export function AgentTelesalesDetailPage() {
       </h1>
       <p className="font-mono text-sm">{bundle?.phone ?? "…"}</p>
 
+      {bundle?.callCue ? (
+        <div className="space-y-1.5 rounded-lg border border-sky-200 bg-sky-50 px-3 py-2">
+          <p className="text-xs font-semibold text-sky-950">Cue NOXH</p>
+          <p className="text-[11px] text-slate-800">{bundle.callCue.openingLine}</p>
+          <ul className="list-disc pl-4 text-[11px] text-slate-700">
+            {bundle.callCue.mustCover.map((m) => (
+              <li key={m.id}>{m.label}</li>
+            ))}
+          </ul>
+        </div>
+      ) : null}
+
       <div className="flex flex-wrap gap-2">
         {bundle?.deepLinks?.tel && !blocked ? (
           <a

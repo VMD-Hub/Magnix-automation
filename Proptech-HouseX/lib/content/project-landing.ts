@@ -111,6 +111,19 @@ export const projectOverviewSchema = z
     totalUnits: z.number().int().positive().optional(),
     blocks: z.number().int().positive().optional(),
     landing: projectLandingSchema.optional(),
+    /** Telesales call cues — giá/đợt/ưu đãi (ADR telesales panel). */
+    telesalesFacts: z
+      .object({
+        pricePerSqmLabel: z.string().optional(),
+        priceFromLabel: z.string().optional(),
+        applicationDeadline: z.string().optional(),
+        promoUnitsRemaining: z.number().int().optional(),
+        promoDiscountLabel: z.string().optional(),
+        valueAnchors: z.array(z.string()).optional(),
+        legalProofHint: z.string().optional(),
+        bankLoanHint: z.string().optional(),
+      })
+      .optional(),
   })
   .passthrough();
 

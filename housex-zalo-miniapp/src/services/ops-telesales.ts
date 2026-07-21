@@ -80,6 +80,22 @@ export function getOpsContact(leadId: string) {
       occurredAt: string;
     }>;
     conversionHint: string;
+    callCue?: {
+      segment: "NOXH";
+      openingLine: string;
+      flowSteps: string[];
+      mustCover: Array<{ id: string; label: string; hint: string }>;
+      projectFacts: {
+        projectName: string | null;
+        priceFromLabel: string | null;
+        pricePerSqmLabel: string | null;
+        applicationDeadlineLabel: string | null;
+        promoUnitsRemaining: number | null;
+        missingFields: string[];
+      };
+      softMode: boolean;
+    } | null;
+    deferredSegment?: string | null;
   }>(`/api/admin/ops-leads/${leadId}/contact`);
 }
 

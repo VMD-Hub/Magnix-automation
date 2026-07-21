@@ -30,6 +30,7 @@ import {
   zaloOpenHint,
   type TelesalesResult,
 } from "@/lib/leads/telesales";
+import { resolveCallCueForLead } from "@/lib/leads/telesales-project-facts";
 import {
   assertLeadReadableByBroker,
   type BrokerTelesalesAccess,
@@ -168,6 +169,11 @@ export async function getBrokerTelesalesContactBundle(
     lastPhone?.reason ?? null,
   );
 
+  const { callCue, deferredSegment } = await resolveCallCueForLead({
+    segment: row.segment,
+    projectId: row.projectId,
+  });
+
   return {
     detail: serializeBrokerTelesalesDetail(row),
     /** Unmask — own lead/case only (asserted above). */
@@ -209,6 +215,8 @@ export async function getBrokerTelesalesContactBundle(
     })),
     conversionHint:
       "Phase 1: deep-link gọi/SMS/Zalo. Server OA/SMS chỉ dành cho Ops.",
+    callCue,
+    deferredSegment,
   };
 }
 

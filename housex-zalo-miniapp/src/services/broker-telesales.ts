@@ -80,6 +80,20 @@ export function getBrokerContact(leadId: string) {
       note: string | null;
       occurredAt: string;
     }>;
+    conversionHint?: string;
+    callCue?: {
+      segment: "NOXH";
+      openingLine: string;
+      mustCover: Array<{ id: string; label: string; hint: string }>;
+      projectFacts: {
+        projectName: string | null;
+        priceFromLabel: string | null;
+        applicationDeadlineLabel: string | null;
+        missingFields: string[];
+      };
+      softMode: boolean;
+    } | null;
+    deferredSegment?: string | null;
   }>(`/api/broker/telesales/leads/${leadId}/contact`);
 }
 

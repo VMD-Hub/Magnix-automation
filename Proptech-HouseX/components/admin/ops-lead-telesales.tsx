@@ -3,6 +3,8 @@
 import { useCallback, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/ui/cn";
+import { TelesalesCallCuePanel } from "@/components/admin/telesales-call-cue-panel";
+import type { TelesalesCallCuePayload } from "@/lib/leads/telesales-call-cues";
 
 type ContactBundle = {
   phone: string | null;
@@ -36,6 +38,8 @@ type ContactBundle = {
     dueAt: string | null;
   }>;
   conversionHint: string;
+  callCue?: TelesalesCallCuePayload | null;
+  deferredSegment?: string | null;
 };
 
 const RESULT_CHIPS: Array<{ id: string; label: string }> = [
@@ -67,6 +71,7 @@ export function OpsLeadTelesalesPanel({
   const [sendOa, setSendOa] = useState(true);
   const [sendSms, setSendSms] = useState(true);
   const [serverMsg, setServerMsg] = useState<string | null>(null);
+  const [lastChip, setLastChip] = useState<string | null>(null);
 
   const load = useCallback(async () => {
     const res = await fetch(`/api/admin/ops-leads/${leadId}/contact`);
@@ -110,6 +115,7 @@ export function OpsLeadTelesalesPanel({
     }
     setMsg("Đã ghi nhật ký.");
     setNote("");
+    setLastChip(result);
     setBundle(json.data?.bundle ?? null);
     onStatusMaybeChanged?.();
   }
@@ -226,6 +232,13 @@ export function OpsLeadTelesalesPanel({
             : "—"}
         </p>
       ) : null}
+
+      <TelesalesCallCuePanel
+        leadId={leadId}
+        callCue={bundle.callCue ?? null}
+        deferredSegment={bundle.deferredSegment}
+        activeChipHint={lastChip}
+      />
 
       <div className="flex flex-wrap gap-2">
         {bundle.deepLinks ? (

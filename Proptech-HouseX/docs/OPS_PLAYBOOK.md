@@ -186,6 +186,31 @@ TELESALES_SERVER_SEND_ENABLED=true SMOKE_NURTURE_REAL_CHANNEL=1 \
 
 Tắt `TELESALES_SERVER_SEND_ENABLED` ngay sau smoke.
 
+### 4b-4. Call cue NOXH (panel telesales)
+
+Panel **Gợi ý cuộc gọi — NOXH** hiện trên web Ops + Mini App khi `lead.segment = NOXH`.
+
+- Cue + must-cover + 4 kỹ thuật (không teleprompter).
+- Số liệu `[giá]`, `[hạn đợt]`, `[số căn ưu đãi]` lấy từ master dự án:
+  - `ProjectUnitType.priceFrom` / unit AVAILABLE (giá từ)
+  - `overviewData.telesalesFacts` (JSON trên Project):
+
+```json
+{
+  "telesalesFacts": {
+    "pricePerSqmLabel": "24–25 triệu/m²",
+    "applicationDeadline": "2026-08-31",
+    "promoUnitsRemaining": 20,
+    "promoDiscountLabel": "chiết khấu đợt 1",
+    "valueAnchors": ["Pháp lý đủ mở bán", "Gói vay ưu đãi NH"],
+    "legalProofHint": "Kiểm tra GPXD trên cổng CĐT",
+    "bankLoanHint": "Vay tối đa 70%, vốn tự có từ 30%"
+  }
+}
+```
+
+Thiếu hạn đợt / số căn → **soft mode** (không framing mất mát mạnh). CCTM cue = phase sau.
+
 ---
 
 ## 5. Hồ sơ NOXH — milestone M1→M5
