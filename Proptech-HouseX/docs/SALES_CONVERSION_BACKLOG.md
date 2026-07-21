@@ -603,6 +603,10 @@ consent proof và PII thật không được đưa vào bằng chứng.
 
 - `.cursor/ADR-016-interest-waitlist-nurture-lane.md`
 - Pointer: `ARCHITECTURE_MAGNIX.md` (ADR-016 callout)
+- Trust ladder allowlist: `docs/INFO_TRUST_LADDER_ALLOWLIST.md` (**ops only**; T1 media → T2 Sở upgrade)
+- Sponsor / CĐT watchlist: `docs/NOXH_SPONSOR_WATCHLIST.md` (**ops only**; keyword T1 + tag `brand:*`)
+- Early Signal Review: `docs/EARLY_SIGNAL_REVIEW.md` · Admin `/admin/early-signals` (L3 trước publish/nurture)
+- Reader surfaces: copy/disclaimer/CTA + chip brand (nhãn khách) — không render mã tier / bảng Sở / MST
 
 **Hard rules (from ADR-016)**
 
@@ -610,6 +614,16 @@ consent proof và PII thật không được đưa vào bằng chứng.
   consent). **No voice call** solely because the user registered for updates.
 - Voice/telesales only after explicit «Tôi muốn được tư vấn» or launch + voice
   opt-in.
+- **Press-first:** T1 báo được tin sớm + disclaimer reader; Sở URL = T2 upgrade, không
+  discovery gate; T4 SoR mới CTA mở bán / LaunchTrigger.
+- **Brand filter:** khách lọc theo SponsorGroup (`brand:{groupSlug}`); JV/LegalEntity
+  gắn dưới group hoặc UNLINKED — không nổ tag theo MST. CHANNEL (Kim Oanh, Ann Home…)
+  = radar bán hàng, không chip CĐT trừ khi chứng minh là CĐT.
+- **Ops vs reader:** `InfoTrustTier` / allowlist / health-check / watchlist MST = vận hành;
+  UI khách chỉ nhận nhãn tiếng Việt + citation đã biên tập.
+- No auto-notify waitlist from raw press scrape (editorial L2/L3 first).
+- Early signals: CAPTURED→PACKAGED→PENDING_L3→APPROVED before public/nurture
+  (`EarlySignalBrief`; no auto nurture on approve in this phase).
 - CTA/form must state: không gọi điện chỉ vì đăng ký nhận cập nhật.
 - Success metrics: Mini App account, profile completeness, eligibility pass, notify
   open — **not** waitlist call volume.

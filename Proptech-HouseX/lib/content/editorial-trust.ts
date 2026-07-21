@@ -51,7 +51,10 @@ export const NOXH_LEGAL_SOURCES: LegalSourceRef[] = [
   },
 ];
 
-/** Nguồn tham chiếu thị trường / báo chí (không thay công bố NN). */
+/** Nguồn tham chiếu thị trường / báo chí — discovery T1 (ADR-016 trust ladder).
+ * Không thay công bố Sở (T2) hay SoR mở bán (T4).
+ * Allowlist ops: docs/INFO_TRUST_LADDER_ALLOWLIST.md
+ */
 export const NOXH_MEDIA_SOURCES: LegalSourceRef[] = [
   {
     id: "vnexpress-noxh",

@@ -227,6 +227,39 @@ Chi tiết kiến trúc: `.cursor/ADR-016-interest-waitlist-nurture-lane.md` · 
 inbox khách `#/thong-bao`; LaunchTrigger khi mở bán; KPI `npm run go-live:kpi-waitlist`.
 Deploy: `npx prisma migrate deploy` rồi build + pm2 restart.
 
+#### Thang tin (báo trước → Sở sau) — tách Ops vs người đọc
+
+Thị trường thật: tin báo chí thường **trước** công bố Sở và trước hồ sơ đủ. **Không**
+chặn tin sớm vì thiếu URL Sở. Sở chỉ **nâng độ tin**, không phải điều kiện bắt đầu.
+
+**Lớp vận hành (chỉ Ops / biên tập / admin)** — mã `T1`…`T4`, allowlist URL, trạng thái
+host, quyết định được phép claim gì. Tài liệu: `docs/INFO_TRUST_LADDER_ALLOWLIST.md`
+(**không** đưa bảng này cho khách).
+
+**Lớp người đọc (web / Mini App / OA / notify)** — chỉ câu tiếng Việt + disclaimer +
+CTA đúng tầng + link nguồn đã chọn. **Cấm** hiện chữ T1/T2, “allowlist”, “SoR”,
+“LaunchTrigger”, danh sách 8 Sở dạng vận hành.
+
+| Tầng (ops) | Người đọc thấy / được nói | Cấm trên surface khách |
+|------------|---------------------------|-------------------------|
+| **T1 báo** | “Theo báo chí…”; mời đăng ký nhận cập nhật + disclaimer chưa công bố Sở + không gọi vì đăng ký | Giá chốt, suất chắc, “đang mở bán”, FOMO giả; mã T1 |
+| **T2 Sở** | “Đã có dấu hiệu công bố/đăng ký Sở” (+ link văn bản nếu có) | CTA mở bán / gọi nóng |
+| **T3 hồ sơ** | FAQ / thủ tục | Đồng nghĩa inventory hoặc quyền gọi |
+| **T4 SoR** | Mở bán, đợt, CTA tư vấn / gọi theo opt-in | Gọi waitlist chỉ vì T1–T3 |
+
+**Disclaimer T1 (bắt buộc — lớp người đọc):**
+
+> Theo báo chí / chưa thấy công bố Sở — đăng ký nhận cập nhật khi có xác nhận. Không gọi điện chỉ vì bạn đăng ký nhận tin.
+
+**Theo dõi CĐT / tập đoàn (ops):** keyword báo theo thương hiệu (Vingroup, Nam Long, Becamex…).
+Tag lọc khách = thương hiệu ổn định (`brand:*`), **không** theo từng công ty JV/MST.
+Đơn vị **CHANNEL** (Kim Oanh, Ann Home…): radar bán hàng/truyền thông — extract CĐT thật, không gắn nhầm chip CĐT.
+Chi tiết seed + quy trình UNLINKED/CHANNEL: `docs/NOXH_SPONSOR_WATCHLIST.md` (**không** đưa bảng MST cho khách).
+
+**Duyệt tin sớm:** mọi tin T1/T2 đưa công khai hoặc nurture phải qua hàng đợi
+`/admin/early-signals` (ops dossier + preview người đọc → L3 Duyệt). Xem `docs/EARLY_SIGNAL_REVIEW.md`.
+Không auto-publish từ scrape.
+
 ---
 
 ## 5. Hồ sơ NOXH — milestone M1→M5

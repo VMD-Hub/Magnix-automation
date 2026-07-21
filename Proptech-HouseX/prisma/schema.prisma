@@ -243,6 +243,37 @@ enum ArticleStatus {
   ARCHIVED
 }
 
+/// ADR-016 Early Signal Review — tin sớm chờ L3 trước publish/nurture.
+enum EarlySignalStatus {
+  CAPTURED
+  PACKAGED
+  PENDING_L3
+  APPROVED
+  REJECTED
+  PUBLISHED
+}
+
+enum EarlySignalTier {
+  T1_PRESS
+  T2_SXD
+  T3_DOSSIER
+  T4_SOR
+}
+
+enum EarlySignalRoleHint {
+  SPONSOR
+  JV_SUBSIDIARY
+  CONTRACTOR
+  CHANNEL
+}
+
+enum EarlySignalResolveStatus {
+  LINKED
+  UNLINKED
+  CONTRACTOR_ONLY
+  CHANNEL_PENDING_SPONSOR
+}
+
 enum PromotionCampaignStatus {
   DRAFT
   ACTIVE
@@ -321,6 +352,7 @@ model Project {
   units        ProjectUnit[]
   unitBookings UnitBooking[]
   noxhCases    NoxhCase[]
+  earlySignals EarlySignalBrief[]
 
   @@index([province, district])
   @@index([deletedAt])
@@ -459,6 +491,7 @@ model Article {
 
   tags     ArticleTagLink[]
   projects ArticleProject[]
+  earlySignals EarlySignalBrief[]
 
   @@index([status, publishedAt])
   @@map("articles")
@@ -485,6 +518,44 @@ model ArticleProject {
   @@id([articleId, projectId])
   @@index([projectId])
   @@map("article_projects")
+}
+
+/// Tin sớm — tổng hợp ops + preview reader; L3 trước publish/nurture (ADR-016).
+model EarlySignalBrief {
+  id             String                    @id @default(uuid())
+  status         EarlySignalStatus         @default(CAPTURED)
+  tier           EarlySignalTier           @default(T1_PRESS)
+  pressUrl       String?                   @map("press_url")
+  sxdUrl         String?                   @map("sxd_url")
+  groupSlug      String?                   @map("group_slug")
+  channelSlug    String?                   @map("channel_slug")
+  roleHint       EarlySignalRoleHint?      @map("role_hint")
+  resolveStatus  EarlySignalResolveStatus? @map("resolve_status")
+  provinceHint   String?                   @map("province_hint")
+  projectId      String?                   @map("project_id")
+  articleId      String?                   @map("article_id")
+  /// Ops notes (không hiện reader).
+  opsNotes       String?                   @map("ops_notes") @db.Text
+  readerTitle    String?                   @map("reader_title")
+  readerBody     String?                   @map("reader_body") @db.Text
+  readerDisclaimer String?                 @map("reader_disclaimer") @db.Text
+  ctaLabel       String?                   @map("cta_label")
+  nurtureOnApprove Boolean                 @default(false) @map("nurture_on_approve")
+  packagedAt     DateTime?                 @map("packaged_at")
+  submittedAt    DateTime?                 @map("submitted_at")
+  reviewedAt     DateTime?                 @map("reviewed_at")
+  reviewedBy     String?                   @map("reviewed_by")
+  rejectReason   String?                   @map("reject_reason") @db.Text
+  createdAt      DateTime                  @default(now()) @map("created_at")
+  updatedAt      DateTime                  @updatedAt @map("updated_at")
+
+  project Project? @relation(fields: [projectId], references: [id], onDelete: SetNull)
+  article Article? @relation(fields: [articleId], references: [id], onDelete: SetNull)
+
+  @@index([status, createdAt])
+  @@index([tier])
+  @@index([projectId])
+  @@map("early_signal_briefs")
 }
 
 model Broker {

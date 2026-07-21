@@ -35,6 +35,13 @@ export const ADMIN_NAV_GROUPS: AdminNavGroup[] = [
         matchPrefix: true,
       },
       {
+        href: "/admin/early-signals",
+        label: "Duyệt tin sớm",
+        title: "Early Signal Review — L3 trước publish/nurture tin NOXH",
+        roles: ["super"],
+        matchPrefix: true,
+      },
+      {
         href: "/admin/articles",
         label: "Tin tức",
         title: "Bài viết & tin tức",
