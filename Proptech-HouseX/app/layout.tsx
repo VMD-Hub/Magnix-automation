@@ -13,6 +13,7 @@ import {
   SEO_DESCRIPTION_DEFAULT,
   SEO_TITLE_DEFAULT,
 } from "@/lib/content/messaging/brand";
+import { withOpenGraph } from "@/lib/seo/open-graph";
 import { IMAGE_FALLBACK } from "@/lib/content/safe-image";
 
 const geistSans = Inter({
@@ -37,14 +38,14 @@ export const metadata: Metadata = {
     template: "%s | House X",
   },
   description: SEO_DESCRIPTION_DEFAULT,
-  openGraph: {
+  openGraph: withOpenGraph({
     type: "website",
     locale: "vi_VN",
     siteName: "House X",
     title: SEO_TITLE_DEFAULT,
     description: SEO_DESCRIPTION_DEFAULT,
     images: [defaultOgImage],
-  },
+  }),
   twitter: {
     card: "summary_large_image",
     title: SEO_TITLE_DEFAULT,

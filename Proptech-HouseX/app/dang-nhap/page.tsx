@@ -30,6 +30,9 @@ export default async function LoginPage({ searchParams }: PageProps) {
 
   return (
     <div className="bg-slate-50 py-12 container-px sm:py-16">
+      <h1 className="mb-4 text-center text-2xl font-bold text-slate-900">
+        Đăng nhập House X
+      </h1>
       <p className="mb-6 text-center text-sm text-slate-500">
         Chọn đúng loại tài khoản khi{" "}
         <Link href="/dang-ky" className="font-semibold text-brand-700">

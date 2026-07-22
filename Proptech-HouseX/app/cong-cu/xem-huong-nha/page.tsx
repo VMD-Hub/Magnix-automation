@@ -14,17 +14,17 @@ import {
 } from "@/lib/content/bat-trach-copy";
 import { BAT_TRACH_FAQ } from "@/lib/content/bat-trach-faq";
 import { PHONG_THUY_TOOL_VISUALS } from "@/lib/content/phong-thuy-visual-variants";
+import { withOpenGraph } from "@/lib/seo/open-graph";
 
 export const metadata: Metadata = {
   title: BAT_TRACH_COPY.metaTitle,
   description: BAT_TRACH_COPY.metaDescription,
   alternates: { canonical: "/cong-cu/xem-huong-nha" },
-  openGraph: {
+  openGraph: withOpenGraph({
     title: BAT_TRACH_COPY.metaTitle,
     description: BAT_TRACH_COPY.metaDescription,
     url: "/cong-cu/xem-huong-nha",
-    type: "website",
-  },
+  }),
 };
 
 function buildHowToJsonLd() {

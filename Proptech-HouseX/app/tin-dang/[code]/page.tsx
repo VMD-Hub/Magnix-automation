@@ -13,6 +13,7 @@ import {
   resolveListingMetaTitle,
 } from "@/lib/content/title";
 import { normalizeSeoDescription } from "@/lib/seo/meta-text";
+import { withOpenGraph } from "@/lib/seo/open-graph";
 import {
   IMAGE_FALLBACK,
   isSafeImageUrl,
@@ -80,13 +81,12 @@ export async function generateMetadata({
     description,
     alternates: canonical ? { canonical } : undefined,
     robots: isSecondary ? { index: false, follow: true } : undefined,
-    openGraph: {
+    openGraph: withOpenGraph({
       title,
       description,
       url: canonical,
-      type: "website",
       images: [{ url: ogImage }],
-    },
+    }),
   };
 }
 

@@ -186,7 +186,7 @@ export const AFFILIATE_VERTICALS: AffiliateVertical[] = [
         title: "Scandinavian — Bắc Âu ấm áp",
         tags: ["Căn hộ", "Tone sáng"],
         metaDescription:
-          "Nội thất Scandinavian: trắng–be, gỗ sáng, textile ấm. Ý tưởng decor nhà ở Việt Nam từ HouseX.",
+          "Nội thất Scandinavian: trắng–be, gỗ sáng, textile ấm — ý tưởng decor căn hộ và nhà phố tại Việt Nam từ studio đối tác House X.",
         h1: "Phong cách Scandinavian cho nhà ở Việt Nam",
         intro:
           "Scandi kết hợp nền trắng, gỗ oak/ash, đèn pendant và cây xanh. Tạo cảm giác ấm áp dù palette sáng — rất phổ biến với căn hộ trẻ tại TP.HCM.",
@@ -205,7 +205,7 @@ export const AFFILIATE_VERTICALS: AffiliateVertical[] = [
         title: "Indochine — Đông Dương đương đại",
         tags: ["Biệt thự", "Nhà phố cổ"],
         metaDescription:
-          "Nội thất Indochine: gạch hoa, gỗ tối màu, đèn lồng, pha hiện đại. Cảm hứng nhà đẹp từ HouseX.",
+          "Nội thất Indochine: gạch hoa, gỗ tối màu, đèn lồng pha hiện đại — cảm hứng nhà đẹp biệt thự và nhà phố từ studio đối tác House X.",
         h1: "Phong cách Indochine trong nhà ở hiện đại",
         intro:
           "Indochine gợi nhớ Sài Gòn xưa: gạch bông, lam gỗ, tủ chè, ghế mây pha chrome. Phù hợp biệt thự, nhà phố cải tạo giữ nét cổ.",
@@ -222,7 +222,7 @@ export const AFFILIATE_VERTICALS: AffiliateVertical[] = [
         title: "Tối giản (Minimal)",
         tags: ["Căn hộ", "Tiết kiệm"],
         metaDescription:
-          "Nội thất tối giản: ít đồ, nhiều không gian trống, chất liệu bền. Ý tưởng decor căn hộ nhỏ.",
+          "Nội thất tối giản: ít đồ, nhiều không gian trống, chất liệu bền — ý tưởng decor căn hộ nhỏ và nhà phố trên House X Proptech.",
         h1: "Nội thất tối giản — Less is more",
         intro:
           "Minimalism loại bỏ chi tiết thừa, giữ đồ dùng chất lượng và bố trí âm tường. Lý tưởng cho người bận rộn và căn hộ cần cảm giác rộng.",

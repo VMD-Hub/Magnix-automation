@@ -34,6 +34,7 @@ import {
   normalizeSeoDescription,
   normalizeSeoTitle,
 } from "@/lib/seo/meta-text";
+import { withOpenGraph } from "@/lib/seo/open-graph";
 import { resolveArticleOgImageUrl } from "@/lib/content/safe-image";
 
 export const revalidate = 300;
@@ -65,17 +66,15 @@ export async function generateMetadata({
     title,
     description,
     alternates: { canonical },
-    openGraph: {
+    openGraph: withOpenGraph({
       title,
       description,
       url: canonical,
       type: "article",
-      siteName: "House X",
-      locale: "vi_VN",
       publishedTime: article.publishedAt?.toISOString(),
       modifiedTime: article.updatedAt.toISOString(),
       images: ogImages,
-    },
+    }),
     twitter: {
       card: "summary_large_image",
       title,

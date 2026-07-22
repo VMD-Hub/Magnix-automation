@@ -17,11 +17,17 @@ import {
 } from "@/lib/content/housex-tools-visuals";
 import { PreloadBannerImage } from "@/components/seo/preload-banner-image";
 import { catalogBannerSources } from "@/lib/brand/banner-responsive";
+import { withOpenGraph } from "@/lib/seo/open-graph";
 
 export const metadata: Metadata = {
   title: TOOLS_HUB_COPY.metaTitle,
   description: TOOLS_HUB_COPY.metaDescription,
   alternates: { canonical: "/cong-cu" },
+  openGraph: withOpenGraph({
+    title: TOOLS_HUB_COPY.metaTitle,
+    description: TOOLS_HUB_COPY.metaDescription,
+    url: "/cong-cu",
+  }),
 };
 
 export default function CongCuPage() {

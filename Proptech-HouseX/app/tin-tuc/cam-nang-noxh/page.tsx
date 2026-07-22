@@ -18,6 +18,7 @@ import {
   NOXH_CATALOG_TITLE,
 } from "@/lib/content/messaging/noxh-public";
 import { getSiteUrl } from "@/lib/site-config";
+import { withOpenGraph } from "@/lib/seo/open-graph";
 
 export const revalidate = 300;
 
@@ -26,12 +27,16 @@ type PageProps = {
 };
 
 export async function generateMetadata(): Promise<Metadata> {
+  const canonical = `${getSiteUrl()}${NOXH_HANDBOOK_PATH}`;
   return {
     title: NOXH_HANDBOOK_SEO_TITLE,
     description: NOXH_HANDBOOK_SEO_DESCRIPTION,
-    alternates: {
-      canonical: `${getSiteUrl()}${NOXH_HANDBOOK_PATH}`,
-    },
+    alternates: { canonical },
+    openGraph: withOpenGraph({
+      title: NOXH_HANDBOOK_SEO_TITLE,
+      description: NOXH_HANDBOOK_SEO_DESCRIPTION,
+      url: canonical,
+    }),
   };
 }
 

@@ -22,6 +22,7 @@ import {
 } from "@/lib/seo/meta-text";
 import { getSiteUrl } from "@/lib/site-config";
 import { resolveLandingHeroImage, parseProjectOverview } from "@/lib/content/project-landing";
+import { withOpenGraph } from "@/lib/seo/open-graph";
 
 export const revalidate = 300;
 
@@ -61,13 +62,12 @@ export async function generateMetadata({
     title,
     description,
     alternates: { canonical },
-    openGraph: {
+    openGraph: withOpenGraph({
       title,
       description,
       url: canonical,
-      type: "website",
       images: [{ url: ogImage, alt: ogAlt }],
-    },
+    }),
   };
 }
 

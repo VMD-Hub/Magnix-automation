@@ -8,6 +8,7 @@ import {
   buildVuNguyenBreadcrumbJsonLd,
   buildVuNguyenPersonJsonLd,
 } from "@/lib/personal-brand/vu-nguyen/person-json-ld";
+import { withOpenGraph } from "@/lib/seo/open-graph";
 
 export function generateMetadata(): Metadata {
   const { seo } = getVuNguyenProfile();
@@ -18,12 +19,12 @@ export function generateMetadata(): Metadata {
     alternates: {
       canonical: getVuNguyenProfileUrl(),
     },
-    openGraph: {
+    openGraph: withOpenGraph({
       title: seo.title,
       description: seo.description,
       url: getVuNguyenProfileUrl(),
       type: "profile",
-    },
+    }),
   };
 }
 

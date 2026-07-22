@@ -8,7 +8,7 @@ import type { RichFaqItem } from "@/lib/content/faq-content";
 export const BRAND_STORY = {
   metaTitle: "Câu chuyện House X — cổng Proptech",
   metaDescription:
-    "Từ một buổi chiều mưa ở Sài Gòn đến House X: cổng BĐS đặt người mua làm trung tâm — thông tin chuẩn, sản phẩm thật.",
+    "Từ một buổi chiều mưa ở Sài Gòn đến House X: cổng Proptech đặt người mua làm trung tâm — thông tin chuẩn, sản phẩm thật, kiểm duyệt minh bạch.",
   title: "Câu chuyện thương hiệu",
   subtitle: "Hành trình hình thành House X",
   pullQuote: {
@@ -136,7 +136,7 @@ export const PLATFORM_FAQ: RichFaqItem[] = [
 export const FAQ_HUB = {
   metaTitle: "Câu hỏi thường gặp",
   metaDescription:
-    "Giải đáp về độ tin cậy tin đăng, bảo vệ số điện thoại, đăng tin, mô hình kinh doanh và nội dung NOXH trên House X.",
+    "Giải đáp về độ tin cậy tin đăng, bảo vệ số điện thoại, đăng tin môi giới, mô hình kinh doanh và nội dung NOXH trên House X — đọc trước khi liên hệ.",
   title: "Câu hỏi thường gặp",
   lead: "Tổng hợp câu hỏi về cách House X vận hành — từ kiểm tra tin đến bảo mật liên hệ. Không thấy câu trả lời? Liên hệ trực tiếp.",
 } as const;
@@ -144,7 +144,7 @@ export const FAQ_HUB = {
 export const EXPERTS_INDEX = {
   metaTitle: "Đội ngũ & chuyên gia rà soát",
   metaDescription:
-    "Ban biên tập và chuyên gia rà soát nội dung House X — đặc biệt nhà ở xã hội và pháp lý liên quan.",
+    "Ban biên tập và chuyên gia rà soát nội dung House X — đặc biệt nhà ở xã hội, pháp lý liên quan và quy trình kiểm duyệt tin công khai.",
   title: "Đội ngũ & biên tập",
   lead:
     "House X công khai người rà soát nội dung nhạy cảm — đặc biệt nhà ở xã hội và các chủ đề pháp lý liên quan.",
@@ -153,7 +153,7 @@ export const EXPERTS_INDEX = {
 export const CONTACT_PAGE = {
   metaTitle: "Liên hệ & trung tâm hỗ trợ",
   metaDescription:
-    "Liên hệ House X: tư vấn dịch vụ vay, định giá, nội thất; báo tin sai; hỗ trợ tài khoản.",
+    "Liên hệ House X: tư vấn dịch vụ vay, định giá, nội thất; báo tin sai; hỗ trợ tài khoản khách hàng và môi giới trong giờ hành chính.",
   title: "Liên hệ & hỗ trợ",
   lead: "Chọn đúng kênh — chúng tôi phản hồi trong giờ hành chính (T2–T6, 8:30–17:30).",
   routes: [

@@ -171,7 +171,8 @@ export const INTERIOR_CASE_STUDIES: InteriorCaseStudy[] = [
     styleSlug: "scandinavian",
     category: "can-ho",
     title: "Căn hộ 1PN Q.2 — Scandinavian",
-    metaDescription: "Thiết kế căn hộ studio 1 phòng ngủ Scandinavian tại Quận 2 — tối ưu không gian nhỏ.",
+    metaDescription:
+      "Thiết kế căn hộ studio 1PN Scandinavian tại Quận 2 — tối ưu không gian nhỏ, storage, ánh sáng ấm và palette trắng–gỗ sáng từ House X.",
     h1: "Căn studio 1PN Quận 2 — Scandinavian",
     summary: "48 m² — dual-purpose phòng khách/ngủ, bếp mở và khu làm việc góc.",
     area: "48 m²",
@@ -191,7 +192,7 @@ export const INTERIOR_CASE_STUDIES: InteriorCaseStudy[] = [
     category: "nha-pho",
     title: "Nhà phố Q.3 — Indochine",
     metaDescription:
-      "Cải tạo nội thất nhà phố phong cách Indochine tại Quận 3 — gạch hoa, gỗ tối, đèn lồng.",
+      "Cải tạo nội thất nhà phố phong cách Indochine tại Quận 3 — gạch hoa, gỗ tối, đèn lồng và giữ nét cổ pha tiện nghi hiện đại từ House X.",
     h1: "Nhà phố Quận 3 — Indochine đương đại",
     summary: "Nhà phố cũ 3 tầng — giữ nét cổ, pha hiện đại tiện nghi.",
     area: "180 m² sàn",
@@ -210,7 +211,8 @@ export const INTERIOR_CASE_STUDIES: InteriorCaseStudy[] = [
     styleSlug: "indochine",
     category: "biet-thu",
     title: "Biệt thự Q.2 — Indochine",
-    metaDescription: "Thiết kế nội thất biệt thự Indochine tại Quận 2 — không gian rộng, gỗ và gạch hoa.",
+    metaDescription:
+      "Thiết kế nội thất biệt thự Indochine tại Quận 2 — không gian rộng, gỗ tối, gạch hoa và flow liên tục giữa các khu từ studio đối tác House X.",
     h1: "Biệt thự Quận 2 — Indochine sang trọng",
     summary: "450 m² — sảnh double-height, phòng khách mở ra sân vườn.",
     area: "450 m²",
@@ -229,7 +231,8 @@ export const INTERIOR_CASE_STUDIES: InteriorCaseStudy[] = [
     styleSlug: "toi-gian",
     category: "can-ho",
     title: "Căn hộ 2PN Q.4 — Tối giản",
-    metaDescription: "Nội thất minimal căn hộ 2 phòng ngủ Quận 4 — ít đồ, nhiều không gian trống.",
+    metaDescription:
+      "Nội thất minimal căn hộ 2 phòng ngủ Quận 4 — ít đồ, nhiều không gian trống, tủ âm tường và vật liệu bền từ studio đối tác House X.",
     h1: "Căn hộ 2PN Quận 4 — Minimal",
     summary: "65 m² — chủ nhà thích không gian gọn, dễ vệ sinh, tập trung chất lượng vật liệu.",
     area: "65 m²",
@@ -248,7 +251,8 @@ export const INTERIOR_CASE_STUDIES: InteriorCaseStudy[] = [
     styleSlug: "toi-gian",
     category: "van-phong",
     title: "Văn phòng Q.1 — Tối giản",
-    metaDescription: "Thiết kế văn phòng làm việc phong cách tối giản tại Quận 1 — startup 15 người.",
+    metaDescription:
+      "Thiết kế văn phòng tối giản tại Quận 1 cho startup ~15 người — open plan, phòng họp kính cách âm và ánh sáng làm việc đủ lux từ House X.",
     h1: "Văn phòng Quận 1 — Minimal workspace",
     summary: "120 m² — open plan, phòng họp kính, khu focus yên tĩnh.",
     area: "120 m²",

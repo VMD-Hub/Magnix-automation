@@ -47,7 +47,7 @@ export const COST_QUICK_COPY = {
 export const COST_DETAIL_COPY = {
   metaTitle: "Dự toán xây nhà chi tiết — móng, sàn, mái",
   metaDescription:
-    "Dự toán chi phí xây dựng chi tiết: hệ số móng, mái, ban công theo loại nhà — đơn giá/m² theo khu vực 2026 trên House X.",
+    "Dự toán chi phí xây dựng chi tiết theo hạng mục: hệ số móng, mái, ban công theo loại nhà — đơn giá/m² tham khảo theo khu vực 2026 trên House X.",
   title: "Dự toán xây nhà chi tiết",
   subtitle:
     "Bóc tách diện tích quy đổi theo hạng mục — chính xác hơn khái toán nhanh, phù hợp so sánh báo giá nhà thầu.",

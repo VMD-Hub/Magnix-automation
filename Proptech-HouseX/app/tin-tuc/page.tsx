@@ -13,17 +13,22 @@ import {
   NOXH_HANDBOOK_TITLE,
 } from "@/lib/content/messaging/noxh-public";
 import { buildNewsHubJsonLd } from "@/lib/seo/article-json-ld";
+import { withOpenGraph } from "@/lib/seo/open-graph";
 import { getSiteUrl } from "@/lib/site-config";
 
 export const revalidate = 300;
 
 export async function generateMetadata(): Promise<Metadata> {
+  const canonical = `${getSiteUrl()}${NEWS_HUB_PATH}`;
   return {
     title: NEWS_HUB_SEO_TITLE,
     description: NEWS_HUB_SEO_DESCRIPTION,
-    alternates: {
-      canonical: `${getSiteUrl()}${NEWS_HUB_PATH}`,
-    },
+    alternates: { canonical },
+    openGraph: withOpenGraph({
+      title: NEWS_HUB_SEO_TITLE,
+      description: NEWS_HUB_SEO_DESCRIPTION,
+      url: canonical,
+    }),
   };
 }
 

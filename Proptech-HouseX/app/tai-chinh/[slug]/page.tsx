@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getService, getVertical } from "@/lib/content/affiliate-verticals";
 import { AffiliateServicePage } from "@/components/affiliate/affiliate-service-page";
+import { withOpenGraph } from "@/lib/seo/open-graph";
 
 const VERTICAL_ID = "tai-chinh" as const;
 
@@ -16,10 +17,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const service = getService(VERTICAL_ID, slug);
   if (!service) return { title: "Không tìm thấy" };
   const vertical = getVertical(VERTICAL_ID);
+  const canonical = `${vertical.path}/${slug}`;
   return {
     title: service.title,
     description: service.metaDescription,
-    alternates: { canonical: `${vertical.path}/${slug}` },
+    alternates: { canonical },
+    openGraph: withOpenGraph({
+      title: service.title,
+      description: service.metaDescription,
+      url: canonical,
+    }),
   };
 }
 

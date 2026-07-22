@@ -37,7 +37,7 @@ export const TAI_CHINH_SERVICES: AffiliateService[] = [
     slug: "vay-mua-nha",
     title: "Vay mua nhà & căn hộ",
     metaDescription:
-      "Tư vấn vay mua nhà, căn hộ, nhà phố trên HouseX: sơ loại hồ sơ, so sánh gói ngân hàng, đồng hành đến giải ngân.",
+      "Tư vấn vay mua nhà, căn hộ, nhà phố trên House X: sơ loại hồ sơ, so sánh gói ngân hàng và đồng hành đến giải ngân minh bạch.",
     h1: "Vay mua nhà — Đồng hành từ sơ loại đến giải ngân?",
     intro:
       "Bạn đang tìm căn nhà / căn hộ và cần vay một phần giá trị? HouseX giúp làm rõ khả năng vay, chuẩn bị hồ sơ và kết nối ngân hàng phù hợp — không thay ngân hàng phê duyệt, nhưng giúp bạn đi đúng thứ tự trước khi đặt cọc.",
@@ -99,7 +99,7 @@ Dùng [Tính khoản vay mua nhà](/cong-cu/tinh-khoan-vay) để có con số s
     slug: "vay-the-chap",
     title: "Vay thế chấp & tái tài trợ",
     metaDescription:
-      "Vay thế chấp BĐS sẵn có hoặc chuyển khoản vay sang ngân hàng mới — HouseX hỗ trợ hồ sơ và đồng hành giải ngân.",
+      "Vay thế chấp BĐS sẵn có hoặc chuyển khoản vay sang ngân hàng mới — House X hỗ trợ hồ sơ, so điều kiện và đồng hành giải ngân.",
     h1: "Vay thế chấp nhà đất — Bổ sung vốn hoặc tối ưu lãi?",
     intro:
       "Bạn đã có bất động sản và cần vốn (sửa nhà, kinh doanh, tất toán nợ) hoặc muốn chuyển khoản vay sang ngân hàng có điều kiện tốt hơn? HouseX hỗ trợ tư vấn mục đích vay, sơ loại hồ sơ và theo sát đến giải ngân.",
@@ -153,7 +153,7 @@ Dùng [Tính khoản vay mua nhà](/cong-cu/tinh-khoan-vay) để có con số s
     slug: "vay-sxkd",
     title: "Vay sản xuất kinh doanh",
     metaDescription:
-      "Vay SXKD có tài sản đảm bảo BĐS trên HouseX: vốn lưu động, máy móc, mở rộng — đồng hành hồ sơ ngân hàng.",
+      "Vay SXKD có tài sản đảm bảo BĐS trên House X: vốn lưu động, máy móc, mở rộng cửa hàng — đồng hành hồ sơ ngân hàng đến giải ngân.",
     h1: "Vay SXKD có thế chấp BĐS — Phù hợp hộ kinh doanh & SME?",
     intro:
       "Hộ kinh doanh và doanh nghiệp nhỏ cần vốn lưu động hoặc đầu tư máy móc, đồng thời có bất động sản làm tài sản đảm bảo? HouseX hỗ trợ làm rõ nhu cầu, chuẩn bị hồ sơ và đồng hành với ngân hàng đối tác.",
