@@ -8,6 +8,14 @@
 - Cùng allowlist CTA + checklist L3 như content queue.
 - Sheet vẫn là nguồn n8n; Postgres = SoR biên tập sau sync.
 
+## SOP L3 (P0 go-live — bắt buộc)
+
+1. Sheet `content_drafts` = **research / n8n sink** — không coi `status=approved` trên Sheet là đủ để Page Publish.
+2. Trước duyệt: `POST /api/admin/content-drafts/sync` (hoặc nút Sync trên UI) → kiểm tra dòng trên `/admin/content-drafts`.
+3. **L3 chỉ trên Admin:** CTA allowlist NƠXH → checklist → `approve` → `publishChannel=FB_PAGE` (hoặc meta `facebook_page`) → `scheduled_at` (trống = due ngay).
+4. Page Publish (`content-page-publish`) chỉ đọc Postgres due API — duyệt Sheet mà quên sync/approve Admin = **không đăng**.
+5. Sau Graph OK, status Admin = `PUBLISHED` + `meta.fb_post_id`; không mark tay trừ khi rescue.
+
 ## Routes
 
 | Surface | Path |

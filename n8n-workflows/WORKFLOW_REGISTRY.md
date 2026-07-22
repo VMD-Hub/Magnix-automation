@@ -30,6 +30,19 @@
 >
 > **Trade / swing / CRO** không thuộc Magnix — xem `TRADE_PROJECT.md` và repo `trading-intelligence`.
 
+## P0 smoke log — Content ops Page (điền sau Manual)
+
+| Slug | Execution ID | Sink assert (masked) | Ngày | Kết quả |
+|------|--------------|----------------------|------|---------|
+| `telegram-notify` | | Telegram received / `telegram_sent=true` | | |
+| `content-classify` | | Sheet row `status=classified` | | |
+| `content-editorial-brief` | | `meta.editorial_brief_v1` hoặc legal Telegram | | |
+| `content-draft` | | Sheet `content_drafts` row + L0–L2 | | |
+| Admin L3 | — | Postgres `APPROVED` + CTA + `scheduled_at` | | |
+| `content-page-publish` | | Graph post id + Postgres `PUBLISHED` | | |
+
+Sau khi đủ cột **Kết quả = pass**: đổi cột Trạng thái các slug trên → `production · smoke YYYY-MM-DD` (hoặc giữ `staging · smoke …` nếu chỉ 1 vòng). Activate cron theo `VPS_DEPLOY_ALL_AGENTS.md` §6 (Đợt 0b→B→B2→D0→P).
+
 ## Cột bắt buộc khi thêm dòng
 
 - **Slug:** path webhook `/webhook/magnix/{slug}` hoặc tên schedule

@@ -33,6 +33,29 @@ HOUSEX_PUBLIC_URL=https://timnhaxahoi.com
 CRON_SECRET=<cùng giá trị House X .env>
 ```
 
+### Block 0 — verify trước smoke (P0 go-live)
+
+**House X** (`/opt/housex/Proptech-HouseX`):
+
+```bash
+# .env phải có CRON_SECRET; migrate content_drafts nếu chưa
+npm run db:deploy   # hoặc npx prisma migrate deploy
+
+# Due API (phải 200 khi đúng secret; probe ngoài không secret → 401 = endpoint sống)
+curl -fsS -H "Authorization: Bearer $CRON_SECRET" \
+  "https://timnhaxahoi.com/api/cron/content-page-publish-due?limit=1"
+```
+
+**n8n** (`/root/n8n.env` rồi **recreate** container với `--env-file` — `restart` không nạp biến mới):
+
+```bash
+grep -E 'HOUSEX_PUBLIC_URL|CRON_SECRET|CONTENT_PAGE_PUBLISH|META_PAGE|TELEGRAM_' /root/n8n.env
+docker exec n8n printenv CONTENT_PAGE_PUBLISH_ENABLED
+docker exec n8n printenv CRON_SECRET   # chỉ xác nhận có giá trị, không paste log
+```
+
+Giữ `CONTENT_SHEET_WRITEBACK_ENABLED=true` đến khi 2–3 publish ổn.
+
 ## 3. Chuẩn bị bài trên Admin
 
 1. Sync Sheet → `/admin/content-drafts` (hoặc tạo tay).

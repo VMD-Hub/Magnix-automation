@@ -221,3 +221,39 @@ Track D da tu dong hoa:
 - [x] Telegram notify dedupe event dang `pending|sent|reminded`.
 - [ ] Staging: gan Google credential, bat env Telegram va xac minh mot message that.
 
+## 11. P0 go-live — Telegram smoke (cung ngay)
+
+**Activate truoc Agent 3 / Page Publish:** `telegram-notify` → `telegram-reminder` → `telegram-resolver`.
+
+**Env VPS (container phai recreate neu moi them):**
+
+```bash
+TELEGRAM_BOT_TOKEN=...
+TELEGRAM_CHAT_ID_OWNER=...   # hoac TELEGRAM_CHAT_ID_OPS
+TELEGRAM_APPROVAL_ENABLED=true
+TELEGRAM_REMINDER_ENABLED=true
+MAGNIX_WEBHOOK_TOKEN=...     # Bearer bat buoc tren webhook
+N8N_PUBLIC_URL=https://n8n.vmd.asia
+```
+
+**Cach A — Manual tren n8n UI:** mo `Magnix Telegram — Notify` → Execute → nhanh `Inject Manual Test Event` (payload `approval_needed`).
+
+**Cach B — script local (uu tien):**
+
+```powershell
+node scripts/test-telegram-notify.mjs
+```
+
+**Cach C — curl (thay TOKEN):**
+
+```bash
+curl -fsS -X POST "https://n8n.vmd.asia/webhook/magnix/telegram-notify" \
+  -H "Authorization: Bearer $MAGNIX_WEBHOOK_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d "{\"event_id\":\"test:notification_events:smoke_$(date +%s):approval_needed\",\"event_type\":\"approval_needed\",\"agent\":\"test\",\"severity\":\"action_required\",\"product_type\":\"lead_magnet\",\"target_channel\":\"facebook_page\",\"title\":\"Magnix Telegram smoke test\",\"segment\":\"noxh_income\",\"source_row_key\":\"test:smoke\",\"sheet_tab\":\"content_drafts\",\"sheet_row\":2,\"approval_fields\":[\"status=approved\"]}"
+```
+
+**Pass khi:** dien thoai nhan tin `[Magnix] Can duyet L3` + response `telegram_sent=true` (hoac row `notification_events`).
+
+- [ ] Telegram L3 proven (1 message that) — ngay: ________
+

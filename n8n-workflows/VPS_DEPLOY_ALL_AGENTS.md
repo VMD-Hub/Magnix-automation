@@ -178,11 +178,20 @@ GitHub Actions (`.github/workflows/magnix-deploy-workflows.yml`) tự rebuild + 
 
 ```
 Đợt 0: UID ingest                → curl OK → Activate webhook
-Đợt A: Agent 1 (TikTok + FB)     → Manual OK → Activate
-Đợt B: Agent 2                   → Manual OK → Activate
-Đợt C: Agent 5 Scorecard         → Manual OK → Activate
-Đợt D: Agent 3 + 6 + 4           → Manual OK → Activate (tốn token LLM)
-Đợt E: Agent 7                   → chỉ activate sau khi render manual pass
+Đợt 0b: Telegram notify/reminder/resolver → 1 message thật → Activate (TRƯỚC draft/publish)
+Đợt B: Agent 2 Classify          → Manual OK → Activate
+Đợt B2: Layer B Editorial Brief  → Manual OK → Activate
+Đợt D0: Agent 3 Draft (+ 3b optional) → Manual OK → Activate
+Đợt P: content-page-publish      → Manual 1 Graph post + Postgres PUBLISHED → Activate cron 10/14/18
+```
+
+**P0 Content ops Page (cùng ngày) — dừng ở Đợt P.** Chưa bắt buộc:
+
+```
+Đợt A: Agent 1 Listen (TikTok/FB) — ngày sau
+Đợt C: Scorecard
+Đợt D: Agent 6 video + Agent 4 outreach
+Đợt E: Agent 7 render
 ```
 
 ---

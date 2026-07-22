@@ -13,6 +13,22 @@
 [~] 1E — Telegram notification (3 workflow: notify webhook + reminder + resolver; bật env + activate)
 ```
 
+## P0 Content ops Page — checklist cùng ngày
+
+Chi tiết: `docs/CONTENT_PAGE_PUBLISH_SETUP.md` §Block 0 · `docs/TELEGRAM_APPROVAL_NOTIFICATIONS.md` §11 · `Proptech-HouseX/docs/CONTENT_DRAFTS_ADMIN.md` §SOP L3 · activate đợt `VPS_DEPLOY_ALL_AGENTS.md` §6.
+
+```
+[ ] Block 0 House X: CRON_SECRET + migrate content_drafts + curl due API 200
+[ ] Block 0 n8n: HOUSEX_PUBLIC_URL, CRON_SECRET trùng, CONTENT_PAGE_PUBLISH_ENABLED,
+                 META_PAGE_*, TELEGRAM_*; recreate container (không chỉ restart)
+[ ] Block 1: Activate Telegram ×3 + 1 message thật (node scripts/test-telegram-notify.mjs)
+[ ] Block 2 Manual: classify → editorial-brief → draft → Admin sync → L3+CTA+schedule
+                 → content-page-publish Manual → Graph + PUBLISHED
+[ ] Block 2: ghi execution ID vào WORKFLOW_REGISTRY § P0 smoke log
+[ ] Block 3: Activate cron Agent 2 + Layer B + Agent 3 + content-page-publish
+[ ] Block 4: deploy House X sau khi merge 301 Ahrefs (next.config)
+```
+
 **Script go-live (local):**
 
 ```powershell

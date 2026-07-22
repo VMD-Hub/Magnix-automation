@@ -128,6 +128,48 @@ const nextConfig = {
         destination: "/du-an/thuong-mai",
         permanent: true,
       },
+      // Ahrefs legacy 404 → live IA (P0 go-live web)
+      {
+        source: "/phap-ly/dieu-kien-noxh-tong-quan",
+        destination:
+          "/tin-tuc/cam-nang-noxh/dieu-kien-mua-nha-o-xa-hoi-2026-tom-tat",
+        permanent: true,
+      },
+      {
+        source: "/phap-ly/thu-tuc-ho-so-co-ban",
+        destination: "/tin-tuc/cam-nang-noxh/quy-trinh-mua-thue-mua-noxh-2026",
+        permanent: true,
+      },
+      {
+        source: "/phap-ly",
+        destination: "/tin-tuc/cam-nang-noxh/chu-de/chinh-sach-ho-so-noxh",
+        permanent: true,
+      },
+      {
+        source: "/bang-tinh",
+        destination: "/cong-cu",
+        permanent: true,
+      },
+      {
+        source: "/timnhatro/dang-ky",
+        destination: "/dang-ky",
+        permanent: true,
+      },
+      {
+        source: "/timnhatro/dang-nhap",
+        destination: "/dang-nhap",
+        permanent: true,
+      },
+      {
+        source: "/timnhatro",
+        destination: "/",
+        permanent: true,
+      },
+      {
+        source: "/mien-tru-trach-nhiem",
+        destination: "/dieu-khoan",
+        permanent: true,
+      },
     ];
   },
 };
