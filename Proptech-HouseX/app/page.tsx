@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { SearchHero } from "@/components/home/search-hero";
 import { ProptechTools } from "@/components/home/proptech-tools";
@@ -17,8 +18,19 @@ import {
   NOXH_CATALOG_PATH,
   NOXH_CATALOG_TITLE,
 } from "@/lib/content/messaging/noxh-public";
+import {
+  SEO_DESCRIPTION_DEFAULT,
+  SEO_TITLE_DEFAULT,
+} from "@/lib/content/messaging/brand";
+import { getSiteUrl } from "@/lib/site-config";
 
 export const revalidate = 300;
+
+export const metadata: Metadata = {
+  title: { absolute: SEO_TITLE_DEFAULT },
+  description: SEO_DESCRIPTION_DEFAULT,
+  alternates: { canonical: getSiteUrl() },
+};
 
 export default async function Home() {
   const { projects, saleListings } = await getHomepageData();
