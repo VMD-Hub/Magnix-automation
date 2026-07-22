@@ -1,12 +1,14 @@
 /**
- * Chuẩn hóa title / description cho SERP (Ahrefs: title ≤60, desc ~70–160).
+ * Chuẩn hóa title / description cho SERP (Ahrefs: title ≤60, desc ~120–160;
+ * dưới ~120 bị flag "too short").
  * Root layout template = "%s | House X" (+10 ký tự) → phần title trang ≤50.
  */
 
 const BRAND_SUFFIX_RE = /\s*\|\s*House\s*X\s*$/i;
 
 export const SEO_TITLE_SEGMENT_MAX = 50;
-export const SEO_DESC_MIN = 70;
+/** Soft floor — Ahrefs Site Audit thường flag desc < ~120. */
+export const SEO_DESC_MIN = 120;
 export const SEO_DESC_MAX = 160;
 export const SEO_DESC_TARGET = 145;
 

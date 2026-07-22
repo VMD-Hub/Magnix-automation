@@ -15,6 +15,7 @@ import {
 } from "@/lib/preview/demo-projects";
 import { mergeMissingGoLiveCommercialCards } from "@/lib/data/merge-go-live-project-cards";
 import { INTERNAL_DEMO_PROJECT_SLUGS } from "@/lib/deploy/internal-demo-content";
+import { unstable_cache } from "next/cache";
 
 export type ProjectListParams = {
   province?: string;
@@ -124,7 +125,7 @@ function catalogFallback(
 }
 
 /** Danh sách dự án public — SSR trang /du-an. */
-export async function listProjects(
+async function listProjectsUncached(
   params: ProjectListParams = {},
 ): Promise<ProjectListResult> {
   const page = Math.max(1, params.page ?? 1);
@@ -209,4 +210,40 @@ export async function listProjects(
   }
 
   return catalogFallback(params, page, pageSize);
+}
+
+const listProjectsCached = unstable_cache(
+  async (
+    province: string,
+    district: string,
+    projectType: string,
+    page: number,
+    pageSize: number,
+  ) =>
+    listProjectsUncached({
+      province: province || undefined,
+      district: district || undefined,
+      projectType: (projectType || undefined) as
+        | ProjectListParams["projectType"]
+        | undefined,
+      page,
+      pageSize,
+    }),
+  ["list-projects"],
+  { revalidate: 300, tags: ["projects-list"] },
+);
+
+/** Danh sách dự án public — SSR trang /du-an (cache 300s). */
+export async function listProjects(
+  params: ProjectListParams = {},
+): Promise<ProjectListResult> {
+  const page = Math.max(1, params.page ?? 1);
+  const pageSize = Math.min(100, Math.max(1, params.pageSize ?? 12));
+  return listProjectsCached(
+    params.province ?? "",
+    params.district ?? "",
+    params.projectType ?? "",
+    page,
+    pageSize,
+  );
 }

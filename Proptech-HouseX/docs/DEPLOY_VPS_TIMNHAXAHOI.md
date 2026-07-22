@@ -114,11 +114,33 @@ App lắng nghe **port 3000** (localhost).
 
 ## 3. Nginx + SSL
 
+Canonical host: **`https://timnhaxahoi.com`** (khớp `NEXT_PUBLIC_SITE_URL`).  
+`www` và `http` phải **301 một hop** về apex — tránh duplicate (Ahrefs) và chuỗi redirect dài.
+
 ```bash
 sudo tee /etc/nginx/sites-available/timnhaxahoi.com <<'EOF'
+# HTTP → HTTPS apex (cả apex lẫn www)
 server {
     listen 80;
+    listen [::]:80;
     server_name timnhaxahoi.com www.timnhaxahoi.com;
+    return 301 https://timnhaxahoi.com$request_uri;
+}
+
+# HTTPS www → HTTPS apex
+server {
+    listen 443 ssl http2;
+    listen [::]:443 ssl http2;
+    server_name www.timnhaxahoi.com;
+    # certbot sẽ gắn ssl_certificate vào đây sau khi chạy certbot
+    return 301 https://timnhaxahoi.com$request_uri;
+}
+
+# App — apex only
+server {
+    listen 443 ssl http2;
+    listen [::]:443 ssl http2;
+    server_name timnhaxahoi.com;
 
     location / {
         proxy_pass http://127.0.0.1:3000;
@@ -135,10 +157,19 @@ EOF
 
 sudo ln -sf /etc/nginx/sites-available/timnhaxahoi.com /etc/nginx/sites-enabled/
 sudo nginx -t && sudo systemctl reload nginx
-sudo certbot --nginx -d timnhaxahoi.com -d www.timnhaxahoi.com
+sudo certbot --nginx -d timnhaxahoi.com -d www.timnhaxahoi.com --redirect
 ```
 
-Chọn redirect **www → non-www** (hoặc ngược lại) khi certbot hỏi — khớp `NEXT_PUBLIC_SITE_URL`.
+Sau certbot, kiểm tra:
+
+```bash
+curl -sI http://timnhaxahoi.com/ | head -5
+curl -sI http://www.timnhaxahoi.com/ | head -5
+curl -sI https://www.timnhaxahoi.com/ | head -5
+# Cả ba phải Location: https://timnhaxahoi.com/
+```
+
+**Ahrefs “3XX redirect”:** HTTP→HTTPS 301 là đúng — có thể ignore/notice. Vấn đề cần xử lý là `www` đang 200 riêng (duplicate), không phải việc bỏ redirect HTTP.
 
 ---
 

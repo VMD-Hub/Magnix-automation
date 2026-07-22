@@ -20,6 +20,7 @@ import {
 import { listCatalogSaleListingCards } from "@/lib/preview/catalog-listings";
 import { listingMatchesBrowseProvince, provincesMatchingBrowseFilter } from "@/lib/content/mega-province-browse";
 import { getListingByCode } from "@/lib/data/listing";
+import { unstable_cache } from "next/cache";
 
 const listingInclude = {
   media: {
@@ -147,8 +148,7 @@ function getSaleBrowseCatalogCards(
   return merged;
 }
 
-/** Danh sách tin đăng public — SSR trang mua bán / cho thuê. */
-export async function browseListings(
+async function browseListingsUncached(
   params: ListingBrowseParams,
 ): Promise<ListingBrowseResult> {
   const page = Math.max(1, params.page ?? 1);
@@ -218,6 +218,43 @@ export async function browseListings(
     // DB offline — dùng catalog go-live bên dưới.
     return buildListingBrowsePage([], 0, catalogItems, page, pageSize);
   }
+}
+
+const browseListingsCached = unstable_cache(
+  async (
+    transactionType: TransactionType,
+    province: string,
+    district: string,
+    propertyType: string,
+    page: number,
+    pageSize: number,
+  ) =>
+    browseListingsUncached({
+      transactionType,
+      province: province || undefined,
+      district: district || undefined,
+      propertyType: propertyType || undefined,
+      page,
+      pageSize,
+    }),
+  ["browse-listings"],
+  { revalidate: 120, tags: ["listings-browse"] },
+);
+
+/** Danh sách tin đăng public — SSR trang mua bán / cho thuê (cache 120s). */
+export async function browseListings(
+  params: ListingBrowseParams,
+): Promise<ListingBrowseResult> {
+  const page = Math.max(1, params.page ?? 1);
+  const pageSize = Math.min(100, Math.max(1, params.pageSize ?? 20));
+  return browseListingsCached(
+    params.transactionType,
+    params.province ?? "",
+    params.district ?? "",
+    params.propertyType ?? "",
+    page,
+    pageSize,
+  );
 }
 
 type ListingWithEditorialTitle = PublicListingDetail;

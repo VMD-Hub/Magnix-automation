@@ -14,6 +14,8 @@ import {
   NOXH_HANDBOOK_SEO_DESCRIPTION,
   NOXH_HANDBOOK_SEO_TITLE,
   NOXH_HANDBOOK_TITLE,
+  NOXH_CATALOG_PATH,
+  NOXH_CATALOG_TITLE,
 } from "@/lib/content/messaging/noxh-public";
 import { getSiteUrl } from "@/lib/site-config";
 
@@ -71,6 +73,14 @@ export default async function CamNangNoxhHubPage({ searchParams }: PageProps) {
             </h1>
             <p className="mt-3 max-w-3xl leading-relaxed text-slate-600">
               {NOXH_HANDBOOK_INTRO}
+            </p>
+            <p className="mt-4">
+              <Link
+                href={NOXH_CATALOG_PATH}
+                className="inline-flex text-sm font-semibold text-brand-700 hover:text-brand-800"
+              >
+                Xem {NOXH_CATALOG_TITLE} đang mở bán →
+              </Link>
             </p>
           </div>
         </div>

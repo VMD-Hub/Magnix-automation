@@ -10,6 +10,9 @@ export const LISTINGS_BROWSE_COPY = {
     coverageNote:
       "Đang phủ TP.HCM, Đồng Nai, Tây Ninh, Cần Thơ và các tỉnh lân cận — tin đã kiểm duyệt.",
     emptyFilter: "Chưa có tin khớp bộ lọc. Thử bỏ bớt điều kiện hoặc quay lại sau.",
+    /** Hub `/mua-ban` — Ahrefs ~120–160 ký tự. */
+    seoDescriptionSuffix:
+      "Tin đã kiểm duyệt trên House X — so sánh giá, vị trí và thông tin minh bạch trước khi liên hệ xem nhà.",
   },
   rent: {
     kicker: "HouseX · Cho thuê",
@@ -22,5 +25,8 @@ export const LISTINGS_BROWSE_COPY = {
       "HouseX đang mở rộng tin cho thuê tại TP.HCM. Bạn có thể xem tin mua bán hoặc đăng ký nhận thông báo khi có tin mới.",
     comingSoonCta: "Xem tin mua bán",
     comingSoonCtaHref: "/mua-ban",
+    /** Hub `/cho-thue` — Ahrefs ~120–160 ký tự. */
+    seoDescriptionSuffix:
+      "Kho tin cho thuê House X đang mở rộng — lọc căn hộ, CHDV, phòng trọ; xem chi tiết trước khi gọi.",
   },
 } as const;

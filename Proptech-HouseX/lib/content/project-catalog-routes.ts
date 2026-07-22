@@ -8,6 +8,7 @@ import {
   type ProjectCatalogDbType,
 } from "@/lib/content/project-catalog-paths";
 import { getSiteUrl } from "@/lib/site-config";
+import { normalizeSeoDescription } from "@/lib/seo/meta-text";
 
 export {
   COMMERCIAL_CATALOG_PATH,
@@ -28,6 +29,10 @@ export const COMMERCIAL_CATALOG_SEO_TITLE =
 export const COMMERCIAL_CATALOG_SEO_DESCRIPTION =
   "Danh mục dự án BĐS thương mại trên House X: căn hộ, nhà phố và đô thị mới tại TP.HCM cùng các tỉnh lân cận — thông tin giá và tiến độ minh bạch." as const;
 
+/** Hub `/du-an` — Ahrefs ~120–160 ký tự. */
+export const PROJECT_CATALOG_HUB_SEO_DESCRIPTION =
+  "Danh mục dự án thương mại và nhà ở xã hội trên House X — giá, tiến độ, pháp lý và điều kiện mua có căn cứ để so sánh trước khi quyết định." as const;
+
 export function buildProjectCatalogMetadata(
   projectType: ProjectCatalogDbType | undefined,
   page: number,
@@ -41,11 +46,13 @@ export function buildProjectCatalogMetadata(
       ? COMMERCIAL_CATALOG_SEO_TITLE
       : "Dự án bất động sản trên House X";
 
-  const description = isNoxh
-    ? NOXH_CATALOG_SEO_DESCRIPTION
-    : isCommercial
-      ? COMMERCIAL_CATALOG_SEO_DESCRIPTION
-      : "Danh mục dự án thương mại và nhà ở xã hội trên House X — giá, tiến độ và điều kiện mua có căn cứ.";
+  const description = normalizeSeoDescription(
+    isNoxh
+      ? NOXH_CATALOG_SEO_DESCRIPTION
+      : isCommercial
+        ? COMMERCIAL_CATALOG_SEO_DESCRIPTION
+        : PROJECT_CATALOG_HUB_SEO_DESCRIPTION,
+  );
 
   return {
     title,

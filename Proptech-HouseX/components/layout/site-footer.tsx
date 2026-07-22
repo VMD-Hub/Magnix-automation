@@ -2,6 +2,8 @@ import Link from "next/link";
 import { AFFILIATE_VERTICALS } from "@/lib/content/affiliate-verticals";
 import { PLATFORM_FOOTER_BLURB } from "@/lib/content/messaging/platform-public";
 import {
+  NOXH_CATALOG_PATH,
+  NOXH_CATALOG_TITLE,
   NOXH_HANDBOOK_PATH,
   NOXH_HANDBOOK_TITLE,
 } from "@/lib/content/messaging/noxh-public";
@@ -163,6 +165,9 @@ export function SiteFooter() {
             </Link>
             <Link href={NOXH_HANDBOOK_PATH} className={FOOTER_LINK}>
               {NOXH_HANDBOOK_TITLE}
+            </Link>
+            <Link href={NOXH_CATALOG_PATH} className={FOOTER_LINK}>
+              {NOXH_CATALOG_TITLE}
             </Link>
             <Link href="/gioi-thieu" className={FOOTER_LINK}>
               Giới thiệu

@@ -13,6 +13,10 @@ import {
   PLATFORM_HERO,
   PLATFORM_TRUST,
 } from "@/lib/content/messaging/platform-public";
+import {
+  NOXH_CATALOG_PATH,
+  NOXH_CATALOG_TITLE,
+} from "@/lib/content/messaging/noxh-public";
 
 export const revalidate = 300;
 
@@ -63,6 +67,15 @@ export default async function Home() {
           subtitle="Các dự án mới, pháp lý rõ ràng"
           href="/du-an"
         />
+        <p className="mb-5 -mt-2 text-sm text-[#666666]">
+          Ưu tiên an cư?{" "}
+          <Link
+            href={NOXH_CATALOG_PATH}
+            className="font-semibold text-brand-700 hover:text-brand-800"
+          >
+            {NOXH_CATALOG_TITLE} →
+          </Link>
+        </p>
         {projects.length > 0 ? (
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {projects.slice(0, 3).map((p) => (

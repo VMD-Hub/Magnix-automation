@@ -16,6 +16,7 @@ import { isBrowseRateLimited } from "@/lib/security/browse-rate-limit";
 import { RateLimitNotice } from "@/components/security/rate-limit-notice";
 import { PreloadHeroBrandSkyline } from "@/components/home/hero-brand-background";
 import { getSiteUrl } from "@/lib/site-config";
+import { normalizeSeoDescription } from "@/lib/seo/meta-text";
 
 export const revalidate = 120;
 
@@ -39,7 +40,9 @@ export async function generateMetadata({
   if (dbType) parts.push(propertyTypeLabel(dbType));
   if (locationLabel) parts.push(locationLabel);
   const title = parts.join(" — ");
-  const description = `Tìm thuê ${dbType ? propertyTypeLabel(dbType).toLowerCase() : "nhà đất"}${locationLabel ? ` tại ${locationLabel}` : " tại TP.HCM và các tỉnh lân cận"}. Kho tin cho thuê HouseX đang cập nhật.`;
+  const description = normalizeSeoDescription(
+    `Tìm thuê ${dbType ? propertyTypeLabel(dbType).toLowerCase() : "nhà đất"}${locationLabel ? ` tại ${locationLabel}` : " tại TP.HCM và các tỉnh lân cận"}. ${LISTINGS_BROWSE_COPY.rent.seoDescriptionSuffix}`,
+  );
 
   const site = getSiteUrl();
   const q = new URLSearchParams();
@@ -58,22 +61,23 @@ export async function generateMetadata({
 }
 
 export default async function ChoThuePage({ searchParams }: PageProps) {
-  if (await isBrowseRateLimited()) {
-    return <RateLimitNotice />;
-  }
   const sp = await searchParams;
   const page = Math.max(1, Number(sp.page) || 1);
   const propertyType = propertyTypeFromSlug(sp.propertyType);
   const location = resolveListingBrowseLocation(sp);
   const copy = LISTINGS_BROWSE_COPY.rent;
 
-  const { items, pagination } = await browseListings({
+  const browsePromise = browseListings({
     transactionType: "RENT",
     province: location.province,
     district: location.district,
     propertyType,
     page,
   });
+  if (await isBrowseRateLimited()) {
+    return <RateLimitNotice />;
+  }
+  const { items, pagination } = await browsePromise;
 
   const siteUrl = getSiteUrl();
   const jsonLd = buildListingListJsonLd(siteUrl, "/cho-thue", copy.listTitle, items);

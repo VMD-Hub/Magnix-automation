@@ -16,6 +16,7 @@ import { isBrowseRateLimited } from "@/lib/security/browse-rate-limit";
 import { RateLimitNotice } from "@/components/security/rate-limit-notice";
 import { PreloadHeroBrandSkyline } from "@/components/home/hero-brand-background";
 import { getSiteUrl } from "@/lib/site-config";
+import { normalizeSeoDescription } from "@/lib/seo/meta-text";
 
 export const revalidate = 120;
 
@@ -39,7 +40,9 @@ export async function generateMetadata({
   if (dbType) parts.push(propertyTypeLabel(dbType));
   if (locationLabel) parts.push(locationLabel);
   const title = parts.join(" — ");
-  const description = `Tìm mua ${dbType ? propertyTypeLabel(dbType).toLowerCase() : "nhà đất"}${locationLabel ? ` tại ${locationLabel}` : " tại TP.HCM và các tỉnh lân cận"}. Tin đã kiểm duyệt, dễ so sánh theo khu vực.`;
+  const description = normalizeSeoDescription(
+    `Tìm mua ${dbType ? propertyTypeLabel(dbType).toLowerCase() : "nhà đất"}${locationLabel ? ` tại ${locationLabel}` : " tại TP.HCM và các tỉnh lân cận"}. ${LISTINGS_BROWSE_COPY.sale.seoDescriptionSuffix}`,
+  );
 
   return {
     title,
@@ -65,22 +68,23 @@ function buildCanonical(sp: {
 }
 
 export default async function MuaBanPage({ searchParams }: PageProps) {
-  if (await isBrowseRateLimited()) {
-    return <RateLimitNotice />;
-  }
   const sp = await searchParams;
   const page = Math.max(1, Number(sp.page) || 1);
   const propertyType = propertyTypeFromSlug(sp.propertyType);
   const location = resolveListingBrowseLocation(sp);
   const copy = LISTINGS_BROWSE_COPY.sale;
 
-  const { items, pagination } = await browseListings({
+  const browsePromise = browseListings({
     transactionType: "SALE",
     province: location.province,
     district: location.district,
     propertyType,
     page,
   });
+  if (await isBrowseRateLimited()) {
+    return <RateLimitNotice />;
+  }
+  const { items, pagination } = await browsePromise;
 
   const siteUrl = getSiteUrl();
   const jsonLd = buildListingListJsonLd(siteUrl, "/mua-ban", copy.listTitle, items);
