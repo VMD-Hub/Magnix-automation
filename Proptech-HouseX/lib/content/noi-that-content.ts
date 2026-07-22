@@ -100,9 +100,6 @@ export type InteriorCaseStudy = {
   isMock: boolean;
 };
 
-const u = (id: string) =>
-  `https://images.unsplash.com/${id}?auto=format&fit=crop&w=1200&q=80`;
-
 export const INTERIOR_CASE_STUDIES: InteriorCaseStudy[] = [
   {
     slug: "can-ho-2pn-q1-hien-dai",
@@ -275,19 +272,31 @@ export type NhaDepPin = {
   span: "normal" | "tall" | "wide";
 };
 
+/** Pin inspiration — local assets only (Ahrefs: Unsplash IDs chết → 404). */
+const INTERIOR_PIN_IMAGES = [
+  "/images/tools/interior-hub.webp",
+  "/images/hero/urban-skyline-golden-hour.jpg",
+  "/images/hero/housex-thu-thiem-civic-center-day.webp",
+  "/images/hero/housex-hero-slide-02-metro-hub.webp",
+  "/images/hero/hcmc-skyline-river-day.webp",
+  "/images/hero/housex-hero-slide-01-civic-center.webp",
+  "/images/hero/hcmc-skyline-river-night.webp",
+  "/images/hero/housex-thu-thiem-civic-center-night.webp",
+] as const;
+
 export const NHA_DEP_PINS: NhaDepPin[] = [
-  { slug: "phong-khach-sang", title: "Phòng khách sáng", image: u("photo-1600210492486-724fe641c782"), tags: ["Phòng khách", "Hiện đại"], span: "wide" },
-  { slug: "bep-lien-thong", title: "Bếp liên thông", image: u("photo-1600607687939-ce8a6c25118c"), tags: ["Bếp", "Scandinavian"], span: "normal" },
-  { slug: "pn-master-be", title: "Phòng ngủ master tone be", image: u("photo-1615529328331-f8917597711f"), tags: ["Phòng ngủ", "Indochine"], span: "tall" },
-  { slug: "wc-toi-gian", title: "WC tối giản", image: u("photo-1600585154340-be6161a56a0c"), tags: ["Phòng tắm", "Minimal"], span: "normal" },
-  { slug: "ban-cong-xanh", title: "Ban công xanh", image: u("photo-1600566753190-17f0baa2a6a3"), tags: ["Ban công", "Decor"], span: "normal" },
-  { slug: "phong-lam-viec", title: "Góc làm việc tại nhà", image: u("photo-1598928506311-c55ded39a2c7"), tags: ["Workspace", "Căn hộ"], span: "wide" },
-  { slug: "sanh-nha-pho", title: "Sảnh nhà phố", image: u("photo-1616486338812-28d840397daf"), tags: ["Nhà phố", "Hiện đại"], span: "tall" },
-  { slug: "phong-an-gia-dinh", title: "Phòng ăn gia đình", image: u("photo-1615874959493-9dfa899b0f94"), tags: ["Phòng ăn", "Scandinavian"], span: "normal" },
-  { slug: "phong-khach-indochine", title: "Salon Indochine", image: u("photo-1600210492493-4c6914dce3af"), tags: ["Phòng khách", "Indochine"], span: "wide" },
-  { slug: "tre-trang-tri", title: "Decor cây xanh", image: u("photo-1600607687644-c7171b42498b"), tags: ["Decor", "Scandinavian"], span: "normal" },
-  { slug: "phong-ngu-nho", title: "Phòng ngủ căn nhỏ", image: u("photo-1522771739844-6a9f6d5f14af"), tags: ["Phòng ngủ", "Căn hộ"], span: "normal" },
-  { slug: "ke-sach-tuong", title: "Kệ sách âm tường", image: u("photo-1618221195710-dd6b41faaea6"), tags: ["Storage", "Minimal"], span: "tall" },
+  { slug: "phong-khach-sang", title: "Phòng khách sáng", image: INTERIOR_PIN_IMAGES[0], tags: ["Phòng khách", "Hiện đại"], span: "wide" },
+  { slug: "bep-lien-thong", title: "Bếp liên thông", image: INTERIOR_PIN_IMAGES[1], tags: ["Bếp", "Scandinavian"], span: "normal" },
+  { slug: "pn-master-be", title: "Phòng ngủ master tone be", image: INTERIOR_PIN_IMAGES[2], tags: ["Phòng ngủ", "Indochine"], span: "tall" },
+  { slug: "wc-toi-gian", title: "WC tối giản", image: INTERIOR_PIN_IMAGES[3], tags: ["Phòng tắm", "Minimal"], span: "normal" },
+  { slug: "ban-cong-xanh", title: "Ban công xanh", image: INTERIOR_PIN_IMAGES[4], tags: ["Ban công", "Decor"], span: "normal" },
+  { slug: "phong-lam-viec", title: "Góc làm việc tại nhà", image: INTERIOR_PIN_IMAGES[5], tags: ["Workspace", "Căn hộ"], span: "wide" },
+  { slug: "sanh-nha-pho", title: "Sảnh nhà phố", image: INTERIOR_PIN_IMAGES[6], tags: ["Nhà phố", "Hiện đại"], span: "tall" },
+  { slug: "phong-an-gia-dinh", title: "Phòng ăn gia đình", image: INTERIOR_PIN_IMAGES[7], tags: ["Phòng ăn", "Scandinavian"], span: "normal" },
+  { slug: "phong-khach-indochine", title: "Salon Indochine", image: INTERIOR_PIN_IMAGES[2], tags: ["Phòng khách", "Indochine"], span: "wide" },
+  { slug: "tre-trang-tri", title: "Decor cây xanh", image: INTERIOR_PIN_IMAGES[0], tags: ["Decor", "Scandinavian"], span: "normal" },
+  { slug: "phong-ngu-nho", title: "Phòng ngủ căn nhỏ", image: INTERIOR_PIN_IMAGES[1], tags: ["Phòng ngủ", "Căn hộ"], span: "normal" },
+  { slug: "ke-sach-tuong", title: "Kệ sách âm tường", image: INTERIOR_PIN_IMAGES[3], tags: ["Storage", "Minimal"], span: "tall" },
 ];
 
 export const NHA_DEP_TAGS = [

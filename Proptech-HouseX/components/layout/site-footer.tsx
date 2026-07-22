@@ -8,20 +8,15 @@ import {
   NOXH_HANDBOOK_TITLE,
 } from "@/lib/content/messaging/noxh-public";
 import { RENT_PROPERTY_TYPE_FILTER_OPTIONS } from "@/lib/content/property-type-slug";
+import {
+  FOOTER_SALE_DISTRICTS,
+  listingBrowsePath,
+} from "@/lib/content/listing-browse-url";
 import { getLegalEntityDisclosure } from "@/lib/content/legal-entity";
 import { getBrandName } from "@/lib/site-config";
 import { HouseXFooterLogo } from "@/components/brand/housex-footer-logo";
 import { FooterBrandOrnament } from "@/components/layout/footer-brand-ornament";
 import { SiteContact } from "@/components/layout/site-contact";
-
-const DISTRICTS = [
-  "Quận 1",
-  "Quận 2",
-  "Quận 7",
-  "Quận 9",
-  "Bình Thạnh",
-  "Thủ Đức",
-];
 
 const PROPERTY_TYPES = RENT_PROPERTY_TYPE_FILTER_OPTIONS;
 
@@ -64,10 +59,10 @@ export function SiteFooter() {
 
           <div className="grid gap-8 sm:grid-cols-2 md:grid-cols-3 lg:col-span-8 xl:col-span-9 xl:grid-cols-5">
           <FooterCol title="Mua bán theo khu vực">
-            {DISTRICTS.map((d) => (
+            {FOOTER_SALE_DISTRICTS.map((d) => (
               <li key={d}>
                 <Link
-                  href={`/mua-ban?district=${encodeURIComponent(d)}`}
+                  href={listingBrowsePath("/mua-ban", { district: d })}
                   className={FOOTER_LINK}
                 >
                   Mua bán nhà đất {d}

@@ -1,5 +1,6 @@
-import { redirect } from "next/navigation";
+/** Redirect 301 → /dinh-gia (next.config.mjs). */
+import { permanentRedirect } from "next/navigation";
 
 export default function CongCuDinhGiaRedirect() {
-  redirect("/dinh-gia");
+  permanentRedirect("/dinh-gia");
 }

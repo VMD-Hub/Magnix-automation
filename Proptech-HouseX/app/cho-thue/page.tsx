@@ -17,6 +17,7 @@ import { RateLimitNotice } from "@/components/security/rate-limit-notice";
 import { PreloadHeroBrandSkyline } from "@/components/home/hero-brand-background";
 import { getSiteUrl } from "@/lib/site-config";
 import { normalizeSeoDescription } from "@/lib/seo/meta-text";
+import { listingBrowseCanonicalUrl } from "@/lib/content/listing-browse-url";
 
 export const revalidate = 120;
 
@@ -44,18 +45,19 @@ export async function generateMetadata({
     `Tìm thuê ${dbType ? propertyTypeLabel(dbType).toLowerCase() : "nhà đất"}${locationLabel ? ` tại ${locationLabel}` : " tại TP.HCM và các tỉnh lân cận"}. ${LISTINGS_BROWSE_COPY.rent.seoDescriptionSuffix}`,
   );
 
-  const site = getSiteUrl();
-  const q = new URLSearchParams();
-  if (sp.province) q.set("province", sp.province);
-  if (sp.district) q.set("district", sp.district);
-  if (sp.propertyType) q.set("propertyType", sp.propertyType);
-  const qs = q.toString();
-
   return {
     title,
     description,
     alternates: {
-      canonical: site ? `${site}/cho-thue${qs ? `?${qs}` : ""}` : undefined,
+      canonical: listingBrowseCanonicalUrl(
+        "/cho-thue",
+        {
+          province: sp.province,
+          district: sp.district,
+          propertyType: sp.propertyType,
+        },
+        getSiteUrl(),
+      ),
     },
   };
 }

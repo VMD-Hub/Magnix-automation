@@ -1,4 +1,5 @@
 import { TRANSACTION_TYPE_LABEL, propertyTypeLabel } from "@/lib/format";
+import { normalizeSeoTitle } from "@/lib/seo/meta-text";
 
 export type ListingTitleInput = {
   transactionType: string;
@@ -35,11 +36,15 @@ export function resolveListingDisplayTitle(l: ListingTitleInput): string {
   return buildListingTitle(l);
 }
 
-/** Meta `<title>` — gắn mã tin nếu chưa có trong headline. */
+/**
+ * Meta `<title>` segment (trước template `| House X`) — ≤50 ký tự.
+ * Ưu tiên headline; mã tin chỉ gắn nếu còn chỗ.
+ */
 export function resolveListingMetaTitle(l: ListingTitleInput): string {
   const display = resolveListingDisplayTitle(l);
   if (l.code && !display.includes(l.code)) {
-    return `${display} — ${l.code}`;
+    const withCode = `${display} — ${l.code}`;
+    return normalizeSeoTitle(withCode);
   }
-  return display;
+  return normalizeSeoTitle(display);
 }

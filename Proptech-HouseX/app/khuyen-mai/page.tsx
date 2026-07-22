@@ -4,9 +4,9 @@ import { CatalogPageShell } from "@/components/layout/catalog-page-shell";
 import { PromotionHub } from "@/components/promotion/promotion-hub";
 
 export const metadata: Metadata = {
-  title: "Khuyến mãi NOXH — Vòng quay may mắn HouseX",
+  title: "Khuyến mãi NOXH — Vòng quay may mắn",
   description:
-    "Vòng quay khuyến mãi dành riêng phân hệ nhà ở xã hội (NOXH) trên HouseX. Không áp dụng nhà thương mại hay dịch vụ khác. Quà có giá trị sau HĐMB NOXH.",
+    "Vòng quay khuyến mãi dành riêng phân hệ nhà ở xã hội (NOXH) trên House X. Không áp dụng nhà thương mại hay dịch vụ khác. Quà có giá trị sau HĐMB NOXH.",
   alternates: { canonical: "/khuyen-mai" },
 };
 

@@ -34,6 +34,7 @@ import {
   normalizeSeoDescription,
   normalizeSeoTitle,
 } from "@/lib/seo/meta-text";
+import { resolveArticleOgImageUrl } from "@/lib/content/safe-image";
 
 export const revalidate = 300;
 
@@ -54,9 +55,11 @@ export async function generateMetadata({
     article.seoDesc ?? article.excerpt ?? article.title.slice(0, 160),
   );
   const canonical = `${siteUrl}${articlePath(article.slug)}`;
-  const ogImage = article.coverImageUrl
-    ? absoluteArticleImageUrl(article.coverImageUrl, siteUrl)
-    : undefined;
+  const ogImage = absoluteArticleImageUrl(
+    resolveArticleOgImageUrl(article.coverImageUrl),
+    siteUrl,
+  );
+  const ogImages = [{ url: ogImage, alt: article.coverImageAlt ?? title }];
 
   return {
     title,
@@ -67,9 +70,17 @@ export async function generateMetadata({
       description,
       url: canonical,
       type: "article",
+      siteName: "House X",
+      locale: "vi_VN",
       publishedTime: article.publishedAt?.toISOString(),
       modifiedTime: article.updatedAt.toISOString(),
-      images: ogImage ? [{ url: ogImage, alt: article.coverImageAlt ?? title }] : undefined,
+      images: ogImages,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [ogImage],
     },
   };
 }

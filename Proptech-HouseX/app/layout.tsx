@@ -13,6 +13,7 @@ import {
   SEO_DESCRIPTION_DEFAULT,
   SEO_TITLE_DEFAULT,
 } from "@/lib/content/messaging/brand";
+import { IMAGE_FALLBACK } from "@/lib/content/safe-image";
 
 const geistSans = Inter({
   variable: "--font-geist-sans",
@@ -24,6 +25,11 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const defaultOgImage = {
+  url: IMAGE_FALLBACK,
+  alt: "House X — Smart Tools · Trusted Utility",
+};
+
 export const metadata: Metadata = {
   metadataBase: new URL(getSiteUrl()),
   title: {
@@ -31,6 +37,20 @@ export const metadata: Metadata = {
     template: "%s | House X",
   },
   description: SEO_DESCRIPTION_DEFAULT,
+  openGraph: {
+    type: "website",
+    locale: "vi_VN",
+    siteName: "House X",
+    title: SEO_TITLE_DEFAULT,
+    description: SEO_DESCRIPTION_DEFAULT,
+    images: [defaultOgImage],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: SEO_TITLE_DEFAULT,
+    description: SEO_DESCRIPTION_DEFAULT,
+    images: [IMAGE_FALLBACK],
+  },
   icons: {
     icon: [
       { url: "/favicon.ico", sizes: "48x48" },

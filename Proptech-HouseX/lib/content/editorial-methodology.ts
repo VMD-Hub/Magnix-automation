@@ -8,7 +8,7 @@ export type MethodologyStep = {
 };
 
 export const EDITORIAL_METHODOLOGY = {
-  metaTitle: "Phương pháp biên tập & kiểm chứng tin | House X",
+  metaTitle: "Phương pháp biên tập & kiểm chứng tin",
   metaDescription:
     "Quy trình kiểm chứng tin đăng House X: đối chiếu địa chỉ, giá, ảnh; kiểm duyệt biên tập; phản hồi cộng đồng — minh bạch và có thể kiểm tra.",
   title: "Phương pháp biên tập House X",

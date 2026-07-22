@@ -22,7 +22,7 @@ export type EditorialRole = {
 };
 
 export const TEAM_EDITORIAL_PAGE = {
-  metaTitle: "Về đội ngũ & Biên tập | House X",
+  metaTitle: "Về đội ngũ & Biên tập",
   metaDescription:
     "Đội ngũ House X: ban lãnh đạo, biên tập viên kiểm duyệt và chuyên gia rà soát — cam kết thông tin BĐS rõ ràng, chuẩn xác và minh bạch.",
   title: "Về đội ngũ & Biên tập",

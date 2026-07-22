@@ -23,8 +23,8 @@ Nguồn tham chiếu code (citation public đã chọn sẵn, không phải full
 
 | id | Nguồn | URL | Vai trò | Ghi chú |
 |----|-------|-----|---------|---------|
-| `vnexpress-noxh` | VnExpress BĐS / NOXH | https://vnexpress.net/bat-dong-san/nha-o-xa-hoi | Discovery T1 | Có thể hiện 1 link bài cụ thể cho reader |
-| `moc-gov` | Bộ Xây dựng | https://moc.gov.vn/ | Chính sách / tín hiệu ngành | Không thay SoR mở bán |
+| `vnexpress-noxh` | VnExpress BĐS | https://vnexpress.net/bat-dong-san | Discovery T1 | Category `/nha-o-xa-hoi` đã gãy (302→error); dùng hub BĐS |
+| `moc-gov` | Bộ Xây dựng | https://moc.gov.vn/vn/Pages/Trangchu.aspx | Chính sách / tín hiệu ngành | Trỏ URL cuối (tránh 302 từ `/`) |
 | `vanban-chinhphu` | Cổng VB Chính phủ | https://vanban.chinhphu.vn/ | Pháp lý quốc gia (song song ladder) | Điều kiện NOXH — lớp A, không phải tin dự án |
 
 **Rule T1 (ops → reader):** publish/nurture phải có disclaimer người đọc

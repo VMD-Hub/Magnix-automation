@@ -10,6 +10,7 @@ import { buildPersonJsonLd } from "@/lib/seo/person-json-ld";
 import { HOUSEX_PROSE_CLASS } from "@/components/content/document-typography";
 import { buildBreadcrumbJsonLd } from "@/lib/seo/affiliate-json-ld";
 import { getSiteUrl } from "@/lib/site-config";
+import { normalizeSeoDescription, normalizeSeoTitle } from "@/lib/seo/meta-text";
 
 type PageProps = { params: Promise<{ slug: string }> };
 
@@ -25,8 +26,8 @@ export async function generateMetadata({
   if (!expert) return { title: "Không tìm thấy" };
 
   return {
-    title: `${expert.name} — ${expert.jobTitle}`,
-    description: expert.bio.slice(0, 160),
+    title: normalizeSeoTitle(`${expert.name} — Chuyên gia NOXH`),
+    description: normalizeSeoDescription(expert.bio),
     alternates: {
       canonical: `${getSiteUrl()}/chuyen-gia/${slug}`,
     },

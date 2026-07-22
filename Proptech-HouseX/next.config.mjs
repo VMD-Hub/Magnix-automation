@@ -170,6 +170,22 @@ const nextConfig = {
         destination: "/dieu-khoan",
         permanent: true,
       },
+      // Hub redirects — 301 ở nginx/Next config (Ahrefs không còn “trang không H1”)
+      {
+        source: "/chuyen-gia",
+        destination: "/doi-ngu",
+        permanent: true,
+      },
+      {
+        source: "/cong-cu/dinh-gia",
+        destination: "/dinh-gia",
+        permanent: true,
+      },
+      {
+        source: "/tin-tuc/:slug((?!cam-nang-noxh|chu-de)[^/]+)",
+        destination: "/tin-tuc/cam-nang-noxh/:slug",
+        permanent: true,
+      },
     ];
   },
 };

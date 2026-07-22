@@ -36,3 +36,10 @@ export function ensureArticleCoverUrl(
   if (url == null) return null;
   return isSafeImageUrl(url) ? url : ARTICLE_COVER_FALLBACK;
 }
+
+/** Luôn trả URL ảnh cho Open Graph / Twitter — null → fallback site. */
+export function resolveArticleOgImageUrl(
+  url: string | null | undefined,
+): string {
+  return ensureArticleCoverUrl(url) ?? ARTICLE_COVER_FALLBACK;
+}

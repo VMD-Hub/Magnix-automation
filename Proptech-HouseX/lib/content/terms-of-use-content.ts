@@ -25,7 +25,7 @@ export type TermsChangeLogEntry = {
 };
 
 export const TERMS_OF_USE = {
-  metaTitle: "Điều khoản sử dụng — House X | Terms of Use",
+  metaTitle: "Điều khoản sử dụng",
   metaDescription:
     "Quy định sử dụng nền tảng House X (VN/EN): tài khoản, đăng tin, bảo vệ liên hệ, trách nhiệm pháp lý và giải quyết tranh chấp.",
   effectiveDate: "4 tháng 7, 2026",

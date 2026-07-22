@@ -2,11 +2,8 @@ import type { AffiliateVertical } from "@/lib/content/affiliate-verticals";
 
 export type ServiceVerticalId = AffiliateVertical["id"];
 
-const u = (id: string, w = 1200) =>
-  `https://images.unsplash.com/${id}?auto=format&fit=crop&w=${w}&q=80`;
-
 export const SERVICES_HUB_VISUAL = {
-  heroImage: u("photo-1560518883-ce09059eeffa", 1920),
+  heroImage: "/images/hero/hcmc-skyline-river-day.webp",
   eyebrow: "Dịch vụ HouseX",
   tagline: "Từ tìm nhà đến an cư trọn vẹn",
   highlights: [
@@ -86,7 +83,8 @@ export const VERTICAL_VISUALS: Record<ServiceVerticalId, VerticalVisual> = {
     ],
   },
   "dinh-gia": {
-    heroImage: u("photo-1560518883-ce09059eeffa", 1920),
+    heroImage: "/images/hero/hcmc-skyline-river-day.webp",
+    heroImageWebp: "/images/hero/hcmc-skyline-river-day.webp",
     heroGradient: "from-ink-900/95 via-slate-900/90 to-brand-900/75",
     accentRing: "ring-brand-200/60",
     accentBg: "bg-brand-50",
@@ -161,27 +159,27 @@ export const VERTICAL_VISUALS: Record<ServiceVerticalId, VerticalVisual> = {
   },
 };
 
-/** Ảnh thẻ dịch vụ theo slug hoặc product line id */
+/** Ảnh thẻ dịch vụ theo slug hoặc product line id — ưu tiên local (tránh Unsplash 404). */
 export const SERVICE_CARD_IMAGES: Record<string, string> = {
   "vay-mua-bds": "/images/tools/finance-hub.png",
   "vay-mua-nha": "/images/tools/finance-hub.png",
   "vay-the-chap": "/images/tools/finance-hub.png",
   "vay-sxkd": "/images/tools/business-loan.png",
-  "bao-hiem-tai-san": u("photo-1450101499163-c8848c66ca85"),
-  "tra-cuu-gia-chu-nha": u("photo-1564013799919-ab600027ffc6"),
+  "bao-hiem-tai-san": "/images/tools/finance-hub.png",
+  "tra-cuu-gia-chu-nha": "/images/hero/hcmc-skyline-river-day.webp",
   "tham-dinh-ngan-hang": "/images/tools/finance-hub.png",
-  "chung-nhan-tham-dinh": u("photo-1450101499163-c8848c66ca85"),
+  "chung-nhan-tham-dinh": "/images/tools/finance-hub.png",
   "phan-chia-thua-ke": "/images/projects/la-home/hero.jpg",
-  "chung-minh-tai-san-visa": u("photo-1436491865332-7a61a109cc05"),
-  "phong-cach-hien-dai": u("photo-1600210492486-724fe641c782"),
-  "hien-dai": u("photo-1600210492486-724fe641c782"),
-  "phong-cach-scandinavian": u("photo-1600607687939-ce8a6c25118c"),
-  scandinavian: u("photo-1600607687939-ce8a6c25118c"),
-  "phong-cach-indochine": u("photo-1615529328331-f8917597711f"),
-  indochine: u("photo-1615529328331-f8917597711f"),
-  "phong-cach-toi-gian": u("photo-1600585154340-be6161a56a0c"),
-  "toi-gian": u("photo-1600585154340-be6161a56a0c"),
-  "can-ho-dep-y-tuong": u("photo-1600566753190-17f0baa2a6a3"),
+  "chung-minh-tai-san-visa": "/images/hero/housex-hero-slide-01-civic-center.webp",
+  "phong-cach-hien-dai": "/images/tools/interior-hub.webp",
+  "hien-dai": "/images/tools/interior-hub.webp",
+  "phong-cach-scandinavian": "/images/hero/urban-skyline-golden-hour.jpg",
+  scandinavian: "/images/hero/urban-skyline-golden-hour.jpg",
+  "phong-cach-indochine": "/images/hero/housex-thu-thiem-civic-center-day.webp",
+  indochine: "/images/hero/housex-thu-thiem-civic-center-day.webp",
+  "phong-cach-toi-gian": "/images/hero/housex-hero-slide-02-metro-hub.webp",
+  "toi-gian": "/images/hero/housex-hero-slide-02-metro-hub.webp",
+  "can-ho-dep-y-tuong": "/images/tools/interior-hub.webp",
 };
 
 /** WebP cho thẻ dịch vụ có ảnh thương hiệu local. */
@@ -191,6 +189,11 @@ export const SERVICE_CARD_IMAGES_WEBP: Record<string, string> = {
   "vay-the-chap": "/images/tools/finance-hub.webp",
   "vay-sxkd": "/images/tools/business-loan.webp",
   "tham-dinh-ngan-hang": "/images/tools/finance-hub.webp",
+  "bao-hiem-tai-san": "/images/tools/finance-hub.webp",
+  "chung-nhan-tham-dinh": "/images/tools/finance-hub.webp",
+  "phong-cach-hien-dai": "/images/tools/interior-hub.webp",
+  "hien-dai": "/images/tools/interior-hub.webp",
+  "can-ho-dep-y-tuong": "/images/tools/interior-hub.webp",
 };
 
 export const HUB_VERTICAL_CARDS: Record<
@@ -203,7 +206,7 @@ export const HUB_VERTICAL_CARDS: Record<
     cta: "Tư vấn vay ngay",
   },
   "dinh-gia": {
-    image: u("photo-1560518883-ce09059eeffa"),
+    image: "/images/hero/hcmc-skyline-river-day.webp",
     badge: "Thẩm định",
     cta: "Yêu cầu định giá",
   },
@@ -217,7 +220,7 @@ export const HUB_VERTICAL_CARDS: Record<
 export function cardImageForSlug(slug: string): string {
   return (
     SERVICE_CARD_IMAGES[slug] ??
-    u("photo-1560518883-ce09059eeffa")
+    "/images/tools/interior-hub.webp"
   );
 }
 

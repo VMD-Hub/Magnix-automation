@@ -1,7 +1,7 @@
 import type { LegalAppendixDoc } from "@/lib/content/legal-appendix-types";
 
 export const APPENDIX_A_SLA: LegalAppendixDoc = {
-  metaTitle: "Phụ lục A — Quy trình SLA xử lý báo cáo | House X",
+  metaTitle: "Phụ lục A — SLA xử lý báo cáo",
   metaDescription:
     "Quy trình tiếp nhận, phân loại và xử lý báo cáo tin sai trên House X — SLA 24–72 giờ, minh bạch (VN/EN).",
   effectiveDate: "4 tháng 7, 2026",

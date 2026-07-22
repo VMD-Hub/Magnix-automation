@@ -254,27 +254,51 @@ export function PromotionHub({ slug = DEFAULT_PROMOTION_SLUG, preview = false }:
 
   if (loading) {
     return (
-      <div className="flex min-h-[320px] items-center justify-center text-slate-500">
-        Đang tải chương trình…
+      <div className="space-y-10">
+        <header className="proptech-catalog-hero proptech-catalog-hero--compact">
+          <RubySurfaceOrnament variant="holder" />
+          <div className="proptech-catalog-hero__body relative">
+            <div className="proptech-catalog-hero__content px-6 py-8 sm:px-8">
+              <p className="proptech-kicker text-gold-400">Vòng quay may mắn · NOXH</p>
+              <h1 className="mt-2 max-w-2xl text-3xl font-extrabold text-white sm:text-4xl">
+                Khuyến mãi NOXH — Vòng quay may mắn
+              </h1>
+              <p className="mt-3 text-sm text-silver-200">Đang tải chương trình…</p>
+            </div>
+          </div>
+        </header>
       </div>
     );
   }
 
   if (error || !data) {
     return (
-      <div className="rounded-2xl border border-red-200 bg-red-50 p-6 text-center text-red-800">
-        <p>{error ?? "Không tìm thấy chương trình."}</p>
-        {!preview ? (
-          <p className="mt-3 text-sm text-red-700">
-            Chương trình chưa được kích hoạt trên server. Admin chạy{" "}
-            <code className="rounded bg-white px-1">npm run db:seed</code> trong thư mục app,
-            hoặc xem thử tại{" "}
-            <Link href="/preview/khuyen-mai" className="font-semibold underline">
-              /preview/khuyen-mai
-            </Link>
-            .
-          </p>
-        ) : null}
+      <div className="space-y-6">
+        <header className="proptech-catalog-hero proptech-catalog-hero--compact">
+          <RubySurfaceOrnament variant="holder" />
+          <div className="proptech-catalog-hero__body relative">
+            <div className="proptech-catalog-hero__content px-6 py-8 sm:px-8">
+              <p className="proptech-kicker text-gold-400">Vòng quay may mắn · NOXH</p>
+              <h1 className="mt-2 max-w-2xl text-3xl font-extrabold text-white sm:text-4xl">
+                Khuyến mãi NOXH — Vòng quay may mắn
+              </h1>
+            </div>
+          </div>
+        </header>
+        <div className="rounded-2xl border border-red-200 bg-red-50 p-6 text-center text-red-800">
+          <p>{error ?? "Không tìm thấy chương trình."}</p>
+          {!preview ? (
+            <p className="mt-3 text-sm text-red-700">
+              Chương trình chưa được kích hoạt trên server. Admin chạy{" "}
+              <code className="rounded bg-white px-1">npm run db:seed</code> trong thư mục app,
+              hoặc xem thử tại{" "}
+              <Link href="/preview/khuyen-mai" className="font-semibold underline">
+                /preview/khuyen-mai
+              </Link>
+              .
+            </p>
+          ) : null}
+        </div>
       </div>
     );
   }

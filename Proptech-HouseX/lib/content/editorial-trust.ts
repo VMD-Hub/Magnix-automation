@@ -60,13 +60,15 @@ export const NOXH_MEDIA_SOURCES: LegalSourceRef[] = [
     id: "vnexpress-noxh",
     label: "VnExpress",
     cite: "Tin công bố giá & hồ sơ NOXH TP.HCM",
-    url: "https://vnexpress.net/bat-dong-san/nha-o-xa-hoi",
+    // Category /nha-o-xa-hoi đã 302 → error.html (Ahrefs); dùng hub BĐS ổn định.
+    url: "https://vnexpress.net/bat-dong-san",
   },
   {
     id: "moc-gov",
     label: "Bộ Xây dựng",
     cite: "Chính sách nhà ở xã hội",
-    url: "https://moc.gov.vn/",
+    // Root moc.gov.vn 302 → Trangchu; trỏ thẳng URL cuối để tránh hop.
+    url: "https://moc.gov.vn/vn/Pages/Trangchu.aspx",
   },
 ];
 

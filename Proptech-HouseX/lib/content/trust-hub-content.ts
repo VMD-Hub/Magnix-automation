@@ -6,7 +6,7 @@
 import type { RichFaqItem } from "@/lib/content/faq-content";
 
 export const BRAND_STORY = {
-  metaTitle: "Câu chuyện House X — Hành trình hình thành cổng Proptech",
+  metaTitle: "Câu chuyện House X — cổng Proptech",
   metaDescription:
     "Từ một buổi chiều mưa ở Sài Gòn đến House X: cổng BĐS đặt người mua làm trung tâm — thông tin chuẩn, sản phẩm thật.",
   title: "Câu chuyện thương hiệu",
@@ -134,7 +134,7 @@ export const PLATFORM_FAQ: RichFaqItem[] = [
 ];
 
 export const FAQ_HUB = {
-  metaTitle: "Câu hỏi thường gặp | House X",
+  metaTitle: "Câu hỏi thường gặp",
   metaDescription:
     "Giải đáp về độ tin cậy tin đăng, bảo vệ số điện thoại, đăng tin, mô hình kinh doanh và nội dung NOXH trên House X.",
   title: "Câu hỏi thường gặp",
@@ -142,7 +142,7 @@ export const FAQ_HUB = {
 } as const;
 
 export const EXPERTS_INDEX = {
-  metaTitle: "Đội ngũ & chuyên gia rà soát | House X",
+  metaTitle: "Đội ngũ & chuyên gia rà soát",
   metaDescription:
     "Ban biên tập và chuyên gia rà soát nội dung House X — đặc biệt nhà ở xã hội và pháp lý liên quan.",
   title: "Đội ngũ & biên tập",
@@ -151,7 +151,7 @@ export const EXPERTS_INDEX = {
 } as const;
 
 export const CONTACT_PAGE = {
-  metaTitle: "Liên hệ & trung tâm hỗ trợ | House X",
+  metaTitle: "Liên hệ & trung tâm hỗ trợ",
   metaDescription:
     "Liên hệ House X: tư vấn dịch vụ vay, định giá, nội thất; báo tin sai; hỗ trợ tài khoản.",
   title: "Liên hệ & hỗ trợ",
@@ -192,7 +192,7 @@ export type LegalSection = {
 };
 
 export const PRIVACY_CONTENT = {
-  metaTitle: "Chính sách bảo mật — House X",
+  metaTitle: "Chính sách bảo mật",
   metaDescription:
     "House X cam kết bảo vệ dữ liệu cá nhân và bảo mật liên hệ; tìm hiểu cách chúng tôi thu, dùng và bảo vệ thông tin của bạn.",
   updated: "Tháng 7/2026",

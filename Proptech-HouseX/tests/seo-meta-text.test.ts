@@ -31,4 +31,11 @@ describe("seo meta-text", () => {
     const d = normalizeSeoDescription(long);
     assert.ok([...d].length <= 160);
   });
+
+  it("listing-style title with code stays ≤50", () => {
+    const t = normalizeSeoTitle(
+      "Cao tốc Biên Hòa–Vũng Tàu ~10 phút — NOXH A10-216 Happy Home 544 triệu — DTA-HH-A10216",
+    );
+    assert.ok([...t].length <= 50);
+  });
 });

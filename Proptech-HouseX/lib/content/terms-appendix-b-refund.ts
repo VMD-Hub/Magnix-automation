@@ -1,7 +1,7 @@
 import type { LegalAppendixDoc } from "@/lib/content/legal-appendix-types";
 
 export const APPENDIX_B_REFUND: LegalAppendixDoc = {
-  metaTitle: "Phụ lục B — Chính sách hoàn tiền dịch vụ trả phí | House X",
+  metaTitle: "Phụ lục B — Hoàn tiền dịch vụ trả phí",
   metaDescription:
     "Điều kiện hoàn tiền, thời hạn xử lý và trường hợp không hoàn tiền cho gói trả phí House X (VN/EN).",
   effectiveDate: "4 tháng 7, 2026",

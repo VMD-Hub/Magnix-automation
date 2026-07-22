@@ -9,7 +9,7 @@ export type ComplaintPillar = {
 };
 
 export const COMPLAINT_HANDLING_POLICY = {
-  metaTitle: "Chính sách xử lý khiếu nại — House X | Complaint Handling Policy",
+  metaTitle: "Chính sách xử lý khiếu nại",
   metaDescription:
     "House X tiếp nhận khiếu nại minh bạch: xác nhận 24 giờ làm việc, xử lý thông thường trong 3 ngày — tin đăng, tài khoản, dịch vụ trả phí (VN/EN).",
   effectiveDate: "4 tháng 7, 2026",

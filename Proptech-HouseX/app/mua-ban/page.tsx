@@ -17,6 +17,7 @@ import { RateLimitNotice } from "@/components/security/rate-limit-notice";
 import { PreloadHeroBrandSkyline } from "@/components/home/hero-brand-background";
 import { getSiteUrl } from "@/lib/site-config";
 import { normalizeSeoDescription } from "@/lib/seo/meta-text";
+import { listingBrowseCanonicalUrl } from "@/lib/content/listing-browse-url";
 
 export const revalidate = 120;
 
@@ -48,23 +49,17 @@ export async function generateMetadata({
     title,
     description,
     alternates: {
-      canonical: buildCanonical(sp),
+      canonical: listingBrowseCanonicalUrl(
+        "/mua-ban",
+        {
+          province: sp.province,
+          district: sp.district,
+          propertyType: sp.propertyType,
+        },
+        getSiteUrl(),
+      ),
     },
   };
-}
-
-function buildCanonical(sp: {
-  province?: string;
-  district?: string;
-  propertyType?: string;
-}) {
-  const site = getSiteUrl();
-  const q = new URLSearchParams();
-  if (sp.province) q.set("province", sp.province);
-  if (sp.district) q.set("district", sp.district);
-  if (sp.propertyType) q.set("propertyType", sp.propertyType);
-  const qs = q.toString();
-  return site ? `${site}/mua-ban${qs ? `?${qs}` : ""}` : undefined;
 }
 
 export default async function MuaBanPage({ searchParams }: PageProps) {

@@ -51,6 +51,11 @@ export async function generateMetadata({
   const canonical = `${siteUrl}/du-an/${project.slug}`;
   const overview = parseProjectOverview(project.overviewData);
   const hero = resolveLandingHeroImage(overview.landing, project.name);
+  const ogImage =
+    hero?.url ??
+    project.developer?.logoUrl ??
+    "/images/hero/hcmc-skyline-river-day.webp";
+  const ogAlt = hero?.alt ?? project.developer?.name ?? project.name;
 
   return {
     title,
@@ -61,11 +66,7 @@ export async function generateMetadata({
       description,
       url: canonical,
       type: "website",
-      images: hero?.url
-        ? [{ url: hero.url, alt: hero.alt ?? project.name }]
-        : project.developer?.logoUrl
-          ? [{ url: project.developer.logoUrl, alt: project.developer.name }]
-          : undefined,
+      images: [{ url: ogImage, alt: ogAlt }],
     },
   };
 }

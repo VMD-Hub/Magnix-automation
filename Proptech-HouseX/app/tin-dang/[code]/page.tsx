@@ -12,6 +12,7 @@ import {
   resolveListingDisplayTitle,
   resolveListingMetaTitle,
 } from "@/lib/content/title";
+import { normalizeSeoDescription } from "@/lib/seo/meta-text";
 import { maskPhone } from "@/lib/privacy/phone";
 import { BrokerContactCard } from "@/components/listings/broker-contact-card";
 import { ListingReportForm } from "@/components/listings/listing-report-form";
@@ -44,11 +45,12 @@ export async function generateMetadata({
   }
 
   const title = resolveListingMetaTitle(listing);
-  const description =
-    listing.description?.replace(/^## .+\n/gm, "").slice(0, 160).trim() ||
-    `${propertyTypeLabel(listing.propertyType)} ${TRANSACTION_TYPE_LABEL[
-      listing.transactionType
-    ].toLowerCase()} tại ${listing.district}, ${listing.province}.`;
+  const description = normalizeSeoDescription(
+    listing.description?.replace(/^## .+\n/gm, "").slice(0, 200).trim() ||
+      `${propertyTypeLabel(listing.propertyType)} ${TRANSACTION_TYPE_LABEL[
+        listing.transactionType
+      ].toLowerCase()} tại ${listing.district}, ${listing.province}.`,
+  );
   const siteUrl = getSiteUrl();
 
   // SEO canonicalization (P1): nếu tin này KHÔNG phải tin đại diện của cụm BĐS
@@ -75,7 +77,9 @@ export async function generateMetadata({
       description,
       url: canonical,
       type: "website",
-      images: listing.media[0]?.url ? [{ url: listing.media[0].url }] : undefined,
+      images: listing.media[0]?.url
+        ? [{ url: listing.media[0].url }]
+        : [{ url: "/images/hero/hcmc-skyline-river-day.webp" }],
     },
   };
 }

@@ -61,13 +61,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: path.includes("xem-huong") || path.includes("kiem-tra-tuoi") ? 0.75 : 0.7,
     })),
     ...affiliate,
-    { url: `${BASE}/dang-ky/khach-hang`, changeFrequency: "monthly", priority: 0.5 },
-    { url: `${BASE}/dang-ky/moi-gioi`, changeFrequency: "monthly", priority: 0.5 },
+    // Không đưa /dang-ky/* vào sitemap — pages robots noindex (Ahrefs: noindex in sitemap).
     { url: `${BASE}/gioi-thieu`, changeFrequency: "monthly", priority: 0.4 },
     { url: `${BASE}/gioi-thieu/cau-chuyen`, changeFrequency: "monthly", priority: 0.35 },
     { url: `${BASE}/gioi-thieu/phuong-phap-bien-tap`, changeFrequency: "monthly", priority: 0.45 },
     { url: `${BASE}/doi-ngu`, changeFrequency: "monthly", priority: 0.45 },
-    { url: `${BASE}/chuyen-gia`, changeFrequency: "monthly", priority: 0.4 },
+    // /chuyen-gia hub 301 → /doi-ngu; chỉ index trang chuyên gia theo slug.
     ...listExpertSlugs().map((slug) => ({
       url: `${BASE}/chuyen-gia/${slug}`,
       changeFrequency: "monthly" as const,

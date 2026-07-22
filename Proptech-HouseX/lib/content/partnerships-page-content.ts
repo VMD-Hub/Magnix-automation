@@ -10,7 +10,7 @@ export type PartnershipProcessStep = {
 };
 
 export const PARTNERSHIPS_PAGE = {
-  metaTitle: "Hợp tác & Đăng tin | House X",
+  metaTitle: "Hợp tác & Đăng tin",
   metaDescription:
     "House X hỗ trợ môi giới và chủ nhà đăng tin chất lượng, tiếp cận đúng khách hàng, bảo vệ liên hệ và tăng hiệu quả hợp tác trên nền tảng bất động sản.",
 

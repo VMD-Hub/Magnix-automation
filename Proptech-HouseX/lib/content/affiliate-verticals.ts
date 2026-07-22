@@ -87,9 +87,9 @@ export const AFFILIATE_VERTICALS: AffiliateVertical[] = [
     id: "tai-chinh",
     path: "/tai-chinh",
     layout: "service-cluster",
-    title: "Tài chính & vay vốn mua nhà — HouseX",
+    title: "Tài chính & vay vốn mua nhà",
     metaDescription:
-      "Tư vấn vay mua nhà, vay thế chấp, vay SXKD và bảo hiểm tài sản (nhà, kho, xe) trên HouseX. Sơ loại hồ sơ, so sánh điều kiện, đồng hành đến giải ngân hoặc nhận GCN.",
+      "Tư vấn vay mua nhà, thế chấp, vay SXKD và bảo hiểm tài sản trên House X. Sơ loại hồ sơ, so sánh điều kiện — đồng hành đến giải ngân hoặc nhận GCN.",
     h1: "Tài chính & vay vốn",
     intro: TAI_CHINH_HUB_INTRO,
     disclaimer: HOUSEX_SERVICE_NOTE,
@@ -125,7 +125,7 @@ export const AFFILIATE_VERTICALS: AffiliateVertical[] = [
     id: "noi-that",
     path: "/noi-that",
     layout: "promo-hub",
-    title: "Thiết kế & thi công nội thất | House X",
+    title: "Thiết kế & thi công nội thất",
     metaDescription:
       "House X kết nối studio thiết kế & thi công nội thất tại TP.HCM. Căn hộ, nhà phố, văn phòng — khảo sát, phối cảnh 3D, báo giá sau khảo sát.",
     h1: "Thiết kế & thi công nội thất — Trọn gói tại TP.HCM",
