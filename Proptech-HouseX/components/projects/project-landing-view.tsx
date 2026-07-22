@@ -12,6 +12,10 @@ import type { ArticleCardData } from "@/lib/data/article-types";
 import { getArticlesForProjectSlug } from "@/lib/data/article-public";
 import { ProjectRelatedArticles } from "@/components/articles/project-related-articles";
 import { FallbackImage } from "@/components/ui/fallback-image";
+import {
+  IMAGE_FALLBACK,
+  isSafeImageUrl,
+} from "@/lib/content/safe-image";
 import { ProjectInventorySection } from "@/components/projects/project-inventory-section";
 import { LeadContactForm } from "@/components/leads/lead-contact-form";
 import {
@@ -144,7 +148,9 @@ export function ProjectLandingContent({
         {heroImage && (
           <>
             <FallbackImage
-              src={heroImage.url}
+              src={
+                isSafeImageUrl(heroImage.url) ? heroImage.url : IMAGE_FALLBACK
+              }
               alt={heroImage.alt?.trim() || `${project.name} — ảnh dự án`}
               className="lux-hero-project-photo lux-hero-photo absolute inset-0 h-full w-full object-cover object-center opacity-30"
               fetchPriority="high"

@@ -1,42 +1,34 @@
-/** Ảnh tham chiếu dự án (mogivi.vn / tư liệu công khai) — admin host CDN HouseX trước go-live. */
-const MOGIVI_CMS = "https://abtgroupcms.mogivi.vn/media";
-const MOGIVI_CDN = "https://cdn.mogivi.vn";
+/**
+ * Phúc Lộc Thọ — ảnh local (không hotlink mogivi: Ahrefs 403).
+ * Stock đồng bộ với `NOXH_STOCK_BY_SLUG["chung-cu-phuc-loc-tho-noxh"]`.
+ */
+const HERO = "/images/hero/hcmc-bitexco-metro-day.webp";
+const GALLERY = [
+  "/images/hero/hcmc-bitexco-metro-day.webp",
+  "/images/hero/housex-thu-thiem-civic-center-day.webp",
+  "/images/hero/hcmc-skyline-river-day.webp",
+  "/images/hero/housex-hero-slide-02-metro-hub.webp",
+  "/images/hero/urban-skyline-golden-hour.jpg",
+  "/images/hero/hcmc-skyline-river-night.webp",
+] as const;
 
 export const PHUC_LOC_THO_PUBLISHED_IMAGES = {
   hero: {
-    url: `${MOGIVI_CMS}/qyobje4c/chung-cu-phuc-loc-tho.jpg`,
+    url: HERO,
     alt: "Chung cư Phúc Lộc Thọ — 35 Lê Văn Chí, Thủ Đức",
   },
-  developerLogo: `${MOGIVI_CMS}/duohtb3v/emerald-apartment.jpg`,
+  developerLogo: "/images/hero/hcmc-skyline-river-day.webp",
   locationMap: {
-    url: `${MOGIVI_CDN}/702A67EA-4752-44C4-8FAD-FBAB0A6A840E.jpg`,
+    url: "/images/hero/hcmc-skyline-river-night.webp",
     alt: "Vị trí Chung cư Phúc Lộc Thọ — ngã tư Thủ Đức, Lê Văn Chí",
     caption: "Minh hoạ kết nối vùng — tham khảo theo tư liệu dự án",
   },
   gallery: [
-    {
-      url: `${MOGIVI_CMS}/qyobje4c/chung-cu-phuc-loc-tho.jpg`,
-      caption: "Tổng quan chung cư Phúc Lộc Thọ (Emerald Apartment)",
-    },
-    {
-      url: `${MOGIVI_CDN}/945C8547-DCE6-4702-8AF2-091117530860.jpg`,
-      caption: "Phối cảnh block cao 16 tầng",
-    },
-    {
-      url: `${MOGIVI_CDN}/867C7405-056F-43A8-9498-AD32309B8B62.jpg`,
-      caption: "Khu vực dự án mặt tiền Lê Văn Chí",
-    },
-    {
-      url: `${MOGIVI_CDN}/484C20DF-FFD7-46C7-AA49-B38C09A2E311.jpg`,
-      caption: "Không gian sống nội khu",
-    },
-    {
-      url: `${MOGIVI_CDN}/BB377948-E13D-46A6-A68B-762675B7E9AF.jpg`,
-      caption: "Tiện ích & cảnh quan xung quanh",
-    },
-    {
-      url: `${MOGIVI_CDN}/702A67EA-4752-44C4-8FAD-FBAB0A6A840E.jpg`,
-      caption: "Kết nối giao thông khu vực Thủ Đức",
-    },
+    { url: GALLERY[0], caption: "Tổng quan chung cư Phúc Lộc Thọ (Emerald Apartment)" },
+    { url: GALLERY[1], caption: "Phối cảnh block cao 16 tầng" },
+    { url: GALLERY[2], caption: "Khu vực dự án mặt tiền Lê Văn Chí" },
+    { url: GALLERY[3], caption: "Không gian sống nội khu" },
+    { url: GALLERY[4], caption: "Tiện ích & cảnh quan xung quanh" },
+    { url: GALLERY[5], caption: "Kết nối giao thông khu vực Thủ Đức" },
   ],
 } as const;

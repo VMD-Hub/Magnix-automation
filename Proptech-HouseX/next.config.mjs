@@ -186,6 +186,21 @@ const nextConfig = {
         destination: "/tin-tuc/cam-nang-noxh/:slug",
         permanent: true,
       },
+      {
+        source: "/tin-tuc/chu-de/:tag",
+        destination: "/tin-tuc/cam-nang-noxh/chu-de/:tag",
+        permanent: true,
+      },
+      {
+        source: "/dang-tin",
+        destination: "/moi-gioi/dang-tin",
+        permanent: true,
+      },
+      {
+        source: "/chu-de/:tag",
+        destination: "/tin-tuc/cam-nang-noxh/chu-de/:tag",
+        permanent: true,
+      },
     ];
   },
 };

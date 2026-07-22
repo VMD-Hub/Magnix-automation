@@ -3,6 +3,10 @@ import { Icon } from "@/components/icons";
 import { Badge } from "@/components/ui/badge";
 import { FallbackImage } from "@/components/ui/fallback-image";
 import {
+  IMAGE_FALLBACK,
+  isSafeImageUrl,
+} from "@/lib/content/safe-image";
+import {
   TRANSACTION_TYPE_LABEL,
   formatPricePerM2,
   formatVnd,
@@ -40,6 +44,12 @@ export function ListingCard({ item }: { item: ListingCardData }) {
     item.title?.trim() ||
     `${propertyTypeLabel(item.propertyType)} tại ${item.district}`;
   const otherBrokers = item.offerCount && item.offerCount > 1 ? item.offerCount - 1 : 0;
+  // SSR: không emit URL hotlink chết (mogivi 403) — Ahrefs vẫn đọc src gốc trước onError.
+  const safeImageUrl = isSafeImageUrl(item.imageUrl)
+    ? item.imageUrl
+    : item.imageUrl
+      ? IMAGE_FALLBACK
+      : null;
 
   return (
     <Link
@@ -47,9 +57,9 @@ export function ListingCard({ item }: { item: ListingCardData }) {
       className="proptech-card group flex flex-col overflow-hidden p-0 hover:shadow-lg"
     >
       <div className="relative aspect-[4/3] overflow-hidden">
-        {item.imageUrl ? (
+        {safeImageUrl ? (
           <FallbackImage
-            src={item.imageUrl}
+            src={safeImageUrl}
             alt={title}
             loading="lazy"
             className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"

@@ -1,6 +1,6 @@
-import { redirect } from "next/navigation";
+import { permanentRedirect } from "next/navigation";
 
-/** /dang-tin → luồng đăng tin môi giới (form khi đã login). */
+/** /dang-tin → form môi giới (308 cứng cũng có trong middleware). */
 export default function DangTinPage() {
-  redirect("/moi-gioi/dang-tin");
+  permanentRedirect("/moi-gioi/dang-tin");
 }

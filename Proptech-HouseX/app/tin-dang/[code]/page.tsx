@@ -13,6 +13,10 @@ import {
   resolveListingMetaTitle,
 } from "@/lib/content/title";
 import { normalizeSeoDescription } from "@/lib/seo/meta-text";
+import {
+  IMAGE_FALLBACK,
+  isSafeImageUrl,
+} from "@/lib/content/safe-image";
 import { maskPhone } from "@/lib/privacy/phone";
 import { BrokerContactCard } from "@/components/listings/broker-contact-card";
 import { ListingReportForm } from "@/components/listings/listing-report-form";
@@ -67,6 +71,10 @@ export async function generateMetadata({
   }
   const canonical = siteUrl ? `${siteUrl}/tin-dang/${canonicalCode}` : undefined;
 
+  const coverUrl = listing.media[0]?.url;
+  const ogImage =
+    coverUrl && isSafeImageUrl(coverUrl) ? coverUrl : IMAGE_FALLBACK;
+
   return {
     title,
     description,
@@ -77,9 +85,7 @@ export async function generateMetadata({
       description,
       url: canonical,
       type: "website",
-      images: listing.media[0]?.url
-        ? [{ url: listing.media[0].url }]
-        : [{ url: "/images/hero/hcmc-skyline-river-day.webp" }],
+      images: [{ url: ogImage }],
     },
   };
 }
@@ -98,6 +104,8 @@ export default async function ListingPage({ params, searchParams }: PageProps) {
 
   const jsonLd = buildListingJsonLd(listing);
   const cover = listing.media[0];
+  const coverSrc =
+    cover?.url && isSafeImageUrl(cover.url) ? cover.url : IMAGE_FALLBACK;
   const headline = resolveListingDisplayTitle(listing);
 
   // P1: các tin khác của cùng 1 BĐS (nhiều broker) — gom theo CanonicalProperty.
@@ -119,7 +127,7 @@ export default async function ListingPage({ params, searchParams }: PageProps) {
           <>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src={cover.url}
+              src={coverSrc}
               alt=""
               aria-hidden
               className="absolute inset-0 h-full w-full object-cover opacity-35"
@@ -164,7 +172,7 @@ export default async function ListingPage({ params, searchParams }: PageProps) {
         {cover && (
           // eslint-disable-next-line @next/next/no-img-element
           <img
-            src={cover.url}
+            src={coverSrc}
             alt={`Ảnh ${listing.code}`}
             className="lux-detail-panel -mt-16 mb-8 aspect-video w-full object-cover p-0"
           />

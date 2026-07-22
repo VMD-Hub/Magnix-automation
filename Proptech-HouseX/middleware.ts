@@ -2,7 +2,11 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { buildCampaignLaneRedirectUrl } from "@/lib/miniapp/campaign-lane-host";
 import { isBlockedScraperUserAgent } from "@/lib/security/scrape-guard";
-import { rewriteLegacyArticleHref } from "@/lib/content/article-routes";
+import {
+  rewriteLegacyArticleHref,
+  topicPath,
+} from "@/lib/content/article-routes";
+import { LEGACY_NOXH_TOPIC_REDIRECTS } from "@/lib/content/articles/noxh-handbook-tags";
 
 function forwardWithPathname(req: NextRequest) {
   const requestHeaders = new Headers(req.headers);
@@ -10,21 +14,41 @@ function forwardWithPathname(req: NextRequest) {
   return NextResponse.next({ request: { headers: requestHeaders } });
 }
 
+function redirectPath(req: NextRequest, pathname: string) {
+  const url = req.nextUrl.clone();
+  url.pathname = pathname;
+  return NextResponse.redirect(url, 308);
+}
+
+function resolveTopicDestination(tagSlug: string): string {
+  return LEGACY_NOXH_TOPIC_REDIRECTS[tagSlug] ?? topicPath(tagSlug);
+}
+
 /** 308 cứng — tránh Ahrefs thấy 200 shell RSC không có `<a>` (orphan / no outlinks). */
 function seoPermanentRedirect(req: NextRequest): NextResponse | null {
   const { pathname } = req.nextUrl;
 
   if (pathname === "/chuyen-gia" || pathname === "/chuyen-gia/") {
-    const url = req.nextUrl.clone();
-    url.pathname = "/doi-ngu";
-    return NextResponse.redirect(url, 308);
+    return redirectPath(req, "/doi-ngu");
+  }
+
+  if (pathname === "/dang-tin" || pathname === "/dang-tin/") {
+    return redirectPath(req, "/moi-gioi/dang-tin");
+  }
+
+  const bareChuDe = pathname.match(/^\/chu-de\/([^/]+)\/?$/);
+  if (bareChuDe?.[1]) {
+    return redirectPath(req, resolveTopicDestination(bareChuDe[1]));
+  }
+
+  const legacyTopic = pathname.match(/^\/tin-tuc\/chu-de\/([^/]+)\/?$/);
+  if (legacyTopic?.[1]) {
+    return redirectPath(req, resolveTopicDestination(legacyTopic[1]));
   }
 
   const rewritten = rewriteLegacyArticleHref(pathname);
   if (rewritten !== pathname) {
-    const url = req.nextUrl.clone();
-    url.pathname = rewritten;
-    return NextResponse.redirect(url, 308);
+    return redirectPath(req, rewritten);
   }
 
   return null;
@@ -75,6 +99,10 @@ export const config = {
     "/api/search/:path*",
     "/chuyen-gia",
     "/chuyen-gia/",
+    "/dang-tin",
+    "/dang-tin/",
+    "/chu-de/:slug",
     "/tin-tuc/:slug",
+    "/tin-tuc/chu-de/:tag",
   ],
 };

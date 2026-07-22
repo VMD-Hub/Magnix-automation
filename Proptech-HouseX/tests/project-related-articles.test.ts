@@ -46,14 +46,14 @@ describe("project related articles", () => {
     );
   });
 
-  it("view-more links to project tag hub", () => {
+  it("view-more links to handbook hub for legacy project tags", () => {
     assert.equal(
       projectRelatedArticlesViewMoreHref(LTK_PROJECT_SLUG),
-      "/tin-tuc/chu-de/nha-o-xa-hoi-ly-thuong-kiet",
+      "/tin-tuc/cam-nang-noxh",
     );
     assert.equal(
       projectRelatedArticlesViewMoreHref(DTA_HAPPY_HOME_SLUG),
-      "/tin-tuc/chu-de/dta-happy-home-nhon-trach",
+      "/tin-tuc/cam-nang-noxh",
     );
   });
 });

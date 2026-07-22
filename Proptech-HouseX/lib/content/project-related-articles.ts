@@ -6,6 +6,7 @@ import {
   MY_HANH_SLUG,
   ORI_SLUG,
 } from "@/lib/preview/noxh-long-an-projects";
+import { LEGACY_NOXH_TOPIC_REDIRECTS } from "@/lib/content/articles/noxh-handbook-tags";
 
 const PHUC_LOC_THO_SLUG = "chung-cu-phuc-loc-tho-noxh";
 
@@ -87,6 +88,11 @@ export function orderProjectRelatedArticles(
 
 export function projectRelatedArticlesViewMoreHref(projectSlug: string): string {
   const tagSlug = PROJECT_ARTICLE_TAG_SLUG[projectSlug];
-  if (tagSlug) return `/tin-tuc/chu-de/${tagSlug}`;
-  return "/tin-tuc/chu-de/noxh";
+  if (tagSlug) {
+    return (
+      LEGACY_NOXH_TOPIC_REDIRECTS[tagSlug] ??
+      `/tin-tuc/cam-nang-noxh/chu-de/${tagSlug}`
+    );
+  }
+  return "/tin-tuc/cam-nang-noxh";
 }
