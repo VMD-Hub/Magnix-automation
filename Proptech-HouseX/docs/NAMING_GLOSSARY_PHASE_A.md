@@ -72,11 +72,12 @@
 
 ---
 
-## 5. Ngoài phạm vi Phase A–C
+## 5. Ngoài phạm vi Phase A–D
 
 - Đổi folder app hàng loạt (migrate path vật lý) — chỉ khi rewrite chạy ổn 1–2 tháng.
 - IndexNow hàng loạt / Semrush.
 - Messaging “không phải sàn”.
+- Subdomain `wiki.*` (Phase E+ nếu cần).
 
 ---
 
@@ -89,9 +90,14 @@
 - [x] **#10–14** trust/liên hệ/đăng tin/SĐT
 - [x] **Nav primary** — Vay mua nhà
 - [x] **Slug dịch vụ** `vay-mua-nha` → `can-ho` (URL `/vay-mua-nha/can-ho`)
+- [x] **Phase D surface homepage** — 4 hub tên chuẩn ngay dưới hero
 
 ### Phase C — trạng thái
 
 Cấu hình trong `next.config.mjs` (`rewrites` mới→FS + `redirects` cũ→mới) và `middleware.ts` (308 cứng cũ→mới).
 
-**Trạng thái:** Phase A chốt · Phase B shipped · **Phase C unify = canonical** · subdomain wiki để sau.
+### Phase D — surface homepage
+
+Block **Bắt đầu đúng chỗ** trên `/` (`NamingSurface`): Wiki nhà ở xã hội · Vay mua nhà · Tính trả góp hàng tháng · Thiết kế & thi công — href canonical Phase C.
+
+**Trạng thái:** Phase A–D shipped · **Phase E = đo lại probe** (câu hỏi dùng tên mới) · subdomain wiki để sau.

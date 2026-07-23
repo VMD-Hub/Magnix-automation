@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { SearchHero } from "@/components/home/search-hero";
+import { NamingSurface } from "@/components/home/naming-surface";
 import { ProptechTools } from "@/components/home/proptech-tools";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { ListingCard } from "@/components/listings/listing-card";
@@ -72,6 +73,8 @@ export default async function Home() {
           </div>
         </div>
       </section>
+
+      <NamingSurface />
 
       <section className="mx-auto max-w-7xl py-6 container-px sm:py-8">
         <SectionHeading
