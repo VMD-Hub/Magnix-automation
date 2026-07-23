@@ -278,6 +278,19 @@ npm run db:seed:noxh-dong-thap
 
 Smoke: `/du-an/nha-o-xa-hoi/dong-thap` · 308 `/tien-giang` → hub · `nha-o-xa-hoi-rivera-garden-my-tho`.
 
+### Ops — seed NOXH An Giang (P0.2, gồm Kiên Giang cũ)
+
+```bash
+cd /opt/housex/Proptech-HouseX
+git pull
+npm run build && pm2 restart housex --update-env   # bật hub an-giang
+# đợi ~5–8s tránh 502
+npm run db:seed:noxh-an-giang
+```
+
+Smoke: `/du-an/nha-o-xa-hoi/an-giang` · 308 `/kien-giang` → hub · `nha-o-xa-hoi-cic-lan-bien-tay-bac-rach-gia`.  
+Inventory: `docs/content/AN_GIANG_NOXH_INVENTORY.md`.
+
 ### Ops — IndexNow (Bing + peers)
 
 Google: GSC Request indexing (tay). Bing/Yandex: IndexNow.

@@ -23,6 +23,7 @@
     "db:seed:noxh-hanoi": "node --env-file=.env --import tsx scripts/seed-noxh-hanoi.ts",
     "db:seed:noxh-danang": "node --env-file=.env --import tsx scripts/seed-noxh-danang.ts",
     "db:seed:noxh-dong-thap": "node --env-file=.env --import tsx scripts/seed-noxh-dong-thap.ts",
+    "db:seed:noxh-an-giang": "node --env-file=.env --import tsx scripts/seed-noxh-an-giang.ts",
     "db:seed:hgx": "node --env-file=.env --import tsx scripts/seed-ho-guom-xanh.ts",
     "db:seed:agent-services": "node --env-file=.env --import tsx scripts/seed-agent-services.ts",
     "db:bootstrap:agent-entitlements": "node --env-file=.env --import tsx scripts/bootstrap-agent-entitlements.ts",

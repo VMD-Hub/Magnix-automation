@@ -90,7 +90,7 @@ export const NOXH_PROVINCE_HUB_BASE = "/du-an/nha-o-xa-hoi" as const;
 /**
  * P0 — miền Nam / ĐBSCL sau sắp xếp.
  * P0.1 hubEnabled: HCM, Đồng Nai, Cần Thơ, Tây Ninh.
- * P0.2 hub Đồng Tháp bật khi có inventory; An Giang vẫn tắt.
+ * P0.2 hub Đồng Tháp + An Giang bật khi có inventory.
  * P0.5 hub Bắc: Hà Nội; hub Trung: Đà Nẵng (inventory skeleton).
  */
 export const NOXH_PROVINCE_REGISTRY_P0 = [
@@ -211,16 +211,25 @@ export const NOXH_PROVINCE_REGISTRY_P0 = [
     nameNew: "An Giang",
     nameNewVariants: ["Tỉnh An Giang"],
     aliasesOld: ["Kiên Giang"],
-    aliasesOldVariants: ["Kien Giang", "An Giang cũ"],
+    aliasesOldVariants: [
+      "Kien Giang",
+      "An Giang cũ",
+      "Rạch Giá",
+      "Phú Quốc",
+    ],
     salesRegion: "south",
-    hubEnabled: false,
+    hubEnabled: true,
     legalNote:
-      "NQ 202/2025 — sáp nhập Kiên Giang + An Giang thành tỉnh An Giang mới. hubEnabled=false đến khi đủ inventory.",
+      "NQ 202/2025 — sáp nhập Kiên Giang + An Giang thành tỉnh An Giang mới. Hub P0.2 bật với inventory NOXH Rạch Giá / Long Xuyên / Phú Quốc.",
     searchKeys: [
       "nhà ở xã hội An Giang",
       "NOXH An Giang",
       "nhà ở xã hội Kiên Giang",
       "NOXH Kiên Giang",
+      "NOXH Rạch Giá",
+      "NOXH Long Xuyên",
+      "NOXH Phú Quốc",
+      "NOXH CIC Tây Bắc",
     ],
   },
   {
