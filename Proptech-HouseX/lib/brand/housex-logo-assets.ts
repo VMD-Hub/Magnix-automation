@@ -1,15 +1,17 @@
 /** Logo header (nền sáng / auth) — cùng lockup đã duyệt. */
-export const HOUSEX_HEADER_LOGO_SRC = "/brand/housex-header-logo.png" as const;
+export const HOUSEX_HEADER_LOGO_SRC = "/brand/housex-lockup-mark-paper.png" as const;
 export const HOUSEX_HEADER_LOGO_WIDTH = 1196;
 export const HOUSEX_HEADER_LOGO_HEIGHT = 365;
 
-/** Logo footer — nền trong suốt, hiển thị trên footer ruby. */
-export const HOUSEX_FOOTER_LOGO_SRC =
-  "/brand/housex-footer-logo-transparent.png" as const;
+/**
+ * Logo footer / header ruby — nền trong suốt.
+ * Đổi tên file (lockup-mark) để phá cache `/_next/image` khi đổi artwork.
+ */
+export const HOUSEX_FOOTER_LOGO_SRC = "/brand/housex-lockup-mark.png" as const;
 export const HOUSEX_FOOTER_LOGO_WIDTH = 1196;
 export const HOUSEX_FOOTER_LOGO_HEIGHT = 365;
 
-/** @deprecated Thay bằng `housex-footer-logo-transparent.png`. */
+/** @deprecated Thay bằng `housex-lockup-mark.png`. */
 export const HOUSEX_FOOTER_LOGO_DARK_SRC =
   "/brand/housex-footer-logo-dark.png" as const;
 

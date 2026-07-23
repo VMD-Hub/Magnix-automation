@@ -15,6 +15,6 @@ export function buildOrganizationJsonLd() {
     url: BASE,
     email: getSupportEmail(),
     sameAs: sameAs.length > 0 ? sameAs : undefined,
-    logo: `${BASE}/brand/housex-footer-logo-transparent.png`,
+    logo: `${BASE}/brand/housex-lockup-mark.png`,
   };
 }

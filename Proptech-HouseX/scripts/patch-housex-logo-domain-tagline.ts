@@ -23,6 +23,8 @@ const TAGLINE = {
 } as const;
 
 const TARGETS = [
+  "public/brand/housex-lockup-mark.png",
+  "public/brand/housex-lockup-mark-paper.png",
   "public/brand/housex-footer-logo-transparent.png",
   "public/brand/housex-header-logo.png",
 ] as const;
