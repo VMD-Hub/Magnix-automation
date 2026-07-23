@@ -365,8 +365,22 @@ npm run build && pm2 restart housex --update-env
 npm run db:seed:noxh-bac-ninh
 ```
 
-Smoke: `/du-an/nha-o-xa-hoi/bac-ninh` · 308 `/bac-giang` → hub · `nha-o-xa-hoi-cat-tuong-smart-city`.  
-Inventory: `docs/content/BAC_NINH_NOXH_INVENTORY.md`.
+Smoke: `/du-an/nha-o-xa-hoi/bac-ninh` · 308 `/bac-giang` → hub ·  
+`nha-o-xa-hoi-cat-tuong-smart-city` · `nha-o-xa-hoi-evergreen-bac-giang-van-trung` (Nếnh).  
+Inventory: `docs/content/BAC_NINH_NOXH_INVENTORY.md` (15 slugs = 8 BN + 7 BG).
+
+### Ops — seed NOXH Quảng Ninh (P0.5 Bắc, standalone)
+
+```bash
+cd /opt/housex/Proptech-HouseX
+git pull
+npm run build && pm2 restart housex --update-env
+# đợi ~5–8s
+npm run db:seed:noxh-quang-ninh
+```
+
+Smoke: `/du-an/nha-o-xa-hoi/quang-ninh` · `nha-o-xa-hoi-doi-ngan-hang-ha-long`.  
+Inventory: `docs/content/QUANG_NINH_NOXH_INVENTORY.md`.
 
 ### Ops — IndexNow (Bing + peers)
 

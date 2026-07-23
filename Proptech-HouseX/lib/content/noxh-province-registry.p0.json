@@ -148,11 +148,13 @@
       "Yên Phong",
       "Quế Võ",
       "Tiên Du",
-      "Từ Sơn"
+      "Từ Sơn",
+      "Việt Yên",
+      "Nếnh"
     ],
     "salesRegion": "north",
     "hubEnabled": true,
-    "legalNote": "NQ 202/2025 — sáp nhập Bắc Giang + Bắc Ninh thành tỉnh Bắc Ninh mới. Hub P0.5 Bắc bật với inventory NOXH Yên Phong / Quế Võ / VSIP.",
+    "legalNote": "NQ 202/2025 — sáp nhập Bắc Giang + Bắc Ninh thành tỉnh Bắc Ninh mới. Hub P0.5 Bắc bật với inventory Yên Phong / Quế Võ / Việt Yên (BG cũ).",
     "searchKeys": [
       "nhà ở xã hội Bắc Ninh",
       "NOXH Bắc Ninh",
@@ -160,8 +162,38 @@
       "NOXH Bắc Giang",
       "NOXH Yên Phong",
       "NOXH Quế Võ",
+      "NOXH Việt Yên",
       "Cát Tường Smart City",
-      "NOXH VSIP Bắc Ninh"
+      "NOXH VSIP Bắc Ninh",
+      "Evergreen Bắc Giang",
+      "NOXH Nếnh"
+    ]
+  },
+  {
+    "slug": "quang-ninh",
+    "nameNew": "Quảng Ninh",
+    "nameNewVariants": ["Tỉnh Quảng Ninh", "Quang Ninh"],
+    "aliasesOld": [],
+    "aliasesOldVariants": [
+      "Hạ Long",
+      "Ha Long",
+      "Cẩm Phả",
+      "Cam Pha",
+      "Quảng Yên",
+      "Đông Triều"
+    ],
+    "salesRegion": "north",
+    "hubEnabled": true,
+    "legalNote": "NQ 202/2025 — Quảng Ninh không sáp nhập cấp tỉnh. Hub P0.5 Bắc bật với inventory Hạ Long / Cẩm Phả / Quảng Yên.",
+    "searchKeys": [
+      "nhà ở xã hội Quảng Ninh",
+      "NOXH Quảng Ninh",
+      "NOXH Hạ Long",
+      "NOXH Cẩm Phả",
+      "Đồi Ngân Hàng",
+      "GHomes Hạ Long",
+      "NOXH Quảng Yên",
+      "NOXH Amata Sông Khoai"
     ]
   },
   {

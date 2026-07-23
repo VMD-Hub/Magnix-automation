@@ -91,7 +91,7 @@ export const NOXH_PROVINCE_HUB_BASE = "/du-an/nha-o-xa-hoi" as const;
  * P0 — miền Nam / ĐBSCL sau sắp xếp.
  * P0.1 hubEnabled: HCM, Đồng Nai, Cần Thơ, Tây Ninh.
  * P0.2 hub Đồng Tháp + An Giang bật khi có inventory.
- * P0.5 hub Bắc: Hà Nội + Bắc Ninh; hub Trung: Đà Nẵng + Khánh Hòa + Đắk Lắk + Gia Lai; hub Nam/Tây Nguyên: Lâm Đồng.
+ * P0.5 hub Bắc: Hà Nội + Bắc Ninh + Quảng Ninh; hub Trung: Đà Nẵng + Khánh Hòa + Đắk Lắk + Gia Lai; hub Nam/Tây Nguyên: Lâm Đồng.
  */
 export const NOXH_PROVINCE_REGISTRY_P0 = [
   {
@@ -268,11 +268,13 @@ export const NOXH_PROVINCE_REGISTRY_P0 = [
       "Quế Võ",
       "Tiên Du",
       "Từ Sơn",
+      "Việt Yên",
+      "Nếnh",
     ],
     salesRegion: "north",
     hubEnabled: true,
     legalNote:
-      "NQ 202/2025 — sáp nhập Bắc Giang + Bắc Ninh thành tỉnh Bắc Ninh mới. Hub P0.5 Bắc bật với inventory NOXH Yên Phong / Quế Võ / VSIP.",
+      "NQ 202/2025 — sáp nhập Bắc Giang + Bắc Ninh thành tỉnh Bắc Ninh mới. Hub P0.5 Bắc bật với inventory Yên Phong / Quế Võ / Việt Yên (BG cũ).",
     searchKeys: [
       "nhà ở xã hội Bắc Ninh",
       "NOXH Bắc Ninh",
@@ -280,8 +282,39 @@ export const NOXH_PROVINCE_REGISTRY_P0 = [
       "NOXH Bắc Giang",
       "NOXH Yên Phong",
       "NOXH Quế Võ",
+      "NOXH Việt Yên",
       "Cát Tường Smart City",
       "NOXH VSIP Bắc Ninh",
+      "Evergreen Bắc Giang",
+      "NOXH Nếnh",
+    ],
+  },
+  {
+    slug: "quang-ninh",
+    nameNew: "Quảng Ninh",
+    nameNewVariants: ["Tỉnh Quảng Ninh", "Quang Ninh"],
+    aliasesOld: [],
+    aliasesOldVariants: [
+      "Hạ Long",
+      "Ha Long",
+      "Cẩm Phả",
+      "Cam Pha",
+      "Quảng Yên",
+      "Đông Triều",
+    ],
+    salesRegion: "north",
+    hubEnabled: true,
+    legalNote:
+      "NQ 202/2025 — Quảng Ninh không sáp nhập cấp tỉnh. Hub P0.5 Bắc bật với inventory Hạ Long / Cẩm Phả / Quảng Yên.",
+    searchKeys: [
+      "nhà ở xã hội Quảng Ninh",
+      "NOXH Quảng Ninh",
+      "NOXH Hạ Long",
+      "NOXH Cẩm Phả",
+      "Đồi Ngân Hàng",
+      "GHomes Hạ Long",
+      "NOXH Quảng Yên",
+      "NOXH Amata Sông Khoai",
     ],
   },
   {

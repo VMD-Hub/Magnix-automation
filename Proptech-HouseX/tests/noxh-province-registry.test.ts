@@ -19,12 +19,13 @@ import {
   resolveNoxhProvinceHubEntry,
 } from "../lib/content/noxh-province-hub";
 
-test("P0 registry: 13 entries, 13 hubs enabled (Bắc Ninh on)", () => {
-  assert.equal(NOXH_PROVINCE_REGISTRY_P0.length, 13);
-  assert.equal(listNoxhProvinceHubsEnabled().length, 13);
+test("P0 registry: 14 entries, 14 hubs enabled (Quảng Ninh on)", () => {
+  assert.equal(NOXH_PROVINCE_REGISTRY_P0.length, 14);
+  assert.equal(listNoxhProvinceHubsEnabled().length, 14);
   assert.ok(getNoxhProvinceBySlug("tp-ho-chi-minh")?.hubEnabled);
   assert.ok(getNoxhProvinceBySlug("ha-noi")?.hubEnabled);
   assert.ok(getNoxhProvinceBySlug("bac-ninh")?.hubEnabled);
+  assert.ok(getNoxhProvinceBySlug("quang-ninh")?.hubEnabled);
   assert.ok(getNoxhProvinceBySlug("da-nang")?.hubEnabled);
   assert.ok(getNoxhProvinceBySlug("dong-thap")?.hubEnabled);
   assert.ok(getNoxhProvinceBySlug("an-giang")?.hubEnabled);
@@ -50,6 +51,8 @@ test("resolve canonical: Bình Dương → TP.HCM; Long An → Tây Ninh", () =>
   assert.equal(resolveNoxhProvinceCanonical("Quy Nhơn")?.slug, "gia-lai");
   assert.equal(resolveNoxhProvinceCanonical("Bắc Giang")?.slug, "bac-ninh");
   assert.equal(resolveNoxhProvinceCanonical("Yên Phong")?.slug, "bac-ninh");
+  assert.equal(resolveNoxhProvinceCanonical("Hạ Long")?.slug, "quang-ninh");
+  assert.equal(resolveNoxhProvinceCanonical("Quảng Ninh")?.slug, "quang-ninh");
 });
 
 test("legacy hub redirects map old slugs", () => {
@@ -117,13 +120,14 @@ test("hub entry resolve: enabled only", () => {
   assert.equal(resolveNoxhProvinceHubEntry("dak-lak")?.slug, "dak-lak");
   assert.equal(resolveNoxhProvinceHubEntry("gia-lai")?.slug, "gia-lai");
   assert.equal(resolveNoxhProvinceHubEntry("bac-ninh")?.slug, "bac-ninh");
+  assert.equal(resolveNoxhProvinceHubEntry("quang-ninh")?.slug, "quang-ninh");
   assert.equal(resolveNoxhProvinceHubEntry("binh-duong"), undefined);
   assert.equal(
     listNoxhProvinceHubsEnabled()
       .map((e) => e.slug)
       .sort()
       .join(","),
-    "an-giang,bac-ninh,can-tho,da-nang,dak-lak,dong-nai,dong-thap,gia-lai,ha-noi,khanh-hoa,lam-dong,tay-ninh,tp-ho-chi-minh",
+    "an-giang,bac-ninh,can-tho,da-nang,dak-lak,dong-nai,dong-thap,gia-lai,ha-noi,khanh-hoa,lam-dong,quang-ninh,tay-ninh,tp-ho-chi-minh",
   );
 });
 

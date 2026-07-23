@@ -3,7 +3,9 @@
 Nguồn: PDF `Bac Ninh.pdf` (extract 2026-07-23).  
 Canonical: **Bắc Ninh**. Alias: Bắc Giang / Yên Phong / Quế Võ / Tiên Du / Từ Sơn (NQ 2025).
 
-**Cụm KCN-centric:** Yên Phong (Samsung corridor · KCN Yên Phong) · Quế Võ · TP Bắc Ninh · VSIP Tiên Du.
+**Cụm KCN-centric:** Yên Phong (Samsung corridor · KCN Yên Phong) · Quế Võ · TP Bắc Ninh · VSIP Tiên Du · **Việt Yên / KCN Vân Trung / Quang Châu** (Bắc Giang cũ).
+
+## I. Bắc Ninh cũ (8 dự án)
 
 | STT | Tên TM | CĐT (PDF → research) | Vị trí | Quy mô PDF | Slug | Enrich |
 |-----|--------|----------------------|--------|------------|------|--------|
@@ -16,10 +18,27 @@ Canonical: **Bắc Ninh**. Alias: Bắc Giang / Yên Phong / Quế Võ / Tiên D
 | 7 | Dabaco Khắc Niệm | Dabaco | Khắc Niệm TP Bắc Ninh | 2 block 19 tầng · ~480 căn | `nha-o-xa-hoi-dabaco-khac-niem` | skeleton |
 | 8 | Evergreen Bắc Ninh | HUD2 | Đại Đồng Tiên Du (VSIP) | 5 block 11 tầng · ~1100 căn | `nha-o-xa-hoi-evergreen-bac-ninh` | skeleton |
 
+## II. Bắc Giang cũ (7 dự án — hub Bắc Ninh)
+
+Địa chỉ dual: canonical **Bắc Ninh** + alias **(Bắc Giang cũ)**. Route 308 `bac-giang` → hub `/du-an/nha-o-xa-hoi/bac-ninh`.
+
+| STT | Tên TM | CĐT (PDF → research) | Vị trí | Quy mô PDF | Slug | Enrich |
+|-----|--------|----------------------|--------|------------|------|--------|
+| 9 | Evergreen Bắc Giang | KCN Sài Gòn-Hải Phòng + Evergreen BG (PDF: Vân Trung / 3A) | **Nếnh** Việt Yên (gần KCN Vân Trung) | ~3,2 ha · 10×20 · ~3300 căn · 28–70 m² · ~12–13,5 tr/m² · đang mở bán | `nha-o-xa-hoi-evergreen-bac-giang-van-trung` | **researched** |
+| 10 | Đình Trám Sen Hồ | Lam Sơn | Hồng Thái Việt Yên | 4 block 18 tầng · ~2400 căn | `nha-o-xa-hoi-dinh-tram-sen-ho` | skeleton |
+| 11 | Công nhân Quang Châu | APEC | Quang Châu Việt Yên | ~1500 căn | `nha-o-xa-hoi-quang-chau-cong-nhan` | skeleton |
+| 12 | Nội Hoàng | VJS | Nội Hoàng Yên Dũng | 4 block 18 tầng · ~1600 căn | `nha-o-xa-hoi-noi-hoang` | skeleton |
+| 13 | Năng Lượng Xanh Bắc Giang | NLX Bắc Giang | Xương Giang TP Bắc Giang | 2 block 19 tầng · ~700 căn | `nha-o-xa-hoi-nang-luong-xanh-bac-giang` | skeleton |
+| 14 | KCN Hòa Phú | ĐT Hòa Phú | Mai Đình Hiệp Hòa | ~1200 căn | `nha-o-xa-hoi-kcn-hoa-phu-hiep-hoa` | skeleton |
+| 15 | KĐT Nếnh | Liên danh | Nếnh Việt Yên | ~2000 căn | `nha-o-xa-hoi-kdt-nenh` | skeleton |
+
+**Lưu ý:** STT-8 `nha-o-xa-hoi-evergreen-bac-ninh` (HUD2 Tiên Du) khác STT-9 Evergreen BG @ Nếnh (slug giữ `…-van-trung`). STT-15 KĐT Nếnh skeleton — có thể trùng cụm địa lý với Evergreen; không merge slug.
+
 ## Tra cứu
 
 - `soxaydung.bacninh.gov.vn` · legacy `soxaydung.bacgiang.gov.vn`
 - Cát Tường / Sở XD Bắc Ninh — enrich STT-1 (hành lang Samsung Yên Phong; đối chiếu giá Sở trước nộp hồ sơ)
+- Evergreen Nếnh — enrich STT-9 (CĐT Sài Gòn-Hải Phòng + Evergreen BG; giá PDF ~12–13,5 tr/m² — xác minh Sở)
 
 ## Hub / seed
 
@@ -27,3 +46,4 @@ Canonical: **Bắc Ninh**. Alias: Bắc Giang / Yên Phong / Quế Võ / Tiên D
 - 308: `bac-giang` → hub Bắc Ninh
 - `npm run db:seed:noxh-bac-ninh`
 - `salesRegion: NORTH`
+- **15 slugs** (8 BN cũ + 7 BG cũ)
