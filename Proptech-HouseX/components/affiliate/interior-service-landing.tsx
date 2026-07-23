@@ -212,16 +212,16 @@ export function InteriorServiceLanding({ vertical }: { vertical: AffiliateVertic
 
       <ServiceToolLinks
         links={[
-          { label: "Tính khoản vay mua nhà", href: "/cong-cu/tinh-khoan-vay" },
-          { label: "Dịch vụ tài chính", href: "/tai-chinh" },
+          { label: "Tính trả góp hàng tháng", href: "/cong-cu/tinh-khoan-vay" },
+          { label: "Vay mua nhà", href: "/tai-chinh" },
           { label: "Thẩm định giá", href: "/dinh-gia" },
         ]}
-        note="Hành trình Proptech House X — tìm nhà, vay, định giá và nội thất trên cùng nền tảng."
+        note="Hành trình Proptech House X — tìm nhà, vay, định giá và thiết kế–thi công trên cùng nền tảng."
       />
 
       <ServiceFaqSection
         id="faq"
-        title="Câu hỏi thường gặp về nội thất"
+        title="FAQ kết nối studio đối tác chiến lược của House X"
         faqs={vertical.hubFaqs ?? []}
       />
 
@@ -232,7 +232,7 @@ export function InteriorServiceLanding({ vertical }: { vertical: AffiliateVertic
       <ServiceCtaSection
         verticalId={vertical.id}
         title="Yêu cầu báo giá / Tư vấn miễn phí"
-        subtitle="Mô tả diện tích, quận và phong cách — House X kết nối studio đối tác và phản hồi trong giờ làm việc."
+        subtitle="Mô tả diện tích, quận và phong cách — House X kết nối studio đối tác chiến lược và phản hồi trong giờ làm việc."
       />
 
       <div className="mx-auto max-w-7xl pb-8 text-center container-px">

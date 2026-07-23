@@ -16,10 +16,10 @@ export { NOXH_CATALOG_PATH };
 export const NOXH_REGION_TAGLINE =
   "Nhà ở xã hội miền Nam — cơ hội an cư cho người lao động" as const;
 
-export const NOXH_CATALOG_TITLE = "Nhà ở xã hội miền Nam" as const;
+export const NOXH_CATALOG_TITLE = "Dự án nhà ở xã hội" as const;
 
 export const NOXH_CATALOG_SEO_TITLE =
-  "Nhà ở xã hội miền Nam — an cư người lao động" as const;
+  "Nhà ở xã hội miền Nam — danh mục dự án trên House X" as const;
 
 export const NOXH_CATALOG_SEO_DESCRIPTION =
   "Danh mục NOXH miền Nam trên House X: Long An, Đồng Nai, TP.HCM, Cần Thơ — giá, mặt bằng, điều kiện mua và hỗ trợ vay cho người lao động." as const;
@@ -27,17 +27,17 @@ export const NOXH_CATALOG_SEO_DESCRIPTION =
 export const NOXH_CATALOG_FAQ_HEADING =
   "Câu hỏi thường gặp về điều kiện mua nhà ở xã hội" as const;
 
-export const NOXH_HANDBOOK_TITLE = "Cẩm nang NOXH" as const;
+export const NOXH_HANDBOOK_TITLE = "Wiki nhà ở xã hội" as const;
 
 export const NOXH_HANDBOOK_SEO_TITLE =
-  "Cẩm nang NOXH — mua nhà xã hội minh bạch" as const;
+  "Wiki nhà ở xã hội trên House X — điều kiện, hồ sơ, vay" as const;
 
 /** Meta description riêng — không dùng INTRO dài trên trang. */
 export const NOXH_HANDBOOK_SEO_DESCRIPTION =
-  "Cẩm nang nhà ở xã hội trên House X: điều kiện mua, hồ sơ, quy trình và vay NOXH — thông tin có căn cứ để bạn kiểm tra trước khi quyết định." as const;
+  "Wiki nhà ở xã hội trên House X: điều kiện mua, hồ sơ, quy trình và vay — thông tin có căn cứ để bạn kiểm tra trước khi quyết định." as const;
 
 export const NOXH_HANDBOOK_INTRO =
-  "Mua nhà ở xã hội cần thông tin có căn cứ — không dựa vào tin đồn hay lời giới thiệu miệng. Cẩm nang này hệ thống hóa tiến độ dự án, khung pháp lý và phương án tài chính từ chuyên gia, giúp bạn chủ động kiểm tra điều kiện, hồ sơ và khả năng vay trước khi quyết định." as const;
+  "Mua nhà ở xã hội cần thông tin có căn cứ — không dựa vào tin đồn hay lời giới thiệu miệng. Wiki này hệ thống hóa tiến độ dự án, khung pháp lý và phương án tài chính từ chuyên gia, giúp bạn chủ động kiểm tra điều kiện, hồ sơ và khả năng vay trước khi quyết định." as const;
 
 /** Mô tả hub chủ đề NOXH — đồng bộ với cẩm nang chính. */
 export const NOXH_TOPIC_HUB_INTRO = NOXH_HANDBOOK_INTRO;

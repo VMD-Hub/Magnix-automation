@@ -22,12 +22,12 @@ export type EditorialRole = {
 };
 
 export const TEAM_EDITORIAL_PAGE = {
-  metaTitle: "Về đội ngũ & Biên tập",
+  metaTitle: "Đội ngũ & biên tập House X (timnhaxahoi.com)",
   metaDescription:
-    "Đội ngũ House X: ban lãnh đạo, biên tập viên kiểm duyệt và chuyên gia rà soát — cam kết thông tin BĐS rõ ràng, chuẩn xác và minh bạch.",
-  title: "Về đội ngũ & Biên tập",
+    "Trang /doi-ngu — đội ngũ House X: ban lãnh đạo, biên tập viên kiểm duyệt và chuyên gia rà soát — thông tin BĐS rõ ràng, chuẩn xác và minh bạch.",
+  title: "Đội ngũ & ban biên tập House X",
   intro:
-    "Chúng tôi tin rằng công nghệ mạnh chỉ khi đi cùng con người có trách nhiệm. Đội ngũ House X là tập hợp những người làm sản phẩm, biên tập viên chuyên môn và chuyên gia ngành — cùng cam kết mang đến thông tin BĐS rõ ràng, chuẩn xác và dễ hiểu cho người dùng.",
+    "Trang chính thức giới thiệu đội ngũ tại /doi-ngu. Chúng tôi tin rằng công nghệ mạnh chỉ khi đi cùng con người có trách nhiệm. Đội ngũ House X là tập hợp những người làm sản phẩm, biên tập viên chuyên môn và chuyên gia ngành — cùng cam kết mang đến thông tin BĐS rõ ràng, chuẩn xác và dễ hiểu cho người dùng.",
 
   leadership: {
     heading: "Ban lãnh đạo",

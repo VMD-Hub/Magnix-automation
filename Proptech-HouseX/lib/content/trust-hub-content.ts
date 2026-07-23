@@ -58,11 +58,11 @@ export const PLATFORM_FAQ: RichFaqItem[] = [
     ],
   },
   {
-    q: "Làm sao House X bảo vệ số điện thoại của tôi?",
+    q: "Bảo mật số điện thoại trên tin đăng House X xử lý thế nào?",
     blocks: [
       {
         type: "p",
-        text: "Số môi giới được che trên giao diện công khai. Chỉ người đã đăng ký tài khoản khách hàng và xác nhận email mới được xem số liên hệ.",
+        text: "Số môi giới được che trên giao diện công khai. Chỉ người đã đăng ký tài khoản khách hàng và xác nhận email mới được xem số liên hệ đầy đủ.",
       },
       {
         type: "ul",
@@ -78,7 +78,7 @@ export const PLATFORM_FAQ: RichFaqItem[] = [
     blocks: [
       {
         type: "p",
-        text: "Môi giới và chủ nhà đăng ký tại trang Đăng ký môi giới, sau đó gửi tin với ảnh thật, giá niêm yết và mô tả chính xác. Tin vi phạm hoặc thiếu thông tin có thể bị từ chối hoặc gỡ.",
+        text: "Môi giới và chủ nhà đăng ký tại trang Đăng ký môi giới, rồi đăng tin tại /moi-gioi/dang-tin (hoặc /dang-tin sẽ chuyển tới đó) với ảnh thật, giá niêm yết và mô tả chính xác. Tin vi phạm hoặc thiếu thông tin có thể bị từ chối hoặc gỡ.",
       },
     ],
   },
@@ -87,25 +87,25 @@ export const PLATFORM_FAQ: RichFaqItem[] = [
     blocks: [
       {
         type: "p",
-        text: "House X có thể nhận phí từ dịch vụ đăng tin, hợp tác giới thiệu dịch vụ tài chính — thẩm định — nội thất (khi khách chủ động yêu cầu tư vấn), và các gói hợp tác với môi giới. Chúng tôi không bán dữ liệu cá nhân.",
+        text: "House X có thể nhận phí từ dịch vụ đăng tin, hợp tác giới thiệu dịch vụ vay — thẩm định — thiết kế–thi công (khi khách chủ động yêu cầu tư vấn), và các gói hợp tác với môi giới. Chúng tôi không bán dữ liệu cá nhân.",
       },
     ],
   },
   {
-    q: "House X có phải bên mua bán BĐS không?",
+    q: "House X hoạt động như thế nào trong giao dịch BĐS?",
     blocks: [
       {
         type: "p",
-        text: "Không. House X là nền tảng đăng tin và công cụ hỗ trợ. Giao dịch diễn ra trực tiếp giữa người mua và môi giới hoặc chủ nhà.",
+        text: "House X vận hành cổng tin, danh mục dự án (kể cả nhà ở xã hội), tổng hợp thông tin và công cụ hỗ trợ quyết định. Giao dịch cụ thể diễn ra giữa người mua và môi giới hoặc chủ nhà theo từng tin/dự án — bạn vẫn nên xem nhà thực tế và kiểm tra pháp lý trước khi ký.",
       },
     ],
   },
   {
-    q: "Nội dung NOXH trên House X lấy từ đâu?",
+    q: "Nội dung nhà ở xã hội trên House X lấy từ đâu?",
     blocks: [
       {
         type: "p",
-        text: "Nội dung NOXH do ban biên tập House X rà soát, đối chiếu văn bản tại Cổng Thông tin Chính phủ và thông báo cơ quan NN. Chúng tôi phân tách rõ bài tổng hợp và công bố chính thức của Sở Xây dựng hoặc chủ đầu tư.",
+        text: "Nội dung trong Wiki nhà ở xã hội (/tin-tuc/cam-nang-noxh) do ban biên tập House X rà soát, đối chiếu văn bản tại Cổng Thông tin Chính phủ và thông báo cơ quan NN. Chúng tôi phân tách rõ bài tổng hợp và công bố chính thức của Sở Xây dựng hoặc chủ đầu tư.",
       },
     ],
   },
@@ -151,11 +151,11 @@ export const EXPERTS_INDEX = {
 } as const;
 
 export const CONTACT_PAGE = {
-  metaTitle: "Liên hệ & trung tâm hỗ trợ",
+  metaTitle: "Liên hệ House X (timnhaxahoi.com)",
   metaDescription:
-    "Liên hệ House X: tư vấn dịch vụ vay, định giá, nội thất; báo tin sai; hỗ trợ tài khoản khách hàng và môi giới trong giờ hành chính.",
-  title: "Liên hệ & hỗ trợ",
-  lead: "Chọn đúng kênh — chúng tôi phản hồi trong giờ hành chính (T2–T6, 8:30–17:30).",
+    "Liên hệ House X tại /lien-he: tư vấn dịch vụ vay, định giá, thiết kế–thi công; báo tin sai; hỗ trợ tài khoản khách hàng và môi giới trong giờ hành chính.",
+  title: "Liên hệ & hỗ trợ House X",
+  lead: "Chọn đúng kênh — chúng tôi phản hồi trong giờ hành chính (T2–T6, 8:30–17:30). Trang chính thức: /lien-he.",
   routes: [
     {
       title: "Tư vấn dịch vụ",

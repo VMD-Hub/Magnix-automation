@@ -10,6 +10,10 @@ export const VALUATION_PARTNERS: AffiliatePartner[] = [
 
 export const DING_GIA_HUB_FAQS: AffiliateFaq[] = [
   {
+    q: "House X có dịch vụ thẩm định giá phục vụ ngân hàng không? URL?",
+    a: "Có. Trang dịch vụ: /dinh-gia/tham-dinh-ngan-hang — thẩm định giá BĐS phục vụ phê duyệt và giải ngân vay. Hub tổng: /dinh-gia.",
+  },
+  {
     q: "Thẩm định giá bất động sản là gì?",
     a: "Là hoạt động tư vấn xác định giá trị tài sản tại một địa điểm, thời điểm, phục vụ mục đích cụ thể — do doanh nghiệp thẩm định giá được cấp phép thực hiện theo Chuẩn mực thẩm định giá Việt Nam. Kết quả thường được lập thành báo cáo và chứng thư thẩm định giá.",
   },

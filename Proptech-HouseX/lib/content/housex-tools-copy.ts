@@ -18,18 +18,18 @@ export const TOOLS_HUB_COPY = {
 } as const;
 
 export const LOAN_CALC_COPY = {
-  metaTitle: "Tính khoản vay mua nhà — lịch trả nợ PDF",
+  metaTitle: "Tính trả góp hàng tháng — khoản vay mua nhà",
   metaDescription:
-    "Tính khoản vay mua nhà theo dư nợ giảm dần hoặc trả góp đều: tiền trả hàng tháng, tổng lãi, lịch trả nợ chi tiết và xuất PDF miễn phí trên House X.",
-  kicker: "Máy tính vay mua nhà",
-  title: "Tính khoản vay mua nhà",
+    "Tính trả góp / khoản vay mua nhà theo dư nợ giảm dần hoặc trả góp đều: tiền trả hàng tháng, tổng lãi, lịch trả nợ chi tiết và xuất PDF miễn phí trên House X.",
+  kicker: "Công cụ · Vay mua nhà",
+  title: "Tính trả góp hàng tháng",
   subtitle:
     "Nhập giá nhà và tỷ lệ vay — xem tiền trả hàng tháng, tổng lãi và lịch trả nợ chi tiết. Xuất PDF để lưu hoặc gửi ngân hàng.",
   primaryCta: "Bắt đầu tính",
   primaryCtaHref: "#tinh-toan",
   secondaryCta: "Nhận tư vấn vay",
   secondaryCtaHref: "/tai-chinh#tu-van",
-  faqHeading: "Câu hỏi thường gặp về vay mua nhà",
+  faqHeading: "Câu hỏi thường gặp về tính trả góp / vay mua nhà",
 } as const;
 
 export const LOAN_AFFORDABILITY_COPY = {
@@ -99,7 +99,7 @@ export const NOXH_LOAN_ASSESSMENT_HUB_TOOLS: ToolCardDef[] = [
   {
     id: "loan",
     href: "/cong-cu/tinh-khoan-vay",
-    title: "Tính khoản vay mua nhà",
+    title: "Tính trả góp hàng tháng",
     desc: "Lịch trả nợ chi tiết, tổng lãi — xuất PDF để đối chiếu.",
     cta: "Tính ngay",
     ready: true,
@@ -149,7 +149,7 @@ export const TOOL_HUB_CARDS: ToolCardDef[] = [
   {
     id: "loan",
     href: "/cong-cu/tinh-khoan-vay",
-    title: "Tính khoản vay mua nhà",
+    title: "Tính trả góp hàng tháng",
     desc: "Dư nợ giảm dần hoặc trả góp đều — lịch trả nợ chi tiết, xuất PDF.",
     cta: "Tính ngay",
     ready: true,

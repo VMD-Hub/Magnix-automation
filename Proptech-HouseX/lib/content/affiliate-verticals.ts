@@ -87,18 +87,18 @@ export const AFFILIATE_VERTICALS: AffiliateVertical[] = [
     id: "tai-chinh",
     path: "/tai-chinh",
     layout: "service-cluster",
-    title: "Tài chính & vay vốn mua nhà",
+    title: "Vay mua nhà trên House X — hồ sơ, ngân hàng hỗ trợ, tính trả góp",
     metaDescription:
-      "Tư vấn vay mua nhà, thế chấp, vay SXKD và bảo hiểm tài sản trên House X. Sơ loại hồ sơ, so sánh điều kiện — đồng hành đến giải ngân hoặc nhận GCN.",
-    h1: "Tài chính & vay vốn",
+      "Vay mua nhà trên House X: hỗ trợ hồ sơ, danh sách ngân hàng, thế chấp, vay SXKD và bảo hiểm tài sản — đồng hành đến giải ngân hoặc nhận GCN.",
+    h1: "Vay mua nhà & hỗ trợ hồ sơ ngân hàng",
     intro: TAI_CHINH_HUB_INTRO,
     disclaimer: HOUSEX_SERVICE_NOTE,
     partners: BANK_PARTNERS,
     partnerIntro:
-      "HouseX hỗ trợ làm hồ sơ vay tại các ngân hàng thương mại phổ biến. Lãi suất và điều kiện cụ thể được ngân hàng công bố tại thời điểm ký hợp đồng tín dụng.",
+      "House X hợp tác liên kết với các ngân hàng dưới đây để hỗ trợ hồ sơ và kết nối giao dịch vay mua nhà / thế chấp — mô hình phổ biến trên các sàn và nền tảng Proptech.",
     hubFaqs: TAI_CHINH_HUB_FAQS,
     toolLinks: [
-      { label: "Tính khoản vay mua nhà", href: "/cong-cu/tinh-khoan-vay" },
+      { label: "Tính trả góp hàng tháng", href: "/cong-cu/tinh-khoan-vay" },
       { label: "Bảo hiểm nhà, kho & xe", href: "/tai-chinh/bao-hiem-tai-san" },
       { label: "Thẩm định cho ngân hàng", href: "/dinh-gia/tham-dinh-ngan-hang" },
     ],
@@ -125,32 +125,37 @@ export const AFFILIATE_VERTICALS: AffiliateVertical[] = [
     id: "noi-that",
     path: "/noi-that",
     layout: "promo-hub",
-    title: "Thiết kế & thi công nội thất",
+    title:
+      "Thiết kế & thi công nội thất House X — kết nối studio đối tác chiến lược",
     metaDescription:
-      "House X kết nối studio thiết kế & thi công nội thất tại TP.HCM. Căn hộ, nhà phố, văn phòng — khảo sát, phối cảnh 3D, báo giá sau khảo sát.",
-    h1: "Thiết kế & thi công nội thất — Trọn gói tại TP.HCM",
+      "House X kết nối studio đối tác chiến lược thiết kế & thi công nội thất tại TP.HCM. Căn hộ, nhà phố, văn phòng — khảo sát, phối cảnh 3D, báo giá sau khảo sát.",
+    h1: "Thiết kế & thi công nội thất — studio đối tác chiến lược",
     intro:
-      "House X kết nối bạn với studio đối tác uy tín — từ thiết kế concept, phối cảnh 3D đến thi công hoàn thiện căn hộ, nhà phố và văn phòng. Cam kết minh bạch quy trình; báo giá chi tiết sau khảo sát hiện trạng.",
+      "House X kết nối bạn với studio đối tác chiến lược — từ thiết kế concept, phối cảnh 3D đến thi công hoàn thiện căn hộ, nhà phố và văn phòng. Cam kết minh bạch quy trình; báo giá chi tiết sau khảo sát hiện trạng.",
     disclaimer:
-      "House X là đầu mối tư vấn và kết nối studio triển khai tại TP.HCM & vùng lân cận. Chi phí tham khảo trên website mang tính ước lượng — báo giá chính thức sau khảo sát.",
+      "House X là đầu mối tư vấn và kết nối studio đối tác chiến lược tại TP.HCM & vùng lân cận. Chi phí tham khảo trên website mang tính ước lượng — báo giá chính thức sau khảo sát.",
     partnerIntro:
-      "House X làm việc với các studio thiết kế & thi công có kinh nghiệm tại TP.HCM — phù hợp từng loại hình và ngân sách.",
+      "House X làm việc với các studio đối tác chiến lược thiết kế & thi công tại TP.HCM — phù hợp từng loại hình và ngân sách.",
     hubFaqs: [
       {
+        q: "House X kết nối studio đối tác chiến lược như thế nào?",
+        a: "House X không vận hành xưởng thi công nội thất riêng. Mô hình là kết nối studio đối tác chiến lược: bạn có một đầu mối tư vấn trên House X; thiết kế và thi công do studio triển khai với quy trình và báo giá minh bạch trước khi ký hợp đồng.",
+      },
+      {
         q: "House X thi công trực tiếp hay qua đối tác?",
-        a: "House X kết nối studio đối tác triển khai thiết kế và thi công. Bạn có một đầu mối tư vấn, quy trình và báo giá minh bạch trước khi ký hợp đồng với đơn vị thi công.",
+        a: "Qua studio đối tác chiến lược của House X — không thi công trực tiếp như nhà thầu nội thất độc lập. House X đồng hành brief, khảo sát và bàn giao đầu mối studio phù hợp.",
       },
       {
         q: "House X hỗ trợ những loại nhà nào?",
-        a: "Căn hộ chung cư, nhà phố, biệt thự, shophouse và văn phòng tại TP.HCM và vùng lân cận — từ thiết kế 2D/3D đến thi công hoàn thiện.",
+        a: "Căn hộ chung cư, nhà phố, biệt thự, shophouse và văn phòng tại TP.HCM và vùng lân cận — từ thiết kế 2D/3D đến thi công hoàn thiện qua studio đối tác chiến lược.",
       },
       {
         q: "Làm sao nhận báo giá?",
-        a: "Gửi form liên hệ kèm diện tích, quận/huyện, phong cách và ngân sách dự kiến. House X sắp lịch khảo sát và chuyển báo giá chi tiết — không cam kết giá cố định trên website.",
+        a: "Gửi form liên hệ kèm diện tích, quận/huyện, phong cách và ngân sách dự kiến. House X sắp lịch khảo sát và chuyển báo giá chi tiết từ studio — không cam kết giá cố định trên website.",
       },
       {
         q: "Thi công căn hộ có cần đăng ký ban quản lý?",
-        a: "Thường cần đăng ký thi công với ban quản lý chung cư. Studio đối tác hỗ trợ checklist giấy tờ khi triển khai.",
+        a: "Thường cần đăng ký thi công với ban quản lý chung cư. Studio đối tác chiến lược hỗ trợ checklist giấy tờ khi triển khai.",
       },
       {
         q: "Chi phí thi công nội thất ước tính thế nào?",

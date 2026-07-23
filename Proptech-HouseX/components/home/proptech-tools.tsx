@@ -2,12 +2,12 @@ import Link from "next/link";
 import { Icon } from "@/components/icons";
 
 const TOOLS = [
-  { label: "Tính khoản vay", href: "/cong-cu/tinh-khoan-vay", Icon: Icon.Calculator },
+  { label: "Tính trả góp", href: "/cong-cu/tinh-khoan-vay", Icon: Icon.Calculator },
   { label: "Kiểm tra NOXH", href: "/cong-cu/dieu-kien-noxh", Icon: Icon.ShieldCheck },
   { label: "Xem hướng nhà", href: "/cong-cu/xem-huong-nha", Icon: Icon.Bagua },
   { label: "Vay mua nhà", href: "/tai-chinh", Icon: Icon.Coins },
   { label: "Định giá BĐS", href: "/dinh-gia", Icon: Icon.Building },
-  { label: "Phong cách nội thất", href: "/noi-that", Icon: Icon.Layers },
+  { label: "Thiết kế–thi công", href: "/noi-that", Icon: Icon.Layers },
   { label: "Dịch vụ HouseX", href: "/dich-vu", Icon: Icon.FileCheck },
   { label: "Mua bán", href: "/mua-ban", Icon: Icon.MapPin },
 ];

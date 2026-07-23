@@ -48,7 +48,7 @@ export function buildWeeklyNewsletterEmail(input: {
   const text = `Xin chào ${name},
 
 Bản tin tuần ${input.weekKey} từ ${brand}.
-- Cẩm nang NOXH: ${ctaUrl}
+- Wiki nhà ở xã hội: ${ctaUrl}
 - Dự án: ${projectsUrl}
 
 Hủy đăng ký: ${input.unsubscribeUrl}

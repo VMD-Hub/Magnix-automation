@@ -14,8 +14,8 @@ type PartnerBankGridProps = {
 export function PartnerBankGrid({
   partners,
   intro,
-  title = "Ngân hàng đối tác tín dụng",
-  disclaimer = "* Lãi suất và điều kiện vay do ngân hàng công bố tại thời điểm ký hợp đồng.",
+  title = "Ngân hàng đối tác hợp tác liên kết",
+  disclaimer = "* Lãi suất, điều kiện và phê duyệt khoản vay theo công bố / quy trình của từng ngân hàng tại thời điểm ký hợp đồng.",
   className,
   compact = false,
 }: PartnerBankGridProps) {

@@ -10,7 +10,7 @@ export const NAV_PRIMARY = [
   { label: "Mua bán", href: "/mua-ban" },
   { label: "Cho thuê", href: "/cho-thue" },
   { label: "Dự án", href: "/du-an" },
-  { label: "Vay", href: "/tai-chinh" },
+  { label: "Vay mua nhà", href: "/tai-chinh" },
   { label: "Định giá", href: "/dinh-gia" },
   { label: "Công cụ", href: "/cong-cu" },
 ] as const;

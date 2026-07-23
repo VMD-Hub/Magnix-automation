@@ -21,8 +21,8 @@ export const TOOL_CATEGORIES: ToolCategory[] = [
   {
     id: "tai-chinh",
     order: 1,
-    title: "Tài chính & vay mua nhà",
-    intro: "Thẩm định vay, hạn mức và lịch trả nợ chi tiết — mạnh hơn các trang BĐS thông thường.",
+    title: "Vay mua nhà",
+    intro: "Thẩm định vay, hạn mức, tính trả góp và lịch trả nợ chi tiết — mạnh hơn các trang BĐS thông thường.",
   },
   {
     id: "phong-thuy",

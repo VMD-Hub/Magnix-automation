@@ -17,10 +17,10 @@ export function AffiliateVerticalHub({ vertical }: { vertical: AffiliateVertical
 
   const sectionTitle =
     vertical.id === "tai-chinh"
-      ? "Gói vay HouseX"
+      ? "Gói vay mua nhà"
       : vertical.id === "dinh-gia"
         ? "Dịch vụ định giá"
-        : "Dịch vụ nội thất";
+        : "Thiết kế & thi công";
 
   return (
     <div className="mx-auto max-w-7xl py-10 container-px">

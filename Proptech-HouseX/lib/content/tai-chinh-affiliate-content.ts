@@ -3,8 +3,12 @@ import type { AffiliateFaq, AffiliateService } from "@/lib/content/affiliate-ver
 /** Hub FAQ — nội dung khách (không lộ hoa hồng / Point Agent). */
 export const TAI_CHINH_HUB_FAQS: AffiliateFaq[] = [
   {
-    q: "Vay mua nhà qua HouseX khác gì đến thẳng ngân hàng?",
-    a: "Bạn vẫn ký hợp đồng tín dụng với ngân hàng. HouseX giúp làm rõ nhu cầu, sơ loại khả năng vay, chuẩn bị hồ sơ, so sánh gói và đồng hành đến khi giải ngân — một đầu mối, tránh tự chạy nhiều nơi.",
+    q: "House X hợp tác liên kết với những ngân hàng nào?",
+    a: "Trên trang /tai-chinh, House X công khai các ngân hàng đối tác hợp tác liên kết hỗ trợ hồ sơ và kết nối giao dịch vay: Vietcombank, BIDV, VietinBank, Agribank, Techcombank, MB Bank, VPBank, ACB, Sacombank và HDBank.",
+  },
+  {
+    q: "Vay mua nhà qua House X khác gì đến thẳng ngân hàng?",
+    a: "House X đồng hành làm rõ nhu cầu, sơ loại hồ sơ, so sánh gói và kết nối tới ngân hàng đối tác — một đầu mối, tránh tự chạy nhiều nơi. Hợp đồng tín dụng vẫn ký với ngân hàng.",
   },
   {
     q: "Quy trình vay mua BĐS gồm những bước nào?",
@@ -16,19 +20,19 @@ export const TAI_CHINH_HUB_FAQS: AffiliateFaq[] = [
   },
   {
     q: "Có cần chọn ngân hàng trước không?",
-    a: "Không bắt buộc. Bạn mô tả nhu cầu; HouseX gợi ý ngân hàng và gói phù hợp hồ sơ. Có thể nộp thêm ngân hàng khác nếu cần so sánh ưu đãi (theo quy trình hỗ trợ).",
+    a: "Không bắt buộc. Bạn mô tả nhu cầu; House X gợi ý ngân hàng đối tác và gói phù hợp hồ sơ. Có thể nộp thêm ngân hàng khác nếu cần so sánh ưu đãi (theo quy trình hỗ trợ).",
   },
   {
-    q: "Công cụ tính khoản vay trên web dùng thế nào?",
-    a: "Dùng /cong-cu/tinh-khoan-vay để ước lượng tiền trả hàng tháng trước khi làm hồ sơ. Kết quả tham khảo — ngân hàng thẩm định mới ra hạn mức và lãi chính thức.",
+    q: "Có công cụ ước tính trả góp hàng tháng trên House X không?",
+    a: "Có. Dùng /cong-cu/tinh-khoan-vay (Tính trả góp / khoản vay mua nhà) để ước lượng tiền trả hàng tháng trước khi làm hồ sơ. Kết quả mang tính tham khảo để chuẩn bị hồ sơ.",
   },
   {
     q: "Sau khi gửi form thì ai liên hệ?",
-    a: "Tư vấn viên HouseX liên hệ trong giờ làm việc để làm rõ mục đích vay, thu nhập và tài sản đảm bảo — rồi hướng dẫn bước tiếp theo.",
+    a: "Tư vấn viên House X liên hệ trong giờ làm việc để làm rõ mục đích vay, thu nhập và tài sản đảm bảo — rồi hướng dẫn bước tiếp theo.",
   },
   {
     q: "Bảo hiểm nhà khi vay là bắt buộc?",
-    a: "Nhiều gói vay mua nhà / thế chấp yêu cầu bảo hiểm tài sản (nhà ở) theo điều kiện ngân hàng. HouseX tư vấn gói và phí tham khảo; bạn cũng có thể mua bảo hiểm nhà, kho hoặc xe độc lập khi chưa vay — xem /tai-chinh/bao-hiem-tai-san.",
+    a: "Nhiều gói vay mua nhà / thế chấp yêu cầu bảo hiểm tài sản (nhà ở) theo điều kiện ngân hàng. House X tư vấn gói và phí tham khảo; bạn cũng có thể mua bảo hiểm nhà, kho hoặc xe độc lập khi chưa vay — xem /tai-chinh/bao-hiem-tai-san.",
   },
 ];
 
@@ -279,4 +283,4 @@ Phạm vi quyền lợi, mức miễn thường và loại trừ rủi ro theo *
 ];
 
 export const TAI_CHINH_HUB_INTRO =
-  "HouseX đồng hành vay mua nhà, vay thế chấp, vay SXKD và bảo hiểm tài sản (nhà, kho, xe): làm rõ nhu cầu, sơ loại hồ sơ / gói bảo hiểm, so sánh điều kiện và theo sát đến giải ngân hoặc nhận giấy chứng nhận. Lãi suất và phê duyệt vay do ngân hàng quyết định; hợp đồng bảo hiểm do doanh nghiệp được cấp phép phát hành — HouseX giúp bạn chuẩn bị đúng và đi đúng quy trình.";
+  "House X đồng hành vay mua nhà, vay thế chấp, vay SXKD và bảo hiểm tài sản: làm rõ nhu cầu, sơ loại hồ sơ, so sánh điều kiện và kết nối tới ngân hàng đối tác hợp tác liên kết — theo sát đến giải ngân. Danh sách đối tác ngân hàng được công khai trên trang này.";

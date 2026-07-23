@@ -192,7 +192,9 @@ export function ServiceVerticalLanding({ vertical }: { vertical: AffiliateVertic
         title={
           vertical.id === "dinh-gia"
             ? "Câu hỏi thường gặp về thẩm định giá"
-            : "Câu hỏi thường gặp"
+            : vertical.id === "tai-chinh"
+              ? "Câu hỏi thường gặp về vay mua nhà & ngân hàng"
+              : "Câu hỏi thường gặp"
         }
         faqs={vertical.hubFaqs ?? []}
       />

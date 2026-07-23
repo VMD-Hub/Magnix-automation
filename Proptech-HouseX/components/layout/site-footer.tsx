@@ -84,7 +84,7 @@ export function SiteFooter() {
             ))}
           </FooterCol>
 
-          <FooterCol title={`Tài chính ${getBrandName()}`}>
+          <FooterCol title={`Vay mua nhà · ${getBrandName()}`}>
             <li>
               <Link href={taiChinh.path} className={`font-medium ${FOOTER_LINK}`}>
                 {taiChinh.h1}
@@ -99,7 +99,7 @@ export function SiteFooter() {
             ))}
             <li>
               <Link href="/cong-cu/tinh-khoan-vay" className={FOOTER_LINK}>
-                Công cụ tính khoản vay
+                Tính trả góp hàng tháng
               </Link>
             </li>
           </FooterCol>
@@ -122,10 +122,10 @@ export function SiteFooter() {
             ))}
           </FooterCol>
 
-          <FooterCol title="Thiết kế & thi công nội thất">
+          <FooterCol title="Thiết kế & thi công">
             <li>
               <Link href={noiThat.path} className={`font-medium ${FOOTER_LINK}`}>
-                Dịch vụ nội thất
+                Thiết kế & thi công nội thất
               </Link>
             </li>
             <li>
