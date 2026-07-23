@@ -19,6 +19,19 @@ enum ProjectStatus {
   TAM_DUNG
 }
 
+/// Vùng bán nội bộ (ops/admin) — không render public landing.
+enum SalesRegion {
+  SOUTH
+  CENTRAL
+  NORTH
+}
+
+/// Lane lead nội bộ — form public giống nhau; chỉ phân tuyến ops.
+enum LeadLane {
+  ACTIVE_SALE
+  PIPELINE_CDT
+}
+
 enum TransactionType {
   SALE
   RENT
@@ -376,6 +389,10 @@ model Project {
   lng          Float?
   totalArea    Float?        @map("total_area")
   density      Float?
+  /// Ops only — Bắc/Trung/Nam; không hiện form lead public.
+  salesRegion  SalesRegion?  @map("sales_region")
+  /// Ops only — hàng đang bán vs pipeline CĐT.
+  leadLane     LeadLane?     @map("lead_lane")
   overviewData Json?         @map("overview_data")
   description  String?       @db.Text
   handoverDate DateTime?     @map("handover_date")
@@ -398,6 +415,7 @@ model Project {
   earlySignals EarlySignalBrief[]
 
   @@index([province, district])
+  @@index([salesRegion])
   @@index([deletedAt])
   @@map("projects")
 }

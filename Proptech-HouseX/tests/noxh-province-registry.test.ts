@@ -4,6 +4,7 @@ import {
   dualAddressFromProvinceRaw,
   formatDualAddress,
   getNoxhProvinceBySlug,
+  inferPrismaSalesRegionFromProvince,
   listNoxhProvinceHubsEnabled,
   NOXH_LEGACY_HUB_REDIRECTS,
   NOXH_PROVINCE_REGISTRY_P0,
@@ -40,4 +41,10 @@ test("dual address: legacy province yields two lines", () => {
   assert.match(formatted.primary, /TP\. Hồ Chí Minh/);
   assert.match(formatted.legacyLine ?? "", /Bình Dương/);
   assert.match(formatted.compact, /trước thuộc/);
+});
+
+test("infer Prisma salesRegion from province", () => {
+  assert.equal(inferPrismaSalesRegionFromProvince("Bình Dương"), "SOUTH");
+  assert.equal(inferPrismaSalesRegionFromProvince("Long An"), "SOUTH");
+  assert.equal(inferPrismaSalesRegionFromProvince("Hà Nội"), null);
 });

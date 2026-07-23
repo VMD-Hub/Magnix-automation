@@ -8,6 +8,7 @@ import { cn } from "@/lib/ui/cn";
 import {
   PROJECT_STATUS_LABEL,
   PROJECT_TYPE_LABEL,
+  SALES_REGION_LABEL,
 } from "@/lib/format";
 
 type ProjectRow = {
@@ -18,6 +19,8 @@ type ProjectRow = {
   status: string;
   province: string;
   district: string;
+  salesRegion?: string | null;
+  leadLane?: string | null;
   updatedAt: string;
   developer: { id: string; name: string };
   _count: { unitTypes: number; listings: number };
@@ -39,12 +42,16 @@ export function ProjectListBoard() {
   const [cloneName, setCloneName] = useState("");
   const [cloneLoading, setCloneLoading] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
+  const [regionFilter, setRegionFilter] = useState<string>("");
 
   const load = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch("/api/admin/projects", {
+      const qs = regionFilter
+        ? `?salesRegion=${encodeURIComponent(regionFilter)}`
+        : "";
+      const res = await fetch(`/api/admin/projects${qs}`, {
         headers: { accept: "application/json" },
       });
       if (res.status === 403) {
@@ -62,7 +69,7 @@ export function ProjectListBoard() {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [regionFilter]);
 
   useEffect(() => {
     load();
@@ -120,9 +127,26 @@ export function ProjectListBoard() {
           Mỗi dự án = một landing SEO chuẩn. Tạo mới hoặc nhân bản từ dự án có
           sẵn.
         </p>
-        <ButtonLink href="/admin/projects/new" variant="primary" size="sm">
-          + Tạo dự án mới
-        </ButtonLink>
+        <div className="flex flex-wrap items-center gap-2">
+          <label className="flex items-center gap-2 text-sm text-slate-600">
+            Vùng bán
+            <select
+              value={regionFilter}
+              onChange={(e) => setRegionFilter(e.target.value)}
+              className="rounded-lg border border-slate-300 px-2 py-1.5 text-sm"
+            >
+              <option value="">Tất cả</option>
+              {Object.entries(SALES_REGION_LABEL).map(([k, v]) => (
+                <option key={k} value={k}>
+                  {v}
+                </option>
+              ))}
+            </select>
+          </label>
+          <ButtonLink href="/admin/projects/new" variant="primary" size="sm">
+            + Tạo dự án mới
+          </ButtonLink>
+        </div>
       </div>
 
       {message && (
@@ -177,7 +201,14 @@ export function ProjectListBoard() {
                     </div>
                   </td>
                   <td className="hidden px-4 py-3 lg:table-cell">
-                    {p.district}, {p.province}
+                    <div>
+                      {p.district}, {p.province}
+                    </div>
+                    {p.salesRegion && (
+                      <div className="mt-0.5 text-xs font-medium text-slate-500">
+                        {SALES_REGION_LABEL[p.salesRegion] ?? p.salesRegion}
+                      </div>
+                    )}
                   </td>
                   <td className="px-4 py-3 text-xs text-slate-500">
                     {formatDate(p.updatedAt)}

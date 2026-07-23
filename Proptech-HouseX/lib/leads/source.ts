@@ -31,6 +31,10 @@ export type LeadSourceMeta = {
   /** Giá trị `source` client gửi trước khi chuẩn hóa — audit/debug. */
   rawSource?: string;
   channel?: LeadSourceChannel;
+  /** Ops routing — stamp từ Project, không lộ form public. */
+  salesRegion?: "SOUTH" | "CENTRAL" | "NORTH";
+  leadLane?: "ACTIVE_SALE" | "PIPELINE_CDT";
+  projectSlug?: string;
 };
 
 export type ResolveLeadSourceInput = {

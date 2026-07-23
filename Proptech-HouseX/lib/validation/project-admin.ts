@@ -11,6 +11,9 @@ import {
 
 const slugRegex = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 
+export const salesRegionEnum = z.enum(["SOUTH", "CENTRAL", "NORTH"]);
+export const leadLaneEnum = z.enum(["ACTIVE_SALE", "PIPELINE_CDT"]);
+
 export const projectAdminSaveSchema = z.object({
   developerId: z.string().uuid(),
   slug: z
@@ -29,6 +32,9 @@ export const projectAdminSaveSchema = z.object({
   lng: z.number().min(-180).max(180).optional().nullable(),
   totalArea: z.number().positive().optional().nullable(),
   density: z.number().nonnegative().optional().nullable(),
+  /** Ops — null/omit = tự suy từ province registry khi có. */
+  salesRegion: salesRegionEnum.optional().nullable(),
+  leadLane: leadLaneEnum.optional().nullable(),
   description: z.string().optional(),
   handoverDate: z.coerce.date().optional().nullable(),
   seoTitle: z.string().optional(),

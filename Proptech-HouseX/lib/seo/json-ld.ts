@@ -1,5 +1,6 @@
 import type { Developer, Project } from "@prisma/client";
 import { getSiteUrl } from "@/lib/site-config";
+import { resolveNoxhProvinceCanonical } from "@/lib/content/noxh-province-registry";
 
 /**
  * Minimal shape needed to build structured data for a project page.
@@ -26,14 +27,18 @@ function readOverview(
  * Build a schema.org `ApartmentComplex` JSON-LD object directly from Prisma data
  * so every project automatically gets correct structured data (no hand-written
  * boilerplate per page). See spec mục 6.
+ *
+ * addressRegion dùng tên địa giới mới (NQ 202/2025) khi province khớp registry.
  */
 export function buildProjectJsonLd(project: ProjectForJsonLd): JsonLdObject {
   const siteUrl = getSiteUrl();
+  const geoEntry = resolveNoxhProvinceCanonical(project.province);
+  const addressRegion = geoEntry?.nameNew ?? project.province;
 
   const address: JsonLdObject = {
     "@type": "PostalAddress",
     addressCountry: "VN",
-    addressRegion: project.province,
+    addressRegion,
     addressLocality: project.district,
   };
   const streetParts = [project.address, project.ward].filter(Boolean);
@@ -47,6 +52,17 @@ export function buildProjectJsonLd(project: ProjectForJsonLd): JsonLdObject {
     name: project.name,
     address,
   };
+
+  if (geoEntry && geoEntry.aliasesOld.length > 0) {
+    // Alias tìm kiếm — không thay addressRegion canonical.
+    jsonLd.additionalProperty = [
+      {
+        "@type": "PropertyValue",
+        name: "formerAdministrativeRegion",
+        value: geoEntry.aliasesOld.join(", "),
+      },
+    ];
+  }
 
   if (siteUrl) {
     jsonLd.url = `${siteUrl}/du-an/${project.slug}`;

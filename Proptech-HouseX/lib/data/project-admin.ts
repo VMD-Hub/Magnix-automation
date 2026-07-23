@@ -1,16 +1,31 @@
 import { prisma } from "@/lib/prisma";
-import type { Prisma } from "@prisma/client";
+import type { LeadLane, Prisma, SalesRegion } from "@prisma/client";
 import {
   buildOverviewData,
   defaultProjectLanding,
   parseProjectOverview,
 } from "@/lib/content/project-landing";
+import { inferPrismaSalesRegionFromProvince } from "@/lib/content/noxh-province-registry";
 import type { ProjectAdminSaveInput } from "@/lib/validation/project-admin";
 import { projectDetailInclude } from "@/lib/data/project";
 
-export async function listProjectsForAdmin() {
+function resolveSalesRegion(
+  input: Pick<ProjectAdminSaveInput, "salesRegion" | "province">,
+): SalesRegion | null {
+  if (input.salesRegion) {
+    return input.salesRegion;
+  }
+  return inferPrismaSalesRegionFromProvince(input.province) as SalesRegion | null;
+}
+
+export async function listProjectsForAdmin(opts?: {
+  salesRegion?: SalesRegion | null;
+}) {
   return prisma.project.findMany({
-    where: { deletedAt: null },
+    where: {
+      deletedAt: null,
+      ...(opts?.salesRegion ? { salesRegion: opts.salesRegion } : {}),
+    },
     orderBy: { updatedAt: "desc" },
     include: {
       developer: { select: { id: true, name: true } },
@@ -64,6 +79,8 @@ export async function createProjectFromAdmin(input: ProjectAdminSaveInput) {
       lng: data.lng ?? undefined,
       totalArea: data.totalArea ?? undefined,
       density: data.density ?? undefined,
+      salesRegion: resolveSalesRegion(data),
+      leadLane: (data.leadLane ?? null) as LeadLane | null,
       description: data.description,
       handoverDate: data.handoverDate ?? undefined,
       seoTitle: data.seoTitle,
@@ -98,6 +115,11 @@ export async function updateProjectFromAdmin(
       lng: data.lng ?? undefined,
       totalArea: data.totalArea ?? undefined,
       density: data.density ?? undefined,
+      salesRegion: resolveSalesRegion(data),
+      leadLane:
+        data.leadLane !== undefined
+          ? (data.leadLane as LeadLane | null)
+          : undefined,
       description: data.description,
       handoverDate: data.handoverDate ?? undefined,
       seoTitle: data.seoTitle,
@@ -145,6 +167,10 @@ export async function cloneProjectForAdmin(
       lng: source.lng,
       totalArea: source.totalArea,
       density: source.density,
+      salesRegion:
+        source.salesRegion ??
+        (inferPrismaSalesRegionFromProvince(source.province) as SalesRegion | null),
+      leadLane: source.leadLane,
       description: source.description,
       handoverDate: source.handoverDate,
       seoTitle: source.seoTitle ? `${source.seoTitle} — bản sao` : undefined,

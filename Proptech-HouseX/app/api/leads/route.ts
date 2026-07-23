@@ -152,6 +152,22 @@ export async function POST(req: NextRequest) {
         referralAssigned: !!attribution.assignedBrokerId,
       });
 
+      if (body.projectId) {
+        const projectOps = await tx.project.findUnique({
+          where: { id: body.projectId },
+          select: { salesRegion: true, leadLane: true, slug: true },
+        });
+        if (projectOps) {
+          sourceMeta = {
+            ...(sourceMeta ?? {}),
+            // Ops routing only — không lộ trên form public.
+            salesRegion: projectOps.salesRegion ?? undefined,
+            leadLane: projectOps.leadLane ?? undefined,
+            projectSlug: projectOps.slug,
+          };
+        }
+      }
+
       if (waitlist) {
         // Referral attribution vẫn giữ assignedBrokerId; source đánh dấu waitlist
         // để tách HOT notify / SLA gọi.

@@ -13,6 +13,26 @@
 
 export type NoxhSalesRegion = "south" | "central" | "north";
 
+/** Prisma `SalesRegion` enum — cùng nghĩa, UPPERCASE. */
+export type PrismaSalesRegion = "SOUTH" | "CENTRAL" | "NORTH";
+
+export function toPrismaSalesRegion(
+  region: NoxhSalesRegion | null | undefined,
+): PrismaSalesRegion | null {
+  if (!region) return null;
+  if (region === "south") return "SOUTH";
+  if (region === "central") return "CENTRAL";
+  return "NORTH";
+}
+
+/** Suy ra SalesRegion Prisma từ chuỗi province DB (registry P0). */
+export function inferPrismaSalesRegionFromProvince(
+  provinceRaw: string | null | undefined,
+): PrismaSalesRegion | null {
+  const entry = resolveNoxhProvinceCanonical(provinceRaw);
+  return toPrismaSalesRegion(entry?.salesRegion);
+}
+
 export type NoxhProvinceEntry = {
   /** Segment URL hub: /du-an/nha-o-xa-hoi/{slug} */
   slug: string;

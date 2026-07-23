@@ -44,6 +44,8 @@ export async function seedHoGuomXanhNoxh(prisma: PrismaClient): Promise<void> {
       status: def.status,
       handoverDate: def.handoverDate ?? null,
       totalArea: def.totalArea ?? null,
+      salesRegion: "SOUTH",
+      leadLane: "PIPELINE_CDT",
     },
     create: {
       developerId: developer.id,
@@ -59,6 +61,8 @@ export async function seedHoGuomXanhNoxh(prisma: PrismaClient): Promise<void> {
       lng: def.lng,
       totalArea: def.totalArea ?? null,
       handoverDate: def.handoverDate ?? null,
+      salesRegion: "SOUTH",
+      leadLane: "PIPELINE_CDT",
       overviewData: overview as object,
       description: def.description,
       seoTitle: def.seoTitle,

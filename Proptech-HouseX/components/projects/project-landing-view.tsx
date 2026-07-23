@@ -28,6 +28,10 @@ import type { ProjectInventoryPageFilters } from "@/lib/validation/project-unit"
 import { FaqAnswerText } from "@/components/content/faq-answer-body";
 import { buildFaqJsonLd } from "@/lib/seo/affiliate-json-ld";
 import {
+  dualAddressFromProvinceRaw,
+  formatDualAddress,
+} from "@/lib/content/noxh-province-registry";
+import {
   LISTING_TIER_LABEL,
   PROJECT_STATUS_LABEL,
   PROJECT_TYPE_LABEL,
@@ -132,6 +136,13 @@ export function ProjectLandingContent({
   }, null);
   const priceFromLabel = minUnitPrice != null ? formatVnd(minUnitPrice) : null;
   const hasInventory = (inventory?.summary.total ?? 0) > 0;
+  const dualAddress = formatDualAddress(
+    dualAddressFromProvinceRaw(project.province, {
+      address: project.address,
+      ward: project.ward,
+      district: project.district,
+    }),
+  );
 
   return (
     <div className="min-h-screen bg-silver-50 text-[#333333]">
@@ -247,9 +258,15 @@ export function ProjectLandingContent({
                 <circle cx="12" cy="10" r="2.5" />
               </svg>
               <span>
-                {[project.address, project.ward, project.district, project.province]
-                  .filter(Boolean)
-                  .join(", ")}
+                {dualAddress.primary}
+                {dualAddress.legacyLine ? (
+                  <>
+                    <br />
+                    <span className="text-sm text-slate-300">
+                      {dualAddress.legacyLine}
+                    </span>
+                  </>
+                ) : null}
               </span>
             </p>
             {project.developer && (
@@ -415,6 +432,8 @@ export function ProjectLandingContent({
           projectName={project.name}
           mapImage={landing?.locationMapImage}
           locationNotes={landing?.locationNotes}
+          addressPrimary={dualAddress.primary}
+          addressLegacyLine={dualAddress.legacyLine}
         />
 
         {project.unitTypes.length > 0 && (

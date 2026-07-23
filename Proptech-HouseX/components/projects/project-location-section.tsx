@@ -5,6 +5,10 @@ type Props = {
   projectName: string;
   mapImage?: ProjectLandingLocationMap | null;
   locationNotes?: string | null;
+  /** Địa chỉ canonical (địa giới mới) */
+  addressPrimary?: string | null;
+  /** Dòng alias cũ — “Trước đây / quen gọi: …” */
+  addressLegacyLine?: string | null;
 };
 
 /**
@@ -15,10 +19,13 @@ export function ProjectLocationSection({
   projectName,
   mapImage,
   locationNotes,
+  addressPrimary,
+  addressLegacyLine,
 }: Props) {
   const hasMap = Boolean(mapImage?.url);
   const hasText = Boolean(locationNotes?.trim());
-  if (!hasMap && !hasText) return null;
+  const hasAddress = Boolean(addressPrimary?.trim());
+  if (!hasMap && !hasText && !hasAddress) return null;
 
   return (
     <section aria-labelledby="project-location-heading">
@@ -28,6 +35,15 @@ export function ProjectLocationSection({
       >
         Vị trí {projectName} thuận lợi ra sao?
       </h2>
+
+      {hasAddress && (
+        <div className="mt-4 max-w-3xl text-base leading-relaxed text-slate-700">
+          <p className="font-medium text-slate-900">{addressPrimary}</p>
+          {addressLegacyLine && (
+            <p className="mt-1 text-sm text-slate-500">{addressLegacyLine}</p>
+          )}
+        </div>
+      )}
 
       <div
         className={

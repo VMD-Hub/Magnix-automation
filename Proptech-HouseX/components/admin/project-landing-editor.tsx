@@ -18,8 +18,10 @@ import {
   type ProjectLanding,
 } from "@/lib/content/project-landing";
 import {
+  LEAD_LANE_LABEL,
   PROJECT_STATUS_LABEL,
   PROJECT_TYPE_LABEL,
+  SALES_REGION_LABEL,
 } from "@/lib/format";
 
 type Developer = { id: string; name: string; verified: boolean };
@@ -34,6 +36,10 @@ type FormState = {
   district: string;
   ward: string;
   address: string;
+  /** Ops only */
+  salesRegion: "" | "SOUTH" | "CENTRAL" | "NORTH";
+  /** Ops only */
+  leadLane: "" | "ACTIVE_SALE" | "PIPELINE_CDT";
   lat: string;
   lng: string;
   totalArea: string;
@@ -62,6 +68,8 @@ function emptyForm(name = ""): FormState {
     district: "",
     ward: "",
     address: "",
+    salesRegion: "",
+    leadLane: "",
     lat: "",
     lng: "",
     totalArea: "",
@@ -88,6 +96,8 @@ function projectToForm(project: Record<string, unknown>): FormState {
     district: string;
     ward?: string | null;
     address?: string | null;
+    salesRegion?: FormState["salesRegion"] | null;
+    leadLane?: FormState["leadLane"] | null;
     lat?: number | null;
     lng?: number | null;
     totalArea?: number | null;
@@ -108,6 +118,8 @@ function projectToForm(project: Record<string, unknown>): FormState {
     district: p.district,
     ward: p.ward ?? "",
     address: p.address ?? "",
+    salesRegion: p.salesRegion ?? "",
+    leadLane: p.leadLane ?? "",
     lat: p.lat != null ? String(p.lat) : "",
     lng: p.lng != null ? String(p.lng) : "",
     totalArea: p.totalArea != null ? String(p.totalArea) : "",
@@ -136,6 +148,8 @@ function formToPayload(form: FormState) {
     district: form.district.trim(),
     ward: form.ward.trim() || undefined,
     address: form.address.trim() || undefined,
+    salesRegion: form.salesRegion || null,
+    leadLane: form.leadLane || null,
     lat: form.lat ? Number(form.lat) : null,
     lng: form.lng ? Number(form.lng) : null,
     totalArea: form.totalArea ? Number(form.totalArea) : null,
@@ -475,6 +489,48 @@ export function ProjectLandingEditor({
               placeholder="Số nhà, tên đường"
             />
           </label>
+          <div className="grid gap-4 sm:grid-cols-2">
+            <label className={labelClass}>
+              Vùng bán (nội bộ)
+              <select
+                value={form.salesRegion}
+                onChange={(e) =>
+                  setField(
+                    "salesRegion",
+                    e.target.value as FormState["salesRegion"],
+                  )
+                }
+                className={inputClass}
+              >
+                <option value="">Tự suy từ tỉnh (registry)</option>
+                {Object.entries(SALES_REGION_LABEL).map(([k, v]) => (
+                  <option key={k} value={k}>
+                    {v}
+                  </option>
+                ))}
+              </select>
+              <span className="mt-1 block text-xs font-normal text-slate-500">
+                Không hiện trên landing / form lead public.
+              </span>
+            </label>
+            <label className={labelClass}>
+              Lane lead (nội bộ)
+              <select
+                value={form.leadLane}
+                onChange={(e) =>
+                  setField("leadLane", e.target.value as FormState["leadLane"])
+                }
+                className={inputClass}
+              >
+                <option value="">Chưa gán</option>
+                {Object.entries(LEAD_LANE_LABEL).map(([k, v]) => (
+                  <option key={k} value={k}>
+                    {v}
+                  </option>
+                ))}
+              </select>
+            </label>
+          </div>
           <label className={labelClass}>
             Vĩ độ (lat)
             <input

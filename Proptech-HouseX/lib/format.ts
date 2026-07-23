@@ -62,6 +62,19 @@ export const PROJECT_TYPE_LABEL: Record<string, string> = {
   NHA_O_XA_HOI: "Nhà ở xã hội",
 };
 
+/** Ops only — không hiện public. */
+export const SALES_REGION_LABEL: Record<string, string> = {
+  SOUTH: "Miền Nam",
+  CENTRAL: "Miền Trung",
+  NORTH: "Miền Bắc",
+};
+
+/** Ops only — không hiện public. */
+export const LEAD_LANE_LABEL: Record<string, string> = {
+  ACTIVE_SALE: "Đang bán (active)",
+  PIPELINE_CDT: "Pipeline CĐT",
+};
+
 export const TRANSACTION_TYPE_LABEL: Record<string, string> = {
   SALE: "Bán",
   RENT: "Cho thuê",
