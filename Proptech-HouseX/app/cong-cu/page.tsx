@@ -44,7 +44,7 @@ export default function CongCuPage() {
         imageAlt={TOOLS_HUB_BANNER.alt}
         objectPosition={TOOLS_HUB_BANNER.objectPosition}
         primaryCta={{ label: "Xem hướng nhà", href: "/cong-cu/xem-huong-nha" }}
-        secondaryCta={{ label: "Tính khoản vay", href: "/cong-cu/tinh-khoan-vay" }}
+        secondaryCta={{ label: "Tính khoản vay", href: "/tinh-tra-gop" }}
       />
 
       {sortedCategories.map((cat, idx) => {
@@ -60,7 +60,7 @@ export default function CongCuPage() {
                 <p className="mt-1 max-w-2xl text-sm text-slate-600">{cat.intro}</p>
               </div>
               {cat.id === "tai-chinh" ? (
-                <Link href="/cong-cu/tinh-khoan-vay" className="text-sm font-semibold text-brand-700 hover:text-brand-800">
+                <Link href="/tinh-tra-gop" className="text-sm font-semibold text-brand-700 hover:text-brand-800">
                   Mở máy tính vay →
                 </Link>
               ) : null}

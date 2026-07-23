@@ -111,12 +111,12 @@ export function buildDtaHappyHomeLanding(): ProjectLanding {
     {
       title: "Tính khoản vay mua nhà",
       text: "Ước tính trả góp hàng tháng theo giá căn DTA Happy Home — miễn phí trên HouseX.",
-      href: "/cong-cu/tinh-khoan-vay",
+      href: "/tinh-tra-gop",
     },
     {
       title: "Tư vấn tài chính & hồ sơ vay",
       text: "Đội ngũ HouseX hỗ trợ chuẩn bị hồ sơ và kết nối gói vay phù hợp NOXH.",
-      href: "/tai-chinh",
+      href: "/vay-mua-nha",
     },
     {
       title: "Đăng ký tư vấn suất mua",

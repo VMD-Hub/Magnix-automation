@@ -71,7 +71,7 @@ export function PaintColorTool() {
           </div>
 
           <div className="mt-4 flex flex-wrap gap-2">
-            <Link href="/noi-that" className="text-sm font-semibold text-brand-700 hover:underline">
+            <Link href="/thiet-ke-thi-cong-noi-that" className="text-sm font-semibold text-brand-700 hover:underline">
               Khám phá phong cách nội thất →
             </Link>
           </div>

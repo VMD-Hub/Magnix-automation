@@ -881,7 +881,7 @@ export function NoxhEligibilityWizard() {
                 </p>
                 <div className="mt-3 grid gap-2 sm:grid-cols-2">
                   <a
-                    href="/cong-cu/tinh-khoan-vay"
+                    href="/tinh-tra-gop"
                     onClick={() => track("noxh_cta_click", { cta: "loan-calc" })}
                     className="flex items-center gap-2 rounded-xl border border-slate-200 p-3 text-sm font-medium text-slate-700 transition-colors hover:border-brand-300 hover:bg-brand-50"
                   >

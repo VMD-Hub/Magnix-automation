@@ -48,7 +48,7 @@ export const ALL_TOOLS: (ToolCardDef & { category: ToolCategoryId })[] = [
   {
     id: "loan",
     category: "tai-chinh",
-    href: "/cong-cu/tinh-khoan-vay",
+    href: "/tinh-tra-gop",
     title: "Tính khoản vay mua nhà",
     desc: "Dư nợ giảm dần hoặc trả góp đều — lịch trả nợ chi tiết, xuất PDF.",
     cta: "Tính ngay",

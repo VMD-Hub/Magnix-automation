@@ -154,7 +154,7 @@ Ngoài khung NHNN, DTA Happy Home Nhơn Trạch (CĐT Công ty CP Đệ Tam) cô
 - Lãi suất ưu đãi 5,5%/năm trong 6 tháng đầu (theo chính sách ngân hàng liên kết — tham khảo [dtanhontrach.com](https://dtanhontrach.com)).
 - 3 phương thức thanh toán linh hoạt theo block.
 
-Khi kết hợp giá căn từ 448 triệu (giá CĐT công bố Block A10) với gói vay 70%, số tiền vay gốc ban đầu có thể từ ~300 triệu — mức trả góp hàng tháng có thể mô phỏng trên [công cụ tính khoản vay HouseX](/cong-cu/tinh-khoan-vay).
+Khi kết hợp giá căn từ 448 triệu (giá CĐT công bố Block A10) với gói vay 70%, số tiền vay gốc ban đầu có thể từ ~300 triệu — mức trả góp hàng tháng có thể mô phỏng trên [công cụ tính khoản vay HouseX](/tinh-tra-gop).
 
 ## Ví dụ dòng tiền (minh hoạ, không phải cam kết ngân hàng)
 

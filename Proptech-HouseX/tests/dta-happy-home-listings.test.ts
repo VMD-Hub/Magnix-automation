@@ -21,13 +21,13 @@ describe("DTA Happy Home A10 listings", () => {
     const detail = buildDtaHappyHomeListingDetail("DTA-HH-A10201");
     assert.ok(detail?.description?.includes("giá chính thức từ CĐT"));
     assert.ok(detail?.description?.includes("Quý IV / 2027"));
-    assert.ok(detail?.description?.includes("/cong-cu/tinh-khoan-vay"));
+    assert.ok(detail?.description?.includes("/tinh-tra-gop"));
   });
 
   it("copy includes CTA links rotated across units", () => {
     const c0 = buildDtaUnitListingCopy(DTA_HAPPY_HOME_INVENTORY_A10[0]!, 0);
     const c1 = buildDtaUnitListingCopy(DTA_HAPPY_HOME_INVENTORY_A10[1]!, 1);
-    assert.ok(c0.description.includes("/cong-cu/tinh-khoan-vay"));
+    assert.ok(c0.description.includes("/tinh-tra-gop"));
     assert.ok(c1.description.includes("/lien-he"));
   });
 

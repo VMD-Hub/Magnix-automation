@@ -11,5 +11,5 @@ export {
 
 import type { ToolBrandVisualVariant } from "@/lib/content/tool-brand-visuals";
 
-/** Hero trang /tai-chinh */
+/** Hero trang /vay-mua-nha */
 export const FINANCE_HUB_VISUAL: ToolBrandVisualVariant = "finance-hub";

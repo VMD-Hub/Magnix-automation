@@ -66,7 +66,7 @@ House X thuộc nền tảng do Công ty TNHH Minh An Land vận hành.
 
 | # | Tên menu | Hành động | URL / Ghi chú |
 |---|----------|-----------|---------------|
-| 1 | Tính khoản vay | Mở link | `https://timnhaxahoi.com/cong-cu/tinh-khoan-vay` |
+| 1 | Tính khoản vay | Mở link | `https://timnhaxahoi.com/tinh-tra-gop` |
 | 2 | Kiểm tra NOXH | Mở link | `https://timnhaxahoi.com/cong-cu/kiem-tra-noxh` |
 | 3 | Dự án NOXH | Mở link | `https://timnhaxahoi.com/nha-o-xa-hoi` |
 | 4 | Đăng ký CTV | Mở link | `https://timnhaxahoi.com/moi-gioi/dang-ky-ctv` |
@@ -126,7 +126,7 @@ Vận hành bởi Công ty TNHH Minh An Land
 |---------|--------------|
 | `TƯ VẤN` | `Cảm ơn bạn! Chuyên viên House X sẽ liên hệ trong giờ làm việc. Bạn có thể mở Mini App để gửi yêu cầu ngay.` |
 | `NOXH` | `Xem hướng dẫn & công cụ NOXH: https://timnhaxahoi.com/nha-o-xa-hoi` |
-| `VAY` | `Tính khoản vay: https://timnhaxahoi.com/cong-cu/tinh-khoan-vay` |
+| `VAY` | `Tính khoản vay: https://timnhaxahoi.com/tinh-tra-gop` |
 
 ---
 

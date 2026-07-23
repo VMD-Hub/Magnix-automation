@@ -226,7 +226,7 @@ export interface OutboxPayloads {
     assignedBrokerId: string | null;
     createdAt: string;
   };
-  /** Form dịch vụ tại /tai-chinh, /dinh-gia, /noi-that và các landing liên kết. */
+  /** Form dịch vụ tại /vay-mua-nha, /dinh-gia, /thiet-ke-thi-cong-noi-that và các landing liên kết. */
   "lead.affiliate_contact": {
     leadId: string;
     vertical: string;

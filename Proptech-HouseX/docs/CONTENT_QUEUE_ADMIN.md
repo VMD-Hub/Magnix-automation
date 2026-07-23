@@ -42,7 +42,7 @@ Từ item **APPROVED** (CTA đủ):
 
 1. **Publish web ngay** → tạo `Article` status PUBLISHED + body markdown có link tool → queue `PUBLISHED`
 2. **Tạo nháp CMS** → `Article` DRAFT, sửa thêm tại `/admin/articles/[id]`, rồi publish_web lại
-3. Public URL: `/tin-tuc/cam-nang-noxh/[slug]`
+3. Public URL: `/wiki-nha-o-xa-hoi/[slug]`
 
 Body luôn có section **Kiểm tra nhanh (CTA)** — không publish bài trống CTA.
 

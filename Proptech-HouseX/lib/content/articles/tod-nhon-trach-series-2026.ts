@@ -224,7 +224,7 @@ DTA Happy Home Nhơn Trạch là dự án nhà ở xã hội trong DTA City: gi�
 
 ${DTA_PR_CLOSINGS.nhonTrachTod}
 
-Tra cứu suất Block A10: [/tin-dang/DTA-HH-A10511](/tin-dang/DTA-HH-A10511) · [Tính khoản vay](/cong-cu/tinh-khoan-vay)
+Tra cứu suất Block A10: [/tin-dang/DTA-HH-A10511](/tin-dang/DTA-HH-A10511) · [Tính khoản vay](/tinh-tra-gop)
 
 *HouseX tổng hợp — số liệu ga, tiến độ thi công và giá căn có thể thay đổi theo công bố chính thức.*`,
     status: "PUBLISHED",

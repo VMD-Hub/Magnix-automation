@@ -164,7 +164,7 @@ export default function Page() {
             </p>
           </Link>
           <Link
-            href="/cong-cu/tinh-khoan-vay"
+            href="/tinh-tra-gop"
             className="rounded-2xl border border-silver-200 bg-white p-5 transition-colors hover:border-brand-300 hover:bg-brand-50"
           >
             <p className="font-bold text-slate-900">Tính khoản vay mua nhà</p>

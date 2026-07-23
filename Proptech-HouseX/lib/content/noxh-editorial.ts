@@ -12,7 +12,7 @@ export const HOUSEX_NOXH_SERVICES: NonNullable<ProjectLanding["services"]> = [
   {
     title: "Tính khoản vay NHCSXH",
     text: "Mô phỏng dòng tiền vay gói 120.000 tỷ: vốn tự có, lãi suất ưu đãi, thời hạn trả — số liệu minh bạch để lên kế hoạch tài chính.",
-    href: "/cong-cu/tinh-khoan-vay",
+    href: "/tinh-tra-gop",
   },
   {
     title: "Tra cứu pháp lý dự án",

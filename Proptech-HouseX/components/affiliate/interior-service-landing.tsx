@@ -212,8 +212,8 @@ export function InteriorServiceLanding({ vertical }: { vertical: AffiliateVertic
 
       <ServiceToolLinks
         links={[
-          { label: "Tính trả góp hàng tháng", href: "/cong-cu/tinh-khoan-vay" },
-          { label: "Vay mua nhà", href: "/tai-chinh" },
+          { label: "Tính trả góp hàng tháng", href: "/tinh-tra-gop" },
+          { label: "Vay mua nhà", href: "/vay-mua-nha" },
           { label: "Thẩm định giá", href: "/dinh-gia" },
         ]}
         note="Hành trình Proptech House X — tìm nhà, vay, định giá và thiết kế–thi công trên cùng nền tảng."

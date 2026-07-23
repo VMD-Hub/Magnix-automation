@@ -18,7 +18,7 @@ const NEED_BY_VERTICAL: Record<string, { value: string; label: string }[]> = {
       value: "ra-soat-phap-ly-15-phut",
       label: "Rà soát pháp lý 15 phút (NOXH / BĐS)",
     },
-    { value: "vay-mua-nha", label: "Vay mua nhà & căn hộ" },
+    { value: "can-ho", label: "Vay mua nhà & căn hộ" },
     { value: "vay-the-chap", label: "Vay thế chấp & tái tài trợ" },
     { value: "vay-sxkd", label: "Vay sản xuất kinh doanh" },
     { value: "bao-hiem-tai-san", label: "Bảo hiểm nhà, kho & xe" },

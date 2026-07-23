@@ -98,7 +98,7 @@ export function SiteFooter() {
               </li>
             ))}
             <li>
-              <Link href="/cong-cu/tinh-khoan-vay" className={FOOTER_LINK}>
+              <Link href="/tinh-tra-gop" className={FOOTER_LINK}>
                 Tính trả góp hàng tháng
               </Link>
             </li>
@@ -129,7 +129,7 @@ export function SiteFooter() {
               </Link>
             </li>
             <li>
-              <Link href="/noi-that/nha-dep" className={FOOTER_LINK}>
+              <Link href="/thiet-ke-thi-cong-noi-that/nha-dep" className={FOOTER_LINK}>
                 Nhà đẹp — Ý tưởng
               </Link>
             </li>

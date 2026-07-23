@@ -19,7 +19,7 @@ export function buildWeeklyNewsletterEmail(input: {
   const brand = getBrandName();
   const name = input.recipientName.trim() || "bạn";
   const base = getSiteUrl().replace(/\/$/, "");
-  const ctaUrl = `${base}/tin-tuc/cam-nang-noxh`;
+  const ctaUrl = `${base}/wiki-nha-o-xa-hoi`;
   const projectsUrl = `${base}/du-an/nha-o-xa-hoi`;
 
   const html = `<!DOCTYPE html>

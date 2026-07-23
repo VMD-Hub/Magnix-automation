@@ -83,7 +83,7 @@ export const NOXH_LEGAL_CHECKLIST = {
         {
           id: "d1",
           label: "DTI / khả năng trả góp sau ưu đãi lãi suất có an toàn?",
-          hint: "Tính thử: timnhaxahoi.com/cong-cu/tinh-khoan-vay",
+          hint: "Tính thử: timnhaxahoi.com/tinh-tra-gop",
         },
       ],
     },

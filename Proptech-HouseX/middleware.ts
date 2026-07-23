@@ -24,16 +24,42 @@ function resolveTopicDestination(tagSlug: string): string {
   return LEGACY_NOXH_TOPIC_REDIRECTS[tagSlug] ?? topicPath(tagSlug);
 }
 
-/** 308 cứng — tránh Ahrefs thấy 200 shell RSC không có `<a>` (orphan / no outlinks). */
+/** 308 cứng — URL cũ → canonical mới (unify naming). */
 function seoPermanentRedirect(req: NextRequest): NextResponse | null {
   const { pathname } = req.nextUrl;
+  const path = pathname.replace(/\/$/, "") || "/";
 
-  if (pathname === "/chuyen-gia" || pathname === "/chuyen-gia/") {
-    return redirectPath(req, "/doi-ngu");
+  // Exact hubs / tools
+  const exact: Record<string, string> = {
+    "/cam-nang-noxh": "/wiki-nha-o-xa-hoi",
+    "/tin-tuc/cam-nang-noxh": "/wiki-nha-o-xa-hoi",
+    "/tai-chinh": "/vay-mua-nha",
+    "/tai-chinh/vay-mua-nha": "/vay-mua-nha/can-ho",
+    "/vay-mua-nha/vay-mua-nha": "/vay-mua-nha/can-ho",
+    "/noi-that": "/thiet-ke-thi-cong-noi-that",
+    "/cong-cu/tinh-khoan-vay": "/tinh-tra-gop",
+    "/chuyen-gia": "/doi-ngu",
+    "/dang-tin": "/moi-gioi/dang-tin",
+  };
+  if (exact[path]) {
+    return redirectPath(req, exact[path]);
   }
 
-  if (pathname === "/dang-tin" || pathname === "/dang-tin/") {
-    return redirectPath(req, "/moi-gioi/dang-tin");
+  // Prefix silos
+  if (path.startsWith("/tin-tuc/cam-nang-noxh/")) {
+    return redirectPath(
+      req,
+      `/wiki-nha-o-xa-hoi/${path.slice("/tin-tuc/cam-nang-noxh/".length)}`,
+    );
+  }
+  if (path.startsWith("/tai-chinh/")) {
+    return redirectPath(req, `/vay-mua-nha/${path.slice("/tai-chinh/".length)}`);
+  }
+  if (path.startsWith("/noi-that/")) {
+    return redirectPath(
+      req,
+      `/thiet-ke-thi-cong-noi-that/${path.slice("/noi-that/".length)}`,
+    );
   }
 
   const bareChuDe = pathname.match(/^\/chu-de\/([^/]+)\/?$/);
@@ -72,9 +98,6 @@ export function middleware(req: NextRequest) {
     });
   }
 
-  // Auth admin: (dashboard)/layout + route handlers (Node có ADMIN_SECRET).
-  // Không verify cookie ở middleware — Edge runtime VPS thường thiếu secret → redirect loop.
-
   return forwardWithPathname(req);
 }
 
@@ -101,6 +124,18 @@ export const config = {
     "/chuyen-gia/",
     "/dang-tin",
     "/dang-tin/",
+    "/cam-nang-noxh",
+    "/cam-nang-noxh/",
+    "/tin-tuc/cam-nang-noxh",
+    "/tin-tuc/cam-nang-noxh/:path*",
+    "/tai-chinh",
+    "/tai-chinh/:path*",
+    "/noi-that",
+    "/noi-that/:path*",
+    "/cong-cu/tinh-khoan-vay",
+    "/cong-cu/tinh-khoan-vay/",
+    "/vay-mua-nha/vay-mua-nha",
+    "/vay-mua-nha/vay-mua-nha/",
     "/chu-de/:slug",
     "/tin-tuc/:slug",
     "/tin-tuc/chu-de/:tag",

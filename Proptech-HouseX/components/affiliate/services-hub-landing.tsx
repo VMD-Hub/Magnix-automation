@@ -38,7 +38,7 @@ export function ServicesHubLanding() {
         heroImage={SERVICES_HUB_VISUAL.heroImage}
         heroGradient="from-ink-900/95 via-ink-800/88 to-brand-900/70"
         breadcrumbs={breadcrumbs}
-        primaryCta={{ label: "Tư vấn vay", href: "/tai-chinh" }}
+        primaryCta={{ label: "Tư vấn vay", href: "/vay-mua-nha" }}
         secondaryCta={{ label: "Định giá BĐS", href: "/dinh-gia" }}
       />
 
@@ -135,7 +135,7 @@ export function ServicesHubLanding() {
             { href: "/mua-ban", label: "Mua bán BĐS", Icon: Icon.Compass, desc: "Tin đăng đã kiểm duyệt" },
             { href: "/du-an", label: "Dự án mới", Icon: Icon.Building, desc: "NOXH & dự án nổi bật" },
             {
-              href: "/cong-cu/tinh-khoan-vay",
+              href: "/tinh-tra-gop",
               label: "Tính khoản vay",
               Icon: Icon.Calculator,
               desc: "Miễn phí, xuất PDF",

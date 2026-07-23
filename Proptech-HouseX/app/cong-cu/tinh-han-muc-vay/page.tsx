@@ -117,7 +117,7 @@ export default function Page() {
         <h2 className="text-lg font-bold text-slate-900">Công cụ liên quan</h2>
         <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           <Link
-            href="/cong-cu/tinh-khoan-vay"
+            href="/tinh-tra-gop"
             className="rounded-2xl border border-silver-200 bg-white p-5 transition-colors hover:border-brand-300 hover:bg-brand-50"
           >
             <p className="font-bold text-slate-900">Tính khoản vay mua nhà</p>
@@ -154,7 +154,7 @@ export default function Page() {
             ưu hồ sơ và đồng hành thẩm định tài sản.
           </p>
           <div className="mt-5 flex flex-wrap gap-3">
-            <ButtonLink href="/tai-chinh#tu-van" variant="primary" size="md">
+            <ButtonLink href="/vay-mua-nha#tu-van" variant="primary" size="md">
               Nhận tư vấn vay
             </ButtonLink>
             <ButtonLink href="/dich-vu" variant="brand" size="md">

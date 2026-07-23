@@ -17,7 +17,7 @@ const LOCATION = "Khu đô thị DTA City, Nguyễn Văn Cừ, Phước An, Nhơ
 const CTAS = [
   {
     label: "Tính khoản vay mua NOXH",
-    href: "/cong-cu/tinh-khoan-vay",
+    href: "/tinh-tra-gop",
     line: "Dùng công cụ tính lãi suất & trả góp trên HouseX để ước lượng vốn tự có và dòng tiền hàng tháng trước khi giữ suất.",
   },
   {
@@ -280,7 +280,7 @@ export function buildDtaUnitListingCopy(
     `→ ${cta.label}: ${cta.href}`,
     "",
     index % 3 === 0
-      ? "Bạn cũng có thể dùng công cụ tính khoản vay tại /cong-cu/tinh-khoan-vay với mức giá suất này."
+      ? "Bạn cũng có thể dùng công cụ tính khoản vay tại /tinh-tra-gop với mức giá suất này."
       : index % 3 === 1
         ? "Cần rà soát điều kiện NOXH? Đăng ký tư vấn miễn phí tại /lien-he."
         : "Xem mặt bằng, nhà mẫu và chính sách thanh toán: /du-an/dta-happy-home-nhon-trach.",

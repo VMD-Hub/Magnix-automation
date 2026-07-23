@@ -91,8 +91,8 @@ export function projectRelatedArticlesViewMoreHref(projectSlug: string): string 
   if (tagSlug) {
     return (
       LEGACY_NOXH_TOPIC_REDIRECTS[tagSlug] ??
-      `/tin-tuc/cam-nang-noxh/chu-de/${tagSlug}`
+      `/wiki-nha-o-xa-hoi/chu-de/${tagSlug}`
     );
   }
-  return "/tin-tuc/cam-nang-noxh";
+  return "/wiki-nha-o-xa-hoi";
 }

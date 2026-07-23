@@ -14,7 +14,7 @@ const breadcrumbs = (vertical: AffiliateVertical) => [
   { name: "Trang chủ", path: "/" },
   { name: HOUSEX_SERVICES_LABEL, path: "/dich-vu" },
   { name: "Nội thất", path: vertical.path },
-  { name: "Nhà đẹp", path: "/noi-that/nha-dep" },
+  { name: "Nhà đẹp", path: "/thiet-ke-thi-cong-noi-that/nha-dep" },
 ];
 
 export function NhaDepInspirationHub({ vertical }: { vertical: AffiliateVertical }) {

@@ -12,7 +12,7 @@ import {
 export const metadata: Metadata = {
   title: LOAN_CALC_COPY.metaTitle,
   description: LOAN_CALC_COPY.metaDescription,
-  alternates: { canonical: "/cong-cu/tinh-khoan-vay" },
+  alternates: { canonical: "/tinh-tra-gop" },
 };
 
 const FAQ = [
@@ -134,7 +134,7 @@ export default function Page() {
             hành thẩm định tài sản nếu cần.
           </p>
           <div className="mt-5 flex flex-wrap gap-3">
-            <ButtonLink href="/tai-chinh#tu-van" variant="primary" size="md">
+            <ButtonLink href="/vay-mua-nha#tu-van" variant="primary" size="md">
               Nhận tư vấn vay
             </ButtonLink>
             <ButtonLink href="/dich-vu" variant="brand" size="md">

@@ -154,7 +154,7 @@ Giá trị thẩm định phục vụ mục đích xét duyệt tín dụng có 
       },
       {
         q: "HouseX có hỗ trợ vay ngân hàng không?",
-        a: "Có. HouseX tư vấn vay mua nhà, thế chấp và SXKD tại /tai-chinh — ví dụ /tai-chinh/vay-mua-nha. Thẩm định giá và hồ sơ vay được đồng bộ khi bạn cần.",
+        a: "Có. HouseX tư vấn vay mua nhà, thế chấp và SXKD tại /vay-mua-nha — ví dụ /vay-mua-nha/can-ho. Thẩm định giá và hồ sơ vay được đồng bộ khi bạn cần.",
       },
       {
         q: "Chứng thư thẩm định có thời hạn không?",

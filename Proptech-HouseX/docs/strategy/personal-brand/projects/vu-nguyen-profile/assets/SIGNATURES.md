@@ -33,7 +33,7 @@ Tóm tắt: [2 dòng nội dung đã trao đổi]
 Rủi ro cần lưu ý: [1 điểm chính]
 
 Checklist em đã tick: [link checklist / file PDF]
-Tính vay NOXH: timnhaxahoi.com/cong-cu/tinh-khoan-vay
+Tính vay NOXH: timnhaxahoi.com/tinh-tra-gop
 
 Hẹn [ngày/giờ] bước tiếp theo. Em Vũ — 0826 600 800.
 ```

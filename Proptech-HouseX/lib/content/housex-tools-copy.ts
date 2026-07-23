@@ -28,7 +28,7 @@ export const LOAN_CALC_COPY = {
   primaryCta: "Bắt đầu tính",
   primaryCtaHref: "#tinh-toan",
   secondaryCta: "Nhận tư vấn vay",
-  secondaryCtaHref: "/tai-chinh#tu-van",
+  secondaryCtaHref: "/vay-mua-nha#tu-van",
   faqHeading: "Câu hỏi thường gặp về tính trả góp / vay mua nhà",
 } as const;
 
@@ -43,7 +43,7 @@ export const LOAN_AFFORDABILITY_COPY = {
   primaryCta: "Bắt đầu tính",
   primaryCtaHref: "#tinh-toan",
   secondaryCta: "Nhận tư vấn vay",
-  secondaryCtaHref: "/tai-chinh#tu-van",
+  secondaryCtaHref: "/vay-mua-nha#tu-van",
   faqHeading: "Câu hỏi thường gặp về hạn mức vay mua nhà",
 } as const;
 
@@ -98,7 +98,7 @@ export const NOXH_LOAN_ASSESSMENT_HUB_TOOLS: ToolCardDef[] = [
   },
   {
     id: "loan",
-    href: "/cong-cu/tinh-khoan-vay",
+    href: "/tinh-tra-gop",
     title: "Tính trả góp hàng tháng",
     desc: "Lịch trả nợ chi tiết, tổng lãi — xuất PDF để đối chiếu.",
     cta: "Tính ngay",
@@ -148,7 +148,7 @@ export const TOOL_HUB_CARDS: ToolCardDef[] = [
   },
   {
     id: "loan",
-    href: "/cong-cu/tinh-khoan-vay",
+    href: "/tinh-tra-gop",
     title: "Tính trả góp hàng tháng",
     desc: "Dư nợ giảm dần hoặc trả góp đều — lịch trả nợ chi tiết, xuất PDF.",
     cta: "Tính ngay",

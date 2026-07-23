@@ -53,7 +53,7 @@ Chị **dừng** dự án 6,3 tỷ **trước khi ký cọc** (đã booking 50 t
 **Bài học:**  
 *Gói vay có ân hạn gốc không có nghĩa là «dễ thở mãi» — phải tính DTI cả kỳ sau ân hạn. Được nói «vay 70%» ≠ đủ điều kiện trả nợ trên căn 6,3 tỷ.*
 
-**CTA (khi đăng):** Rà soát 15 phút · Tính vay: timnhaxahoi.com/cong-cu/tinh-khoan-vay
+**CTA (khi đăng):** Rà soát 15 phút · Tính vay: timnhaxahoi.com/tinh-tra-gop
 
 ---
 

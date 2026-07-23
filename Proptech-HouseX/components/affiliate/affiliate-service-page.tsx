@@ -94,14 +94,14 @@ export function AffiliateServicePage({
           <div>
             {service.body ? <AffiliateServiceBody body={service.body} /> : null}
 
-            {vertical.id === "tai-chinh" && service.slug === "vay-mua-bat-dong-san" ? (
+            {vertical.id === "tai-chinh" && service.slug === "can-ho" ? (
               <section className="mt-8 overflow-hidden proptech-ruby-soft-panel p-6">
                 <h2 className="font-bold text-slate-900">Công cụ tính khoản vay</h2>
                 <p className="mt-1 text-sm text-slate-600">
                   Ước lượng tiền trả hàng tháng trước khi làm hồ sơ chính thức.
                 </p>
                 <Link
-                  href="/cong-cu/tinh-khoan-vay"
+                  href="/tinh-tra-gop"
                   className="mt-4 inline-flex h-10 items-center rounded-xl bg-brand-600 px-5 text-sm font-semibold text-white hover:bg-brand-700"
                 >
                   Mở công cụ tính lãi →

@@ -37,7 +37,7 @@ Chào anh/chị — cập nhật ngắn: [lãi suất ưu đãi / tiến độ p
 
 Không ép quyết định — chỉ để anh/chị cân nhắc khung thời gian nếu đang phù hợp.
 
-Tính vay: timnhaxahoi.com/cong-cu/tinh-khoan-vay
+Tính vay: timnhaxahoi.com/tinh-tra-gop
 ```
 
 ---

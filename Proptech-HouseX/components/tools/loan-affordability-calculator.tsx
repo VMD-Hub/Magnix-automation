@@ -630,7 +630,7 @@ export function LoanAffordabilityCalculator() {
         <div className="flex flex-wrap gap-3 print:hidden">
           {standard.maxLoanAmount > 0 ? (
             <Link
-              href="/cong-cu/tinh-khoan-vay"
+              href="/tinh-tra-gop"
               className="inline-flex h-11 items-center gap-2 rounded-xl bg-brand-600 px-5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-brand-700"
             >
               <Icon.Calculator className="h-4 w-4" />
@@ -638,7 +638,7 @@ export function LoanAffordabilityCalculator() {
             </Link>
           ) : null}
           <Link
-            href="/tai-chinh#tu-van"
+            href="/vay-mua-nha#tu-van"
             className="inline-flex h-11 items-center rounded-xl border border-brand-200 px-5 text-sm font-semibold text-brand-700 transition-colors hover:bg-brand-50"
           >
             Nhận tư vấn vay

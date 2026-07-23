@@ -1,5 +1,5 @@
 /**
- * Render markdown gọn cho landing dịch vụ affiliate (/tai-chinh, /dinh-gia…).
+ * Render markdown gọn cho landing dịch vụ affiliate (/vay-mua-nha, /dinh-gia…).
  * Hỗ trợ: ##/###, **bold**, [link](href), >, •/− list, 1. list, bảng |.
  */
 

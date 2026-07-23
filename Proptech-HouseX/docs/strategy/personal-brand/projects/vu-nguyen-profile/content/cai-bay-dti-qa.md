@@ -35,7 +35,7 @@ Dừng trước cọc · Bình Tân ~3,2 tỷ · DTI ~33%.
 
 ### Nên làm gì trước cọc?
 
-Tính DTI hai pha · so 2 phương án giá · timnhaxahoi.com/cong-cu/tinh-khoan-vay
+Tính DTI hai pha · so 2 phương án giá · timnhaxahoi.com/tinh-tra-gop
 
 ---
 

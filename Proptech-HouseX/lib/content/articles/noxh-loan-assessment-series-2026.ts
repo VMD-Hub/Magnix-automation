@@ -351,7 +351,7 @@ Vấn đề không chỉ là “có được vay hay không”, mà còn là “
 4. **Kiểm tra lịch sử tín dụng trên CIC** — [tra CIC an toàn](/tin-tuc/cach-tra-cic-an-toan-truoc-khi-vay).
 5. **Chuẩn bị giấy tờ cá nhân và chứng minh thu nhập** — [hồ sơ vay NOXH](/tin-tuc/ho-so-vay-mua-nha-o-xa-hoi).
 6. **Xem kỹ điều kiện dự án NOXH** — [kiểm tra NOXH](/cong-cu/dieu-kien-noxh).
-7. **Ước tính khoản trả nợ hàng tháng** — [tính khoản vay](/cong-cu/tinh-khoan-vay).
+7. **Ước tính khoản trả nợ hàng tháng** — [tính khoản vay](/tinh-tra-gop).
 
 Nếu bạn làm đủ 7 bước này, khả năng đi đúng hướng sẽ cao hơn rất nhiều so với việc chỉ nghe tư vấn miệng từ người bán hàng.
 
@@ -811,7 +811,7 @@ Kỳ hạn vay nên để tuổi cuối kỳ vay nằm trong mức ngân hàng c
 - **Quá ngắn:** áp lực trả nợ/tháng quá lớn.
 - **Quá dài:** tổng lãi tăng; tuổi cuối kỳ có thể vượt ngưỡng.
 
-NOXH thường vay **15–20 năm**. Kỳ hạn tốt nhất cân bằng tuổi, thu nhập và mức sống gia đình — [tính khoản vay](/cong-cu/tinh-khoan-vay) để xem tiền trả/tháng.
+NOXH thường vay **15–20 năm**. Kỳ hạn tốt nhất cân bằng tuổi, thu nhập và mức sống gia đình — [tính khoản vay](/tinh-tra-gop) để xem tiền trả/tháng.
 
 ## Những lỗi thường gặp khi tính tuổi vay
 
@@ -1213,7 +1213,7 @@ Chỉ khi 5 điểm này đủ an toàn, bạn mới nên nghĩ đến chuyện 
 | 2 | Tuổi vay phù hợp? | [kiểm tra nhanh thời hạn vay](/cong-cu/kiem-tra-vay-noxh) |
 | 3 | CIC sạch / đã xử lý nợ xấu? | [Tra CIC](/tin-tuc/cach-tra-cic-an-toan-truoc-khi-vay) |
 | 4 | Hạn mức vay đủ giá căn? | [Hạn mức vay](/cong-cu/tinh-han-muc-vay) |
-| 5 | Vốn tự có ~30% + phí? | [Tính khoản vay](/cong-cu/tinh-khoan-vay) |
+| 5 | Vốn tự có ~30% + phí? | [Tính khoản vay](/tinh-tra-gop) |
 | 6 | Đọc HĐ cọc — điều hoàn cọc? | Tự đọc / luật sư |
 | 7 | Còn điểm mù? | [Liên hệ chuyên gia](/lien-he) |
 
@@ -1487,7 +1487,7 @@ Nếu bạn không cộng toàn bộ các khoản này, ngân sách thực tế 
 
 Nhiều người nhìn vào lương tháng rồi kết luận rằng mình “trả được”. Nhưng lương chỉ là một phần của bài toán. Bạn còn phải tính ăn uống, học phí, y tế, đi lại, hiếu hỉ, nuôi con, và các khoản nợ khác nếu có.
 
-Nếu khoản trả góp chiếm quá nhiều thu nhập, chỉ cần một tháng có biến cố nhỏ là kế hoạch tài chính lập tức bị xô lệch. Dùng [tính hạn mức vay](/cong-cu/tinh-han-muc-vay) (có trừ chi phí sinh hoạt hộ) và [tính khoản vay](/cong-cu/tinh-khoan-vay) để xem số thực tế — không chỉ lương trên giấy.
+Nếu khoản trả góp chiếm quá nhiều thu nhập, chỉ cần một tháng có biến cố nhỏ là kế hoạch tài chính lập tức bị xô lệch. Dùng [tính hạn mức vay](/cong-cu/tinh-han-muc-vay) (có trừ chi phí sinh hoạt hộ) và [tính khoản vay](/tinh-tra-gop) để xem số thực tế — không chỉ lương trên giấy.
 
 ## Sai lầm 3: Không để quỹ dự phòng
 

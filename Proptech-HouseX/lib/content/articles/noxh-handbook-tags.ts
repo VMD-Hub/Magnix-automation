@@ -70,11 +70,11 @@ export const NOXH_HANDBOOK_TAG_DESCRIPTIONS: Record<
 export const LEGACY_NOXH_TOPIC_REDIRECTS: Record<string, string> = {
   noxh: NOXH_HANDBOOK_PATH,
   "goc-chuyen-gia": NOXH_HANDBOOK_PATH,
-  "phap-ly": `/tin-tuc/cam-nang-noxh/chu-de/${NOXH_TAG_CHINH_SACH.slug}`,
-  "tien-do-du-an": `/tin-tuc/cam-nang-noxh/chu-de/${NOXH_TAG_DU_AN_GIA.slug}`,
-  "dau-tu": `/tin-tuc/cam-nang-noxh/chu-de/${NOXH_TAG_DU_AN_GIA.slug}`,
-  "ha-tang-giao-thong": `/tin-tuc/cam-nang-noxh/chu-de/${NOXH_TAG_HA_TANG.slug}`,
-  "do-thi-ve-tinh-tod": `/tin-tuc/cam-nang-noxh/chu-de/${NOXH_TAG_HA_TANG.slug}`,
+  "phap-ly": `/wiki-nha-o-xa-hoi/chu-de/${NOXH_TAG_CHINH_SACH.slug}`,
+  "tien-do-du-an": `/wiki-nha-o-xa-hoi/chu-de/${NOXH_TAG_DU_AN_GIA.slug}`,
+  "dau-tu": `/wiki-nha-o-xa-hoi/chu-de/${NOXH_TAG_DU_AN_GIA.slug}`,
+  "ha-tang-giao-thong": `/wiki-nha-o-xa-hoi/chu-de/${NOXH_TAG_HA_TANG.slug}`,
+  "do-thi-ve-tinh-tod": `/wiki-nha-o-xa-hoi/chu-de/${NOXH_TAG_HA_TANG.slug}`,
   "nha-o-xa-hoi-ly-thuong-kiet": NOXH_HANDBOOK_PATH,
   "dta-happy-home-nhon-trach": NOXH_HANDBOOK_PATH,
 };

@@ -9,41 +9,75 @@ const nextConfig = {
     config.resolve.alias["@"] = __dirname;
     return config;
   },
+  async rewrites() {
+    return [
+      // Canonical mới → filesystem app/ cũ (chưa migrate folder)
+      {
+        source: "/wiki-nha-o-xa-hoi",
+        destination: "/tin-tuc/cam-nang-noxh",
+      },
+      {
+        source: "/wiki-nha-o-xa-hoi/:path*",
+        destination: "/tin-tuc/cam-nang-noxh/:path*",
+      },
+      {
+        source: "/vay-mua-nha",
+        destination: "/tai-chinh",
+      },
+      {
+        source: "/vay-mua-nha/:path*",
+        destination: "/tai-chinh/:path*",
+      },
+      {
+        source: "/thiet-ke-thi-cong-noi-that",
+        destination: "/noi-that",
+      },
+      {
+        source: "/thiet-ke-thi-cong-noi-that/:path*",
+        destination: "/noi-that/:path*",
+      },
+      {
+        source: "/tinh-tra-gop",
+        destination: "/cong-cu/tinh-khoan-vay",
+      },
+    ];
+  },
   async redirects() {
     return [
+      // --- Interior legacy flat → canonical mới ---
       {
         source: "/noi-that/phong-cach-hien-dai",
-        destination: "/noi-that/phong-cach/hien-dai",
+        destination: "/thiet-ke-thi-cong-noi-that/phong-cach/hien-dai",
         permanent: true,
       },
       {
         source: "/noi-that/phong-cach-scandinavian",
-        destination: "/noi-that/phong-cach/scandinavian",
+        destination: "/thiet-ke-thi-cong-noi-that/phong-cach/scandinavian",
         permanent: true,
       },
       {
         source: "/noi-that/phong-cach-indochine",
-        destination: "/noi-that/phong-cach/indochine",
+        destination: "/thiet-ke-thi-cong-noi-that/phong-cach/indochine",
         permanent: true,
       },
       {
         source: "/noi-that/phong-cach-toi-gian",
-        destination: "/noi-that/phong-cach/toi-gian",
+        destination: "/thiet-ke-thi-cong-noi-that/phong-cach/toi-gian",
         permanent: true,
       },
       {
         source: "/noi-that/can-ho-dep-y-tuong",
-        destination: "/noi-that/nha-dep",
+        destination: "/thiet-ke-thi-cong-noi-that/nha-dep",
         permanent: true,
       },
       {
         source: "/noi-that/thiet-ke-noi-that",
-        destination: "/noi-that/phong-cach/hien-dai",
+        destination: "/thiet-ke-thi-cong-noi-that/phong-cach/hien-dai",
         permanent: true,
       },
       {
         source: "/noi-that/thi-cong-noi-that",
-        destination: "/noi-that/nha-dep",
+        destination: "/thiet-ke-thi-cong-noi-that/nha-dep",
         permanent: true,
       },
       {
@@ -61,6 +95,7 @@ const nextConfig = {
         destination: "/phong-thuy",
         permanent: true,
       },
+      // Wiki topic aliases (cũ + filesystem path) → canonical wiki
       {
         source: "/tin-tuc/cam-nang-noxh/chu-de/phong-thuy",
         destination: "/phong-thuy",
@@ -72,48 +107,58 @@ const nextConfig = {
         permanent: true,
       },
       {
+        source: "/wiki-nha-o-xa-hoi/chu-de/phong-thuy",
+        destination: "/phong-thuy",
+        permanent: true,
+      },
+      {
+        source: "/wiki-nha-o-xa-hoi/chu-de/phong-thuy/:path*",
+        destination: "/phong-thuy",
+        permanent: true,
+      },
+      {
         source: "/tin-tuc/cam-nang-noxh/chu-de/noxh",
-        destination: "/tin-tuc/cam-nang-noxh",
+        destination: "/wiki-nha-o-xa-hoi",
         permanent: true,
       },
       {
         source: "/tin-tuc/cam-nang-noxh/chu-de/goc-chuyen-gia",
-        destination: "/tin-tuc/cam-nang-noxh",
+        destination: "/wiki-nha-o-xa-hoi",
         permanent: true,
       },
       {
         source: "/tin-tuc/cam-nang-noxh/chu-de/phap-ly",
-        destination: "/tin-tuc/cam-nang-noxh/chu-de/chinh-sach-ho-so-noxh",
+        destination: "/wiki-nha-o-xa-hoi/chu-de/chinh-sach-ho-so-noxh",
         permanent: true,
       },
       {
         source: "/tin-tuc/cam-nang-noxh/chu-de/tien-do-du-an",
-        destination: "/tin-tuc/cam-nang-noxh/chu-de/du-an-gia-tien-do-noxh",
+        destination: "/wiki-nha-o-xa-hoi/chu-de/du-an-gia-tien-do-noxh",
         permanent: true,
       },
       {
         source: "/tin-tuc/cam-nang-noxh/chu-de/dau-tu",
-        destination: "/tin-tuc/cam-nang-noxh/chu-de/du-an-gia-tien-do-noxh",
+        destination: "/wiki-nha-o-xa-hoi/chu-de/du-an-gia-tien-do-noxh",
         permanent: true,
       },
       {
         source: "/tin-tuc/cam-nang-noxh/chu-de/ha-tang-giao-thong",
-        destination: "/tin-tuc/cam-nang-noxh/chu-de/ha-tang-ket-noi-vung",
+        destination: "/wiki-nha-o-xa-hoi/chu-de/ha-tang-ket-noi-vung",
         permanent: true,
       },
       {
         source: "/tin-tuc/cam-nang-noxh/chu-de/do-thi-ve-tinh-tod",
-        destination: "/tin-tuc/cam-nang-noxh/chu-de/ha-tang-ket-noi-vung",
+        destination: "/wiki-nha-o-xa-hoi/chu-de/ha-tang-ket-noi-vung",
         permanent: true,
       },
       {
         source: "/tin-tuc/cam-nang-noxh/chu-de/nha-o-xa-hoi-ly-thuong-kiet",
-        destination: "/tin-tuc/cam-nang-noxh",
+        destination: "/wiki-nha-o-xa-hoi",
         permanent: true,
       },
       {
         source: "/tin-tuc/cam-nang-noxh/chu-de/dta-happy-home-nhon-trach",
-        destination: "/tin-tuc/cam-nang-noxh",
+        destination: "/wiki-nha-o-xa-hoi",
         permanent: true,
       },
       {
@@ -128,21 +173,21 @@ const nextConfig = {
         destination: "/du-an/thuong-mai",
         permanent: true,
       },
-      // Ahrefs legacy 404 → live IA (P0 go-live web)
+      // Ahrefs legacy 404 → live IA
       {
         source: "/phap-ly/dieu-kien-noxh-tong-quan",
         destination:
-          "/tin-tuc/cam-nang-noxh/dieu-kien-mua-nha-o-xa-hoi-2026-tom-tat",
+          "/wiki-nha-o-xa-hoi/dieu-kien-mua-nha-o-xa-hoi-2026-tom-tat",
         permanent: true,
       },
       {
         source: "/phap-ly/thu-tuc-ho-so-co-ban",
-        destination: "/tin-tuc/cam-nang-noxh/quy-trinh-mua-thue-mua-noxh-2026",
+        destination: "/wiki-nha-o-xa-hoi/quy-trinh-mua-thue-mua-noxh-2026",
         permanent: true,
       },
       {
         source: "/phap-ly",
-        destination: "/tin-tuc/cam-nang-noxh/chu-de/chinh-sach-ho-so-noxh",
+        destination: "/wiki-nha-o-xa-hoi/chu-de/chinh-sach-ho-so-noxh",
         permanent: true,
       },
       {
@@ -170,7 +215,59 @@ const nextConfig = {
         destination: "/dieu-khoan",
         permanent: true,
       },
-      // Hub redirects — 301 ở nginx/Next config (Ahrefs không còn “trang không H1”)
+      // Slug dịch vụ đổi: vay-mua-nha → can-ho (tránh đụng hub /vay-mua-nha)
+      {
+        source: "/tai-chinh/vay-mua-nha",
+        destination: "/vay-mua-nha/can-ho",
+        permanent: true,
+      },
+      {
+        source: "/vay-mua-nha/vay-mua-nha",
+        destination: "/vay-mua-nha/can-ho",
+        permanent: true,
+      },
+      // Unify: URL cũ → canonical mới
+      {
+        source: "/cam-nang-noxh",
+        destination: "/wiki-nha-o-xa-hoi",
+        permanent: true,
+      },
+      {
+        source: "/tin-tuc/cam-nang-noxh",
+        destination: "/wiki-nha-o-xa-hoi",
+        permanent: true,
+      },
+      {
+        source: "/tin-tuc/cam-nang-noxh/:path*",
+        destination: "/wiki-nha-o-xa-hoi/:path*",
+        permanent: true,
+      },
+      {
+        source: "/tai-chinh",
+        destination: "/vay-mua-nha",
+        permanent: true,
+      },
+      {
+        source: "/tai-chinh/:path*",
+        destination: "/vay-mua-nha/:path*",
+        permanent: true,
+      },
+      {
+        source: "/noi-that",
+        destination: "/thiet-ke-thi-cong-noi-that",
+        permanent: true,
+      },
+      {
+        source: "/noi-that/:path*",
+        destination: "/thiet-ke-thi-cong-noi-that/:path*",
+        permanent: true,
+      },
+      {
+        source: "/cong-cu/tinh-khoan-vay",
+        destination: "/tinh-tra-gop",
+        permanent: true,
+      },
+      // Hub redirects
       {
         source: "/chuyen-gia",
         destination: "/doi-ngu",
@@ -183,12 +280,12 @@ const nextConfig = {
       },
       {
         source: "/tin-tuc/:slug((?!cam-nang-noxh|chu-de)[^/]+)",
-        destination: "/tin-tuc/cam-nang-noxh/:slug",
+        destination: "/wiki-nha-o-xa-hoi/:slug",
         permanent: true,
       },
       {
         source: "/tin-tuc/chu-de/:tag",
-        destination: "/tin-tuc/cam-nang-noxh/chu-de/:tag",
+        destination: "/wiki-nha-o-xa-hoi/chu-de/:tag",
         permanent: true,
       },
       {
@@ -198,7 +295,7 @@ const nextConfig = {
       },
       {
         source: "/chu-de/:tag",
-        destination: "/tin-tuc/cam-nang-noxh/chu-de/:tag",
+        destination: "/wiki-nha-o-xa-hoi/chu-de/:tag",
         permanent: true,
       },
     ];

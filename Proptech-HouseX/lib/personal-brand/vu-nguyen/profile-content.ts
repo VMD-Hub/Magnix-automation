@@ -105,7 +105,7 @@ export const VU_NGUYEN_PROFILE = {
     },
     {
       label: "Tính khoản vay",
-      href: "/cong-cu/tinh-khoan-vay",
+      href: "/tinh-tra-gop",
       desc: "Dòng tiền & lãi suất",
     },
     {

@@ -85,7 +85,7 @@ export const INTERIOR_PARTNERS: AffiliatePartner[] = [];
 export const AFFILIATE_VERTICALS: AffiliateVertical[] = [
   {
     id: "tai-chinh",
-    path: "/tai-chinh",
+    path: "/vay-mua-nha",
     layout: "service-cluster",
     title: "Vay mua nhà trên House X — hồ sơ, ngân hàng hỗ trợ, tính trả góp",
     metaDescription:
@@ -98,8 +98,8 @@ export const AFFILIATE_VERTICALS: AffiliateVertical[] = [
       "House X hợp tác liên kết với các ngân hàng dưới đây để hỗ trợ hồ sơ và kết nối giao dịch vay mua nhà / thế chấp — mô hình phổ biến trên các sàn và nền tảng Proptech.",
     hubFaqs: TAI_CHINH_HUB_FAQS,
     toolLinks: [
-      { label: "Tính trả góp hàng tháng", href: "/cong-cu/tinh-khoan-vay" },
-      { label: "Bảo hiểm nhà, kho & xe", href: "/tai-chinh/bao-hiem-tai-san" },
+      { label: "Tính trả góp hàng tháng", href: "/tinh-tra-gop" },
+      { label: "Bảo hiểm nhà, kho & xe", href: "/vay-mua-nha/bao-hiem-tai-san" },
       { label: "Thẩm định cho ngân hàng", href: "/dinh-gia/tham-dinh-ngan-hang" },
     ],
     services: TAI_CHINH_SERVICES,
@@ -116,14 +116,14 @@ export const AFFILIATE_VERTICALS: AffiliateVertical[] = [
     disclaimer: HOUSEX_SERVICE_NOTE,
     hubFaqs: DING_GIA_HUB_FAQS,
     toolLinks: [
-      { label: "Tính khoản vay mua nhà", href: "/cong-cu/tinh-khoan-vay" },
-      { label: "Dịch vụ tài chính HouseX", href: "/tai-chinh" },
+      { label: "Tính khoản vay mua nhà", href: "/tinh-tra-gop" },
+      { label: "Dịch vụ tài chính HouseX", href: "/vay-mua-nha" },
     ],
     services: DING_GIA_SERVICES,
   },
   {
     id: "noi-that",
-    path: "/noi-that",
+    path: "/thiet-ke-thi-cong-noi-that",
     layout: "promo-hub",
     title:
       "Thiết kế & thi công nội thất House X — kết nối studio đối tác chiến lược",
@@ -139,7 +139,7 @@ export const AFFILIATE_VERTICALS: AffiliateVertical[] = [
     hubFaqs: [
       {
         q: "House X kết nối studio đối tác chiến lược như thế nào?",
-        a: "House X không vận hành xưởng thi công nội thất riêng. Mô hình là kết nối studio đối tác chiến lược: bạn có một đầu mối tư vấn trên House X; thiết kế và thi công do studio triển khai với quy trình và báo giá minh bạch trước khi ký hợp đồng.",
+        a: "House X không vận hành xưởng thi công nội thất riêng. Mô hình là kết nối studio đối tác chiến lược: bạn có một đầu mối tư vấn trên House X (/thiet-ke-thi-cong-noi-that); thiết kế và thi công do studio triển khai với quy trình và báo giá minh bạch trước khi ký hợp đồng.",
       },
       {
         q: "House X thi công trực tiếp hay qua đối tác?",
@@ -278,7 +278,7 @@ export function affiliateSitemapEntries(baseUrl: string) {
       }
     }
     if (v.id === "noi-that") {
-      entries.push({ url: `${baseUrl}/noi-that/nha-dep`, priority: 0.78 });
+      entries.push({ url: `${baseUrl}/thiet-ke-thi-cong-noi-that/nha-dep`, priority: 0.78 });
       if (v.showcases) {
         for (const s of v.showcases) {
           entries.push({
@@ -290,7 +290,7 @@ export function affiliateSitemapEntries(baseUrl: string) {
       // Case studies
       for (const c of INTERIOR_CASE_STUDIES) {
         entries.push({
-          url: `${baseUrl}/noi-that/cong-trinh/${c.slug}`,
+          url: `${baseUrl}/thiet-ke-thi-cong-noi-that/cong-trinh/${c.slug}`,
           priority: 0.7,
         });
       }

@@ -5,9 +5,9 @@
 
 export const NOI_THAT_GEO = "TP.HCM & vùng lân cận";
 
-export const STYLE_PATH_PREFIX = "/noi-that/phong-cach" as const;
-export const CASE_STUDY_PATH_PREFIX = "/noi-that/cong-trinh" as const;
-export const NHA_DEP_PATH = "/noi-that/nha-dep" as const;
+export const STYLE_PATH_PREFIX = "/thiet-ke-thi-cong-noi-that/phong-cach" as const;
+export const CASE_STUDY_PATH_PREFIX = "/thiet-ke-thi-cong-noi-that/cong-trinh" as const;
+export const NHA_DEP_PATH = "/thiet-ke-thi-cong-noi-that/nha-dep" as const;
 
 export type InteriorStyleSlug = "hien-dai" | "scandinavian" | "indochine" | "toi-gian";
 

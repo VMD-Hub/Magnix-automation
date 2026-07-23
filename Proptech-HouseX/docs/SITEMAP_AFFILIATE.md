@@ -7,9 +7,11 @@ Giai đoạn hiện tại: **giới thiệu + kết nối studio đối tác + f
 ```
 /dich-vu                    ← Pillar 3 nhóm
 
-/tai-chinh                  ← Hub quảng cáo tài chính (1 trang)
-  #vay-mua-bds              ← Section (anchor), không URL riêng
-  #vay-sxkd
+/vay-mua-nha                  ← Hub vay mua nhà (canonical)
+  /can-ho                   ← Vay mua nhà & căn hộ (slug dịch vụ; cũ /tai-chinh/vay-mua-nha)
+  /vay-the-chap
+  /vay-sxkd
+  /bao-hiem-tai-san
   + Danh sách ngân hàng liên kết
   + Form tư vấn
 
@@ -18,7 +20,7 @@ Giai đoạn hiện tại: **giới thiệu + kết nối studio đối tác + f
   /tham-dinh-ngan-hang
   …
 
-/noi-that                   ← Hub dịch vụ nội thất (conversion-first)
+/thiet-ke-thi-cong-noi-that ← Hub thiết kế–thi công (canonical; cũ /noi-that)
   /phong-cach/hien-dai      ← Bài SEO phong cách
   /phong-cach/scandinavian
   /phong-cach/indochine
@@ -30,7 +32,7 @@ Giai đoạn hiện tại: **giới thiệu + kết nối studio đối tác + f
 /lien-he                    ← Form tổng (mọi dịch vụ)
 ```
 
-**301 từ URL cũ:** `/noi-that/phong-cach-hien-dai` → `/noi-that/phong-cach/hien-dai`, v.v. (xem `next.config.mjs`).
+**308 từ URL cũ:** `/tai-chinh` → `/vay-mua-nha`, `/noi-that` → `/thiet-ke-thi-cong-noi-that`, `/noi-that/phong-cach-hien-dai` → `/thiet-ke-thi-cong-noi-that/phong-cach/hien-dai`, v.v. (xem `next.config.mjs`).
 
 ## Vai trò vận hành
 

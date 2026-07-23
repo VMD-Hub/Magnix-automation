@@ -4,7 +4,7 @@ import type { AffiliateFaq, AffiliateService } from "@/lib/content/affiliate-ver
 export const TAI_CHINH_HUB_FAQS: AffiliateFaq[] = [
   {
     q: "House X hợp tác liên kết với những ngân hàng nào?",
-    a: "Trên trang /tai-chinh, House X công khai các ngân hàng đối tác hợp tác liên kết hỗ trợ hồ sơ và kết nối giao dịch vay: Vietcombank, BIDV, VietinBank, Agribank, Techcombank, MB Bank, VPBank, ACB, Sacombank và HDBank.",
+    a: "Trên trang /vay-mua-nha, House X công khai các ngân hàng đối tác hợp tác liên kết hỗ trợ hồ sơ và kết nối giao dịch vay: Vietcombank, BIDV, VietinBank, Agribank, Techcombank, MB Bank, VPBank, ACB, Sacombank và HDBank.",
   },
   {
     q: "Vay mua nhà qua House X khác gì đến thẳng ngân hàng?",
@@ -24,7 +24,7 @@ export const TAI_CHINH_HUB_FAQS: AffiliateFaq[] = [
   },
   {
     q: "Có công cụ ước tính trả góp hàng tháng trên House X không?",
-    a: "Có. Dùng /cong-cu/tinh-khoan-vay (Tính trả góp / khoản vay mua nhà) để ước lượng tiền trả hàng tháng trước khi làm hồ sơ. Kết quả mang tính tham khảo để chuẩn bị hồ sơ.",
+    a: "Có. Dùng /tinh-tra-gop (Tính trả góp / khoản vay mua nhà) để ước lượng tiền trả hàng tháng trước khi làm hồ sơ. Kết quả mang tính tham khảo để chuẩn bị hồ sơ.",
   },
   {
     q: "Sau khi gửi form thì ai liên hệ?",
@@ -32,13 +32,13 @@ export const TAI_CHINH_HUB_FAQS: AffiliateFaq[] = [
   },
   {
     q: "Bảo hiểm nhà khi vay là bắt buộc?",
-    a: "Nhiều gói vay mua nhà / thế chấp yêu cầu bảo hiểm tài sản (nhà ở) theo điều kiện ngân hàng. House X tư vấn gói và phí tham khảo; bạn cũng có thể mua bảo hiểm nhà, kho hoặc xe độc lập khi chưa vay — xem /tai-chinh/bao-hiem-tai-san.",
+    a: "Nhiều gói vay mua nhà / thế chấp yêu cầu bảo hiểm tài sản (nhà ở) theo điều kiện ngân hàng. House X tư vấn gói và phí tham khảo; bạn cũng có thể mua bảo hiểm nhà, kho hoặc xe độc lập khi chưa vay — xem /vay-mua-nha/bao-hiem-tai-san.",
   },
 ];
 
 export const TAI_CHINH_SERVICES: AffiliateService[] = [
   {
-    slug: "vay-mua-nha",
+    slug: "can-ho",
     title: "Vay mua nhà & căn hộ",
     metaDescription:
       "Tư vấn vay mua nhà, căn hộ, nhà phố trên House X: sơ loại hồ sơ, so sánh gói ngân hàng và đồng hành đến giải ngân minh bạch.",
@@ -68,12 +68,12 @@ export const TAI_CHINH_SERVICES: AffiliateService[] = [
 
 ## Công cụ miễn phí trước khi gửi form
 
-Dùng [Tính khoản vay mua nhà](/cong-cu/tinh-khoan-vay) để có con số sơ bộ. Kết quả không thay thế thẩm định ngân hàng.
+Dùng [Tính khoản vay mua nhà](/tinh-tra-gop) để có con số sơ bộ. Kết quả không thay thế thẩm định ngân hàng.
 
 ## Liên quan thẩm định giá & bảo hiểm
 
 • Khi ngân hàng yêu cầu chứng thư định giá tài sản đảm bảo: [thẩm định cho ngân hàng](/dinh-gia/tham-dinh-ngan-hang)
-• Nhiều gói vay yêu cầu bảo hiểm nhà ở: [bảo hiểm tài sản](/tai-chinh/bao-hiem-tai-san)`,
+• Nhiều gói vay yêu cầu bảo hiểm nhà ở: [bảo hiểm tài sản](/vay-mua-nha/bao-hiem-tai-san)`,
     faqs: [
       {
         q: "Mua NOXH có vay được không?",
@@ -93,7 +93,7 @@ Dùng [Tính khoản vay mua nhà](/cong-cu/tinh-khoan-vay) để có con số s
       },
       {
         q: "Có bắt buộc mua bảo hiểm nhà khi vay không?",
-        a: "Tùy gói và ngân hàng. Nhiều gói vay mua nhà / thế chấp yêu cầu bảo hiểm tài sản. HouseX tư vấn kèm hồ sơ vay hoặc độc lập — xem /tai-chinh/bao-hiem-tai-san.",
+        a: "Tùy gói và ngân hàng. Nhiều gói vay mua nhà / thế chấp yêu cầu bảo hiểm tài sản. HouseX tư vấn kèm hồ sơ vay hoặc độc lập — xem /vay-mua-nha/bao-hiem-tai-san.",
       },
     ],
     ctaLabel: "Tư vấn vay mua nhà",
@@ -135,7 +135,7 @@ Dùng [Tính khoản vay mua nhà](/cong-cu/tinh-khoan-vay) để có con số s
 • Kê khai đúng mục đích và hiện trạng tài sản — sai lệch có thể khiến hồ sơ bị từ chối
 • HouseX không cam kết duyệt vay; quyết định cuối thuộc ngân hàng
 • Cần thẩm định giá chính thức: xem [thẩm định cho ngân hàng](/dinh-gia/tham-dinh-ngan-hang)
-• Gói vay bắt buộc BH nhà ở: xem [bảo hiểm tài sản](/tai-chinh/bao-hiem-tai-san)`,
+• Gói vay bắt buộc BH nhà ở: xem [bảo hiểm tài sản](/vay-mua-nha/bao-hiem-tai-san)`,
     faqs: [
       {
         q: "Tái tài trợ khác vay mới thế nào?",
@@ -147,7 +147,7 @@ Dùng [Tính khoản vay mua nhà](/cong-cu/tinh-khoan-vay) để có con số s
       },
       {
         q: "Có bắt buộc bảo hiểm nhà khi vay không?",
-        a: "Nhiều gói ngân hàng yêu cầu bảo hiểm tài sản. HouseX tư vấn phí và gói phù hợp — có thể mua kèm hồ sơ vay hoặc độc lập tại /tai-chinh/bao-hiem-tai-san.",
+        a: "Nhiều gói ngân hàng yêu cầu bảo hiểm tài sản. HouseX tư vấn phí và gói phù hợp — có thể mua kèm hồ sơ vay hoặc độc lập tại /vay-mua-nha/bao-hiem-tai-san.",
       },
     ],
     ctaLabel: "Tư vấn vay thế chấp",
@@ -251,7 +251,7 @@ Phạm vi quyền lợi, mức miễn thường và loại trừ rủi ro theo *
 
 ## Liên quan vay & thẩm định
 
-• [Vay mua nhà](/tai-chinh/vay-mua-nha) · [Vay thế chấp](/tai-chinh/vay-the-chap)
+• [Vay mua nhà](/vay-mua-nha/can-ho) · [Vay thế chấp](/vay-mua-nha/vay-the-chap)
 • Khi cần chứng thư cho ngân hàng: [thẩm định cho ngân hàng](/dinh-gia/tham-dinh-ngan-hang)
 
 > HouseX là đầu mối tư vấn và đồng hành; **doanh nghiệp bảo hiểm được cấp phép** phát hành hợp đồng và GCN. Phí chính thức sau khi có đủ thông tin tài sản / hạn mức.`,

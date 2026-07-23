@@ -162,6 +162,7 @@ export const VERTICAL_VISUALS: Record<ServiceVerticalId, VerticalVisual> = {
 /** Ảnh thẻ dịch vụ theo slug hoặc product line id — ưu tiên local (tránh Unsplash 404). */
 export const SERVICE_CARD_IMAGES: Record<string, string> = {
   "vay-mua-bds": "/images/tools/finance-hub.png",
+  "can-ho": "/images/tools/finance-hub.png",
   "vay-mua-nha": "/images/tools/finance-hub.png",
   "vay-the-chap": "/images/tools/finance-hub.png",
   "vay-sxkd": "/images/tools/business-loan.png",
@@ -185,6 +186,7 @@ export const SERVICE_CARD_IMAGES: Record<string, string> = {
 /** WebP cho thẻ dịch vụ có ảnh thương hiệu local. */
 export const SERVICE_CARD_IMAGES_WEBP: Record<string, string> = {
   "vay-mua-bds": "/images/tools/finance-hub.webp",
+  "can-ho": "/images/tools/finance-hub.webp",
   "vay-mua-nha": "/images/tools/finance-hub.webp",
   "vay-the-chap": "/images/tools/finance-hub.webp",
   "vay-sxkd": "/images/tools/business-loan.webp",

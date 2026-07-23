@@ -49,11 +49,11 @@ describe("project related articles", () => {
   it("view-more links to handbook hub for legacy project tags", () => {
     assert.equal(
       projectRelatedArticlesViewMoreHref(LTK_PROJECT_SLUG),
-      "/tin-tuc/cam-nang-noxh",
+      "/wiki-nha-o-xa-hoi",
     );
     assert.equal(
       projectRelatedArticlesViewMoreHref(DTA_HAPPY_HOME_SLUG),
-      "/tin-tuc/cam-nang-noxh",
+      "/wiki-nha-o-xa-hoi",
     );
   });
 });
