@@ -125,6 +125,10 @@ export const NOXH_PROVINCE_REGISTRY_P0 = [
       "nhà ở xã hội Vũng Tàu",
       "nhà ở xã hội Bà Rịa",
       "NOXH Bà Rịa Vũng Tàu",
+      "Happy Home Long Phước",
+      "NOXH Phúc Đạt Tân Uyên",
+      "Eco Home 1 Phú Mỹ",
+      "NOXH Thủ Đức",
     ],
   },
   {

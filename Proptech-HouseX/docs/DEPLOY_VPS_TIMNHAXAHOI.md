@@ -338,6 +338,23 @@ npm run db:seed:noxh-gia-lai
 
 Smoke: `/du-an/nha-o-xa-hoi/gia-lai` · 308 `/binh-dinh` → hub · `nha-o-xa-hoi-ecohome-nhon-binh`.
 
+### Ops — seed NOXH TP.HCM mega (HCM + Bình Dương + BR-VT)
+
+Hub đã bật sẵn. Seed catalog lớn (26 landing; Hồ Gươm Xanh qua `db:seed:hgx` riêng).
+
+```bash
+cd /opt/housex/Proptech-HouseX
+git pull
+npm run build && pm2 restart housex --update-env
+# đợi ~5–8s
+npm run db:seed:noxh-hcm
+# tùy chọn nếu chưa: npm run db:seed:hgx
+```
+
+Smoke: `/du-an/nha-o-xa-hoi/tp-ho-chi-minh` · 308 `/binh-duong` `/ba-ria-vung-tau` ·  
+`nha-o-xa-hoi-happy-home-long-phuoc` · `nha-o-xa-hoi-phuc-dat-tan-uyen` · `nha-o-xa-hoi-eco-home-1-phu-my`.  
+Inventory: `docs/content/HCM_MEGA_NOXH_INVENTORY.md`.
+
 ### Ops — IndexNow (Bing + peers)
 
 Google: GSC Request indexing (tay). Bing/Yandex: IndexNow.
