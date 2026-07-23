@@ -117,7 +117,7 @@ export function buildNamLong2CanThoMock(): ProjectDetail {
     name: NL2_PROJECT_NAME,
     projectType: "NHA_O_XA_HOI",
     status: "DANG_BAN",
-    province: "Cần Thơ",
+    province: "TP. Cần Thơ",
     district: "Cái Răng",
     ward: "Hưng Thạnh",
     address: "Mặt tiền Trần Hoàng Na, KDC Nam Long 2 (lô 9A)",

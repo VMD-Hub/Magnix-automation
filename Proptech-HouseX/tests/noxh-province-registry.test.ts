@@ -35,6 +35,19 @@ test("P0 registry: 14 entries, 14 hubs enabled (Quảng Ninh on)", () => {
   assert.ok(getNoxhProvinceBySlug("gia-lai")?.hubEnabled);
 });
 
+test("nameNew: TP trực thuộc TW có tiền tố TP.; tỉnh khác không", () => {
+  assert.equal(getNoxhProvinceBySlug("tp-ho-chi-minh")?.nameNew, "TP. Hồ Chí Minh");
+  assert.equal(getNoxhProvinceBySlug("dong-nai")?.nameNew, "TP. Đồng Nai");
+  assert.equal(getNoxhProvinceBySlug("can-tho")?.nameNew, "TP. Cần Thơ");
+  assert.equal(getNoxhProvinceBySlug("ha-noi")?.nameNew, "TP. Hà Nội");
+  assert.equal(getNoxhProvinceBySlug("da-nang")?.nameNew, "TP. Đà Nẵng");
+  assert.equal(getNoxhProvinceBySlug("bac-ninh")?.nameNew, "Bắc Ninh");
+  assert.equal(getNoxhProvinceBySlug("quang-ninh")?.nameNew, "Quảng Ninh");
+  assert.equal(getNoxhProvinceBySlug("tay-ninh")?.nameNew, "Tây Ninh");
+  assert.doesNotMatch(getNoxhProvinceBySlug("bac-ninh")!.nameNew, /^TP\./);
+  assert.doesNotMatch(getNoxhProvinceBySlug("khanh-hoa")!.nameNew, /^TP\./);
+});
+
 test("resolve canonical: Bình Dương → TP.HCM; Long An → Tây Ninh", () => {
   assert.equal(resolveNoxhProvinceCanonical("Bình Dương")?.slug, "tp-ho-chi-minh");
   assert.equal(resolveNoxhProvinceCanonical("Long An")?.slug, "tay-ninh");

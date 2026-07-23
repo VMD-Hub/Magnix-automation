@@ -15,9 +15,9 @@ test("Hà Nội NOXH: 17 unique slugs", () => {
   assert.equal(getNoxhHanoiDef("missing"), null);
 });
 
-test("Hà Nội skeletons: province Hà Nội; only researched STT-1 may cite provisional price", () => {
+test("Hà Nội skeletons: province TP. Hà Nội; only researched STT-1 may cite provisional price", () => {
   for (const def of allNoxhHanoiDefs()) {
-    assert.equal(def.province, "Hà Nội");
+    assert.equal(def.province, "TP. Hà Nội");
     assert.equal(def.projectType, "NHA_O_XA_HOI");
     assert.equal(def.status, "SAP_MO_BAN");
     assert.equal(inferPrismaSalesRegionFromProvince(def.province), "NORTH");

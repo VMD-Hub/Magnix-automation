@@ -279,7 +279,7 @@ function skeletonDef(row: HanoiRow): NoxhLandingDef {
     developerTax: row.developerTax,
     projectType: "NHA_O_XA_HOI",
     status: "SAP_MO_BAN",
-    province: "Hà Nội",
+    province: "TP. Hà Nội",
     district: row.district,
     ward: row.ward,
     address: row.address,

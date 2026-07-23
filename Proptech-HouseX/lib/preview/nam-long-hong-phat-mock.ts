@@ -120,7 +120,7 @@ export function buildNamLongHongPhatMock(): ProjectDetail {
     name: NLHP_PROJECT_NAME,
     projectType: "NHA_O_XA_HOI",
     status: "DA_BAN_GIAO",
-    province: "Cần Thơ",
+    province: "TP. Cần Thơ",
     district: "Cái Răng",
     ward: "Hưng Thạnh",
     address: "Đường số 2 & 4, KDC Nam Long lô 8C",

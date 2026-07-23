@@ -114,7 +114,7 @@ export function buildEcoResidenceMock(): ProjectDetail {
     name: "Eco Residence — Nhà Ở Xã Hội Long Bình Tân",
     projectType: "NHA_O_XA_HOI",
     status: "DANG_BAN",
-    province: "Đồng Nai",
+    province: "TP. Đồng Nai",
     district: "Biên Hòa",
     ward: "Long Hưng",
     address: "52 Nguyễn Văn Tỏ, phường Long Hưng",

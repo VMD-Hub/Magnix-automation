@@ -44,8 +44,8 @@
   },
   {
     "slug": "can-tho",
-    "nameNew": "Cần Thơ",
-    "nameNewVariants": ["TP. Cần Thơ", "Thành phố Cần Thơ"],
+    "nameNew": "TP. Cần Thơ",
+    "nameNewVariants": ["Cần Thơ", "Thành phố Cần Thơ", "TP.Can Tho"],
     "aliasesOld": ["Hậu Giang", "Sóc Trăng"],
     "aliasesOldVariants": ["Hau Giang", "Soc Trang"],
     "salesRegion": "south",
@@ -120,8 +120,8 @@
   },
   {
     "slug": "ha-noi",
-    "nameNew": "Hà Nội",
-    "nameNewVariants": ["Thành phố Hà Nội", "TP. Hà Nội", "Ha Noi"],
+    "nameNew": "TP. Hà Nội",
+    "nameNewVariants": ["Hà Nội", "Thành phố Hà Nội", "Ha Noi"],
     "aliasesOld": [],
     "aliasesOldVariants": ["thủ đô", "Thu do"],
     "salesRegion": "north",
@@ -198,8 +198,8 @@
   },
   {
     "slug": "da-nang",
-    "nameNew": "Đà Nẵng",
-    "nameNewVariants": ["Thành phố Đà Nẵng", "TP. Đà Nẵng", "Da Nang"],
+    "nameNew": "TP. Đà Nẵng",
+    "nameNewVariants": ["Đà Nẵng", "Thành phố Đà Nẵng", "Da Nang"],
     "aliasesOld": [],
     "aliasesOldVariants": ["Danang"],
     "salesRegion": "central",

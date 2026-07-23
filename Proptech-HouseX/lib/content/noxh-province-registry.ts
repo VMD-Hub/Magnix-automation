@@ -2,6 +2,9 @@
  * Registry địa giới NOXH P0 — NQ 202/2025/QH15 (hiệu lực sắp xếp 01/7/2025).
  *
  * Canonical = tên mới (URL hub, H1, schema).
+ * Quy ước hiển thị:
+ * - TP trực thuộc TW → `TP. …` (TP. Hà Nội, TP. Hải Phòng, TP. Đà Nẵng, TP. Hồ Chí Minh, TP. Cần Thơ, TP. Đồng Nai)
+ * - Tỉnh khác → chỉ tên (Bắc Ninh, Quảng Ninh, …) — không thêm `Tỉnh` / `TP.` vào nameNew
  * aliasesOld = tên cũ còn search / tin đăng legacy / địa chỉ song song.
  *
  * Đồng bộ pattern với:
@@ -153,8 +156,8 @@ export const NOXH_PROVINCE_REGISTRY_P0 = [
   },
   {
     slug: "can-tho",
-    nameNew: "Cần Thơ",
-    nameNewVariants: ["TP. Cần Thơ", "Thành phố Cần Thơ"],
+    nameNew: "TP. Cần Thơ",
+    nameNewVariants: ["Cần Thơ", "Thành phố Cần Thơ", "TP.Can Tho"],
     aliasesOld: ["Hậu Giang", "Sóc Trăng"],
     aliasesOldVariants: ["Hau Giang", "Soc Trang"],
     salesRegion: "south",
@@ -238,8 +241,8 @@ export const NOXH_PROVINCE_REGISTRY_P0 = [
   },
   {
     slug: "ha-noi",
-    nameNew: "Hà Nội",
-    nameNewVariants: ["Thành phố Hà Nội", "TP. Hà Nội", "Ha Noi"],
+    nameNew: "TP. Hà Nội",
+    nameNewVariants: ["Hà Nội", "Thành phố Hà Nội", "Ha Noi"],
     aliasesOld: [],
     aliasesOldVariants: ["thủ đô", "Thu do"],
     salesRegion: "north",
@@ -319,8 +322,8 @@ export const NOXH_PROVINCE_REGISTRY_P0 = [
   },
   {
     slug: "da-nang",
-    nameNew: "Đà Nẵng",
-    nameNewVariants: ["Thành phố Đà Nẵng", "TP. Đà Nẵng", "Da Nang"],
+    nameNew: "TP. Đà Nẵng",
+    nameNewVariants: ["Đà Nẵng", "Thành phố Đà Nẵng", "Da Nang"],
     aliasesOld: [],
     aliasesOldVariants: ["Danang"],
     salesRegion: "central",

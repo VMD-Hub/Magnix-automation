@@ -28,7 +28,7 @@ export function buildDtaHappyHomeMock(): ProjectDetail {
     name: DTA_HAPPY_HOME_NAME,
     projectType: "NHA_O_XA_HOI",
     status: "DANG_BAN",
-    province: "Đồng Nai",
+    province: "TP. Đồng Nai",
     district: "Nhơn Trạch",
     ward: "Phước An",
     address: "Đường Nguyễn Văn Cừ, Khu đô thị DTA City",

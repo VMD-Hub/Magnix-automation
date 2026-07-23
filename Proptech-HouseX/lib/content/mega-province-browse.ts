@@ -1,4 +1,5 @@
 import {
+  CAN_THO_CENTRAL_CITY,
   isCanThoMegaCityProvince,
   provincesMatchingCanThoMegaCity,
 } from "@/lib/content/can-tho-browse-locations-2025";
@@ -25,6 +26,7 @@ export function provincesMatchingBrowseFilter(
       return provincesMatchingHcmMegaCity();
     case DONG_NAI_CENTRAL_CITY:
       return provincesMatchingDongNaiMegaCity();
+    case CAN_THO_CENTRAL_CITY:
     case "Cần Thơ":
       return provincesMatchingCanThoMegaCity();
     case "Tây Ninh":
@@ -47,7 +49,7 @@ export function isMegaProvinceBrowseEntry(province: string | undefined): boolean
 export function canonicalBrowseProvinceName(province: string): string {
   if (isHcmMegaCityProvince(province)) return "TP. Hồ Chí Minh";
   if (isDongNaiMegaCityProvince(province)) return DONG_NAI_CENTRAL_CITY;
-  if (isCanThoMegaCityProvince(province)) return "Cần Thơ";
+  if (isCanThoMegaCityProvince(province)) return CAN_THO_CENTRAL_CITY;
   if (isTayNinhMegaProvince(province)) return "Tây Ninh";
   return province;
 }

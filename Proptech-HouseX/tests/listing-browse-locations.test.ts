@@ -52,11 +52,13 @@ describe("listing browse locations", () => {
 
   it("Can Tho mega city includes Hau Giang and Soc Trang aliases", () => {
     const names = provincesMatchingCanThoMegaCity();
+    assert.ok(names.includes("TP. Cần Thơ"));
     assert.ok(names.includes("Cần Thơ"));
     assert.ok(names.includes("Hậu Giang"));
     assert.ok(names.includes("Sóc Trăng"));
     assert.ok(isCanThoMegaCityProvince("Hậu Giang"));
     assert.ok(isCanThoMegaCityProvince("Sóc Trăng"));
+    assert.ok(isCanThoMegaCityProvince("TP. Cần Thơ"));
   });
 
   it("Tay Ninh mega province includes Long An alias", () => {

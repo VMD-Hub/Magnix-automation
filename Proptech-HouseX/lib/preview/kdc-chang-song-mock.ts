@@ -113,7 +113,7 @@ export function buildKdcChangSongMock(): ProjectDetail {
     name: CS_PROJECT_NAME,
     projectType: "NHA_O_XA_HOI",
     status: "SAP_MO_BAN",
-    province: "Đồng Nai",
+    province: "TP. Đồng Nai",
     district: "Biên Hòa",
     ward: "Phước Tân",
     address: "KDC Chàng Sông, phường Phước Tân",

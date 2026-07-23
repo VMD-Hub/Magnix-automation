@@ -2,6 +2,7 @@ import { listCatalogSaleListingCards } from "@/lib/preview/catalog-listings";
 import {
   canThoBrowseDistrictFlatList,
   canThoBrowseDistrictGroups,
+  CAN_THO_CENTRAL_CITY,
   CAN_THO_LEGACY_PROVINCE_ALIASES,
   isCanThoMegaCityProvince,
   provincesMatchingCanThoMegaCity,
@@ -74,8 +75,8 @@ export const LISTING_BROWSE_PROVINCES: ListingBrowseProvince[] = [
   },
   {
     slug: "can-tho",
-    label: "Cần Thơ",
-    province: "Cần Thơ",
+    label: CAN_THO_CENTRAL_CITY,
+    province: CAN_THO_CENTRAL_CITY,
     districts: canThoBrowseDistrictFlatList(),
     districtGroups: canThoBrowseDistrictGroups().map((g) => ({
       id: g.id,

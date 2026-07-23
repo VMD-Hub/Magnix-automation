@@ -11,6 +11,9 @@ export type BrowseZoneGroup = {
 
 export const CAN_THO_LEGACY_PROVINCE_ALIASES = ["Hậu Giang", "Sóc Trăng"] as const;
 
+/** Canonical display — TP trực thuộc TW */
+export const CAN_THO_CENTRAL_CITY = "TP. Cần Thơ" as const;
+
 export const CAN_THO_BROWSE_ZONE_GROUPS: readonly BrowseZoneGroup[] = [
   {
     id: "can-tho-core",
@@ -79,7 +82,7 @@ export function canThoBrowseDistrictGroups(): BrowseZoneGroup[] {
 }
 
 export function provincesMatchingCanThoMegaCity(): string[] {
-  return ["Cần Thơ", ...CAN_THO_LEGACY_PROVINCE_ALIASES];
+  return [CAN_THO_CENTRAL_CITY, "Cần Thơ", ...CAN_THO_LEGACY_PROVINCE_ALIASES];
 }
 
 export function isCanThoMegaCityProvince(province: string | undefined): boolean {

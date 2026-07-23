@@ -16,7 +16,7 @@ test("Đà Nẵng NOXH: 5 unique slugs (exclude EcoLife TM)", () => {
 
 test("Đà Nẵng: province + CENTRAL; Đại Địa Bảo enriched", () => {
   for (const def of allNoxhDanangDefs()) {
-    assert.equal(def.province, "Đà Nẵng");
+    assert.equal(def.province, "TP. Đà Nẵng");
     assert.equal(inferPrismaSalesRegionFromProvince(def.province), "CENTRAL");
     for (const u of def.unitTypes) {
       assert.equal(u.priceFrom ?? null, null);

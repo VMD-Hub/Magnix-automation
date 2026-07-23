@@ -114,7 +114,7 @@ function skeletonDef(row: DnRow): NoxhLandingDef {
     developerTax: row.developerTax,
     projectType: "NHA_O_XA_HOI",
     status: "SAP_MO_BAN",
-    province: "Đà Nẵng",
+    province: "TP. Đà Nẵng",
     district: row.district,
     ward: row.ward,
     address: row.address,

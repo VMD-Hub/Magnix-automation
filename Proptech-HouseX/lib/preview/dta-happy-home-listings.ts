@@ -39,7 +39,7 @@ export function listDtaHappyHomeListingCards(): ListingCardData[] {
       transactionType: "SALE",
       price: u.priceVnd,
       area: u.netAreaM2,
-      province: "Đồng Nai",
+      province: "TP. Đồng Nai",
       district: "Nhơn Trạch",
       verified: true,
       hasVideo: false,
