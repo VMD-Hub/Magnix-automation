@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Image from "next/image";
 import Link from "next/link";
@@ -21,7 +21,7 @@ type Props = {
   priority?: boolean;
   /** `ruby` — thanh tiêu đề; `light` — trang auth nền sáng (chip ruby nhỏ). */
   surface?: "ruby" | "light";
-  /** Hiện tagline VN dưới logo (domain nằm trong mark PNG). */
+  /** Hiện tagline VN dưới logo (domain nằm trong mark PNG do user thiết kế). */
   showTagline?: boolean;
 };
 

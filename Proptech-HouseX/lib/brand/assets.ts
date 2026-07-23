@@ -44,7 +44,7 @@ export const BRAND_ASSETS = {
     },
     /** Lockup header/footer */
     lockup: {
-      path: "/brand/housex-lockup-mark.png",
+      path: "/brand/housex-lockup-mark-v5.png",
       usage: "Header + footer wordmark",
       decorative: true,
     },

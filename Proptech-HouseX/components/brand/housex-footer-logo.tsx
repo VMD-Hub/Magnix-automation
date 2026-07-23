@@ -18,7 +18,7 @@ type Props = {
   showTagline?: boolean;
 };
 
-/** Logo footer — `housex-lockup-mark.png` (nền trong suốt). */
+/** Logo footer — `housex-lockup-mark-v5.png` (nền trong suốt). */
 export function HouseXFooterLogo({
   href = null,
   className,

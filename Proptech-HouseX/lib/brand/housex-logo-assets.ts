@@ -1,17 +1,17 @@
-/** Logo header (nền sáng / auth) — cùng lockup đã duyệt. */
-export const HOUSEX_HEADER_LOGO_SRC = "/brand/housex-lockup-mark-paper.png" as const;
-export const HOUSEX_HEADER_LOGO_WIDTH = 1196;
-export const HOUSEX_HEADER_LOGO_HEIGHT = 365;
+/** Logo header (nền sáng / auth) — lockup user + domain metallic (v5). */
+export const HOUSEX_HEADER_LOGO_SRC = "/brand/housex-lockup-mark-paper-v5.png" as const;
+export const HOUSEX_HEADER_LOGO_WIDTH = 1024;
+export const HOUSEX_HEADER_LOGO_HEIGHT = 350;
 
 /**
  * Logo footer / header ruby — nền trong suốt.
- * Đổi tên file (lockup-mark) để phá cache `/_next/image` khi đổi artwork.
+ * v5 = lockup user; domain cùng gold metallic với O/X.
  */
-export const HOUSEX_FOOTER_LOGO_SRC = "/brand/housex-lockup-mark.png" as const;
-export const HOUSEX_FOOTER_LOGO_WIDTH = 1196;
-export const HOUSEX_FOOTER_LOGO_HEIGHT = 365;
+export const HOUSEX_FOOTER_LOGO_SRC = "/brand/housex-lockup-mark-v5.png" as const;
+export const HOUSEX_FOOTER_LOGO_WIDTH = 1024;
+export const HOUSEX_FOOTER_LOGO_HEIGHT = 350;
 
-/** @deprecated Thay bằng `housex-lockup-mark.png`. */
+/** @deprecated Thay bằng `housex-lockup-mark-v5.png`. */
 export const HOUSEX_FOOTER_LOGO_DARK_SRC =
   "/brand/housex-footer-logo-dark.png" as const;
 
@@ -47,7 +47,7 @@ export const HOUSEX_HEADER_PAPER_TILE_SIZE_PX = 128;
 export const HOUSEX_FOOTER_TAGLINE = "Nền tảng số tìm nhà Việt Nam" as const;
 
 /**
- * Domain công khai — nằm trong mark PNG (thay tagline EN cũ).
- * Vẫn export cho aria-label / copy; không render thêm dòng domain dưới logo.
+ * Domain công khai — nằm trong mark PNG (lockup user).
+ * Export cho aria-label / copy; không render thêm dòng domain HTML.
  */
 export const HOUSEX_DOMAIN_TAGLINE = "timnhaxahoi.com" as const;

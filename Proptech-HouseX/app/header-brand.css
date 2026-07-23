@@ -65,11 +65,11 @@
 
 .housex-header-logo__domain {
   display: block;
-  font-size: 0.5625rem;
-  font-weight: 500;
-  letter-spacing: 0.04em;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
   line-height: 1.2;
-  color: rgba(252, 211, 77, 0.88);
+  color: rgba(252, 211, 77, 0.95);
 }
 
 .housex-header-logo--light .housex-header-logo__tagline {
@@ -90,8 +90,8 @@
   }
 
   .housex-header-logo__domain {
-    font-size: 0.625rem;
-    letter-spacing: 0.05em;
+    font-size: 0.75rem;
+    letter-spacing: 0.01em;
   }
 }
 
