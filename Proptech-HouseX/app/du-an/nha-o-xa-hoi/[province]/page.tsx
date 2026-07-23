@@ -9,6 +9,9 @@ import {
 
 export const revalidate = 300;
 
+/** Chỉ 4 hub hubEnabled — slug khác (kể cả dong-thap/an-giang) → HTTP 404. */
+export const dynamicParams = false;
+
 type PageProps = {
   params: Promise<{ province: string }>;
   searchParams: Promise<{ page?: string }>;
