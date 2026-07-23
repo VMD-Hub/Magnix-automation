@@ -91,7 +91,7 @@ export const NOXH_PROVINCE_HUB_BASE = "/du-an/nha-o-xa-hoi" as const;
  * P0 — miền Nam / ĐBSCL sau sắp xếp.
  * P0.1 hubEnabled: HCM, Đồng Nai, Cần Thơ, Tây Ninh.
  * P0.2 hub Đồng Tháp + An Giang bật khi có inventory.
- * P0.5 hub Bắc: Hà Nội; hub Trung: Đà Nẵng + Khánh Hòa (inventory skeleton).
+ * P0.5 hub Bắc: Hà Nội; hub Trung: Đà Nẵng + Khánh Hòa; hub Nam/Tây Nguyên: Lâm Đồng (inventory).
  */
 export const NOXH_PROVINCE_REGISTRY_P0 = [
   {
@@ -302,6 +302,39 @@ export const NOXH_PROVINCE_REGISTRY_P0 = [
       "NOXH Diên Khánh",
     ],
   },
+  {
+    slug: "lam-dong",
+    nameNew: "Lâm Đồng",
+    nameNewVariants: ["Tỉnh Lâm Đồng", "Lam Dong"],
+    aliasesOld: ["Đắk Nông", "Bình Thuận"],
+    aliasesOldVariants: [
+      "Dak Nong",
+      "Dak Nông",
+      "Binh Thuan",
+      "Đà Lạt",
+      "Da Lat",
+      "Phan Thiết",
+      "Phan Thiet",
+      "Gia Nghĩa",
+      "Gia Nghia",
+      "Bảo Lộc",
+    ],
+    salesRegion: "south",
+    hubEnabled: true,
+    legalNote:
+      "NQ 202/2025 — sáp nhập Đắk Nông + Bình Thuận + Lâm Đồng thành tỉnh Lâm Đồng mới. Hub P0.5 bật với inventory Đà Lạt / Phan Thiết / Gia Nghĩa.",
+    searchKeys: [
+      "nhà ở xã hội Lâm Đồng",
+      "NOXH Lâm Đồng",
+      "nhà ở xã hội Đà Lạt",
+      "NOXH Đà Lạt",
+      "NOXH Phan Thiết",
+      "NOXH Bình Thuận",
+      "NOXH Đắk Nông",
+      "NOXH Kim Đồng Đà Lạt",
+      "NOXH Gia Nghĩa",
+    ],
+  },
 ] as const satisfies readonly NoxhProvinceEntry[];
 
 export type NoxhProvinceSlug = (typeof NOXH_PROVINCE_REGISTRY_P0)[number]["slug"];
@@ -394,6 +427,8 @@ export const NOXH_LEGACY_HUB_REDIRECTS: Readonly<Record<string, NoxhProvinceSlug
     "tien-giang": "dong-thap",
     "kien-giang": "an-giang",
     "ninh-thuan": "khanh-hoa",
+    "binh-thuan": "lam-dong",
+    "dak-nong": "lam-dong",
   };
 
 export function resolveLegacyNoxhHubRedirect(

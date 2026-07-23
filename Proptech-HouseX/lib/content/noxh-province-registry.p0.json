@@ -180,5 +180,37 @@
       "NOXH Ninh Thuận",
       "NOXH Diên Khánh"
     ]
+  },
+  {
+    "slug": "lam-dong",
+    "nameNew": "Lâm Đồng",
+    "nameNewVariants": ["Tỉnh Lâm Đồng", "Lam Dong"],
+    "aliasesOld": ["Đắk Nông", "Bình Thuận"],
+    "aliasesOldVariants": [
+      "Dak Nong",
+      "Dak Nông",
+      "Binh Thuan",
+      "Đà Lạt",
+      "Da Lat",
+      "Phan Thiết",
+      "Phan Thiet",
+      "Gia Nghĩa",
+      "Gia Nghia",
+      "Bảo Lộc"
+    ],
+    "salesRegion": "south",
+    "hubEnabled": true,
+    "legalNote": "NQ 202/2025 — sáp nhập Đắk Nông + Bình Thuận + Lâm Đồng thành tỉnh Lâm Đồng mới. Hub P0.5 bật với inventory Đà Lạt / Phan Thiết / Gia Nghĩa.",
+    "searchKeys": [
+      "nhà ở xã hội Lâm Đồng",
+      "NOXH Lâm Đồng",
+      "nhà ở xã hội Đà Lạt",
+      "NOXH Đà Lạt",
+      "NOXH Phan Thiết",
+      "NOXH Bình Thuận",
+      "NOXH Đắk Nông",
+      "NOXH Kim Đồng Đà Lạt",
+      "NOXH Gia Nghĩa"
+    ]
   }
 ]
