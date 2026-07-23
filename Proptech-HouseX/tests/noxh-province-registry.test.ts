@@ -20,13 +20,14 @@ import {
   resolveNoxhProvinceHubEntry,
 } from "../lib/content/noxh-province-hub";
 
-test("P0 registry: 8 entries, 6 hubs enabled (HN + Đà Nẵng)", () => {
+test("P0 registry: 8 entries, 7 hubs enabled (Đồng Tháp on)", () => {
   assert.equal(NOXH_PROVINCE_REGISTRY_P0.length, 8);
-  assert.equal(listNoxhProvinceHubsEnabled().length, 6);
+  assert.equal(listNoxhProvinceHubsEnabled().length, 7);
   assert.ok(getNoxhProvinceBySlug("tp-ho-chi-minh")?.hubEnabled);
   assert.ok(getNoxhProvinceBySlug("ha-noi")?.hubEnabled);
   assert.ok(getNoxhProvinceBySlug("da-nang")?.hubEnabled);
-  assert.equal(getNoxhProvinceBySlug("dong-thap")?.hubEnabled, false);
+  assert.ok(getNoxhProvinceBySlug("dong-thap")?.hubEnabled);
+  assert.equal(getNoxhProvinceBySlug("an-giang")?.hubEnabled, false);
 });
 
 test("resolve canonical: Bình Dương → TP.HCM; Long An → Tây Ninh", () => {
@@ -54,7 +55,7 @@ test("legacy hub redirect path: enabled → hub; disabled → national", () => {
   );
   assert.equal(
     resolveNoxhLegacyHubRedirectPath("tien-giang"),
-    NOXH_PROVINCE_HUB_BASE,
+    "/du-an/nha-o-xa-hoi/dong-thap",
   );
   assert.equal(
     resolveNoxhLegacyHubRedirectPath("kien-giang"),
@@ -71,14 +72,15 @@ test("provincesMatchingNoxhHub includes aliases", () => {
 
 test("hub entry resolve: enabled only", () => {
   assert.equal(resolveNoxhProvinceHubEntry("tp-ho-chi-minh")?.slug, "tp-ho-chi-minh");
-  assert.equal(resolveNoxhProvinceHubEntry("dong-thap"), undefined);
+  assert.equal(resolveNoxhProvinceHubEntry("dong-thap")?.slug, "dong-thap");
+  assert.equal(resolveNoxhProvinceHubEntry("an-giang"), undefined);
   assert.equal(resolveNoxhProvinceHubEntry("binh-duong"), undefined);
   assert.equal(
     listNoxhProvinceHubsEnabled()
       .map((e) => e.slug)
       .sort()
       .join(","),
-    "can-tho,da-nang,dong-nai,ha-noi,tay-ninh,tp-ho-chi-minh",
+    "can-tho,da-nang,dong-nai,dong-thap,ha-noi,tay-ninh,tp-ho-chi-minh",
   );
 });
 

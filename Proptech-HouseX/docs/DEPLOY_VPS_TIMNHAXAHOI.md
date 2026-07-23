@@ -268,6 +268,16 @@ npm run db:seed:noxh-danang
 
 Smoke: `/du-an/nha-o-xa-hoi/da-nang` + `nha-o-xa-hoi-dai-dia-bao-son-tra`. Inventory: `docs/content/DANANG_NOXH_INVENTORY.md`.
 
+### Ops — seed NOXH Đồng Tháp (P0.2)
+
+```bash
+cd /opt/housex/Proptech-HouseX
+npm run build && pm2 restart housex --update-env   # bật hub dong-thap
+npm run db:seed:noxh-dong-thap
+```
+
+Smoke: `/du-an/nha-o-xa-hoi/dong-thap` · 308 `/tien-giang` → hub · `nha-o-xa-hoi-rivera-garden-my-tho`.
+
 ### Ops — IndexNow (Bing + peers)
 
 Google: GSC Request indexing (tay). Bing/Yandex: IndexNow.

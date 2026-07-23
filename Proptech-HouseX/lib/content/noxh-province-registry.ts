@@ -90,7 +90,7 @@ export const NOXH_PROVINCE_HUB_BASE = "/du-an/nha-o-xa-hoi" as const;
 /**
  * P0 — miền Nam / ĐBSCL sau sắp xếp.
  * P0.1 hubEnabled: HCM, Đồng Nai, Cần Thơ, Tây Ninh.
- * P0.2 registry sẵn, hub tắt: Đồng Tháp, An Giang.
+ * P0.2 hub Đồng Tháp bật khi có inventory; An Giang vẫn tắt.
  * P0.5 hub Bắc: Hà Nội; hub Trung: Đà Nẵng (inventory skeleton).
  */
 export const NOXH_PROVINCE_REGISTRY_P0 = [
@@ -190,16 +190,20 @@ export const NOXH_PROVINCE_REGISTRY_P0 = [
     nameNew: "Đồng Tháp",
     nameNewVariants: ["Tỉnh Đồng Tháp"],
     aliasesOld: ["Tiền Giang"],
-    aliasesOldVariants: ["Tien Giang", "Đồng Tháp cũ"],
+    aliasesOldVariants: ["Tien Giang", "Đồng Tháp cũ", "Mỹ Tho"],
     salesRegion: "south",
-    hubEnabled: false,
+    hubEnabled: true,
     legalNote:
-      "NQ 202/2025 — sáp nhập Tiền Giang + Đồng Tháp thành tỉnh Đồng Tháp mới. hubEnabled=false đến khi đủ inventory.",
+      "NQ 202/2025 — sáp nhập Tiền Giang + Đồng Tháp thành tỉnh Đồng Tháp mới. Hub P0.2 bật với inventory NOXH Mỹ Tho / Đồng Tháp (Phase 5 lite).",
     searchKeys: [
       "nhà ở xã hội Đồng Tháp",
       "NOXH Đồng Tháp",
       "nhà ở xã hội Tiền Giang",
       "NOXH Tiền Giang",
+      "NOXH Mỹ Tho",
+      "Rivera Garden Mỹ Tho",
+      "NOXH HQC Mỹ Tho",
+      "NOXH Gò Công",
     ],
   },
   {
