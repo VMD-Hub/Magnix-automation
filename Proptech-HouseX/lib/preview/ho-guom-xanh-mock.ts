@@ -191,7 +191,7 @@ export function buildHoGuomXanhMock(): ProjectDetail {
       totalUnits: overview.totalUnits,
       ...(overview.blocks != null ? { blocks: overview.blocks } : {}),
       landing: overview.landing,
-    });
+    }) as ProjectDetail["overviewData"];
   }
   return project;
 }
