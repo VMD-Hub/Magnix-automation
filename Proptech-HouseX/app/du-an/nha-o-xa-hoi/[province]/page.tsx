@@ -24,9 +24,7 @@ export async function generateMetadata({
 }: PageProps): Promise<Metadata> {
   const { province } = await params;
   const entry = resolveNoxhProvinceHubEntry(province);
-  if (!entry) {
-    return { title: "Không tìm thấy hub tỉnh" };
-  }
+  if (!entry) notFound();
   const sp = await searchParams;
   const page = Math.max(1, Number(sp.page) || 1);
   return buildNoxhProvinceHubMetadata(entry, page);
