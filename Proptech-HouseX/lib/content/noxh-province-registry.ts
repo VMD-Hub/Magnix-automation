@@ -91,6 +91,7 @@ export const NOXH_PROVINCE_HUB_BASE = "/du-an/nha-o-xa-hoi" as const;
  * P0 — miền Nam / ĐBSCL sau sắp xếp.
  * P0.1 hubEnabled: HCM, Đồng Nai, Cần Thơ, Tây Ninh.
  * P0.2 registry sẵn, hub tắt: Đồng Tháp, An Giang.
+ * P0.5 hub Bắc: Hà Nội (inventory skeleton Phase 5 lite).
  */
 export const NOXH_PROVINCE_REGISTRY_P0 = [
   {
@@ -216,6 +217,27 @@ export const NOXH_PROVINCE_REGISTRY_P0 = [
       "NOXH An Giang",
       "nhà ở xã hội Kiên Giang",
       "NOXH Kiên Giang",
+    ],
+  },
+  {
+    slug: "ha-noi",
+    nameNew: "Hà Nội",
+    nameNewVariants: ["Thành phố Hà Nội", "TP. Hà Nội", "Ha Noi"],
+    aliasesOld: [],
+    aliasesOldVariants: ["thủ đô", "Thu do"],
+    salesRegion: "north",
+    hubEnabled: true,
+    legalNote:
+      "Hub Bắc P0.5 — inventory skeleton 17 dự án NOXH từ danh sách nội bộ House X (Phase 5 lite). Enrich từng dự án khi có nguồn CĐT / Sở.",
+    searchKeys: [
+      "nhà ở xã hội Hà Nội",
+      "NOXH Hà Nội",
+      "nhà ở xã hội thủ đô",
+      "NOXH Hoàng Mai",
+      "NOXH Nam Từ Liêm",
+      "NOXH Long Biên",
+      "NOXH Thanh Trì",
+      "NOXH Mê Linh",
     ],
   },
 ] as const satisfies readonly NoxhProvinceEntry[];

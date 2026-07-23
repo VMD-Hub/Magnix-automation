@@ -246,7 +246,18 @@ npm run db:backfill:sales-region -- --apply   # ghi null → inferred
 # npm run db:backfill:sales-region -- --apply --force  # ghi cả khi đã có giá trị khác
 ```
 
-Province ngoài registry (vd. Hà Nội trước khi mở Bắc) → bỏ qua, log `no_infer`.
+Province ngoài registry (vd. trước khi mở Bắc) → bỏ qua, log `no_infer`.
+
+### Ops — seed NOXH Hà Nội (Phase 5 lite)
+
+```bash
+cd /opt/housex/Proptech-HouseX
+git pull
+npm run build && pm2 restart housex --update-env   # nếu có code hub ha-noi
+npm run db:seed:noxh-hanoi
+```
+
+Smoke: `/du-an/nha-o-xa-hoi/ha-noi` + 1 slug (vd. `nha-o-xa-hoi-udic-eco-tower-ha-dinh`). Inventory: `docs/content/HANOI_NOXH_INVENTORY.md`.
 
 ### Ops — IndexNow (Bing + peers)
 

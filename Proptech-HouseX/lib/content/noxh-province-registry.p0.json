@@ -105,5 +105,25 @@
       "nhà ở xã hội Kiên Giang",
       "NOXH Kiên Giang"
     ]
+  },
+  {
+    "slug": "ha-noi",
+    "nameNew": "Hà Nội",
+    "nameNewVariants": ["Thành phố Hà Nội", "TP. Hà Nội", "Ha Noi"],
+    "aliasesOld": [],
+    "aliasesOldVariants": ["thủ đô", "Thu do"],
+    "salesRegion": "north",
+    "hubEnabled": true,
+    "legalNote": "Hub Bắc P0.5 — inventory skeleton 17 dự án NOXH từ danh sách nội bộ House X (Phase 5 lite). Enrich từng dự án khi có nguồn CĐT / Sở.",
+    "searchKeys": [
+      "nhà ở xã hội Hà Nội",
+      "NOXH Hà Nội",
+      "nhà ở xã hội thủ đô",
+      "NOXH Hoàng Mai",
+      "NOXH Nam Từ Liêm",
+      "NOXH Long Biên",
+      "NOXH Thanh Trì",
+      "NOXH Mê Linh"
+    ]
   }
 ]

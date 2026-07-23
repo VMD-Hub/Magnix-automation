@@ -20,10 +20,11 @@ import {
   resolveNoxhProvinceHubEntry,
 } from "../lib/content/noxh-province-hub";
 
-test("P0 registry: 6 entries, 4 hubs enabled", () => {
-  assert.equal(NOXH_PROVINCE_REGISTRY_P0.length, 6);
-  assert.equal(listNoxhProvinceHubsEnabled().length, 4);
+test("P0 registry: 7 entries, 5 hubs enabled (incl. Hà Nội)", () => {
+  assert.equal(NOXH_PROVINCE_REGISTRY_P0.length, 7);
+  assert.equal(listNoxhProvinceHubsEnabled().length, 5);
   assert.ok(getNoxhProvinceBySlug("tp-ho-chi-minh")?.hubEnabled);
+  assert.ok(getNoxhProvinceBySlug("ha-noi")?.hubEnabled);
   assert.equal(getNoxhProvinceBySlug("dong-thap")?.hubEnabled, false);
 });
 
@@ -76,7 +77,7 @@ test("hub entry resolve: enabled only", () => {
       .map((e) => e.slug)
       .sort()
       .join(","),
-    "can-tho,dong-nai,tay-ninh,tp-ho-chi-minh",
+    "can-tho,dong-nai,ha-noi,tay-ninh,tp-ho-chi-minh",
   );
 });
 
@@ -102,7 +103,7 @@ test("dual address: legacy province yields two lines", () => {
 test("infer Prisma salesRegion from province", () => {
   assert.equal(inferPrismaSalesRegionFromProvince("Bình Dương"), "SOUTH");
   assert.equal(inferPrismaSalesRegionFromProvince("Long An"), "SOUTH");
-  assert.equal(inferPrismaSalesRegionFromProvince("Hà Nội"), null);
+  assert.equal(inferPrismaSalesRegionFromProvince("Hà Nội"), "NORTH");
 });
 
 test("plan salesRegion backfill: null → set; mismatch needs force", () => {
@@ -123,6 +124,10 @@ test("plan salesRegion backfill: null → set; mismatch needs force", () => {
     { action: "set", next: "SOUTH" },
   );
   assert.deepEqual(planProjectSalesRegionBackfill("Hà Nội", null), {
+    action: "set",
+    next: "NORTH",
+  });
+  assert.deepEqual(planProjectSalesRegionBackfill("Hải Phòng", null), {
     action: "skip",
     reason: "no_infer",
   });

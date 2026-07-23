@@ -20,6 +20,7 @@
     "db:seed:vinhomes": "node --env-file=.env --import tsx scripts/seed-vinhomes-projects.ts",
     "db:seed:commercial": "node --env-file=.env --import tsx scripts/seed-commercial-landings.ts",
     "db:seed:noxh": "node --env-file=.env --import tsx scripts/seed-noxh-long-an.ts",
+    "db:seed:noxh-hanoi": "node --env-file=.env --import tsx scripts/seed-noxh-hanoi.ts",
     "db:seed:hgx": "node --env-file=.env --import tsx scripts/seed-ho-guom-xanh.ts",
     "db:seed:agent-services": "node --env-file=.env --import tsx scripts/seed-agent-services.ts",
     "db:bootstrap:agent-entitlements": "node --env-file=.env --import tsx scripts/bootstrap-agent-entitlements.ts",
