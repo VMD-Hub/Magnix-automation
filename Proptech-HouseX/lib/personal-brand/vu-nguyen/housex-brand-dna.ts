@@ -60,7 +60,7 @@ export const HOUSEX_BRAND_DNA_CARD = {
     },
   ] satisfies readonly BrandPillarCard[],
   direction:
-    "Định hướng dài hạn của House X là xây dựng tiện ích Proptech bền vững theo kim chỉ nam Smart Tools · Trusted Utility: công nghệ phục vụ quyết định có căn cứ, tiện ích minh bạch xuyên suốt hành trình an cư — từ khám phá dự án nhà ở xã hội đến hoàn tất thủ tục.",
+    "Định hướng dài hạn của House X là xây dựng nền tảng số tìm nhà Việt Nam: công nghệ phục vụ quyết định có căn cứ, tiện ích minh bạch xuyên suốt hành trình an cư — từ khám phá dự án nhà ở xã hội đến hoàn tất thủ tục.",
   exploreLinks: [
     {
       label: "Câu chuyện đầy đủ trên web",

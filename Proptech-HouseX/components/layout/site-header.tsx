@@ -66,7 +66,7 @@ export function SiteHeader() {
 
   return (
     <header className="site-header-bar proptech-header-ruby sticky top-0 z-50 print:hidden">
-      <div className="mx-auto flex min-h-[4.35rem] max-w-7xl items-center justify-between gap-3 py-2 container-px">
+      <div className="mx-auto flex min-h-[5.25rem] max-w-7xl items-center justify-between gap-3 py-2 container-px sm:min-h-[5.5rem]">
         <HouseXHeaderLogo href="/" surface="ruby" />
 
         <nav className="hidden items-center gap-0.5 lg:flex" aria-label="Chính">

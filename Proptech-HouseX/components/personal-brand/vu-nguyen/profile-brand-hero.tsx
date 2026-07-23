@@ -37,7 +37,7 @@ export function ProfileBrandHero({
         <BannerPicture
           sources={sources}
           sizes={CATALOG_BANNER_SIZES}
-          alt="House X — Smart Tools · Trusted Utility"
+          alt="House X — Nền tảng số tìm nhà Việt Nam"
           objectPosition={slide.objectPosition}
           priority
         />

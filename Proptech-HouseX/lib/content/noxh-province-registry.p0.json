@@ -1,0 +1,109 @@
+[
+  {
+    "slug": "tp-ho-chi-minh",
+    "nameNew": "TP. Hồ Chí Minh",
+    "nameNewVariants": ["Thành phố Hồ Chí Minh", "TP.HCM", "TPHCM", "Hồ Chí Minh"],
+    "aliasesOld": ["Bình Dương", "Bà Rịa - Vũng Tàu"],
+    "aliasesOldVariants": ["Ba Ria - Vung Tau", "Bà Rịa – Vũng Tàu", "BR-VT", "Vũng Tàu", "Bà Rịa", "Binh Duong"],
+    "salesRegion": "south",
+    "hubEnabled": true,
+    "legalNote": "NQ 202/2025 + NQ 1685/2025 — sáp nhập Bình Dương và Bà Rịa-Vũng Tàu vào TP.HCM (từ 01/7/2025).",
+    "searchKeys": [
+      "nhà ở xã hội TP.HCM",
+      "nhà ở xã hội Hồ Chí Minh",
+      "NOXH TP.HCM",
+      "nhà ở xã hội Bình Dương",
+      "NOXH Bình Dương",
+      "nhà ở xã hội Vũng Tàu",
+      "nhà ở xã hội Bà Rịa",
+      "NOXH Bà Rịa Vũng Tàu"
+    ]
+  },
+  {
+    "slug": "dong-nai",
+    "nameNew": "TP. Đồng Nai",
+    "nameNewVariants": ["Đồng Nai", "Thành phố Đồng Nai"],
+    "aliasesOld": ["Đồng Nai", "Bình Phước"],
+    "aliasesOldVariants": ["Dong Nai", "Binh Phuoc"],
+    "salesRegion": "south",
+    "hubEnabled": true,
+    "legalNote": "NQ 202/2025 — sáp nhập Đồng Nai + Bình Phước thành TP. Đồng Nai (từ 01/7/2025). Alias \"Đồng Nai\" giữ cho tin/search cũ.",
+    "searchKeys": [
+      "nhà ở xã hội Đồng Nai",
+      "nhà ở xã hội TP. Đồng Nai",
+      "NOXH Đồng Nai",
+      "nhà ở xã hội Bình Phước",
+      "NOXH Bình Phước",
+      "NOXH Nhơn Trạch",
+      "NOXH Long Thành"
+    ]
+  },
+  {
+    "slug": "can-tho",
+    "nameNew": "Cần Thơ",
+    "nameNewVariants": ["TP. Cần Thơ", "Thành phố Cần Thơ"],
+    "aliasesOld": ["Hậu Giang", "Sóc Trăng"],
+    "aliasesOldVariants": ["Hau Giang", "Soc Trang"],
+    "salesRegion": "south",
+    "hubEnabled": true,
+    "legalNote": "NQ 202/2025 — sáp nhập Cần Thơ + Hậu Giang + Sóc Trăng thành TP. Cần Thơ mới (từ 01/7/2025).",
+    "searchKeys": [
+      "nhà ở xã hội Cần Thơ",
+      "NOXH Cần Thơ",
+      "nhà ở xã hội Hậu Giang",
+      "nhà ở xã hội Sóc Trăng",
+      "NOXH Nam Long Cần Thơ"
+    ]
+  },
+  {
+    "slug": "tay-ninh",
+    "nameNew": "Tây Ninh",
+    "nameNewVariants": ["Tỉnh Tây Ninh"],
+    "aliasesOld": ["Long An"],
+    "aliasesOldVariants": ["Long An cũ", "LongAn"],
+    "salesRegion": "south",
+    "hubEnabled": true,
+    "legalNote": "NQ 202/2025 — sáp nhập Tây Ninh + Long An thành tỉnh Tây Ninh mới (từ 01/7/2025). Query \"NOXH Long An\" trỏ alias về hub này.",
+    "searchKeys": [
+      "nhà ở xã hội Tây Ninh",
+      "NOXH Tây Ninh",
+      "nhà ở xã hội Long An",
+      "NOXH Long An",
+      "NOXH Đức Hòa",
+      "NOXH Bến Lức",
+      "NOXH Cần Giuộc"
+    ]
+  },
+  {
+    "slug": "dong-thap",
+    "nameNew": "Đồng Tháp",
+    "nameNewVariants": ["Tỉnh Đồng Tháp"],
+    "aliasesOld": ["Tiền Giang"],
+    "aliasesOldVariants": ["Tien Giang", "Đồng Tháp cũ"],
+    "salesRegion": "south",
+    "hubEnabled": false,
+    "legalNote": "NQ 202/2025 — sáp nhập Tiền Giang + Đồng Tháp thành tỉnh Đồng Tháp mới. hubEnabled=false đến khi đủ inventory.",
+    "searchKeys": [
+      "nhà ở xã hội Đồng Tháp",
+      "NOXH Đồng Tháp",
+      "nhà ở xã hội Tiền Giang",
+      "NOXH Tiền Giang"
+    ]
+  },
+  {
+    "slug": "an-giang",
+    "nameNew": "An Giang",
+    "nameNewVariants": ["Tỉnh An Giang"],
+    "aliasesOld": ["Kiên Giang"],
+    "aliasesOldVariants": ["Kien Giang", "An Giang cũ"],
+    "salesRegion": "south",
+    "hubEnabled": false,
+    "legalNote": "NQ 202/2025 — sáp nhập Kiên Giang + An Giang thành tỉnh An Giang mới. hubEnabled=false đến khi đủ inventory.",
+    "searchKeys": [
+      "nhà ở xã hội An Giang",
+      "NOXH An Giang",
+      "nhà ở xã hội Kiên Giang",
+      "NOXH Kiên Giang"
+    ]
+  }
+]

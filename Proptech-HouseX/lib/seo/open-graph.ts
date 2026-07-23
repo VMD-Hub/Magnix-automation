@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { IMAGE_FALLBACK } from "@/lib/content/safe-image";
+import { HOUSEX_FOOTER_TAGLINE } from "@/lib/brand/housex-logo-assets";
 
-const DEFAULT_OG_ALT = "House X — Smart Tools · Trusted Utility";
+const DEFAULT_OG_ALT = `House X — ${HOUSEX_FOOTER_TAGLINE}`;
 
 export function siteOgImages(
   url: string = IMAGE_FALLBACK,

@@ -22,10 +22,9 @@
 **Dán vào:** Trang thông tin OA → Chỉnh sửa → **Thông tin giới thiệu**
 
 ```
-House X — cổng Proptech tìm nhà thông minh.
-Smart Tools · Trusted Utility
+House X — nền tảng số tìm nhà Việt Nam.
 
-• Tính khoản vay & kiểm tra điều kiện NOXH
+• Wiki nhà ở xã hội · vay mua nhà · tính trả góp
 • Xem dự án minh bạch — một nguồn, ít nhiễu
 • Mở Mini App để dùng công cụ ngay trên Zalo
 
@@ -66,9 +65,9 @@ House X thuộc nền tảng do Công ty TNHH Minh An Land vận hành.
 
 | # | Tên menu | Hành động | URL / Ghi chú |
 |---|----------|-----------|---------------|
-| 1 | Tính khoản vay | Mở link | `https://timnhaxahoi.com/tinh-tra-gop` |
-| 2 | Kiểm tra NOXH | Mở link | `https://timnhaxahoi.com/cong-cu/kiem-tra-noxh` |
-| 3 | Dự án NOXH | Mở link | `https://timnhaxahoi.com/nha-o-xa-hoi` |
+| 1 | Tính trả góp | Mở link | `https://timnhaxahoi.com/tinh-tra-gop` |
+| 2 | Wiki nhà ở xã hội | Mở link | `https://timnhaxahoi.com/wiki-nha-o-xa-hoi` |
+| 3 | Vay mua nhà | Mở link | `https://timnhaxahoi.com/vay-mua-nha` |
 | 4 | Đăng ký CTV | Mở link | `https://timnhaxahoi.com/moi-gioi/dang-ky-ctv` |
 | 5 | Giới thiệu House X | Mở link | `https://timnhaxahoi.com/gioi-thieu` |
 | 6 | Liên hệ | Mở link | `https://timnhaxahoi.com/lien-he` |
@@ -81,7 +80,7 @@ House X thuộc nền tảng do Công ty TNHH Minh An Land vận hành.
 
 > **Giới hạn Zalo: ~250 ký tự** (ô text). Tagline EN + visual để trên **ảnh banner**; phần text chỉ giữ CTA + liên hệ + pháp nhân.
 
-**Bước ảnh:** Upload `housex-miniapp-banner-750x420.png` làm ảnh kèm tin chào (tagline *Smart Tools · Trusted Utility* đã có trên banner).
+**Bước ảnh:** Upload `housex-miniapp-banner-750x420.png` làm ảnh kèm tin chào (tagline *Nền tảng số tìm nhà Việt Nam* — cập nhật asset banner khi có bản mới).
 
 ### Bản dán (≤250 ký tự) — **khuyến nghị**
 
@@ -115,7 +114,7 @@ Bạn có thể:
 Nhắn «TƯ VẤN» hoặc bấm Mini App — chúng tôi phản hồi trong giờ làm việc (T2–T7, 8:00–18:00).
 
 —
-House X · Smart Tools · Trusted Utility
+House X · Nền tảng số tìm nhà Việt Nam
 Vận hành bởi Công ty TNHH Minh An Land
 🌐 timnhaxahoi.com · ☎ 0826 600 800
 ```
@@ -125,8 +124,8 @@ Vận hành bởi Công ty TNHH Minh An Land
 | Từ khóa | Trả lời ngắn |
 |---------|--------------|
 | `TƯ VẤN` | `Cảm ơn bạn! Chuyên viên House X sẽ liên hệ trong giờ làm việc. Bạn có thể mở Mini App để gửi yêu cầu ngay.` |
-| `NOXH` | `Xem hướng dẫn & công cụ NOXH: https://timnhaxahoi.com/nha-o-xa-hoi` |
-| `VAY` | `Tính khoản vay: https://timnhaxahoi.com/tinh-tra-gop` |
+| `NOXH` | `Wiki nhà ở xã hội: https://timnhaxahoi.com/wiki-nha-o-xa-hoi` |
+| `VAY` | `Tính trả góp: https://timnhaxahoi.com/tinh-tra-gop` |
 
 ---
 

@@ -80,4 +80,4 @@ export const PLATFORM_NAMING_SURFACE = {
 } as const;
 
 export const PLATFORM_FOOTER_BLURB =
-  "Công cụ mua nhà thông minh — wiki nhà ở xã hội, tính trả góp, dự án và thông tin minh bạch trên cùng cổng House X." as const;
+  "Nền tảng số tìm nhà Việt Nam — wiki nhà ở xã hội, tính trả góp, dự án và thông tin minh bạch trên cùng cổng House X." as const;

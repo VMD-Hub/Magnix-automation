@@ -26,6 +26,7 @@ Nguồn nghiên cứu (tham khảo công khai, đối chiếu trước publish):
 | **Khác trong KĐT** | Khách sạn–TTTM ~24 tầng; chung cư thương mại tới ~40 tầng; nhà phố / biệt thự |
 | **Pháp lý (tham chiếu)** | Quy hoạch 1/500 đã phê duyệt (theo CĐT / đối tác) |
 | **Tiến độ** | Khởi công ~27/06/2025 · bàn giao tham chiếu ~2028 |
+| **Status catalog** | **`SAP_MO_BAN` / Sắp mở bán** — phân biệt với DTA Happy Home, Solena, Thủ Thiêm Green House (`DANG_BAN`) |
 | **Giá NOXH** | **Chưa công bố** — liên hệ tư vấn House X khi CĐT / Sở mở đợt |
 
 ---

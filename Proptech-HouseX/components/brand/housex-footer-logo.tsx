@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import {
+  HOUSEX_DOMAIN_TAGLINE,
   HOUSEX_FOOTER_LOGO_HEIGHT,
   HOUSEX_FOOTER_LOGO_SRC,
   HOUSEX_FOOTER_LOGO_WIDTH,
@@ -14,27 +15,41 @@ export { HOUSEX_FOOTER_LOGO_SRC };
 type Props = {
   href?: string | null;
   className?: string;
+  showTagline?: boolean;
 };
 
 /** Logo footer — `housex-footer-logo-transparent.png` (nền trong suốt). */
-export function HouseXFooterLogo({ href = null, className }: Props) {
-  const image = (
-    <span className="housex-footer-logo__frame">
-      <Image
-        src={HOUSEX_FOOTER_LOGO_SRC}
-        alt={`${getBrandName()} — ${HOUSEX_FOOTER_TAGLINE}`}
-        width={HOUSEX_FOOTER_LOGO_WIDTH}
-        height={HOUSEX_FOOTER_LOGO_HEIGHT}
-        sizes="(max-width: 640px) 220px, 300px"
-        className="housex-footer-logo__img"
-      />
+export function HouseXFooterLogo({
+  href = null,
+  className,
+  showTagline = true,
+}: Props) {
+  const brand = getBrandName();
+  const lockup = (
+    <span className="housex-footer-logo__lockup">
+      <span className="housex-footer-logo__frame">
+        <Image
+          src={HOUSEX_FOOTER_LOGO_SRC}
+          alt={`${brand} — ${HOUSEX_FOOTER_TAGLINE}`}
+          width={HOUSEX_FOOTER_LOGO_WIDTH}
+          height={HOUSEX_FOOTER_LOGO_HEIGHT}
+          sizes="(max-width: 640px) 220px, 300px"
+          className="housex-footer-logo__img"
+        />
+      </span>
+      {showTagline ? (
+        <span className="housex-footer-logo__copy">
+          <span className="housex-footer-logo__tagline">{HOUSEX_FOOTER_TAGLINE}</span>
+          <span className="housex-footer-logo__domain">{HOUSEX_DOMAIN_TAGLINE}</span>
+        </span>
+      ) : null}
     </span>
   );
 
   if (!href) {
     return (
       <span className={cn("housex-footer-logo inline-flex shrink-0", className)}>
-        {image}
+        {lockup}
       </span>
     );
   }
@@ -46,9 +61,9 @@ export function HouseXFooterLogo({ href = null, className }: Props) {
         "housex-footer-logo inline-flex shrink-0 items-center focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-400",
         className,
       )}
-      aria-label={`${getBrandName()} — Trang chủ`}
+      aria-label={`${brand} — ${HOUSEX_FOOTER_TAGLINE} (${HOUSEX_DOMAIN_TAGLINE})`}
     >
-      {image}
+      {lockup}
     </Link>
   );
 }

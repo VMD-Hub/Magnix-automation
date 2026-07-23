@@ -35,7 +35,7 @@ test("favicon: bo góc theo tỷ lệ ~22%", () => {
 });
 
 test("housex brand: favicon PNG + OA avatar từ mark-only đã duyệt", () => {
-  assert.equal(HOUSEX_FOOTER_TAGLINE, "Smart Tools · Trusted Utility");
+  assert.equal(HOUSEX_FOOTER_TAGLINE, "Nền tảng số tìm nhà Việt Nam");
   assert.ok(existsSync(join(process.cwd(), "app/icon.png")));
   assert.ok(existsSync(join(process.cwd(), "app/apple-icon.png")));
   assert.ok(existsSync(join(process.cwd(), "app/favicon.ico")));

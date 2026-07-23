@@ -23,7 +23,7 @@ export const BRAND_STORY = {
     "Hành trình ấy không bằng phẳng. Chúng tôi thử nghiệm nhiều cách gom tin trùng, điều chỉnh thuật toán phát hiện ảnh không phù hợp, và thiết kế cơ chế bảo vệ liên hệ sao cho thuận tiện nhưng vẫn an toàn. Mỗi lần một người dùng báo một tin sai, mỗi lần một môi giới phản hồi để cải thiện mô tả, nền tảng lại tiến một bước — thực tế hơn, đáng tin hơn.",
     "House X là lời cam kết: thông tin chuẩn — sản phẩm thật. Chúng tôi tin rằng khi thông tin trở nên minh bạch, quyết định của con người sáng suốt hơn, thị trường vận hành hiệu quả hơn, và những giao dịch bất động sản sẽ bớt rủi ro, bớt tổn thương.",
   ],
-  closingTagline: "Smart Tools · Trusted Utility",
+  closingTagline: "Nền tảng số tìm nhà Việt Nam",
 } as const;
 
 export const FOUNDER_NOTE = {

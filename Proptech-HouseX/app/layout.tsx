@@ -15,6 +15,7 @@ import {
 } from "@/lib/content/messaging/brand";
 import { withOpenGraph } from "@/lib/seo/open-graph";
 import { IMAGE_FALLBACK } from "@/lib/content/safe-image";
+import { HOUSEX_FOOTER_TAGLINE } from "@/lib/brand/housex-logo-assets";
 
 const geistSans = Inter({
   variable: "--font-geist-sans",
@@ -28,7 +29,7 @@ const geistMono = Geist_Mono({
 
 const defaultOgImage = {
   url: IMAGE_FALLBACK,
-  alt: "House X — Smart Tools · Trusted Utility",
+  alt: `House X — ${HOUSEX_FOOTER_TAGLINE}`,
 };
 
 export const metadata: Metadata = {

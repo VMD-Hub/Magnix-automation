@@ -369,6 +369,38 @@ html:not(.dark) .lux-hero .lux-glass {
   line-height: 0;
 }
 
+.housex-footer-logo__lockup {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.4rem;
+  line-height: 1;
+}
+
+.housex-footer-logo__copy {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.15rem;
+}
+
+.housex-footer-logo__tagline {
+  display: block;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  line-height: 1.3;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.housex-footer-logo__domain {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: rgba(252, 211, 77, 0.85);
+}
+
 .housex-footer-logo__img {
   display: block;
   height: 3rem;

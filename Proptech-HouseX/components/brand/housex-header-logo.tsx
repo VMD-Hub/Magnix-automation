@@ -6,6 +6,7 @@ import {
   HOUSEX_BRAND_LOGO_MARK_HEIGHT,
   HOUSEX_BRAND_LOGO_MARK_SRC,
   HOUSEX_BRAND_LOGO_MARK_WIDTH,
+  HOUSEX_DOMAIN_TAGLINE,
   HOUSEX_FOOTER_TAGLINE,
 } from "@/lib/brand/housex-logo-assets";
 import { getBrandName } from "@/lib/site-config";
@@ -20,6 +21,8 @@ type Props = {
   priority?: boolean;
   /** `ruby` — thanh tiêu đề; `light` — trang auth nền sáng (chip ruby nhỏ). */
   surface?: "ruby" | "light";
+  /** Hiện tagline VN + domain dưới logo (mặc định bật). */
+  showTagline?: boolean;
 };
 
 /** Logo thanh tiêu đề — khi mở từ Mini App, chạm logo về Mini App (không về home web). */
@@ -28,12 +31,14 @@ export function HouseXHeaderLogo({
   className,
   priority = true,
   surface = "ruby",
+  showTagline = true,
 }: Props) {
+  const brand = getBrandName();
   const image = (
     <span className="housex-header-logo__frame">
       <Image
         src={HOUSEX_BRAND_LOGO_MARK_SRC}
-        alt={`${getBrandName()} — ${HOUSEX_FOOTER_TAGLINE}`}
+        alt={`${brand} — ${HOUSEX_FOOTER_TAGLINE}`}
         width={HOUSEX_BRAND_LOGO_MARK_WIDTH}
         height={HOUSEX_BRAND_LOGO_MARK_HEIGHT}
         priority={priority}
@@ -43,11 +48,23 @@ export function HouseXHeaderLogo({
     </span>
   );
 
+  const lockupInner = (
+    <span className="housex-header-logo__lockup">
+      {image}
+      {showTagline ? (
+        <span className="housex-header-logo__copy">
+          <span className="housex-header-logo__tagline">{HOUSEX_FOOTER_TAGLINE}</span>
+          <span className="housex-header-logo__domain">{HOUSEX_DOMAIN_TAGLINE}</span>
+        </span>
+      ) : null}
+    </span>
+  );
+
   const lockup =
     surface === "light" ? (
-      <span className="housex-header-logo__light-pad">{image}</span>
+      <span className="housex-header-logo__light-pad">{lockupInner}</span>
     ) : (
-      image
+      lockupInner
     );
 
   const logoClass = cn(
@@ -55,6 +72,8 @@ export function HouseXHeaderLogo({
     surface === "light" && "housex-header-logo--light",
     className,
   );
+
+  const ariaLabel = `${brand} — ${HOUSEX_FOOTER_TAGLINE} (${HOUSEX_DOMAIN_TAGLINE})`;
 
   if (!href) {
     return (
@@ -72,21 +91,14 @@ export function HouseXHeaderLogo({
 
   if (href === "/") {
     return (
-      <EmbedHomeLink
-        className={logoClass}
-        ariaLabel={`${getBrandName()} — Trang chủ`}
-      >
+      <EmbedHomeLink className={logoClass} ariaLabel={ariaLabel}>
         {lockup}
       </EmbedHomeLink>
     );
   }
 
   return (
-    <Link
-      href={href}
-      className={logoClass}
-      aria-label={`${getBrandName()} — Trang chủ`}
-    >
+    <Link href={href} className={logoClass} aria-label={ariaLabel}>
       {lockup}
     </Link>
   );
