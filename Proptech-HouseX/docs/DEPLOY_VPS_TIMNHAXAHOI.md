@@ -259,6 +259,15 @@ npm run db:seed:noxh-hanoi
 
 Smoke: `/du-an/nha-o-xa-hoi/ha-noi` + 1 slug (vd. `nha-o-xa-hoi-udic-eco-tower-ha-dinh`). Inventory: `docs/content/HANOI_NOXH_INVENTORY.md`.
 
+### Ops — seed NOXH Đà Nẵng (Phase 5 lite Trung)
+
+```bash
+cd /opt/housex/Proptech-HouseX
+npm run db:seed:noxh-danang
+```
+
+Smoke: `/du-an/nha-o-xa-hoi/da-nang` + `nha-o-xa-hoi-dai-dia-bao-son-tra`. Inventory: `docs/content/DANANG_NOXH_INVENTORY.md`.
+
 ### Ops — IndexNow (Bing + peers)
 
 Google: GSC Request indexing (tay). Bing/Yandex: IndexNow.
