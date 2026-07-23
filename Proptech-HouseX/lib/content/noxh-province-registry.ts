@@ -91,7 +91,7 @@ export const NOXH_PROVINCE_HUB_BASE = "/du-an/nha-o-xa-hoi" as const;
  * P0 — miền Nam / ĐBSCL sau sắp xếp.
  * P0.1 hubEnabled: HCM, Đồng Nai, Cần Thơ, Tây Ninh.
  * P0.2 hub Đồng Tháp + An Giang bật khi có inventory.
- * P0.5 hub Bắc: Hà Nội; hub Trung: Đà Nẵng + Khánh Hòa; hub Nam/Tây Nguyên: Lâm Đồng (inventory).
+ * P0.5 hub Bắc: Hà Nội; hub Trung: Đà Nẵng + Khánh Hòa + Đắk Lắk + Gia Lai; hub Nam/Tây Nguyên: Lâm Đồng.
  */
 export const NOXH_PROVINCE_REGISTRY_P0 = [
   {
@@ -335,6 +335,62 @@ export const NOXH_PROVINCE_REGISTRY_P0 = [
       "NOXH Gia Nghĩa",
     ],
   },
+  {
+    slug: "dak-lak",
+    nameNew: "Đắk Lắk",
+    nameNewVariants: ["Tỉnh Đắk Lắk", "Dak Lak", "Đak Lắk"],
+    aliasesOld: ["Phú Yên"],
+    aliasesOldVariants: [
+      "Phu Yen",
+      "Buôn Ma Thuột",
+      "Buon Ma Thuot",
+      "Tuy Hòa",
+      "Tuy Hoa",
+      "Đông Hòa",
+    ],
+    salesRegion: "central",
+    hubEnabled: true,
+    legalNote:
+      "NQ 202/2025 — sáp nhập Phú Yên + Đắk Lắk thành tỉnh Đắk Lắk mới. Hub P0.5 Trung bật với inventory Buôn Ma Thuột / Tuy Hòa.",
+    searchKeys: [
+      "nhà ở xã hội Đắk Lắk",
+      "NOXH Đắk Lắk",
+      "nhà ở xã hội Buôn Ma Thuột",
+      "NOXH Buôn Ma Thuột",
+      "NOXH Tuy Hòa",
+      "NOXH Phú Yên",
+      "NOXH Ân Phú",
+      "Ecohome Harmony Đắk Lắk",
+    ],
+  },
+  {
+    slug: "gia-lai",
+    nameNew: "Gia Lai",
+    nameNewVariants: ["Tỉnh Gia Lai", "Gia Lai"],
+    aliasesOld: ["Bình Định"],
+    aliasesOldVariants: [
+      "Binh Dinh",
+      "Pleiku",
+      "Quy Nhơn",
+      "Quy Nhon",
+      "An Nhơn",
+      "An Nhon",
+    ],
+    salesRegion: "central",
+    hubEnabled: true,
+    legalNote:
+      "NQ 202/2025 — sáp nhập Bình Định + Gia Lai thành tỉnh Gia Lai mới. Hub P0.5 Trung bật với inventory Pleiku / Quy Nhơn / An Nhơn.",
+    searchKeys: [
+      "nhà ở xã hội Gia Lai",
+      "NOXH Gia Lai",
+      "nhà ở xã hội Quy Nhơn",
+      "NOXH Quy Nhơn",
+      "NOXH Bình Định",
+      "NOXH Pleiku",
+      "Ecohome Nhơn Bình",
+      "NOXH An Nhơn",
+    ],
+  },
 ] as const satisfies readonly NoxhProvinceEntry[];
 
 export type NoxhProvinceSlug = (typeof NOXH_PROVINCE_REGISTRY_P0)[number]["slug"];
@@ -429,6 +485,8 @@ export const NOXH_LEGACY_HUB_REDIRECTS: Readonly<Record<string, NoxhProvinceSlug
     "ninh-thuan": "khanh-hoa",
     "binh-thuan": "lam-dong",
     "dak-nong": "lam-dong",
+    "phu-yen": "dak-lak",
+    "binh-dinh": "gia-lai",
   };
 
 export function resolveLegacyNoxhHubRedirect(

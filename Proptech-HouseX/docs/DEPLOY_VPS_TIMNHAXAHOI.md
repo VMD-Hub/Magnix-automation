@@ -317,6 +317,27 @@ npm run db:seed:noxh-lam-dong
 Smoke: `/du-an/nha-o-xa-hoi/lam-dong` · 308 `/binh-thuan` & `/dak-nong` → hub · `nha-o-xa-hoi-kim-dong-da-lat`.  
 Inventory: `docs/content/LAM_DONG_NOXH_INVENTORY.md`.
 
+### Ops — seed NOXH Đắk Lắk (P0.5 Trung, gồm Phú Yên cũ)
+
+```bash
+cd /opt/housex/Proptech-HouseX
+git pull
+npm run build && pm2 restart housex --update-env
+# đợi ~5–8s
+npm run db:seed:noxh-dak-lak
+```
+
+Smoke: `/du-an/nha-o-xa-hoi/dak-lak` · 308 `/phu-yen` → hub · `nha-o-xa-hoi-an-phu-buon-ma-thuot`.
+
+### Ops — seed NOXH Gia Lai (P0.5 Trung, gồm Bình Định cũ)
+
+```bash
+cd /opt/housex/Proptech-HouseX
+npm run db:seed:noxh-gia-lai
+```
+
+Smoke: `/du-an/nha-o-xa-hoi/gia-lai` · 308 `/binh-dinh` → hub · `nha-o-xa-hoi-ecohome-nhon-binh`.
+
 ### Ops — IndexNow (Bing + peers)
 
 Google: GSC Request indexing (tay). Bing/Yandex: IndexNow.

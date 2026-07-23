@@ -19,9 +19,9 @@ import {
   resolveNoxhProvinceHubEntry,
 } from "../lib/content/noxh-province-hub";
 
-test("P0 registry: 10 entries, 10 hubs enabled (Lâm Đồng on)", () => {
-  assert.equal(NOXH_PROVINCE_REGISTRY_P0.length, 10);
-  assert.equal(listNoxhProvinceHubsEnabled().length, 10);
+test("P0 registry: 12 entries, 12 hubs enabled (Đắk Lắk + Gia Lai on)", () => {
+  assert.equal(NOXH_PROVINCE_REGISTRY_P0.length, 12);
+  assert.equal(listNoxhProvinceHubsEnabled().length, 12);
   assert.ok(getNoxhProvinceBySlug("tp-ho-chi-minh")?.hubEnabled);
   assert.ok(getNoxhProvinceBySlug("ha-noi")?.hubEnabled);
   assert.ok(getNoxhProvinceBySlug("da-nang")?.hubEnabled);
@@ -29,6 +29,8 @@ test("P0 registry: 10 entries, 10 hubs enabled (Lâm Đồng on)", () => {
   assert.ok(getNoxhProvinceBySlug("an-giang")?.hubEnabled);
   assert.ok(getNoxhProvinceBySlug("khanh-hoa")?.hubEnabled);
   assert.ok(getNoxhProvinceBySlug("lam-dong")?.hubEnabled);
+  assert.ok(getNoxhProvinceBySlug("dak-lak")?.hubEnabled);
+  assert.ok(getNoxhProvinceBySlug("gia-lai")?.hubEnabled);
 });
 
 test("resolve canonical: Bình Dương → TP.HCM; Long An → Tây Ninh", () => {
@@ -42,6 +44,9 @@ test("resolve canonical: Bình Dương → TP.HCM; Long An → Tây Ninh", () =>
   assert.equal(resolveNoxhProvinceCanonical("Bình Thuận")?.slug, "lam-dong");
   assert.equal(resolveNoxhProvinceCanonical("Đắk Nông")?.slug, "lam-dong");
   assert.equal(resolveNoxhProvinceCanonical("Đà Lạt")?.slug, "lam-dong");
+  assert.equal(resolveNoxhProvinceCanonical("Phú Yên")?.slug, "dak-lak");
+  assert.equal(resolveNoxhProvinceCanonical("Bình Định")?.slug, "gia-lai");
+  assert.equal(resolveNoxhProvinceCanonical("Quy Nhơn")?.slug, "gia-lai");
 });
 
 test("legacy hub redirects map old slugs", () => {
@@ -79,6 +84,14 @@ test("legacy hub redirect path: enabled → hub; disabled → national", () => {
     resolveNoxhLegacyHubRedirectPath("dak-nong"),
     "/du-an/nha-o-xa-hoi/lam-dong",
   );
+  assert.equal(
+    resolveNoxhLegacyHubRedirectPath("phu-yen"),
+    "/du-an/nha-o-xa-hoi/dak-lak",
+  );
+  assert.equal(
+    resolveNoxhLegacyHubRedirectPath("binh-dinh"),
+    "/du-an/nha-o-xa-hoi/gia-lai",
+  );
 });
 
 test("provincesMatchingNoxhHub includes aliases", () => {
@@ -94,13 +107,15 @@ test("hub entry resolve: enabled only", () => {
   assert.equal(resolveNoxhProvinceHubEntry("an-giang")?.slug, "an-giang");
   assert.equal(resolveNoxhProvinceHubEntry("khanh-hoa")?.slug, "khanh-hoa");
   assert.equal(resolveNoxhProvinceHubEntry("lam-dong")?.slug, "lam-dong");
+  assert.equal(resolveNoxhProvinceHubEntry("dak-lak")?.slug, "dak-lak");
+  assert.equal(resolveNoxhProvinceHubEntry("gia-lai")?.slug, "gia-lai");
   assert.equal(resolveNoxhProvinceHubEntry("binh-duong"), undefined);
   assert.equal(
     listNoxhProvinceHubsEnabled()
       .map((e) => e.slug)
       .sort()
       .join(","),
-    "an-giang,can-tho,da-nang,dong-nai,dong-thap,ha-noi,khanh-hoa,lam-dong,tay-ninh,tp-ho-chi-minh",
+    "an-giang,can-tho,da-nang,dak-lak,dong-nai,dong-thap,gia-lai,ha-noi,khanh-hoa,lam-dong,tay-ninh,tp-ho-chi-minh",
   );
 });
 
@@ -132,6 +147,10 @@ test("infer Prisma salesRegion from province", () => {
   assert.equal(inferPrismaSalesRegionFromProvince("Ninh Thuận"), "CENTRAL");
   assert.equal(inferPrismaSalesRegionFromProvince("Lâm Đồng"), "SOUTH");
   assert.equal(inferPrismaSalesRegionFromProvince("Bình Thuận"), "SOUTH");
+  assert.equal(inferPrismaSalesRegionFromProvince("Đắk Lắk"), "CENTRAL");
+  assert.equal(inferPrismaSalesRegionFromProvince("Gia Lai"), "CENTRAL");
+  assert.equal(inferPrismaSalesRegionFromProvince("Phú Yên"), "CENTRAL");
+  assert.equal(inferPrismaSalesRegionFromProvince("Bình Định"), "CENTRAL");
 });
 
 test("plan salesRegion backfill: null → set; mismatch needs force", () => {
