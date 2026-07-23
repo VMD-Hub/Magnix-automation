@@ -8,6 +8,7 @@ import {
 } from "@/lib/content/article-routes";
 import { LEGACY_NOXH_TOPIC_REDIRECTS } from "@/lib/content/articles/noxh-handbook-tags";
 import {
+  getNoxhProvinceBySlug,
   NOXH_LEGACY_HUB_REDIRECTS,
   NOXH_PROVINCE_HUB_BASE,
   resolveNoxhLegacyHubRedirectPath,
@@ -67,17 +68,23 @@ function seoPermanentRedirect(req: NextRequest): NextResponse | null {
     );
   }
 
-  // Hub tỉnh NOXH — slug địa giới cũ → canonical (308)
-  const noxhProvinceLegacy = path.match(
-    /^\/du-an\/nha-o-xa-hoi\/([^/]+)\/?$/,
-  );
-  if (noxhProvinceLegacy?.[1]) {
-    const legacySlug = noxhProvinceLegacy[1];
-    if (legacySlug in NOXH_LEGACY_HUB_REDIRECTS) {
+  // Hub tỉnh NOXH — slug địa giới cũ → canonical (308);
+  // hubEnabled=false / slug lạ → HTTP 404 (Next soft-200 không đủ).
+  const noxhProvinceSeg = path.match(/^\/du-an\/nha-o-xa-hoi\/([^/]+)\/?$/);
+  if (noxhProvinceSeg?.[1]) {
+    const provinceSlug = noxhProvinceSeg[1];
+    if (provinceSlug in NOXH_LEGACY_HUB_REDIRECTS) {
       return redirectPath(
         req,
-        resolveNoxhLegacyHubRedirectPath(legacySlug) || NOXH_PROVINCE_HUB_BASE,
+        resolveNoxhLegacyHubRedirectPath(provinceSlug) || NOXH_PROVINCE_HUB_BASE,
       );
+    }
+    const entry = getNoxhProvinceBySlug(provinceSlug);
+    if (!entry?.hubEnabled) {
+      return new NextResponse("Not Found", {
+        status: 404,
+        headers: { "content-type": "text/plain; charset=utf-8" },
+      });
     }
   }
 
