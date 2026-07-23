@@ -120,3 +120,9 @@ Property Search Console `timnhaxahoi.com` → **URL Inspection** → **Request i
 *Ngày request: _______________*
 
 Không dùng Google Indexing API cho trang catalog thường.
+
+### IndexNow (Bing) — sau deploy key file
+
+- Key: `https://timnhaxahoi.com/4d0ed13bac455b1df1eb45dc3dcecd25.txt`
+- Submit: `cd Proptech-HouseX && npm run seo:indexnow -- --apply` (chi tiết `DEPLOY_VPS_TIMNHAXAHOI.md`)
+- Google vẫn GSC tay (bạn đã làm); IndexNow = Bing + peers.

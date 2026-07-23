@@ -1,5 +1,8 @@
 import { prisma } from "@/lib/prisma";
 import type { ArticleAdminSaveInput } from "@/lib/validation/article-admin";
+import { articlePath } from "@/lib/content/article-routes";
+import { notifyIndexNowUrls } from "@/lib/seo/indexnow";
+import { getSiteUrl } from "@/lib/site-config";
 
 export async function listArticlesForAdmin() {
   return prisma.article.findMany({
@@ -64,10 +67,15 @@ function articleData(input: ArticleAdminSaveInput) {
   };
 }
 
+function notifyArticleIfPublished(slug: string, status: string) {
+  if (status !== "PUBLISHED") return;
+  notifyIndexNowUrls([`${getSiteUrl()}${articlePath(slug)}`]);
+}
+
 export async function createArticleFromAdmin(input: ArticleAdminSaveInput) {
   const tagIds = await resolveTagIds(input.tagSlugs);
 
-  return prisma.article.create({
+  const created = await prisma.article.create({
     data: {
       ...articleData(input),
       tags: {
@@ -82,6 +90,8 @@ export async function createArticleFromAdmin(input: ArticleAdminSaveInput) {
       projects: { include: { project: true } },
     },
   });
+  notifyArticleIfPublished(created.slug, created.status);
+  return created;
 }
 
 export async function updateArticleFromAdmin(
@@ -90,7 +100,7 @@ export async function updateArticleFromAdmin(
 ) {
   const tagIds = await resolveTagIds(input.tagSlugs);
 
-  return prisma.$transaction(async (tx) => {
+  const updated = await prisma.$transaction(async (tx) => {
     await tx.articleTagLink.deleteMany({ where: { articleId: id } });
     await tx.articleProject.deleteMany({ where: { articleId: id } });
 
@@ -109,6 +119,8 @@ export async function updateArticleFromAdmin(
       },
     });
   });
+  notifyArticleIfPublished(updated.slug, updated.status);
+  return updated;
 }
 
 export async function deleteArticleFromAdmin(id: string) {

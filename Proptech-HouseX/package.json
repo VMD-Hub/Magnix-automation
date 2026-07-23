@@ -30,6 +30,7 @@
     "db:verify:landings": "node --env-file=.env --import tsx scripts/verify-landings-db.ts",
     "db:backfill:noxh-snapshot": "node --env-file=.env --import tsx scripts/backfill-noxh-wizard-snapshot-from-sheet.ts",
     "db:backfill:sales-region": "node --env-file=.env --import tsx scripts/backfill-project-sales-region.ts",
+    "seo:indexnow": "node --env-file=.env --import tsx scripts/submit-indexnow.ts",
     "db:setup": "npm run db:up && npm run db:push && npm run db:seed",
     "db:studio": "prisma studio",
     "ops:unbind-zalo-phone": "node --env-file=.env --import tsx scripts/unbind-zalo-test-phone.ts",

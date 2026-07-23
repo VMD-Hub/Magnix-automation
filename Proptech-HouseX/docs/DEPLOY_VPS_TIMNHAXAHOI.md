@@ -248,6 +248,20 @@ npm run db:backfill:sales-region -- --apply   # ghi null → inferred
 
 Province ngoài registry (vd. Hà Nội trước khi mở Bắc) → bỏ qua, log `no_infer`.
 
+### Ops — IndexNow (Bing + peers)
+
+Google: GSC Request indexing (tay). Bing/Yandex: IndexNow.
+
+1. Deploy xong, xác nhận key file 200:
+   `curl -s https://timnhaxahoi.com/4d0ed13bac455b1df1eb45dc3dcecd25.txt`
+2. Submit hub + silo ưu tiên:
+```bash
+cd /opt/housex/Proptech-HouseX
+npm run seo:indexnow -- --apply
+# hoặc chỉ 4 hub: npm run seo:indexnow -- --apply --preset=hubs
+```
+Bài viết admin status `PUBLISHED` cũng fire-and-forget IndexNow. Tắt: `INDEXNOW_ENABLED=false`.
+
 ---
 
 ## 7. Backup (nên bật sau go-live)
