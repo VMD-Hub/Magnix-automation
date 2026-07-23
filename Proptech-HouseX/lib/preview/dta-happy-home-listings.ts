@@ -79,7 +79,7 @@ export function buildDtaHappyHomeListingDetail(
     propertyType: "can_ho",
     price: new Prisma.Decimal(unit.priceVnd),
     area: unit.netAreaM2,
-    province: "Đồng Nai",
+    province: "TP. Đồng Nai",
     district: "Nhơn Trạch",
     ward: "Phước An",
     address: "Nguyễn Văn Cừ, Khu đô thị DTA City — Block A10",
