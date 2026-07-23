@@ -33,6 +33,33 @@ export function inferPrismaSalesRegionFromProvince(
   return toPrismaSalesRegion(entry?.salesRegion);
 }
 
+/**
+ * Kế hoạch backfill ops: chỉ set khi null (hoặc --force khi khác suy luận).
+ * Province ngoài registry → skip (không xóa salesRegion hiện có).
+ */
+export function planProjectSalesRegionBackfill(
+  province: string,
+  current: PrismaSalesRegion | null,
+  opts?: { force?: boolean },
+):
+  | { action: "set"; next: PrismaSalesRegion }
+  | { action: "skip"; reason: "already_ok" | "no_infer" | "keep_existing" } {
+  const inferred = inferPrismaSalesRegionFromProvince(province);
+  if (!inferred) {
+    return { action: "skip", reason: "no_infer" };
+  }
+  if (current === inferred) {
+    return { action: "skip", reason: "already_ok" };
+  }
+  if (current == null) {
+    return { action: "set", next: inferred };
+  }
+  if (opts?.force) {
+    return { action: "set", next: inferred };
+  }
+  return { action: "skip", reason: "keep_existing" };
+}
+
 export type NoxhProvinceEntry = {
   /** Segment URL hub: /du-an/nha-o-xa-hoi/{slug} */
   slug: string;

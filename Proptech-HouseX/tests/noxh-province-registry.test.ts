@@ -9,6 +9,7 @@ import {
   NOXH_LEGACY_HUB_REDIRECTS,
   NOXH_PROVINCE_HUB_BASE,
   NOXH_PROVINCE_REGISTRY_P0,
+  planProjectSalesRegionBackfill,
   provincesMatchingNoxhHub,
   resolveLegacyNoxhHubRedirect,
   resolveNoxhLegacyHubRedirectPath,
@@ -102,4 +103,27 @@ test("infer Prisma salesRegion from province", () => {
   assert.equal(inferPrismaSalesRegionFromProvince("Bình Dương"), "SOUTH");
   assert.equal(inferPrismaSalesRegionFromProvince("Long An"), "SOUTH");
   assert.equal(inferPrismaSalesRegionFromProvince("Hà Nội"), null);
+});
+
+test("plan salesRegion backfill: null → set; mismatch needs force", () => {
+  assert.deepEqual(planProjectSalesRegionBackfill("Bình Dương", null), {
+    action: "set",
+    next: "SOUTH",
+  });
+  assert.deepEqual(planProjectSalesRegionBackfill("Bình Dương", "SOUTH"), {
+    action: "skip",
+    reason: "already_ok",
+  });
+  assert.deepEqual(planProjectSalesRegionBackfill("Bình Dương", "NORTH"), {
+    action: "skip",
+    reason: "keep_existing",
+  });
+  assert.deepEqual(
+    planProjectSalesRegionBackfill("Bình Dương", "NORTH", { force: true }),
+    { action: "set", next: "SOUTH" },
+  );
+  assert.deepEqual(planProjectSalesRegionBackfill("Hà Nội", null), {
+    action: "skip",
+    reason: "no_infer",
+  });
 });

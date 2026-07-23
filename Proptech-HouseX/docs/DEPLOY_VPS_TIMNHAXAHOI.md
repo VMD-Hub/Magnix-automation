@@ -235,6 +235,19 @@ npm run go-live:check-env-files   # bắt .env.production ghi đè DATABASE_URL
 pm2 restart housex --update-env
 ```
 
+### Ops — backfill `Project.salesRegion` (dual-geo)
+
+Suy từ `province` → registry P0 (`SOUTH` / …). Không đụng `leadLane` / public copy. Dry-run mặc định:
+
+```bash
+cd /opt/housex/Proptech-HouseX
+npm run db:backfill:sales-region              # xem would_set
+npm run db:backfill:sales-region -- --apply   # ghi null → inferred
+# npm run db:backfill:sales-region -- --apply --force  # ghi cả khi đã có giá trị khác
+```
+
+Province ngoài registry (vd. Hà Nội trước khi mở Bắc) → bỏ qua, log `no_infer`.
+
 ---
 
 ## 7. Backup (nên bật sau go-live)
