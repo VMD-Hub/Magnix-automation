@@ -102,6 +102,11 @@ import {
   buildNoxhLongAnListings,
   buildNoxhLongAnMock,
 } from "@/lib/preview/noxh-long-an-projects";
+import {
+  buildHoGuomXanhMock,
+  buildHoGuomXanhPreviewListings,
+  HGX_PROJECT_SLUG,
+} from "@/lib/preview/ho-guom-xanh-mock";
 
 type DemoEntry = {
   build: () => ProjectDetail;
@@ -145,6 +150,10 @@ const DEMO_REGISTRY: Record<string, DemoEntry> = {
   [NLHP_PROJECT_SLUG]: {
     build: buildNamLongHongPhatMock,
     listings: buildNamLongHongPhatPreviewListings,
+  },
+  [HGX_PROJECT_SLUG]: {
+    build: buildHoGuomXanhMock,
+    listings: buildHoGuomXanhPreviewListings,
   },
   [SOLENA_GREEN_TOWN_SLUG]: {
     build: buildSolenaGreenTownMock,

@@ -156,6 +156,27 @@ export const NOXH_STOCK_BY_SLUG: Record<string, NoxhStockPack> = {
       { url: IMG.thuThiemDay, caption: "An cư gần KCN" },
     ],
   ),
+  "nha-o-xa-hoi-ho-guom-xanh-thuan-an": pack(
+    IMG.urbanGolden,
+    "Nhà ở xã hội Hồ Gươm Xanh Thuận An Bình Dương — chung cư NOXH 5–12 tầng",
+    [
+      {
+        url: IMG.urbanGolden,
+        caption:
+          "Phối cảnh nhà ở xã hội Hồ Gươm Xanh — phân khu chung cư NOXH 5–12 tầng Thuận An",
+      },
+      {
+        url: IMG.metroHub,
+        caption:
+          "Kết nối nhà ở xã hội Hồ Gươm Xanh — Quốc lộ 13 Đại lộ Bình Dương cửa ngõ TP.HCM",
+      },
+      {
+        url: IMG.skylineDay,
+        caption:
+          "Tiện ích nhà ở xã hội Hồ Gươm Xanh — hồ cảnh quan công viên nội khu Thuận An",
+      },
+    ],
+  ),
 };
 
 /**

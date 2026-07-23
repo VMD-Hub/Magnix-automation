@@ -49,6 +49,8 @@ import {
 } from "../lib/preview/nam-long-hong-phat-mock";
 import { NAM_LONG_HP_IMAGES } from "../lib/content/nam-long-hong-phat-images";
 import { seedNoxhLongAnProjects } from "../lib/preview/seed-noxh-long-an";
+import { seedHoGuomXanhNoxh } from "../lib/preview/seed-ho-guom-xanh";
+import { HGX_PROJECT_SLUG } from "../lib/preview/ho-guom-xanh-mock";
 import { allNoxhLongAnSlugs } from "../lib/preview/noxh-long-an-projects";
 import { seedHousexRiversideUnits } from "../lib/preview/seed-project-units";
 import { seedHousexRiversideUnitBookings } from "../lib/preview/seed-unit-bookings";
@@ -955,6 +957,9 @@ async function main() {
   // NOXH Long An — LA Home, Mỹ Hạnh, The Ori, Hậu Nghĩa, Phước Vĩnh Tây, Phú An Thạnh.
   await seedNoxhLongAnProjects(prisma);
 
+  // NOXH — Hồ Gươm Xanh Thuận An (phân khu trong KĐT TBS Land).
+  await seedHoGuomXanhNoxh(prisma);
+
   // Căn hộ thương mại — Solena Green Town (nội dung tham khảo solena.com.vn).
   await seedSolenaGreenTown(prisma);
 
@@ -1525,6 +1530,7 @@ Mức giá chính thức: 23.251.398 đồng/m² (đã VAT, chưa gồm 2% phí 
   console.log("  NOXH mẫu: /du-an/noxh-kdc-chang-song-phuoc-tan");
   console.log(`  NOXH mẫu: /du-an/${NL2_PROJECT_SLUG}`);
   console.log(`  NOXH mẫu: /du-an/${NLHP_PROJECT_SLUG}`);
+  console.log(`  NOXH mẫu: /du-an/${HGX_PROJECT_SLUG}`);
   for (const slug of allNoxhLongAnSlugs()) {
     console.log(`  NOXH Long An: /du-an/${slug}`);
   }
