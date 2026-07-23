@@ -290,6 +290,18 @@ export function resolveLegacyNoxhHubRedirect(
   return NOXH_LEGACY_HUB_REDIRECTS[legacySlug];
 }
 
+/**
+ * Path 308 cho slug hub cũ.
+ * Target hubEnabled → hub mới; không thì về hub quốc gia.
+ */
+export function resolveNoxhLegacyHubRedirectPath(legacySlug: string): string {
+  const target = resolveLegacyNoxhHubRedirect(legacySlug);
+  if (!target) return NOXH_PROVINCE_HUB_BASE;
+  const entry = getNoxhProvinceBySlug(target);
+  if (!entry?.hubEnabled) return NOXH_PROVINCE_HUB_BASE;
+  return noxhProvinceHubPath(target);
+}
+
 export type DualAddressInput = {
   /** Địa chỉ / đơn vị theo địa giới mới (canonical) */
   addressNew: string;

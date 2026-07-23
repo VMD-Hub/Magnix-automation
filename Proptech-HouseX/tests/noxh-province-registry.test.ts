@@ -7,10 +7,17 @@ import {
   inferPrismaSalesRegionFromProvince,
   listNoxhProvinceHubsEnabled,
   NOXH_LEGACY_HUB_REDIRECTS,
+  NOXH_PROVINCE_HUB_BASE,
   NOXH_PROVINCE_REGISTRY_P0,
+  provincesMatchingNoxhHub,
   resolveLegacyNoxhHubRedirect,
+  resolveNoxhLegacyHubRedirectPath,
   resolveNoxhProvinceCanonical,
 } from "../lib/content/noxh-province-registry";
+import {
+  buildNoxhProvinceHubFaqs,
+  resolveNoxhProvinceHubEntry,
+} from "../lib/content/noxh-province-hub";
 
 test("P0 registry: 6 entries, 4 hubs enabled", () => {
   assert.equal(NOXH_PROVINCE_REGISTRY_P0.length, 6);
@@ -31,6 +38,54 @@ test("legacy hub redirects map old slugs", () => {
   assert.equal(resolveLegacyNoxhHubRedirect("binh-duong"), "tp-ho-chi-minh");
   assert.equal(resolveLegacyNoxhHubRedirect("long-an"), "tay-ninh");
   assert.equal(NOXH_LEGACY_HUB_REDIRECTS["binh-phuoc"], "dong-nai");
+});
+
+test("legacy hub redirect path: enabled → hub; disabled → national", () => {
+  assert.equal(
+    resolveNoxhLegacyHubRedirectPath("binh-duong"),
+    "/du-an/nha-o-xa-hoi/tp-ho-chi-minh",
+  );
+  assert.equal(
+    resolveNoxhLegacyHubRedirectPath("long-an"),
+    "/du-an/nha-o-xa-hoi/tay-ninh",
+  );
+  assert.equal(
+    resolveNoxhLegacyHubRedirectPath("tien-giang"),
+    NOXH_PROVINCE_HUB_BASE,
+  );
+  assert.equal(
+    resolveNoxhLegacyHubRedirectPath("kien-giang"),
+    NOXH_PROVINCE_HUB_BASE,
+  );
+});
+
+test("provincesMatchingNoxhHub includes aliases", () => {
+  const hcm = provincesMatchingNoxhHub("tp-ho-chi-minh");
+  assert.ok(hcm.includes("TP. Hồ Chí Minh"));
+  assert.ok(hcm.includes("Bình Dương"));
+  assert.ok(hcm.includes("Bà Rịa - Vũng Tàu"));
+});
+
+test("hub entry resolve: enabled only", () => {
+  assert.equal(resolveNoxhProvinceHubEntry("tp-ho-chi-minh")?.slug, "tp-ho-chi-minh");
+  assert.equal(resolveNoxhProvinceHubEntry("dong-thap"), undefined);
+  assert.equal(resolveNoxhProvinceHubEntry("binh-duong"), undefined);
+  assert.equal(
+    listNoxhProvinceHubsEnabled()
+      .map((e) => e.slug)
+      .sort()
+      .join(","),
+    "can-tho,dong-nai,tay-ninh,tp-ho-chi-minh",
+  );
+});
+
+test("hub FAQ mentions aliases without salesRegion", () => {
+  const entry = resolveNoxhProvinceHubEntry("tp-ho-chi-minh");
+  assert.ok(entry);
+  const faqs = buildNoxhProvinceHubFaqs(entry!);
+  const blob = JSON.stringify(faqs);
+  assert.match(blob, /Bình Dương/);
+  assert.doesNotMatch(blob, /salesRegion|SOUTH|leadLane/i);
 });
 
 test("dual address: legacy province yields two lines", () => {

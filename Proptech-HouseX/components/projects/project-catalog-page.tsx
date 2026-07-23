@@ -28,6 +28,10 @@ import {
   PROJECT_CATALOG_BASE_PATH,
   type ProjectCatalogDbType,
 } from "@/lib/content/project-catalog-routes";
+import {
+  listNoxhProvinceHubsEnabled,
+  noxhProvinceHubPath,
+} from "@/lib/content/noxh-province-registry";
 import { PROJECT_TYPE_LABEL } from "@/lib/format";
 import { cn } from "@/lib/ui/cn";
 
@@ -78,6 +82,26 @@ export function ProjectCatalogPage({ projectType, page }: Props) {
           label={PROJECT_TYPE_LABEL.NHA_O_XA_HOI}
         />
       </div>
+
+      {isNoxhCatalog ? (
+        <div className="mb-8">
+          <p className="mb-2 text-sm font-medium text-slate-700">
+            Theo tỉnh / thành (địa giới mới)
+          </p>
+          <div className="flex flex-wrap gap-2">
+            {listNoxhProvinceHubsEnabled().map((hub) => (
+              <Link
+                key={hub.slug}
+                href={noxhProvinceHubPath(hub.slug)}
+                prefetch
+                className="rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-sm font-medium text-emerald-900 hover:border-emerald-300 hover:bg-emerald-100"
+              >
+                {hub.nameNew}
+              </Link>
+            ))}
+          </div>
+        </div>
+      ) : null}
 
       <Suspense key={gridKey} fallback={<ProjectCatalogGridFallback />}>
         <ProjectCatalogGrid

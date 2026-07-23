@@ -261,13 +261,18 @@ export function listDemoProjectCards(params: {
 export function listCatalogProjectCards(params: {
   projectType?: "THUONG_MAI" | "NHA_O_XA_HOI";
   province?: string;
+  provinces?: string[];
   district?: string;
 } = {}): ProjectCardData[] {
   return getCatalogSlugs(params.projectType)
     .map((slug) => DEMO_REGISTRY[slug]?.build())
     .filter((p): p is ProjectDetail => p != null)
     .filter((p) => {
-      if (params.province && p.province !== params.province) return false;
+      if (params.provinces?.length) {
+        if (!params.provinces.includes(p.province)) return false;
+      } else if (params.province && p.province !== params.province) {
+        return false;
+      }
       if (params.district && p.district !== params.district) return false;
       return true;
     })
@@ -278,6 +283,7 @@ export function listCatalogProjectCards(params: {
 export function listGoLiveProjectCards(params: {
   projectType?: "THUONG_MAI" | "NHA_O_XA_HOI";
   province?: string;
+  provinces?: string[];
   district?: string;
 } = {}): ProjectCardData[] {
   return listCatalogProjectCards(params);

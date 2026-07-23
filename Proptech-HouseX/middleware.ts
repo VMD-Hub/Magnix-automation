@@ -7,6 +7,11 @@ import {
   topicPath,
 } from "@/lib/content/article-routes";
 import { LEGACY_NOXH_TOPIC_REDIRECTS } from "@/lib/content/articles/noxh-handbook-tags";
+import {
+  NOXH_LEGACY_HUB_REDIRECTS,
+  NOXH_PROVINCE_HUB_BASE,
+  resolveNoxhLegacyHubRedirectPath,
+} from "@/lib/content/noxh-province-registry";
 
 function forwardWithPathname(req: NextRequest) {
   const requestHeaders = new Headers(req.headers);
@@ -60,6 +65,20 @@ function seoPermanentRedirect(req: NextRequest): NextResponse | null {
       req,
       `/thiet-ke-thi-cong-noi-that/${path.slice("/noi-that/".length)}`,
     );
+  }
+
+  // Hub tỉnh NOXH — slug địa giới cũ → canonical (308)
+  const noxhProvinceLegacy = path.match(
+    /^\/du-an\/nha-o-xa-hoi\/([^/]+)\/?$/,
+  );
+  if (noxhProvinceLegacy?.[1]) {
+    const legacySlug = noxhProvinceLegacy[1];
+    if (legacySlug in NOXH_LEGACY_HUB_REDIRECTS) {
+      return redirectPath(
+        req,
+        resolveNoxhLegacyHubRedirectPath(legacySlug) || NOXH_PROVINCE_HUB_BASE,
+      );
+    }
   }
 
   const bareChuDe = pathname.match(/^\/chu-de\/([^/]+)\/?$/);
@@ -139,5 +158,6 @@ export const config = {
     "/chu-de/:slug",
     "/tin-tuc/:slug",
     "/tin-tuc/chu-de/:tag",
+    "/du-an/nha-o-xa-hoi/:province",
   ],
 };

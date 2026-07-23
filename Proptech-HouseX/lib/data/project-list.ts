@@ -19,6 +19,8 @@ import { unstable_cache } from "next/cache";
 
 export type ProjectListParams = {
   province?: string;
+  /** Nhiều nhãn province (canonical + alias) — Prisma `in`. */
+  provinces?: string[];
   district?: string;
   projectType?: "THUONG_MAI" | "NHA_O_XA_HOI";
   page?: number;
@@ -90,14 +92,29 @@ function paginateCatalog(
 /** Sau lần timeout đầu, bỏ qua DB để chuyển trang nhanh (dev / Postgres tắt). */
 let dbReachable: boolean | null = null;
 
+function resolveProvinceFilter(params: ProjectListParams): {
+  province?: string;
+  provinces?: string[];
+} {
+  if (params.provinces && params.provinces.length > 0) {
+    return { provinces: params.provinces };
+  }
+  if (params.province) {
+    return { province: params.province };
+  }
+  return {};
+}
+
 function catalogFallback(
   params: ProjectListParams,
   page: number,
   pageSize: number,
 ): ProjectListResult {
+  const provinceFilter = resolveProvinceFilter(params);
   const catalogItems = listCatalogProjectCards({
     projectType: params.projectType,
-    province: params.province,
+    province: provinceFilter.province,
+    provinces: provinceFilter.provinces,
     district: params.district,
   });
   if (catalogItems.length > 0) {
@@ -111,7 +128,17 @@ function catalogFallback(
     };
   }
 
-  const demoItems = listDemoProjectCards({ projectType: params.projectType });
+  const demoItems = listDemoProjectCards({
+    projectType: params.projectType,
+  }).filter((p) => {
+    if (provinceFilter.provinces?.length) {
+      return provinceFilter.provinces.includes(p.province);
+    }
+    if (provinceFilter.province) {
+      return p.province === provinceFilter.province;
+    }
+    return true;
+  });
   return {
     items: demoItems,
     pagination: {
@@ -135,10 +162,15 @@ async function listProjectsUncached(
     return catalogFallback(params, page, pageSize);
   }
 
+  const provinceFilter = resolveProvinceFilter(params);
   const where = {
     deletedAt: null,
     slug: { notIn: [...INTERNAL_DEMO_PROJECT_SLUGS] },
-    ...(params.province ? { province: params.province } : {}),
+    ...(provinceFilter.provinces
+      ? { province: { in: provinceFilter.provinces } }
+      : provinceFilter.province
+        ? { province: provinceFilter.province }
+        : {}),
     ...(params.district ? { district: params.district } : {}),
     ...(params.projectType ? { projectType: params.projectType } : {}),
   };
@@ -215,6 +247,7 @@ async function listProjectsUncached(
 const listProjectsCached = unstable_cache(
   async (
     province: string,
+    provincesKey: string,
     district: string,
     projectType: string,
     page: number,
@@ -222,6 +255,9 @@ const listProjectsCached = unstable_cache(
   ) =>
     listProjectsUncached({
       province: province || undefined,
+      provinces: provincesKey
+        ? provincesKey.split("\u0001").filter(Boolean)
+        : undefined,
       district: district || undefined,
       projectType: (projectType || undefined) as
         | ProjectListParams["projectType"]
@@ -239,8 +275,10 @@ export async function listProjects(
 ): Promise<ProjectListResult> {
   const page = Math.max(1, params.page ?? 1);
   const pageSize = Math.min(100, Math.max(1, params.pageSize ?? 12));
+  const provincesKey = (params.provinces ?? []).join("\u0001");
   return listProjectsCached(
     params.province ?? "",
+    provincesKey,
     params.district ?? "",
     params.projectType ?? "",
     page,

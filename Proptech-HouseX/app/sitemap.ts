@@ -5,6 +5,10 @@ import {
   COMMERCIAL_CATALOG_PATH,
   NOXH_CATALOG_PATH,
 } from "@/lib/content/project-catalog-routes";
+import {
+  listNoxhProvinceHubsEnabled,
+  noxhProvinceHubPath,
+} from "@/lib/content/noxh-province-registry";
 import { toolSitemapPaths } from "@/lib/content/housex-tools-registry";
 import { listExpertSlugs } from "@/lib/content/editorial-trust";
 import { getCatalogSlugs } from "@/lib/seed/catalog-project-slugs";
@@ -49,6 +53,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${BASE}/cho-thue`, changeFrequency: "hourly", priority: 0.9 },
     { url: `${BASE}/du-an`, changeFrequency: "daily", priority: 0.9 },
     { url: `${BASE}${NOXH_CATALOG_PATH}`, changeFrequency: "daily", priority: 0.92 },
+    ...listNoxhProvinceHubsEnabled().map((hub) => ({
+      url: `${BASE}${noxhProvinceHubPath(hub.slug)}`,
+      changeFrequency: "daily" as const,
+      priority: 0.9,
+    })),
     { url: `${BASE}${COMMERCIAL_CATALOG_PATH}`, changeFrequency: "daily", priority: 0.88 },
     { url: `${BASE}/tin-tuc`, changeFrequency: "daily", priority: 0.85 },
     { url: `${BASE}${NOXH_HANDBOOK_PATH}`, changeFrequency: "daily", priority: 0.85 },
