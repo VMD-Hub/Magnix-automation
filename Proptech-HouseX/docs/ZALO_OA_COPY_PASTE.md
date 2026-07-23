@@ -23,6 +23,7 @@
 
 ```
 House X — nền tảng số tìm nhà Việt Nam.
+House X = website timnhaxahoi.com (cùng thương hiệu trên web & Zalo).
 
 • Wiki nhà ở xã hội · vay mua nhà · tính trả góp
 • Xem dự án minh bạch — một nguồn, ít nhiễu
@@ -71,6 +72,17 @@ House X thuộc nền tảng do Công ty TNHH Minh An Land vận hành.
 | 4 | Đăng ký CTV | Mở link | `https://timnhaxahoi.com/moi-gioi/dang-ky-ctv` |
 | 5 | Giới thiệu House X | Mở link | `https://timnhaxahoi.com/gioi-thieu` |
 | 6 | Liên hệ | Mở link | `https://timnhaxahoi.com/lien-he` |
+
+**Hub NOXH theo tỉnh** (tuỳ chọn — chỉ thêm nếu còn slot menu; không bắt buộc dán hết):
+
+| Tỉnh | URL |
+|------|-----|
+| TP.HCM | `https://timnhaxahoi.com/du-an/nha-o-xa-hoi/tp-ho-chi-minh` |
+| Đồng Nai | `https://timnhaxahoi.com/du-an/nha-o-xa-hoi/dong-nai` |
+| Cần Thơ | `https://timnhaxahoi.com/du-an/nha-o-xa-hoi/can-tho` |
+| Tây Ninh | `https://timnhaxahoi.com/du-an/nha-o-xa-hoi/tay-ninh` |
+
+Hoặc keyword auto-reply `HCM` / `ĐỒNG NAI` trỏ 1 URL hub tương ứng.
 
 ---
 
@@ -126,6 +138,7 @@ Vận hành bởi Công ty TNHH Minh An Land
 | `TƯ VẤN` | `Cảm ơn bạn! Chuyên viên House X sẽ liên hệ trong giờ làm việc. Bạn có thể mở Mini App để gửi yêu cầu ngay.` |
 | `NOXH` | `Wiki nhà ở xã hội: https://timnhaxahoi.com/wiki-nha-o-xa-hoi` |
 | `VAY` | `Tính trả góp: https://timnhaxahoi.com/tinh-tra-gop` |
+| `HCM` | `NOXH TP.HCM: https://timnhaxahoi.com/du-an/nha-o-xa-hoi/tp-ho-chi-minh` |
 
 ---
 

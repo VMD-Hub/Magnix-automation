@@ -17,6 +17,10 @@ import {
   NOXH_CATALOG_PATH,
   NOXH_CATALOG_TITLE,
 } from "@/lib/content/messaging/noxh-public";
+import {
+  listNoxhProvinceHubsEnabled,
+  noxhProvinceHubPath,
+} from "@/lib/content/noxh-province-registry";
 import { getSiteUrl } from "@/lib/site-config";
 import { withOpenGraph } from "@/lib/seo/open-graph";
 
@@ -87,6 +91,25 @@ export default async function CamNangNoxhHubPage({ searchParams }: PageProps) {
                 Xem {NOXH_CATALOG_TITLE} đang mở bán →
               </Link>
             </p>
+            {page === 1 ? (
+              <div className="mt-6">
+                <p className="text-sm font-medium text-slate-700">
+                  Dự án theo tỉnh
+                </p>
+                <div className="mt-2 flex flex-wrap gap-2">
+                  {listNoxhProvinceHubsEnabled().map((hub) => (
+                    <Link
+                      key={hub.slug}
+                      href={noxhProvinceHubPath(hub.slug)}
+                      prefetch
+                      className="rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-sm font-medium text-emerald-900 hover:border-emerald-300 hover:bg-emerald-100"
+                    >
+                      {hub.nameNew}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            ) : null}
           </div>
         </div>
 

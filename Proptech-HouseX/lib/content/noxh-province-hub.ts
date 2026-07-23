@@ -81,6 +81,16 @@ export function buildNoxhProvinceHubFaqs(
   }
 
   faqs.push({
+    q: "Điều kiện mua nhà ở xã hội xem ở đâu?",
+    blocks: [
+      {
+        type: "p",
+        text: "Wiki nhà ở xã hội trên House X (/wiki-nha-o-xa-hoi) tóm tắt điều kiện, hồ sơ và quy trình theo văn bản công bố. Sau khi tự kiểm tra sơ bộ, bạn có thể mở dự án trên hub tỉnh này để đăng ký tư vấn — form giống nhau trên mọi miền.",
+      },
+    ],
+  });
+
+  faqs.push({
     q: "Xem tất cả nhà ở xã hội miền Nam ở đâu?",
     blocks: [
       {

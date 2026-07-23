@@ -100,4 +100,23 @@ Cấu hình trong `next.config.mjs` (`rewrites` mới→FS + `redirects` cũ→m
 
 Block **Bắt đầu đúng chỗ** trên `/` (`NamingSurface`): Wiki nhà ở xã hội · Vay mua nhà · Tính trả góp hàng tháng · Thiết kế & thi công — href canonical Phase C.
 
-**Trạng thái:** Phase A–D shipped · **Phase E = đo lại probe** (câu hỏi dùng tên mới) · subdomain wiki để sau.
+**Trạng thái:** Phase A–D shipped · Phase E probe đo lại · hub tỉnh NOXH P0.1 live · subdomain wiki để sau.
+
+### Phase 6 lite — GSC Request indexing (ops, tay)
+
+Property Search Console `timnhaxahoi.com` → **URL Inspection** → **Request indexing** (sau khi sitemap đã Success):
+
+| Hub tỉnh | URL |
+|----------|-----|
+| TP.HCM | `https://timnhaxahoi.com/du-an/nha-o-xa-hoi/tp-ho-chi-minh` |
+| Đồng Nai | `https://timnhaxahoi.com/du-an/nha-o-xa-hoi/dong-nai` |
+| Cần Thơ | `https://timnhaxahoi.com/du-an/nha-o-xa-hoi/can-tho` |
+| Tây Ninh | `https://timnhaxahoi.com/du-an/nha-o-xa-hoi/tay-ninh` |
+
+- [ ] 4 URL trên đã Request indexing
+- [ ] Sitemap `https://timnhaxahoi.com/sitemap.xml` vẫn Success (có 4 hub)
+- [ ] Bing: để sync từ GSC nếu đang import
+
+*Ngày request: _______________*
+
+Không dùng Google Indexing API cho trang catalog thường.

@@ -21,6 +21,7 @@ import { getNoxhEditorialTrust } from "@/lib/content/editorial-trust";
 import { NOXH_ELIGIBILITY_FAQ } from "@/lib/content/noxh-eligibility-faq";
 import {
   NOXH_CATALOG_FAQ_HEADING,
+  NOXH_HANDBOOK_PATH,
 } from "@/lib/content/messaging/noxh-public";
 import {
   COMMERCIAL_CATALOG_PATH,
@@ -100,6 +101,16 @@ export function ProjectCatalogPage({ projectType, page }: Props) {
               </Link>
             ))}
           </div>
+          <p className="mt-3 text-sm text-slate-600">
+            Điều kiện, hồ sơ và quy trình:{" "}
+            <Link
+              href={NOXH_HANDBOOK_PATH}
+              prefetch
+              className="font-semibold text-brand-700 hover:underline"
+            >
+              Wiki nhà ở xã hội
+            </Link>
+          </p>
         </div>
       ) : null}
 

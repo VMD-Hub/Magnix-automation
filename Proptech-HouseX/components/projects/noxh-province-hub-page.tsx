@@ -13,15 +13,16 @@ import {
 import { PreloadBannerImage } from "@/components/seo/preload-banner-image";
 import { catalogBannerSources } from "@/lib/brand/banner-responsive";
 import { PROJECT_CATALOG_BANNERS } from "@/lib/brand/project-catalog-banners";
-import {
-  buildNoxhProvinceHubFaqs,
-} from "@/lib/content/noxh-province-hub";
+import { buildNoxhProvinceHubFaqs } from "@/lib/content/noxh-province-hub";
 import type { NoxhProvinceEntry } from "@/lib/content/noxh-province-registry";
+import {
+  provincesMatchingNoxhHub,
+} from "@/lib/content/noxh-province-registry";
 import {
   NOXH_CATALOG_PATH,
   PROJECT_CATALOG_BASE_PATH,
 } from "@/lib/content/project-catalog-routes";
-import { provincesMatchingNoxhHub } from "@/lib/content/noxh-province-registry";
+import { NOXH_HANDBOOK_PATH } from "@/lib/content/messaging/noxh-public";
 
 type Props = {
   entry: NoxhProvinceEntry;
@@ -78,19 +79,58 @@ export function NoxhProvinceHubPage({ entry, page }: Props) {
         </ol>
       </nav>
 
-      <header className="mb-8 max-w-3xl">
+      <header className="mb-6 max-w-3xl">
         <h1 className="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
           Nhà ở xã hội {entry.nameNew}
         </h1>
-        <p className="mt-3 text-base leading-relaxed text-slate-600">
-          Danh mục dự án nhà ở xã hội tại {entry.nameNew} mới nhất 2026 trên
-          House X
+        <p className="mt-2 text-sm font-medium text-emerald-800">
+          Cập nhật mới nhất 2026 — danh mục theo địa giới mới
           {entry.aliasesOld.length > 0
-            ? ` — gồm khu vực quen gọi ${entry.aliasesOld.join(", ")}`
+            ? ` (còn tìm theo tên quen gọi: ${entry.aliasesOld.join(", ")})`
             : ""}
-          . Chọn dự án để xem giá, tiến độ và điều kiện mua.
+          .
+        </p>
+        <p className="mt-3 text-base leading-relaxed text-slate-600">
+          Danh mục dự án nhà ở xã hội tại {entry.nameNew} trên House X. Chọn
+          dự án để xem giá, tiến độ và điều kiện mua.
         </p>
       </header>
+
+      {page === 1 ? (
+        <nav
+          aria-label="Liên kết hỗ trợ"
+          className="mb-8 flex flex-wrap gap-x-4 gap-y-2 text-sm"
+        >
+          <Link
+            href={NOXH_HANDBOOK_PATH}
+            prefetch
+            className="font-semibold text-brand-700 hover:underline"
+          >
+            Wiki nhà ở xã hội
+          </Link>
+          <Link
+            href="/vay-mua-nha"
+            prefetch
+            className="font-semibold text-brand-700 hover:underline"
+          >
+            Vay mua nhà
+          </Link>
+          <Link
+            href="/tinh-tra-gop"
+            prefetch
+            className="font-semibold text-brand-700 hover:underline"
+          >
+            Tính trả góp
+          </Link>
+          <Link
+            href={NOXH_CATALOG_PATH}
+            prefetch
+            className="font-semibold text-brand-700 hover:underline"
+          >
+            Tất cả NOXH miền Nam
+          </Link>
+        </nav>
+      ) : null}
 
       <Suspense
         key={`${entry.slug}-${page}`}
