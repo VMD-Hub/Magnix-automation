@@ -355,6 +355,19 @@ Smoke: `/du-an/nha-o-xa-hoi/tp-ho-chi-minh` · 308 `/binh-duong` `/ba-ria-vung-t
 `nha-o-xa-hoi-happy-home-long-phuoc` · `nha-o-xa-hoi-phuc-dat-tan-uyen` · `nha-o-xa-hoi-eco-home-1-phu-my`.  
 Inventory: `docs/content/HCM_MEGA_NOXH_INVENTORY.md`.
 
+### Ops — seed NOXH Bắc Ninh (P0.5 Bắc, gồm Bắc Giang cũ)
+
+```bash
+cd /opt/housex/Proptech-HouseX
+git pull
+npm run build && pm2 restart housex --update-env
+# đợi ~5–8s
+npm run db:seed:noxh-bac-ninh
+```
+
+Smoke: `/du-an/nha-o-xa-hoi/bac-ninh` · 308 `/bac-giang` → hub · `nha-o-xa-hoi-cat-tuong-smart-city`.  
+Inventory: `docs/content/BAC_NINH_NOXH_INVENTORY.md`.
+
 ### Ops — IndexNow (Bing + peers)
 
 Google: GSC Request indexing (tay). Bing/Yandex: IndexNow.

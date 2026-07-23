@@ -91,7 +91,7 @@ export const NOXH_PROVINCE_HUB_BASE = "/du-an/nha-o-xa-hoi" as const;
  * P0 — miền Nam / ĐBSCL sau sắp xếp.
  * P0.1 hubEnabled: HCM, Đồng Nai, Cần Thơ, Tây Ninh.
  * P0.2 hub Đồng Tháp + An Giang bật khi có inventory.
- * P0.5 hub Bắc: Hà Nội; hub Trung: Đà Nẵng + Khánh Hòa + Đắk Lắk + Gia Lai; hub Nam/Tây Nguyên: Lâm Đồng.
+ * P0.5 hub Bắc: Hà Nội + Bắc Ninh; hub Trung: Đà Nẵng + Khánh Hòa + Đắk Lắk + Gia Lai; hub Nam/Tây Nguyên: Lâm Đồng.
  */
 export const NOXH_PROVINCE_REGISTRY_P0 = [
   {
@@ -255,6 +255,33 @@ export const NOXH_PROVINCE_REGISTRY_P0 = [
       "NOXH Long Biên",
       "NOXH Thanh Trì",
       "NOXH Mê Linh",
+    ],
+  },
+  {
+    slug: "bac-ninh",
+    nameNew: "Bắc Ninh",
+    nameNewVariants: ["Tỉnh Bắc Ninh", "Bac Ninh"],
+    aliasesOld: ["Bắc Giang"],
+    aliasesOldVariants: [
+      "Bac Giang",
+      "Yên Phong",
+      "Quế Võ",
+      "Tiên Du",
+      "Từ Sơn",
+    ],
+    salesRegion: "north",
+    hubEnabled: true,
+    legalNote:
+      "NQ 202/2025 — sáp nhập Bắc Giang + Bắc Ninh thành tỉnh Bắc Ninh mới. Hub P0.5 Bắc bật với inventory NOXH Yên Phong / Quế Võ / VSIP.",
+    searchKeys: [
+      "nhà ở xã hội Bắc Ninh",
+      "NOXH Bắc Ninh",
+      "nhà ở xã hội Bắc Giang",
+      "NOXH Bắc Giang",
+      "NOXH Yên Phong",
+      "NOXH Quế Võ",
+      "Cát Tường Smart City",
+      "NOXH VSIP Bắc Ninh",
     ],
   },
   {
@@ -491,6 +518,7 @@ export const NOXH_LEGACY_HUB_REDIRECTS: Readonly<Record<string, NoxhProvinceSlug
     "dak-nong": "lam-dong",
     "phu-yen": "dak-lak",
     "binh-dinh": "gia-lai",
+    "bac-giang": "bac-ninh",
   };
 
 export function resolveLegacyNoxhHubRedirect(

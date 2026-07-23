@@ -139,6 +139,32 @@
     ]
   },
   {
+    "slug": "bac-ninh",
+    "nameNew": "Bắc Ninh",
+    "nameNewVariants": ["Tỉnh Bắc Ninh", "Bac Ninh"],
+    "aliasesOld": ["Bắc Giang"],
+    "aliasesOldVariants": [
+      "Bac Giang",
+      "Yên Phong",
+      "Quế Võ",
+      "Tiên Du",
+      "Từ Sơn"
+    ],
+    "salesRegion": "north",
+    "hubEnabled": true,
+    "legalNote": "NQ 202/2025 — sáp nhập Bắc Giang + Bắc Ninh thành tỉnh Bắc Ninh mới. Hub P0.5 Bắc bật với inventory NOXH Yên Phong / Quế Võ / VSIP.",
+    "searchKeys": [
+      "nhà ở xã hội Bắc Ninh",
+      "NOXH Bắc Ninh",
+      "nhà ở xã hội Bắc Giang",
+      "NOXH Bắc Giang",
+      "NOXH Yên Phong",
+      "NOXH Quế Võ",
+      "Cát Tường Smart City",
+      "NOXH VSIP Bắc Ninh"
+    ]
+  },
+  {
     "slug": "da-nang",
     "nameNew": "Đà Nẵng",
     "nameNewVariants": ["Thành phố Đà Nẵng", "TP. Đà Nẵng", "Da Nang"],
