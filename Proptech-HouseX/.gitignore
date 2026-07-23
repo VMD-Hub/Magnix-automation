@@ -49,3 +49,6 @@ next-env.d.ts
 
 # Local/VPS smoke & KPI reports (IDs only — still keep out of git)
 /reports/
+
+# Logo patch backups (scripts/patch-housex-logo-domain-tagline.ts)
+/public/brand/*.pre-domain-tagline.bak.png

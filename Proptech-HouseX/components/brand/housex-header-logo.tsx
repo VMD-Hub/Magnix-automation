@@ -21,7 +21,7 @@ type Props = {
   priority?: boolean;
   /** `ruby` — thanh tiêu đề; `light` — trang auth nền sáng (chip ruby nhỏ). */
   surface?: "ruby" | "light";
-  /** Hiện tagline VN + domain dưới logo (mặc định bật). */
+  /** Hiện tagline VN dưới logo (domain nằm trong mark PNG). */
   showTagline?: boolean;
 };
 
@@ -54,7 +54,6 @@ export function HouseXHeaderLogo({
       {showTagline ? (
         <span className="housex-header-logo__copy">
           <span className="housex-header-logo__tagline">{HOUSEX_FOOTER_TAGLINE}</span>
-          <span className="housex-header-logo__domain">{HOUSEX_DOMAIN_TAGLINE}</span>
         </span>
       ) : null}
     </span>

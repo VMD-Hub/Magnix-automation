@@ -41,8 +41,11 @@ export const HOUSEX_BRAND_LOGO_PAPER = "#ebebe6" as const;
 
 export const HOUSEX_HEADER_PAPER_TILE_SIZE_PX = 128;
 
-/** Tagline VN dưới logo — neo ngành + phạm vi (AIO / SEO). */
+/** Tagline VN dưới logo (HTML) — neo ngành + phạm vi (AIO / SEO). */
 export const HOUSEX_FOOTER_TAGLINE = "Nền tảng số tìm nhà Việt Nam" as const;
 
-/** Domain công khai dưới logo — neo entity House X = timnhaxahoi.com (AIO). */
+/**
+ * Domain công khai — nằm trong mark PNG (thay tagline EN cũ).
+ * Vẫn export cho aria-label / copy; không render thêm dòng domain dưới logo.
+ */
 export const HOUSEX_DOMAIN_TAGLINE = "timnhaxahoi.com" as const;

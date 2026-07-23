@@ -40,7 +40,6 @@ export function HouseXFooterLogo({
       {showTagline ? (
         <span className="housex-footer-logo__copy">
           <span className="housex-footer-logo__tagline">{HOUSEX_FOOTER_TAGLINE}</span>
-          <span className="housex-footer-logo__domain">{HOUSEX_DOMAIN_TAGLINE}</span>
         </span>
       ) : null}
     </span>
