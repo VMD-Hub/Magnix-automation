@@ -39,6 +39,15 @@ const PRESERVE_KEYS = new Set([
   'GOOGLE_GEMINI_API_KEY',
   'GOOGLE_AI_API_KEY',
   'GENERATIVE_LANGUAGE_API_KEY',
+  // Page Publish / House X / Telegram — không để file generated trống ghi đè
+  'CRON_SECRET',
+  'HOUSEX_PUBLIC_URL',
+  'MAGNIX_WEBHOOK_TOKEN',
+  'META_PAGE_ID',
+  'META_PAGE_ACCESS_TOKEN',
+  'TELEGRAM_BOT_TOKEN',
+  'TELEGRAM_CHAT_ID_OWNER',
+  'TELEGRAM_CHAT_ID_OPS',
 ]);
 
 function parseEnv(text) {
@@ -105,7 +114,16 @@ if (remoteEnv.status === 0 && remoteEnv.stdout?.trim()) {
   }
   console.log('Merged with remote /root/n8n.env (preserved encryption key + extras)');
 } else if (remoteEnv.stderr?.includes('Permission denied') || remoteEnv.status !== 0) {
-  console.warn('SSH batch không khả dụng — dùng file generated thuần (chạy scp thủ công nếu cần giữ N8N_ENCRYPTION_KEY)');
+  console.warn('SSH batch không khả dụng — không merge được /root/n8n.env hiện tại.');
+  if (process.env.N8N_ENV_FORCE_OVERWRITE !== '1') {
+    console.error(
+      'ABORT: scp file generated thuần sẽ ghi đè mất CRON_SECRET / META_PAGE_* / TELEGRAM_*.\n' +
+        '  → Chạy scp khi SSH password OK, hoặc set N8N_ENV_FORCE_OVERWRITE=1 nếu cố ý.\n' +
+        '  → Khôi phục: ls /root/backup/n8n/n8n.env-* rồi cp bản cũ → /root/n8n.env + recreate container.'
+    );
+    process.exit(1);
+  }
+  console.warn('N8N_ENV_FORCE_OVERWRITE=1 — tiếp tục với file generated thuần');
 }
 
 fs.writeFileSync(
