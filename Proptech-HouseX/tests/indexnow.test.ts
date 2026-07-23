@@ -3,7 +3,10 @@ import test from "node:test";
 import {
   buildIndexNowPayload,
   INDEXNOW_KEY_COMMITTED,
+  INDEXNOW_PRODUCTION_SITE_URL,
+  isLocalSiteUrl,
   normalizeIndexNowUrlList,
+  resolveIndexNowSiteUrl,
 } from "../lib/seo/indexnow";
 
 test("normalizeIndexNowUrlList: relative + absolute same host", () => {
@@ -40,4 +43,21 @@ test("buildIndexNowPayload includes committed key location", () => {
   assert.equal(payload!.urlList.length, 1);
   if (prev === undefined) delete process.env.INDEXNOW_KEY;
   else process.env.INDEXNOW_KEY = prev;
+});
+
+test("resolveIndexNowSiteUrl falls back from localhost to production", () => {
+  assert.equal(isLocalSiteUrl("http://localhost:3000"), true);
+  const prevSite = process.env.NEXT_PUBLIC_SITE_URL;
+  const prevIndex = process.env.INDEXNOW_SITE_URL;
+  process.env.NEXT_PUBLIC_SITE_URL = "http://localhost:3000";
+  delete process.env.INDEXNOW_SITE_URL;
+  assert.equal(resolveIndexNowSiteUrl(), INDEXNOW_PRODUCTION_SITE_URL);
+  assert.equal(
+    resolveIndexNowSiteUrl("http://127.0.0.1:3000"),
+    INDEXNOW_PRODUCTION_SITE_URL,
+  );
+  if (prevSite === undefined) delete process.env.NEXT_PUBLIC_SITE_URL;
+  else process.env.NEXT_PUBLIC_SITE_URL = prevSite;
+  if (prevIndex === undefined) delete process.env.INDEXNOW_SITE_URL;
+  else process.env.INDEXNOW_SITE_URL = prevIndex;
 });

@@ -4,6 +4,7 @@
  *
  * Key file (ownership): `public/{key}.txt` → https://timnhaxahoi.com/{key}.txt
  * Env: INDEXNOW_KEY (optional override), INDEXNOW_ENABLED=false để tắt submit.
+ * Site submit: INDEXNOW_SITE_URL hoặc production host — không bao giờ POST localhost.
  */
 import { listNoxhProvinceHubsEnabled, noxhProvinceHubPath } from "@/lib/content/noxh-province-registry";
 import { NOXH_HANDBOOK_PATH } from "@/lib/content/article-routes";
@@ -15,6 +16,9 @@ export const INDEXNOW_KEY_COMMITTED = "4d0ed13bac455b1df1eb45dc3dcecd25";
 
 export const INDEXNOW_ENDPOINT = "https://api.indexnow.org/indexnow";
 
+/** Host public thật — IndexNow từ chối / vô nghĩa với localhost. */
+export const INDEXNOW_PRODUCTION_SITE_URL = "https://timnhaxahoi.com";
+
 export function getIndexNowKey(): string {
   return process.env.INDEXNOW_KEY?.trim() || INDEXNOW_KEY_COMMITTED;
 }
@@ -23,7 +27,39 @@ export function isIndexNowEnabled(): boolean {
   return process.env.INDEXNOW_ENABLED !== "false";
 }
 
-export function indexNowKeyLocation(siteUrl = getSiteUrl()): string {
+export function isLocalSiteUrl(siteUrl: string): boolean {
+  try {
+    const host = new URL(siteUrl).hostname;
+    return (
+      host === "localhost" ||
+      host === "127.0.0.1" ||
+      host === "0.0.0.0" ||
+      host.endsWith(".local")
+    );
+  } catch {
+    return true;
+  }
+}
+
+/**
+ * URL gốc dùng khi submit IndexNow.
+ * Ưu tiên: opts.siteUrl → INDEXNOW_SITE_URL → getSiteUrl() (nếu không local) → production.
+ */
+export function resolveIndexNowSiteUrl(explicit?: string): string {
+  const candidates = [
+    explicit?.trim(),
+    process.env.INDEXNOW_SITE_URL?.trim(),
+    getSiteUrl(),
+  ].filter(Boolean) as string[];
+
+  for (const raw of candidates) {
+    const normalized = raw.replace(/\/$/, "");
+    if (!isLocalSiteUrl(normalized)) return normalized;
+  }
+  return INDEXNOW_PRODUCTION_SITE_URL;
+}
+
+export function indexNowKeyLocation(siteUrl = resolveIndexNowSiteUrl()): string {
   const key = getIndexNowKey();
   return `${siteUrl.replace(/\/$/, "")}/${key}.txt`;
 }
@@ -38,7 +74,7 @@ export type IndexNowPayload = {
 /** Chuẩn hóa → absolute URL cùng host; bỏ trùng / lệch host. */
 export function normalizeIndexNowUrlList(
   urls: string[],
-  siteUrl = getSiteUrl(),
+  siteUrl = resolveIndexNowSiteUrl(),
 ): string[] {
   const base = siteUrl.replace(/\/$/, "");
   const host = new URL(base).hostname;
@@ -71,7 +107,10 @@ export function buildIndexNowPayload(
   urls: string[],
   opts?: { siteUrl?: string },
 ): IndexNowPayload | null {
-  const siteUrl = opts?.siteUrl ?? getSiteUrl();
+  const siteUrl = resolveIndexNowSiteUrl(opts?.siteUrl);
+  if (isLocalSiteUrl(siteUrl)) {
+    return null;
+  }
   const urlList = normalizeIndexNowUrlList(urls, siteUrl);
   if (urlList.length === 0) return null;
   const key = getIndexNowKey();
@@ -90,7 +129,9 @@ export function buildIndexNowPayload(
 }
 
 /** Preset discovery ưu tiên — hub tỉnh P0.1 + silo NOXH. */
-export function indexNowPriorityUrls(siteUrl = getSiteUrl()): string[] {
+export function indexNowPriorityUrls(
+  siteUrl = resolveIndexNowSiteUrl(),
+): string[] {
   const base = siteUrl.replace(/\/$/, "");
   const hubs = listNoxhProvinceHubsEnabled().map(
     (h) => `${base}${noxhProvinceHubPath(h.slug)}`,
@@ -116,7 +157,7 @@ export type IndexNowSubmitResult = {
 
 /**
  * POST IndexNow. Không throw — caller log / ignore.
- * 200 / 202 = chấp nhận; 204 = đã biết URL.
+ * 200 / 202 = chấp nhận; 204 = đã biết URL; 429 = rate limit — đợi rồi thử lại.
  */
 export async function submitIndexNowUrls(
   urls: string[],
@@ -126,7 +167,16 @@ export async function submitIndexNowUrls(
     return { ok: true, skipped: true, submitted: 0 };
   }
 
-  const payload = buildIndexNowPayload(urls, { siteUrl: opts?.siteUrl });
+  const siteUrl = resolveIndexNowSiteUrl(opts?.siteUrl);
+  if (isLocalSiteUrl(siteUrl)) {
+    return {
+      ok: false,
+      submitted: 0,
+      error: "localhost_site_url",
+    };
+  }
+
+  const payload = buildIndexNowPayload(urls, { siteUrl });
   if (!payload) {
     return { ok: false, submitted: 0, error: "empty_url_list" };
   }
@@ -140,12 +190,21 @@ export async function submitIndexNowUrls(
     });
     const body = await res.text().catch(() => "");
     const ok = res.status === 200 || res.status === 202 || res.status === 204;
+    let error: string | undefined;
+    if (!ok) {
+      if (res.status === 429) {
+        error =
+          "rate_limited_429 — đợi 10–30 phút rồi --apply lại (host production)";
+      } else {
+        error = `http_${res.status}`;
+      }
+    }
     return {
       ok,
       status: res.status,
       submitted: payload.urlList.length,
       body: body.slice(0, 500),
-      error: ok ? undefined : `http_${res.status}`,
+      error,
     };
   } catch (err) {
     return {

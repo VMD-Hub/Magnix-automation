@@ -252,14 +252,15 @@ Province ngoài registry (vd. Hà Nội trước khi mở Bắc) → bỏ qua, l
 
 Google: GSC Request indexing (tay). Bing/Yandex: IndexNow.
 
-1. Deploy xong, xác nhận key file 200:
+1. Deploy xong, đợi app sẵn (tránh 502 ngay sau pm2 restart), xác nhận key file:
    `curl -s https://timnhaxahoi.com/4d0ed13bac455b1df1eb45dc3dcecd25.txt`
-2. Submit hub + silo ưu tiên:
+2. Submit hub + silo (script tự dùng `https://timnhaxahoi.com` — không POST localhost dù `.env` có `NEXT_PUBLIC_SITE_URL=localhost`):
 ```bash
 cd /opt/housex/Proptech-HouseX
 npm run seo:indexnow -- --apply
 # hoặc chỉ 4 hub: npm run seo:indexnow -- --apply --preset=hubs
 ```
+429 TooManyRequests → đợi 10–30 phút rồi chạy lại (lần submit localhost trước cũng bị tính quota).
 Bài viết admin status `PUBLISHED` cũng fire-and-forget IndexNow. Tắt: `INDEXNOW_ENABLED=false`.
 
 ---
