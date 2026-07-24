@@ -154,7 +154,11 @@ function asHttpUrlOrId(raw: string, idToUrl: (id: string) => string): string {
 /**
  * Link công khai Zalo OA (footer / Kết nối).
  * Không dùng ZALO_APP_ID (đó là App developers, không phải link OA).
+ * Fallback công khai: OA House X (không phải secret).
  */
+const DEFAULT_ZALO_OA_PUBLIC_URL =
+  "https://zalo.me/240893358011883819" as const;
+
 export function getHouseXZaloOaPublicUrl(): string | null {
   const full = firstNonEmpty(
     process.env.NEXT_PUBLIC_SOCIAL_ZALO_URL,
@@ -168,8 +172,11 @@ export function getHouseXZaloOaPublicUrl(): string | null {
     process.env.NEXT_PUBLIC_ZALO_OA_ID,
     process.env.ZALO_OA_ID,
   );
-  if (!id) return null;
-  return asHttpUrlOrId(id, (oaId) => `https://zalo.me/${oaId}`);
+  if (id) {
+    return asHttpUrlOrId(id, (oaId) => `https://zalo.me/${oaId}`);
+  }
+
+  return DEFAULT_ZALO_OA_PUBLIC_URL;
 }
 
 /**

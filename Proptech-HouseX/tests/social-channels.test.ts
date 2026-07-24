@@ -50,6 +50,14 @@ describe("getHouseXZaloOaPublicUrl", () => {
     process.env.NEXT_PUBLIC_SOCIAL_ZALO_URL = "https://zalo.me/housex";
     assert.equal(getHouseXZaloOaPublicUrl(), "https://zalo.me/housex");
   });
+
+  it("fallback OA House X khi không có env", () => {
+    clearSocialEnv();
+    assert.equal(
+      getHouseXZaloOaPublicUrl(),
+      "https://zalo.me/240893358011883819",
+    );
+  });
 });
 
 describe("getHouseXFacebookPageUrl", () => {
