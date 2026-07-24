@@ -52,29 +52,30 @@ export default function Page() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
       />
 
-      <ToolsBreadcrumb
-        items={[
-          { label: "Trang chủ", href: "/" },
-          { label: "Công cụ", href: "/cong-cu" },
-          { label: "Tính khoản vay" },
-        ]}
-      />
+      <div className="print:hidden">
+        <ToolsBreadcrumb
+          items={[
+            { label: "Trang chủ", href: "/" },
+            { label: "Công cụ", href: "/cong-cu" },
+            { label: "Tính khoản vay" },
+          ]}
+        />
 
-      <ToolsPageHero
-        kicker={LOAN_CALC_COPY.kicker}
-        title={LOAN_CALC_COPY.title}
-        subtitle={LOAN_CALC_COPY.subtitle}
-        image={LOAN_CALC_BANNER.jpg}
-        imageWebp={LOAN_CALC_BANNER.webp}
-        imageAlt={LOAN_CALC_BANNER.alt}
-        objectPosition={LOAN_CALC_BANNER.objectPosition}
-        primaryCta={{ label: LOAN_CALC_COPY.primaryCta, href: LOAN_CALC_COPY.primaryCtaHref }}
-        secondaryCta={{
-          label: LOAN_CALC_COPY.secondaryCta,
-          href: LOAN_CALC_COPY.secondaryCtaHref,
-        }}
-      />
-
+        <ToolsPageHero
+          kicker={LOAN_CALC_COPY.kicker}
+          title={LOAN_CALC_COPY.title}
+          subtitle={LOAN_CALC_COPY.subtitle}
+          image={LOAN_CALC_BANNER.jpg}
+          imageWebp={LOAN_CALC_BANNER.webp}
+          imageAlt={LOAN_CALC_BANNER.alt}
+          objectPosition={LOAN_CALC_BANNER.objectPosition}
+          primaryCta={{ label: LOAN_CALC_COPY.primaryCta, href: LOAN_CALC_COPY.primaryCtaHref }}
+          secondaryCta={{
+            label: LOAN_CALC_COPY.secondaryCta,
+            href: LOAN_CALC_COPY.secondaryCtaHref,
+          }}
+        />
+      </div>
       <div className="mb-8 flex gap-3 overflow-x-auto pb-1 [-webkit-overflow-scrolling:touch] sm:grid sm:grid-cols-3 sm:gap-4 sm:overflow-visible sm:pb-0 print:hidden">
         {LOAN_CALC_TRUST_STATS.map((s) => (
           <div

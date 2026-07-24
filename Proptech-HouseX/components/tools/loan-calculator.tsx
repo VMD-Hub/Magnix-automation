@@ -16,10 +16,16 @@ import {
   type MilestoneInput,
   type PaymentScheduleMode,
 } from "@/lib/finance/loan-disbursement";
+import { ToolPrintSheet } from "@/components/tools/print/tool-print-sheet";
 import { formatVnd } from "@/lib/format";
+import { getSiteHostname } from "@/lib/site-config";
 
 function groupVnd(n: number): string {
   return n.toLocaleString("vi-VN");
+}
+
+function loanMethodLabel(method: LoanMethod): string {
+  return method === "ANNUITY" ? "Trả góp đều (EMI)" : "Dư nợ giảm dần";
 }
 
 function Field({
@@ -142,11 +148,35 @@ export function LoanCalculator() {
     ? (disbursementResult?.schedule ?? [])
     : (disbursementResult?.schedule ?? []).slice(0, 12);
 
+  const printSummary = useMemo(
+    () => [
+      { label: "Giá bất động sản", value: formatVnd(price) ?? "—" },
+      { label: "Số tiền vay", value: formatVnd(principal) ?? "—" },
+      { label: "Tỷ lệ vay", value: `${loanPct}%` },
+      { label: "Lãi suất", value: `${rate}%/năm` },
+      { label: "Kỳ hạn", value: `${years} năm` },
+      { label: "Phương thức tính lãi", value: loanMethodLabel(method) },
+    ],
+    [price, principal, loanPct, rate, years, method],
+  );
+
+  const printSubtitle = `Giá ${formatVnd(price)} · Vay ${loanPct}% · ${years} năm · ${rate}%/năm · ${loanMethodLabel(method)}`;
+
+  const handlePrintPdf = useCallback(() => {
+    setShowAllRows(true);
+    // Prefetch QR để sẵn khi hộp thoại in mở.
+    const img = new window.Image();
+    img.src = "/api/brand/zalo-oa-qr";
+    requestAnimationFrame(() => {
+      window.setTimeout(() => window.print(), 80);
+    });
+  }, []);
+
   const inputCls =
     "mt-1 h-11 w-full rounded-xl border border-slate-200 px-3 text-base text-slate-900 outline-none focus:border-brand-400 focus:ring-2 focus:ring-brand-100 sm:text-sm";
 
   return (
-    <div className="grid min-w-0 gap-6 lg:grid-cols-[minmax(0,380px)_minmax(0,1fr)]">
+    <div className="loan-calc-print-root grid min-w-0 gap-6 lg:grid-cols-[minmax(0,380px)_minmax(0,1fr)]">
       <div className="min-w-0 space-y-4 proptech-ruby-soft-panel p-4 sm:p-5 print:hidden">
         <Field label="Giá trị bất động sản" hint={`${groupVnd(price)} đ`}>
           <VndInput
@@ -298,24 +328,21 @@ export function LoanCalculator() {
       </div>
 
       <div className="min-w-0 space-y-5">
-        <div className="hidden print:block">
-          <h1 className="text-2xl font-bold text-slate-900">
-            HouseX — Lịch trả nợ vay mua bất động sản
-          </h1>
-          <p className="mt-1 text-sm text-slate-600">
-            Giá {formatVnd(price)} · Vay tối đa {loanPct}% · {years} năm ·{" "}
-            {rate}%/năm
-          </p>
-        </div>
+        <ToolPrintSheet
+          title="Bảng tính lãi suất trả góp"
+          subtitle={printSubtitle}
+          summary={printSummary}
+        />
 
         {disbursementResult?.bankCapExceeded ? (
-          <p className="rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-900">
+          <p className="rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-900 print:hidden">
             Tổng giải ngân NH vượt {loanPct}% — hệ thống đã cắt bớt ở đợt cuối
             theo trần vay.
           </p>
         ) : null}
 
-        <div className="grid grid-cols-1 gap-3 min-[420px]:grid-cols-2 lg:grid-cols-4">
+        {/* Stat cards: màn hình; PDF dùng khối summary trong ToolPrintSheet */}
+        <div className="grid grid-cols-1 gap-3 min-[420px]:grid-cols-2 lg:grid-cols-4 print:hidden">
           {useDisbursement && disbursementResult ? (
             <>
               <Stat
@@ -366,18 +393,18 @@ export function LoanCalculator() {
             type="button"
             variant="outline"
             size="sm"
-            onClick={() => window.print()}
+            onClick={handlePrintPdf}
             className="shrink-0"
           >
             <Icon.FileCheck className="text-base" /> Tải PDF
           </Button>
         </div>
 
-        <div className="rounded-2xl border border-slate-200">
-          <p className="border-b border-slate-100 px-3 py-2 text-xs text-slate-500 sm:hidden">
+        <div className="rounded-2xl border border-slate-200 print:border-0 print:rounded-none">
+          <p className="border-b border-slate-100 px-3 py-2 text-xs text-slate-500 sm:hidden print:hidden">
             Vuốt ngang để xem đủ cột
           </p>
-          <div className="max-h-[28rem] overflow-auto [-webkit-overflow-scrolling:touch] print:max-h-none print:overflow-visible">
+          <div className="tool-print-table-wrap max-h-[28rem] overflow-auto [-webkit-overflow-scrolling:touch] print:max-h-none print:overflow-visible">
             {useDisbursement && disbursementResult ? (
               <table className="w-full min-w-[48rem] text-right text-sm">
                 <thead className="sticky top-0 bg-slate-100 text-xs text-slate-600">
@@ -486,9 +513,9 @@ export function LoanCalculator() {
           ) : null}
         </div>
 
-        <p className="text-xs text-slate-400">
+        <p className="tool-print-disclaimer text-xs text-slate-400">
           *** Kết quả chỉ mang tính tham khảo và có thể thay đổi theo chính sách
-          từng ngân hàng / CĐT. Đơn vị: VND.
+          từng ngân hàng / CĐT. Đơn vị: VND. Nguồn: House X — {getSiteHostname()}.
         </p>
       </div>
     </div>
