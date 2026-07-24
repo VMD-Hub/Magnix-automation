@@ -135,6 +135,7 @@ export const LEGAL_DOC_STATUS_LABEL: Record<string, string> = {
   da_co: "Đã có",
   dang_lam: "Đang làm",
   chua_co: "Chưa có",
+  chua_xac_minh: "Đang xác minh",
 };
 
 export function legalDocLabel(docType: string): string {

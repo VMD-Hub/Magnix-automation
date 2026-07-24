@@ -474,7 +474,11 @@ function skeletonDef(row: HcmRow): NoxhLandingDef {
     heroSubtitle: `${seoName} · ${row.district}, TP.HCM${tip}`,
     locationNotes: `${row.name}: ${row.address}.
 
-Theo House X: tỉnh **TP. Hồ Chí Minh**.${legacy ? ` Địa chỉ kép giữ tên ${row.legacyNote} để tra cứu.` : ""} Vị trí trên bản đồ đang được xác minh.
+${
+  row.legacyNote
+    ? `Sau sắp xếp địa giới 2025, khu vực này thuộc TP. Hồ Chí Minh (trước thuộc ${row.legacyNote}). `
+    : ""
+}Vị trí trên bản đồ đang được xác minh.
 
 Đối chiếu soxaydung.hochiminhcity.gov.vn. Xem Wiki nhà ở xã hội hoặc để lại thông tin tư vấn trên House X.`,
     highlights: [
@@ -490,8 +494,10 @@ Theo House X: tỉnh **TP. Hồ Chí Minh**.${legacy ? ` Địa chỉ kép giữ
     amenities: [NOXH_AMENITIES_VERIFYING],
     faqs: [
       {
-        q: `${row.name} thuộc tỉnh nào trên House X?`,
-        a: "Theo House X: TP. Hồ Chí Minh (sau NQ 2025). Tên Bình Dương / BR-VT / quận-huyện cũ vẫn dùng để tìm kiếm.",
+        q: `${row.name} thuộc tỉnh nào?`,
+        a: row.legacyNote
+          ? `Thuộc TP. Hồ Chí Minh sau sắp xếp địa giới 2025 (trước thuộc ${row.legacyNote}). Bạn vẫn có thể tìm theo tên địa phương cũ.`
+          : "Thuộc TP. Hồ Chí Minh. Tra cứu điều kiện và đăng ký tư vấn trên House X.",
       },
       {
         q: "Giá bao nhiêu?",

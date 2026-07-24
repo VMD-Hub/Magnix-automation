@@ -170,7 +170,7 @@ function skeletonDef(row: QnRow): NoxhLandingDef {
     heroSubtitle: `${seoName} · ${row.district}, Quảng Ninh${tip}`,
     locationNotes: `${row.name}: ${row.address}.
 
-Quảng Ninh standalone (NQ 202/2025 — không sáp nhập cấp tỉnh). Cụm Hạ Long · Cẩm Phả · Quảng Yên · Đông Triều. Vị trí trên bản đồ đang được xác minh.
+Tỉnh Quảng Ninh giữ nguyên sau sắp xếp địa giới 2025 (không sáp nhập cấp tỉnh). Các cụm đô thị: Hạ Long · Cẩm Phả · Quảng Yên · Đông Triều. Vị trí trên bản đồ đang được xác minh.
 
 Đối chiếu soxaydung.quangninh.gov.vn. Xem Wiki nhà ở xã hội hoặc để lại thông tin tư vấn trên House X.`,
     highlights: [
@@ -187,7 +187,7 @@ Quảng Ninh standalone (NQ 202/2025 — không sáp nhập cấp tỉnh). Cụm
     faqs: [
       {
         q: `${row.name} thuộc tỉnh nào?`,
-        a: "Theo House X: Quảng Ninh. Tên Hạ Long / Cẩm Phả / Quảng Yên / Đông Triều vẫn dùng để tìm kiếm.",
+        a: "Thuộc tỉnh Quảng Ninh. Bạn có thể tìm theo tên Hạ Long / Cẩm Phả / Quảng Yên / Đông Triều.",
       },
       {
         q: "Giá bao nhiêu?",
