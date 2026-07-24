@@ -19,25 +19,25 @@ export const ABOUT_CORE_VALUES = {
     {
       title: "Dữ liệu thực — giá trị thật",
       desc: "Mỗi tin lên House X đều qua kiểm duyệt ảnh, vị trí và giá. Bạn quyết định trên dữ liệu đã được lọc, không phải tin thô.",
-      icon: "/brand/icons/core-values/du-lieu-thuc.svg",
+      iconId: "du-lieu-thuc",
       iconAlt: "Biểu tượng dữ liệu đã kiểm chứng",
     },
     {
       title: "Một dự án — một chân dung",
       desc: "Cùng một dự án thì giá trị và tiện ích phải thống nhất — không vẽ khác với thực tế dự án đang có. House X giữ một diện mạo rõ cho từng dự án để bạn so sánh đúng.",
-      icon: "/brand/icons/core-values/mot-du-an.svg",
+      iconId: "mot-du-an",
       iconAlt: "Biểu tượng một dự án một chân dung",
     },
     {
       title: "Bảo mật kết nối",
       desc: "Thông tin liên hệ được bảo vệ. Số điện thoại chỉ hiện khi bạn sẵn sàng và đã xác thực.",
-      icon: "/brand/icons/core-values/bao-mat-ket-noi.svg",
+      iconId: "bao-mat-ket-noi",
       iconAlt: "Biểu tượng bảo mật kết nối",
     },
     {
       title: "Đồng hành an cư",
       desc: "House X đi cùng từ tính vay, điều kiện nhà ở xã hội đến thiết kế–thi công — không dừng ở bước tìm tin.",
-      icon: "/brand/icons/core-values/dong-hanh-an-cu.svg",
+      iconId: "dong-hanh-an-cu",
       iconAlt: "Biểu tượng đồng hành an cư",
     },
   ],
@@ -50,14 +50,14 @@ export const ABOUT_MISSION_VISION = {
       title: "Sứ mệnh",
       lead: "Đơn giản hóa hành trình tìm tổ ấm.",
       body: "Giúp người Việt tiết kiệm thời gian và bớt âu lo vì thông tin ảo — nhờ dữ liệu chính trực và sự đồng hành thấu hiểu trên từng bước.",
-      icon: "/brand/icons/mission-vision/su-menh.svg",
+      iconId: "su-menh",
       iconAlt: "Biểu tượng sứ mệnh — lộ trình tìm tổ ấm được đơn giản hóa",
     },
     {
       title: "Tầm nhìn",
       lead: "Trở thành điểm tựa đầu tiên trên mọi bước đường an cư:",
       body: "nơi mỗi quyết định bắt đầu bằng sự minh bạch và kết thúc bằng sự an tâm.",
-      icon: "/brand/icons/mission-vision/tam-nhin.svg",
+      iconId: "tam-nhin",
       iconAlt: "Biểu tượng tầm nhìn — nhìn xa tới điểm tựa an cư",
     },
   ],
@@ -86,8 +86,8 @@ export const ABOUT_PARTNER_SECTION = {
 } as const;
 
 export const ABOUT_CTA = {
-  title: "Bắt đầu hành trình tìm nhà",
-  body: "Nhập nhu cầu hoặc đăng ký để bảo vệ liên hệ của bạn — House X đồng hành từ bước so sánh đến khi bạn sẵn sàng trao đổi.",
+  title: "Tìm nhà trên dữ liệu đã kiểm chứng",
+  body: "Duyệt tin thật, so sánh rõ — hoặc đăng ký để lưu nhu cầu và để House X đồng hành đến khi bạn sẵn sàng liên hệ.",
   primary: { label: "Tìm nhà ngay", href: "/mua-ban" },
   secondary: { label: "Đăng ký", href: "/dang-ky/khach-hang" },
 } as const;

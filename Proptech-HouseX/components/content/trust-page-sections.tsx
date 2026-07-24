@@ -66,14 +66,14 @@ export function MetricsBand({
   return (
     <div
       className={cn(
-        "not-prose grid grid-cols-2 gap-4 rounded-2xl bg-gradient-to-br from-brand-900 to-ink-900 p-6 text-white sm:grid-cols-4",
+        "not-prose grid grid-cols-2 gap-4 rounded-2xl border border-brand-100 bg-gradient-to-br from-brand-50 via-white to-brand-50/80 p-6 sm:grid-cols-4",
         className,
       )}
     >
       {metrics.map((m) => (
         <div key={m.label} className="text-center sm:text-left">
-          <p className="text-2xl font-extrabold text-gold-400">{m.value}</p>
-          <p className="mt-1 text-xs leading-snug text-slate-300">{m.label}</p>
+          <p className="text-2xl font-extrabold text-brand-700">{m.value}</p>
+          <p className="mt-1 text-xs leading-snug text-slate-600">{m.label}</p>
         </div>
       ))}
     </div>

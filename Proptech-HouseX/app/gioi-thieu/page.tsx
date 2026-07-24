@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
+import { AboutBrandIcon } from "@/components/brand/about-brand-icon";
 import { ToolsPageHero } from "@/components/tools/tools-page-hero";
 import { FounderNoteBlock } from "@/components/content/founder-story-sections";
 import { DocPlainBulletList, HOUSEX_PROSE_CLASS } from "@/components/content/document-typography";
@@ -64,14 +64,7 @@ export default function GioiThieuPage() {
                 key={item.title}
                 className="flex gap-3 rounded-xl border border-silver-200 bg-white p-4 shadow-sm"
               >
-                <Image
-                  src={item.icon}
-                  alt={item.iconAlt}
-                  width={72}
-                  height={72}
-                  unoptimized
-                  className="h-[4.5rem] w-[4.5rem] shrink-0"
-                />
+                <AboutBrandIcon id={item.iconId} title={item.iconAlt} />
                 <div className="min-w-0">
                   <h3 className="text-sm font-bold text-slate-900">{item.title}</h3>
                   <p className="mt-1 text-sm leading-relaxed text-slate-600">
@@ -93,14 +86,7 @@ export default function GioiThieuPage() {
                 key={item.title}
                 className="flex gap-3 rounded-xl border border-silver-200 bg-white p-4 shadow-sm"
               >
-                <Image
-                  src={item.icon}
-                  alt={item.iconAlt}
-                  width={72}
-                  height={72}
-                  unoptimized
-                  className="h-[4.5rem] w-[4.5rem] shrink-0"
-                />
+                <AboutBrandIcon id={item.iconId} title={item.iconAlt} />
                 <div className="min-w-0">
                   <h3 className="text-sm font-bold text-brand-700">{item.title}</h3>
                   <p className="mt-1 text-sm font-semibold leading-snug text-slate-900">
