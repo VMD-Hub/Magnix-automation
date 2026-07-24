@@ -17,30 +17,50 @@ export const ABOUT_CORE_VALUES = {
   title: "Giá trị cốt lõi",
   items: [
     {
-      title: "Thông tin chuẩn",
-      desc: "Ảnh, mô tả, vị trí và giá được kiểm tra trước khi hiển thị.",
+      title: "Dữ liệu thực — giá trị thật",
+      desc: "Mỗi tin lên House X đều qua kiểm duyệt ảnh, vị trí và giá. Bạn quyết định trên dữ liệu đã được lọc, không phải tin thô.",
+      icon: "/brand/icons/core-values/du-lieu-thuc.svg",
+      iconAlt: "Biểu tượng dữ liệu đã kiểm chứng",
     },
     {
-      title: "Minh bạch",
-      desc: "Một BĐS — một tin đại diện; gom tin trùng để giảm nhiễu.",
+      title: "Một dự án — một chân dung",
+      desc: "Cùng một dự án thì giá trị và tiện ích phải thống nhất — không vẽ khác với thực tế dự án đang có. House X giữ một diện mạo rõ cho từng dự án để bạn so sánh đúng.",
+      icon: "/brand/icons/core-values/mot-du-an.svg",
+      iconAlt: "Biểu tượng một dự án một chân dung",
     },
     {
-      title: "An toàn liên hệ",
-      desc: "Số điện thoại được bảo vệ và chỉ hiện sau khi bạn xác thực.",
+      title: "Bảo mật kết nối",
+      desc: "Thông tin liên hệ được bảo vệ. Số điện thoại chỉ hiện khi bạn sẵn sàng và đã xác thực.",
+      icon: "/brand/icons/core-values/bao-mat-ket-noi.svg",
+      iconAlt: "Biểu tượng bảo mật kết nối",
     },
     {
-      title: "Công cụ hỗ trợ quyết định",
-      desc: "Tính khoản vay, kiểm tra điều kiện mua nhà ở xã hội, tham khảo hạn mức vay, định giá, dịch vụ tài chính và thiết kế — thi công nội thất.",
+      title: "Đồng hành an cư",
+      desc: "House X đi cùng từ tính vay, điều kiện nhà ở xã hội đến thiết kế–thi công — không dừng ở bước tìm tin.",
+      icon: "/brand/icons/core-values/dong-hanh-an-cu.svg",
+      iconAlt: "Biểu tượng đồng hành an cư",
     },
   ],
 } as const;
 
 export const ABOUT_MISSION_VISION = {
   title: "Sứ mệnh & Tầm nhìn",
-  mission:
-    "Giúp người mua và người thuê tiết kiệm thời gian và tránh thông tin nhiễu bằng dữ liệu và công cụ đáng tin trên cùng một nền tảng.",
-  vision:
-    "Trở thành điểm đến đầu tiên của người Việt khi tìm nhà — nơi mỗi bước đều minh bạch và đáng tin.",
+  items: [
+    {
+      title: "Sứ mệnh",
+      lead: "Đơn giản hóa hành trình tìm tổ ấm.",
+      body: "Giúp người Việt tiết kiệm thời gian và bớt âu lo vì thông tin ảo — nhờ dữ liệu chính trực và sự đồng hành thấu hiểu trên từng bước.",
+      icon: "/brand/icons/mission-vision/su-menh.svg",
+      iconAlt: "Biểu tượng sứ mệnh — lộ trình tìm tổ ấm được đơn giản hóa",
+    },
+    {
+      title: "Tầm nhìn",
+      lead: "Trở thành điểm tựa đầu tiên trên mọi bước đường an cư:",
+      body: "nơi mỗi quyết định bắt đầu bằng sự minh bạch và kết thúc bằng sự an tâm.",
+      icon: "/brand/icons/mission-vision/tam-nhin.svg",
+      iconAlt: "Biểu tượng tầm nhìn — nhìn xa tới điểm tựa an cư",
+    },
+  ],
 } as const;
 
 export const ABOUT_BUYER_BENEFITS = {

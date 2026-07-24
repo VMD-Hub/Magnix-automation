@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" fill="none" role="img" aria-labelledby="title">
+  <title id="title">T§m nhìn  iÃm tña §u tiên trên b°Ûc °Ýng an c°</title>
+  <rect x="8" y="8" width="112" height="112" rx="28" fill="#FDF2F3"/>
+  <!-- distant horizon house -->
+  <path d="M86 52l10-8 10 8v16H86V52z" fill="#fff" stroke="#B81425" stroke-width="2.5" stroke-linejoin="round"/>
+  <rect x="92" y="58" width="6" height="10" rx="1" fill="#DAA520"/>
+  <!-- soft distant hills -->
+  <path d="M72 70c6-6 12-8 18-8s12 2 18 8" stroke="#F9C8CC" stroke-width="3" stroke-linecap="round" fill="none"/>
+  <!-- person -->
+  <circle cx="42" cy="58" r="8" fill="#B81425"/>
+  <path d="M30 92c2-16 8-22 12-22s10 6 12 22" fill="#7A0E18"/>
+  <!-- telescope -->
+  <path d="M48 62l28-14" stroke="#5C0B12" stroke-width="5" stroke-linecap="round"/>
+  <path d="M48 62l28-14" stroke="#DAA520" stroke-width="2.5" stroke-linecap="round"/>
+  <rect x="72" y="42" width="14" height="10" rx="3" fill="#B81425" transform="rotate(-26 79 47)"/>
+  <circle cx="76" cy="48" r="2.5" fill="#fff"/>
+  <!-- sight line -->
+  <path d="M86 48h10" stroke="#F0959C" stroke-width="2" stroke-linecap="round" stroke-dasharray="3 3"/>
+</svg>

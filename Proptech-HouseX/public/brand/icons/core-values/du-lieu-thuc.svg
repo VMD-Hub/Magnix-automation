@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" fill="none" role="img" aria-labelledby="title">
+  <title id="title">Dï liÇu thñc  giá trË th­t</title>
+  <!-- soft plate -->
+  <rect x="8" y="8" width="112" height="112" rx="28" fill="#FDF2F3"/>
+  <!-- document stack -->
+  <rect x="34" y="28" width="52" height="68" rx="8" fill="#fff" stroke="#B81425" stroke-width="3"/>
+  <rect x="40" y="38" width="28" height="4" rx="2" fill="#F9C8CC"/>
+  <rect x="40" y="48" width="36" height="4" rx="2" fill="#F9C8CC"/>
+  <rect x="40" y="58" width="22" height="4" rx="2" fill="#F9C8CC"/>
+  <!-- bar chart = real data -->
+  <rect x="42" y="72" width="8" height="14" rx="2" fill="#B81425"/>
+  <rect x="54" y="66" width="8" height="20" rx="2" fill="#DAA520"/>
+  <rect x="66" y="70" width="8" height="16" rx="2" fill="#7A0E18"/>
+  <!-- verified seal -->
+  <circle cx="86" cy="88" r="18" fill="#B81425"/>
+  <circle cx="86" cy="88" r="13" fill="#DAA520"/>
+  <path d="M79.5 88.2l4.2 4.2 8.6-9.2" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

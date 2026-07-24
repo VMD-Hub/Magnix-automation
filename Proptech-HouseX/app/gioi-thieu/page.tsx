@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { ToolsPageHero } from "@/components/tools/tools-page-hero";
 import { FounderNoteBlock } from "@/components/content/founder-story-sections";
@@ -54,38 +55,64 @@ export default function GioiThieuPage() {
         <ProcessSteps steps={ABOUT_PROCESS_STEPS} className="mb-10" />
 
         <section className="mb-12">
-          <h2 className="text-xl font-extrabold text-slate-900">Giá trị cốt lõi</h2>
+          <h2 className="text-xl font-extrabold text-slate-900">
+            {ABOUT_CORE_VALUES.title}
+          </h2>
           <div className="mt-4 grid gap-3 sm:grid-cols-2">
             {ABOUT_CORE_VALUES.items.map((item) => (
               <div
                 key={item.title}
-                className="rounded-xl border border-silver-200 bg-white p-4 shadow-sm"
+                className="flex gap-3 rounded-xl border border-silver-200 bg-white p-4 shadow-sm"
               >
-                <h3 className="text-sm font-bold text-slate-900">{item.title}</h3>
-                <p className="mt-1 text-sm leading-relaxed text-slate-600">{item.desc}</p>
+                <Image
+                  src={item.icon}
+                  alt={item.iconAlt}
+                  width={72}
+                  height={72}
+                  unoptimized
+                  className="h-[4.5rem] w-[4.5rem] shrink-0"
+                />
+                <div className="min-w-0">
+                  <h3 className="text-sm font-bold text-slate-900">{item.title}</h3>
+                  <p className="mt-1 text-sm leading-relaxed text-slate-600">
+                    {item.desc}
+                  </p>
+                </div>
               </div>
             ))}
           </div>
         </section>
 
-        <section className="mb-12 rounded-2xl border border-silver-200 bg-slate-50 p-6 sm:p-8">
+        <section className="mb-12">
           <h2 className="text-xl font-extrabold text-slate-900">
             {ABOUT_MISSION_VISION.title}
           </h2>
-          <dl className="mt-4 space-y-4 text-sm">
-            <div>
-              <dt className="font-bold text-brand-700">Sứ mệnh</dt>
-              <dd className="mt-1 leading-relaxed text-slate-700">
-                {ABOUT_MISSION_VISION.mission}
-              </dd>
-            </div>
-            <div>
-              <dt className="font-bold text-brand-700">Tầm nhìn</dt>
-              <dd className="mt-1 leading-relaxed text-slate-700">
-                {ABOUT_MISSION_VISION.vision}
-              </dd>
-            </div>
-          </dl>
+          <div className="mt-4 grid gap-3 sm:grid-cols-2">
+            {ABOUT_MISSION_VISION.items.map((item) => (
+              <div
+                key={item.title}
+                className="flex gap-3 rounded-xl border border-silver-200 bg-white p-4 shadow-sm"
+              >
+                <Image
+                  src={item.icon}
+                  alt={item.iconAlt}
+                  width={72}
+                  height={72}
+                  unoptimized
+                  className="h-[4.5rem] w-[4.5rem] shrink-0"
+                />
+                <div className="min-w-0">
+                  <h3 className="text-sm font-bold text-brand-700">{item.title}</h3>
+                  <p className="mt-1 text-sm font-semibold leading-snug text-slate-900">
+                    {item.lead}
+                  </p>
+                  <p className="mt-1 text-sm leading-relaxed text-slate-600">
+                    {item.body}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
         </section>
 
         <section className="mb-12">

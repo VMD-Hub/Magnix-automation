@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" fill="none" role="img" aria-labelledby="title">
+  <title id="title">MÙt dñ án  mÙt chân dung</title>
+  <rect x="8" y="8" width="112" height="112" rx="28" fill="#FDF2F3"/>
+  <!-- unified building -->
+  <path d="M36 96V48l28-16 28 16v48H36z" fill="#fff" stroke="#B81425" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M64 32v64" stroke="#F9C8CC" stroke-width="2"/>
+  <!-- windows row  same identity -->
+  <rect x="44" y="54" width="10" height="10" rx="2" fill="#B81425"/>
+  <rect x="58" y="54" width="10" height="10" rx="2" fill="#B81425"/>
+  <rect x="74" y="54" width="10" height="10" rx="2" fill="#B81425"/>
+  <rect x="44" y="70" width="10" height="10" rx="2" fill="#7A0E18"/>
+  <rect x="58" y="70" width="10" height="10" rx="2" fill="#DAA520"/>
+  <rect x="74" y="70" width="10" height="10" rx="2" fill="#7A0E18"/>
+  <!-- door -->
+  <rect x="58" y="84" width="12" height="12" rx="2" fill="#5C0B12"/>
+  <!-- portrait badge  one face for the project -->
+  <circle cx="94" cy="40" r="16" fill="#B81425"/>
+  <circle cx="94" cy="36" r="5.5" fill="#fff"/>
+  <path d="M83.5 50c2.5-6 8-9 10.5-9s8 3 10.5 9" fill="#fff"/>
+</svg>

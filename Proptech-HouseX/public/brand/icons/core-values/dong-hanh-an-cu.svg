@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" fill="none" role="img" aria-labelledby="title">
+  <title id="title">Óng hành an c°</title>
+  <rect x="8" y="8" width="112" height="112" rx="28" fill="#FDF2F3"/>
+  <!-- path / journey -->
+  <path d="M28 96c16-18 24-28 36-28s20 10 36 28" stroke="#F9C8CC" stroke-width="6" stroke-linecap="round" fill="none"/>
+  <path d="M28 96c16-18 24-28 36-28s20 10 36 28" stroke="#B81425" stroke-width="2.5" stroke-linecap="round" fill="none" stroke-dasharray="5 6"/>
+  <!-- house destination -->
+  <path d="M52 62l12-10 12 10v22H52V62z" fill="#fff" stroke="#B81425" stroke-width="3" stroke-linejoin="round"/>
+  <rect x="60" y="70" width="8" height="14" rx="1.5" fill="#DAA520"/>
+  <!-- companion figures -->
+  <circle cx="36" cy="72" r="6" fill="#B81425"/>
+  <path d="M28 92c1.5-10 5.5-14 8-14s6.5 4 8 14" fill="#7A0E18"/>
+  <circle cx="92" cy="72" r="6" fill="#B81425"/>
+  <path d="M84 92c1.5-10 5.5-14 8-14s6.5 4 8 14" fill="#7A0E18"/>
+  <!-- shared step marker -->
+  <circle cx="64" cy="96" r="4" fill="#DAA520"/>
+</svg>
