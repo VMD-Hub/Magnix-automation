@@ -3,7 +3,7 @@ import { afterEach, describe, it } from "node:test";
 import {
   getHouseXFacebookPageUrl,
   getHouseXZaloOaPublicUrl,
-} from "../lib/site-config";
+} from "../lib/site-config.ts";
 
 const KEYS = [
   "NEXT_PUBLIC_SOCIAL_ZALO_URL",
@@ -62,13 +62,11 @@ describe("getHouseXFacebookPageUrl", () => {
     );
   });
 
-  it("nhận URL đầy đủ", () => {
+  it("fallback page timnhaxahoi khi không có env", () => {
     clearSocialEnv();
-    process.env.NEXT_PUBLIC_SOCIAL_FACEBOOK_URL =
-      "https://www.facebook.com/HouseX.VN";
     assert.equal(
       getHouseXFacebookPageUrl(),
-      "https://www.facebook.com/HouseX.VN",
+      "https://www.facebook.com/timnhaxahoi",
     );
   });
 });

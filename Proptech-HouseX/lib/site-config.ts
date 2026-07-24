@@ -175,7 +175,11 @@ export function getHouseXZaloOaPublicUrl(): string | null {
 /**
  * Link Fanpage Facebook (footer).
  * Chấp nhận URL đầy đủ hoặc page id / username.
+ * Fallback công khai: page timnhaxahoi (không phải secret).
  */
+const DEFAULT_FACEBOOK_PAGE_URL =
+  "https://www.facebook.com/timnhaxahoi" as const;
+
 export function getHouseXFacebookPageUrl(): string | null {
   const full = firstNonEmpty(
     process.env.NEXT_PUBLIC_SOCIAL_FACEBOOK_URL,
@@ -198,8 +202,11 @@ export function getHouseXFacebookPageUrl(): string | null {
     process.env.FANPAGE_ID,
     process.env.META_PAGE_ID,
   );
-  if (!id) return null;
-  return asHttpUrlOrId(id, (pageId) => `https://www.facebook.com/${pageId}`);
+  if (id) {
+    return asHttpUrlOrId(id, (pageId) => `https://www.facebook.com/${pageId}`);
+  }
+
+  return DEFAULT_FACEBOOK_PAGE_URL;
 }
 
 /** Liên kết mạng xã hội — bổ sung URL/ID trong env khi sẵn sàng. */
