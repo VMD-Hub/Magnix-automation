@@ -270,12 +270,12 @@ const HAU_NGHIA_DEF: NoxhLandingDef = {
   blocks: 8,
   handoverDate: new Date("2028-12-31"),
   description:
-    "NOXH KĐT mới Hậu Nghĩa — quy hoạch 6.399 căn trong masterplan 16 ha (CĐT Phát triển Thành phố Xanh). Giai đoạn Green Nestera: 8 tháp, 1.467 căn, khởi công 12/2025 trong Vinhomes Green City ~192 ha.",
+    "NOXH KĐT mới Hậu Nghĩa — quy hoạch 6.399 căn trong quy hoạch tổng thể 16 ha (CĐT Phát triển Thành phố Xanh). Giai đoạn Green Nestera: 8 tháp, 1.467 căn, khởi công 12/2025 trong Vinhomes Green City khoảng 192 ha.",
   seoTitle: "Nhà ở xã hội Hậu Nghĩa — Green Nestera 6.399 căn NOXH",
   seoDesc:
     "NOXH KĐT Hậu Nghĩa Đức Hòa: quy hoạch 6.399 căn, Green Nestera 1.467 căn đang xây. Vinhomes Green City — ~20 tr/m².",
   heroSubtitle:
-    "Green Nestera · Hậu Nghĩa Đức Hòa — masterplan 6.399 căn NOXH, giai đoạn 1: 1.467 căn 8 tháp",
+    "Green Nestera · Hậu Nghĩa Đức Hòa — quy hoạch tổng thể 6.399 căn NOXH, giai đoạn 1: 1.467 căn 8 tháp",
   heroImage: NOXH_HAU_NGHIA_IMAGES.hero,
   locationMapImage: NOXH_HAU_NGHIA_IMAGES.map,
   locationNotes: `Nhà ở xã hội thuộc Khu đô thị mới Hậu Nghĩa – Đức Hòa (nay xã Hậu Nghĩa), do Công ty CP Phát triển Thành phố Xanh làm chủ đầu tư — quy hoạch 16 ha, 6.399 căn NOXH theo kế hoạch tỉnh Long An.
@@ -339,7 +339,7 @@ const PVT_DEF: NoxhLandingDef = {
   blocks: 0,
   handoverDate: new Date("2030-12-31"),
   description:
-    "NOXH KĐT mới Phước Vĩnh Tây (Cần Giuộc): quy hoạch 13.440 căn chung cư cao 10 tầng trong đại đô thị ~1.090 ha do Vinhomes–VIG. Hoàn thiện masterplan 2030.",
+    "NOXH KĐT mới Phước Vĩnh Tây (Cần Giuộc): quy hoạch 13.440 căn chung cư cao 10 tầng trong đại đô thị khoảng 1.090 ha do Vinhomes–VIG. Hoàn thiện quy hoạch tổng thể đến 2030.",
   seoTitle: "Nhà ở xã hội Phước Vĩnh Tây — 13.440 căn NOXH Cần Giuộc",
   seoDesc:
     "NOXH KĐT Phước Vĩnh Tây Long An: 13.440 căn, tháp 10 tầng, ~1.090 ha. Vinhomes–VIG — đang triển khai hạ tầng.",
@@ -416,7 +416,7 @@ const PHU_AN_DEF: NoxhLandingDef = {
     "Phú An Thạnh · TL830 Bến Lức — quy hoạch ~1.100 căn NOXH/công nhân, KCN 1.002 ha",
   heroImage: NOXH_PHU_AN_IMAGES.hero,
   locationMapImage: NOXH_PHU_AN_IMAGES.map,
-  locationNotes: `Khu nhà ở chuyên gia – công nhân và dân cư Phú An Thạnh tại Tỉnh lộ 830, xã An Thạnh, huyện Bến Lức — trong masterplan KCN Phú An Thạnh (~1.002 ha).
+  locationNotes: `Khu nhà ở chuyên gia – công nhân và dân cư Phú An Thạnh tại Tỉnh lộ 830, xã An Thạnh, huyện Bến Lức — trong quy hoạch tổng thể KCN Phú An Thạnh (khoảng 1.002 ha).
 
 CĐT Phú An Thạnh (từ 2008). Quy hoạch KDC ~29 ha phục vụ CN & chuyên gia; mục tiêu quỹ nhà ~1.100 căn theo kế hoạch phát triển KCN. Cách cao tốc TP.HCM–Trung Lương ~3 km, QL1A ~6 km.`,
   highlights: [

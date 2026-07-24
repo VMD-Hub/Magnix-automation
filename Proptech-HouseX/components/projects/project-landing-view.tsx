@@ -43,6 +43,12 @@ import {
   propertyTypeLabel,
 } from "@/lib/format";
 
+/** `totalArea` lẫn ha (Long An…) và m² (nhiều seed NOXH). ≥10.000 coi là m² → quy đổi ha. */
+function formatProjectTotalAreaHa(totalArea: number): string {
+  const ha = totalArea >= 10_000 ? totalArea / 10_000 : totalArea;
+  return `${ha.toLocaleString("vi-VN", { maximumFractionDigits: 2 })} ha`;
+}
+
 type Props = {
   project: ProjectDetail;
   /** Truyền từ trang preview — bỏ qua truy vấn DB. */
@@ -109,7 +115,10 @@ export function ProjectLandingContent({
   if (overview.blocks != null)
     stats.push({ label: "Block / tòa", value: String(overview.blocks) });
   if (project.totalArea != null)
-    stats.push({ label: "Tổng diện tích", value: `${project.totalArea} ha` });
+    stats.push({
+      label: "Tổng diện tích",
+      value: formatProjectTotalAreaHa(project.totalArea),
+    });
   if (project.density != null)
     stats.push({ label: "Mật độ xây dựng", value: `${project.density}%` });
   if (project.handoverDate)

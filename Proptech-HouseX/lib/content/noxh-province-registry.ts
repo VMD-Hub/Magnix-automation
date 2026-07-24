@@ -613,9 +613,16 @@ export function dualAddressFromProvinceRaw(
   } = {},
 ): DualAddressInput {
   const entry = resolveNoxhProvinceCanonical(provinceRaw);
-  const locality = [localityParts.address, localityParts.ward, localityParts.district]
-    .filter(Boolean)
-    .join(", ");
+  const address = localityParts.address?.trim() || "";
+  const ward = localityParts.ward?.trim() || "";
+  const district = localityParts.district?.trim() || "";
+
+  /** Tránh lặp khi `address` đã chứa ward/district (vd. "Long Phước, TP. Thủ Đức, …"). */
+  const localityBits: string[] = [];
+  if (address) localityBits.push(address);
+  if (ward && !address.includes(ward)) localityBits.push(ward);
+  if (district && !address.includes(district)) localityBits.push(district);
+  const locality = localityBits.join(", ");
 
   if (!entry) {
     const fallback = [locality, provinceRaw].filter(Boolean).join(", ");
@@ -626,9 +633,13 @@ export function dualAddressFromProvinceRaw(
     (a) => normalizeGeoToken(a) === normalizeGeoToken(provinceRaw),
   );
 
-  const addressNew = [locality, entry.nameNew].filter(Boolean).join(", ");
+  const addressNew = locality.includes(entry.nameNew)
+    ? locality
+    : [locality, entry.nameNew].filter(Boolean).join(", ");
   const addressLegacy = isLegacyName
-    ? [locality, provinceRaw].filter(Boolean).join(", ")
+    ? locality.includes(provinceRaw)
+      ? locality
+      : [locality, provinceRaw].filter(Boolean).join(", ")
     : null;
 
   return { addressNew, addressLegacy };

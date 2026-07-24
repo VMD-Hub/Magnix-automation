@@ -210,29 +210,29 @@ function enrichKimDong(def: NoxhLandingDef): NoxhLandingDef {
     totalUnits: 94,
     blocks: 1,
     description:
-      "Nhà ở xã hội Kim Đồng tại đường Kim Đồng, Phường 6, TP. Đà Lạt — một trong ít dự án NOXH gần trung tâm Đà Lạt. CĐT theo kết quả lựa chọn nhà đầu tư (25/12/2024): liên danh CTCP Đầu tư NNP và CTCP Đầu tư Minh Trí Thuận An (danh mục PDF ghi Khải Thịnh — không khớp nguồn mở). Quy mô 94 căn (~75 bán, ~19 thuê), diện tích đất 3.317 m², căn hộ ~43–70 m², vốn ~99,8 tỷ (chưa GPMB). Tiến độ pháp lý 24 tháng từ QĐ lựa chọn NĐT; vẫn cần theo dõi GPMB. Tư vấn điều kiện qua House X.",
+      "Nhà ở xã hội Kim Đồng tại đường Kim Đồng, Phường 6, TP. Đà Lạt — một trong ít dự án nhà ở xã hội gần trung tâm Đà Lạt. Chủ đầu tư theo kết quả lựa chọn nhà đầu tư (25/12/2024): liên danh CTCP Đầu tư NNP và CTCP Đầu tư Minh Trí Thuận An. Quy mô 94 căn (khoảng 75 bán, khoảng 19 thuê), diện tích đất 3.317 m², căn hộ khoảng 43–70 m², vốn khoảng 99,8 tỷ (chưa gồm giải phóng mặt bằng). Tiến độ pháp lý 24 tháng từ quyết định lựa chọn nhà đầu tư; cần theo dõi giải phóng mặt bằng. Tư vấn điều kiện qua House X.",
     seoTitle: "Nhà ở xã hội Kim Đồng Đà Lạt — 94 căn Phường 6 | House X",
     seoDesc:
-      "NOXH Kim Đồng Đà Lạt: 94 căn (~43–70 m²), CĐT liên danh NNP + Minh Trí Thuận An. Tra cứu điều kiện và tư vấn trên House X.",
+      "NOXH Kim Đồng Đà Lạt: 94 căn (khoảng 43–70 m²), chủ đầu tư liên danh NNP + Minh Trí Thuận An. Tra cứu điều kiện và tư vấn trên House X.",
     heroSubtitle:
-      "Đà Lạt P.6 · 94 căn · ~43–70 m² · liên danh NNP + Minh Trí · trung tâm cao nguyên",
+      "Đà Lạt P.6 · 94 căn · khoảng 43–70 m² · liên danh NNP + Minh Trí · trung tâm cao nguyên",
     locationNotes: `NOXH Kim Đồng trên đường Kim Đồng, Phường 6, TP. Đà Lạt — vị trí trung tâm cao nguyên trong tỉnh Lâm Đồng mới.
 
-Nguồn: Báo Đấu Thầu / VietnamNet (kết quả lựa chọn NĐT). Đối chiếu soxaydung.lamdong.gov.vn — GPMB còn là điểm nghẽn theo báo chí.
+Nguồn: Báo Đấu Thầu / VietnamNet (kết quả lựa chọn nhà đầu tư). Đối chiếu soxaydung.lamdong.gov.vn — giải phóng mặt bằng còn là điểm cần theo dõi theo báo chí.
 
-House X không thu đặt cọc thay CĐT.`,
+House X không thu đặt cọc thay chủ đầu tư.`,
     highlights: [
       {
         title: "94 căn trung tâm Đà Lạt",
-        text: "Đất 3.317 m²; căn hộ ~43–70 m²; khoảng 75 căn bán và 19 căn thuê theo công bố lựa chọn NĐT.",
+        text: "Đất 3.317 m²; căn hộ khoảng 43–70 m²; khoảng 75 căn bán và 19 căn thuê theo công bố lựa chọn nhà đầu tư.",
       },
       {
-        title: "CĐT: NNP + Minh Trí Thuận An",
-        text: "Liên danh được phê duyệt 25/12/2024. Danh mục nội bộ PDF ghi Khải Thịnh — House X ưu tiên nguồn Sở / báo đấu thầu.",
+        title: "Chủ đầu tư: NNP + Minh Trí Thuận An",
+        text: "Liên danh được phê duyệt 25/12/2024 theo kết quả lựa chọn nhà đầu tư công khai.",
       },
       {
-        title: "Theo dõi GPMB",
-        text: "Vốn ~99,8 tỷ (chưa chi phí bồi thường). Báo chí ghi còn vướng mặt bằng — xác minh tiến độ trước khi nộp hồ sơ.",
+        title: "Theo dõi giải phóng mặt bằng",
+        text: "Vốn khoảng 99,8 tỷ (chưa chi phí bồi thường). Báo chí ghi còn vướng mặt bằng — xác minh tiến độ trước khi nộp hồ sơ.",
       },
     ],
     amenities: [

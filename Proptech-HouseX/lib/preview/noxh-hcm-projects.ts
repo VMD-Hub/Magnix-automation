@@ -450,7 +450,7 @@ function skeletonDef(row: HcmRow): NoxhLandingDef {
   const tip = row.productHint ? ` · ${row.productHint}` : "";
   const legacy =
     row.legacyNote != null
-      ? ` Thuộc mega-city TP.HCM sau NQ 2025 (${row.legacyNote}).`
+      ? ` Thuộc địa giới TP.HCM sau NQ 2025 (${row.legacyNote}).`
       : "";
   return {
     id: `preview-hcm-noxh-${row.stt}`,
@@ -528,51 +528,49 @@ function enrichHappyHomeLongPhuoc(def: NoxhLandingDef): NoxhLandingDef {
     developerName: "Vinhomes (Tập đoàn Vingroup)",
     totalArea: 441600,
     description:
-      "Nhà ở xã hội Happy Home Long Phước (Thành Phố Xanh) tại Long Phước, TP. Thủ Đức — dự án Vinhomes trong cụm NOXH Đông TP.HCM. Quy mô đất ~44,16 ha (441.600 m²). PDF nội bộ ghi “Grand Park / Long Thạnh Mỹ ~4.300 căn” — House X chưa xác minh số căn, không invent totalUnits. Không nhầm với Happy Home Cam Ranh (Khánh Hòa) hay Happy Home Nhơn Trạch (Đồng Nai). Tư vấn điều kiện qua House X.",
+      "Nhà ở xã hội Happy Home Long Phước (Thành Phố Xanh) tại Long Phước, TP. Thủ Đức — dự án Vinhomes trong cụm NOXH phía Đông TP.HCM. Quy mô đất khoảng 44,16 ha (441.600 m²). Số căn đang được xác minh theo công bố Sở Xây dựng hoặc chủ đầu tư. Chúng tôi đang theo dõi để cập nhật thông tin dự án đến quý vị sớm nhất.",
     seoTitle:
       "Happy Home Long Phước — Thành Phố Xanh Vinhomes · 44 ha | House X",
     seoDesc:
-      "NOXH Happy Home Long Phước (Vinhomes): KĐT ~44 ha Long Phước, Thủ Đức. Khác Happy Home Cam Ranh. Tra cứu điều kiện trên House X.",
+      "NOXH Happy Home Long Phước (Vinhomes): khu đô thị khoảng 44 ha tại Long Phước, Thủ Đức. Tra cứu điều kiện mua và đăng ký tư vấn trên House X.",
     heroSubtitle:
-      "Thành Phố Xanh · Long Phước · ~44 ha · Vinhomes — không nhầm Cam Ranh",
+      "Thành Phố Xanh · Long Phước · khoảng 44 ha · Vinhomes",
     locationNotes: `Happy Home Long Phước (Thành Phố Xanh) tại Long Phước, TP. Thủ Đức, TP. Hồ Chí Minh.
 
-PDF danh mục ghi tên “Happy Home Grand Park / Long Thạnh Mỹ” — research ưu tiên **Long Phước / Thành Phố Xanh**. Quy mô đất ~44,16 ha. Số căn PDF ~4.300 chưa được House X xác minh độc lập.
+Quy mô đất khoảng 44,16 ha. Một số tài liệu còn ghi tên Grand Park / Long Thạnh Mỹ — trên House X ưu tiên tên Thành Phố Xanh / Happy Home Long Phước. Số căn đang được xác minh độc lập trước khi công bố.
 
-Phân biệt: nha-o-xa-hoi-happy-home-cam-ranh (Khánh Hòa) là dự án Vinhomes khác hẳn.
-
-House X không thu đặt cọc thay CĐT.`,
+Dự án này khác Happy Home Cam Ranh (Khánh Hòa) và Happy Home Nhơn Trạch (Đồng Nai). House X không thu đặt cọc thay chủ đầu tư.`,
     highlights: [
       {
-        title: "KĐT ~44,16 ha Long Phước",
-        text: "Diện tích đất ~441.600 m² theo research. Số căn PDF ~4.300 — chưa xác minh; không hiển thị totalUnits cho đến khi có Sở / CĐT.",
+        title: "Khu đô thị khoảng 44,16 ha",
+        text: "Diện tích đất khoảng 441.600 m² tại Long Phước. Số căn đang được xác minh theo công bố Sở Xây dựng hoặc chủ đầu tư.",
       },
       {
         title: "Vinhomes · Thành Phố Xanh",
-        text: "CĐT Vinhomes (Vingroup). Tên thương mại ưu tiên Thành Phố Xanh / Happy Home Long Phước — không dùng nhầm Grand Park Cam Ranh.",
+        text: "Chủ đầu tư Vinhomes (Vingroup). Tên thương mại: Thành Phố Xanh / Happy Home Long Phước.",
       },
       {
-        title: "PDF vs research",
-        text: "PDF ghi Long Thạnh Mỹ / Grand Park — đối chiếu Sở XD TP.HCM trước khi nộp hồ sơ.",
+        title: "Đối chiếu trước khi nộp hồ sơ",
+        text: "Một số nguồn còn ghi Long Thạnh Mỹ / Grand Park — đối chiếu Sở Xây dựng TP.HCM trước khi nộp hồ sơ.",
       },
     ],
     amenities: [
-      "Hạ tầng KĐT theo masterplan Vinhomes",
+      "Hạ tầng khu đô thị theo quy hoạch tổng thể Vinhomes",
       "Kết nối Long Phước — cửa ngõ Đông TP.HCM",
       NOXH_AMENITIES_VERIFYING,
     ],
     faqs: [
       {
         q: "Happy Home Long Phước có phải Happy Home Cam Ranh không?",
-        a: "Không. Cam Ranh (Khánh Hòa) slug nha-o-xa-hoi-happy-home-cam-ranh. Long Phước (Thủ Đức, TP.HCM) là dự án riêng.",
+        a: "Không. Happy Home Cam Ranh thuộc Khánh Hòa; Happy Home Long Phước tại Thủ Đức (TP.HCM) là dự án riêng.",
       },
       {
         q: "Bao nhiêu căn?",
-        a: "PDF nội bộ ~4.300 căn — House X chưa xác minh. Không invent số liệu trên landing.",
+        a: "Một số nguồn nêu khoảng 4.300 căn — House X đang xác minh. Đăng ký nhận thông tin trên trang dự án để được cập nhật sớm.",
       },
       {
-        q: "Grand Park là gì?",
-        a: "PDF danh mục dùng tên Grand Park / Long Thạnh Mỹ. Research ưu tiên Long Phước · Thành Phố Xanh.",
+        q: "Vì sao có tên Grand Park / Long Thạnh Mỹ?",
+        a: "Một số tài liệu danh mục còn dùng tên Grand Park / Long Thạnh Mỹ. Trên House X ưu tiên Thành Phố Xanh / Happy Home Long Phước theo vị trí Long Phước.",
       },
     ],
     legalDocs: [{ docType: "chap_thuan_noxh", status: "dang_lam" }],
@@ -588,26 +586,26 @@ function enrichPhucDatTanUyen(def: NoxhLandingDef): NoxhLandingDef {
     blocks: 3,
     totalArea: 11440.8,
     description:
-      "Nhà ở xã hội Phúc Đạt Tân Uyên tại Tân Hiệp, TP. Tân Uyên — canonical TP.HCM (Bình Dương cũ). CĐT Phúc Đạt: 936 căn, 3 block 18 tầng trên ~11.440,8 m² đất; căn hộ ~32–62 m²; vốn ~1.300 tỷ theo công bố / báo. Đang bán theo danh mục Sở. Tư vấn điều kiện qua House X — đối chiếu phucdat.vn và Sở XD.",
+      "Nhà ở xã hội Phúc Đạt Tân Uyên tại Tân Hiệp, TP. Tân Uyên — thuộc địa giới TP. Hồ Chí Minh (Bình Dương cũ). Chủ đầu tư Phúc Đạt: 936 căn, 3 block 18 tầng trên khoảng 11.440,8 m² đất; căn hộ khoảng 32–62 m²; vốn khoảng 1.300 tỷ theo công bố công khai. Đang bán theo thông báo Sở. Tư vấn điều kiện qua House X — đối chiếu phucdat.vn và Sở Xây dựng.",
     seoTitle:
       "NOXH Phúc Đạt Tân Uyên — 936 căn · 3×18 tầng | House X",
     seoDesc:
-      "Phúc Đạt Tân Uyên: 936 căn NOXH, 3 block 18 tầng, ~32–62 m², Tân Uyên (Bình Dương cũ). Tra cứu điều kiện trên House X.",
+      "Phúc Đạt Tân Uyên: 936 căn NOXH, 3 block 18 tầng, khoảng 32–62 m², Tân Uyên (Bình Dương cũ). Tra cứu điều kiện trên House X.",
     heroSubtitle:
-      "Phúc Đạt · Tân Uyên · 936 căn · 3 block 18 tầng · ~32–62 m² · DANG_BAN",
+      "Phúc Đạt · Tân Uyên · 936 căn · 3 block 18 tầng · khoảng 32–62 m² · đang bán",
     locationNotes: `NOXH Phúc Đạt Tân Uyên — Tân Hiệp, TP. Tân Uyên, TP. Hồ Chí Minh (Bình Dương cũ).
 
-Quy mô: 936 căn · 3 block cao 18 tầng · diện tích đất 11.440,8 m² · căn hộ ~32–62 m² · vốn ~1.300 tỷ.
+Quy mô: 936 căn · 3 block cao 18 tầng · diện tích đất 11.440,8 m² · căn hộ khoảng 32–62 m² · vốn khoảng 1.300 tỷ.
 
-Nguồn: phucdat.vn · CafeF · Sở Xây dựng TP.HCM. House X không thu đặt cọc thay CĐT.`,
+Nguồn tham chiếu: phucdat.vn · báo chí · Sở Xây dựng. House X không thu đặt cọc thay chủ đầu tư.`,
     highlights: [
       {
         title: "936 căn · 3 block 18 tầng",
-        text: "Quy mô theo danh mục NOXH và công bố CĐT Phúc Đạt.",
+        text: "Quy mô theo công bố chủ đầu tư Phúc Đạt và danh mục nhà ở xã hội.",
       },
       {
-        title: "11.440,8 m² · ~32–62 m²/căn",
-        text: "Diện tích đất và loại căn theo research / Sở.",
+        title: "11.440,8 m² · khoảng 32–62 m²/căn",
+        text: "Diện tích đất và loại căn theo công bố chủ đầu tư / Sở Xây dựng.",
       },
       {
         title: "Bình Dương cũ — hub TP.HCM",
@@ -637,31 +635,31 @@ function enrichEcoHome1PhuMy(def: NoxhLandingDef): NoxhLandingDef {
     address:
       "TP. Phú Mỹ, TP. Hồ Chí Minh (Bà Rịa – Vũng Tàu cũ)",
     description:
-      "Nhà ở xã hội Eco Home 1 (CC1) do Hodeco phát triển tại **Phú Mỹ** — canonical TP.HCM (BR-VT cũ). PDF danh mục ghi sai P.11 Vũng Tàu; research xác nhận Phú Mỹ. 340 căn trên ~3.767,5 m²; diện tích căn 32,32–59,41 m²; giá tham chiếu ~19,87 tr/m² (xác minh Sở). Khởi công 11/2024. Tư vấn điều kiện qua House X.",
+      "Nhà ở xã hội Eco Home 1 (CC1) do Hodeco phát triển tại TP. Phú Mỹ — thuộc địa giới TP. Hồ Chí Minh (Bà Rịa – Vũng Tàu cũ). 340 căn trên khoảng 3.767,5 m²; diện tích căn 32,32–59,41 m²; giá tham chiếu khoảng 19,87 triệu/m² (xác minh Sở trước khi nộp hồ sơ). Khởi công 11/2024. Tư vấn điều kiện qua House X.",
     seoTitle: "Eco Home 1 Phú Mỹ — 340 căn Hodeco · 32–59 m² | House X",
     seoDesc:
-      "NOXH Eco Home 1 Phú Mỹ (Hodeco): 340 căn, 32–59 m², ~19,87 tr/m². Sửa PDF P.11 VT → Phú Mỹ. Tra cứu trên House X.",
+      "NOXH Eco Home 1 Phú Mỹ (Hodeco): 340 căn, 32–59 m², khoảng 19,87 triệu/m². Tra cứu điều kiện trên House X.",
     heroSubtitle:
-      "Hodeco · Phú Mỹ · 340 căn · 32–59 m² · khởi công 11/2024 · không phải P.11 VT",
-    locationNotes: `Eco Home 1 (CC1) Hodeco — **TP. Phú Mỹ**, TP. Hồ Chí Minh (Bà Rịa – Vũng Tàu cũ).
+      "Hodeco · Phú Mỹ · 340 căn · 32–59 m² · khởi công 11/2024",
+    locationNotes: `Eco Home 1 (CC1) Hodeco — TP. Phú Mỹ, TP. Hồ Chí Minh (Bà Rịa – Vũng Tàu cũ).
 
-PDF nội bộ ghi nhầm P.11 Vũng Tàu — House X canonical **Phú Mỹ**.
+Vị trí đúng là TP. Phú Mỹ (không phải phường 11 Vũng Tàu như một số tài liệu cũ còn ghi).
 
-340 căn · đất 3.767,5 m² · căn 32,32–59,41 m² · giá tham chiếu ~19,87 tr/m² · khởi công 11/2024.
+340 căn · đất 3.767,5 m² · căn 32,32–59,41 m² · giá tham chiếu khoảng 19,87 triệu/m² · khởi công 11/2024.
 
-House X không thu đặt cọc thay CĐT.`,
+House X không thu đặt cọc thay chủ đầu tư.`,
     highlights: [
       {
-        title: "340 căn · Phú Mỹ (sửa PDF)",
-        text: "PDF sai P.11 Vũng Tàu — vị trí đúng TP. Phú Mỹ, BR-VT cũ.",
+        title: "340 căn · TP. Phú Mỹ",
+        text: "Vị trí tại TP. Phú Mỹ (Bà Rịa – Vũng Tàu cũ), thuộc hub TP. Hồ Chí Minh trên House X.",
       },
       {
-        title: "32,32–59,41 m² · ~19,87 tr/m²",
-        text: "Diện tích và giá tham chiếu báo — xác minh Sở trước nộp hồ sơ.",
+        title: "32,32–59,41 m² · khoảng 19,87 triệu/m²",
+        text: "Diện tích và giá tham chiếu theo báo chí — xác minh Sở Xây dựng trước khi nộp hồ sơ.",
       },
       {
         title: "Khởi công 11/2024",
-        text: "Tiến độ thi công theo báo địa phương — cập nhật theo CĐT.",
+        text: "Tiến độ thi công theo thông tin công khai — cập nhật theo chủ đầu tư.",
       },
     ],
     unitTypes: [
@@ -676,11 +674,11 @@ House X không thu đặt cọc thay CĐT.`,
     faqs: [
       {
         q: "Eco Home 1 ở Vũng Tàu hay Phú Mỹ?",
-        a: "Phú Mỹ (BR-VT cũ). PDF danh mục ghi P.11 Vũng Tàu — House X sửa theo research.",
+        a: "Tại TP. Phú Mỹ (Bà Rịa – Vũng Tàu cũ). Một số tài liệu cũ ghi nhầm phường 11 Vũng Tàu — House X ghi theo vị trí Phú Mỹ.",
       },
       {
         q: "Giá bao nhiêu?",
-        a: "Tham chiếu ~19,87 tr/m² theo báo — xác minh Sở / CĐT trước khi nộp hồ sơ.",
+        a: "Tham chiếu khoảng 19,87 triệu/m² theo báo chí — xác minh Sở Xây dựng / chủ đầu tư trước khi nộp hồ sơ.",
       },
     ],
     legalDocs: [{ docType: "chap_thuan_noxh", status: "da_co" }],

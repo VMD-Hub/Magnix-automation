@@ -292,7 +292,7 @@ function skeletonDef(row: BnRow): NoxhLandingDef {
     heroSubtitle: `${seoName} · ${row.district}, Bắc Ninh${tip}`,
     locationNotes: `${row.name}: ${row.address}.
 
-Sau NQ 2025, Bắc Giang sáp nhập vào tỉnh Bắc Ninh mới. Cụm KCN Yên Phong (Samsung corridor) · Quế Võ · VSIP Tiên Du. Vị trí trên bản đồ đang được xác minh.
+Sau NQ 2025, Bắc Giang sáp nhập vào tỉnh Bắc Ninh mới. Cụm KCN Yên Phong (Samsung) · Quế Võ · VSIP Tiên Du. Vị trí trên bản đồ đang được xác minh.
 
 Đối chiếu soxaydung.bacninh.gov.vn / soxaydung.bacgiang.gov.vn (legacy). Xem Wiki nhà ở xã hội hoặc để lại thông tin tư vấn trên House X.`,
     highlights: [
@@ -352,49 +352,49 @@ function enrichCatTuong(def: NoxhLandingDef): NoxhLandingDef {
     blocks: 9,
     status: "DANG_BAN",
     description:
-      "Nhà ở xã hội Cát Tường Smart City tại Yên Trung & Thụy Hòa, Yên Phong — hành lang Samsung · KCN Yên Phong. CĐT CTCP Cát Tường. Sở/CĐT: ~9,4 ha (~94.075 m²), 9 khối K–T, ~1.040 căn (PDF inventory ghi 5 block ~1.000). Giá Sở công bố một số đợt ~15,4–16,3 triệu/m² (PDF nội bộ ~9,5–11,5 — ưu tiên Sở). Đang mở bán theo đợt. Tư vấn điều kiện qua House X — không công bố số điện thoại CĐT.",
+      "Nhà ở xã hội Cát Tường Smart City tại Yên Trung & Thụy Hòa, Yên Phong — gần hành lang Samsung · KCN Yên Phong. Chủ đầu tư CTCP Cát Tường. Theo Sở / chủ đầu tư: khoảng 9,4 ha (~94.075 m²), 9 khối K–T, khoảng 1.040 căn. Giá một số đợt Sở công bố khoảng 15,4–16,3 triệu/m² — ưu tiên thông báo Sở mới nhất trước khi nộp hồ sơ. Đang mở bán theo đợt. Tư vấn điều kiện qua House X.",
     seoTitle:
       "Nhà ở xã hội Cát Tường Smart City — ~1.040 căn Yên Phong | House X",
     seoDesc:
-      "NOXH Cát Tường Smart City Yên Phong: 9 khối ~1.040 căn, gần KCN Yên Phong. Tra cứu điều kiện và tư vấn trên House X.",
+      "NOXH Cát Tường Smart City Yên Phong: 9 khối khoảng 1.040 căn, gần KCN Yên Phong. Tra cứu điều kiện và tư vấn trên House X.",
     heroSubtitle:
-      "Yên Phong · Samsung corridor · 9 khối · ~1.040 căn · đang mở bán theo đợt",
+      "Yên Phong · gần KCN Samsung · 9 khối · khoảng 1.040 căn · đang mở bán theo đợt",
     locationNotes: `NOXH Cát Tường Smart City tại xã Yên Trung & Thụy Hòa, huyện Yên Phong, Bắc Ninh — cạnh hành lang công nghiệp Samsung · KCN Yên Phong.
 
-Quy mô Sở/CĐT: 9 khối K–T · ~1.040 căn · ~94.075 m². Giá một số đợt Sở công bố ~15,4–16,3 triệu/m² (chưa VAT & phí bảo trì) — xác minh thông báo mới nhất trước nộp hồ sơ.
+Quy mô theo Sở / chủ đầu tư: 9 khối K–T · khoảng 1.040 căn · khoảng 94.075 m². Giá một số đợt Sở công bố khoảng 15,4–16,3 triệu/m² (chưa VAT & phí bảo trì) — xác minh thông báo mới nhất trước khi nộp hồ sơ.
 
-House X không thu đặt cọc thay CĐT · không công bố số điện thoại CĐT.`,
+House X không thu đặt cọc thay chủ đầu tư.`,
     highlights: [
       {
-        title: "~1.040 căn · 9 khối K–T",
-        text: "~9,4 ha tại Yên Phong · gần KCN Yên Phong. PDF inventory ghi ~5 block / ~1.000 — House X ưu tiên công bố Sở / CĐT.",
+        title: "Khoảng 1.040 căn · 9 khối K–T",
+        text: "Khoảng 9,4 ha tại Yên Phong · gần KCN Yên Phong. Quy mô theo công bố Sở / chủ đầu tư.",
       },
       {
-        title: "CĐT: Cát Tường",
-        text: "CTCP Cát Tường — vốn tham chiếu ~1.778 tỷ. Hành lang Samsung Yên Phong.",
+        title: "Chủ đầu tư: Cát Tường",
+        text: "CTCP Cát Tường — vốn tham chiếu khoảng 1.778 tỷ. Gần hành lang Samsung Yên Phong.",
       },
       {
         title: "Giá — xác minh Sở",
-        text: "Một số đợt Sở công bố ~15,4–16,3 triệu/m². Danh mục PDF ghi ~9,5–11,5 — không dùng làm bảng giá nộp hồ sơ.",
+        text: "Một số đợt Sở công bố khoảng 15,4–16,3 triệu/m². Không dùng mức tham chiếu thấp hơn trên tài liệu cũ làm bảng giá nộp hồ sơ.",
       },
     ],
     amenities: [
       "KCN Yên Phong · hành lang Samsung",
-      "Hạ tầng kỹ thuật theo tiêu chuẩn NOXH",
-      "Trường / y tế theo quy hoạch (theo dõi GPMB)",
+      "Hạ tầng kỹ thuật theo tiêu chuẩn nhà ở xã hội",
+      "Trường / y tế theo quy hoạch (theo dõi giải phóng mặt bằng)",
     ],
     faqs: [
       {
         q: "Ai là chủ đầu tư?",
-        a: "CTCP Cát Tường. House X tư vấn qua form — không công bố số điện thoại CĐT.",
+        a: "CTCP Cát Tường. House X tư vấn qua form trên trang dự án.",
       },
       {
         q: "Bao nhiêu căn?",
-        a: "Theo Sở / CĐT: khoảng 1.040 căn trên 9 khối (K–T). Đang mở bán theo đợt.",
+        a: "Theo Sở / chủ đầu tư: khoảng 1.040 căn trên 9 khối (K–T). Đang mở bán theo đợt.",
       },
       {
         q: "Giá bao nhiêu?",
-        a: "Đối chiếu thông báo Sở XD Bắc Ninh mới nhất (một số đợt ~15,4–16,3 triệu/m²). Không dựa vào mức PDF nội bộ thấp hơn.",
+        a: "Đối chiếu thông báo Sở Xây dựng Bắc Ninh mới nhất (một số đợt khoảng 15,4–16,3 triệu/m²).",
       },
     ],
     unitTypes: [
@@ -428,53 +428,53 @@ function enrichEvergreenVanTrung(def: NoxhLandingDef): NoxhLandingDef {
     blocks: 10,
     status: "DANG_BAN",
     description:
-      "Nhà ở xã hội Evergreen Bắc Giang tại KĐT mới thị trấn Nếnh (phường Nếnh), Việt Yên — gần cụm KCN Vân Trung / Đình Trám / Quang Châu (Bắc Giang cũ, canonical Bắc Ninh). CĐT liên danh KCN Sài Gòn-Hải Phòng + ĐT PT bền vững Evergreen Bắc Giang (PDF catalog ghi nhầm Vân Trung / Sài Gòn 3A — ưu tiên công bố CĐT). Quy mô tham chiếu: ~3,2 ha · 10 block 20 tầng · ~3.300 căn · 28–70 m² (một số nguồn master plan lớn hơn — đối chiếu đợt Sở). Giá PDF ~12–13,5 triệu/m² — xác minh Sở trước nộp hồ sơ. Đang mở bán theo đợt. Tư vấn điều kiện qua House X — không công bố số điện thoại CĐT.",
+      "Nhà ở xã hội Evergreen Bắc Giang tại khu đô thị mới thị trấn Nếnh (phường Nếnh), Việt Yên — gần cụm KCN Vân Trung / Đình Trám / Quang Châu (Bắc Giang cũ, thuộc Bắc Ninh trên House X). Chủ đầu tư liên danh KCN Sài Gòn-Hải Phòng và Đầu tư phát triển bền vững Evergreen Bắc Giang. Quy mô tham chiếu: khoảng 3,2 ha · 10 block 20 tầng · khoảng 3.300 căn · 28–70 m². Giá tham chiếu khoảng 12–13,5 triệu/m² — xác minh Sở trước khi nộp hồ sơ. Đang mở bán theo đợt. Tư vấn điều kiện qua House X.",
     seoTitle:
       "Nhà ở xã hội Evergreen Bắc Giang — ~3.300 căn KĐT Nếnh | House X",
     seoDesc:
-      "NOXH Evergreen Bắc Giang tại Nếnh Việt Yên: ~10 block ~3.300 căn, gần KCN Vân Trung. Tra cứu điều kiện và tư vấn trên House X.",
+      "NOXH Evergreen Bắc Giang tại Nếnh Việt Yên: khoảng 10 block, khoảng 3.300 căn, gần KCN Vân Trung. Tra cứu điều kiện và tư vấn trên House X.",
     heroSubtitle:
-      "Nếnh · Việt Yên · gần KCN Vân Trung · ~10 block 20 tầng · ~3.300 căn · đang mở bán",
-    locationNotes: `NOXH Evergreen Bắc Giang tại phường Nếnh (KĐT mới thị trấn Nếnh), Bắc Ninh (Bắc Giang cũ) — gần KCN Vân Trung / Đình Trám / Quang Châu.
+      "Nếnh · Việt Yên · gần KCN Vân Trung · khoảng 10 block 20 tầng · khoảng 3.300 căn · đang mở bán",
+    locationNotes: `NOXH Evergreen Bắc Giang tại phường Nếnh (khu đô thị mới thị trấn Nếnh), Bắc Ninh (Bắc Giang cũ) — gần KCN Vân Trung / Đình Trám / Quang Châu.
 
-Slug catalog giữ hậu tố van-trung (PDF STT); địa điểm thực tế theo CĐT là Nếnh. Quy mô tham chiếu ~3,2 ha · 10 block 20 tầng · ~3.300 căn · 28–70 m². Giá PDF inventory ~12–13,5 triệu/m² — đối chiếu thông báo Sở XD Bắc Ninh trước nộp hồ sơ.
+Một số tài liệu còn ghi địa điểm Vân Trung; công bố chủ đầu tư / Sở ưu tiên khu đô thị Nếnh. Quy mô tham chiếu khoảng 3,2 ha · 10 block 20 tầng · khoảng 3.300 căn · 28–70 m². Giá tham chiếu khoảng 12–13,5 triệu/m² — đối chiếu thông báo Sở Xây dựng Bắc Ninh trước khi nộp hồ sơ.
 
-House X không thu đặt cọc thay CĐT · không công bố số điện thoại CĐT.`,
+House X không thu đặt cọc thay chủ đầu tư.`,
     highlights: [
       {
-        title: "~3.300 căn · 10 block 20 tầng",
-        text: "KĐT Nếnh · gần cụm KCN Việt Yên (Bắc Giang cũ). PDF ghi Vân Trung — House X ưu tiên địa điểm CĐT tại Nếnh.",
+        title: "Khoảng 3.300 căn · 10 block 20 tầng",
+        text: "Khu đô thị Nếnh · gần cụm KCN Việt Yên (Bắc Giang cũ). Vị trí theo công bố chủ đầu tư tại Nếnh.",
       },
       {
-        title: "CĐT: Sài Gòn-Hải Phòng + Evergreen Bắc Giang",
-        text: "Liên danh KCN Sài Gòn-Hải Phòng + ĐT PT bền vững Evergreen Bắc Giang — NOXH công nhân khu công nghiệp.",
+        title: "Chủ đầu tư: Sài Gòn-Hải Phòng + Evergreen Bắc Giang",
+        text: "Liên danh KCN Sài Gòn-Hải Phòng và Đầu tư phát triển bền vững Evergreen Bắc Giang — nhà ở xã hội phục vụ khu công nghiệp.",
       },
       {
         title: "Giá — xác minh Sở",
-        text: "PDF inventory ~12–13,5 triệu/m². Không dùng làm bảng giá nộp hồ sơ — đối chiếu Sở XD.",
+        text: "Giá tham chiếu khoảng 12–13,5 triệu/m². Đối chiếu Sở Xây dựng trước khi nộp hồ sơ.",
       },
     ],
     amenities: [
-      "KĐT Nếnh · gần KCN Vân Trung / Đình Trám",
-      "Hạ tầng kỹ thuật theo tiêu chuẩn NOXH",
+      "Khu đô thị Nếnh · gần KCN Vân Trung / Đình Trám",
+      "Hạ tầng kỹ thuật theo tiêu chuẩn nhà ở xã hội",
       NOXH_AMENITIES_VERIFYING,
     ],
     faqs: [
       {
         q: "Khác gì Evergreen Bắc Ninh (HUD2 Tiên Du)?",
-        a: "Đây là Evergreen Bắc Giang tại Nếnh (liên danh Sài Gòn-Hải Phòng + Evergreen Bắc Giang). Evergreen Bắc Ninh HUD2 tại Đại Đồng Tiên Du là dự án riêng.",
+        a: "Đây là Evergreen Bắc Giang tại Nếnh (liên danh Sài Gòn-Hải Phòng + Evergreen Bắc Giang). Evergreen Bắc Ninh HUD2 tại Đại Đồng, Tiên Du là dự án riêng.",
       },
       {
         q: "Ở Vân Trung hay Nếnh?",
-        a: "PDF danh mục ghi Vân Trung; công bố CĐT / Sở: KĐT mới thị trấn Nếnh (phường Nếnh). Gần cụm KCN Vân Trung.",
+        a: "Một số tài liệu ghi Vân Trung; công bố chủ đầu tư / Sở: khu đô thị mới thị trấn Nếnh (phường Nếnh). Dự án gần cụm KCN Vân Trung.",
       },
       {
         q: "Bao nhiêu căn?",
-        a: "Tham chiếu catalog ~3.300 căn trên ~10 block 20 tầng (một số nguồn nêu master plan lớn hơn). Đang mở bán theo đợt.",
+        a: "Tham chiếu khoảng 3.300 căn trên khoảng 10 block 20 tầng. Đang mở bán theo đợt — xác minh thông báo mới nhất.",
       },
       {
         q: "Giá bao nhiêu?",
-        a: "PDF ghi ~12–13,5 triệu/m². Xác minh thông báo Sở XD mới nhất trước nộp hồ sơ.",
+        a: "Tham chiếu khoảng 12–13,5 triệu/m². Xác minh thông báo Sở Xây dựng mới nhất trước khi nộp hồ sơ.",
       },
     ],
     unitTypes: [

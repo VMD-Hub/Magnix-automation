@@ -232,7 +232,7 @@ function enrichDoiNganHang(def: NoxhLandingDef): NoxhLandingDef {
     blocks: 3,
     status: "DANG_BAN",
     description:
-      "Nhà ở xã hội Đồi Ngân Hàng (GHomes Hạ Long) tại phường Hồng Hải & Cao Thắng, TP. Hạ Long — ~25.900 m², 3 khối (~986 căn). CĐT liên danh Tư vấn ĐT TC Toàn Cầu (Global Invest) + ĐT PT nhà số 6 Hà Nội (PDF ghi TTH+NHP / Hồng Hà — ưu tiên Sở / CĐT). Diện tích căn 45–70 m²; giá tham chiếu đợt Sở ~16,2 triệu/m² — đối chiếu thông báo mới nhất trước nộp hồ sơ. Đang mở bán theo đợt. Tư vấn điều kiện qua House X — không công bố số điện thoại CĐT.",
+      "Nhà ở xã hội Đồi Ngân Hàng (GHomes Hạ Long) tại phường Hồng Hải & Cao Thắng, TP. Hạ Long — khoảng 25.900 m², 3 khối (khoảng 986 căn). Chủ đầu tư liên danh Tư vấn Đầu tư Tài chính Toàn Cầu và Đầu tư Phát triển nhà số 6 Hà Nội. Diện tích căn 45–70 m²; giá tham chiếu đợt Sở khoảng 16,2 triệu/m² — đối chiếu thông báo mới nhất trước khi nộp hồ sơ. Đang mở bán theo đợt. Tư vấn điều kiện qua House X.",
     seoTitle:
       "Nhà ở xã hội Đồi Ngân Hàng Hạ Long — ~986 căn GHomes | House X",
     seoDesc:
@@ -241,26 +241,26 @@ function enrichDoiNganHang(def: NoxhLandingDef): NoxhLandingDef {
       "Hạ Long · Hồng Hải & Cao Thắng · 3 khối · ~986 căn · ~16,2 tr/m² · GHomes",
     locationNotes: `NOXH Đồi Ngân Hàng (GHomes) tại phường Hồng Hải & Cao Thắng, TP. Hạ Long, Quảng Ninh.
 
-Quy mô: ~25.900 m² · 3 khối · ~986 căn · căn 45–70 m². Giá tham chiếu đợt Sở ~16,2 triệu/m² — xác minh thông báo Sở XD Quảng Ninh mới nhất trước nộp hồ sơ.
+Quy mô: khoảng 25.900 m² · 3 khối · khoảng 986 căn · căn 45–70 m². Giá tham chiếu đợt Sở khoảng 16,2 triệu/m² — xác minh thông báo Sở Xây dựng Quảng Ninh mới nhất trước khi nộp hồ sơ.
 
-House X không thu đặt cọc thay CĐT · không công bố số điện thoại CĐT.`,
+House X không thu đặt cọc thay chủ đầu tư · không công bố số điện thoại chủ đầu tư.`,
     highlights: [
       {
-        title: "~986 căn · ~25.900 m²",
+        title: "Khoảng 986 căn · khoảng 25.900 m²",
         text: "Đồi Ngân Hàng / GHomes tại Hồng Hải & Cao Thắng, TP. Hạ Long. 3 khối chung cư.",
       },
       {
-        title: "CĐT: Toàn Cầu + Nhà số 6 Hà Nội",
-        text: "Liên danh Tư vấn ĐT TC Toàn Cầu + ĐT PT nhà số 6 Hà Nội — thương hiệu GHomes Hạ Long.",
+        title: "Chủ đầu tư: Toàn Cầu + Nhà số 6 Hà Nội",
+        text: "Liên danh Tư vấn Đầu tư Tài chính Toàn Cầu và Đầu tư Phát triển nhà số 6 Hà Nội — thương hiệu GHomes Hạ Long.",
       },
       {
         title: "Giá — xác minh Sở",
-        text: "Một số đợt Sở / truyền thông ~16,2 triệu/m² (45–70 m²). Đối chiếu Sở XD Quảng Ninh trước nộp hồ sơ.",
+        text: "Một số đợt Sở / truyền thông khoảng 16,2 triệu/m² (45–70 m²). Đối chiếu Sở Xây dựng Quảng Ninh trước khi nộp hồ sơ.",
       },
     ],
     amenities: [
       "TP. Hạ Long · Hồng Hải & Cao Thắng",
-      "Hạ tầng kỹ thuật theo tiêu chuẩn NOXH",
+      "Hạ tầng kỹ thuật theo tiêu chuẩn nhà ở xã hội",
       NOXH_AMENITIES_VERIFYING,
     ],
     faqs: [
