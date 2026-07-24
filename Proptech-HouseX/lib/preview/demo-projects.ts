@@ -103,6 +103,50 @@ import {
   buildNoxhLongAnMock,
 } from "@/lib/preview/noxh-long-an-projects";
 import {
+  allNoxhAnGiangSlugs,
+  buildNoxhAnGiangMock,
+} from "@/lib/preview/noxh-an-giang-projects";
+import {
+  allNoxhDongThapSlugs,
+  buildNoxhDongThapMock,
+} from "@/lib/preview/noxh-dong-thap-projects";
+import {
+  allNoxhHanoiSlugs,
+  buildNoxhHanoiMock,
+} from "@/lib/preview/noxh-hanoi-projects";
+import {
+  allNoxhDanangSlugs,
+  buildNoxhDanangMock,
+} from "@/lib/preview/noxh-danang-projects";
+import {
+  allNoxhHcmSlugs,
+  buildNoxhHcmMock,
+} from "@/lib/preview/noxh-hcm-projects";
+import {
+  allNoxhKhanhHoaSlugs,
+  buildNoxhKhanhHoaMock,
+} from "@/lib/preview/noxh-khanh-hoa-projects";
+import {
+  allNoxhLamDongSlugs,
+  buildNoxhLamDongMock,
+} from "@/lib/preview/noxh-lam-dong-projects";
+import {
+  allNoxhDakLakSlugs,
+  buildNoxhDakLakMock,
+} from "@/lib/preview/noxh-dak-lak-projects";
+import {
+  allNoxhGiaLaiSlugs,
+  buildNoxhGiaLaiMock,
+} from "@/lib/preview/noxh-gia-lai-projects";
+import {
+  allNoxhBacNinhSlugs,
+  buildNoxhBacNinhMock,
+} from "@/lib/preview/noxh-bac-ninh-projects";
+import {
+  allNoxhQuangNinhSlugs,
+  buildNoxhQuangNinhMock,
+} from "@/lib/preview/noxh-quang-ninh-projects";
+import {
   buildHoGuomXanhMock,
   buildHoGuomXanhPreviewListings,
   HGX_PROJECT_SLUG,
@@ -112,6 +156,24 @@ type DemoEntry = {
   build: () => ProjectDetail;
   listings?: () => ProjectLandingListingCard[];
 };
+
+function registerNoxhMocks(
+  slugs: string[],
+  build: (slug: string) => ProjectDetail | null,
+): Record<string, DemoEntry> {
+  return Object.fromEntries(
+    slugs.map((slug) => [
+      slug,
+      {
+        build: () => {
+          const p = build(slug);
+          if (!p) throw new Error(`NOXH mock missing for slug: ${slug}`);
+          return p;
+        },
+      },
+    ]),
+  );
+}
 
 /** Dự án demo khi chưa có Postgres / chưa seed — slug khớp seed. */
 const DEMO_REGISTRY: Record<string, DemoEntry> = {
@@ -204,6 +266,17 @@ const DEMO_REGISTRY: Record<string, DemoEntry> = {
       },
     ]),
   ),
+  ...registerNoxhMocks(allNoxhAnGiangSlugs(), buildNoxhAnGiangMock),
+  ...registerNoxhMocks(allNoxhDongThapSlugs(), buildNoxhDongThapMock),
+  ...registerNoxhMocks(allNoxhHanoiSlugs(), buildNoxhHanoiMock),
+  ...registerNoxhMocks(allNoxhDanangSlugs(), buildNoxhDanangMock),
+  ...registerNoxhMocks(allNoxhHcmSlugs(), buildNoxhHcmMock),
+  ...registerNoxhMocks(allNoxhKhanhHoaSlugs(), buildNoxhKhanhHoaMock),
+  ...registerNoxhMocks(allNoxhLamDongSlugs(), buildNoxhLamDongMock),
+  ...registerNoxhMocks(allNoxhDakLakSlugs(), buildNoxhDakLakMock),
+  ...registerNoxhMocks(allNoxhGiaLaiSlugs(), buildNoxhGiaLaiMock),
+  ...registerNoxhMocks(allNoxhBacNinhSlugs(), buildNoxhBacNinhMock),
+  ...registerNoxhMocks(allNoxhQuangNinhSlugs(), buildNoxhQuangNinhMock),
 };
 
 export function isDemoProjectSlug(slug: string): boolean {

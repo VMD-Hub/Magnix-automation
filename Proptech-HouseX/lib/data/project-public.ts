@@ -45,6 +45,9 @@ export function enrichProjectFromCatalog(
   const catalogOverview = parseProjectOverview(catalog.overviewData);
   if (!catalogOverview.landing) return project;
 
+  /** NOXH inventory: copy landing/mô tả lấy từ code — tránh DB seed cũ “đóng băng” sau deploy. */
+  const preferCatalogCopy = catalog.projectType === "NHA_O_XA_HOI";
+
   return {
     ...catalog,
     ...project,
@@ -53,9 +56,15 @@ export function enrichProjectFromCatalog(
       blocks: current.blocks ?? catalogOverview.blocks,
       landing: catalogOverview.landing,
     }) as ProjectDetail["overviewData"],
-    description: project.description?.trim() || catalog.description,
-    seoTitle: project.seoTitle?.trim() || catalog.seoTitle,
-    seoDesc: project.seoDesc?.trim() || catalog.seoDesc,
+    description: preferCatalogCopy
+      ? catalog.description?.trim() || project.description
+      : project.description?.trim() || catalog.description,
+    seoTitle: preferCatalogCopy
+      ? catalog.seoTitle?.trim() || project.seoTitle
+      : project.seoTitle?.trim() || catalog.seoTitle,
+    seoDesc: preferCatalogCopy
+      ? catalog.seoDesc?.trim() || project.seoDesc
+      : project.seoDesc?.trim() || catalog.seoDesc,
     unitTypes:
       project.unitTypes.length > 0 ? project.unitTypes : catalog.unitTypes,
     legalDocs:
