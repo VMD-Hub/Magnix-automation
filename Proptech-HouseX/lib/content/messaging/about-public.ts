@@ -8,9 +8,7 @@ export const ABOUT_SEO = {
 
 export const ABOUT_HERO = {
   kicker: "Về House X",
-  h1: "Giới thiệu House X — Cổng Proptech tìm nhà an toàn và chính xác",
-  intro:
-    "House X là cổng Proptech đặt người tìm nhà ở trung tâm: tìm, so sánh và liên hệ an toàn với tin đăng đã được kiểm chứng. Chúng tôi giúp bạn ra quyết định nhanh và ít rủi ro hơn khi mua hoặc thuê bất động sản.",
+  h1: "Nền tảng số tìm nhà Việt Nam",
 } as const;
 
 export const ABOUT_CORE_VALUES = {

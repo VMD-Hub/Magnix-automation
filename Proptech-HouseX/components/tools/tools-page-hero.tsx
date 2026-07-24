@@ -15,7 +15,10 @@ type Cta = { label: string; href: string };
 type Props = {
   kicker?: string;
   title: string;
-  subtitle: string;
+  /** Bỏ qua nếu hero chỉ cần kicker + title + CTA. */
+  subtitle?: string;
+  /** Căn giữa nội dung + CTA (vd. /gioi-thieu). Mặc định trái. */
+  align?: "start" | "center";
   /** Ưu tiên slide responsive — không tải bản 3840. */
   bannerSlide?: HouseXHeroSlideAsset;
   bannerSources?: ResponsiveBannerSources;
@@ -33,6 +36,7 @@ export function ToolsPageHero({
   kicker,
   title,
   subtitle,
+  align = "start",
   bannerSlide,
   bannerSources,
   image,
@@ -46,6 +50,7 @@ export function ToolsPageHero({
   const sources =
     bannerSources ??
     (bannerSlide ? catalogBannerSources(bannerSlide) : undefined);
+  const centered = align === "center";
 
   return (
     <header className={cn("proptech-catalog-hero", className)}>
@@ -76,23 +81,41 @@ export function ToolsPageHero({
         )}
         <div className="proptech-catalog-hero__overlay-h" aria-hidden />
         <div className="proptech-catalog-hero__overlay-v" aria-hidden />
-        <div className="proptech-catalog-hero__content absolute inset-0 flex flex-col justify-end px-5 pb-5 sm:px-8 sm:pb-7">
+        <div
+          className={cn(
+            "proptech-catalog-hero__content absolute inset-0 flex flex-col justify-end px-5 pb-5 sm:px-8 sm:pb-7",
+            centered && "items-center text-center",
+          )}
+        >
           {kicker ? (
             <p className="proptech-kicker text-gold-400">{kicker}</p>
           ) : null}
           <h1
             className={cn(
-              "lux-hero-title max-w-2xl text-2xl font-extrabold tracking-tight text-white drop-shadow-sm sm:text-3xl lg:text-4xl",
+              "lux-hero-title text-2xl font-extrabold tracking-tight text-white drop-shadow-sm sm:text-3xl lg:text-4xl",
+              centered ? "max-w-3xl" : "max-w-2xl",
               kicker && "mt-2",
             )}
           >
             {title}
           </h1>
-          <p className="mt-2 max-w-xl text-sm leading-relaxed text-silver-200 sm:text-base">
-            {subtitle}
-          </p>
+          {subtitle ? (
+            <p
+              className={cn(
+                "mt-2 text-sm leading-relaxed text-silver-200 sm:text-base",
+                centered ? "max-w-2xl" : "max-w-xl",
+              )}
+            >
+              {subtitle}
+            </p>
+          ) : null}
           {(primaryCta || secondaryCta) && (
-            <div className="mt-5 flex flex-wrap gap-3 print:hidden">
+            <div
+              className={cn(
+                "mt-5 flex flex-wrap gap-3 print:hidden",
+                centered && "justify-center",
+              )}
+            >
               {primaryCta ? (
                 <ButtonLink href={primaryCta.href} variant="primary" size="md">
                   {primaryCta.label}

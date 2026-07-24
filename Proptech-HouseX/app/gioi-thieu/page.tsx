@@ -43,10 +43,10 @@ export default function GioiThieuPage() {
         <ToolsPageHero
           kicker={ABOUT_HERO.kicker}
           title={ABOUT_HERO.h1}
-          subtitle={ABOUT_HERO.intro}
+          align="center"
           image={hero.jpgMd}
           imageWebp={hero.webpMd}
-          imageAlt="House X — cổng Proptech tìm nhà an toàn"
+          imageAlt="House X — nền tảng số tìm nhà Việt Nam"
           objectPosition={hero.objectPosition}
           primaryCta={{ label: "Tìm nhà ngay", href: "/mua-ban" }}
           secondaryCta={{ label: "Đăng ký", href: "/dang-ky/khach-hang" }}
