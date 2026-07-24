@@ -241,7 +241,7 @@ const SLUG_TITLE = new Map<string, string>([
   ],
   [
     "hieu-sai-mua-nha-dung-cho-du-tien",
-    "Mua nhà có cần “đủ tiền” không? 4 hiểu sai khiến người mua lần đầu đứng ngoài",
+    "Mua nhà có cần “đủ tiền” không? 4 hiểu sai khiến người mua lần đầu đứng ngoài cuộc",
   ],
 ]);
 

@@ -39,7 +39,7 @@ export const NOXH_LOAN_QUICK_CHECKLIST = [
   { item: "Tình trạng hôn nhân & nghĩa vụ nợ vợ/chồng", href: "/tin-tuc/vay-noxh-vo-chong-dong-vay-cic" },
   { item: "Giấy tờ chứng minh thu nhập và hợp đồng mua/thuê mua", href: "/tin-tuc/ho-so-vay-mua-nha-o-xa-hoi" },
   { item: "Dòng tiền & quỹ dự phòng — tránh tưởng đủ tiền mua nhà", href: "/tin-tuc/sai-lam-tai-chinh-tuong-du-tien-mua-nha" },
-  { item: "Đừng chờ “đủ tiền” — 4 hiểu sai khiến bạn đứng ngoài", href: "/tin-tuc/hieu-sai-mua-nha-dung-cho-du-tien" },
+  { item: "Đừng chờ “đủ tiền” — 4 hiểu sai khiến bạn đứng ngoài cuộc", href: "/tin-tuc/hieu-sai-mua-nha-dung-cho-du-tien" },
 ] as const;
 
 export const NOXH_LOAN_QUICK_FAQ = [
