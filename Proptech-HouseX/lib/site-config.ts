@@ -138,25 +138,71 @@ export type SocialChannel = {
   href: string | null;
 };
 
-/**
- * Link công khai Zalo OA (footer / Kết nối).
- * Ưu tiên URL đầy đủ; không thì ghép từ OA ID (server `ZALO_OA_ID` cũng được — SiteContact là RSC).
- */
-export function getHouseXZaloOaPublicUrl(): string | null {
-  const full =
-    process.env.NEXT_PUBLIC_SOCIAL_ZALO_URL?.trim() ||
-    process.env.NEXT_PUBLIC_ZALO_OA_PUBLIC_URL?.trim();
-  if (full) return full;
-
-  const id =
-    process.env.NEXT_PUBLIC_ZALO_OA_ID?.trim() ||
-    process.env.ZALO_OA_ID?.trim();
-  if (!id) return null;
-  if (/^https?:\/\//i.test(id)) return id;
-  return `https://zalo.me/${id.replace(/^\/+/, "")}`;
+function firstNonEmpty(...candidates: Array<string | undefined | null>): string | null {
+  for (const c of candidates) {
+    const v = c?.trim();
+    if (v) return v;
+  }
+  return null;
 }
 
-/** Liên kết mạng xã hội — bổ sung URL trong env khi sẵn sàng. */
+function asHttpUrlOrId(raw: string, idToUrl: (id: string) => string): string {
+  if (/^https?:\/\//i.test(raw)) return raw;
+  return idToUrl(raw.replace(/^\/+/, ""));
+}
+
+/**
+ * Link công khai Zalo OA (footer / Kết nối).
+ * Không dùng ZALO_APP_ID (đó là App developers, không phải link OA).
+ */
+export function getHouseXZaloOaPublicUrl(): string | null {
+  const full = firstNonEmpty(
+    process.env.NEXT_PUBLIC_SOCIAL_ZALO_URL,
+    process.env.NEXT_PUBLIC_ZALO_OA_PUBLIC_URL,
+    process.env.SOCIAL_ZALO_URL,
+    process.env.ZALO_OA_PUBLIC_URL,
+  );
+  if (full) return asHttpUrlOrId(full, (id) => `https://zalo.me/${id}`);
+
+  const id = firstNonEmpty(
+    process.env.NEXT_PUBLIC_ZALO_OA_ID,
+    process.env.ZALO_OA_ID,
+  );
+  if (!id) return null;
+  return asHttpUrlOrId(id, (oaId) => `https://zalo.me/${oaId}`);
+}
+
+/**
+ * Link Fanpage Facebook (footer).
+ * Chấp nhận URL đầy đủ hoặc page id / username.
+ */
+export function getHouseXFacebookPageUrl(): string | null {
+  const full = firstNonEmpty(
+    process.env.NEXT_PUBLIC_SOCIAL_FACEBOOK_URL,
+    process.env.SOCIAL_FACEBOOK_URL,
+    process.env.NEXT_PUBLIC_FACEBOOK_PAGE_URL,
+    process.env.FACEBOOK_PAGE_URL,
+    process.env.NEXT_PUBLIC_FANPAGE_URL,
+    process.env.FANPAGE_URL,
+  );
+  if (full) {
+    return asHttpUrlOrId(full, (id) => `https://www.facebook.com/${id}`);
+  }
+
+  const id = firstNonEmpty(
+    process.env.NEXT_PUBLIC_FACEBOOK_PAGE_ID,
+    process.env.FACEBOOK_PAGE_ID,
+    process.env.NEXT_PUBLIC_FB_PAGE_ID,
+    process.env.FB_PAGE_ID,
+    process.env.NEXT_PUBLIC_FANPAGE_ID,
+    process.env.FANPAGE_ID,
+    process.env.META_PAGE_ID,
+  );
+  if (!id) return null;
+  return asHttpUrlOrId(id, (pageId) => `https://www.facebook.com/${pageId}`);
+}
+
+/** Liên kết mạng xã hội — bổ sung URL/ID trong env khi sẵn sàng. */
 export function getSocialChannels(): SocialChannel[] {
   return [
     {
@@ -167,17 +213,23 @@ export function getSocialChannels(): SocialChannel[] {
     {
       id: "facebook",
       label: "Fanpage",
-      href: process.env.NEXT_PUBLIC_SOCIAL_FACEBOOK_URL?.trim() || null,
+      href: getHouseXFacebookPageUrl(),
     },
     {
       id: "tiktok",
       label: "TikTok",
-      href: process.env.NEXT_PUBLIC_SOCIAL_TIKTOK_URL?.trim() || null,
+      href: firstNonEmpty(
+        process.env.NEXT_PUBLIC_SOCIAL_TIKTOK_URL,
+        process.env.SOCIAL_TIKTOK_URL,
+      ),
     },
     {
       id: "youtube",
       label: "YouTube",
-      href: process.env.NEXT_PUBLIC_SOCIAL_YOUTUBE_URL?.trim() || null,
+      href: firstNonEmpty(
+        process.env.NEXT_PUBLIC_SOCIAL_YOUTUBE_URL,
+        process.env.SOCIAL_YOUTUBE_URL,
+      ),
     },
   ];
 }
