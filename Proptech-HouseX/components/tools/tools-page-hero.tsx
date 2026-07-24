@@ -83,8 +83,10 @@ export function ToolsPageHero({
         <div className="proptech-catalog-hero__overlay-v" aria-hidden />
         <div
           className={cn(
-            "proptech-catalog-hero__content absolute inset-0 flex flex-col justify-end px-5 pb-5 sm:px-8 sm:pb-7",
-            centered && "items-center text-center",
+            "proptech-catalog-hero__content !absolute inset-0 z-[2] flex flex-col px-5 sm:px-8",
+            centered
+              ? "items-center justify-center py-6 text-center sm:py-7"
+              : "justify-end pb-5 sm:pb-7",
           )}
         >
           {kicker ? (

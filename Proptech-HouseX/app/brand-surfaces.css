@@ -330,7 +330,7 @@
 }
 
 .proptech-catalog-hero__content {
-  position: relative;
+  /* Không ép position — hero dùng absolute inset-0; compact dùng flow bình thường. */
   z-index: 2;
 }
 
