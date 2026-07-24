@@ -61,7 +61,7 @@ export function buildNoxhProvinceHubFaqs(
       blocks: [
         {
           type: "p",
-          text: `Trang này liệt kê các dự án nhà ở xã hội thuộc địa giới ${entry.nameNew} (sau sắp xếp đơn vị hành chính 2025). Chọn dự án để xem giá, mặt bằng, điều kiện mua và đăng ký tư vấn trên House X.`,
+          text: `Trang này liệt kê các dự án nhà ở xã hội tại ${entry.nameNew}. Chọn dự án để xem giá, mặt bằng, điều kiện mua và đăng ký tư vấn trên House X.`,
         },
       ],
     },
@@ -74,7 +74,7 @@ export function buildNoxhProvinceHubFaqs(
       blocks: [
         {
           type: "p",
-          text: `Tên địa giới cũ như ${entry.aliasesOld.join(", ")} vẫn dùng để tìm kiếm. Theo sắp xếp hành chính mới, các khu vực này thuộc ${entry.nameNew}. House X giữ cả tên mới và tên quen gọi để bạn không bỏ lỡ dự án.`,
+          text: `Tên quen gọi như ${entry.aliasesOld.join(", ")} vẫn dùng để tìm kiếm. Theo đơn vị hành chính hiện hành, các khu vực này thuộc ${entry.nameNew}. House X giữ cả tên mới và tên quen gọi để bạn không bỏ lỡ dự án.`,
         },
       ],
     });
@@ -85,17 +85,17 @@ export function buildNoxhProvinceHubFaqs(
     blocks: [
       {
         type: "p",
-        text: "Wiki nhà ở xã hội trên House X (/wiki-nha-o-xa-hoi) tóm tắt điều kiện, hồ sơ và quy trình theo văn bản công bố. Sau khi tự kiểm tra sơ bộ, bạn có thể mở dự án trên hub tỉnh này để đăng ký tư vấn — form giống nhau trên mọi miền.",
+        text: "Trên House X có hướng dẫn nhà ở xã hội: điều kiện, hồ sơ và quy trình theo văn bản công bố. Bạn nên tự kiểm tra sơ bộ trước, rồi mở từng dự án tại tỉnh này để xem giá và đăng ký tư vấn nếu cần.",
       },
     ],
   });
 
   faqs.push({
-    q: "Xem tất cả nhà ở xã hội miền Nam ở đâu?",
+    q: "Xem tất cả dự án nhà ở xã hội trên House X ở đâu?",
     blocks: [
       {
         type: "p",
-        text: `Hub quốc gia tại ${NOXH_PROVINCE_HUB_BASE} gom toàn bộ dự án NOXH trên House X. Các hub tỉnh (TP.HCM, Đồng Nai, Cần Thơ, Tây Ninh) lọc theo địa giới mới.`,
+        text: "Mở danh mục nhà ở xã hội toàn quốc trên House X để xem mọi dự án. Các trang theo tỉnh (TP.HCM, Đồng Nai, Hà Nội, Đà Nẵng…) giúp bạn lọc đúng khu vực đang sống hoặc làm việc.",
       },
     ],
   });

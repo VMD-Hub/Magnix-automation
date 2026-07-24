@@ -68,7 +68,7 @@ export async function NoxhProvinceHubGrid({
               prefetch
               className="font-semibold text-brand-700 hover:underline"
             >
-              Xem tất cả nhà ở xã hội miền Nam →
+              Xem tất cả dự án nhà ở xã hội
             </Link>
           </p>
         </div>

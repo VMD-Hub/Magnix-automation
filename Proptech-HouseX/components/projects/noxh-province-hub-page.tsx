@@ -84,15 +84,15 @@ export function NoxhProvinceHubPage({ entry, page }: Props) {
           Nhà ở xã hội {entry.nameNew}
         </h1>
         <p className="mt-2 text-sm font-medium text-emerald-800">
-          Cập nhật mới nhất 2026 — danh mục theo địa giới mới
+          Cập nhật 2026 — danh mục dự án tại {entry.nameNew}
           {entry.aliasesOld.length > 0
-            ? ` (còn tìm theo tên quen gọi: ${entry.aliasesOld.join(", ")})`
+            ? ` (vẫn tìm được theo tên quen gọi: ${entry.aliasesOld.join(", ")})`
             : ""}
           .
         </p>
         <p className="mt-3 text-base leading-relaxed text-slate-600">
-          Danh mục dự án nhà ở xã hội tại {entry.nameNew} trên House X. Chọn
-          dự án để xem giá, tiến độ và điều kiện mua.
+          Chọn dự án để xem giá, tiến độ và điều kiện mua — thông tin có căn cứ
+          trước khi bạn giữ suất hoặc nộp hồ sơ.
         </p>
       </header>
 
@@ -106,7 +106,7 @@ export function NoxhProvinceHubPage({ entry, page }: Props) {
             prefetch
             className="font-semibold text-brand-700 hover:underline"
           >
-            Wiki nhà ở xã hội
+            Hướng dẫn nhà ở xã hội
           </Link>
           <Link
             href="/vay-mua-nha"
@@ -127,7 +127,7 @@ export function NoxhProvinceHubPage({ entry, page }: Props) {
             prefetch
             className="font-semibold text-brand-700 hover:underline"
           >
-            Tất cả NOXH miền Nam
+            Tất cả dự án nhà ở xã hội
           </Link>
         </nav>
       ) : null}
@@ -158,7 +158,7 @@ export function NoxhProvinceHubPage({ entry, page }: Props) {
           prefetch
           className="font-semibold text-brand-700 hover:underline"
         >
-          ← Tất cả nhà ở xã hội miền Nam
+          ← Tất cả dự án nhà ở xã hội
         </Link>
       </p>
     </CatalogPageShell>

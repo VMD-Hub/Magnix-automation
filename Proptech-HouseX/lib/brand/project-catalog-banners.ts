@@ -34,7 +34,7 @@ export const PROJECT_CATALOG_BANNERS: Record<
   },
   NHA_O_XA_HOI: {
     title: NOXH_CATALOG_TITLE,
-    alt: "Khu căn hộ nhà ở xã hội — danh mục dự án miền Nam trên HouseX",
+    alt: "Khu căn hộ nhà ở xã hội — danh mục dự án toàn quốc trên House X",
     slide: civic,
     objectPosition: "50% 55%",
   },

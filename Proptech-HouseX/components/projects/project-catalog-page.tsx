@@ -87,7 +87,7 @@ export function ProjectCatalogPage({ projectType, page }: Props) {
       {isNoxhCatalog ? (
         <div className="mb-8">
           <p className="mb-2 text-sm font-medium text-slate-700">
-            Theo tỉnh / thành (địa giới mới)
+            Theo tỉnh, thành phố
           </p>
           <div className="flex flex-wrap gap-2">
             {listNoxhProvinceHubsEnabled().map((hub) => (
@@ -102,14 +102,15 @@ export function ProjectCatalogPage({ projectType, page }: Props) {
             ))}
           </div>
           <p className="mt-3 text-sm text-slate-600">
-            Điều kiện, hồ sơ và quy trình:{" "}
+            Cần nắm điều kiện mua, hồ sơ và quy trình trước? Xem{" "}
             <Link
               href={NOXH_HANDBOOK_PATH}
               prefetch
               className="font-semibold text-brand-700 hover:underline"
             >
-              Wiki nhà ở xã hội
+              hướng dẫn nhà ở xã hội
             </Link>
+            .
           </p>
         </div>
       ) : null}

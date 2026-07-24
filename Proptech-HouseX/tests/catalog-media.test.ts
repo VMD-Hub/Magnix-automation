@@ -90,9 +90,10 @@ describe("catalog media fallbacks", () => {
     assert.equal(overview.blocks, undefined);
   });
 
-  it("NOXH region tagline is SEO-friendly without internal Rada brand name", () => {
-    assert.match(NOXH_REGION_TAGLINE, /nhà ở xã hội miền Nam/i);
-    assert.match(NOXH_REGION_TAGLINE, /người lao động/i);
+  it("NOXH catalog hook is national and buyer-facing without Rada", () => {
+    assert.match(NOXH_REGION_TAGLINE, /kiểm tra điều kiện/i);
+    assert.match(NOXH_REGION_TAGLINE, /giữ suất/i);
+    assert.doesNotMatch(NOXH_REGION_TAGLINE, /miền Nam/i);
     assert.doesNotMatch(NOXH_REGION_TAGLINE, /Rada/i);
   });
 });

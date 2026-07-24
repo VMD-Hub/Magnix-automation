@@ -1,6 +1,7 @@
 /**
- * Copy công khai NOXH — SEO + cảm xúc.
- * Không dùng tên nội bộ "Rada"; giữ từ khóa nhà ở xã hội miền Nam / an cư / người lao động.
+ * Copy công khai NOXH — SEO + cảm xúc người mua.
+ * Định vị: House X = nền tảng số tìm nhà Việt Nam (Bắc · Trung · Nam).
+ * Không dùng tên nội bộ "Rada"; không lộ path/URL thô trong prose.
  */
 
 import {
@@ -12,17 +13,26 @@ import { NOXH_CATALOG_PATH } from "@/lib/content/project-catalog-paths";
 export { NOXH_HANDBOOK_PATH } from "@/lib/content/article-routes";
 export { NOXH_CATALOG_PATH };
 
-/** Dòng giới thiệu trên banner danh mục & hero từng dự án NOXH. */
-export const NOXH_REGION_TAGLINE =
-  "Nhà ở xã hội miền Nam — cơ hội an cư cho người lao động" as const;
+/**
+ * Hook banner danh mục & hero dự án NOXH — intent người mua, không slogan vùng miền.
+ * Cấu trúc gần trang chủ: kicker (hook) → tiêu đề → lead ngắn.
+ */
+export const NOXH_CATALOG_HOOK =
+  "Chọn đúng dự án — kiểm tra điều kiện trước khi giữ suất" as const;
+
+/** @deprecated Dùng NOXH_CATALOG_HOOK — giữ alias để import cũ không gãy. */
+export const NOXH_REGION_TAGLINE = NOXH_CATALOG_HOOK;
 
 export const NOXH_CATALOG_TITLE = "Dự án nhà ở xã hội" as const;
 
+export const NOXH_CATALOG_LEAD =
+  "Danh mục Bắc · Trung · Nam trên House X — giá, tiến độ và điều kiện mua có căn cứ." as const;
+
 export const NOXH_CATALOG_SEO_TITLE =
-  "Nhà ở xã hội miền Nam — danh mục dự án trên House X" as const;
+  "Dự án nhà ở xã hội toàn quốc trên House X" as const;
 
 export const NOXH_CATALOG_SEO_DESCRIPTION =
-  "Danh mục NOXH miền Nam trên House X: Long An, Đồng Nai, TP.HCM, Cần Thơ — giá, mặt bằng, điều kiện mua và hỗ trợ vay cho người lao động." as const;
+  "Danh mục nhà ở xã hội trên House X: Hà Nội, TP.HCM, Đồng Nai, Đà Nẵng và nhiều tỉnh thành — giá, mặt bằng, điều kiện mua và hỗ trợ vay." as const;
 
 export const NOXH_CATALOG_FAQ_HEADING =
   "Câu hỏi thường gặp về điều kiện mua nhà ở xã hội" as const;
@@ -204,4 +214,4 @@ export const NOXH_TOPIC_PILLAR_LINKS = [
 
 /** Alt banner danh mục NOXH. */
 export const NOXH_CATALOG_BANNER_ALT =
-  "Khu căn hộ nhà ở xã hội — danh mục dự án miền Nam trên HouseX" as const;
+  "Khu căn hộ nhà ở xã hội — danh mục dự án toàn quốc trên House X" as const;

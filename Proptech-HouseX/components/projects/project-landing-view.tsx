@@ -2,7 +2,7 @@ import Link from "next/link";
 import type { ProjectDetail } from "@/lib/data/project";
 import { parseProjectOverview, resolveLandingHeroImage } from "@/lib/content/project-landing";
 import { ensureNoxhLandingMedia } from "@/lib/content/noxh-stock-images";
-import { NOXH_REGION_TAGLINE } from "@/lib/content/messaging/noxh-public";
+import { NOXH_CATALOG_HOOK } from "@/lib/content/messaging/noxh-public";
 import { ProjectLocationSection } from "@/components/projects/project-location-section";
 import { ProjectIntroVideo } from "@/components/projects/project-intro-video";
 import { ProjectDeveloperProfile } from "@/components/projects/project-developer-profile";
@@ -230,8 +230,8 @@ export function ProjectLandingContent({
 
           <div className="mt-6 max-w-3xl">
             {isNoxh && (
-              <p className="mb-3 text-sm font-semibold uppercase tracking-[0.12em] text-emerald-200/95 sm:text-base">
-                {NOXH_REGION_TAGLINE}
+              <p className="mb-3 text-sm font-medium tracking-wide text-emerald-200/95 sm:text-base">
+                {NOXH_CATALOG_HOOK}
               </p>
             )}
             <h1 className="lux-hero-title text-3xl font-bold tracking-tight drop-shadow-sm sm:text-4xl lg:text-5xl lg:leading-[1.1]">
