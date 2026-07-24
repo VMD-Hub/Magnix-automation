@@ -18,7 +18,6 @@ import {
 } from "@/lib/finance/loan-disbursement";
 import { ToolPrintSheet } from "@/components/tools/print/tool-print-sheet";
 import { formatVnd } from "@/lib/format";
-import { getSiteHostname } from "@/lib/site-config";
 
 function groupVnd(n: number): string {
   return n.toLocaleString("vi-VN");
@@ -515,7 +514,7 @@ export function LoanCalculator() {
 
         <p className="tool-print-disclaimer text-xs text-slate-400">
           *** Kết quả chỉ mang tính tham khảo và có thể thay đổi theo chính sách
-          từng ngân hàng / CĐT. Đơn vị: VND. Nguồn: House X — {getSiteHostname()}.
+          từng ngân hàng / CĐT. Đơn vị: VND.
         </p>
       </div>
     </div>

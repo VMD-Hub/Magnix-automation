@@ -2,11 +2,7 @@ import {
   HOUSEX_FOOTER_LOGO_SRC,
   HOUSEX_FOOTER_TAGLINE,
 } from "@/lib/brand/housex-logo-assets";
-import {
-  getSiteHostname,
-  getSupportEmail,
-  getSupportPhoneDisplay,
-} from "@/lib/site-config";
+import { getSupportEmail, getSupportPhoneDisplay } from "@/lib/site-config";
 import { cn } from "@/lib/ui/cn";
 
 type Props = {
@@ -14,13 +10,12 @@ type Props = {
 };
 
 /**
- * Header in PDF công cụ — trái: logo + tagline; phải: liên hệ + QR Zalo OA.
- * Chỉ hiện khi print (đặt trên cùng bảng tính).
+ * Header in PDF công cụ — trái: logo + tagline; phải: hotline + email + QR Zalo OA.
+ * Không in domain (tránh trùng URL footer trình duyệt khi bật Headers and footers).
  */
 export function ToolPrintBrandHeader({ className }: Props) {
   const phone = getSupportPhoneDisplay();
   const email = getSupportEmail();
-  const host = getSiteHostname();
 
   return (
     <header className={cn("tool-print-header hidden print:flex", className)}>
@@ -41,7 +36,6 @@ export function ToolPrintBrandHeader({ className }: Props) {
             Hotline: <strong>{phone}</strong>
           </p>
           <p className="tool-print-header__contact-line">{email}</p>
-          <p className="tool-print-header__contact-line">{host}</p>
         </div>
         <div className="tool-print-header__qr">
           {/* eslint-disable-next-line @next/next/no-img-element */}
