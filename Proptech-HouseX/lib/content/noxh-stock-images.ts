@@ -35,7 +35,7 @@ function pack(
     locationMap: {
       url: mapUrl,
       alt: `Minh hoạ kết nối vùng — ${heroAlt}`,
-      caption: "Minh hoạ kết nối vùng — cập nhật bản đồ chính thức khi CĐT công bố",
+      caption: "Minh họa kết nối vùng — vị trí bản đồ đang được xác minh",
     },
     gallery,
   };

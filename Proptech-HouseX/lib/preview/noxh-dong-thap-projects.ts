@@ -4,6 +4,11 @@
  */
 import type { ProjectDetail } from "@/lib/data/project";
 import {
+  NOXH_AMENITIES_VERIFYING,
+  NOXH_PRICE_FAQ_VERIFYING,
+  NOXH_UPDATING_SOON,
+} from "@/lib/content/messaging/noxh-landing-incomplete";
+import {
   buildNoxhMock,
   buildNoxhSeedLanding,
   type NoxhLandingDef,
@@ -130,32 +135,32 @@ function skeletonDef(row: DtRow): NoxhLandingDef {
     address: row.address,
     lat: row.lat,
     lng: row.lng,
-    description: `${row.name} tại ${row.address}. CĐT theo danh mục House X: ${row.developerName}. Thuộc địa giới Đồng Tháp sau sắp xếp (trước thuộc Tiền Giang nếu ghi Mỹ Tho / Gò Công). Skeleton — giá / suất cập nhật khi có Sở XD hoặc CĐT. Tư vấn điều kiện qua House X.`,
+    description: `${row.name} tại ${row.address}. Chủ đầu tư: ${row.developerName}. Thuộc địa giới Đồng Tháp sau sắp xếp (trước thuộc Tiền Giang nếu ghi Mỹ Tho / Gò Công). Giá và suất đang được xác minh. ${NOXH_UPDATING_SOON}`,
     seoTitle: `${row.name} — Đồng Tháp | House X`,
     seoDesc: `Nhà ở xã hội ${seoName} tại ${row.district}, Đồng Tháp. CĐT: ${row.developerName}. Tra cứu điều kiện mua và đăng ký tư vấn trên House X.`,
-    heroSubtitle: `${seoName} · ${row.district}, Đồng Tháp — catalog House X`,
+    heroSubtitle: `${seoName} · ${row.district}, Đồng Tháp`,
     locationNotes: `${row.name}: ${row.address}.
 
-Sau NQ 2025, Tiền Giang sáp nhập vào tỉnh Đồng Tháp mới. Tọa độ ước lượng.
+Sau NQ 2025, Tiền Giang sáp nhập vào tỉnh Đồng Tháp mới. Vị trí trên bản đồ đang được xác minh.
 
-Đối chiếu sxd.dongthap.gov.vn. House X: wiki NOXH + form tư vấn.`,
+Đối chiếu sxd.dongthap.gov.vn. Xem Wiki nhà ở xã hội hoặc để lại thông tin tư vấn trên House X.`,
     highlights: [
       { title: "Vị trí", text: row.address },
-      { title: "Chủ đầu tư (danh mục)", text: row.developerName },
+      { title: "Chủ đầu tư", text: row.developerName },
       {
         title: "Giá & suất",
-        text: "Chưa công bố trên House X — đối chiếu Sở Xây dựng / CĐT.",
+        text: `Giá và suất đang được xác minh. ${NOXH_UPDATING_SOON}`,
       },
     ],
-    amenities: ["Tiện ích theo công bố CĐT (bổ sung khi research)"],
+    amenities: [NOXH_AMENITIES_VERIFYING],
     faqs: [
       {
         q: `${row.name} thuộc tỉnh nào?`,
-        a: "Canonical House X: Đồng Tháp (sau sắp xếp 2025). Tên Tiền Giang / Mỹ Tho vẫn dùng để tìm kiếm.",
+        a: "Theo House X: Đồng Tháp (sau sắp xếp 2025). Tên Tiền Giang / Mỹ Tho vẫn dùng để tìm kiếm.",
       },
       {
         q: "Giá bao nhiêu?",
-        a: "House X chỉ đăng khi có công bố Sở / CĐT. Xác minh trước khi nộp hồ sơ.",
+        a: NOXH_PRICE_FAQ_VERIFYING,
       },
       {
         q: "Tư vấn thế nào?",
@@ -225,7 +230,7 @@ Nguồn ưu tiên: longgiangland.com.vn · sxd.dongthap.gov.vn.`,
     faqs: [
       {
         q: "Rivera Garden Mỹ Tho thuộc Đồng Tháp hay Tiền Giang?",
-        a: "Canonical House X: Đồng Tháp (sau NQ 2025). Địa chỉ: phường Mỹ Tho — trước thuộc tỉnh Tiền Giang.",
+        a: "Theo House X: Đồng Tháp (sau NQ 2025). Địa chỉ: phường Mỹ Tho — trước thuộc tỉnh Tiền Giang.",
       },
       {
         q: "Khi nào bàn giao?",

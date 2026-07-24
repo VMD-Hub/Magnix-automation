@@ -4,6 +4,12 @@
  */
 import type { ProjectDetail } from "@/lib/data/project";
 import {
+  NOXH_AMENITIES_VERIFYING,
+  NOXH_PRICE_FAQ_VERIFYING,
+  NOXH_TYPE_VERIFYING,
+  NOXH_UPDATING_SOON,
+} from "@/lib/content/messaging/noxh-landing-incomplete";
+import {
   buildNoxhMock,
   buildNoxhSeedLanding,
   type NoxhLandingDef,
@@ -163,34 +169,34 @@ function skeletonDef(row: AgRow): NoxhLandingDef {
     address: row.address,
     lat: row.lat,
     lng: row.lng,
-    description: `${row.name} tại ${row.address}. CĐT theo danh mục House X: ${row.developerName}. Thuộc tỉnh An Giang sau sắp xếp (Kiên Giang cũ nếu Rạch Giá / Phú Quốc).${tip} Skeleton — giá / suất cập nhật khi có Sở XD hoặc CĐT. Tư vấn điều kiện qua House X.`,
+    description: `${row.name} tại ${row.address}. Chủ đầu tư: ${row.developerName}. Thuộc tỉnh An Giang sau sắp xếp (Kiên Giang cũ nếu Rạch Giá / Phú Quốc).${tip} Giá và suất đang được xác minh. ${NOXH_UPDATING_SOON}`,
     seoTitle: `${row.name} — An Giang | House X`,
     seoDesc: `Nhà ở xã hội ${seoName} tại ${row.district}, An Giang. CĐT: ${row.developerName}. Tra cứu điều kiện mua và đăng ký tư vấn trên House X.`,
-    heroSubtitle: `${seoName} · ${row.district}, An Giang${tip} — catalog House X`,
+    heroSubtitle: `${seoName} · ${row.district}, An Giang${tip}`,
     locationNotes: `${row.name}: ${row.address}.
 
-Sau NQ 2025, Kiên Giang sáp nhập vào tỉnh An Giang mới. Tọa độ ước lượng.
+Sau NQ 2025, Kiên Giang sáp nhập vào tỉnh An Giang mới. Vị trí trên bản đồ đang được xác minh.
 
-Đối chiếu soxaydung.angiang.gov.vn. House X: wiki NOXH + form tư vấn.`,
+Đối chiếu soxaydung.angiang.gov.vn. Xem Wiki nhà ở xã hội hoặc để lại thông tin tư vấn trên House X.`,
     highlights: [
       { title: "Vị trí", text: row.address },
-      { title: "Chủ đầu tư (danh mục)", text: row.developerName },
+      { title: "Chủ đầu tư", text: row.developerName },
       {
         title: "Loại hình",
         text: row.productHint
           ? `Đặc thù khu vực: ${row.productHint}.`
-          : "NOXH theo công bố CĐT — bổ sung khi research.",
+          : NOXH_TYPE_VERIFYING,
       },
     ],
-    amenities: ["Tiện ích theo công bố CĐT (bổ sung khi research)"],
+    amenities: [NOXH_AMENITIES_VERIFYING],
     faqs: [
       {
         q: `${row.name} thuộc An Giang hay Kiên Giang?`,
-        a: "Canonical House X: An Giang (sau NQ 2025). Tên Kiên Giang / Rạch Giá / Phú Quốc vẫn dùng để tìm kiếm.",
+        a: "Theo House X: An Giang (sau NQ 2025). Tên Kiên Giang / Rạch Giá / Phú Quốc vẫn dùng để tìm kiếm.",
       },
       {
         q: "Giá bao nhiêu?",
-        a: "House X chỉ đăng khi có công bố Sở / CĐT. Xác minh trước khi nộp hồ sơ.",
+        a: NOXH_PRICE_FAQ_VERIFYING,
       },
       {
         q: "Tư vấn thế nào?",
@@ -239,7 +245,7 @@ function enrichCicTayBac(def: NoxhLandingDef): NoxhLandingDef {
       "Rạch Giá · 1.011 căn liền kề trệt+1 lầu · từ ~1,5 tỷ/căn (CIC) · Khu C & D Tây Bắc",
     locationNotes: `NOXH KĐT lấn biển Tây Bắc tại Khu C & D, TP. Rạch Giá — trong quy hoạch đô thị Tây Bắc, gần cảng hành khách Rạch Giá (theo CIC).
 
-Canonical tỉnh: An Giang (sau sáp nhập Kiên Giang). Nguồn: cicgroups.com · đối chiếu Sở XD An Giang / Kiên Giang legacy.
+Theo địa giới hiện hành: An Giang (sau sáp nhập Kiên Giang). Nguồn: cicgroups.com — đối chiếu Sở Xây dựng trước khi nộp hồ sơ.
 
 House X không thu đặt cọc thay CĐT.`,
     highlights: [
@@ -264,7 +270,7 @@ House X không thu đặt cọc thay CĐT.`,
     faqs: [
       {
         q: "NOXH CIC Tây Bắc thuộc An Giang hay Kiên Giang?",
-        a: "Canonical House X: An Giang. Địa chỉ: TP. Rạch Giá — trước thuộc tỉnh Kiên Giang.",
+        a: "Theo House X: An Giang. Địa chỉ: TP. Rạch Giá — trước thuộc tỉnh Kiên Giang.",
       },
       {
         q: "Đây là chung cư hay nhà liền kề?",

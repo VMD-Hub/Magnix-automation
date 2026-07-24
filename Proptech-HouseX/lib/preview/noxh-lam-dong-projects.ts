@@ -4,6 +4,12 @@
  */
 import type { ProjectDetail } from "@/lib/data/project";
 import {
+  NOXH_AMENITIES_VERIFYING,
+  NOXH_PRICE_FAQ_VERIFYING,
+  NOXH_TYPE_VERIFYING,
+  NOXH_UPDATING_SOON,
+} from "@/lib/content/messaging/noxh-landing-incomplete";
+import {
   buildNoxhMock,
   buildNoxhSeedLanding,
   type NoxhLandingDef,
@@ -139,34 +145,34 @@ function skeletonDef(row: LdRow): NoxhLandingDef {
     address: row.address,
     lat: row.lat,
     lng: row.lng,
-    description: `${row.name} tại ${row.address}. CĐT theo danh mục House X: ${row.developerName}. Thuộc tỉnh Lâm Đồng sau sắp xếp (Bình Thuận / Đắk Nông cũ nếu Phan Thiết, Hàm Kiệm, Gia Nghĩa).${tip} Skeleton — giá / suất cập nhật khi có Sở XD hoặc CĐT. Tư vấn điều kiện qua House X.`,
+    description: `${row.name} tại ${row.address}. Chủ đầu tư: ${row.developerName}. Thuộc tỉnh Lâm Đồng sau sắp xếp (Bình Thuận / Đắk Nông cũ nếu Phan Thiết, Hàm Kiệm, Gia Nghĩa).${tip} Giá và suất đang được xác minh. ${NOXH_UPDATING_SOON}`,
     seoTitle: `${row.name} — Lâm Đồng | House X`,
     seoDesc: `Nhà ở xã hội ${seoName} tại ${row.district}, Lâm Đồng. CĐT: ${row.developerName}. Tra cứu điều kiện mua và đăng ký tư vấn trên House X.`,
-    heroSubtitle: `${seoName} · ${row.district}, Lâm Đồng${tip} — catalog House X`,
+    heroSubtitle: `${seoName} · ${row.district}, Lâm Đồng${tip}`,
     locationNotes: `${row.name}: ${row.address}.
 
-Sau NQ 2025, Đắk Nông và Bình Thuận sáp nhập vào tỉnh Lâm Đồng mới. Tọa độ ước lượng.
+Sau NQ 2025, Đắk Nông và Bình Thuận sáp nhập vào tỉnh Lâm Đồng mới. Vị trí trên bản đồ đang được xác minh.
 
-Đối chiếu soxaydung.lamdong.gov.vn. House X: wiki NOXH + form tư vấn.`,
+Đối chiếu soxaydung.lamdong.gov.vn. Xem Wiki nhà ở xã hội hoặc để lại thông tin tư vấn trên House X.`,
     highlights: [
       { title: "Vị trí", text: row.address },
-      { title: "Chủ đầu tư (danh mục)", text: row.developerName },
+      { title: "Chủ đầu tư", text: row.developerName },
       {
         title: "Loại hình",
         text: row.productHint
           ? `Đặc thù: ${row.productHint}.`
-          : "NOXH theo công bố CĐT — bổ sung khi research.",
+          : NOXH_TYPE_VERIFYING,
       },
     ],
-    amenities: ["Tiện ích theo công bố CĐT (bổ sung khi research)"],
+    amenities: [NOXH_AMENITIES_VERIFYING],
     faqs: [
       {
         q: `${row.name} thuộc Lâm Đồng, Bình Thuận hay Đắk Nông?`,
-        a: "Canonical House X: Lâm Đồng (sau NQ 2025). Tên Bình Thuận / Đắk Nông / Đà Lạt / Phan Thiết vẫn dùng để tìm kiếm.",
+        a: "Theo House X: Lâm Đồng (sau NQ 2025). Tên Bình Thuận / Đắk Nông / Đà Lạt / Phan Thiết vẫn dùng để tìm kiếm.",
       },
       {
         q: "Giá bao nhiêu?",
-        a: "House X chỉ đăng khi có công bố Sở / CĐT. Xác minh trước khi nộp hồ sơ.",
+        a: NOXH_PRICE_FAQ_VERIFYING,
       },
       {
         q: "Tư vấn thế nào?",

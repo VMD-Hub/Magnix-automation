@@ -5,6 +5,11 @@
  */
 import type { ProjectDetail } from "@/lib/data/project";
 import {
+  NOXH_AMENITIES_VERIFYING,
+  NOXH_PRICE_FAQ_VERIFYING,
+  NOXH_UPDATING_SOON,
+} from "@/lib/content/messaging/noxh-landing-incomplete";
+import {
   buildNoxhMock,
   buildNoxhSeedLanding,
   type NoxhLandingDef,
@@ -285,41 +290,41 @@ function skeletonDef(row: HanoiRow): NoxhLandingDef {
     address: row.address,
     lat: row.lat,
     lng: row.lng,
-    description: `${row.name} tại ${row.address}. Chủ đầu tư theo danh mục nội bộ House X: ${row.developerName}. Trang skeleton — giá, số căn và tiến độ sẽ cập nhật khi có công bố chính thức từ CĐT hoặc cơ quan nhà nước. Tư vấn điều kiện / hồ sơ NOXH qua House X.`,
+    description: `${row.name} tại ${row.address}. Chủ đầu tư: ${row.developerName}. Giá, số căn và tiến độ đang được xác minh. ${NOXH_UPDATING_SOON}`,
     seoTitle: `${row.name} — Hà Nội | House X`,
     seoDesc: `Nhà ở xã hội ${seoName} tại ${row.district}, Hà Nội. CĐT: ${row.developerName}. Tra cứu điều kiện mua và đăng ký tư vấn trên House X — chưa công bố bảng giá trên trang này.`,
-    heroSubtitle: `${seoName} · ${row.district}, Hà Nội — skeleton catalog House X · cập nhật khi có nguồn chính thức`,
-    locationNotes: `${row.name} theo danh mục nội bộ: ${row.address}.
+    heroSubtitle: `${seoName} · ${row.district}, Hà Nội — đang xác minh theo công bố chính thức`,
+    locationNotes: `${row.name}: ${row.address}.
 
-Tọa độ trên bản đồ là ước lượng theo ${row.district} — sẽ chỉnh khi có tọa độ / sơ đồ CĐT.
+Vị trí trên bản đồ đang được xác minh theo ${row.district} — sẽ chỉnh khi có tọa độ / sơ đồ CĐT.
 
-House X cung cấp wiki điều kiện NOXH, tính trả góp và form tư vấn — không thay thế thông báo mở bán của CĐT / Sở.`,
+Xem Wiki nhà ở xã hội, công cụ tính trả góp hoặc để lại thông tin tư vấn trên House X.`,
     highlights: [
       {
         title: "Vị trí Hà Nội",
         text: `${row.address}`,
       },
       {
-        title: "Chủ đầu tư (theo danh mục)",
+        title: "Chủ đầu tư",
         text: row.developerName,
       },
       {
         title: "Giá & suất",
-        text: "Chưa công bố trên House X — liên hệ tư vấn khi CĐT / cơ quan nhà nước mở đợt.",
+        text: `Giá và suất đang được xác minh. ${NOXH_UPDATING_SOON}`,
       },
     ],
     amenities: [
-      "Tiện ích nội khu theo công bố CĐT (bổ sung khi research)",
+      NOXH_AMENITIES_VERIFYING,
       "Kết nối giao thông khu vực Hà Nội",
     ],
     faqs: [
       {
         q: `${row.name} nằm ở đâu?`,
-        a: `Theo danh mục House X: ${row.address}.`,
+        a: `Địa chỉ: ${row.address}.`,
       },
       {
         q: "Giá bao nhiêu?",
-        a: "House X chưa đăng bảng giá — chỉ cập nhật khi có công bố chính thức từ CĐT hoặc cơ quan nhà nước.",
+        a: NOXH_PRICE_FAQ_VERIFYING,
       },
       {
         q: "Làm sao đăng ký tư vấn?",

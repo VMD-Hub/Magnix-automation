@@ -5,6 +5,11 @@
  */
 import type { ProjectDetail } from "@/lib/data/project";
 import {
+  NOXH_AMENITIES_VERIFYING,
+  NOXH_PRICE_FAQ_VERIFYING,
+  NOXH_UPDATING_SOON,
+} from "@/lib/content/messaging/noxh-landing-incomplete";
+import {
   buildNoxhMock,
   buildNoxhSeedLanding,
   type NoxhLandingDef,
@@ -120,35 +125,35 @@ function skeletonDef(row: DnRow): NoxhLandingDef {
     address: row.address,
     lat: row.lat,
     lng: row.lng,
-    description: `${row.name} tại ${row.address}. Chủ đầu tư theo danh mục House X: ${row.developerName}. Trang skeleton — giá / số căn chi tiết cập nhật khi có công bố Sở Xây dựng Đà Nẵng hoặc CĐT. Tư vấn điều kiện NOXH qua House X.`,
+    description: `${row.name} tại ${row.address}. Chủ đầu tư: ${row.developerName}. Giá và số căn đang được xác minh. ${NOXH_UPDATING_SOON}`,
     seoTitle: `${row.name} — Đà Nẵng | House X`,
     seoDesc: `Nhà ở xã hội ${seoName} tại ${row.district}, Đà Nẵng. CĐT: ${row.developerName}. Tra cứu điều kiện mua và đăng ký tư vấn trên House X.`,
-    heroSubtitle: `${seoName} · ${row.district}, Đà Nẵng — catalog House X · cập nhật khi có nguồn chính thức`,
+    heroSubtitle: `${seoName} · ${row.district}, Đà Nẵng — đang xác minh theo công bố chính thức`,
     locationNotes: `${row.name}: ${row.address}.
 
-Tọa độ ước lượng theo ${row.district}. Đối chiếu sxd.danang.gov.vn / danang.gov.vn khi nộp hồ sơ.
+Vị trí trên bản đồ đang được xác minh theo ${row.district}. Đối chiếu sxd.danang.gov.vn / danang.gov.vn khi nộp hồ sơ.
 
-House X: wiki điều kiện NOXH, tính trả góp, form tư vấn — không thay thông báo CĐT / Sở.`,
+Xem Wiki nhà ở xã hội, công cụ tính trả góp hoặc để lại thông tin tư vấn trên House X.`,
     highlights: [
       { title: "Vị trí Đà Nẵng", text: row.address },
-      { title: "Chủ đầu tư (danh mục)", text: row.developerName },
+      { title: "Chủ đầu tư", text: row.developerName },
       {
         title: "Giá & suất",
-        text: "Chưa công bố chính thức trên House X — đối chiếu Sở XD / CĐT từng đợt.",
+        text: `Giá và suất đang được xác minh. ${NOXH_UPDATING_SOON}`,
       },
     ],
     amenities: [
-      "Tiện ích nội khu theo công bố CĐT (bổ sung khi research)",
+      NOXH_AMENITIES_VERIFYING,
       "Kết nối giao thông Đà Nẵng",
     ],
     faqs: [
       {
         q: `${row.name} nằm ở đâu?`,
-        a: `Theo danh mục House X: ${row.address}.`,
+        a: `Địa chỉ: ${row.address}.`,
       },
       {
         q: "Giá bao nhiêu?",
-        a: "House X chỉ đăng giá khi có công bố Sở Xây dựng / CĐT. Danh mục nội bộ có thể ghi mức dự kiến — luôn xác minh trước khi nộp hồ sơ.",
+        a: NOXH_PRICE_FAQ_VERIFYING,
       },
       {
         q: "Đăng ký tư vấn thế nào?",
@@ -181,7 +186,7 @@ function enrichDaiDiaBao(def: NoxhLandingDef): NoxhLandingDef {
     totalUnits: 739,
     blocks: 3,
     description:
-      "Nhà ở xã hội Đại Địa Bảo (chung cư cho người thu nhập thấp tại Khu TĐC Đại Địa Bảo), Sơn Trà, Đà Nẵng. Liên doanh CĐT Đức Mạnh – ĐTXD 579 (công bố ducmanhgroup.com): 3 block 9 tầng, 739 căn hộ + 28 ki-ốt. Block A/B đã đưa vào sử dụng; Block C (237 căn + 28 ki-ốt) là đợt đang / vừa tiếp nhận hồ sơ theo báo chí 2026. Giá dự kiến danh mục nội bộ ~17 triệu/m² — đối chiếu Sở XD Đà Nẵng. Tư vấn điều kiện qua House X.",
+      "Nhà ở xã hội Đại Địa Bảo (chung cư cho người thu nhập thấp tại Khu TĐC Đại Địa Bảo), Sơn Trà, Đà Nẵng. Liên doanh CĐT Đức Mạnh – ĐTXD 579 (công bố ducmanhgroup.com): 3 block 9 tầng, 739 căn hộ + 28 ki-ốt. Block A/B đã đưa vào sử dụng; Block C (237 căn + 28 ki-ốt) là đợt đang / vừa tiếp nhận hồ sơ theo báo chí 2026. Giá tham chiếu đang được xác minh (~17 triệu/m² theo một số nguồn công khai) — đối chiếu Sở Xây dựng Đà Nẵng. Tư vấn điều kiện qua House X.",
     seoTitle:
       "Nhà ở xã hội Đại Địa Bảo Sơn Trà — 739 căn | House X",
     seoDesc:
@@ -204,7 +209,7 @@ Nguồn: ducmanhgroup.com · đối chiếu sxd.danang.gov.vn. House X không th
       },
       {
         title: "Giá dự kiến ~17 triệu/m²",
-        text: "Theo danh mục nội bộ House X — xác minh mức phê duyệt tại Sở Xây dựng Đà Nẵng trước khi nộp hồ sơ.",
+        text: "Giá đang được xác minh theo công bố Sở Xây dựng Đà Nẵng trước khi nộp hồ sơ.",
       },
     ],
     amenities: [
