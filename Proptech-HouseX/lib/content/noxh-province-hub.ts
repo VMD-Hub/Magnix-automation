@@ -85,17 +85,17 @@ export function buildNoxhProvinceHubFaqs(
     blocks: [
       {
         type: "p",
-        text: "Trên House X có hướng dẫn nhà ở xã hội: điều kiện, hồ sơ và quy trình theo văn bản công bố. Bạn nên tự kiểm tra sơ bộ trước, rồi mở từng dự án tại tỉnh này để xem giá và đăng ký tư vấn nếu cần.",
+        text: "Xem Wiki nhà ở xã hội trên House X: điều kiện, hồ sơ và quy trình theo văn bản công bố. Bạn nên tự kiểm tra sơ bộ trước, rồi mở từng dự án tại tỉnh này để xem giá và đăng ký tư vấn nếu cần.",
       },
     ],
   });
 
   faqs.push({
-    q: "Xem tất cả dự án nhà ở xã hội trên House X ở đâu?",
+    q: "Xem danh mục dự án nhà ở xã hội toàn quốc ở đâu?",
     blocks: [
       {
         type: "p",
-        text: "Mở danh mục nhà ở xã hội toàn quốc trên House X để xem mọi dự án. Các trang theo tỉnh (TP.HCM, Đồng Nai, Hà Nội, Đà Nẵng…) giúp bạn lọc đúng khu vực đang sống hoặc làm việc.",
+        text: "Mở danh mục dự án NOXH toàn quốc trên House X để xem mọi dự án. Các trang theo tỉnh (TP.HCM, Đồng Nai, Cần Thơ, Hà Nội, Đà Nẵng…) giúp bạn lọc đúng khu vực đang sống hoặc làm việc.",
       },
     ],
   });

@@ -106,7 +106,7 @@ export function NoxhProvinceHubPage({ entry, page }: Props) {
             prefetch
             className="font-semibold text-brand-700 hover:underline"
           >
-            Hướng dẫn nhà ở xã hội
+            Wiki nhà ở xã hội
           </Link>
           <Link
             href="/vay-mua-nha"
@@ -127,7 +127,7 @@ export function NoxhProvinceHubPage({ entry, page }: Props) {
             prefetch
             className="font-semibold text-brand-700 hover:underline"
           >
-            Tất cả dự án nhà ở xã hội
+            Dự án NOXH toàn quốc
           </Link>
         </nav>
       ) : null}
@@ -158,7 +158,7 @@ export function NoxhProvinceHubPage({ entry, page }: Props) {
           prefetch
           className="font-semibold text-brand-700 hover:underline"
         >
-          ← Tất cả dự án nhà ở xã hội
+          ← Dự án NOXH toàn quốc
         </Link>
       </p>
     </CatalogPageShell>
