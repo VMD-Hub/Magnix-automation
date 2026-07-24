@@ -2,7 +2,6 @@ import Link from "next/link";
 import type { EditorialExpert, LegalSourceRef } from "@/lib/content/editorial-trust";
 import {
   EDITORIAL_BYLINE,
-  EDITORIAL_METHODOLOGY_PATH,
   expertProfilePath,
   formatEditorialDate,
 } from "@/lib/content/editorial-trust";
@@ -12,13 +11,13 @@ export function EditorialTrustPanel({
   publishedAt,
   sources,
   expert,
-  variant = "article",
   className,
 }: {
   updatedAt: Date;
   publishedAt?: Date | null;
   sources: LegalSourceRef[];
   expert: EditorialExpert | null;
+  /** Giữ tương thích call site cũ; disclaimer footer đã bỏ. */
   variant?: "article" | "tool";
   className?: string;
 }) {
@@ -70,16 +69,21 @@ export function EditorialTrustPanel({
       </dl>
 
       {sources.length > 0 ? (
-        <div className="mt-5">
-          <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
-            Căn cứ pháp lý &amp; nguồn tham chiếu
-          </p>
-          <ul className="mt-2 space-y-3">
-            {sources.map((s) => (
-              <li
-                key={s.id}
-                className="rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm"
+        <details className="group mt-5 rounded-xl border border-slate-200 bg-white open:border-brand-200">
+          <summary className="cursor-pointer list-none px-4 py-3 text-sm font-semibold text-slate-800 marker:content-none [&::-webkit-details-marker]:hidden">
+            <span className="flex items-center justify-between gap-3">
+              Căn cứ pháp lý &amp; nguồn tham chiếu
+              <span
+                aria-hidden
+                className="shrink-0 text-brand-600 transition-transform group-open:rotate-45"
               >
+                +
+              </span>
+            </span>
+          </summary>
+          <ul className="space-y-3 border-t border-slate-100 px-4 pb-4 pt-3">
+            {sources.map((s) => (
+              <li key={s.id} className="text-sm">
                 <p className="font-semibold text-slate-900">
                   <a
                     href={s.url}
@@ -99,21 +103,8 @@ export function EditorialTrustPanel({
               </li>
             ))}
           </ul>
-        </div>
+        </details>
       ) : null}
-
-      <p className="mt-5 text-xs leading-relaxed text-slate-500">
-        {variant === "tool"
-          ? "Kết quả công cụ là sàng lọc sơ bộ theo bộ quy tắc đang áp dụng — điều kiện chính thức do cơ quan có thẩm quyền xác nhận."
-          : "House X tổng hợp và đối chiếu nguồn công khai — không thay công bố của cơ quan nhà nước hoặc chủ đầu tư."}{" "}
-        <Link
-          href={EDITORIAL_METHODOLOGY_PATH}
-          className="font-medium text-brand-700 hover:underline"
-        >
-          Phương pháp biên tập
-        </Link>
-        .
-      </p>
     </aside>
   );
 }
