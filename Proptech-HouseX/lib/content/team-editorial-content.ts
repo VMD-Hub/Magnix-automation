@@ -24,10 +24,10 @@ export type EditorialRole = {
 export const TEAM_EDITORIAL_PAGE = {
   metaTitle: "Đội ngũ & biên tập House X (timnhaxahoi.com)",
   metaDescription:
-    "Trang /doi-ngu — đội ngũ House X: ban lãnh đạo, biên tập viên kiểm duyệt và chuyên gia rà soát — thông tin BĐS rõ ràng, chuẩn xác và minh bạch.",
-  title: "Đội ngũ & ban biên tập House X",
+    "Ban lãnh đạo, biên tập viên kiểm duyệt và chuyên gia rà soát House X — thông tin BĐS rõ ràng, chuẩn xác và minh bạch.",
+  title: "Đội ngũ & biên tập House X",
   intro:
-    "Trang chính thức giới thiệu đội ngũ tại /doi-ngu. Chúng tôi tin rằng công nghệ mạnh chỉ khi đi cùng con người có trách nhiệm. Đội ngũ House X là tập hợp những người làm sản phẩm, biên tập viên chuyên môn và chuyên gia ngành — cùng cam kết mang đến thông tin BĐS rõ ràng, chuẩn xác và dễ hiểu cho người dùng.",
+    "Ban lãnh đạo, biên tập viên và chuyên gia rà soát — cùng chịu trách nhiệm giữ thông tin BĐS trên House X rõ ràng và chuẩn xác.",
 
   leadership: {
     heading: "Ban lãnh đạo",
@@ -68,7 +68,7 @@ export const TEAM_EDITORIAL_PAGE = {
   editorialTeam: {
     heading: "Đội ngũ biên tập & kiểm duyệt",
     intro:
-      "House X có đội ngũ biên tập viên chuyên trách kiểm tra nội dung tin đăng trước khi hiển thị. Mỗi tin trải qua cả bước tự động và bước rà soát thủ công để đảm bảo tiêu chuẩn chất lượng.",
+      "Mỗi tin đăng qua kiểm duyệt tự động và rà soát thủ công trước khi hiển thị.",
     roles: [
       {
         title: "Biên tập viên nội dung",

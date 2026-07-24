@@ -112,7 +112,7 @@ export const ABOUT_PROCESS_STEPS = [
 export const ABOUT_QUICK_LINKS = [
   {
     title: "Câu chuyện thương hiệu",
-    desc: "Hành trình hình thành House X — từ Sài Gòn mưa đến cam kết thông tin chuẩn.",
+    desc: "Hành trình hình thành House X — từ Sài Gòn mưa đến thông tin chuẩn, sản phẩm thật.",
     href: "/gioi-thieu/cau-chuyen",
   },
   {

@@ -8,20 +8,20 @@ import type { RichFaqItem } from "@/lib/content/faq-content";
 export const BRAND_STORY = {
   metaTitle: "Câu chuyện House X — cổng Proptech",
   metaDescription:
-    "Từ một buổi chiều mưa ở Sài Gòn đến House X: cổng Proptech đặt người mua làm trung tâm — thông tin chuẩn, sản phẩm thật, kiểm duyệt minh bạch.",
+    "Từ một buổi chiều mưa ở Sài Gòn đến House X: cổng Proptech đặt người tìm nhà làm trung tâm — thông tin chuẩn, sản phẩm thật, kiểm duyệt minh bạch.",
   title: "Câu chuyện thương hiệu",
   subtitle: "Hành trình hình thành House X",
   pullQuote: {
-    text: "Chỉ cần một nơi nào đó mà mọi thứ rõ ràng—ảnh thật, giá thật, và khi chúng tôi gọi thì là người bán thật.",
-    attribution: "Một cặp vợ chồng trẻ, Sài Gòn",
+    text: "Chỉ cần một nơi rõ ràng — ảnh thật, giá thật, và khi gọi thì đúng người bán.",
+    attribution: "Anh chị họ, Sài Gòn",
   },
   /** Toàn bộ narrative — render tuần tự trên trang Câu chuyện. */
   narrative: [
-    "Có một lần, trong một buổi chiều mưa ở Sài Gòn, tôi theo một cặp vợ chồng trẻ đi xem ba căn hộ trong một khu vực. Họ đã dành cả buổi cuối tuần để chạy khắp nơi, nhưng cuối cùng vẫn bối rối: ảnh đăng khác với thực tế, giá ghi mập mờ, số điện thoại thì khiến họ bị làm phiền liên tục bởi các cuộc gọi không mong muốn. Họ nói với tôi: “Chỉ cần một nơi nào đó mà mọi thứ rõ ràng—ảnh thật, giá thật, và khi chúng tôi gọi thì là người bán thật.” Câu nói ấy ám ảnh tôi.",
-    "Trên thị trường, người mua lạc lối trong rừng tin rác; môi giới chân chính bị chìm giữa hàng loạt tin trùng và lead kém chất lượng; chủ nhà chân thật thì lo lắng khi số điện thoại bị rò rỉ khắp nơi. Thị trường Proptech đã có nhiều công cụ, nhưng thiếu một nơi thực sự đặt quyền lợi người mua làm trung tâm — một nền tảng vừa dùng công nghệ để lọc, vừa dùng con người để kiểm duyệt và minh bạch hóa thông tin.",
-    "House X ra đời từ chính những bất tiện ấy. Chúng tôi không chỉ muốn tạo ra một trang đăng tin nữa. Mục tiêu là xây dựng một cổng tin bất động sản nơi người mua cảm thấy an tâm ngay từ lần đầu truy cập: biết chắc ảnh có thật, vị trí chính xác, giá niêm yết rõ ràng, và chỉ khi họ sẵn sàng mới để lộ thông tin liên hệ. Chúng tôi kết hợp công nghệ đối chiếu địa chỉ — giá — hình ảnh với quy trình biên tập có trách nhiệm, và mở cửa cho cộng đồng cùng tham gia giữ chất lượng.",
-    "Hành trình ấy không bằng phẳng. Chúng tôi thử nghiệm nhiều cách gom tin trùng, điều chỉnh thuật toán phát hiện ảnh không phù hợp, và thiết kế cơ chế bảo vệ liên hệ sao cho thuận tiện nhưng vẫn an toàn. Mỗi lần một người dùng báo một tin sai, mỗi lần một môi giới phản hồi để cải thiện mô tả, nền tảng lại tiến một bước — thực tế hơn, đáng tin hơn.",
-    "House X là lời cam kết: thông tin chuẩn — sản phẩm thật. Chúng tôi tin rằng khi thông tin trở nên minh bạch, quyết định của con người sáng suốt hơn, thị trường vận hành hiệu quả hơn, và những giao dịch bất động sản sẽ bớt rủi ro, bớt tổn thương.",
+    "Có một lần, chiều mưa ở Sài Gòn, tôi theo vợ chồng người anh họ đi tìm nhà an cư sau ngày cưới. Cả cuối tuần chạy theo tin môi giới, cuối cùng vẫn bối rối: ảnh khác thực tế, giá mập mờ, số điện thoại bị rò rỉ khiến họ bị làm phiền suốt nhiều tháng sau đó. Họ nói: “Chỉ cần một nơi rõ ràng — ảnh thật, giá thật, và khi gọi thì đúng người bán.” Câu ấy ám ảnh tôi.",
+    "Trên thị trường, người mua lạc giữa tin rác, tin trùng lặp và tin ảo; người có nhu cầu thật thiếu chỗ tin được. Proptech đã có nhiều công cụ, nhưng thiếu điểm tựa đặt quyền lợi người tìm nhà làm trung tâm — nơi công nghệ lọc dữ liệu đi cùng kiểm duyệt của con người.",
+    "House X sinh ra từ những bất tiện ấy. Không phải thêm một trang đăng tin, mà một cổng thông tin minh bạch: ảnh đúng thực tế, vị trí chuẩn, giá niêm yết rõ, và bảo vệ liên hệ đến khi người dùng sẵn sàng kết nối.",
+    "Hành trình ấy không bằng phẳng. Chúng tôi liên tục thử nghiệm gom tin trùng lặp, tối ưu kiểm duyệt và cơ chế bảo vệ liên hệ. Mỗi phản hồi từ người dùng và môi giới giúp nền tảng thực tế hơn, đáng tin hơn.",
+    "House X cam kết: thông tin chuẩn — sản phẩm thật. Khi thông tin minh bạch, quyết định an cư nhẹ gánh hơn — và mỗi người Việt tiến gần tổ ấm với ít rủi ro hơn.",
   ],
   closingTagline: "Nền tảng số tìm nhà Việt Nam",
 } as const;

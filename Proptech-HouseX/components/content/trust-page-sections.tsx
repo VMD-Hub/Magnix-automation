@@ -180,8 +180,10 @@ export function LegalDocument({
 }) {
   return (
     <article className={cn("mx-auto max-w-2xl py-10 container-px", HOUSEX_PROSE_CLASS)}>
-      <h1>{title}</h1>
-      <p className="text-sm text-slate-500">Cập nhật: {updated}</p>
+      <h1 className="!mb-3 text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">
+        {title}
+      </h1>
+      <p className="not-prose text-sm text-slate-500">Cập nhật: {updated}</p>
       <p>{intro}</p>
       {sections.map((s) => (
         <section key={s.heading}>
