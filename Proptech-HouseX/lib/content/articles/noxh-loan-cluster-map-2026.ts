@@ -189,6 +189,12 @@ const RELATED_SLUGS: Record<string, readonly string[]> = {
     NOXH_LOAN_PILLAR.slug,
     "vay-noxh-can-thu-nhap-bao-nhieu",
   ],
+  "vay-noxh-nhcsxh-va-ngan-hang-thuong-mai": [
+    "tham-dinh-khoan-vay-mua-nha-o-xa-hoi",
+    "mua-nha-o-xa-hoi-co-duoc-vay-ngan-hang-khong",
+    "vay-noxh-can-thu-nhap-bao-nhieu",
+    "checklist-truoc-khi-dat-coc-noxh",
+  ],
   /** Bài bổ sung — vợ/chồng đồng vay */
   "vay-noxh-vo-chong-dong-vay-cic": [
     "dieu-kien-vay-noxh-theo-tuoi-hon-nhan",
@@ -242,6 +248,10 @@ const SLUG_TITLE = new Map<string, string>([
   [
     "hieu-sai-mua-nha-dung-cho-du-tien",
     "Mua nhà có cần “đủ tiền” không? 4 hiểu sai khiến người mua lần đầu đứng ngoài cuộc",
+  ],
+  [
+    "vay-noxh-nhcsxh-va-ngan-hang-thuong-mai",
+    "Vay mua nhà ở xã hội: NHCSXH khác ngân hàng thương mại thế nào?",
   ],
 ]);
 

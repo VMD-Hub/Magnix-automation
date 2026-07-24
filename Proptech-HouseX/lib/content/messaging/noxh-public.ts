@@ -61,6 +61,14 @@ export const NOXH_TOPIC_PILLAR_LINKS = [
     label: "Vay gói 120.000 tỷ NHCSXH",
   },
   {
+    href: articlePath("vay-noxh-nhcsxh-va-ngan-hang-thuong-mai"),
+    label: "NHCSXH vs NHTM — 3 cơ chế lãi vay NOXH",
+  },
+  {
+    href: articlePath("lai-suat-vay-noxh-duoi-35-tuoi-nhnn-2026"),
+    label: "Lãi suất NOXH người dưới 35 tuổi",
+  },
+  {
     href: articlePath("chon-noxh-dung-cach-theo-nang-luc"),
     label: "Chọn NOXH đúng cách — đừng mua theo cảm xúc",
   },
