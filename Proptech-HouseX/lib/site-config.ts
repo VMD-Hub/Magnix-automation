@@ -138,13 +138,31 @@ export type SocialChannel = {
   href: string | null;
 };
 
+/**
+ * Link công khai Zalo OA (footer / Kết nối).
+ * Ưu tiên URL đầy đủ; không thì ghép từ OA ID (server `ZALO_OA_ID` cũng được — SiteContact là RSC).
+ */
+export function getHouseXZaloOaPublicUrl(): string | null {
+  const full =
+    process.env.NEXT_PUBLIC_SOCIAL_ZALO_URL?.trim() ||
+    process.env.NEXT_PUBLIC_ZALO_OA_PUBLIC_URL?.trim();
+  if (full) return full;
+
+  const id =
+    process.env.NEXT_PUBLIC_ZALO_OA_ID?.trim() ||
+    process.env.ZALO_OA_ID?.trim();
+  if (!id) return null;
+  if (/^https?:\/\//i.test(id)) return id;
+  return `https://zalo.me/${id.replace(/^\/+/, "")}`;
+}
+
 /** Liên kết mạng xã hội — bổ sung URL trong env khi sẵn sàng. */
 export function getSocialChannels(): SocialChannel[] {
   return [
     {
       id: "zalo",
-      label: "Zalo",
-      href: process.env.NEXT_PUBLIC_SOCIAL_ZALO_URL?.trim() || null,
+      label: "Zalo OA",
+      href: getHouseXZaloOaPublicUrl(),
     },
     {
       id: "facebook",
