@@ -15,6 +15,7 @@ import {
   resolveNoxhProvinceCanonical,
 } from "../lib/content/noxh-province-registry";
 import {
+  buildNoxhProvinceAdminBoundaryLine,
   buildNoxhProvinceHubFaqs,
   resolveNoxhProvinceHubEntry,
 } from "../lib/content/noxh-province-hub";
@@ -151,6 +152,21 @@ test("hub FAQ mentions aliases without salesRegion", () => {
   const blob = JSON.stringify(faqs);
   assert.match(blob, /Bình Dương/);
   assert.doesNotMatch(blob, /salesRegion|SOUTH|leadLane/i);
+});
+
+test("admin boundary line uses human merger phrasing", () => {
+  const tayNinh = resolveNoxhProvinceHubEntry("tay-ninh");
+  assert.ok(tayNinh);
+  assert.equal(
+    buildNoxhProvinceAdminBoundaryLine(tayNinh!),
+    "Danh mục địa giới hành chính mới (bao gồm: Long An, Tây Ninh (cũ)).",
+  );
+  const haNoi = resolveNoxhProvinceHubEntry("ha-noi");
+  assert.ok(haNoi);
+  assert.match(
+    buildNoxhProvinceAdminBoundaryLine(haNoi!),
+    /địa giới hành chính hiện hành/,
+  );
 });
 
 test("dual address: legacy province yields two lines", () => {

@@ -13,7 +13,10 @@ import {
 import { PreloadBannerImage } from "@/components/seo/preload-banner-image";
 import { catalogBannerSources } from "@/lib/brand/banner-responsive";
 import { PROJECT_CATALOG_BANNERS } from "@/lib/brand/project-catalog-banners";
-import { buildNoxhProvinceHubFaqs } from "@/lib/content/noxh-province-hub";
+import {
+  buildNoxhProvinceAdminBoundaryLine,
+  buildNoxhProvinceHubFaqs,
+} from "@/lib/content/noxh-province-hub";
 import type { NoxhProvinceEntry } from "@/lib/content/noxh-province-registry";
 import {
   provincesMatchingNoxhHub,
@@ -84,15 +87,10 @@ export function NoxhProvinceHubPage({ entry, page }: Props) {
           Nhà ở xã hội {entry.nameNew}
         </h1>
         <p className="mt-2 text-sm font-medium text-emerald-800">
-          Cập nhật 2026 — danh mục dự án tại {entry.nameNew}
-          {entry.aliasesOld.length > 0
-            ? ` (vẫn tìm được theo tên quen gọi: ${entry.aliasesOld.join(", ")})`
-            : ""}
-          .
+          {buildNoxhProvinceAdminBoundaryLine(entry)}
         </p>
         <p className="mt-3 text-base leading-relaxed text-slate-600">
-          Chọn dự án để xem giá, tiến độ và điều kiện mua — thông tin có căn cứ
-          trước khi bạn giữ suất hoặc nộp hồ sơ.
+          Chọn dự án để xem giá, tiến độ và điều kiện mua.
         </p>
       </header>
 

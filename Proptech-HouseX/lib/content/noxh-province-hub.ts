@@ -22,15 +22,30 @@ export function buildNoxhProvinceHubTitle(entry: NoxhProvinceEntry): string {
   return `Nhà ở xã hội ${entry.nameNew} — danh mục dự án trên House X`;
 }
 
+/**
+ * Dòng giải thích địa giới — giọng biên tập người, không dùng cụm AI kiểu
+ * “còn tìm theo tên quen gọi”.
+ * Ví dụ Tây Ninh: bao gồm Long An, Tây Ninh (cũ).
+ */
+export function buildNoxhProvinceAdminBoundaryLine(
+  entry: NoxhProvinceEntry,
+): string {
+  if (entry.aliasesOld.length === 0) {
+    return `Danh mục địa giới hành chính hiện hành — ${entry.nameNew}.`;
+  }
+  const included = [...entry.aliasesOld, `${entry.nameNew} (cũ)`].join(", ");
+  return `Danh mục địa giới hành chính mới (bao gồm: ${included}).`;
+}
+
 export function buildNoxhProvinceHubDescription(
   entry: NoxhProvinceEntry,
 ): string {
-  const aliases =
+  const boundary =
     entry.aliasesOld.length > 0
-      ? ` Gồm khu vực quen gọi ${entry.aliasesOld.join(", ")}.`
+      ? ` ${buildNoxhProvinceAdminBoundaryLine(entry)}`
       : "";
   return normalizeSeoDescription(
-    `Nhà ở xã hội ${entry.nameNew} mới nhất 2026 trên House X: danh mục dự án, giá và điều kiện mua.${aliases} Tư vấn hồ sơ qua House X.`,
+    `Nhà ở xã hội ${entry.nameNew} trên House X: danh mục dự án, giá và điều kiện mua.${boundary} Tư vấn hồ sơ qua House X.`,
   );
 }
 
@@ -74,7 +89,7 @@ export function buildNoxhProvinceHubFaqs(
       blocks: [
         {
           type: "p",
-          text: `Tên quen gọi như ${entry.aliasesOld.join(", ")} vẫn dùng để tìm kiếm. Theo đơn vị hành chính hiện hành, các khu vực này thuộc ${entry.nameNew}. House X giữ cả tên mới và tên quen gọi để bạn không bỏ lỡ dự án.`,
+          text: `${buildNoxhProvinceAdminBoundaryLine(entry)} Trên House X, tìm ${entry.aliasesOld.join(" hoặc ")} vẫn ra đúng danh mục ${entry.nameNew} — vì các dự án thuộc địa giới hành chính mới này.`,
         },
       ],
     });
