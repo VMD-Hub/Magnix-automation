@@ -5,6 +5,7 @@ import { NOXH_HANDBOOK_JOURNEY_ARTICLES_2026 } from "@/lib/content/articles/noxh
 import { NOXH_KNOWLEDGE_ARTICLES_2026 } from "@/lib/content/articles/noxh-knowledge-series-2026";
 import { NOXH_MINDSET_ARTICLES_2026 } from "@/lib/content/articles/noxh-mindset-series-2026";
 import { NOXH_LOAN_ASSESSMENT_ARTICLES_2026 } from "@/lib/content/articles/noxh-loan-assessment-series-2026";
+import { FIRST_BUYER_FINANCE_MYTHS_ARTICLES_2026 } from "@/lib/content/articles/first-buyer-finance-myths-2026";
 import { NOXH_TREND_ARTICLES_2026 } from "@/lib/content/articles/noxh-trend-series-2026";
 import { TOD_NHON_TRACH_ARTICLES_2026 } from "@/lib/content/articles/tod-nhon-trach-series-2026";
 import {
@@ -313,6 +314,7 @@ Xem thêm [chuyên mục phong thủy](/phong-thuy) và [xem hướng nhà](/con
   ...NOXH_KNOWLEDGE_ARTICLES_2026,
   ...NOXH_HANDBOOK_JOURNEY_ARTICLES_2026,
   ...NOXH_LOAN_ASSESSMENT_ARTICLES_2026,
+  ...FIRST_BUYER_FINANCE_MYTHS_ARTICLES_2026,
   ...NOXH_MINDSET_ARTICLES_2026,
   ...TOD_NHON_TRACH_ARTICLES_2026,
 ];

@@ -177,10 +177,17 @@ const RELATED_SLUGS: Record<string, readonly string[]> = {
     "sai-lam-tai-chinh-tuong-du-tien-mua-nha",
   ],
   "sai-lam-tai-chinh-tuong-du-tien-mua-nha": [
+    "hieu-sai-mua-nha-dung-cho-du-tien",
     "kiem-tra-kha-nang-vay-noxh-60-giay",
     "vay-noxh-can-thu-nhap-bao-nhieu",
     "checklist-truoc-khi-dat-coc-noxh",
     NOXH_LOAN_PILLAR.slug,
+  ],
+  "hieu-sai-mua-nha-dung-cho-du-tien": [
+    "sai-lam-tai-chinh-tuong-du-tien-mua-nha",
+    "checklist-truoc-khi-dat-coc-noxh",
+    NOXH_LOAN_PILLAR.slug,
+    "vay-noxh-can-thu-nhap-bao-nhieu",
   ],
   /** Bài bổ sung — vợ/chồng đồng vay */
   "vay-noxh-vo-chong-dong-vay-cic": [
@@ -231,6 +238,10 @@ const SLUG_TITLE = new Map<string, string>([
   [
     "vay-noxh-vo-chong-dong-vay-cic",
     "Vay NOXH khi đã kết hôn — đồng vay, CIC và chi phí hộ",
+  ],
+  [
+    "hieu-sai-mua-nha-dung-cho-du-tien",
+    "Mua nhà có cần “đủ tiền” không? 4 hiểu sai khiến người mua lần đầu đứng ngoài",
   ],
 ]);
 

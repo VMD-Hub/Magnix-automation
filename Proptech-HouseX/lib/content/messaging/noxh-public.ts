@@ -165,6 +165,10 @@ export const NOXH_TOPIC_PILLAR_LINKS = [
     label: "Sai lầm tài chính — tưởng đủ tiền mua nhà",
   },
   {
+    href: articlePath("hieu-sai-mua-nha-dung-cho-du-tien"),
+    label: "4 hiểu sai — đừng chờ “đủ tiền” mới mua nhà",
+  },
+  {
     href: articlePath("checklist-truoc-khi-dat-coc-noxh"),
     label: "Đừng cọc khi chưa kiểm tra vay",
   },

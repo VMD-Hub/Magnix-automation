@@ -1551,6 +1551,8 @@ Cảm giác “đủ tiền mua nhà” rất dễ tạo ra quyết định vộ
 
 Một kế hoạch mua nhà tốt không phải là kế hoạch giúp bạn mua nhanh nhất, mà là kế hoạch giúp bạn mua nhà mà vẫn sống ổn định, bền vững và không bị áp lực tài chính kéo dài.
 
+Hai cực rủi ro khi mua nhà lần đầu để ở: vào khi chưa đủ rõ (bài này), và đứng ngoài quá lâu vì chờ “đủ tiền”. Nếu bạn đang trì hoãn vì sợ chưa đủ, đọc thêm [4 hiểu sai khiến người mua lần đầu đứng ngoài](/tin-tuc/hieu-sai-mua-nha-dung-cho-du-tien).
+
 ## Câu hỏi thường gặp
 
 **Vì sao tôi có tiền cọc nhưng vẫn chưa chắc đủ tiền mua nhà?**  
@@ -1577,7 +1579,7 @@ ${closing("sai-lam-tai-chinh-tuong-du-tien-mua-nha")}`,
     seoTitle:
       "Sai lầm tài chính tưởng đủ tiền mua nhà — 7 điều cần biết | HouseX",
     seoDesc:
-      "Có tiền cọc chưa chắc đủ mua NOXH. 7 sai lầm tài chính cá nhân, quỹ dự phòng, nợ cộng dồn và cách tự kiểm tra trước khi cọc.",
+      "Có tiền cọc chưa chắc đủ mua NOXH. 7 sai lầm tài chính cá nhân — đối xứng với bài đứng ngoài vì chờ đủ tiền. Tự kiểm trước khi cọc.",
     tags: [TAG],
     projects: [],
   },
