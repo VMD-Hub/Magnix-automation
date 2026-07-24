@@ -52,7 +52,9 @@ export function TeamMemberCard({ member }: { member: TeamMemberProfile }) {
       <div className="min-w-0 flex-1">
         <h3 className="text-lg font-bold text-slate-900">{member.name}</h3>
         <p className="text-sm font-semibold text-brand-700">{member.role}</p>
-        <p className="mt-2 text-sm leading-relaxed text-slate-600">{member.bio}</p>
+        <p className="mt-2 text-sm leading-relaxed text-slate-600 italic">
+          {member.bio}
+        </p>
         {member.profileHref ? (
           <a
             href={member.profileHref}
