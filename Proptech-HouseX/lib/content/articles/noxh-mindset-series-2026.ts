@@ -49,7 +49,7 @@ Trước khi chọn nhà ở xã hội, bạn nên kiểm tra **4 điểm chính
 
 | # | Điểm cần kiểm tra | Gợi ý |
 | --- | --- | --- |
-  |
+| 1 | **Khả năng vay** — tuổi, thu nhập, hồ sơ có khả thi không | [Thẩm định vay NOXH](${NOXH_MINDSET_ACTION_LINKS.loanPillar}) |
 | 2 | **Khả năng trả nợ hàng tháng** — sau trả góp còn đủ sinh hoạt không | [Tính hạn mức vay](${NOXH_MINDSET_ACTION_LINKS.hanMucVay}) |
 | 3 | **Lịch sử tín dụng** — CIC, nợ quá hạn | [Tra CIC an toàn](${NOXH_MINDSET_ACTION_LINKS.cic}) |
 | 4 | **Điều kiện mua NOXH** — nhóm đối tượng, thu nhập | [Điều kiện mua NOXH 2026](/tin-tuc/dieu-kien-mua-nha-o-xa-hoi-2026-tom-tat) |
