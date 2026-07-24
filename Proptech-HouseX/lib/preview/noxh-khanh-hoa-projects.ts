@@ -230,41 +230,41 @@ function enrichHappyHomeCamRanh(def: NoxhLandingDef): NoxhLandingDef {
     blocks: undefined,
     status: "DANG_BAN",
     description:
-      "Nhà ở xã hội Happy Home Cam Ranh (pháp lý: Khu NOXH phường Cam Nghĩa) do CTCP Muối Cam Ranh — công ty thuộc Vinhomes / Vingroup — làm CĐT. Quy mô đất ~87,6 ha; Sở XD Khánh Hòa (CV 01/2026) ghi ~3.565 căn NOXH; khởi công 01/2024, mục tiêu đưa vào sử dụng khoảng QIV/2026. Vốn đầu tư tham chiếu ~3.756 tỷ đồng. Không nhầm với Happy Home Nhơn Trạch (Đồng Nai). Tư vấn điều kiện qua House X.",
+      "Nhà ở xã hội Happy Home Cam Ranh (tên pháp lý: Khu nhà ở xã hội phường Cam Nghĩa) do CTCP Muối Cam Ranh — công ty thuộc Vinhomes / Vingroup — làm chủ đầu tư. Quy mô đất khoảng 87,6 ha; Sở Xây dựng Khánh Hòa ghi khoảng 3.565 căn; khởi công 01/2024, mục tiêu đưa vào sử dụng khoảng quý IV/2026. Vốn đầu tư tham chiếu khoảng 3.756 tỷ đồng. Tư vấn điều kiện qua House X.",
     seoTitle:
-      "Nhà ở xã hội Happy Home Cam Ranh — ~3.565 căn Cam Nghĩa | House X",
+      "Nhà ở xã hội Happy Home Cam Ranh — khoảng 3.565 căn Cam Nghĩa | House X",
     seoDesc:
-      "NOXH Happy Home Cam Ranh (Cam Nghĩa, Khánh Hòa): ~87,6 ha, ~3.565 căn, CĐT Muối Cam Ranh / Vinhomes. Tra cứu điều kiện và tư vấn trên House X.",
+      "Nhà ở xã hội Happy Home Cam Ranh (Cam Nghĩa, Khánh Hòa): khoảng 87,6 ha, khoảng 3.565 căn, chủ đầu tư Muối Cam Ranh / Vinhomes. Tra cứu điều kiện và tư vấn trên House X.",
     heroSubtitle:
-      "Cam Ranh · ~3.565 căn · ~87,6 ha · Muối Cam Ranh (Vinhomes) · mục tiêu ~QIV/2026",
-    locationNotes: `Khu NOXH phường Cam Nghĩa / Happy Home Cam Ranh — TP. Cam Ranh, Khánh Hòa, trong KĐT ven vịnh, gần QL1A và sân bay Cam Ranh (theo CĐT).
+      "Cam Ranh · khoảng 3.565 căn · khoảng 87,6 ha · Muối Cam Ranh (Vinhomes) · mục tiêu khoảng quý IV/2026",
+    locationNotes: `Khu nhà ở xã hội phường Cam Nghĩa / Happy Home Cam Ranh — TP. Cam Ranh, Khánh Hòa, trong khu đô thị ven vịnh, gần QL1A và sân bay Cam Ranh.
 
-Tên pháp lý Sở: Khu nhà ở xã hội phường Cam Nghĩa. Thương mại: Vinhomes Happy Home.
+Tên pháp lý: Khu nhà ở xã hội phường Cam Nghĩa. Tên thương mại: Vinhomes Happy Home.
 
-House X không thu đặt cọc thay CĐT. Đối chiếu sxd.khanhhoa.gov.vn.`,
+House X không thu đặt cọc thay chủ đầu tư. Đối chiếu sxd.khanhhoa.gov.vn.`,
     highlights: [
       {
-        title: "~3.565 căn · ~87,6 ha",
-        text: "Dự án NOXH quy mô lớn tại Cam Ranh theo Sở (01/2026) và công bố CĐT — thấp tầng / liền kề + căn hộ trong đô thị ven vịnh.",
+        title: "Khoảng 3.565 căn · khoảng 87,6 ha",
+        text: "Dự án nhà ở xã hội quy mô lớn tại Cam Ranh theo Sở Xây dựng (01/2026) và công bố chủ đầu tư.",
       },
       {
         title: "Muối Cam Ranh · Vinhomes",
-        text: "CĐT pháp lý: CTCP Muối Cam Ranh (thuộc Vinhomes). Khởi công 11/1/2024; vốn tham chiếu ~3.756 tỷ.",
+        text: "Chủ đầu tư pháp lý: CTCP Muối Cam Ranh (thuộc Vinhomes). Khởi công 11/1/2024; vốn tham chiếu khoảng 3.756 tỷ.",
       },
       {
         title: "Giá — xác minh Sở",
-        text: "Danh mục nội bộ ghi khoảng 8–12 triệu/m²; kênh thương mại có mức theo căn. Chỉ nộp hồ sơ theo bảng / điều kiện Sở hoặc CĐT công bố.",
+        text: "Giá đang được xác minh. Chỉ nộp hồ sơ theo bảng giá và điều kiện Sở Xây dựng hoặc chủ đầu tư công bố.",
       },
     ],
     amenities: [
-      "Hạ tầng KĐT ven vịnh Cam Ranh",
+      "Hạ tầng khu đô thị ven vịnh Cam Ranh",
       "Gần QL1A / kết nối sân bay Cam Ranh",
-      "Trường học / tiện ích theo quy hoạch CĐT",
+      "Trường học / tiện ích theo quy hoạch chủ đầu tư",
     ],
     faqs: [
       {
         q: "Happy Home Cam Ranh có phải Happy Home Nhơn Trạch không?",
-        a: "Không. Đây là NOXH tại Cam Nghĩa, Cam Ranh (Khánh Hòa). Happy Home Nhơn Trạch thuộc Đồng Nai — slug và hub khác.",
+        a: "Không. Dự án này tại Cam Nghĩa, Cam Ranh (Khánh Hòa). Happy Home Nhơn Trạch thuộc Đồng Nai — là dự án khác.",
       },
       {
         q: "Ai là chủ đầu tư?",
@@ -272,7 +272,7 @@ House X không thu đặt cọc thay CĐT. Đối chiếu sxd.khanhhoa.gov.vn.`,
       },
       {
         q: "Bao nhiêu căn / khi nào vào ở?",
-        a: "Sở XD (01/2026): khoảng 3.565 căn; khởi công 01/2024; dự kiến đưa vào sử dụng khoảng quý IV/2026 — xác minh tiến độ trên sxd.khanhhoa.gov.vn.",
+        a: "Sở Xây dựng (01/2026): khoảng 3.565 căn; khởi công 01/2024; dự kiến đưa vào sử dụng khoảng quý IV/2026 — xác minh tiến độ trên sxd.khanhhoa.gov.vn.",
       },
     ],
     unitTypes: [

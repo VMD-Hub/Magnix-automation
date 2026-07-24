@@ -228,7 +228,7 @@ Nguồn: ducmanhgroup.com · đối chiếu sxd.danang.gov.vn. House X không th
       },
       {
         q: "Giá bao nhiêu?",
-        a: "Danh mục nội bộ ghi ~17 triệu/m² (dự kiến). Giá chính thức theo phê duyệt Sở Xây dựng / bảng CĐT từng đợt.",
+        a: "Giá đang được xác minh theo công bố Sở Xây dựng hoặc chủ đầu tư từng đợt. Đăng ký nhận thông tin trên trang dự án để House X cập nhật sớm cho bạn.",
       },
     ],
     unitTypes: [

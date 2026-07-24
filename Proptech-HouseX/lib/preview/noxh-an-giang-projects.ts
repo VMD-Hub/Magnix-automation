@@ -255,7 +255,7 @@ House X không thu đặt cọc thay CĐT.`,
       },
       {
         title: "Giá từ ~1,5 tỷ/căn",
-        text: "Tham chiếu website CĐT. Danh mục nội bộ ghi khoảng 1,3–1,5 tỷ — xác minh bảng niêm yết / Sở trước khi nộp hồ sơ.",
+        text: "Tham chiếu website chủ đầu tư khoảng từ 1,5 tỷ/căn — xác minh bảng niêm yết / Sở trước khi nộp hồ sơ.",
       },
       {
         title: "CIC Group · KĐT Tây Bắc",

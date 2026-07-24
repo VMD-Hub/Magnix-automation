@@ -228,35 +228,33 @@ function enrichEcohomeNhonBinh(def: NoxhLandingDef): NoxhLandingDef {
     totalUnits: 1380,
     blocks: 5,
     description:
-      "Nhà ở xã hội Ecohome Nhơn Bình tại Phường Nhơn Bình, TP. Quy Nhơn — dự án chung cư NOXH quy mô lớn của Capital House / CH Group trên ~4,6 ha. 5 tòa 13–16 tầng, 1.380 căn (35,1–76,9 m²), chứng nhận EDGE green; khởi công 2020 và đã bàn giao vận hành. Mức giá công bố tham chiếu ~12–14 tr/m² (thị trường thứ cấp — xác minh trước giao dịch). Không nhầm với Ecohome Harmony Đắk Lắk. Tư vấn điều kiện qua House X.",
-    seoTitle: "Ecohome Nhơn Bình — 1.380 căn NOXH Quy Nhơn | House X",
+      "Nhà ở xã hội Ecohome Nhơn Bình tại Phường Nhơn Bình, TP. Quy Nhơn — dự án chung cư nhà ở xã hội quy mô lớn của Capital House / CH Group trên khoảng 4,6 ha. 5 tòa 13–16 tầng, 1.380 căn (35,1–76,9 m²), chứng nhận công trình xanh EDGE; khởi công 2020 và đã bàn giao vận hành. Mức giá tham chiếu khoảng 12–14 triệu/m² (thị trường thứ cấp — xác minh trước giao dịch). Tư vấn điều kiện qua House X.",
+    seoTitle: "Ecohome Nhơn Bình — 1.380 căn nhà ở xã hội Quy Nhơn | House X",
     seoDesc:
-      "NOXH Ecohome Nhơn Bình: 1.380 căn, 5 tòa EDGE green, Capital House / CH Group. Đã bàn giao — tra cứu điều kiện trên House X.",
+      "Ecohome Nhơn Bình: 1.380 căn, 5 tòa EDGE, Capital House / CH Group. Đã bàn giao — tra cứu điều kiện trên House X.",
     heroSubtitle:
       "Quy Nhơn Nhơn Bình · 1.380 căn · 5 tòa EDGE · Capital House · đã bàn giao",
-    locationNotes: `Ecohome Nhơn Bình trên ~4,6 ha tại Phường Nhơn Bình, TP. Quy Nhơn — thuộc tỉnh Gia Lai mới (Bình Định cũ).
+    locationNotes: `Ecohome Nhơn Bình trên khoảng 4,6 ha tại Phường Nhơn Bình, TP. Quy Nhơn — thuộc tỉnh Gia Lai (Bình Định cũ).
 
-Nguồn: docs/content/ECOHOME_NHON_BINH_NOXH_LANDING.md · CH Group / Capital House. Đối chiếu Sở XD Gia Lai.
-
-House X không thu đặt cọc thay CĐT.`,
+Đối chiếu Sở Xây dựng Gia Lai trước khi giao dịch. House X không thu đặt cọc thay chủ đầu tư.`,
     highlights: [
       {
         title: "1.380 căn · 5 tòa",
-        text: "5 block 13–16 tầng trên ~46.034 m²; căn hộ 35,1–76,9 m²; đã bàn giao vận hành.",
+        text: "5 block 13–16 tầng trên khoảng 46.034 m²; căn hộ 35,1–76,9 m²; đã bàn giao vận hành.",
       },
       {
         title: "Capital House / CH Group",
-        text: "CTNHH Ecohome Nhơn Bình — chứng nhận EDGE green building.",
+        text: "CTNHH Ecohome Nhơn Bình — chứng nhận công trình xanh EDGE.",
       },
       {
-        title: "Không nhầm Harmony Đắk Lắk",
-        text: "Ecohome Nhơn Bình tại Quy Nhơn khác Ecohome Harmony (Buôn Ma Thuột / Tuy Hòa, Đắk Lắk).",
+        title: "Vị trí Quy Nhơn",
+        text: "Phường Nhơn Bình, TP. Quy Nhơn — khác dự án Ecohome Harmony tại Đắk Lắk.",
       },
     ],
     amenities: [
-      "EDGE green building",
+      "Công trình xanh EDGE",
       "Tiện ích cộng đồng theo thiết kế Capital House",
-      "Hạ tầng kỹ thuật chung cư NOXH",
+      "Hạ tầng kỹ thuật chung cư nhà ở xã hội",
     ],
     faqs: [
       {

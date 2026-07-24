@@ -1,10 +1,11 @@
 /**
  * Copy công khai khi dự án NOXH chưa đủ dữ liệu / CĐT chưa công bố đủ.
  *
- * Quy ước biên tập (không đưa nguyên văn lên trang):
- * - Thiếu thông tin → "đang xác minh" (không: research / skeleton / catalog / bổ sung khi…).
- * - Không lẫn Anh–Việt trên bề mặt người đọc.
- * - Kết thúc khối thiếu dữ liệu bằng câu giữ chân / soft follow bên dưới.
+ * Quy ước biên tập (KHÔNG đưa lên trang người đọc):
+ * - Nguồn nội bộ: “PDF”, “research”, “slug”, “catalog”, “danh mục nội bộ”, “ưu tiên tên”…
+ * - Chỉ dùng nguồn để viết lại bằng tiếng Việt cho người mua nhà.
+ * - Thiếu thông tin → “đang xác minh” + câu giữ chân bên dưới.
+ * - Phân biệt dự án trùng tên: nói địa danh (Cam Ranh / Thủ Đức), không đưa slug URL.
  */
 
 /** Nhãn tiện ích khi chưa có danh sách CĐT. */

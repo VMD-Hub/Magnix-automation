@@ -528,30 +528,30 @@ function enrichHappyHomeLongPhuoc(def: NoxhLandingDef): NoxhLandingDef {
     developerName: "Vinhomes (Tập đoàn Vingroup)",
     totalArea: 441600,
     description:
-      "Nhà ở xã hội Happy Home Long Phước (Thành Phố Xanh) tại Long Phước, TP. Thủ Đức — dự án Vinhomes trong cụm NOXH phía Đông TP.HCM. Quy mô đất khoảng 44,16 ha (441.600 m²). Số căn đang được xác minh theo công bố Sở Xây dựng hoặc chủ đầu tư. Chúng tôi đang theo dõi để cập nhật thông tin dự án đến quý vị sớm nhất.",
+      "Nhà ở xã hội Happy Home Long Phước (Thành Phố Xanh) tại Long Phước, TP. Thủ Đức — dự án Vinhomes trong cụm nhà ở xã hội phía Đông TP.HCM. Quy mô đất khoảng 44,16 ha (441.600 m²). Giá và số căn đang được xác minh theo công bố Sở Xây dựng hoặc chủ đầu tư. Chúng tôi đang theo dõi để cập nhật thông tin dự án đến quý vị sớm nhất.",
     seoTitle:
       "Happy Home Long Phước — Thành Phố Xanh Vinhomes · 44 ha | House X",
     seoDesc:
-      "NOXH Happy Home Long Phước (Vinhomes): khu đô thị khoảng 44 ha tại Long Phước, Thủ Đức. Tra cứu điều kiện mua và đăng ký tư vấn trên House X.",
+      "Nhà ở xã hội Happy Home Long Phước (Vinhomes): khu đô thị khoảng 44 ha tại Long Phước, Thủ Đức. Tra cứu điều kiện mua và đăng ký tư vấn trên House X.",
     heroSubtitle:
       "Thành Phố Xanh · Long Phước · khoảng 44 ha · Vinhomes",
     locationNotes: `Happy Home Long Phước (Thành Phố Xanh) tại Long Phước, TP. Thủ Đức, TP. Hồ Chí Minh.
 
-Quy mô đất khoảng 44,16 ha. Một số tài liệu còn ghi tên Grand Park / Long Thạnh Mỹ — trên House X ưu tiên tên Thành Phố Xanh / Happy Home Long Phước. Số căn đang được xác minh độc lập trước khi công bố.
+Quy mô đất khoảng 44,16 ha. Số căn và bảng giá đang được xác minh theo công bố Sở Xây dựng hoặc chủ đầu tư.
 
-Dự án này khác Happy Home Cam Ranh (Khánh Hòa) và Happy Home Nhơn Trạch (Đồng Nai). House X không thu đặt cọc thay chủ đầu tư.`,
+House X không thu đặt cọc thay chủ đầu tư.`,
     highlights: [
       {
         title: "Khu đô thị khoảng 44,16 ha",
-        text: "Diện tích đất khoảng 441.600 m² tại Long Phước. Số căn đang được xác minh theo công bố Sở Xây dựng hoặc chủ đầu tư.",
+        text: "Diện tích đất khoảng 441.600 m² tại Long Phước, TP. Thủ Đức.",
       },
       {
-        title: "Vinhomes · Thành Phố Xanh",
-        text: "Chủ đầu tư Vinhomes (Vingroup). Tên thương mại: Thành Phố Xanh / Happy Home Long Phước.",
+        title: "Chủ đầu tư Vinhomes",
+        text: "Tập đoàn Vingroup phát triển dưới tên Thành Phố Xanh / Happy Home Long Phước.",
       },
       {
-        title: "Đối chiếu trước khi nộp hồ sơ",
-        text: "Một số nguồn còn ghi Long Thạnh Mỹ / Grand Park — đối chiếu Sở Xây dựng TP.HCM trước khi nộp hồ sơ.",
+        title: "Giá & suất",
+        text: "Đang được xác minh. Chúng tôi đang theo dõi để cập nhật thông tin dự án đến quý vị sớm nhất.",
       },
     ],
     amenities: [
@@ -562,15 +562,15 @@ Dự án này khác Happy Home Cam Ranh (Khánh Hòa) và Happy Home Nhơn Trạ
     faqs: [
       {
         q: "Happy Home Long Phước có phải Happy Home Cam Ranh không?",
-        a: "Không. Happy Home Cam Ranh thuộc Khánh Hòa; Happy Home Long Phước tại Thủ Đức (TP.HCM) là dự án riêng.",
+        a: "Không. Happy Home Cam Ranh ở Khánh Hòa; Happy Home Long Phước nằm tại Long Phước, Thủ Đức (TP.HCM).",
       },
       {
-        q: "Bao nhiêu căn?",
-        a: "Một số nguồn nêu khoảng 4.300 căn — House X đang xác minh. Đăng ký nhận thông tin trên trang dự án để được cập nhật sớm.",
+        q: "Bao nhiêu căn / giá bao nhiêu?",
+        a: "Giá và số căn đang được xác minh theo công bố Sở Xây dựng hoặc chủ đầu tư. Đăng ký nhận thông tin trên trang dự án để House X cập nhật sớm cho bạn.",
       },
       {
-        q: "Vì sao có tên Grand Park / Long Thạnh Mỹ?",
-        a: "Một số tài liệu danh mục còn dùng tên Grand Park / Long Thạnh Mỹ. Trên House X ưu tiên Thành Phố Xanh / Happy Home Long Phước theo vị trí Long Phước.",
+        q: "Tư vấn thế nào?",
+        a: "Để lại thông tin trên form trang dự án hoặc xem Wiki nhà ở xã hội trên House X.",
       },
     ],
     legalDocs: [{ docType: "chap_thuan_noxh", status: "dang_lam" }],

@@ -205,51 +205,49 @@ function enrichAnPhu(def: NoxhLandingDef): NoxhLandingDef {
     blocks: 9,
     status: "DANG_BAN",
     description:
-      "Nhà ở xã hội Ân Phú tại Khu dân cư Hà Huy Tập, Phường Tân An, TP. Buôn Ma Thuột — 9 khối 3 tầng, 330 căn trên ~27.478 m². CĐT CTCP Đầu tư PTĐT Ân Phú (CafeLand / Sở XD): căn 50–70 m², 264 căn bán và 66 căn thuê; giá tham chiếu ~16,6 triệu/m² — đối chiếu Sở trước nộp hồ sơ. Đang bàn giao từng đợt; phần còn lại dự kiến hoàn tất Q3/2026. XH-03: 164 căn đủ điều kiện kinh doanh 2025. Không nhầm Ecohome Harmony Km7 (CĐT khác). Tư vấn điều kiện qua House X — không hotline CĐT.",
+      "Nhà ở xã hội Ân Phú tại Khu dân cư Hà Huy Tập, Phường Tân An, TP. Buôn Ma Thuột — 9 khối 3 tầng, 330 căn trên khoảng 27.478 m². Chủ đầu tư CTCP Đầu tư PTĐT Ân Phú: căn 50–70 m², 264 căn bán và 66 căn thuê; giá tham chiếu khoảng 16,6 triệu/m² — đối chiếu Sở trước khi nộp hồ sơ. Đang bàn giao từng đợt; phần còn lại dự kiến hoàn tất quý III/2026. Tư vấn điều kiện qua House X.",
     seoTitle:
       "Nhà ở xã hội Ân Phú Buôn Ma Thuột — 330 căn Hà Huy Tập | House X",
     seoDesc:
-      "NOXH Ân Phú Buôn Ma Thuột: 9 khối 330 căn (50–70 m²), CĐT Ân Phú, bàn giao từng đợt. Tra cứu điều kiện và tư vấn trên House X.",
+      "Nhà ở xã hội Ân Phú Buôn Ma Thuột: 9 khối 330 căn (50–70 m²), chủ đầu tư Ân Phú, bàn giao từng đợt. Tra cứu điều kiện và tư vấn trên House X.",
     heroSubtitle:
-      "BMT Tân An · 9 khối · 330 căn · 50–70 m² · bàn giao từng đợt · CĐT Ân Phú",
-    locationNotes: `NOXH Ân Phú trên đường Hà Huy Tập, Phường Tân An, TP. Buôn Ma Thuột — KDC Hà Huy Tập.
+      "Buôn Ma Thuột Tân An · 9 khối · 330 căn · 50–70 m² · bàn giao từng đợt · chủ đầu tư Ân Phú",
+    locationNotes: `Nhà ở xã hội Ân Phú trên đường Hà Huy Tập, Phường Tân An, TP. Buôn Ma Thuột — khu dân cư Hà Huy Tập.
 
-Quy mô: 9 khối 3 tầng · 330 căn · ~27.478 m² · 264 bán + 66 thuê. Đang bàn giao từng đợt; phần còn lại dự kiến Q3/2026. XH-03: 164 căn đủ ĐKKD 2025.
+Quy mô: 9 khối 3 tầng · 330 căn · khoảng 27.478 m² · 264 căn bán và 66 căn thuê. Đang bàn giao từng đợt; phần còn lại dự kiến quý III/2026.
 
-Không nhầm Ecohome Harmony Km7 (CĐT khác). Nguồn: CafeLand / Sở XD Đắk Lắk.
-
-House X không thu đặt cọc thay CĐT · không công bố hotline CĐT.`,
+House X không thu đặt cọc thay chủ đầu tư.`,
     highlights: [
       {
         title: "330 căn · 9 khối 3 tầng",
-        text: "~27.478 m²; căn 50–70 m²; 264 căn bán và 66 căn thuê theo CafeLand / Sở.",
+        text: "Khoảng 27.478 m²; căn 50–70 m²; 264 căn bán và 66 căn thuê theo công bố công khai.",
       },
       {
-        title: "CĐT: Ân Phú",
-        text: "CTCP Đầu tư PTĐT Ân Phú — KDC Hà Huy Tập. Không nhầm Ecohome Harmony Km7.",
+        title: "Chủ đầu tư: Ân Phú",
+        text: "CTCP Đầu tư PTĐT Ân Phú — khu dân cư Hà Huy Tập, TP. Buôn Ma Thuột.",
       },
       {
         title: "Bàn giao từng đợt",
-        text: "Đang bàn giao; phần còn lại dự kiến Q3/2026. Giá tham chiếu ~16,6 triệu/m² — xác minh Sở trước nộp hồ sơ.",
+        text: "Đang bàn giao; phần còn lại dự kiến quý III/2026. Giá tham chiếu khoảng 16,6 triệu/m² — xác minh Sở trước khi nộp hồ sơ.",
       },
     ],
     amenities: [
-      "KDC Hà Huy Tập · Phường Tân An",
+      "Khu dân cư Hà Huy Tập · Phường Tân An",
       "264 căn bán · 66 căn thuê",
-      "Hạ tầng kỹ thuật theo tiêu chuẩn NOXH",
+      "Hạ tầng kỹ thuật theo tiêu chuẩn nhà ở xã hội",
     ],
     faqs: [
       {
-        q: "Ai là chủ đầu tư NOXH Ân Phú?",
-        a: "CTCP Đầu tư PTĐT Ân Phú theo CafeLand / Sở XD. Không nhầm Ecohome Harmony Km7 (CĐT khác). House X tư vấn qua form — không hotline CĐT.",
+        q: "Ai là chủ đầu tư nhà ở xã hội Ân Phú?",
+        a: "CTCP Đầu tư PTĐT Ân Phú. House X tư vấn qua form trên trang dự án.",
       },
       {
         q: "Bao nhiêu căn / diện tích?",
-        a: "330 căn trên ~27.478 m²; diện tích căn 50–70 m²; 264 căn bán và 66 căn thuê.",
+        a: "330 căn trên khoảng 27.478 m²; diện tích căn 50–70 m²; 264 căn bán và 66 căn thuê.",
       },
       {
         q: "Đã bàn giao chưa?",
-        a: "Đang bàn giao từng đợt; phần còn lại dự kiến hoàn tất Q3/2026. XH-03: 164 căn đủ điều kiện kinh doanh 2025.",
+        a: "Đang bàn giao từng đợt; phần còn lại dự kiến hoàn tất quý III/2026.",
       },
     ],
     unitTypes: [
