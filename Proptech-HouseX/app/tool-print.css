@@ -202,6 +202,48 @@
     color: #64748b;
   }
 
+  .tool-print-body {
+    margin-top: 4px;
+  }
+
+  .tool-print-section-title {
+    margin: 12px 0 6px;
+    font-size: 11pt;
+    font-weight: 800;
+    color: #0f172a;
+  }
+
+  .tool-print-kv-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 9pt;
+  }
+
+  .tool-print-kv-table th,
+  .tool-print-kv-table td {
+    border: 1px solid #e2e8f0;
+    padding: 6px 8px;
+    text-align: left;
+    vertical-align: top;
+  }
+
+  .tool-print-kv-table th {
+    width: 22%;
+    font-weight: 700;
+    background: #f8fafc;
+  }
+
+  .tool-print-list {
+    margin: 0;
+    padding-left: 18px;
+    font-size: 9pt;
+    color: #334155;
+  }
+
+  .tool-print-list li {
+    margin-bottom: 3px;
+  }
+
   /* Ẩn banner trang / chrome — không in hero catalog */
   .proptech-catalog-hero,
   .site-header-bar,
@@ -210,7 +252,8 @@
     display: none !important;
   }
 
-  .loan-calc-print-root {
+  .loan-calc-print-root,
+  .tool-calc-print-root {
     display: block !important;
   }
 }

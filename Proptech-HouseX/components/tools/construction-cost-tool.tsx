@@ -2,6 +2,8 @@
 
 import { useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
+import { ToolPrintSheet } from "@/components/tools/print/tool-print-sheet";
+import { ToolPrintPdfButton } from "@/components/tools/print/tool-print-pdf-button";
 import {
   COST_ESTIMATE_DISCLAIMER,
   estimateDetail,
@@ -50,14 +52,17 @@ export function ConstructionCostTool({ mode }: { mode: Mode }) {
   const inputCls =
     "mt-1.5 w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm outline-none focus:border-brand-400 focus:ring-2 focus:ring-brand-100";
 
+  const printTitle =
+    mode === "quick" ? "Bảng ước tính chi phí xây nhà" : "Bảng dự toán xây nhà chi tiết";
+
   return (
-    <div className="space-y-6">
+    <div className="tool-calc-print-root space-y-6">
       <form
         onSubmit={(e) => {
           e.preventDefault();
           setSubmitted(true);
         }}
-        className="proptech-ruby-soft-panel p-5 sm:p-6"
+        className="proptech-ruby-soft-panel p-5 sm:p-6 print:hidden"
       >
         <div className="grid gap-4 sm:grid-cols-2">
           <label>
@@ -125,41 +130,88 @@ export function ConstructionCostTool({ mode }: { mode: Mode }) {
       </form>
 
       {result ? (
-        <div className="rounded-2xl border border-brand-200 bg-white p-5 sm:p-6">
-          <p className="text-xs font-semibold uppercase text-brand-600">
-            {result.packageLabel} · {result.regionLabel}
-          </p>
-          <p className="mt-2 text-2xl font-extrabold text-slate-900">
-            {formatVnd(result.totalWithContingency)}
-          </p>
-          <p className="text-sm text-slate-500">
-            Gồm dự phòng 10% · DT quy đổi {result.totalBuiltAreaM2} m² · {formatVnd(result.unitPricePerM2)}/m²
-          </p>
+        <>
+          <ToolPrintSheet
+            title={printTitle}
+            subtitle={`${result.packageLabel} · ${result.regionLabel}`}
+            summary={[
+              { label: "Tổng (gồm dự phòng)", value: formatVnd(result.totalWithContingency) },
+              { label: "DT quy đổi", value: `${result.totalBuiltAreaM2} m²` },
+              { label: "Đơn giá", value: `${formatVnd(result.unitPricePerM2)}/m²` },
+              { label: "Diện tích/tầng", value: `${floorAreaM2} m²` },
+              { label: "Số tầng", value: `${floors}` },
+              { label: "Gói", value: result.packageLabel },
+            ]}
+          >
+            <div className="tool-print-table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th className="text-left">Hạng mục</th>
+                    <th className="text-left">Quy đổi</th>
+                    <th className="text-right">m² quy đổi</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {result.lines.map((l) => (
+                    <tr key={l.label}>
+                      <td className="text-left">{l.label}</td>
+                      <td className="text-left">{l.coefficient}</td>
+                      <td className="text-right">{l.subtotalM2.toFixed(1)}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <p className="tool-print-disclaimer">{COST_ESTIMATE_DISCLAIMER}</p>
+          </ToolPrintSheet>
 
-          <table className="mt-4 w-full text-left text-sm">
-            <thead className="text-xs uppercase text-slate-500">
-              <tr>
-                <th className="pb-2">Hạng mục</th>
-                <th className="pb-2">Quy đổi</th>
-                <th className="pb-2 text-right">m² quy đổi</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-100">
-              {result.lines.map((l) => (
-                <tr key={l.label}>
-                  <td className="py-2 font-medium text-slate-800">{l.label}</td>
-                  <td className="py-2 text-slate-600">{l.coefficient}</td>
-                  <td className="py-2 text-right text-slate-800">{l.subtotalM2.toFixed(1)}</td>
+          <div className="rounded-2xl border border-brand-200 bg-white p-5 sm:p-6 print:hidden">
+            <div className="flex flex-wrap items-start justify-between gap-3">
+              <div>
+                <p className="text-xs font-semibold uppercase text-brand-600">
+                  {result.packageLabel} · {result.regionLabel}
+                </p>
+                <p className="mt-2 text-2xl font-extrabold text-slate-900">
+                  {formatVnd(result.totalWithContingency)}
+                </p>
+                <p className="text-sm text-slate-500">
+                  Gồm dự phòng 10% · DT quy đổi {result.totalBuiltAreaM2} m² ·{" "}
+                  {formatVnd(result.unitPricePerM2)}/m²
+                </p>
+              </div>
+              <ToolPrintPdfButton />
+            </div>
+
+            <table className="mt-4 w-full text-left text-sm">
+              <thead className="text-xs uppercase text-slate-500">
+                <tr>
+                  <th className="pb-2">Hạng mục</th>
+                  <th className="pb-2">Quy đổi</th>
+                  <th className="pb-2 text-right">m² quy đổi</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody className="divide-y divide-slate-100">
+                {result.lines.map((l) => (
+                  <tr key={l.label}>
+                    <td className="py-2 font-medium text-slate-800">{l.label}</td>
+                    <td className="py-2 text-slate-600">{l.coefficient}</td>
+                    <td className="py-2 text-right text-slate-800">
+                      {l.subtotalM2.toFixed(1)}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
 
-          <ul className="mt-4 space-y-1 text-xs text-slate-500">
-            {result.notes.map((n) => <li key={n}>· {n}</li>)}
-          </ul>
-          <p className="mt-3 text-xs text-slate-500">{COST_ESTIMATE_DISCLAIMER}</p>
-        </div>
+            <ul className="mt-4 space-y-1 text-xs text-slate-500">
+              {result.notes.map((n) => (
+                <li key={n}>· {n}</li>
+              ))}
+            </ul>
+            <p className="mt-3 text-xs text-slate-500">{COST_ESTIMATE_DISCLAIMER}</p>
+          </div>
+        </>
       ) : null}
     </div>
   );

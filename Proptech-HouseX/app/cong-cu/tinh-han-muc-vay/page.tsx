@@ -60,32 +60,33 @@ export default function Page() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
       />
 
-      <ToolsBreadcrumb
-        items={[
-          { label: "Trang chủ", href: "/" },
-          { label: "Công cụ", href: "/cong-cu" },
-          { label: "Tính hạn mức vay" },
-        ]}
-      />
+      <div className="print:hidden">
+        <ToolsBreadcrumb
+          items={[
+            { label: "Trang chủ", href: "/" },
+            { label: "Công cụ", href: "/cong-cu" },
+            { label: "Tính hạn mức vay" },
+          ]}
+        />
 
-      <ToolsPageHero
-        kicker={LOAN_AFFORDABILITY_COPY.kicker}
-        title={LOAN_AFFORDABILITY_COPY.title}
-        subtitle={LOAN_AFFORDABILITY_COPY.subtitle}
-        image={LOAN_AFFORDABILITY_BANNER.jpg}
-        imageWebp={LOAN_AFFORDABILITY_BANNER.webp}
-        imageAlt={LOAN_AFFORDABILITY_BANNER.alt}
-        objectPosition={LOAN_AFFORDABILITY_BANNER.objectPosition}
-        primaryCta={{
-          label: LOAN_AFFORDABILITY_COPY.primaryCta,
-          href: LOAN_AFFORDABILITY_COPY.primaryCtaHref,
-        }}
-        secondaryCta={{
-          label: LOAN_AFFORDABILITY_COPY.secondaryCta,
-          href: LOAN_AFFORDABILITY_COPY.secondaryCtaHref,
-        }}
-      />
-
+        <ToolsPageHero
+          kicker={LOAN_AFFORDABILITY_COPY.kicker}
+          title={LOAN_AFFORDABILITY_COPY.title}
+          subtitle={LOAN_AFFORDABILITY_COPY.subtitle}
+          image={LOAN_AFFORDABILITY_BANNER.jpg}
+          imageWebp={LOAN_AFFORDABILITY_BANNER.webp}
+          imageAlt={LOAN_AFFORDABILITY_BANNER.alt}
+          objectPosition={LOAN_AFFORDABILITY_BANNER.objectPosition}
+          primaryCta={{
+            label: LOAN_AFFORDABILITY_COPY.primaryCta,
+            href: LOAN_AFFORDABILITY_COPY.primaryCtaHref,
+          }}
+          secondaryCta={{
+            label: LOAN_AFFORDABILITY_COPY.secondaryCta,
+            href: LOAN_AFFORDABILITY_COPY.secondaryCtaHref,
+          }}
+        />
+      </div>
       <div className="mb-8 flex gap-3 overflow-x-auto pb-1 [-webkit-overflow-scrolling:touch] sm:grid sm:grid-cols-3 sm:gap-4 sm:overflow-visible sm:pb-0 print:hidden">
         {LOAN_CALC_TRUST_STATS.map((s) => (
           <div

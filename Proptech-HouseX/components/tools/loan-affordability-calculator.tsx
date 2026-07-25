@@ -5,6 +5,8 @@ import { useMemo, useState } from "react";
 import { Icon } from "@/components/icons";
 import { PercentInput } from "@/components/tools/percent-input";
 import { VndInput } from "@/components/tools/vnd-input";
+import { ToolPrintSheet } from "@/components/tools/print/tool-print-sheet";
+import { ToolPrintPdfButton } from "@/components/tools/print/tool-print-pdf-button";
 import { cn } from "@/lib/ui/cn";
 import { DEFAULT_LOAN_ANNUAL_RATE } from "@/lib/format/percent";
 import {
@@ -180,8 +182,26 @@ export function LoanAffordabilityCalculator() {
 
   const dtiPct = result.currentDti != null ? Math.round(result.currentDti * 100) : null;
 
+  const printSummary = useMemo(
+    () => [
+      { label: "Thu nhập hộ/tháng", value: formatVnd(result.totalIncome) ?? "—" },
+      {
+        label: "Nghĩa vụ hiện tại",
+        value: formatVnd(result.totalCurrentObligation) ?? "—",
+      },
+      {
+        label: "DTI hiện tại",
+        value: dtiPct != null ? `${dtiPct}%` : "—",
+      },
+      { label: "Lãi suất giả định", value: `${rate}%/năm` },
+      { label: "Kỳ hạn", value: `${years} năm` },
+      { label: "LTV giả định", value: `${ltvPct}%` },
+    ],
+    [result.totalIncome, result.totalCurrentObligation, dtiPct, rate, years, ltvPct],
+  );
+
   return (
-    <div className="grid min-w-0 gap-6 lg:grid-cols-[minmax(0,380px)_minmax(0,1fr)]">
+    <div className="tool-calc-print-root grid min-w-0 gap-6 lg:grid-cols-[minmax(0,380px)_minmax(0,1fr)]">
       <div className="min-w-0 space-y-4 proptech-ruby-soft-panel p-4 sm:p-5 print:hidden">
         <Field
           label="Thu nhập của bạn/tháng"
@@ -453,7 +473,53 @@ export function LoanAffordabilityCalculator() {
       </div>
 
       <div className="min-w-0 space-y-5">
-        <div className="rounded-2xl border border-slate-200 bg-white p-5">
+        <ToolPrintSheet
+          title="Bảng tính hạn mức vay mua nhà"
+          subtitle={`Ước lượng theo thu nhập · ${years} năm · ${rate}%/năm · LTV ${ltvPct}%`}
+          summary={printSummary}
+        >
+          <h2 className="tool-print-section-title">Ba kịch bản DTI</h2>
+          <table className="tool-print-kv-table">
+            <thead>
+              <tr>
+                <th>Kịch bản</th>
+                <th>Hạn mức vay</th>
+                <th>Nhà ~</th>
+                <th>Trả/tháng ~</th>
+              </tr>
+            </thead>
+            <tbody>
+              {result.scenarios.map((s) => (
+                <tr key={s.profile}>
+                  <th>
+                    {s.label}
+                    <br />
+                    <span style={{ fontWeight: 400, fontSize: "8pt" }}>
+                      DTI ≤ {Math.round(s.dtiCap * 100)}%
+                    </span>
+                  </th>
+                  <td>{s.maxLoanAmount > 0 ? formatVnd(s.maxLoanAmount) : "—"}</td>
+                  <td>{s.maxPropertyPrice > 0 ? formatVnd(s.maxPropertyPrice) : "—"}</td>
+                  <td>
+                    {s.maxMonthlyPayment > 0
+                      ? `${groupVnd(s.maxMonthlyPayment)} đ`
+                      : "—"}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <p className="tool-print-disclaimer">
+            *** Kết quả mang tính tham khảo — mỗi ngân hàng có ma trận thẩm định riêng.
+          </p>
+        </ToolPrintSheet>
+
+        <div className="flex flex-wrap items-center justify-between gap-3 print:hidden">
+          <h2 className="text-lg font-bold text-slate-900">Kết quả ước lượng</h2>
+          <ToolPrintPdfButton />
+        </div>
+
+        <div className="rounded-2xl border border-slate-200 bg-white p-5 print:hidden">
           <div className="flex flex-wrap items-start justify-between gap-3">
             <div>
               <p className="text-sm font-medium text-slate-500">Tổng quan hồ sơ</p>
@@ -553,7 +619,7 @@ export function LoanAffordabilityCalculator() {
           </ul>
         </div>
 
-        <div className="grid min-w-0 gap-3 sm:grid-cols-3">
+        <div className="grid min-w-0 gap-3 sm:grid-cols-3 print:hidden">
           {result.scenarios.map((s) => {
             const meta = DTI_PROFILES[s.profile];
             return (

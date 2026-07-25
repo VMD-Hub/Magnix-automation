@@ -8,6 +8,7 @@ import { track } from "@/lib/analytics/track";
 import { articlePath } from "@/lib/content/article-routes";
 import { NOXH_CATALOG_PATH } from "@/lib/content/project-catalog-routes";
 import { NoxhChecklistPrint } from "@/components/tools/noxh-checklist-print";
+import { useToolPrintPdf } from "@/components/tools/print/use-tool-print-pdf";
 import { VndInput } from "@/components/tools/vnd-input";
 import { PhoneInput } from "@/components/tools/phone-input";
 import { DecimalInput } from "@/components/tools/decimal-input";
@@ -171,6 +172,7 @@ const TIER_META: Record<
 /* ---------- main wizard ---------- */
 
 export function NoxhEligibilityWizard() {
+  const printPdf = useToolPrintPdf();
   const [step, setStep] = useState(0);
 
   // B1 — đối tượng
@@ -274,7 +276,7 @@ export function NoxhEligibilityWizard() {
 
   function handlePrint() {
     track("noxh_pdf_download", { tier: classification.tier });
-    window.print();
+    printPdf();
   }
 
   const groupInfo = objectGroup ? NOXH_OBJECT_GROUPS[objectGroup] : null;
