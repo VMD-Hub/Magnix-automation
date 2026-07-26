@@ -41,6 +41,7 @@
     "db:seed:cctm-luat-nha-o-queue:dry": "node --import tsx scripts/seed-cctm-luat-nha-o-queue.ts --dry-run",
     "db:publish:first-buyer-debt-hub": "node --env-file=.env --import tsx scripts/publish-first-buyer-debt-hub-queue.ts",
     "db:publish:first-buyer-debt-hub:dry": "node --import tsx scripts/publish-first-buyer-debt-hub-queue.ts --dry-run",
+    "db:tag:first-buyer-debt-hub": "node --env-file=.env --import tsx scripts/tag-first-buyer-debt-hub-articles.ts",
     "db:hide-internal-demo": "node --env-file=.env --import tsx scripts/hide-internal-demo-content.ts",
     "db:verify:landings": "node --env-file=.env --import tsx scripts/verify-landings-db.ts",
     "db:backfill:noxh-snapshot": "node --env-file=.env --import tsx scripts/backfill-noxh-wizard-snapshot-from-sheet.ts",

@@ -59,17 +59,26 @@ function tagSlugsFor(item: BriefItem): string[] {
 
 async function resolveTagIds(slugs: string[]): Promise<string[]> {
   if (slugs.length === 0) return [];
-  const tags = await prisma.articleTag.findMany({
-    where: { slug: { in: slugs } },
-    select: { id: true, slug: true },
-  });
-  const found = new Set(tags.map((t) => t.slug));
-  for (const s of slugs) {
-    if (!found.has(s)) {
-      console.warn(`  ⚠ tag chưa có trong DB: ${s} — bỏ qua (không fail publish)`);
+  const ids: string[] = [];
+  for (const slug of slugs) {
+    const def =
+      slug === NOXH_TAG_THAM_DINH_VAY.slug
+        ? NOXH_TAG_THAM_DINH_VAY
+        : slug === NOXH_TAG_CHINH_SACH.slug
+          ? NOXH_TAG_CHINH_SACH
+          : null;
+    if (!def) {
+      console.warn(`  ⚠ tag ngoài handbook: ${slug} — bỏ qua`);
+      continue;
     }
+    const tag = await prisma.articleTag.upsert({
+      where: { slug: def.slug },
+      update: { name: def.name },
+      create: { slug: def.slug, name: def.name },
+    });
+    ids.push(tag.id);
   }
-  return tags.map((t) => t.id);
+  return ids;
 }
 
 async function main() {
