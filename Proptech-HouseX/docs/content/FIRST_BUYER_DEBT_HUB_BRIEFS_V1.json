@@ -1,0 +1,652 @@
+{
+  "brief_pack_version": 1,
+  "created_at": "2026-07-26",
+  "doc": "Proptech-HouseX/docs/content/FIRST_BUYER_DEBT_HUB_BRIEF_2026.md",
+  "channel": "blog_seo",
+  "product_type": "website_article",
+  "ship_order": ["A0", "A1", "B0", "B1", "A2", "B2", "A3", "B3"],
+  "items": [
+    {
+      "id": "A0",
+      "normalized_key": "editorial:first-buyer-pillar:2026",
+      "slug": "huong-dan-mua-nha-lan-dau-2026-tu-chon-nha-den-ky-hop-dong",
+      "h1": "Hướng dẫn mua nhà lần đầu 2026 — từ chọn nhà đến ký hợp đồng cần làm những gì?",
+      "priority": "P0",
+      "content_type": "NOXH_LEGAL",
+      "segment": "noxh_income",
+      "legal_topic": "noxh_income",
+      "requires_legal_kb": true,
+      "cta_tool_id": "noxh-check",
+      "cta_keyword": "NOXH",
+      "interest_key": "mua_nha_lan_dau_huong_dan",
+      "tags": ["noxh", "phap-ly"],
+      "internal_links": [
+        "/vay-mua-nha",
+        "/cong-cu/dieu-kien-noxh",
+        "/cong-cu/kiem-tra-vay-noxh",
+        "/tinh-tra-gop",
+        "/tin-tuc/tham-dinh-khoan-vay-mua-nha-o-xa-hoi",
+        "/tin-tuc/hieu-sai-mua-nha-dung-cho-du-tien"
+      ],
+      "editorial_brief_v1": {
+        "brief_version": 1,
+        "editorial_title": "Pillar mua nhà lần đầu 2026 — chọn nhà đến ký HĐ",
+        "one_line_insight": "Phần lớn người mua lần đầu không biết khả năng vay và DTI quyết định ngưỡng giá nhiều hơn giá sàn trên brochure.",
+        "qa_backbone": [
+          {
+            "question": "Mua nhà lần đầu cần đủ điều kiện và giấy tờ gì?",
+            "answer_angle": "Tách hai tầng: điều kiện mua (đối tượng/thu nhập nếu NOXH) và điều kiện vay (thu nhập chứng minh, CIC). Checklist giấy tờ cá nhân + hồ sơ thu nhập — không nhồi Mẫu 01 vào mọi case CCTM.",
+            "search_keyword": "mua nhà lần đầu cần giấy tờ gì",
+            "hook_line": "Giấy tờ mua và giấy tờ vay là hai bộ khác nhau."
+          },
+          {
+            "question": "Nên chọn nhà ở xã hội hay căn hộ thương mại khi mua lần đầu?",
+            "answer_angle": "So sánh cửa đối tượng, trần thu nhập, thời hạn sở hữu, vốn tự có — link spoke A1 và tool điều kiện NOXH.",
+            "search_keyword": "nên mua NOXH hay căn thương mại",
+            "hook_line": "Giá thấp hơn không phải lúc nào cũng là cửa đúng hồ sơ."
+          },
+          {
+            "question": "Vay bao nhiêu là vừa và hồ sơ tài chính thế nào thì dễ bị từ chối?",
+            "answer_angle": "DTI + chứng minh thu nhập + nợ tiêu dùng; đủ điều kiện NOXH ≠ chắc được vay. Link A2, hạn mức vay, tính trả góp.",
+            "search_keyword": "hồ sơ vay mua nhà bị từ chối",
+            "hook_line": "Ngưỡng giá thật nằm ở DTI, không ở brochure."
+          },
+          {
+            "question": "Chi phí ẩn và thời gian từ ký hợp đồng đến sở hữu thường kéo dài bao lâu?",
+            "answer_angle": "Liệt kê nhóm phí (trước bạ, công chứng, bảo hiểm…) và khung timeline tham khảo — không cam kết số ngày cố định. Link A3.",
+            "search_keyword": "chi phí ẩn khi mua nhà lần đầu",
+            "hook_line": "Cọc và trả góp chưa phải toàn bộ chi phí sở hữu."
+          },
+          {
+            "question": "Trước khi đặt cọc nên tự kiểm tra những gì trên House X?",
+            "answer_angle": "Chuỗi tool: điều kiện NOXH → hạn mức → trả góp → checklist cọc đã publish → form /vay-mua-nha khi còn phân vân.",
+            "search_keyword": "checklist trước khi đặt cọc mua nhà",
+            "hook_line": "Tự kiểm trước cọc rẻ hơn sửa sau khi đã đặt."
+          }
+        ],
+        "recommended_formats": [
+          {
+            "format": "lead_magnet",
+            "platform": "blog",
+            "priority": 1,
+            "why": "Pillar SEO + checklist hồ sơ NOXH"
+          }
+        ],
+        "deconstruct_rules": [
+          "H2 phải là câu hỏi đủ",
+          "Không cam kết duyệt vay hoặc lãi suất cố định mọi ngân hàng",
+          "Không so sánh crypto/cổ phiếu",
+          "Link chéo sang B0 đảo nợ một lần, không chuỗi tuyến tính dài"
+        ],
+        "cta_keyword": "NOXH",
+        "compliance_notes": "Disclaimer tham khảo; phê duyệt thuộc TCTD. Số phí/timeline mang tính khung tham khảo.",
+        "source_refs": [
+          "noxh_loan_two_tier_001",
+          "noxh_loan_nhcsxh_limit_80pct_001",
+          "noxh_qa_loan_overview_001"
+        ],
+        "legal_topic": "noxh_income",
+        "interest_key": "mua_nha_lan_dau_huong_dan"
+      }
+    },
+    {
+      "id": "A1",
+      "normalized_key": "editorial:first-buyer-noxh-vs-cctm:2026",
+      "slug": "nen-chon-nha-o-xa-hoi-hay-can-ho-thuong-mai-khi-mua-lan-dau",
+      "h1": "Nên chọn nhà ở xã hội hay căn hộ thương mại khi mua lần đầu?",
+      "priority": "P0",
+      "content_type": "NOXH_LEGAL",
+      "segment": "noxh_income",
+      "legal_topic": "noxh_income",
+      "requires_legal_kb": true,
+      "cta_tool_id": "noxh-check",
+      "cta_keyword": "NOXH",
+      "interest_key": "noxh_vs_cctm_lan_dau",
+      "tags": ["noxh", "phap-ly"],
+      "internal_links": [
+        "/cong-cu/dieu-kien-noxh",
+        "/tin-tuc/huong-dan-mua-nha-lan-dau-2026-tu-chon-nha-den-ky-hop-dong",
+        "/vay-mua-nha",
+        "/tin-tuc/dieu-kien-mua-nha-o-xa-hoi-2026-tom-tat"
+      ],
+      "editorial_brief_v1": {
+        "brief_version": 1,
+        "editorial_title": "NOXH vs CCTM khi mua nhà lần đầu",
+        "one_line_insight": "NOXH rẻ hơn về giá niêm yết nhưng cửa đối tượng–thu nhập–thời hạn sở hữu khác hẳn CCTM — chọn sai cửa tốn thời gian hồ sơ, không chỉ tiền cọc.",
+        "qa_backbone": [
+          {
+            "question": "Nhà ở xã hội và căn hộ thương mại khác nhau ở những điểm pháp lý nào?",
+            "answer_angle": "Đối tượng, điều kiện nhà ở, thời hạn sở hữu/chuyển nhượng, quy trình xác nhận — trích Đ.76–79 / NĐ 100, không tư vấn case cá nhân.",
+            "search_keyword": "khác nhau nhà ở xã hội và chung cư thương mại",
+            "hook_line": "Hai sản phẩm, hai cửa hồ sơ — không chỉ hai mức giá."
+          },
+          {
+            "question": "Ai đủ điều kiện mua NOXH và trần thu nhập đang áp dụng thế nào?",
+            "answer_angle": "Khung thu nhập theo NĐ hiện hành + hệ số địa phương khi có; nhấn mạnh cần đối chiếu hồ sơ và tool, không nêu một con số cho mọi tỉnh như chân lý.",
+            "search_keyword": "điều kiện thu nhập mua nhà ở xã hội",
+            "hook_line": "Trần thu nhập NOXH không cố định một con số cho cả nước."
+          },
+          {
+            "question": "Khi nào căn thương mại vẫn hợp lý hơn dù giá cao hơn?",
+            "answer_angle": "Không đủ đối tượng/thu nhập NOXH, cần thanh khoản/chuyển nhượng linh hoạt hơn, hoặc timeline dự án NOXH không khớp nhu cầu ở.",
+            "search_keyword": "khi nào nên mua căn hộ thương mại",
+            "hook_line": "Đôi khi cửa thương mại khớp đời sống hơn cửa ưu đãi."
+          },
+          {
+            "question": "Hồ sơ và thời gian chờ giữa hai lựa chọn khác nhau ra sao?",
+            "answer_angle": "NOXH: xác nhận đối tượng + CĐT; CCTM: HĐMB/thế chấp thương mại. Không hứa số ngày duyệt.",
+            "search_keyword": "thời gian làm hồ sơ mua NOXH",
+            "hook_line": "Chờ suất NOXH và chờ giải ngân vay là hai đồng hồ khác nhau."
+          },
+          {
+            "question": "Làm sao tự đối chiếu điều kiện NOXH trước khi giữ suất?",
+            "answer_angle": "CTA tool điều kiện NOXH + checklist Drive; nhắc không đặt cọc khi chưa rõ cửa đối tượng.",
+            "search_keyword": "kiểm tra điều kiện mua nhà ở xã hội",
+            "hook_line": "Đối chiếu điều kiện trước khi giữ suất."
+          }
+        ],
+        "recommended_formats": [
+          {
+            "format": "lead_magnet",
+            "platform": "blog",
+            "priority": 1,
+            "why": "High-intent so sánh + CTA noxh-check"
+          }
+        ],
+        "deconstruct_rules": [
+          "Không kết luận NOXH luôn tốt hơn CCTM",
+          "Thu nhập: theo pack pháp lý, có hệ số địa phương",
+          "Sentence case title"
+        ],
+        "cta_keyword": "NOXH",
+        "compliance_notes": "Không cam kết đủ điều kiện cho hồ sơ cụ thể; dẫn tool tự kiểm.",
+        "source_refs": [
+          "noxh_loan_two_tier_001",
+          "noxh_qa_loan_overview_001"
+        ],
+        "legal_topic": "noxh_income",
+        "interest_key": "noxh_vs_cctm_lan_dau"
+      }
+    },
+    {
+      "id": "A2",
+      "normalized_key": "editorial:first-buyer-loan-reject:2026",
+      "slug": "ho-so-tai-chinh-the-nao-thi-de-bi-ngan-hang-tu-choi-vay-mua-nha",
+      "h1": "Hồ sơ tài chính thế nào thì dễ bị ngân hàng từ chối vay mua nhà?",
+      "priority": "P0",
+      "content_type": "LOAN_FINANCE",
+      "segment": "noxh_income",
+      "legal_topic": "loan_dti",
+      "requires_legal_kb": true,
+      "cta_tool_id": "noxh-loan-quick",
+      "cta_keyword": "DONGTIEN",
+      "interest_key": "ho_so_vay_bi_tu_choi",
+      "tags": ["noxh", "tham-dinh-vay"],
+      "internal_links": [
+        "/vu-nguyen/case/cai-bay-dti",
+        "/cong-cu/kiem-tra-vay-noxh",
+        "/cong-cu/tinh-han-muc-vay",
+        "/tinh-tra-gop",
+        "/tin-tuc/tham-dinh-khoan-vay-mua-nha-o-xa-hoi",
+        "/tin-tuc/dao-no-va-co-cau-no-truoc-khi-vay-mua-nha-chien-luoc-nao-phu-hop"
+      ],
+      "editorial_brief_v1": {
+        "brief_version": 1,
+        "editorial_title": "Hồ sơ tài chính dễ bị từ chối vay mua nhà",
+        "one_line_insight": "Đủ điều kiện mua NOXH không đồng nghĩa được duyệt vay — tầng thẩm định ngân hàng nhìn DTI, CIC và chứng minh thu nhập riêng.",
+        "qa_backbone": [
+          {
+            "question": "Đủ điều kiện mua NOXH có chắc được vay không?",
+            "answer_angle": "Hai tầng: đủ mua ≠ đủ vay. Claim noxh_loan_two_tier_001 + forbidden_claims.",
+            "search_keyword": "đủ điều kiện NOXH có vay được không",
+            "hook_line": "Cửa mua và cửa vay là hai cánh cửa."
+          },
+          {
+            "question": "DTI là gì và ngân hàng thường nhìn tỷ lệ này thế nào?",
+            "answer_angle": "Định nghĩa DTI; không có tỷ lệ cố định trong luật NOXH; minh họa khung thường gặp dưới dạng tham khảo; link case cai-bay-dti.",
+            "search_keyword": "DTI vay mua nhà là gì",
+            "hook_line": "DTI quyết định ngưỡng giá im lặng hơn brochure."
+          },
+          {
+            "question": "Những lỗi chứng minh thu nhập nào hay làm hồ sơ bị trả lại?",
+            "answer_angle": "Sao kê thiếu tháng, thu nhập không ổn định, không khớp kê khai — theo counseling thẩm định, không hứa duyệt.",
+            "search_keyword": "chứng minh thu nhập vay mua nhà",
+            "hook_line": "Thu nhập trên lời nói khác thu nhập trên sao kê."
+          },
+          {
+            "question": "Nợ thẻ tín dụng và trả góp tiêu dùng ảnh hưởng duyệt vay ra sao?",
+            "answer_angle": "Làm đầy tử số DTI; cầu nối sang pillar B0 đảo nợ.",
+            "search_keyword": "nợ thẻ tín dụng ảnh hưởng vay mua nhà",
+            "hook_line": "Thẻ quay vòng cũng là nghĩa vụ nợ trong mắt ngân hàng."
+          },
+          {
+            "question": "Nên tự kiểm tra hạn mức và trả góp thế nào trước khi nộp hồ sơ?",
+            "answer_angle": "Tool hạn mức + tính trả góp hai kịch bản (ưu đãi / sau ưu đãi) + noxh-loan-quick.",
+            "search_keyword": "tính hạn mức vay mua nhà",
+            "hook_line": "Mô phỏng hai kịch bản lãi trước khi nộp hồ sơ."
+          }
+        ],
+        "recommended_formats": [
+          {
+            "format": "lead_magnet",
+            "platform": "blog",
+            "priority": 1,
+            "why": "Excel dòng tiền / DONGTIEN"
+          }
+        ],
+        "deconstruct_rules": [
+          "Không nêu DTI trần như quy định pháp luật",
+          "Mọi số là minh họa có nhãn",
+          "Bắt buộc link case DTI"
+        ],
+        "cta_keyword": "DONGTIEN",
+        "compliance_notes": "Ước tính không thay thẩm định NH. L2 /devil bắt buộc.",
+        "source_refs": [
+          "noxh_loan_two_tier_001",
+          "bank_dti_income_appraisal_001",
+          "noxh_qa_dti_income_001"
+        ],
+        "legal_topic": "loan_dti",
+        "interest_key": "ho_so_vay_bi_tu_choi"
+      }
+    },
+    {
+      "id": "A3",
+      "normalized_key": "editorial:first-buyer-hidden-costs:2026",
+      "slug": "chi-phi-an-khi-mua-nha-lan-dau-va-timeline-tu-ky-den-so-huu",
+      "h1": "Chi phí ẩn khi mua nhà lần đầu và timeline từ ký đến sở hữu thường như thế nào?",
+      "priority": "P1",
+      "content_type": "NOXH_LEGAL",
+      "segment": "noxh_income",
+      "legal_topic": "noxh_income",
+      "requires_legal_kb": true,
+      "cta_tool_id": "noxh-check",
+      "cta_keyword": "NOXH",
+      "interest_key": "chi_phi_an_mua_nha",
+      "tags": ["noxh", "phap-ly"],
+      "internal_links": [
+        "/vay-mua-nha/bao-hiem-tai-san",
+        "/tin-tuc/checklist-truoc-khi-dat-coc-noxh",
+        "/tin-tuc/huong-dan-mua-nha-lan-dau-2026-tu-chon-nha-den-ky-hop-dong",
+        "/vay-mua-nha"
+      ],
+      "editorial_brief_v1": {
+        "brief_version": 1,
+        "editorial_title": "Chi phí ẩn và timeline mua nhà lần đầu",
+        "one_line_insight": "Nhiều người chỉ tính tiền cọc và trả góp — quên phí trước bạ, công chứng, bảo hiểm tài sản và khoảng chờ tùy loại hình.",
+        "qa_backbone": [
+          {
+            "question": "Ngoài giá căn, người mua lần đầu thường gặp những khoản phí nào?",
+            "answer_angle": "Nhóm phí: công chứng, trước bạ/thuế liên quan chuyển nhượng (theo loại HĐ), phí ngân hàng, bảo hiểm tài sản khi vay — liệt kê cách kiểm, không cam kết mức cố định.",
+            "search_keyword": "chi phí ẩn khi mua nhà",
+            "hook_line": "Giá căn chưa phải tổng tiền ra cửa."
+          },
+          {
+            "question": "Timeline từ ký hợp đồng đến nhận nhà hoặc sổ thường kéo dài bao lâu?",
+            "answer_angle": "Khung tham khảo theo loại hình (NOXH/CĐT vs chuyển nhượng); nhấn mạnh phụ thuộc hồ sơ và bên bán — không hứa 50–90 ngày như cam kết.",
+            "search_keyword": "thời gian từ ký hợp đồng đến sổ hồng",
+            "hook_line": "Đồng hồ pháp lý khác đồng hồ trả góp hàng tháng."
+          },
+          {
+            "question": "Bảo hiểm tài sản và phí ngân hàng xuất hiện ở bước nào?",
+            "answer_angle": "Thường gắn giải ngân/thế chấp; soft link /vay-mua-nha/bao-hiem-tai-san.",
+            "search_keyword": "bảo hiểm tài sản khi vay mua nhà",
+            "hook_line": "Một số gói vay yêu cầu bảo hiểm nhà trước giải ngân."
+          },
+          {
+            "question": "Làm sao lập bảng tổng chi phí sở hữu trước khi đặt cọc?",
+            "answer_angle": "Checklist cột: vốn tự có, phí một lần, trả tháng, quỹ dự phòng — nối checklist cọc đã publish.",
+            "search_keyword": "tính tổng chi phí mua nhà lần đầu",
+            "hook_line": "Một bảng Excel trước cọc đỡ hơn một năm hối tiếc."
+          },
+          {
+            "question": "NOXH và căn thương mại khác nhau thế nào về phí và tiến độ?",
+            "answer_angle": "Khác quy trình CĐT/xác nhận đối tượng vs HĐMB thương mại — cầu A1, không so sánh lợi nhuận.",
+            "search_keyword": "phí mua nhà ở xã hội khác thương mại",
+            "hook_line": "Hai quy trình, hai nhịp phí — cần bảng riêng từng cửa."
+          }
+        ],
+        "recommended_formats": [
+          {
+            "format": "lead_magnet",
+            "platform": "blog",
+            "priority": 1,
+            "why": "Bảng phí trước/sau ký"
+          }
+        ],
+        "deconstruct_rules": [
+          "Không cam kết mức phí theo m² nếu thiếu nguồn",
+          "Timeline là khung tham khảo",
+          "Không urgency giả"
+        ],
+        "cta_keyword": "NOXH",
+        "compliance_notes": "Phí và timeline phụ thuộc hồ sơ thực tế và bên liên quan.",
+        "source_refs": [
+          "noxh_loan_nhcsxh_limit_80pct_001"
+        ],
+        "legal_topic": "noxh_income",
+        "interest_key": "chi_phi_an_mua_nha"
+      }
+    },
+    {
+      "id": "B0",
+      "normalized_key": "editorial:debt-restructure-pillar:2026",
+      "slug": "dao-no-va-co-cau-no-truoc-khi-vay-mua-nha-chien-luoc-nao-phu-hop",
+      "h1": "Đảo nợ và cơ cấu nợ trước khi vay mua nhà — chiến lược nào phù hợp?",
+      "priority": "P0",
+      "content_type": "LOAN_FINANCE",
+      "segment": "noxh_income",
+      "legal_topic": "loan_dti",
+      "requires_legal_kb": true,
+      "cta_tool_id": "noxh-loan-quick",
+      "cta_keyword": "DONGTIEN",
+      "interest_key": "dao_no_truoc_mua_nha",
+      "tags": ["noxh", "tham-dinh-vay"],
+      "internal_links": [
+        "/vu-nguyen/case/cai-bay-dti",
+        "/cong-cu/kiem-tra-vay-noxh",
+        "/cong-cu/tinh-han-muc-vay",
+        "/tinh-tra-gop",
+        "/tin-tuc/cach-tra-cic-an-toan-truoc-khi-vay",
+        "/tin-tuc/no-xau-nhom-2-vay-mua-nha-o-xa-hoi",
+        "/tin-tuc/huong-dan-mua-nha-lan-dau-2026-tu-chon-nha-den-ky-hop-dong"
+      ],
+      "editorial_brief_v1": {
+        "brief_version": 1,
+        "editorial_title": "Pillar đảo nợ và cơ cấu nợ trước vay mua nhà",
+        "one_line_insight": "Đảo nợ không phải che giấu nợ — đó là kỹ năng sắp xếp nghĩa vụ để DTI và CIC đủ cửa thẩm định mua nhà.",
+        "qa_backbone": [
+          {
+            "question": "Đảo nợ khác cơ cấu nợ ở điểm nào khi chuẩn bị vay mua nhà?",
+            "answer_angle": "Định nghĩa đơn giản: đảo = chuyển/hợp nhất nghĩa vụ; cơ cấu = đổi kỳ hạn/lãi/phương án trả trong cùng quan hệ tín dụng. Mục tiêu chung: DTI thở hơn trước hồ sơ vay nhà.",
+            "search_keyword": "đảo nợ để mua nhà",
+            "hook_line": "Đảo nợ là kỹ năng sống, không phải mánh khóe."
+          },
+          {
+            "question": "Vì sao DTI quyết định khả năng được duyệt nhiều hơn lãi suất brochure?",
+            "answer_angle": "Brochure nói lãi; hồ sơ nói khả năng trả. Case cai-bay-dti minh họa hai pha ân hạn.",
+            "search_keyword": "DTI quyết định vay mua nhà",
+            "hook_line": "Lãi đẹp trên tờ rơi thua DTI trên sao kê."
+          },
+          {
+            "question": "Nên xử lý nợ tiêu dùng theo thứ tự nào trước khi nộp hồ sơ vay nhà?",
+            "answer_angle": "Ưu tiên quá hạn → thẻ quay vòng lãi cao → trả góp ngắn làm đầy DTI; link B2.",
+            "search_keyword": "sắp xếp nợ trước khi vay mua nhà",
+            "hook_line": "Thứ tự tất toán quan trọng hơn số lượng app vay."
+          },
+          {
+            "question": "Refinance hoặc kéo dài kỳ hạn dùng khi nào và rủi ro gì?",
+            "answer_angle": "Khi giảm áp lực tháng nhưng tổng lãi có thể tăng — nêu trade-off, không khuyến khích tối đa hóa nợ.",
+            "search_keyword": "refinance khoản vay mua nhà",
+            "hook_line": "Kéo dài kỳ hạn hạ áp lực tháng, không xóa gốc."
+          },
+          {
+            "question": "Trường hợp nợ xấu hoặc quá hạn còn có lộ trình phục hồi không?",
+            "answer_angle": "Có khung 6–12 tháng tham khảo; link B3 + bài nợ nhóm 2; không hứa vay được sau X ngày.",
+            "search_keyword": "nợ xấu còn vay mua nhà được không",
+            "hook_line": "Phục hồi hồ sơ là lộ trình, không phải nút reset."
+          }
+        ],
+        "recommended_formats": [
+          {
+            "format": "lead_magnet",
+            "platform": "blog",
+            "priority": 1,
+            "why": "Excel dòng tiền + E-E-A-T case DTI"
+          }
+        ],
+        "deconstruct_rules": [
+          "Giọng demystify nợ — không moralize",
+          "Không dạy 'che CIC'",
+          "Bắt buộc disclaimer thẩm định NH"
+        ],
+        "cta_keyword": "DONGTIEN",
+        "compliance_notes": "L2 /devil. Không cam kết phục hồi điểm tín dụng trong thời hạn cố định.",
+        "source_refs": [
+          "bank_dti_income_appraisal_001",
+          "bank_cic_credit_history_001",
+          "bank_npl_classification_001",
+          "noxh_qa_dti_income_001"
+        ],
+        "legal_topic": "loan_dti",
+        "interest_key": "dao_no_truoc_mua_nha"
+      }
+    },
+    {
+      "id": "B1",
+      "normalized_key": "editorial:good-bad-debt:2026",
+      "slug": "no-tot-va-no-xau-khac-nhau-the-nao-khi-chuan-bi-vay-mua-nha",
+      "h1": "Nợ tốt và nợ xấu khác nhau thế nào khi chuẩn bị vay mua nhà?",
+      "priority": "P0",
+      "content_type": "LOAN_FINANCE",
+      "segment": "noxh_income",
+      "legal_topic": "loan_dti",
+      "requires_legal_kb": true,
+      "cta_tool_id": "noxh-loan-quick",
+      "cta_keyword": "DONGTIEN",
+      "interest_key": "no_tot_no_xau_vay_nha",
+      "tags": ["noxh", "tham-dinh-vay"],
+      "internal_links": [
+        "/tin-tuc/cach-tra-cic-an-toan-truoc-khi-vay",
+        "/tin-tuc/dao-no-va-co-cau-no-truoc-khi-vay-mua-nha-chien-luoc-nao-phu-hop",
+        "https://creditconnect.vn/"
+      ],
+      "editorial_brief_v1": {
+        "brief_version": 1,
+        "editorial_title": "Nợ tốt và nợ xấu khi chuẩn bị vay mua nhà",
+        "one_line_insight": "Người Việt hay mặc định mọi khoản nợ đều xấu — trong khi ngân hàng phân nhóm trên CIC và nhìn khả năng trả nợ.",
+        "qa_backbone": [
+          {
+            "question": "Nợ tốt và nợ xấu được hiểu thế nào trong bối cảnh vay mua nhà?",
+            "answer_angle": "Nợ gắn tài sản/dòng tiền kiểm soát được vs nợ tiêu dùng lãi cao/quá hạn — khung giáo dục, không cổ súy đòn bẩy tối đa.",
+            "search_keyword": "nợ tốt nợ xấu vay mua nhà",
+            "hook_line": "Không phải mọi khoản nợ đều là lỗi lầm."
+          },
+          {
+            "question": "Ngân hàng phân loại nợ trên CIC theo nhóm nào?",
+            "answer_angle": "Nhóm theo thông tư phân loại nợ — rút từ atomic-claims.loan; link bài nợ nhóm 2.",
+            "search_keyword": "nhóm nợ CIC là gì",
+            "hook_line": "CIC nói bằng nhóm nợ, không bằng cảm giác."
+          },
+          {
+            "question": "Khoản trả góp nhà hoặc ô tô đang trả đúng hạn có phải luôn là điểm trừ không?",
+            "answer_angle": "Vẫn tính vào DTI; 'đúng hạn' tốt cho lịch sử nhưng vẫn chiếm room trả nợ.",
+            "search_keyword": "đang trả góp xe có vay mua nhà được không",
+            "hook_line": "Trả đúng hạn vẫn chiếm chỗ trong DTI."
+          },
+          {
+            "question": "Thẻ tín dụng quay vòng ảnh hưởng DTI ra sao?",
+            "answer_angle": "NH có thể quy đổi hạn mức/dư nợ thẻ vào nghĩa vụ — khuyến nghị giảm dư nợ trước nộp hồ sơ.",
+            "search_keyword": "thẻ tín dụng ảnh hưởng vay mua nhà",
+            "hook_line": "Thẻ quay vòng là nợ ẩn trên DTI."
+          },
+          {
+            "question": "Trước khi vay nhà nên tự tra CIC bằng cách nào?",
+            "answer_angle": "Hướng dẫn tự tra an toàn + link creditconnect / bài CIC House X.",
+            "search_keyword": "cách tra CIC trước khi vay mua nhà",
+            "hook_line": "Tra CIC của chính mình trước khi để ngân hàng tra."
+          }
+        ],
+        "recommended_formats": [
+          {
+            "format": "lead_magnet",
+            "platform": "blog",
+            "priority": 1,
+            "why": "Checklist CIC"
+          }
+        ],
+        "deconstruct_rules": [
+          "Không dạy giấu nợ",
+          "Không gọi vay nhà là 'nợ tốt' theo kiểu hype đầu tư"
+        ],
+        "cta_keyword": "DONGTIEN",
+        "compliance_notes": "Phân loại nợ theo quy định NHNN/CIC — dẫn claim_id.",
+        "source_refs": [
+          "bank_npl_classification_001",
+          "bank_cic_credit_history_001",
+          "noxh_qa_cic_bad_debt_001"
+        ],
+        "legal_topic": "loan_dti",
+        "interest_key": "no_tot_no_xau_vay_nha"
+      }
+    },
+    {
+      "id": "B2",
+      "normalized_key": "editorial:consumer-debt-order:2026",
+      "slug": "sap-xep-no-tieu-dung-truoc-khi-vay-mua-nha-mat-bao-lau",
+      "h1": "Sắp xếp nợ tiêu dùng trước khi vay mua nhà mất bao lâu?",
+      "priority": "P1",
+      "content_type": "LOAN_FINANCE",
+      "segment": "noxh_income",
+      "legal_topic": "loan_dti",
+      "requires_legal_kb": true,
+      "cta_tool_id": "noxh-loan-quick",
+      "cta_keyword": "DONGTIEN",
+      "interest_key": "sap_xep_no_tieu_dung",
+      "tags": ["noxh", "tham-dinh-vay"],
+      "internal_links": [
+        "/cong-cu/tinh-han-muc-vay",
+        "/tinh-tra-gop",
+        "/tin-tuc/dao-no-va-co-cau-no-truoc-khi-vay-mua-nha-chien-luoc-nao-phu-hop",
+        "/vu-nguyen/case/cai-bay-dti"
+      ],
+      "editorial_brief_v1": {
+        "brief_version": 1,
+        "editorial_title": "Sắp xếp nợ tiêu dùng trước vay mua nhà",
+        "one_line_insight": "Hợp nhất hoặc tất toán đúng thứ tự trong vài tháng thường giúp DTI thở hơn là vay thêm để đảo lung tung.",
+        "qa_backbone": [
+          {
+            "question": "Nên ưu tiên tất toán khoản nào trước khi nộp hồ sơ vay nhà?",
+            "answer_angle": "Quá hạn trước, rồi lãi cao/thẻ quay vòng, rồi trả góp ngắn chiếm DTI — khung ưu tiên, không tư vấn danh mục cá nhân.",
+            "search_keyword": "ưu tiên trả nợ trước khi vay mua nhà",
+            "hook_line": "Trả đúng thứ tự quan trọng hơn trả đều mọi app."
+          },
+          {
+            "question": "Hợp nhất nợ khác đảo nợ sang ngân hàng khác thế nào?",
+            "answer_angle": "Giải thích khái niệm + rủi ro tăng tổng lãi / phí; không quảng bá sản phẩm NH cụ thể.",
+            "search_keyword": "hợp nhất nợ để vay mua nhà",
+            "hook_line": "Hợp nhất giảm số món nợ, không tự giảm gốc."
+          },
+          {
+            "question": "Sau khi tất toán, thông tin trên CIC cập nhật mất bao lâu?",
+            "answer_angle": "Phụ thuộc thành viên CIC báo cáo — nêu khoảng tham khảo, không cam kết ngày cố định.",
+            "search_keyword": "CIC cập nhật sau khi tất toán bao lâu",
+            "hook_line": "Tất toán xong chưa chắc CIC đổi ngay trong tuần."
+          },
+          {
+            "question": "Làm sao ước tính DTI trước và sau khi giảm nợ tiêu dùng?",
+            "answer_angle": "Công thức đơn giản + tool hạn mức vay; ví dụ số mang nhãn minh họa.",
+            "search_keyword": "tính DTI trước khi vay mua nhà",
+            "hook_line": "Đo DTI trước và sau tất toán — đừng đoán."
+          },
+          {
+            "question": "Khi nào nên tạm dừng kế hoạch mua nhà 6 đến 12 tháng để phục hồi hồ sơ?",
+            "answer_angle": "Khi quá hạn/nợ xấu hoặc DTI sau ưu đãi đã căng — cầu B3 và case DTI.",
+            "search_keyword": "bao lâu thì nên vay mua nhà sau nợ xấu",
+            "hook_line": "Đôi khi chờ 6–12 tháng rẻ hơn mất cọc."
+          }
+        ],
+        "recommended_formats": [
+          {
+            "format": "lead_magnet",
+            "platform": "blog",
+            "priority": 1,
+            "why": "Timeline 6–12 tháng + Excel dòng tiền"
+          }
+        ],
+        "deconstruct_rules": [
+          "Không hứa timeline CIC cố định",
+          "Không khuyến khích vay mới để đảo nếu DTI đã căng"
+        ],
+        "cta_keyword": "DONGTIEN",
+        "compliance_notes": "Mọi timeline là tham khảo; quyết định theo NH và CIC.",
+        "source_refs": [
+          "bank_dti_income_appraisal_001",
+          "bank_cic_credit_history_001"
+        ],
+        "legal_topic": "loan_dti",
+        "interest_key": "sap_xep_no_tieu_dung"
+      }
+    },
+    {
+      "id": "B3",
+      "normalized_key": "editorial:npl-recovery-6-12m:2026",
+      "slug": "no-xau-cic-con-vay-mua-nha-duoc-khong-lo-trinh-6-12-thang",
+      "h1": "Nợ xấu CIC còn vay mua nhà được không — lộ trình 6 đến 12 tháng gồm những gì?",
+      "priority": "P1",
+      "content_type": "LOAN_FINANCE",
+      "segment": "noxh_income",
+      "legal_topic": "loan_dti",
+      "requires_legal_kb": true,
+      "cta_tool_id": "noxh-loan-quick",
+      "cta_keyword": "DONGTIEN",
+      "interest_key": "no_xau_lo_trinh_phuc_hoi",
+      "tags": ["noxh", "tham-dinh-vay"],
+      "internal_links": [
+        "/tin-tuc/no-xau-nhom-2-vay-mua-nha-o-xa-hoi",
+        "/tin-tuc/cach-tra-cic-an-toan-truoc-khi-vay",
+        "/tin-tuc/tham-dinh-khoan-vay-mua-nha-o-xa-hoi",
+        "/tin-tuc/checklist-truoc-khi-dat-coc-noxh",
+        "/cong-cu/kiem-tra-vay-noxh"
+      ],
+      "editorial_brief_v1": {
+        "brief_version": 1,
+        "editorial_title": "Nợ xấu CIC và lộ trình 6–12 tháng trước vay nhà",
+        "one_line_insight": "Đủ đối tượng NOXH không xóa nợ xấu; thường cần tất toán, báo CIC và chấp nhận thời gian lưu thông tin theo quy định.",
+        "qa_backbone": [
+          {
+            "question": "Nợ xấu nhóm nào thường làm hồ sơ vay nhà rất khó duyệt?",
+            "answer_angle": "Nhóm 3–5 thường rất khó; nhóm 2 cũng rủi ro cao — dẫn Q&A và bài nợ nhóm 2, không khẳng định tuyệt đối.",
+            "search_keyword": "nợ xấu có vay mua nhà được không",
+            "hook_line": "Đủ điều kiện NOXH không xóa nợ xấu trên CIC."
+          },
+          {
+            "question": "Tất toán xong có vay ngay được không hay còn thời gian chờ?",
+            "answer_angle": "Thường vẫn còn lịch sử trên CIC trong thời hạn quy định; không hứa 'x ngày là sạch'.",
+            "search_keyword": "tất toán nợ xấu bao lâu thì vay được",
+            "hook_line": "Tất toán là bước bắt buộc, chưa phải bước cuối."
+          },
+          {
+            "question": "Lộ trình 6 đến 12 tháng phục hồi profile tài chính gồm những bước nào?",
+            "answer_angle": "Tra CIC → tất toán/quá hạn → giảm DTI tiêu dùng → chứng minh thu nhập ổn định → mới nộp vay nhà; nhãn tham khảo.",
+            "search_keyword": "phục hồi CIC trước khi vay mua nhà",
+            "hook_line": "Phục hồi hồ sơ là checklist theo tháng, không phải lời hứa."
+          },
+          {
+            "question": "Nợ nhóm 2 khác nhóm 3 đến 5 thế nào với người mua NOXH?",
+            "answer_angle": "Link sâu bài no-xau-nhom-2; tránh trùng nội dung — bài này neo lộ trình tổng.",
+            "search_keyword": "nợ nhóm 2 vay nhà ở xã hội",
+            "hook_line": "Nhóm 2 vẫn là tín hiệu đỏ với nhiều ngân hàng."
+          },
+          {
+            "question": "Nên đọc thêm bài nào trên House X trước khi đặt cọc?",
+            "answer_angle": "CIC an toàn → nợ nhóm 2 → thẩm định vay → checklist cọc → tool 60s.",
+            "search_keyword": "checklist trước khi đặt cọc khi có nợ",
+            "hook_line": "Đọc cụm thẩm định trước khi đặt bút cọc."
+          }
+        ],
+        "recommended_formats": [
+          {
+            "format": "lead_magnet",
+            "platform": "blog",
+            "priority": 1,
+            "why": "Pain cực cao — CIC + DONGTIEN"
+          }
+        ],
+        "deconstruct_rules": [
+          "Không hứa xóa nợ xấu hoặc vay chắc sau 6 tháng",
+          "Không trùng nguyên văn bài nợ nhóm 2 — link sang"
+        ],
+        "cta_keyword": "DONGTIEN",
+        "compliance_notes": "Theo TT phân loại nợ / CIC; L2 /devil bắt buộc.",
+        "source_refs": [
+          "bank_npl_classification_001",
+          "bank_cic_credit_history_001",
+          "noxh_qa_cic_bad_debt_001"
+        ],
+        "legal_topic": "loan_dti",
+        "interest_key": "no_xau_lo_trinh_phuc_hoi"
+      }
+    }
+  ]
+}
