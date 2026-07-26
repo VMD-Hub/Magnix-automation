@@ -1,0 +1,75 @@
+{
+  "brief_pack_version": 1,
+  "created_at": "2026-07-26",
+  "doc": "Proptech-HouseX/docs/content/LUAT_NHA_O_CCTM_CLUSTER_2026.md",
+  "channel": "blog_seo",
+  "product_type": "website_article",
+  "content_type": "GENERAL_POLICY",
+  "requires_legal_qa": true,
+  "ship_order": ["A0", "B2", "C1", "D3", "E4", "F6", "G5"],
+  "items": [
+    {
+      "id": "A0",
+      "normalized_key": "editorial:cctm-luat-nha-o-pillar:2026",
+      "slug": "luat-nha-o-2023-va-du-thao-sua-doi-2026-thay-doi-gi",
+      "priority": "P0",
+      "cta_tool_id": "noxh-check",
+      "segment": "general_inbound",
+      "draft_file": "docs/content/drafts/00-pillar-luat-nha-o-2023-du-thao-2026.md"
+    },
+    {
+      "id": "B2",
+      "normalized_key": "editorial:cctm-kiem-dinh-chung-cu:2026",
+      "slug": "kiem-dinh-chung-cu-bat-buoc-tuoi-toa-nha-bao-nhieu",
+      "priority": "P0",
+      "cta_tool_id": "noxh-check",
+      "segment": "general_inbound",
+      "draft_file": "docs/content/drafts/02-kiem-dinh-chung-cu-tuoi-toa-nha.md"
+    },
+    {
+      "id": "C1",
+      "normalized_key": "editorial:cctm-quyen-so-huu-can-ho:2026",
+      "slug": "quyen-so-huu-can-ho-chung-cu-co-thoi-han-hay-khong",
+      "priority": "P1",
+      "cta_tool_id": "noxh-check",
+      "segment": "general_inbound",
+      "draft_file": "docs/content/drafts/01-quyen-so-huu-can-ho-chung-cu.md"
+    },
+    {
+      "id": "D3",
+      "normalized_key": "editorial:cctm-pha-do-chung-cu:2026",
+      "slug": "pha-do-chung-cu-bat-buoc-can-cu-va-quy-trinh",
+      "priority": "P1",
+      "cta_tool_id": "noxh-check",
+      "segment": "general_inbound",
+      "draft_file": "docs/content/drafts/03-pha-do-chung-cu-bat-buoc.md"
+    },
+    {
+      "id": "E4",
+      "normalized_key": "editorial:cctm-tai-dinh-cu:2026",
+      "slug": "tai-dinh-cu-chung-cu-nhan-nha-hay-nhan-tien",
+      "priority": "P2",
+      "cta_tool_id": "noxh-check",
+      "segment": "general_inbound",
+      "draft_file": "docs/content/drafts/04-tai-dinh-cu-nhan-nha-hay-nhan-tien.md"
+    },
+    {
+      "id": "F6",
+      "normalized_key": "editorial:cctm-quan-ly-van-hanh:2026",
+      "slug": "quan-ly-van-hanh-chung-cu-trach-nhiem-cua-ai",
+      "priority": "P2",
+      "cta_tool_id": "noxh-check",
+      "segment": "general_inbound",
+      "draft_file": "docs/content/drafts/06-quan-ly-van-hanh-chung-cu.md"
+    },
+    {
+      "id": "G5",
+      "normalized_key": "editorial:cctm-nha-o-cho-thue:2026",
+      "slug": "nha-o-cho-thue-du-thao-2026-dieu-kien-va-uu-dai",
+      "priority": "P3",
+      "cta_tool_id": "noxh-loan-quick",
+      "segment": "general_inbound",
+      "draft_file": "docs/content/drafts/05-nha-o-cho-thue-du-thao-2026.md"
+    }
+  ]
+}
