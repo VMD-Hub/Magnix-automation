@@ -103,6 +103,7 @@ Cấu hình: `lib/content/project-related-articles.ts`.
 
 | Ưu tiên | Chủ đề | Ghi chú |
 |---------|--------|---------|
+| P0 | Hub mua nhà lần đầu + đảo nợ/DTI (8 bài) | Brief: `FIRST_BUYER_DEBT_HUB_BRIEF_2026.md` · JSON: `FIRST_BUYER_DEBT_HUB_BRIEFS_V1.json` — nest `/vay-mua-nha`, không cannibalize pillar thẩm định vay |
 | P1 | Eco Residence, Dragon E-Home, Thu Thiem Green House | Có landing, chưa có bài |
 | P1 | Nam Long Cần Thơ (2 dự án) | Regional gap |
 | P2 | Điều 67 — quân nhân/công an | Deep dive |
