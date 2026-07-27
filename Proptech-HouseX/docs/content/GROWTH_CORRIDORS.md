@@ -17,6 +17,8 @@ Phễu chuyển đổi trên mỗi trục: **Vĩ mô** (hạ tầng / TOD) → *
 
 **Pillar (giữ slug URL):** `/wiki-nha-o-xa-hoi/bon-cuc-tang-truong-do-thi-tp-hcm-2026`
 
+Vùng Thủ đô Hà Nội (tách SoR): [`GROWTH_CORRIDORS_HANOI.md`](./GROWTH_CORRIDORS_HANOI.md)
+
 ## Nguồn tham chiếu biên tập (2025–2026)
 
 - QD 1125/QĐ-TTg (11/6/2025) — Đồ án điều chỉnh QHC TP.HCM 2040–2060

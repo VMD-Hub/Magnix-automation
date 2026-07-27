@@ -63,6 +63,36 @@ export const NOXH_TAG_QL13 = {
   name: "Trục Quốc lộ 13 Đông Bắc",
 } as const;
 
+/** Vùng Thủ đô — Trục Đông / Đông Nam. */
+export const NOXH_TAG_HN_EAST = {
+  slug: "truc-dong-dong-nam-vung-thu-do",
+  name: "Trục Đông – Đông Nam Vùng Thủ đô",
+} as const;
+
+/** Vùng Thủ đô — Nội Bài / Bắc sông Hồng. */
+export const NOXH_TAG_HN_AIRPORT = {
+  slug: "truc-san-bay-noi-bai-bac-song-hong",
+  name: "Trục Nội Bài – Bắc sông Hồng",
+} as const;
+
+/** Vùng Thủ đô — Vành đai 4. */
+export const NOXH_TAG_HN_RING4 = {
+  slug: "truc-vanh-dai-4-vung-thu-do",
+  name: "Trục Vành đai 4 Vùng Thủ đô",
+} as const;
+
+/** Vùng Thủ đô — Đại lộ Thăng Long / Hòa Lạc. */
+export const NOXH_TAG_HN_WEST = {
+  slug: "truc-dai-lo-thang-long-hoa-lac",
+  name: "Trục Đại lộ Thăng Long – Hòa Lạc",
+} as const;
+
+/** Vùng Thủ đô — Tây Nam Hà Nam – Ninh Bình. */
+export const NOXH_TAG_HN_SOUTHWEST = {
+  slug: "truc-tay-nam-ha-nam-ninh-binh",
+  name: "Trục Tây Nam Hà Nam – Ninh Bình",
+} as const;
+
 export const NOXH_HANDBOOK_TAGS = [
   NOXH_TAG_CHINH_SACH,
   NOXH_TAG_CHON_NHA,
@@ -75,6 +105,11 @@ export const NOXH_HANDBOOK_TAGS = [
   NOXH_TAG_RING_ROAD,
   NOXH_TAG_AIRPORT,
   NOXH_TAG_QL13,
+  NOXH_TAG_HN_EAST,
+  NOXH_TAG_HN_AIRPORT,
+  NOXH_TAG_HN_RING4,
+  NOXH_TAG_HN_WEST,
+  NOXH_TAG_HN_SOUTHWEST,
 ] as const;
 
 export const NOXH_HANDBOOK_TAG_SLUGS = new Set<string>(
@@ -105,7 +140,7 @@ export const NOXH_HANDBOOK_TAG_DESCRIPTIONS: Record<
   [NOXH_TAG_DU_AN_GIA.slug]:
     "Giá bán, tiến độ, so sánh dự án và cập nhật thị trường NOXH.",
   [NOXH_TAG_HA_TANG.slug]:
-    "Khung TOD, quy hoạch tổng thể và điều hướng 6 trục tăng trưởng toàn TP.HCM / liên vùng.",
+    "Khung TOD, quy hoạch tổng thể và điều hướng trục tăng trưởng (TP.HCM / Vùng Thủ đô).",
   [NOXH_TAG_NORTH_SOUTH.slug]:
     "Trục dọc sông Sài Gòn hướng biển: Củ Chi – lõi – Nhà Bè – Cần Giờ; BĐS ven sông Nam Sài Gòn.",
   [NOXH_TAG_EAST_WEST.slug]:
@@ -118,6 +153,16 @@ export const NOXH_HANDBOOK_TAG_DESCRIPTIONS: Record<
     "Kết nối sân bay Long Thành & Tân Sơn Nhất: đường sắt TTLT, đô thị sân bay bán kính 5–10 km.",
   [NOXH_TAG_QL13.slug]:
     "Đại lộ tài chính QL13 Đông Bắc: Lái Thiêu, Thuận An, Dĩ An — Metro số 2, cửa ngõ Thủ Đức.",
+  [NOXH_TAG_HN_EAST.slug]:
+    "Trục Đông – Đông Nam Vùng Thủ đô: Hà Nội – Hưng Yên – Hải Phòng – Quảng Ninh; cao tốc 5B / ven biển.",
+  [NOXH_TAG_HN_AIRPORT.slug]:
+    "Trục Nội Bài – Bắc sông Hồng: Võ Nguyên Giáp, Đông Anh, Sóc Sơn, Mê Linh.",
+  [NOXH_TAG_HN_RING4.slug]:
+    "Vành đai 4 Vùng Thủ đô (~113,5 km): Hà Nội – Hưng Yên – Bắc Ninh; đô thị vệ tinh quanh nút giao.",
+  [NOXH_TAG_HN_WEST.slug]:
+    "Đại lộ Thăng Long – Hòa Lạc: công nghệ, giáo dục bậc cao, Nam Từ Liêm / Mỹ Đình.",
+  [NOXH_TAG_HN_SOUTHWEST.slug]:
+    "Tây Nam Vùng Thủ đô: Hà Nam – Ninh Bình; QL1A, Pháp Vân – Cầu Giẽ, công nghiệp sạch và sinh thái.",
 };
 
 /** 301 slug chủ đề cũ → slug mới hoặc hub cẩm nang. */
@@ -180,6 +225,26 @@ export const NOXH_HANDBOOK_SECONDARY_CLUSTERS = [
   {
     ...NOXH_TAG_QL13,
     description: NOXH_HANDBOOK_TAG_DESCRIPTIONS[NOXH_TAG_QL13.slug],
+  },
+  {
+    ...NOXH_TAG_HN_EAST,
+    description: NOXH_HANDBOOK_TAG_DESCRIPTIONS[NOXH_TAG_HN_EAST.slug],
+  },
+  {
+    ...NOXH_TAG_HN_AIRPORT,
+    description: NOXH_HANDBOOK_TAG_DESCRIPTIONS[NOXH_TAG_HN_AIRPORT.slug],
+  },
+  {
+    ...NOXH_TAG_HN_RING4,
+    description: NOXH_HANDBOOK_TAG_DESCRIPTIONS[NOXH_TAG_HN_RING4.slug],
+  },
+  {
+    ...NOXH_TAG_HN_WEST,
+    description: NOXH_HANDBOOK_TAG_DESCRIPTIONS[NOXH_TAG_HN_WEST.slug],
+  },
+  {
+    ...NOXH_TAG_HN_SOUTHWEST,
+    description: NOXH_HANDBOOK_TAG_DESCRIPTIONS[NOXH_TAG_HN_SOUTHWEST.slug],
   },
 ] as const;
 

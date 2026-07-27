@@ -238,6 +238,102 @@ export const ARTICLE_EDITORIAL_COVERS: Record<string, EditorialCover> = {
     caption:
       "ACV hướng khai thác thương mại Long Thành giai đoạn 1 từ 1/12/2026; bán kính 5–10 km.",
   },
+  "nam-truc-tang-truong-vung-thu-do-ha-noi-2026": {
+    url: HERO.skyline,
+    alt: "Toàn cảnh đô thị — minh họa năm trục tăng trưởng Vùng Thủ đô Hà Nội",
+    caption:
+      "Đô thị chùm: Đông – Đông Nam, Nội Bài, Vành đai 4, Đại lộ Thăng Long và Tây Nam Hà Nam.",
+  },
+  "cao-toc-5b-hanh-lang-kinh-te-ven-bien-dong-nam-vung-thu-do-2026": {
+    url: HERO.viaduct,
+    alt: "Hạ tầng cao tốc liên vùng — minh họa hành lang Đông – Đông Nam Vùng Thủ đô",
+    caption:
+      "Cao tốc / QL5B và hành lang kinh tế ven biển Hà Nội – Hải Phòng – Quảng Ninh.",
+  },
+  "di-dan-quan-phia-dong-hung-yen-dong-tien-2026": {
+    url: HERO.urban,
+    alt: "Không gian đô thị mở rộng — minh họa ly tâm bờ Đông sông Hồng / Hưng Yên",
+    caption:
+      "Hưng Yên như cửa ngõ “quận phía Đông”: dòng tiền trung hạn theo phút di chuyển và pháp lý.",
+  },
+  "du-an-dai-do-thi-chung-cu-truc-phia-dong-ha-noi-2026": {
+    url: HERO.skyline,
+    alt: "Nhà chung cư đại đô thị — minh họa trục phía Đông Hà Nội / Hưng Yên",
+    caption:
+      "Review định tính Ocean Park và nhà chung cư trục Đông — không bịa bảng giá.",
+  },
+  "quy-hoach-nhat-tan-noi-bai-dai-lo-vo-nguyen-giap-2026": {
+    url: HERO.metroHub,
+    alt: "Trục giao thông cửa ngõ sân bay — minh họa Nhật Tân – Nội Bài",
+    caption:
+      "Đại lộ Võ Nguyên Giáp và định hướng đô thị Bắc sông Hồng / Đông Anh.",
+  },
+  "bds-thanh-pho-san-bay-noi-bai-bac-song-hong-2026": {
+    url: HERO.thuThiemNight,
+    alt: "Đô thị gần sân bay — minh họa thành phố sân bay Nội Bài",
+    caption:
+      "Nhu cầu căn hộ và thương mại phục vụ chuyên gia KCN Đông Anh – Sóc Sơn – Mê Linh.",
+  },
+  "du-an-can-ho-dat-nen-dong-anh-me-linh-2026": {
+    url: HERO.urban,
+    alt: "An cư Bắc sông Hồng — minh họa Đông Anh / Mê Linh",
+    caption:
+      "Checklist pháp lý căn hộ và thửa đất; soft link NOXH Mê Linh trên House X.",
+  },
+  "tien-do-vanh-dai-4-vung-thu-do-2026": {
+    url: HERO.viaduct,
+    alt: "Công trình vành đai liên tỉnh — minh họa Vành đai 4 Vùng Thủ đô",
+    caption:
+      "Tuyến ~113,5 km qua Hà Nội, Hưng Yên, Bắc Ninh — tiến độ theo công bố chính thống.",
+  },
+  "tod-doc-vanh-dai-4-vung-thu-do-2026": {
+    url: HERO.metroHub,
+    alt: "Nút giao đô thị vệ tinh — minh họa TOD dọc Vành đai 4",
+    caption:
+      "Quỹ đất quanh nút giao VD4: phân biệt lõi TOD và vùng hưởng lợi vệ tinh.",
+  },
+  "dat-nen-nha-pho-don-dau-vanh-dai-4-bac-ninh-hung-yen-2026": {
+    url: HERO.urban,
+    alt: "Thửa đất và nhà phố vệ tinh — minh họa đón Vành đai 4",
+    caption:
+      "Bắc Ninh, Hưng Yên, Mê Linh: pháp lý an toàn trước khi so sánh giá định tính.",
+  },
+  "quy-hoach-truc-phia-tay-dai-lo-thang-long-hoa-lac-2026": {
+    url: HERO.bitexcoMetro,
+    alt: "Hành lang phía Tây Thủ đô — minh họa Đại lộ Thăng Long / Hòa Lạc",
+    caption:
+      "Trung tâm công nghệ – giáo dục Hòa Lạc và tiến độ hạ tầng dọc Thăng Long.",
+  },
+  "an-cu-phia-tay-nam-tu-liem-my-dinh-2026": {
+    url: HERO.skyline,
+    alt: "An cư lõi phía Tây — minh họa Nam Từ Liêm / Mỹ Đình",
+    caption:
+      "Thanh khoản cao tầng nhờ tiện ích xã hội đồng bộ và bài toán tài chính trung thực.",
+  },
+  "can-ho-cao-cap-dai-lo-thang-long-dang-mo-ban-2026": {
+    url: HERO.thuThiemDay,
+    alt: "Căn hộ cao cấp hành lang Tây — minh họa mở bán dọc Thăng Long",
+    caption:
+      "So sánh định tính chính sách thanh toán / ân hạn — CTA tư vấn House X.",
+  },
+  "quy-hoach-truc-phia-nam-ha-nam-ve-tinh-2026": {
+    url: HERO.viaduct,
+    alt: "Hành lang QL1A phía Nam — minh họa Hà Nam vệ tinh Thủ đô",
+    caption:
+      "Pháp Vân – Cầu Giẽ / QL1A: Hà Nam trong khung đô thị vệ tinh công nghiệp – dịch vụ.",
+  },
+  "dat-nen-nha-pho-kcn-sach-phia-nam-ha-noi-2026": {
+    url: HERO.urban,
+    alt: "Nhà phố ven KCN sạch — minh họa phía Nam Hà Nội / Hà Nam",
+    caption:
+      "Nhu cầu nhà ở chuyên gia khi FDI / nhà máy dịch chuyển về hành lang Tây Nam.",
+  },
+  "bds-sinh-thai-do-thi-dich-vu-tay-nam-vung-thu-do-2026": {
+    url: HERO.civic,
+    alt: "Đô thị dịch vụ – sinh thái — minh họa trục Tây Nam Vùng Thủ đô",
+    caption:
+      "Khung chọn dự án Phủ Lý, Duy Tiên, Thường Tín, Thanh Trì — pháp lý trước giá.",
+  },
 };
 
 /** Khối markdown ảnh minh hoạ trong thân bài (chuẩn báo chí). */
