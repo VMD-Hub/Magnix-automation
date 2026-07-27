@@ -21,7 +21,7 @@ const MINH_DUC_ME_LINH_SLUG = "nha-o-xa-hoi-minh-duc-me-linh";
 const MINH_DUC_ME_LINH_NAME = "Nhà ở xã hội Minh Đức Mê Linh";
 
 /**
- * Series Trục Nội Bài – Bắc sông Hồng — phễu Vĩ mô → Tiềm năng → Thực tế.
+ * Series Trục Nội Bài – Bắc sông Hồng — ba lớp: quy hoạch–thể chế → dịch chuyển không gian → thẩm định.
  * Số liệu quy hoạch / hành chính theo công bố — không bịa giá căn hộ.
  */
 export const HANOI_AIRPORT_CORRIDOR_ARTICLES_2026: ArticleDetail[] = [
@@ -29,14 +29,14 @@ export const HANOI_AIRPORT_CORRIDOR_ARTICLES_2026: ArticleDetail[] = [
     id: "article-hn-airport-01-macro",
     slug: SLUG_MACRO,
     title:
-      "Quy hoạch Nhật Tân – Nội Bài và trục Đại lộ Võ Nguyên Giáp: Biểu tượng phát triển mới của Hà Nội",
+      "Quy hoạch Nhật Tân – Nội Bài và Đại lộ Võ Nguyên Giáp: Cửa ngõ hàng không trong cấu trúc đa cực Thủ đô",
     excerpt:
-      "QH chi tiết 1/500 hai bên Nhật Tân – Nội Bài (Đại lộ Võ Nguyên Giáp): ~1.810 ha / ~11,1 km qua Đông Anh – Sóc Sơn; Đông Anh đẩy tiêu chí lên quận (thanglong.chinhphu.vn).",
-    body: `## Đại lộ Võ Nguyên Giáp (Nhật Tân – Nội Bài) định hình cửa ngõ Bắc sông Hồng thế nào?
+      "Trong khung QĐ 1569/QĐ-TTg và hướng thành phố phía Bắc: đồ án 1/500 hai bên Đại lộ Võ Nguyên Giáp (~1.810 ha / ~11,1 km); Đông Anh hoàn thiện tiêu chí lên quận theo công bố hành chính.",
+    body: `## Đại lộ Võ Nguyên Giáp định vị cửa ngõ Bắc sông Hồng thế nào trong quy hoạch Thủ đô?
 
-Trục đường từ cầu Nhật Tân về sân bay quốc tế Nội Bài — Đại lộ Võ Nguyên Giáp — là mặt cắt đô thị cửa ngõ phía Bắc Thủ đô. Khác hành lang Đông – Đông Nam gắn cao tốc cảng biển, trục này gắn logistics hàng không, dịch vụ sân bay và đô thị Bắc sông Hồng (Đông Anh, Sóc Sơn, kéo dài ảnh hưởng tới Mê Linh).
+Trong Quyết định 1569/QĐ-TTg (Quy hoạch Thủ đô thời kỳ 2021–2030, tầm nhìn 2050), không gian phía Bắc được định hướng như một cực phát triển gắn logistics quốc tế và đô thị hóa Bắc sông Hồng. Đại lộ Võ Nguyên Giáp (Nhật Tân – Nội Bài) là mặt cắt thực thi lớp đó: kết nối cầu Nhật Tân với sân bay quốc tế Nội Bài, đồng thời tạo khung cho quy hoạch chi tiết hai bên tuyến tại Đông Anh – Sóc Sơn (ảnh hưởng kéo dài tới Mê Linh).
 
-Đối chiếu năm trục tăng trưởng: [Năm trục tăng trưởng Vùng Thủ đô Hà Nội](${PILLAR_HREF}). Hub: [${HUB_HREF}](${HUB_HREF}).
+Khác hành lang Đông – Đông Nam (cao tốc – cảng biển), trục này lấy cửa ngõ hàng không và đô thị hóa hành chính làm động lực chính — không phải khẩu hiệu “biểu tượng” tách khỏi thể chế. Đối chiếu năm hành lang: [Năm trục tăng trưởng Vùng Thủ đô Hà Nội](${PILLAR_HREF}). Hub: [${HUB_HREF}](${HUB_HREF}).
 
 ${EDITORIAL_FIGURES.hcmSkyline}
 
@@ -67,15 +67,15 @@ Huyện Đông Anh được Thành phố Hà Nội xác định là một trong 
 
 ${EDITORIAL_FIGURES.metroHub}
 
-## Người tìm nhà Bắc sông Hồng nên đọc tiếp bài nào?
+## Nên đọc tiếp lớp nào trên cùng hành lang Nội Bài?
 
-| Tầng phễu | Câu hỏi | Bài House X |
-|-----------|---------|-------------|
-| Vĩ mô (bài này) | QH Nhật Tân – Nội Bài & Đông Anh lên quận? | Bạn đang đọc |
-| Tiềm năng | Thành phố sân bay / cho thuê Bắc sông Hồng? | [BĐS thành phố sân bay Nội Bài](/wiki-nha-o-xa-hoi/${SLUG_POTENTIAL}) |
-| Thực tế | Căn hộ / thửa đất Đông Anh – Mê Linh? | [Dự án Đông Anh – Mê Linh](/wiki-nha-o-xa-hoi/${SLUG_REALITY}) |
+| Lớp đọc | Câu hỏi chuyên môn | Bài House X |
+|---------|--------------------|-------------|
+| Quy hoạch – thể chế (bài này) | QH 1/500 Nhật Tân – Nội Bài & Đông Anh lên quận? | Bạn đang đọc |
+| Dịch chuyển không gian | Đô thị sân bay / nhu cầu ở–thuê Bắc sông Hồng? | [Đô thị sân bay Nội Bài](/wiki-nha-o-xa-hoi/${SLUG_POTENTIAL}) |
+| Thẩm định dự án | Căn hộ / thửa đất Đông Anh – Mê Linh? | [Thẩm định Đông Anh – Mê Linh](/wiki-nha-o-xa-hoi/${SLUG_REALITY}) |
 
-House X hỗ trợ định hướng chọn trục trước khi so dự án — [để lại thông tin tại đây](/lien-he).
+${NORTHERN_SUPPORT_CLOSING}
 
 ${EDITORIAL_FIGURES.bitexcoMetro}
 
@@ -96,14 +96,14 @@ ${EDITORIAL_FIGURES.bitexcoMetro}
     id: "article-hn-airport-02-potential",
     slug: SLUG_POTENTIAL,
     title:
-      'Đón sóng đầu tư bất động sản "Thành phố sân bay" và xu hướng sở hữu căn hộ Bắc sông Hồng',
+      'Đô thị sân bay Nội Bài và dịch chuyển nhu cầu nhà ở Bắc sông Hồng',
     excerpt:
-      "Logic thành phố sân bay Nội Bài: nhu cầu ở và cho thuê định tính tại Đông Anh / Sóc Sơn phục vụ chuyên gia KCN và dịch vụ hàng không — không bịa biên độ giá hay công suất thuê.",
-    body: `## “Thành phố sân bay” Bắc sông Hồng nghĩa là gì — khác “sốt đất quanh sân bay” thế nào?
+      "Trong định hướng đa cực Thủ đô: nhu cầu ở và thuê định tính tại Đông Anh / Sóc Sơn gắn logistics hàng không và KCN — tách khỏi “sốt đất quanh sân bay”; không bịa biên độ giá.",
+    body: `## “Đô thị sân bay” Bắc sông Hồng là khái niệm quy hoạch nào — khác “sốt đất quanh sân bay” thế nào?
 
-Thành phố sân bay ở đây là lớp đô thị gắn việc làm logistics hàng không, dịch vụ sân bay và khu công nghiệp phía Bắc sông Hồng — Đông Anh, Sóc Sơn và vùng ảnh hưởng Mê Linh — nơi phút di chuyển tới Nội Bài và các KCN quyết định nhu cầu ở / thuê nhiều hơn “tin đồn quy hoạch”.
+Trong khung đa cực – đa trung tâm (QĐ 1569/QĐ-TTg), hướng Bắc gắn cửa ngõ quốc tế Nội Bài với đô thị hóa Đông Anh – Sóc Sơn và vùng ảnh hưởng Mê Linh. “Đô thị sân bay” ở đây là lớp chức năng: việc làm logistics hàng không, dịch vụ sân bay và KCN — nơi phút di chuyển tới Nội Bài quyết định nhu cầu ở / thuê nhiều hơn tin đồn thửa đất.
 
-Khác trục Đông – Đông Nam (cao tốc cảng biển), hành lang này lấy cửa ngõ hàng không và đô thị Bắc sông Hồng làm trọng tâm. Khung năm trục: [pillar Vùng Thủ đô](${PILLAR_HREF}). Bài vĩ mô: [QH Nhật Tân – Nội Bài / Võ Nguyên Giáp](/wiki-nha-o-xa-hoi/${SLUG_MACRO}).
+Khác hành lang Đông – Đông Nam (cao tốc – cảng biển), động lực gốc là năng lực hàng không và lộ trình đô thị hóa hành chính (kể cả tiêu chí lên quận Đông Anh). Khung năm hành lang: [pillar Vùng Thủ đô](${PILLAR_HREF}). Lớp thể chế: [QH Nhật Tân – Nội Bài / Võ Nguyên Giáp](/wiki-nha-o-xa-hoi/${SLUG_MACRO}).
 
 ${EDITORIAL_FIGURES.hcmSkyline}
 
@@ -145,9 +145,9 @@ ${EDITORIAL_FIGURES.bitexcoMetro}
     coverImageUrl: "/images/hero/hcmc-skyline-river-day.webp",
     authorName: "Ban biên tập House X",
     seoTitle:
-      "BĐS thành phố sân bay Nội Bài – Bắc sông Hồng 2026 | HouseX",
+      "Đô thị sân bay Nội Bài – dịch chuyển nhu cầu Bắc sông Hồng | HouseX",
     seoDesc:
-      "Logic ở / thuê định tính Đông Anh – Sóc Sơn gắn sân bay và KCN — không bịa lợi suất hay bảng giá căn hộ.",
+      "Nhu cầu ở / thuê định tính Đông Anh – Sóc Sơn trong khung đa cực Thủ đô — không bịa lợi suất hay bảng giá căn hộ.",
     tags: [NOXH_TAG_HN_AIRPORT],
     projects: [],
   },
@@ -155,10 +155,10 @@ ${EDITORIAL_FIGURES.bitexcoMetro}
     id: "article-hn-airport-03-reality",
     slug: SLUG_REALITY,
     title:
-      "Gọi tên các dự án căn hộ, đất nền đón đầu quy hoạch đô thị thông minh Bắc Hà Nội",
+      "Thẩm định căn hộ và thửa đất Đông Anh – Mê Linh trên hành lang Nội Bài",
     excerpt:
-      "Khung chọn căn hộ / thửa đất Đông Anh – Mê Linh: checklist pháp lý, phút di chuyển, neo NOXH HUD Melinh Central và Minh Đức Mê Linh trên House X — không bịa giá mở bán.",
-    body: `## Làm sao chọn căn hộ hoặc thửa đất Đông Anh – Mê Linh mà không bị “tin đô thị thông minh”?
+      "Khung thẩm định pháp lý – kết nối – tài chính tại Đông Anh / Mê Linh; soft neo NOXH HUD Melinh Central và Minh Đức Mê Linh — không bịa giá mở bán.",
+    body: `## Làm sao thẩm định căn hộ hoặc thửa đất Đông Anh – Mê Linh khi tin “đô thị thông minh” lan truyền?
 
 Trên trục Nội Bài – Bắc sông Hồng, khung thực tế khoảng 40-30-30:
 

@@ -1,6 +1,6 @@
 /**
  * Giọng biên tập Vùng Thủ đô / miền Bắc — tách biệt tone HCMC.
- * Dùng khi viết series growth corridors Hà Nội.
+ * Độc giả Hà Nội: quan tâm chính trị – quy hoạch – hạ tầng; cần chiều sâu chuyên gia, không nội dung hời hợt.
  */
 
 /** Thuật ngữ ưu tiên (Bắc) — tránh từ miền Nam trong thân bài HN. */
@@ -16,9 +16,14 @@ export const NORTHERN_LEXICON_PREFERRED = [
   "phòng khách sang trọng",
   "sổ đỏ",
   "pháp lý an toàn",
+  "đồ án quy hoạch",
+  "đô thị vệ tinh",
+  "đô thị đối trọng",
+  "hành lang kinh tế",
+  "phân kỳ đầu tư",
 ] as const;
 
-/** Cụm từ miền Nam — không dùng trong series Vùng Thủ đô. */
+/** Cụm từ miền Nam / sáo bán hàng / meta biên tập — không dùng trong series Vùng Thủ đô. */
 export const NORTHERN_LEXICON_AVOID = [
   /\blộ giới\b/i,
   /\bnền đất\b/i,
@@ -26,15 +31,24 @@ export const NORTHERN_LEXICON_AVOID = [
   /\bofficetel\b/i,
   /\bcam kết lợi nhuận\b/i,
   /\bvị trí kim cương\b/i,
+  /\bphễu\b/i,
+  /\bgiọng điềm tĩnh\b/i,
+  /\bphù hợp người mua miền Bắc\b/i,
+  /\bbài toán tài chính trung thực\b/i,
+  /\bmỏ vàng\b/i,
+  /\bsóng đầu tư\b/i,
+  /\bđón sóng\b/i,
 ] as const;
 
 export const NORTHERN_VOICE_RULES = [
-  "Tone điềm tĩnh, lập luận logic; số liệu phút di chuyển và tiến độ theo tháng khi có nguồn.",
-  "Không cam kết lợi nhuận / biên độ tăng giá %; không sáo 'kim cương'.",
-  "Bài thực tế: ~40% vị trí–kết nối–không gian sống; ~30% giá/so sánh định tính; ~30% tài chính + CTA /lien-he.",
-  "Phụ cận: nhấn sổ đỏ / pháp lý an toàn, thửa đất – nhà phố mặt đường.",
-  "Nội đô / cao cấp: cộng đồng cư dân, căn vuông vức, hướng ban công (Đông Nam/Nam) khi phù hợp.",
-  "Interlink phễu trong cùng trục: Vĩ mô → Tiềm năng → Thực tế.",
+  "Tone chuyên gia đô thị / quy hoạch: trang trọng, chặt chẽ, không khẩu hiệu bán hàng.",
+  "Ưu tiên chiều sâu: thể chế (Quyết định/QHC), cấu trúc không gian, tiến độ hạ tầng công bố, phân vai vệ tinh–đối trọng.",
+  "Người Hà Nội đọc chính trị – quy hoạch – hạ tầng trước 'xu hướng thị trường'; lập luận theo nhân – quả quy hoạch, không checklist marketing.",
+  "Không cam kết lợi nhuận / biên độ tăng giá %; không sáo 'kim cương', 'mỏ vàng', 'đón sóng'.",
+  "Không lộ meta biên tập ra bài (phễu, giọng điềm tĩnh, phù hợp người mua miền Bắc).",
+  "Ba lớp đọc nội bộ (không gọi là phễu trên bài): quy hoạch–thể chế → dịch chuyển nhu cầu/không gian → thẩm định dự án–pháp lý + CTA /lien-he.",
+  "Phụ cận: sổ đỏ / pháp lý an toàn, thửa đất – nhà phố mặt đường; nội đô: cộng đồng cư dân, căn vuông, hướng ban công khi phù hợp.",
+  "Interlink cùng hành lang; đối chiếu trục khác chỉ khi nêu rõ tên và lý do phân biệt.",
 ] as const;
 
 export function getNorthernLexiconIssues(body: string): string[] {
@@ -55,4 +69,4 @@ export function assertNorthernEditorialBody(body: string, slug: string): void {
   }
 }
 
-export const NORTHERN_SUPPORT_CLOSING = `House X hỗ trợ rà soát phương án an cư và hồ sơ nhà ở xã hội (nếu thuộc đối tượng) theo từng khu vực Vùng Thủ đô — bạn [để lại thông tin tại đây](/lien-he), chuyên gia sẽ đồng hành với số liệu thực tế, không ép tiến độ.`;
+export const NORTHERN_SUPPORT_CLOSING = `House X hỗ trợ đối chiếu phương án an cư và hồ sơ nhà ở xã hội (nếu thuộc đối tượng) theo từng hành lang Vùng Thủ đô — trên cơ sở quy hoạch công bố, tiến độ hạ tầng và pháp lý từng dự án. Bạn có thể [để lại thông tin tại đây](/lien-he); chuyên gia sẽ phản hồi bằng khung phân tích, không ép tiến độ giao dịch.`;

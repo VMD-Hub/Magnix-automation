@@ -31,7 +31,7 @@ Phễu trên mỗi trục: **Vĩ mô** → **Tiềm năng** → **Thực tế**.
 ## Quy tắc biên tập
 
 1. Không trộn corridor ID / tag hub với series HCMC.
-2. Giọng miền Bắc bắt buộc — xem `NORTHERN_VOICE.md`.
+2. Giọng chuyên gia miền Bắc bắt buộc — xem `NORTHERN_VOICE.md` (chính trị – quy hoạch – hạ tầng; không meta “phễu”, không khẩu hiệu bán hàng).
 3. Cross-sell trục khác chỉ khi nêu rõ tên trục.
 4. Không seed landing Ocean City / Masterise trong phase này.
 

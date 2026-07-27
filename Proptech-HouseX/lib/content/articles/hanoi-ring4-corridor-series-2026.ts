@@ -11,22 +11,22 @@ const HUB_HREF =
   "/wiki-nha-o-xa-hoi/chu-de/truc-vanh-dai-4-vung-thu-do";
 
 /**
- * Trục Vành đai 4 Vùng Thủ đô — phễu Vĩ mô → Tiềm năng → Thực tế.
- * Giọng miền Bắc: điềm tĩnh, số liệu có nguồn, không cam kết biên độ giá.
+ * Trục Vành đai 4 Vùng Thủ đô — ba lớp: quy hoạch–thể chế → dịch chuyển không gian → thẩm định.
+ * Giọng chuyên gia: số liệu có nguồn, không cam kết biên độ giá.
  */
 export const HANOI_RING4_CORRIDOR_ARTICLES_2026: ArticleDetail[] = [
   {
     id: "article-hn-ring4-01",
     slug: "tien-do-vanh-dai-4-vung-thu-do-2026",
     title:
-      "Bản đồ tiến độ Vành đai 4 – Vùng Thủ đô: Chặng nước rút khơi thông mọi điểm nghẽn giao thông",
+      "Tiến độ Vành đai 4 Vùng Thủ đô: Phân kỳ GPMB, song hành và mốc khai thác liên tỉnh",
     excerpt:
-      "VD4 ~113,52 km qua Hà Nội – Hưng Yên – Bắc Ninh; tổng mức đầu tư khoảng 85–86 nghìn tỷ. GPMB cơ bản ~100%; đường song hành Hà Nội ~85%, Hưng Yên khoảng 70–82%, Bắc Ninh thấp hơn. Hướng cơ bản hoàn thành 2026, khai thác 2027; thông xe kỹ thuật các cầu có thể sớm hơn trước giữa năm 2027.",
-    body: `## Vành đai 4 Vùng Thủ đô đang ở giai đoạn nào?
+      "VD4 ~113,52 km qua Hà Nội – Hưng Yên – Bắc Ninh; vốn ~85–86 nghìn tỷ. GPMB cơ bản hoàn thành; song hành HN ~85%, HY ~70–82%, BN thấp hơn. Hướng cơ bản 2026, khai thác 2027 theo công bố / báo chí chính thống.",
+    body: `## Vành đai 4 đóng vai trò gì trong cấu trúc liên kết Vùng Thủ đô?
 
-Đường Vành đai 4 – Vùng Thủ đô là vòng ngoài liên tỉnh, giúp giảm tải nội đô lịch sử và mở thêm quỹ đất đô thị vệ tinh quanh nút giao. Toàn tuyến dài khoảng 113,52 km, đi qua Hà Nội, Hưng Yên và Bắc Ninh; tổng mức đầu tư các dự án thành phần thường được báo chí và cơ quan nhà nước nêu quanh 85–86 nghìn tỷ đồng (các bản cập nhật ghi khoảng 85.563–85.813 tỷ tùy thời điểm tổng hợp).
+Trong đồ án tầm nhìn dài hạn và khung Quy hoạch Thủ đô (QĐ 1569/QĐ-TTg), hệ vành đai (3.5 – 4 – 4.5 – 5) là công cụ điều phối vùng: giảm tải cửa ngõ nội đô lịch sử và kết nối đô thị vệ tinh / đối trọng quanh hạt nhân. Vành đai 4 Vùng Thủ đô (~113,52 km qua Hà Nội – Hưng Yên – Bắc Ninh; tổng mức đầu tư quanh 85–86 nghìn tỷ theo các bản tổng hợp) là vòng ngoài đang ở giai đoạn nước rút thi công — tín hiệu gốc là GPMB, sản lượng song hành và mốc thông xe / khai thác theo Ban quản lý dự án, không phải “tin đồn toàn tuyến một ngày”.
 
-Đọc trong khung 5 trục: [Năm trục tăng trưởng Vùng Thủ đô Hà Nội](${PILLAR_HREF}). Hub: [${HUB_HREF}](${HUB_HREF}).
+Đọc trong khung năm hành lang: [Năm trục tăng trưởng Vùng Thủ đô Hà Nội](${PILLAR_HREF}). Hub: [${HUB_HREF}](${HUB_HREF}).
 
 ${EDITORIAL_FIGURES.hcmSkyline}
 
@@ -71,11 +71,11 @@ Hướng phấn đấu được nêu công khai: thông xe kỹ thuật các c�
 - Ưu tiên đoạn song hành và nút giao gần nơi ở hơn là tin đồn “toàn tuyến thông xe”.
 - Đối chiếu pháp lý thửa đất / nhà phố trước khi đặt cọc — xem bài thực tế trong cùng trục.
 
-| Tầng | Bài trong phễu |
-|------|----------------|
-| Vĩ mô (bài này) | Tiến độ VD4 |
-| Tiềm năng | [TOD dọc Vành đai 4](/wiki-nha-o-xa-hoi/tod-doc-vanh-dai-4-vung-thu-do-2026) |
-| Thực tế | [Thửa đất, nhà phố Bắc Ninh – Hưng Yên – Mê Linh](/wiki-nha-o-xa-hoi/dat-nen-nha-pho-don-dau-vanh-dai-4-bac-ninh-hung-yen-2026) |
+| Lớp đọc | Bài trên cùng hành lang |
+|---------|-------------------------|
+| Quy hoạch – thể chế (bài này) | Tiến độ VD4 |
+| Dịch chuyển không gian | [TOD và nút giao Vành đai 4](/wiki-nha-o-xa-hoi/tod-doc-vanh-dai-4-vung-thu-do-2026) |
+| Thẩm định dự án | [Thửa đất, nhà phố Bắc Ninh – Hưng Yên – Mê Linh](/wiki-nha-o-xa-hoi/dat-nen-nha-pho-don-dau-vanh-dai-4-bac-ninh-hung-yen-2026) |
 
 ${NORTHERN_SUPPORT_CLOSING}
 
@@ -98,9 +98,9 @@ ${EDITORIAL_FIGURES.bitexcoMetro}
     id: "article-hn-ring4-02",
     slug: "tod-doc-vanh-dai-4-vung-thu-do-2026",
     title:
-      "Mô hình đô thị TOD dọc tuyến Vành đai 4: Bản đồ kho báu mới cho các nhà đầu tư bất động sản",
+      "Đô thị TOD và nút giao Vành đai 4: Phân biệt lõi giao thông công cộng với vệ tinh đường bộ",
     excerpt:
-      "Tiềm năng quanh nút giao Vành đai 4 mang tính định tính: chỉ quỹ đất gắn điểm giao thông công cộng trong bán kính đi bộ mới gần TOD đúng nghĩa. Phân biệt nút vành đai đường bộ và lõi ga metro / đường sắt — không cam kết biên độ giá.",
+      "Chỉ quỹ đất gắn điểm giao thông công cộng trong bán kính đi bộ mới gần TOD đúng nghĩa. Nút vành đai đường bộ mang lợi thế liên vùng khác — không cam kết biên độ giá.",
     body: `## TOD dọc Vành đai 4 nghĩa là gì — mọi nút giao có phải TOD?
 
 Không. TOD (Transit-Oriented Development) lấy nhà ga hoặc điểm giao thông công cộng làm trung tâm, tập trung nhà ở – thương mại trong bán kính đi bộ (thường tối đa khoảng 1–1,5 km). Nút giao Vành đai 4 chủ yếu là điểm kết nối đường bộ cao tốc / quốc lộ — lợi thế tiếp cận vùng, nhưng chưa tự động thành TOD nếu thiếu ga metro / BRT / đường sắt và quy hoạch mật độ hỗn hợp quanh điểm đó.
@@ -130,13 +130,13 @@ ${EDITORIAL_FIGURES.bitexcoMetro}
 
 Hub trục này: [${HUB_HREF}](${HUB_HREF}).
 
-## Nhà đầu tư cá nhân nên hỏi gì trước khi “săn TOD vành đai”?
+## Câu hỏi chuyên môn trước khi thẩm định vị trí quanh vành đai?
 
 1. Có ga / điểm công cộng nào đã có trong quy hoạch chi tiết trong bán kính đi bộ không?
 2. Lợi thế chính là thời gian ô tô khi thông xe đoạn gần nhà — hay là sống gần ga?
 3. Pháp lý thửa đất / dự án có sổ đỏ, quy hoạch rõ, không vướng hành lang kỹ thuật tuyến không?
 
-Tầng thực tế: [Thửa đất, nhà phố đón Vành đai 4](/wiki-nha-o-xa-hoi/dat-nen-nha-pho-don-dau-vanh-dai-4-bac-ninh-hung-yen-2026).
+Lớp thẩm định: [Thửa đất, nhà phố quanh Vành đai 4](/wiki-nha-o-xa-hoi/dat-nen-nha-pho-don-dau-vanh-dai-4-bac-ninh-hung-yen-2026).
 
 ${NORTHERN_SUPPORT_CLOSING}
 
@@ -159,14 +159,14 @@ ${EDITORIAL_FIGURES.thuThiem}
     id: "article-hn-ring4-03",
     slug: "dat-nen-nha-pho-don-dau-vanh-dai-4-bac-ninh-hung-yen-2026",
     title:
-      "Sắp thông xe Vành đai 4: Thửa đất, nhà phố khu vực nào tại Bắc Ninh, Hưng Yên, Mê Linh đáng rà soát?",
+      "Thẩm định thửa đất và nhà phố quanh Vành đai 4 tại Bắc Ninh, Hưng Yên, Mê Linh",
     excerpt:
-      "Checklist pháp lý thửa đất và nhà phố mặt đường quanh hành lang VD4 tại Bắc Ninh, Hưng Yên, Mê Linh. So sánh định tính — không nêu phần trăm tăng giá; ưu tiên sổ đỏ và pháp lý an toàn trước khi đặt cọc.",
-    body: `## Đón thông xe Vành đai 4 bằng thửa đất / nhà phố — cơ hội thật hay khẩu hiệu?
+      "Checklist pháp lý thửa đất và nhà phố mặt đường quanh hành lang VD4: sổ đỏ và quy hoạch trước kỳ vọng thông xe — so sánh định tính, không nêu phần trăm tăng giá.",
+    body: `## Thông xe từng đoạn Vành đai 4 và thửa đất / nhà phố — tách tín hiệu hạ tầng khỏi kỳ vọng giá?
 
-Thông xe từng đoạn giúp rút ngắn thời gian liên vùng và mở thêm lựa chọn an cư vệ tinh — nhưng không đồng nghĩa mọi thửa đất gần đường đều “tăng giá chắc chắn”. House X chỉ mô tả lợi ích định tính theo khu vực; không công bố phần trăm tăng giá và không neo bảng giá giả.
+Thông xe từng đoạn rút ngắn thời gian liên vùng và mở thêm lựa chọn an cư vệ tinh — nhưng không đồng nghĩa mọi thửa đất gần đường đều thanh khoản tốt. Tín hiệu gốc là pháp lý thửa, hành lang kỹ thuật tuyến và khả năng tiếp cận mặt đường hiện hữu; thông xe chỉ là điều kiện cần, không đủ. House X mô tả lợi ích định tính theo khu vực — không công bố phần trăm tăng giá.
 
-Đọc tiến độ trước: [Tiến độ Vành đai 4](/wiki-nha-o-xa-hoi/tien-do-vanh-dai-4-vung-thu-do-2026) · Khung TOD: [TOD dọc Vành đai 4](/wiki-nha-o-xa-hoi/tod-doc-vanh-dai-4-vung-thu-do-2026) · Pillar: [Năm trục tăng trưởng Vùng Thủ đô](${PILLAR_HREF}).
+Đọc tiến độ trước: [Tiến độ Vành đai 4](/wiki-nha-o-xa-hoi/tien-do-vanh-dai-4-vung-thu-do-2026) · Khung TOD: [TOD và nút giao Vành đai 4](/wiki-nha-o-xa-hoi/tod-doc-vanh-dai-4-vung-thu-do-2026) · Pillar: [Năm trục tăng trưởng Vùng Thủ đô](${PILLAR_HREF}).
 
 ${EDITORIAL_FIGURES.hcmSkyline}
 
@@ -188,7 +188,7 @@ ${EDITORIAL_FIGURES.metroViaduct}
 4. Nếu mua trong dự án: chủ đầu tư, giấy phép, tiến độ hạ tầng nội khu đã nghiệm thu.
 5. Khả năng tiếp cận mặt đường hiện hữu — không phụ thuộc lời hứa “mở đường sau”.
 
-Thiếu một trong các mục trên thì “đón đầu thông xe” dễ thành rủi ro thanh khoản, không phải chiến lược dài hạn.
+Thiếu một trong các mục trên thì đặt cọc theo tin thông xe dễ thành rủi ro thanh khoản, không phải chiến lược dài hạn.
 
 ## Có nhầm thửa đất vành đai với căn hộ nội đô / trục Tây không?
 
@@ -199,7 +199,7 @@ Có. Logic thửa đất – nhà phố vệ tinh quanh VD4 khác căn hộ cao 
 
 ${EDITORIAL_FIGURES.bitexcoMetro}
 
-## Khi nào nên nhờ tư vấn thay vì tự “săn tin thông xe”?
+## Khi nào nên nhờ đối chiếu chuyên môn thay vì tự tổng hợp tin thông xe?
 
 Khi bạn cần tách đúng trục (vành đai vs Nội Bài vs Đông Nam vs Tây), kiểm điều kiện an cư / nhà ở xã hội, hoặc muốn checklist pháp lý trước khi đặt cọc.
 
@@ -212,7 +212,7 @@ ${NORTHERN_SUPPORT_CLOSING}
     coverImageUrl: "/images/hero/hcmc-skyline-river-day.webp",
     authorName: "Ban biên tập House X",
     seoTitle:
-      "Thửa đất nhà phố đón Vành đai 4 — checklist Bắc Ninh, Hưng Yên, Mê Linh | HouseX",
+      "Thửa đất nhà phố quanh Vành đai 4 — checklist Bắc Ninh, Hưng Yên, Mê Linh | HouseX",
     seoDesc:
       "Checklist sổ đỏ và pháp lý an toàn quanh VD4 tại Bắc Ninh, Hưng Yên, Mê Linh. So sánh định tính — không nêu % tăng giá.",
     tags: [NOXH_TAG_HN_RING4],

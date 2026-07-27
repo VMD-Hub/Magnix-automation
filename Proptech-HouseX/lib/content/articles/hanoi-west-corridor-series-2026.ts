@@ -10,28 +10,28 @@ const HUB_HREF =
   "/wiki-nha-o-xa-hoi/chu-de/truc-dai-lo-thang-long-hoa-lac";
 
 /**
- * Trục Đại lộ Thăng Long / Hòa Lạc — phễu Vĩ mô → Tiềm năng → Thực tế.
- * Giọng miền Bắc: điềm tĩnh; không bịa bảng giá Masterise/Vinhomes; không cam kết biên độ giá.
+ * Trục Đại lộ Thăng Long / Hòa Lạc — ba lớp: quy hoạch–thể chế → dịch chuyển không gian → thẩm định.
+ * Giọng chuyên gia; không bịa bảng giá Masterise/Vinhomes; không cam kết biên độ giá.
  */
 export const HANOI_WEST_CORRIDOR_ARTICLES_2026: ArticleDetail[] = [
   {
     id: "article-hn-west-01",
     slug: "quy-hoach-truc-phia-tay-dai-lo-thang-long-hoa-lac-2026",
     title:
-      "Quy hoạch trục phía Tây Hà Nội: Định hình trung tâm công nghệ, giáo dục bậc cao Hòa Lạc",
+      "Quy hoạch cực phía Tây Thủ đô: Đại lộ Thăng Long, Hòa Lạc và hành lang khoa học – giáo dục",
     excerpt:
-      "Đại lộ Thăng Long nối lõi phía Tây với Hòa Lạc — hành lang công nghệ, giáo dục bậc cao và mở rộng không gian đô thị. Metro số 5 (Văn Cao – Hòa Lạc) được báo chí mô tả là tuyến dọc đại lộ; tiến độ theo công bố cơ quan nhà nước, không gộp với “sóng giá” ngắn hạn.",
-    body: `## Vì sao trục phía Tây gắn với Đại lộ Thăng Long và Hòa Lạc?
+      "Trong khung QĐ 1569/QĐ-TTg: Đại lộ Thăng Long nối lõi phía Tây với Hòa Lạc — cực công nghệ, giáo dục bậc cao. Metro số 5 (Văn Cao – Hòa Lạc) theo công bố / báo chí; tiến độ tách khỏi kỳ vọng giá căn hộ.",
+    body: `## Cực phía Tây Thủ đô được tổ chức quanh những lớp không gian nào?
 
-Phía Tây Hà Nội được tổ chức quanh hành lang Đại lộ Thăng Long: từ khu vực Nam Từ Liêm / Mỹ Đình kéo dài hướng Hòa Lạc — nơi quy hoạch và truyền thông thường nhắc tới cụm công nghệ, đại học và dịch vụ hỗ trợ. Khác Vành đai 4 (vòng ngoài liên tỉnh) và khác Nội Bài (logistics hàng không), trục này thiên về việc làm tri thức, học tập dài hạn và an cư cao tầng có tiện ích xã hội đồng bộ.
+Trong Quyết định 1569/QĐ-TTg, phát triển khoa học công nghệ và đổi mới sáng tạo là một trong các khâu đột phá của Thủ đô. Phía Tây hiện thực hóa lớp đó quanh Đại lộ Thăng Long: từ Nam Từ Liêm / Mỹ Đình kéo dài hướng Hòa Lạc — nơi quy hoạch và truyền thông chuyên ngành gắn cụm đại học, viện nghiên cứu và khu chức năng hỗ trợ. Khác Vành đai 4 (vòng ngoài liên tỉnh) và khác Nội Bài (logistics hàng không), động lực dài hạn ở đây là việc làm tri thức và mật độ tiện ích xã hội đã hình thành ở lõi phía Tây — không phải một tin metro đơn lẻ.
 
-Đọc trong khung 5 trục: [Năm trục tăng trưởng Vùng Thủ đô Hà Nội](${PILLAR_HREF}). Hub: [${HUB_HREF}](${HUB_HREF}).
+Đọc trong khung năm hành lang: [Năm trục tăng trưởng Vùng Thủ đô Hà Nội](${PILLAR_HREF}). Hub: [${HUB_HREF}](${HUB_HREF}).
 
 ${EDITORIAL_FIGURES.hcmSkyline}
 
 ## Hòa Lạc đóng vai trò gì trong đô thị chùm phía Tây?
 
-Hòa Lạc thường được định vị như cực công nghệ – giáo dục bậc cao phía Tây Thủ đô: quỹ đất rộng hơn lõi lịch sử, gắn kết với đại học / viện nghiên cứu và khu chức năng hỗ trợ. Người mua nhà miền Bắc thường đọc trục này theo logic “gần việc làm tri thức + thời gian về lõi chấp nhận được”, chứ không theo khẩu hiệu ngắn hạn.
+Hòa Lạc thường được định vị như cực công nghệ – giáo dục bậc cao phía Tây Thủ đô: quỹ đất rộng hơn lõi lịch sử, gắn kết với đại học / viện nghiên cứu và khu chức năng hỗ trợ. Cách đọc chuyên môn: phân kỳ đầu tư hạ tầng (đại lộ, metro theo công bố) và mật độ tiện ích xã hội ở lõi Nam Từ Liêm – Mỹ Đình quyết định thanh khoản ở thực nhiều hơn tên thương mại dự án.
 
 | Lớp | Vai trò tham chiếu |
 |-----|-------------------|
@@ -54,11 +54,11 @@ ${EDITORIAL_FIGURES.metroHub}
 3. Kết nối ngang sang Vành đai 4 / các nút liên vùng khi đoạn gần hoàn thiện.
 4. Tiện ích xã hội (trường, y tế, thương mại) tại Nam Từ Liêm / Mỹ Đình — quyết định thanh khoản ở thực nhiều hơn “tên đại lộ”.
 
-| Tầng | Bài trong phễu |
-|------|----------------|
-| Vĩ mô (bài này) | Quy hoạch Thăng Long – Hòa Lạc |
-| Tiềm năng | [An cư Nam Từ Liêm – Mỹ Đình](/wiki-nha-o-xa-hoi/an-cu-phia-tay-nam-tu-liem-my-dinh-2026) |
-| Thực tế | [Căn hộ cao cấp đang mở bán](/wiki-nha-o-xa-hoi/can-ho-cao-cap-dai-lo-thang-long-dang-mo-ban-2026) |
+| Lớp đọc | Bài trên cùng hành lang |
+|---------|-------------------------|
+| Quy hoạch – thể chế (bài này) | Quy hoạch Thăng Long – Hòa Lạc |
+| Dịch chuyển không gian | [An cư Nam Từ Liêm – Mỹ Đình](/wiki-nha-o-xa-hoi/an-cu-phia-tay-nam-tu-liem-my-dinh-2026) |
+| Thẩm định dự án | [Căn hộ cao cấp đang mở bán](/wiki-nha-o-xa-hoi/can-ho-cao-cap-dai-lo-thang-long-dang-mo-ban-2026) |
 
 ${NORTHERN_SUPPORT_CLOSING}
 
@@ -81,12 +81,12 @@ ${EDITORIAL_FIGURES.bitexcoMetro}
     id: "article-hn-west-02",
     slug: "an-cu-phia-tay-nam-tu-liem-my-dinh-2026",
     title:
-      "Nhu cầu an cư thực tế tại lõi phía Tây: Lực đẩy giữ vững làn sóng bất động sản cao tầng Nam Từ Liêm",
+      "Nhu cầu an cư lõi phía Tây: Thanh khoản cao tầng Nam Từ Liêm – Mỹ Đình trong cấu trúc đô thị",
     excerpt:
-      "Thanh khoản Mỹ Đình, Tây Mỗ, Đại Mỗ gắn tiện ích xã hội đồng bộ và bài toán trả góp trung thực cho công chức / người thu nhập ổn định. Phân tích định tính — không bịa phần trăm tăng giá căn hộ.",
+      "Thanh khoản Mỹ Đình, Tây Mỗ, Đại Mỗ gắn mật độ tiện ích xã hội và khả năng trả góp của hộ thu nhập ổn định. Phân tích định tính — không bịa phần trăm tăng giá căn hộ.",
     body: `## Vì sao Mỹ Đình – Tây Mỗ – Đại Mỗ giữ thanh khoản cao tầng?
 
-Lõi phía Tây gần Mỹ Đình hưởng lợi từ cụm thể thao – hội nghị, mật độ dịch vụ và kết nối vào trung tâm hành chính. Tây Mỗ và Đại Mỗ mở thêm quỹ căn hộ cao tầng với không gian sống rộng hơn một số khu lõi lịch sử, đồng thời vẫn bám Đại lộ Thăng Long. Người mua miền Bắc thường ưu tiên cộng đồng cư dân ổn định, căn vuông vức và hướng ban công Đông Nam / Nam khi có lựa chọn — hơn là khẩu hiệu ngắn hạn.
+Lõi phía Tây gần Mỹ Đình hưởng lợi từ cụm thể thao – hội nghị, mật độ dịch vụ và kết nối vào trung tâm hành chính. Tây Mỗ và Đại Mỗ mở thêm quỹ căn hộ cao tầng với không gian sống rộng hơn một số khu lõi lịch sử, đồng thời vẫn bám Đại lộ Thăng Long. Trên thực địa Hà Nội, thanh khoản “ở thực” thường gắn cộng đồng cư dân ổn định, căn vuông vức và hướng ban công Đông Nam / Nam khi có lựa chọn — hơn là khẩu hiệu ngắn hạn gắn tên đại lộ.
 
 Bối cảnh macro: [Quy hoạch Thăng Long – Hòa Lạc](/wiki-nha-o-xa-hoi/quy-hoach-truc-phia-tay-dai-lo-thang-long-hoa-lac-2026) · Pillar: [Năm trục tăng trưởng Vùng Thủ đô](${PILLAR_HREF}).
 
@@ -104,9 +104,9 @@ House X không công bố chỉ số tăng giá chung cho cả quận — thanh 
 
 ${EDITORIAL_FIGURES.metroHub}
 
-## Bài toán trả góp cho công chức / thu nhập ổn định — khung định tính?
+## Khung trả góp cho công chức / thu nhập ổn định — đọc thế nào?
 
-Với người có thu nhập đều (công chức, viên chức, chuyên viên), logic tài chính trung thực thường gồm:
+Với hộ có thu nhập đều (công chức, viên chức, chuyên viên), khung tài chính cần kiểm trước khi đặt cọc thường gồm:
 
 1. Ước tổng vốn thật: giá căn + thuế phí + nội thất nội thất tối thiểu (không chỉ nhìn “giá chào”).
 2. Đối chiếu khoản trả hàng tháng với thu nhập khả dụng sau chi tiêu thiết yếu — để dư địa cho biến động lãi suất.
@@ -116,11 +116,11 @@ Với người có thu nhập đều (công chức, viên chức, chuyên viên)
 
 Công cụ tham chiếu nội bộ: [/tinh-tra-gop](/tinh-tra-gop) — chỉ để mô phỏng, không thay thế tư vấn tín dụng chính thức.
 
-## Có nên gộp “sóng metro” vào quyết định mua ngay?
+## Có nên lấy tiến độ metro làm lý do duy nhất mua ngay?
 
-Không nên. Metro số 5 là lớp dài hạn; nhu cầu ở thực tại Mỹ Đình / Tây Mỗ / Đại Mỗ đã tồn tại nhờ tiện ích và việc làm. Hãy dùng tiến độ metro như yếu tố bổ sung, không phải lý do duy nhất đặt cọc.
+Không nên. Metro số 5 là lớp dài hạn theo phân kỳ đầu tư công; nhu cầu ở thực tại Mỹ Đình / Tây Mỗ / Đại Mỗ đã tồn tại nhờ tiện ích và việc làm. Hãy dùng tiến độ metro như yếu tố bổ sung trong thẩm định kết nối, không phải lý do duy nhất đặt cọc.
 
-Tầng thực tế: [Căn hộ cao cấp dọc Đại lộ Thăng Long](/wiki-nha-o-xa-hoi/can-ho-cao-cap-dai-lo-thang-long-dang-mo-ban-2026). Hub: [${HUB_HREF}](${HUB_HREF}).
+Lớp thẩm định: [Căn hộ cao cấp dọc Đại lộ Thăng Long](/wiki-nha-o-xa-hoi/can-ho-cao-cap-dai-lo-thang-long-dang-mo-ban-2026). Hub: [${HUB_HREF}](${HUB_HREF}).
 
 ${NORTHERN_SUPPORT_CLOSING}
 
@@ -143,12 +143,12 @@ ${EDITORIAL_FIGURES.thuThiem}
     id: "article-hn-west-03",
     slug: "can-ho-cao-cap-dai-lo-thang-long-dang-mo-ban-2026",
     title:
-      "Danh sách các dự án căn hộ cao cấp đang mở bán dọc trục Đại lộ Thăng Long có chính sách tài chính tốt nhất",
+      "Thẩm định căn hộ cao cấp đang mở bán dọc Đại lộ Thăng Long: Pháp lý và lịch thanh toán",
     excerpt:
-      "Khung so sánh định tính chính sách thanh toán kiểu 40–30–30 và checklist pháp lý khi căn hộ cao cấp dọc Đại lộ Thăng Long đang mở bán. Không neo bảng giá giả theo thương hiệu; CTA tư vấn House X.",
-    body: `## “Đang mở bán” trên Đại lộ Thăng Long nên đọc thế nào?
+      "Khung so sánh định tính chính sách thanh toán kiểu 40–30–30 và checklist pháp lý khi căn hộ cao cấp dọc Đại lộ Thăng Long đang mở bán. Không neo bảng giá theo thương hiệu; CTA tư vấn House X.",
+    body: `## Quỹ căn “đang mở bán” trên Đại lộ Thăng Long nên đọc theo lớp nào?
 
-Thị trường cao tầng phía Tây luôn có quỹ căn chào bán theo từng đợt. House X không liệt kê bảng giá bịa đặt gắn tên thương hiệu lớn, cũng không cam kết biên độ tăng giá. Thay vào đó, bài này đưa khung so sánh chính sách tài chính và pháp lý — bạn đối chiếu đúng dự án đang mở với công bố chủ đầu tư tại thời điểm xem nhà.
+Thị trường cao tầng phía Tây luôn có quỹ căn chào bán theo từng đợt. House X không liệt kê bảng giá gắn tên thương hiệu lớn, cũng không cam kết biên độ tăng giá. Thay vào đó, bài này đưa khung thẩm định chính sách tài chính và pháp lý — đối chiếu đúng dự án đang mở với công bố chủ đầu tư tại thời điểm xem nhà.
 
 Bối cảnh: [Quy hoạch Thăng Long – Hòa Lạc](/wiki-nha-o-xa-hoi/quy-hoach-truc-phia-tay-dai-lo-thang-long-hoa-lac-2026) · [An cư Mỹ Đình – Tây Mỗ – Đại Mỗ](/wiki-nha-o-xa-hoi/an-cu-phia-tay-nam-tu-liem-my-dinh-2026) · [Năm trục tăng trưởng Vùng Thủ đô](${PILLAR_HREF}).
 
@@ -156,7 +156,7 @@ ${EDITORIAL_FIGURES.hcmSkyline}
 
 ## Khung chính sách thanh toán 40–30–30 nghĩa là gì?
 
-Nhiều chủ đầu tư chia lịch thanh toán thành các đợt lớn — ví dụ tỷ lệ tham chiếu 40% – 30% – 30% theo tiến độ xây dựng / bàn giao (tỷ lệ thực tế từng dự án có thể khác). Cách đọc trung thực:
+Nhiều chủ đầu tư chia lịch thanh toán thành các đợt lớn — ví dụ tỷ lệ tham chiếu 40% – 30% – 30% theo tiến độ xây dựng / bàn giao (tỷ lệ thực tế từng dự án có thể khác). Cách đọc chuyên môn:
 
 | Câu hỏi | Việc cần làm |
 |---------|--------------|

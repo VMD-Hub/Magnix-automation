@@ -10,22 +10,22 @@ const HUB_HREF =
   "/wiki-nha-o-xa-hoi/chu-de/truc-tay-nam-ha-nam-ninh-binh";
 
 /**
- * Trục Tây Nam (Hà Nội – Hà Nam – Ninh Bình) — phễu Vĩ mô → Tiềm năng → Thực tế.
- * Giọng miền Bắc: điềm tĩnh; thửa đất / sổ đỏ; không cam kết biên độ giá.
+ * Trục Tây Nam (Hà Nội – Hà Nam – Ninh Bình) — ba lớp: quy hoạch–thể chế → dịch chuyển không gian → thẩm định.
+ * Giọng chuyên gia: thửa đất / sổ đỏ; không cam kết biên độ giá.
  */
 export const HANOI_SOUTHWEST_CORRIDOR_ARTICLES_2026: ArticleDetail[] = [
   {
     id: "article-hn-southwest-01",
     slug: "quy-hoach-truc-phia-nam-ha-nam-ve-tinh-2026",
     title:
-      "Quy hoạch trục kinh tế phía Nam: Khi Hà Nam trở thành đô thị vệ tinh công nghiệp và dịch vụ lớn của Thủ đô",
+      "Quy hoạch hành lang phía Nam: Hà Nam trong phân vai đô thị vệ tinh – đối trọng của Thủ đô",
     excerpt:
-      "QL1A và cao tốc Pháp Vân – Cầu Giẽ tạo hành lang Nam Vùng Thủ đô; Hà Nam được đọc như đô thị vệ tinh công nghiệp – dịch vụ. Macro hạ tầng trước khi so thửa đất hay căn hộ — không gộp với sóng Vành đai 4 hay Thăng Long.",
-    body: `## Vì sao trục phía Nam gắn với Hà Nam và cửa ngõ Pháp Vân – Cầu Giẽ?
+      "QL1A và cao tốc Pháp Vân – Cầu Giẽ tạo hành lang Nam Vùng Thủ đô; Hà Nam được đọc như đô thị vệ tinh công nghiệp – dịch vụ trong khung chùm đô thị hướng tâm — tách khỏi logic Vành đai 4 hay Thăng Long.",
+    body: `## Hành lang phía Nam gắn Hà Nam và cửa ngõ Pháp Vân – Cầu Giẽ thế nào trong phân công vùng?
 
-Phía Nam Vùng Thủ đô nối lõi Hà Nội với Hà Nam (và xa hơn hướng Ninh Bình) qua Quốc lộ 1A và cao tốc Pháp Vân – Cầu Giẽ. Đây là hành lang trung chuyển hàng hóa – lao động và dần hình thành đô thị vệ tinh: người làm việc tại KCN / dịch vụ phía Nam tìm chỗ ở gần việc, trong khi vẫn giữ khả năng lên Hà Nội khi cần.
+Trong mô hình chùm đô thị hướng tâm (bổ sung khung QĐ 1569/QĐ-TTg), phía Nam hạt nhân Hà Nội nối với Hà Nam (và tiếp nối Ninh Bình trong liên kết vùng) qua Quốc lộ 1A và cao tốc Pháp Vân – Cầu Giẽ. Đây là hành lang trung chuyển hàng hóa – lao động và dần hình thành đô thị vệ tinh / đối trọng công nghiệp – dịch vụ: nơi việc làm tại KCN và dịch vụ phía Nam tạo nhu cầu an cư gần chỗ làm, đồng thời giữ khả năng lên Hà Nội khi cần.
 
-Đọc trong khung 5 trục: [Năm trục tăng trưởng Vùng Thủ đô Hà Nội](${PILLAR_HREF}). Hub: [${HUB_HREF}](${HUB_HREF}).
+Đọc trong khung năm hành lang: [Năm trục tăng trưởng Vùng Thủ đô Hà Nội](${PILLAR_HREF}). Hub: [${HUB_HREF}](${HUB_HREF}).
 
 ${EDITORIAL_FIGURES.hcmSkyline}
 
@@ -51,11 +51,11 @@ ${EDITORIAL_FIGURES.metroHub}
 - Thăng Long – Hòa Lạc: công nghệ – giáo dục và cao tầng phía Tây.
 - Tây Nam: QL1A / Pháp Vân – Cầu Giẽ, KCN sạch và đô thị dịch vụ – sinh thái phía Nam.
 
-| Tầng | Bài trong phễu |
-|------|----------------|
-| Vĩ mô (bài này) | Quy hoạch trục phía Nam – Hà Nam |
-| Tiềm năng | [Thửa đất, nhà phố ven KCN sạch](/wiki-nha-o-xa-hoi/dat-nen-nha-pho-kcn-sach-phia-nam-ha-noi-2026) |
-| Thực tế | [BĐS sinh thái – đô thị dịch vụ](/wiki-nha-o-xa-hoi/bds-sinh-thai-do-thi-dich-vu-tay-nam-vung-thu-do-2026) |
+| Lớp đọc | Bài trên cùng hành lang |
+|---------|-------------------------|
+| Quy hoạch – thể chế (bài này) | Quy hoạch trục phía Nam – Hà Nam |
+| Dịch chuyển không gian | [Thửa đất, nhà phố ven KCN sạch](/wiki-nha-o-xa-hoi/dat-nen-nha-pho-kcn-sach-phia-nam-ha-noi-2026) |
+| Thẩm định dự án | [BĐS sinh thái – đô thị dịch vụ](/wiki-nha-o-xa-hoi/bds-sinh-thai-do-thi-dich-vu-tay-nam-vung-thu-do-2026) |
 
 ${NORTHERN_SUPPORT_CLOSING}
 
@@ -78,12 +78,12 @@ ${EDITORIAL_FIGURES.bitexcoMetro}
     id: "article-hn-southwest-02",
     slug: "dat-nen-nha-pho-kcn-sach-phia-nam-ha-noi-2026",
     title:
-      "Đất nền, nhà phố ven các khu công nghiệp sạch phía Nam Hà Nội: Kênh trú ẩn dòng tiền bền vững",
+      "Thửa đất và nhà phố ven KCN sạch phía Nam: Nhu cầu nhà ở chuyên gia trong phân công vùng",
     excerpt:
       "Thửa đất và nhà phố mặt đường ven KCN sạch phía Nam: nhu cầu nhà ở chuyên gia khi FDI / nhà máy dịch chuyển. Phân tích định tính — ưu tiên sổ đỏ; không cam kết biên độ giá hay lợi nhuận cho thuê.",
-    body: `## Vì sao thửa đất / nhà phố ven KCN sạch được quan tâm?
+    body: `## Vì sao thửa đất / nhà phố ven KCN sạch được đặt trong logic phân công vùng?
 
-Khi FDI và nhà máy ưu tiên khu công nghiệp sạch (tiêu chuẩn môi trường, hạ tầng kỹ thuật đồng bộ), lực lượng chuyên gia và lao động kỹ thuật cần chỗ ở gần việc. Thửa đất hoặc nhà phố mặt đường quanh hành lang phía Nam trở thành kênh tích sản dài hạn với người mua miền Bắc — nếu pháp lý rõ và hạ tầng thực tế đủ dùng. Đây không phải lời hứa tăng giá ngắn hạn.
+Khi FDI và nhà máy ưu tiên khu công nghiệp sạch (tiêu chuẩn môi trường, hạ tầng kỹ thuật đồng bộ), lực lượng chuyên gia và lao động kỹ thuật cần chỗ ở gần việc. Thửa đất hoặc nhà phố mặt đường quanh hành lang phía Nam trở thành kênh tích sản dài hạn — nếu pháp lý rõ và hạ tầng thực tế đủ dùng. Đây không phải lời hứa tăng giá ngắn hạn, mà là hệ quả của phân vai vệ tinh công nghiệp – dịch vụ trong cấu trúc vùng.
 
 Bối cảnh macro: [Quy hoạch trục phía Nam – Hà Nam](/wiki-nha-o-xa-hoi/quy-hoach-truc-phia-nam-ha-nam-ve-tinh-2026) · Pillar: [Năm trục tăng trưởng Vùng Thủ đô](${PILLAR_HREF}).
 
@@ -91,7 +91,7 @@ ${EDITORIAL_FIGURES.hcmSkyline}
 
 ## Logic nhu cầu nhà ở chuyên gia — định tính?
 
-| Yếu tố | Cách đọc trung thực |
+| Yếu tố | Cách đọc chuyên môn |
 |--------|---------------------|
 | Khoảng cách tới cổng KCN | Thời gian xe máy / ô tô giờ vào ca — không chỉ km bản đồ |
 | Chất lượng điện – nước – internet | Quyết định giữ chân chuyên gia thuê dài hạn |
@@ -111,14 +111,14 @@ ${EDITORIAL_FIGURES.metroHub}
 5. Khả năng tiếp cận mặt đường hiện hữu cho xe con và xe tải nhẹ (nếu cho thuê dịch vụ nhỏ).
 6. Môi trường: khoảng cách tới nguồn thải / khu xử lý — ưu tiên KCN sạch đã công bố tiêu chuẩn.
 
-## Có nhầm kênh KCN với săn đất “theo sóng vành đai”?
+## Có nhầm kênh KCN phía Nam với logic nút giao vành đai không?
 
 Có. Vành đai 4 mở quỹ vệ tinh quanh nút giao liên tỉnh; trục Tây Nam gắn QL1A / Pháp Vân – Cầu Giẽ và cụm KCN phía Nam. Chọn đúng động lực trước khi so sản phẩm:
 
 - Hub Tây Nam: [${HUB_HREF}](${HUB_HREF})
 - Hub Vành đai 4 (nếu ưu tiên vòng ngoài): [/wiki-nha-o-xa-hoi/chu-de/truc-vanh-dai-4-vung-thu-do](/wiki-nha-o-xa-hoi/chu-de/truc-vanh-dai-4-vung-thu-do)
 
-Tầng thực tế: [BĐS sinh thái – đô thị dịch vụ Tây Nam](/wiki-nha-o-xa-hoi/bds-sinh-thai-do-thi-dich-vu-tay-nam-vung-thu-do-2026).
+Lớp thẩm định: [BĐS sinh thái – đô thị dịch vụ Tây Nam](/wiki-nha-o-xa-hoi/bds-sinh-thai-do-thi-dich-vu-tay-nam-vung-thu-do-2026).
 
 ${NORTHERN_SUPPORT_CLOSING}
 
@@ -141,12 +141,12 @@ ${EDITORIAL_FIGURES.thuThiem}
     id: "article-hn-southwest-03",
     slug: "bds-sinh-thai-do-thi-dich-vu-tay-nam-vung-thu-do-2026",
     title:
-      "Săn tìm bất động sản sinh thái, đô thị dịch vụ đón sóng quy hoạch trục Tây Nam Vùng Thủ đô",
+      "Thẩm định bất động sản sinh thái và đô thị dịch vụ trên hành lang Tây Nam Vùng Thủ đô",
     excerpt:
       "Khung chọn dự án / khu vực tại Phủ Lý, Duy Tiên, Thường Tín, Thanh Trì: pháp lý trước giá, sinh thái và đô thị dịch vụ định tính. Không bịa phần trăm tăng giá; CTA tư vấn House X.",
-    body: `## “Sinh thái” và “đô thị dịch vụ” trên trục Tây Nam nghĩa là gì?
+    body: `## “Sinh thái” và “đô thị dịch vụ” trên hành lang Tây Nam nghĩa là gì trong quy hoạch vùng?
 
-Trên hành lang phía Nam, người mua thường gặp hai nhóm sản phẩm: (1) không gian gắn cây xanh / mặt nước / mật độ thấp hơn lõi; (2) đô thị dịch vụ gần việc làm, trường học và tiện ích hàng ngày. Cả hai đều cần pháp lý rõ trước mọi hình ảnh marketing. House X đưa khung chọn khu vực — không liệt kê bảng giá giả và không cam kết biên độ tăng giá.
+Trên hành lang phía Nam, hai nhóm sản phẩm thường gặp: (1) không gian gắn cây xanh / mặt nước / mật độ thấp hơn lõi; (2) đô thị dịch vụ gần việc làm, trường học và tiện ích hàng ngày. Cả hai đều cần pháp lý rõ trước mọi hình ảnh marketing. Trong phân công vùng, đây là lớp tiếp nhận nhu cầu an cư và dịch vụ của vệ tinh phía Nam — không đồng nhất với chu kỳ đại đô thị thương mại bờ Đông sông Hồng.
 
 Bối cảnh: [Quy hoạch trục phía Nam](/wiki-nha-o-xa-hoi/quy-hoach-truc-phia-nam-ha-nam-ve-tinh-2026) · [Thửa đất ven KCN sạch](/wiki-nha-o-xa-hoi/dat-nen-nha-pho-kcn-sach-phia-nam-ha-noi-2026) · [Năm trục tăng trưởng Vùng Thủ đô](${PILLAR_HREF}).
 
@@ -184,7 +184,7 @@ ${EDITORIAL_FIGURES.bitexcoMetro}
 ## Bước tiếp theo?
 
 1. Chốt động lực: gần KCN, gần cửa ngõ lên Hà Nội, hay ưu tiên không gian thấp mật độ.
-2. Đối chiếu macro → tiềm năng → thực tế trong cùng trục (ba bài phễu Tây Nam).
+2. Đối chiếu ba lớp đọc trên cùng hành lang Tây Nam (quy hoạch – dịch chuyển – thẩm định).
 3. [Để lại thông tin tại /lien-he](/lien-he) để chuyên gia House X đồng hành với checklist thực tế.
 
 ${NORTHERN_SUPPORT_CLOSING}
