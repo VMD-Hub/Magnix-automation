@@ -18,6 +18,10 @@ async function main() {
   console.log("Preview (noindex): /preview/du-an/gladia-heights-khang-dien-thu-duc");
   console.log("Preview (noindex): /preview/du-an/victoria-village-thanh-my-loi");
   console.log("Preview (noindex): /preview/du-an/solena-green-town-binh-tan");
+  console.log("Preview (noindex): /preview/du-an/the-emerald-68-thuan-an");
+  console.log("Preview (noindex): /preview/du-an/at-sky-garden-lai-thieu");
+  console.log("Preview (noindex): /preview/du-an/astral-city-thuan-an");
+  console.log("Preview (noindex): /preview/du-an/the-emerald-boulevard-thuan-an");
 }
 
 main()

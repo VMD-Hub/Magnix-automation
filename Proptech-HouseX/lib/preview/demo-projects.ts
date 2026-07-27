@@ -156,6 +156,20 @@ import {
   buildHoGuomXanhPreviewListings,
   HGX_PROJECT_SLUG,
 } from "@/lib/preview/ho-guom-xanh-mock";
+import {
+  ASTRAL_CITY_SLUG,
+  AT_SKY_GARDEN_SLUG,
+  buildAstralCityMock,
+  buildAstralCityPreviewListings,
+  buildAtSkyGardenMock,
+  buildAtSkyGardenPreviewListings,
+  buildEmerald68Mock,
+  buildEmerald68PreviewListings,
+  buildEmeraldBoulevardMock,
+  buildEmeraldBoulevardPreviewListings,
+  EMERALD_68_SLUG,
+  EMERALD_BOULEVARD_SLUG,
+} from "@/lib/preview/ql13-commercial-mocks";
 
 type DemoEntry = {
   build: () => ProjectDetail;
@@ -261,6 +275,22 @@ const DEMO_REGISTRY: Record<string, DemoEntry> = {
   [VICTORIA_VILLAGE_SLUG]: {
     build: buildVictoriaVillageMock,
     listings: buildVictoriaVillagePreviewListings,
+  },
+  [EMERALD_68_SLUG]: {
+    build: buildEmerald68Mock,
+    listings: buildEmerald68PreviewListings,
+  },
+  [AT_SKY_GARDEN_SLUG]: {
+    build: buildAtSkyGardenMock,
+    listings: buildAtSkyGardenPreviewListings,
+  },
+  [ASTRAL_CITY_SLUG]: {
+    build: buildAstralCityMock,
+    listings: buildAstralCityPreviewListings,
+  },
+  [EMERALD_BOULEVARD_SLUG]: {
+    build: buildEmeraldBoulevardMock,
+    listings: buildEmeraldBoulevardPreviewListings,
   },
   "iki-village": {
     build: buildIkiVillageMock,

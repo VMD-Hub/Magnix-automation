@@ -11,6 +11,7 @@ import { NOXH_TREND_ARTICLES_2026 } from "@/lib/content/articles/noxh-trend-seri
 import { TOD_NHON_TRACH_ARTICLES_2026 } from "@/lib/content/articles/tod-nhon-trach-series-2026";
 import { ID_TOWN_INFRA_ARTICLES_2026 } from "@/lib/content/articles/id-town-infra-series-2026";
 import { HGX_INFRA_ARTICLES_2026 } from "@/lib/content/articles/ho-guom-xanh-infra-series-2026";
+import { LAI_THIEU_AREA_ARTICLES_2026 } from "@/lib/content/articles/lai-thieu-area-series-2026";
 import {
   handbookTagSummaries,
   isNoxhHandbookArticle,
@@ -323,6 +324,7 @@ Xem thêm [chuyên mục phong thủy](/phong-thuy) và [xem hướng nhà](/con
   ...TOD_NHON_TRACH_ARTICLES_2026,
   ...ID_TOWN_INFRA_ARTICLES_2026,
   ...HGX_INFRA_ARTICLES_2026,
+  ...LAI_THIEU_AREA_ARTICLES_2026,
 ];
 
 const DEMO_ARTICLES: ArticleDetail[] = DEMO_ARTICLES_RAW.map(applyEditorialMedia);

@@ -20,6 +20,21 @@ import {
   buildVictoriaVillageSeedLanding,
   VICTORIA_VILLAGE_SLUG,
 } from "@/lib/preview/victoria-village-mock";
+import {
+  ASTRAL_CITY_NAME,
+  ASTRAL_CITY_SLUG,
+  AT_SKY_GARDEN_NAME,
+  AT_SKY_GARDEN_SLUG,
+  buildAstralCitySeedLanding,
+  buildAtSkyGardenSeedLanding,
+  buildEmerald68SeedLanding,
+  buildEmeraldBoulevardSeedLanding,
+  EMERALD_68_NAME,
+  EMERALD_68_SLUG,
+  EMERALD_BOULEVARD_NAME,
+  EMERALD_BOULEVARD_SLUG,
+  QL13_COMMERCIAL_SLUGS,
+} from "@/lib/preview/ql13-commercial-mocks";
 import { seedSolenaGreenTown } from "./solena-green-town";
 import { SOLENA_GREEN_TOWN_SLUG } from "@/lib/content/solena-green-town-slug";
 
@@ -28,6 +43,7 @@ export const COMMERCIAL_LANDING_SLUGS = [
   NOBLE_CRYSTAL_RIVERSIDE_SLUG,
   GLADIA_HEIGHTS_SLUG,
   VICTORIA_VILLAGE_SLUG,
+  ...QL13_COMMERCIAL_SLUGS,
 ] as const;
 
 export type CommercialLandingSlug = (typeof COMMERCIAL_LANDING_SLUGS)[number];
@@ -418,6 +434,152 @@ export async function seedCommercialLandings(
   });
 
   await seedSolenaGreenTown(prisma);
+  await seedQl13CommercialLandings(prisma);
 
   return [...COMMERCIAL_LANDING_SLUGS, SOLENA_GREEN_TOWN_SLUG];
+}
+
+async function seedQl13CommercialLandings(prisma: PrismaClient) {
+  const rows = [
+    {
+      slug: EMERALD_68_SLUG,
+      name: EMERALD_68_NAME,
+      taxCode: "QL13-LEPHONG-E68",
+      developerName: "Lê Phong Group · Coteccons",
+      status: "DANG_BAN" as const,
+      ward: "Vĩnh Phú",
+      address: "Quốc lộ 13, Vĩnh Phú, Thuận An, Bình Dương",
+      lat: 10.905,
+      lng: 106.705,
+      handoverDate: new Date("2027-09-30"),
+      landing: buildEmerald68SeedLanding(),
+      description:
+        "The Emerald 68 — Lê Phong · Coteccons, QL13 Vĩnh Phú, giá tham chiếu 42–48 tr/m².",
+      seoTitle: "The Emerald 68 Thuận An — Căn hộ QL13 cửa ngõ Bình Dương",
+      seoDesc:
+        "Emerald 68: Lê Phong · Coteccons, view sông, giá 42–48 tr/m², bàn giao ~2027–2028.",
+    },
+    {
+      slug: AT_SKY_GARDEN_SLUG,
+      name: AT_SKY_GARDEN_NAME,
+      taxCode: "QL13-AT-SKYGARDEN",
+      developerName: "A&T Group",
+      status: "DANG_BAN" as const,
+      ward: "Lái Thiêu",
+      address: "Lõi Lái Thiêu, gần Quốc lộ 13, Thuận An",
+      lat: 10.912,
+      lng: 106.712,
+      handoverDate: new Date("2026-03-31"),
+      landing: buildAtSkyGardenSeedLanding(),
+      description:
+        "A&T Sky Garden — lõi Lái Thiêu sát Hồ Gươm Xanh, giá tham chiếu 31–35 tr/m².",
+      seoTitle: "A&T Sky Garden Lái Thiêu — Căn hộ 3 mặt hướng thủy",
+      seoDesc:
+        "A&T Sky Garden: lõi Lái Thiêu, giá 31–35 tr/m², bàn giao ~Q1/2026.",
+    },
+    {
+      slug: ASTRAL_CITY_SLUG,
+      name: ASTRAL_CITY_NAME,
+      taxCode: "QL13-ASTRAL-CITY",
+      developerName: "Phát Đạt · Danh Khôi",
+      status: "DANG_BAN" as const,
+      ward: "Bình Hòa",
+      address: "Quốc lộ 13, Bình Hòa, Thuận An",
+      lat: 10.895,
+      lng: 106.702,
+      handoverDate: null as Date | null,
+      landing: buildAstralCitySeedLanding(),
+      totalArea: 3.7,
+      description:
+        "Astral City — Phát Đạt · Danh Khôi, phức hợp ~3,7 ha gần Lotte, giá 48–55 tr/m².",
+      seoTitle: "Astral City Thuận An — Phức hợp căn hộ QL13 gần Lotte",
+      seoDesc:
+        "Astral City: ~3,7 ha, phố đi bộ 300 m, giá 48–55 tr/m².",
+    },
+    {
+      slug: EMERALD_BOULEVARD_SLUG,
+      name: EMERALD_BOULEVARD_NAME,
+      taxCode: "QL13-LEPHONG-EBD",
+      developerName: "Lê Phong Group",
+      status: "SAP_MO_BAN" as const,
+      ward: "Lái Thiêu",
+      address: "Quốc lộ 13, đối diện sân golf Sông Bé, Thuận An",
+      lat: 10.918,
+      lng: 106.708,
+      handoverDate: null as Date | null,
+      landing: buildEmeraldBoulevardSeedLanding(),
+      description:
+        "The Emerald Boulevard — sắp mở bán, view sân golf Sông Bé, giá dự kiến từ ~62 tr/m².",
+      seoTitle: "The Emerald Boulevard — Sắp mở bán view sân golf Sông Bé",
+      seoDesc:
+        "Emerald Boulevard: Lê Phong, đối diện sân golf Sông Bé, giá dự kiến từ 62 tr/m².",
+    },
+  ];
+
+  for (const row of rows) {
+    const developer = await prisma.developer.upsert({
+      where: { taxCode: row.taxCode },
+      update: { name: row.developerName, verified: true },
+      create: {
+        name: row.developerName,
+        taxCode: row.taxCode,
+        verified: true,
+      },
+    });
+    const overview = buildOverviewData(null, { landing: row.landing });
+    await prisma.project.upsert({
+      where: { slug: row.slug },
+      update: {
+        overviewData: overview as object,
+        description: row.description,
+        seoTitle: row.seoTitle,
+        seoDesc: row.seoDesc,
+        status: row.status,
+        lat: row.lat,
+        lng: row.lng,
+        handoverDate: row.handoverDate,
+        totalArea: "totalArea" in row ? row.totalArea : null,
+      },
+      create: {
+        developerId: developer.id,
+        slug: row.slug,
+        name: row.name,
+        projectType: "THUONG_MAI",
+        status: row.status,
+        province: "Bình Dương",
+        district: "Thuận An",
+        ward: row.ward,
+        address: row.address,
+        lat: row.lat,
+        lng: row.lng,
+        totalArea: "totalArea" in row ? row.totalArea : null,
+        handoverDate: row.handoverDate,
+        overviewData: overview as object,
+        description: row.description,
+        seoTitle: row.seoTitle,
+        seoDesc: row.seoDesc,
+        unitTypes: {
+          create: [
+            {
+              name: "Căn 2 phòng ngủ",
+              areaMin: 55,
+              areaMax: 75,
+              bedrooms: 2,
+              priceFrom: null,
+            },
+            {
+              name: "Căn 3 phòng ngủ",
+              areaMin: 80,
+              areaMax: 100,
+              bedrooms: 3,
+              priceFrom: null,
+            },
+          ],
+        },
+        legalDocs: {
+          create: [{ docType: "quy_hoach_1_500", status: "da_co" }],
+        },
+      },
+    });
+  }
 }

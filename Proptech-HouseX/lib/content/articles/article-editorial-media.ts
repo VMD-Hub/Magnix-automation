@@ -136,6 +136,30 @@ export const ARTICLE_EDITORIAL_COVERS: Record<string, EditorialCover> = {
     caption:
       "NOXH Hồ Gươm Xanh Thuận An — mặt tiền Đại lộ Bình Dương / QL13, gần ga Metro số 2 quy hoạch tại Lái Thiêu.",
   },
+  "lai-thieu-quy-hoach-2040-phuong-trung-tam-metro-2026": {
+    url: HERO.metroHub,
+    alt: "Minh họa metro và cửa ngõ đô thị — hành lang Quốc lộ 13 Lái Thiêu",
+    caption:
+      "Quy hoạch Lái Thiêu đến 2040: phường trung tâm, QL13 hướng 8 làn và Metro dọc Đại lộ Bình Dương.",
+  },
+  "can-ho-lai-thieu-quoc-lo-13-du-an-noi-bat-2026": {
+    url: HERO.urban,
+    alt: "Minh họa skyline căn hộ cao tầng vùng cửa ngõ TP.HCM – Bình Dương",
+    caption:
+      "Cuộc đua căn hộ dọc Quốc lộ 13 / Đại lộ Bình Dương đoạn Lái Thiêu — cao cấp ven sông đến tầm trung.",
+  },
+  "mua-can-ho-lai-thieu-o-thuc-hay-dau-tu-cho-thue-2026": {
+    url: HERO.skyline,
+    alt: "Minh họa an cư và đầu tư căn hộ vùng đô thị mở rộng",
+    caption:
+      "Hai lộ trình tại Lái Thiêu: mua để ở thực hoặc đầu tư cho thuê đón sóng hạ tầng QL13 – Metro.",
+  },
+  "can-ho-lai-thieu-sap-mo-ban-emerald-boulevard-hgx-2026": {
+    url: HERO.metroHub,
+    alt: "Minh họa đô thị cửa ngõ và quỹ căn hộ sắp mở bán trên Quốc lộ 13",
+    caption:
+      "Emerald Boulevard (view sân golf Sông Bé) và phân khu cao cấp Hồ Gươm Xanh — quỹ sắp mở bán Lái Thiêu.",
+  },
 };
 
 /** Khối markdown ảnh minh hoạ trong thân bài (chuẩn báo chí). */

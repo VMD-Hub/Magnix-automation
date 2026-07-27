@@ -9,8 +9,21 @@ import {
   ORI_SLUG,
 } from "@/lib/preview/noxh-long-an-projects";
 import { LEGACY_NOXH_TOPIC_REDIRECTS } from "@/lib/content/articles/noxh-handbook-tags";
+import {
+  ASTRAL_CITY_SLUG,
+  AT_SKY_GARDEN_SLUG,
+  EMERALD_68_SLUG,
+  EMERALD_BOULEVARD_SLUG,
+} from "@/lib/preview/ql13-commercial-mocks";
 
 const PHUC_LOC_THO_SLUG = "chung-cu-phuc-loc-tho-noxh";
+
+const QL13_FEATURED = [
+  "can-ho-lai-thieu-quoc-lo-13-du-an-noi-bat-2026",
+  "can-ho-lai-thieu-sap-mo-ban-emerald-boulevard-hgx-2026",
+  "lai-thieu-quy-hoach-2040-phuong-trung-tam-metro-2026",
+  "mua-can-ho-lai-thieu-o-thuc-hay-dau-tu-cho-thue-2026",
+] as const;
 
 /** Thứ tự ưu tiên bài trend trên landing từng dự án. */
 export const PROJECT_FEATURED_ARTICLE_SLUGS: Partial<Record<string, string[]>> =
@@ -42,6 +55,10 @@ export const PROJECT_FEATURED_ARTICLE_SLUGS: Partial<Record<string, string[]>> =
     ],
     [HGX_PROJECT_SLUG]: [
       "ho-guom-xanh-metro-so-2-ql13-tod-2026",
+      "lai-thieu-quy-hoach-2040-phuong-trung-tam-metro-2026",
+      "can-ho-lai-thieu-quoc-lo-13-du-an-noi-bat-2026",
+      "can-ho-lai-thieu-sap-mo-ban-emerald-boulevard-hgx-2026",
+      "mua-can-ho-lai-thieu-o-thuc-hay-dau-tu-cho-thue-2026",
       "tp-hcm-5-khu-tod-metro-so-2-ben-thanh-tham-luong",
       "tod-xuong-song-phat-trien-do-thi-viet-nam-2025-2045",
       "quy-hoach-tong-the-tphcm-tam-nhin-100-nam-sieu-do-thi",
@@ -67,6 +84,10 @@ export const PROJECT_FEATURED_ARTICLE_SLUGS: Partial<Record<string, string[]>> =
       "noxh-long-an-6-du-an-mien-nam-2026",
       "so-sanh-gia-noxh-ly-thuong-kiet-dta-happy-home-2026",
     ],
+    [EMERALD_68_SLUG]: [...QL13_FEATURED],
+    [AT_SKY_GARDEN_SLUG]: [...QL13_FEATURED],
+    [ASTRAL_CITY_SLUG]: [...QL13_FEATURED],
+    [EMERALD_BOULEVARD_SLUG]: [...QL13_FEATURED],
   };
 
 /** Tag chủ đề tương ứng — dùng link “Xem thêm” từ landing dự án. */

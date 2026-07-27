@@ -55,14 +55,19 @@ Stock local (`noxh-stock-images`) — chưa nội bộ hóa ảnh CĐT.
 
 ---
 
-## Bài hạ tầng (SEO)
+## Bài hạ tầng / khu vực (SEO)
 
 | Slug | Tiêu đề ngắn | Tag |
 |------|--------------|-----|
 | `ho-guom-xanh-metro-so-2-ql13-tod-2026` | Metro số 2 QL13 · ga Lái Thiêu · TOD + điểm nổi bật NOXH | `ha-tang-ket-noi-vung` |
+| `lai-thieu-quy-hoach-2040-phuong-trung-tam-metro-2026` | Quy hoạch Lái Thiêu 2040 · phường trung tâm · Metro · ven sông | `ha-tang-ket-noi-vung` |
+| `can-ho-lai-thieu-quoc-lo-13-du-an-noi-bat-2026` | Emerald 68 · A&T · Astral đang mở bán | `du-an-gia-tien-do-noxh` |
+| `can-ho-lai-thieu-sap-mo-ban-emerald-boulevard-hgx-2026` | Emerald Boulevard · HGX cao cấp sắp mở bán | `du-an-gia-tien-do-noxh` |
+| `mua-can-ho-lai-thieu-o-thuc-hay-dau-tu-cho-thue-2026` | Ở thực vs cho thuê đón hạ tầng Lái Thiêu | `chon-noxh-dung-cach` |
 
-- File: `lib/content/articles/ho-guom-xanh-infra-series-2026.ts`
-- Preview: `/wiki-nha-o-xa-hoi/ho-guom-xanh-metro-so-2-ql13-tod-2026`
+- File Metro HGX: `lib/content/articles/ho-guom-xanh-infra-series-2026.ts`
+- File series khu vực: `lib/content/articles/lai-thieu-area-series-2026.ts`
+- Preview: `/wiki-nha-o-xa-hoi/{slug}`
 - Featured trên landing: `PROJECT_FEATURED_ARTICLE_SLUGS[nha-o-xa-hoi-ho-guom-xanh-thuan-an]`
 
 ---
@@ -73,4 +78,4 @@ Stock local (`noxh-stock-images`) — chưa nội bộ hóa ảnh CĐT.
 - `/preview/du-an/nha-o-xa-hoi-ho-guom-xanh-thuan-an`
 - Catalog: `/du-an/nha-o-xa-hoi`
 
-*Nghiên cứu: 2026-07-23 · Bài hạ tầng Metro 2: 2026-07-27*
+*Series Lái Thiêu (4 bài) + landing thương mại QL13: 2026-07-27*

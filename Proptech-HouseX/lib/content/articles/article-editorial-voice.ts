@@ -87,6 +87,18 @@ export const HGX_PR_CLOSINGS = {
     "Nếu bạn đang tìm chỗ ở xã hội gần hành lang metro tương lai trên Quốc lộ 13, [Hồ Gươm Xanh](/du-an/nha-o-xa-hoi-ho-guom-xanh-thuan-an) đáng để đối chiếu: ga quy hoạch tại Lái Thiêu chỉ cách vài trăm mét theo các phương án đã công bố. House X tư vấn hồ sơ mua nhà ở xã hội miễn phí và cập nhật tiến độ dự án — [đăng ký ngay](/lien-he).",
 } as const;
 
+/** Đoạn kết PR — series khu vực Lái Thiêu. */
+export const LAI_THIEU_PR_CLOSINGS = {
+  quyHoach:
+    "Nếu bạn đang hình dung chỗ ở lâu dài trên cửa ngõ Lái Thiêu – Quốc lộ 13, [Hồ Gươm Xanh](/du-an/nha-o-xa-hoi-ho-guom-xanh-thuan-an) là tổ hợp đô thị đáng đối chiếu: mặt tiền Đại lộ Bình Dương, gần ga Metro số 2 quy hoạch, có phân khu nhà ở xã hội trong KĐT ~26,4 ha. House X tư vấn hồ sơ mua nhà ở xã hội miễn phí và cập nhật tiến độ dự án — [đăng ký ngay](/lien-he).",
+  duAn:
+    "Giữa các căn hộ thương mại dọc QL13, phân khu nhà ở xã hội trong [Hồ Gươm Xanh](/du-an/nha-o-xa-hoi-ho-guom-xanh-thuan-an) dành cho đối tượng đủ điều kiện theo Luật Nhà ở — giá và hồ sơ khác hẳn thị trường thương mại. House X tư vấn hồ sơ mua nhà ở xã hội miễn phí và cập nhật tiến độ dự án — [đăng ký ngay](/lien-he).",
+  oThucDauTu:
+    "Dù bạn ưu tiên ở thực hay dòng tiền thuê trên trục Lái Thiêu, House X hỗ trợ đối chiếu phương án — đặc biệt nếu bạn thuộc đối tượng nhà ở xã hội tại [Hồ Gươm Xanh](/du-an/nha-o-xa-hoi-ho-guom-xanh-thuan-an). Tư vấn hồ sơ miễn phí và cập nhật tiến độ dự án — [đăng ký ngay](/lien-he).",
+  sapMoBan:
+    "Khi theo dõi quỹ sắp mở bán trên QL13, House X cập nhật lịch và bảng giá tham chiếu — đồng thời hỗ trợ đối chiếu phân khu nhà ở xã hội tại [Hồ Gươm Xanh](/du-an/nha-o-xa-hoi-ho-guom-xanh-thuan-an) nếu bạn thuộc đối tượng. [Đăng ký ngay](/lien-he).",
+} as const;
+
 export function getEditorialBodyIssues(body: string): string[] {
   const text = String(body || "");
   const issues: string[] = [];
