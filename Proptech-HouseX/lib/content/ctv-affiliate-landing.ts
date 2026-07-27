@@ -192,5 +192,5 @@ export const CTV_AFFILIATE_CLOSING_HEADING =
 export const CTV_AFFILIATE_ARTICLES_SECTION = {
   heading: "Tài liệu chương trình",
   intro:
-    "Bốn bài: bối cảnh thị trường hoa hồng, mô hình cộng tác viên, đối tượng hợp tác và hướng dẫn bắt đầu.",
+    "Đọc trước khi đăng ký: hiểu rủi ro của thỏa thuận hoa hồng ngoài luồng, cách hợp tác trên House X, và các bước bắt đầu phù hợp với vai trò của bạn.",
 } as const;

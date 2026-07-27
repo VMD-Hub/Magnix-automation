@@ -110,15 +110,14 @@ export default function CtvAffiliateLandingPage() {
               >
                 {CTV_AFFILIATE_CTAS.secondary.label}
               </ButtonLink>
-            </div>
-            <p className="mt-3 text-sm text-slate-500">
-              <Link
+              <ButtonLink
                 href={CTV_AFFILIATE_CTAS.tertiary.href}
-                className="font-medium text-brand-700 hover:underline"
+                variant="outline"
+                size="lg"
               >
                 {CTV_AFFILIATE_CTAS.tertiary.label}
-              </Link>
-            </p>
+              </ButtonLink>
+            </div>
           </div>
         </div>
 
@@ -250,7 +249,7 @@ export default function CtvAffiliateLandingPage() {
               </ButtonLink>
               <ButtonLink
                 href={CTV_AFFILIATE_CTAS.tertiary.href}
-                variant="ghost"
+                variant="outline"
                 size="lg"
               >
                 {CTV_AFFILIATE_CTAS.tertiary.label}
