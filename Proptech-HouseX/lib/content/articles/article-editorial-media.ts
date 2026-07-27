@@ -1,5 +1,6 @@
 import type { ArticleDetail } from "@/lib/data/article-types";
 import { DTA_HAPPY_HOME_IMAGES } from "@/lib/content/dta-happy-home-images";
+import { ID_TOWN_IMAGES } from "@/lib/content/id-town-images";
 import { PHU_THO_DMC_IMAGES } from "@/lib/content/phu-tho-dmc-images";
 
 const HERO = {
@@ -116,6 +117,12 @@ export const ARTICLE_EDITORIAL_COVERS: Record<string, EditorialCover> = {
     alt: "Minh họa khu đô thị vùng ven miền Nam",
     caption: "Danh mục 6 dự án NOXH Long An — vùng đệm TP.HCM.",
   },
+  "id-town-long-thanh-ha-tang-san-bay-metro-2026": {
+    url: ID_TOWN_IMAGES.hero.url,
+    alt: ID_TOWN_IMAGES.hero.alt,
+    caption:
+      "ID Town Long Thành trong iD Junction — NOXH cận nút cao tốc HCM – Long Thành – Dầu Giây và QL51.",
+  },
 };
 
 /** Khối markdown ảnh minh hoạ trong thân bài (chuẩn báo chí). */
@@ -196,6 +203,24 @@ export const EDITORIAL_FIGURES = {
     alt: "Tiến độ Khu đô thị DTA City Nhơn Trạch",
     caption: "Hạ tầng KCN – đô thị vệ tinh sân bay Long Thành đang hoàn thiện",
     source: "CĐT Đệ Tam",
+  }),
+  idTownPhoiCanh: editorialFigure({
+    url: ID_TOWN_IMAGES.hero.url,
+    alt: ID_TOWN_IMAGES.hero.alt,
+    caption: "Phối cảnh phân khu NOXH ID Town trong khu đô thị iD Junction Long Thành",
+    source: "id-town.com.vn",
+  }),
+  idTownMap: editorialFigure({
+    url: ID_TOWN_IMAGES.locationMap.url,
+    alt: ID_TOWN_IMAGES.locationMap.alt,
+    caption: ID_TOWN_IMAGES.locationMap.caption,
+    source: "id-town.com.vn",
+  }),
+  idTownTienIch: editorialFigure({
+    url: ID_TOWN_IMAGES.gallery[2].url,
+    alt: "Tiện ích nội khu ID Town Long Thành",
+    caption: "Hồ bơi và cảnh quan nội khu — mật độ xây dựng khoảng 35%",
+    source: "id-town.com.vn",
   }),
 } as const;
 

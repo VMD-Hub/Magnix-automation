@@ -1,5 +1,6 @@
 import type { ArticleCardData } from "@/lib/data/article-types";
 import { DTA_HAPPY_HOME_SLUG } from "@/lib/content/dta-happy-home-landing";
+import { ID_TOWN_SLUG } from "@/lib/content/id-town-landing";
 import { LTK_PROJECT_SLUG } from "@/lib/preview/phu-tho-dmc-mock";
 import {
   LA_HOME_SLUG,
@@ -30,6 +31,14 @@ export const PROJECT_FEATURED_ARTICLE_SLUGS: Partial<Record<string, string[]>> =
       "tod-xuong-song-phat-trien-do-thi-viet-nam-2025-2045",
       "quy-hoach-tong-the-tphcm-tam-nhin-100-nam-sieu-do-thi",
     ],
+    [ID_TOWN_SLUG]: [
+      "id-town-long-thanh-ha-tang-san-bay-metro-2026",
+      "metro-thu-thiem-long-thanh-175000-ty-khoi-cong-2026",
+      "tod-xuong-song-phat-trien-do-thi-viet-nam-2025-2045",
+      "quy-hoach-tong-the-tphcm-tam-nhin-100-nam-sieu-do-thi",
+      "dieu-kien-mua-nha-o-xa-hoi-2026-tom-tat",
+      "quy-trinh-mua-thue-mua-noxh-2026",
+    ],
     [PHUC_LOC_THO_SLUG]: [
       "phuc-loc-tho-block-c-noxh-gia-ho-so-2026",
       "tp-hcm-cong-bo-gia-2-du-an-noxh-ly-thuong-kiet-phu-tho-dmc",
@@ -55,6 +64,7 @@ export const PROJECT_FEATURED_ARTICLE_SLUGS: Partial<Record<string, string[]>> =
 export const PROJECT_ARTICLE_TAG_SLUG: Partial<Record<string, string>> = {
   [LTK_PROJECT_SLUG]: "nha-o-xa-hoi-ly-thuong-kiet",
   [DTA_HAPPY_HOME_SLUG]: "dta-happy-home-nhon-trach",
+  [ID_TOWN_SLUG]: "ha-tang-ket-noi-vung",
 };
 
 /** Tag hub bổ sung cho bài hạ tầng / TOD (landing DTA). */

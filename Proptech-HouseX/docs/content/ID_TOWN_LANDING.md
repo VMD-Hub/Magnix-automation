@@ -58,6 +58,18 @@ Mapping: `lib/content/id-town-images.ts`
 
 ---
 
+## Bài hạ tầng (SEO)
+
+| Slug | Tiêu đề ngắn | Tag |
+|------|--------------|-----|
+| `id-town-long-thanh-ha-tang-san-bay-metro-2026` | Sân bay ~5 km · ga ~1,5–2 km · cao tốc/QL51 | `ha-tang-ket-noi-vung` |
+
+- File: `lib/content/articles/id-town-infra-series-2026.ts`
+- Preview: `/wiki-nha-o-xa-hoi/id-town-long-thanh-ha-tang-san-bay-metro-2026`
+- Featured trên landing: `PROJECT_FEATURED_ARTICLE_SLUGS[id-town-long-thanh]`
+
+---
+
 ## Xem trước / seed
 
 ```bash

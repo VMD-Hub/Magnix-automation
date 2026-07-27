@@ -71,6 +71,12 @@ export const DTA_PR_CLOSINGS = {
     "Từ góc nhìn người ở thực tế, DTA Happy Home Nhơn Trạch — dự án NOXH trong [DTA City](/du-an/dta-happy-home-nhon-trach) — nằm trong tam giác hạ tầng: cao tốc Biên Hòa – Vũng Tàu khoảng 10 phút, trục 25C hướng sân bay Long Thành khoảng 20 phút (theo CĐT), và vùng ga Nhơn Trạch quy hoạch cách khoảng 3–5 km. Đây là đô thị vệ tinh sân bay hưởng lợi giao thông công cộng — không phải lõi TOD (đi bộ tới ga trong ~1–1,5 km) — phù hợp gia đình trẻ làm việc tại KCN Nhơn Trạch, thay vì chịu chi phí thuê trọ và di chuyển dài ngày từ TP.HCM.",
 } as const;
 
+/** Đoạn kết PR — ID Town Long Thành (iD Junction). */
+export const ID_TOWN_PR_CLOSINGS = {
+  haTangKetNoi:
+    "Với người đủ điều kiện NOXH và ưu tiên khoảng cách thực tế tới sân bay Long Thành cùng hành lang đường sắt liên vùng, [ID Town Long Thành](/du-an/id-town-long-thanh) trong iD Junction — mặt tiền Phạm Văn Đồng, gần nút cao tốc – QL51 — là phương án an cư cận kề ga quy hoạch (~1,5–2 km tới ga Long Thành 1) và khoảng ~5 km tới khu vực sân bay (theo CĐT). HouseX hỗ trợ rà soát điều kiện đối tượng và đối chiếu đợt mở bán — bạn có thể [để lại thông tin tại đây](/lien-he).",
+} as const;
+
 export function getEditorialBodyIssues(body: string): string[] {
   const text = String(body || "");
   const issues: string[] = [];
