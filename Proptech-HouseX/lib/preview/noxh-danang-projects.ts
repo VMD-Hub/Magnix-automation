@@ -197,7 +197,7 @@ function enrichDaiDiaBao(def: NoxhLandingDef): NoxhLandingDef {
 
 Quy mô: 3 block 9 tầng · 739 căn hộ · 28 ki-ốt. Block B (~2013), Block A (~2016) đã sử dụng; Block C đang / vừa mở đợt hồ sơ.
 
-Nguồn: ducmanhgroup.com · đối chiếu sxd.danang.gov.vn. House X không thu đặt cọc thay CĐT.`,
+Nguồn: ducmanhgroup.com · đối chiếu sxd.danang.gov.vn.`,
     highlights: [
       {
         title: "739 căn · 3 block 9 tầng",

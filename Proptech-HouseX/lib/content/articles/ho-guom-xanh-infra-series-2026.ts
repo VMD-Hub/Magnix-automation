@@ -70,16 +70,16 @@ Hạ tầng chỉ là một nửa câu chuyện. Khi cân nhắc suất nhà ở
 | Cảnh quan nội khu | Hồ cảnh quan trung tâm, công viên, phố đi bộ và tiện ích giáo dục, thương mại, thể thao |
 | Tách rõ NOXH / thương mại | KĐT còn nhà phố, biệt thự, cao tầng thương mại tới ~40 tầng và tổ hợp khách sạn–TTTM — giá & điều kiện khác hẳn NOXH |
 | Tiến độ | Khởi công khoảng 27/06/2025; bàn giao tham chiếu khoảng 2028 (theo kênh công bố — xác nhận từng đợt) |
-| Giá NOXH | Chưa niêm yết công khai trên website CĐT — không lấy giá thương mại làm giá NOXH |
-| Pháp lý đối tượng | Mua theo Luật Nhà ở / đợt thông báo cơ quan NN + CĐT — không theo cơ chế căn hộ thương mại |
+| Giá nhà ở xã hội | Chưa niêm yết trên website dự án |
+| Pháp lý đối tượng | Theo Luật Nhà ở và thông báo từng đợt mở bán |
 
 ${EDITORIAL_FIGURES.hgxTienIch}
 
 ${HGX_PR_CLOSINGS.metroTod}
 
-Tra cứu landing dự án: [/du-an/nha-o-xa-hoi-ho-guom-xanh-thuan-an](/du-an/nha-o-xa-hoi-ho-guom-xanh-thuan-an) · Điều kiện mua NOXH: [/wiki-nha-o-xa-hoi/dieu-kien-mua-nha-o-xa-hoi-2026-tom-tat](/wiki-nha-o-xa-hoi/dieu-kien-mua-nha-o-xa-hoi-2026-tom-tat)
+Tra cứu landing dự án: [/du-an/nha-o-xa-hoi-ho-guom-xanh-thuan-an](/du-an/nha-o-xa-hoi-ho-guom-xanh-thuan-an) · Điều kiện mua: [/wiki-nha-o-xa-hoi/dieu-kien-mua-nha-o-xa-hoi-2026-tom-tat](/wiki-nha-o-xa-hoi/dieu-kien-mua-nha-o-xa-hoi-2026-tom-tat)
 
-*HouseX tổng hợp từ website CĐT và báo chí — vị trí ga, tiến độ Metro số 2 / mở rộng QL13 và bảng giá căn NOXH có thể thay đổi theo văn bản phê duyệt và đợt mở bán chính thức.*`,
+*Vị trí ga, tiến độ Metro số 2 / mở rộng QL13 và bảng giá căn có thể thay đổi theo phê duyệt và đợt mở bán.*`,
     status: "PUBLISHED",
     publishedAt: new Date("2026-07-27T10:00:00.000Z"),
     updatedAt: UPDATED,

@@ -220,7 +220,7 @@ function enrichKimDong(def: NoxhLandingDef): NoxhLandingDef {
 
 Nguồn: Báo Đấu Thầu / VietnamNet (kết quả lựa chọn nhà đầu tư). Đối chiếu soxaydung.lamdong.gov.vn — giải phóng mặt bằng còn là điểm cần theo dõi theo báo chí.
 
-House X không thu đặt cọc thay chủ đầu tư.`,
+`,
     highlights: [
       {
         title: "94 căn trung tâm Đà Lạt",
@@ -243,7 +243,7 @@ House X không thu đặt cọc thay chủ đầu tư.`,
     faqs: [
       {
         q: "Ai là chủ đầu tư NOXH Kim Đồng?",
-        a: "Theo kết quả lựa chọn nhà đầu tư: liên danh CTCP Đầu tư NNP và CTCP Đầu tư Minh Trí Thuận An. Không dùng hotline CĐT trên House X — tư vấn qua form House X.",
+        a: "Liên danh CTCP Đầu tư NNP và CTCP Đầu tư Minh Trí Thuận An (theo kết quả lựa chọn nhà đầu tư).",
       },
       {
         q: "Bao nhiêu căn / diện tích?",

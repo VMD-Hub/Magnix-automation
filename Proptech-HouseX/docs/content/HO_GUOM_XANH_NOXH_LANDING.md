@@ -48,7 +48,7 @@ Stock local (`noxh-stock-images`) — chưa nội bộ hóa ảnh CĐT.
 
 ## CTA HouseX
 
-- Hotline: **House X** (`0826 600 800` / `NEXT_PUBLIC_SUPPORT_PHONE`) — **không** dùng hotline website CĐT TBS
+- Hotline: **House X** (`0826 600 800` / `NEXT_PUBLIC_SUPPORT_PHONE`)
 - Form tư vấn → `/lien-he`
 - Không nhúng hotline / form bên thứ ba trên landing
 - Tool: điều kiện NOXH, wiki hồ sơ

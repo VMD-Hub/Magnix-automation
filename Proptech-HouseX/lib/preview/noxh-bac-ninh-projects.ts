@@ -363,7 +363,7 @@ function enrichCatTuong(def: NoxhLandingDef): NoxhLandingDef {
 
 Quy mô theo Sở / chủ đầu tư: 9 khối K–T · khoảng 1.040 căn · khoảng 94.075 m². Giá một số đợt Sở công bố khoảng 15,4–16,3 triệu/m² (chưa VAT & phí bảo trì) — xác minh thông báo mới nhất trước khi nộp hồ sơ.
 
-House X không thu đặt cọc thay chủ đầu tư.`,
+`,
     highlights: [
       {
         title: "Khoảng 1.040 căn · 9 khối K–T",
@@ -386,7 +386,7 @@ House X không thu đặt cọc thay chủ đầu tư.`,
     faqs: [
       {
         q: "Ai là chủ đầu tư?",
-        a: "CTCP Cát Tường. House X tư vấn qua form trên trang dự án.",
+        a: "CTCP Cát Tường.",
       },
       {
         q: "Bao nhiêu căn?",
@@ -439,7 +439,7 @@ function enrichEvergreenVanTrung(def: NoxhLandingDef): NoxhLandingDef {
 
 Một số tài liệu còn ghi địa điểm Vân Trung; công bố chủ đầu tư / Sở ưu tiên khu đô thị Nếnh. Quy mô tham chiếu khoảng 3,2 ha · 10 block 20 tầng · khoảng 3.300 căn · 28–70 m². Giá tham chiếu khoảng 12–13,5 triệu/m² — đối chiếu thông báo Sở Xây dựng Bắc Ninh trước khi nộp hồ sơ.
 
-House X không thu đặt cọc thay chủ đầu tư.`,
+`,
     highlights: [
       {
         title: "Khoảng 3.300 căn · 10 block 20 tầng",

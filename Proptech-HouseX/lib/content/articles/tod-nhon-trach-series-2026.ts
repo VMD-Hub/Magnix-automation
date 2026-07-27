@@ -88,7 +88,7 @@ ${DTA_PR_CLOSINGS.todAnCu}
 
 Bài liên quan: [5 khu TOD metro số 2 TP.HCM](/tin-tuc/tp-hcm-5-khu-tod-metro-so-2-ben-thanh-tham-luong) · [Nhơn Trạch — cực tăng trưởng mới](/tin-tuc/nhon-trach-cu-tang-truong-ha-tang-tod-2026)
 
-*Thông tin ga và quy hoạch TOD có thể điều chỉnh khi phê duyệt chi tiết — người đọc nên theo dõi văn bản chính thức.*`,
+*Thông tin ga và quy hoạch TOD có thể điều chỉnh khi phê duyệt chi tiết.*`,
     status: "PUBLISHED",
     publishedAt: new Date("2026-07-02T12:00:00.000Z"),
     updatedAt: UPDATED,

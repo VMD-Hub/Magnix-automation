@@ -243,7 +243,7 @@ function enrichDoiNganHang(def: NoxhLandingDef): NoxhLandingDef {
 
 Quy mô: khoảng 25.900 m² · 3 khối · khoảng 986 căn · căn 45–70 m². Giá tham chiếu đợt Sở khoảng 16,2 triệu/m² — xác minh thông báo Sở Xây dựng Quảng Ninh mới nhất trước khi nộp hồ sơ.
 
-House X không thu đặt cọc thay chủ đầu tư · không công bố số điện thoại chủ đầu tư.`,
+`,
     highlights: [
       {
         title: "Khoảng 986 căn · khoảng 25.900 m²",
@@ -266,7 +266,7 @@ House X không thu đặt cọc thay chủ đầu tư · không công bố số 
     faqs: [
       {
         q: "Ai là chủ đầu tư?",
-        a: "Liên danh Tư vấn ĐT TC Toàn Cầu + ĐT PT nhà số 6 Hà Nội (GHomes Hạ Long). House X tư vấn qua form — không công bố số điện thoại CĐT.",
+        a: "Liên danh Tư vấn ĐT TC Toàn Cầu + ĐT PT nhà số 6 Hà Nội (GHomes Hạ Long).",
       },
       {
         q: "Bao nhiêu căn?",

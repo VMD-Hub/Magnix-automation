@@ -86,23 +86,23 @@ export function buildIdTownLanding(): ProjectLanding {
     },
     {
       q: "Quy mô dự án ID Town thế nào?",
-      a: "Quy mô khoảng 2,5 ha; 4 block chung cư cao 7 tầng; tổng 628 căn hộ; mật độ xây dựng khoảng 35% theo thông tin website dự án.",
+      a: "Khoảng 2,5 ha; 4 block chung cư cao 7 tầng; tổng 628 căn hộ; mật độ xây dựng khoảng 35%.",
     },
     {
       q: "Giá ID Town bao nhiêu?",
-      a: "Theo công bố giá khối C, D (01/2026), đơn giá bình quân hơn 22 triệu/m² (đã gồm VAT). Căn khoảng 48–77 m² tương đương khoảng hơn 1 tỷ đến ~1,7 tỷ/căn tùy diện tích. Liên hệ tư vấn để nhận bảng giá block đang mở bán.",
+      a: "Đơn giá bình quân hơn 22 triệu/m² (đã gồm VAT, khối C/D công bố 01/2026). Căn khoảng 48–77 m² tương đương khoảng hơn 1 tỷ đến ~1,7 tỷ tùy diện tích. Liên hệ tư vấn để nhận bảng giá block đang mở bán.",
     },
     {
       q: "Loại căn hộ ID Town có những loại nào?",
-      a: "Theo website dự án: phổ biến là căn 2PN–1WC hoặc 2WC; một số căn góc view rộng. Trang mặt bằng nêu tham chiếu khoảng ~59 m² (2PN 1WC), ~69–73 m² (2PN 2WC) và một số căn 3PN hạn chế.",
+      a: "Phổ biến căn 2PN–1WC hoặc 2WC; một số căn góc. Diện tích khoảng ~59 m² (2PN 1WC), ~69–73 m² (2PN 2WC) và một số căn 3PN hạn chế.",
     },
     {
       q: "ID Town bàn giao khi nào?",
-      a: "Theo thông tin CĐT / báo chí: nhiều block đã cất nóc; bàn giao dự kiến từ quý 4/2026. House X cập nhật khi có thông báo chính thức mới.",
+      a: "Nhiều block đã cất nóc; bàn giao dự kiến từ quý 4/2026.",
     },
     {
       q: "Ai được mua ID Town?",
-      a: "Người thuộc các nhóm đối tượng nhà ở xã hội theo Luật Nhà ở và quy định địa phương (công nhân KCN, người thu nhập thấp, CBCCVC…). Mỗi hộ/cá nhân chỉ được hưởng hỗ trợ NOXH theo quy định. Liên hệ tư vấn để rà điều kiện trước khi nộp hồ sơ.",
+      a: "Người thuộc đối tượng nhà ở xã hội theo Luật Nhà ở và quy định địa phương (công nhân KCN, người thu nhập thấp, CBCCVC…). Mỗi hộ/cá nhân chỉ được hưởng hỗ trợ nhà ở xã hội theo quy định.",
     },
   ];
   landing.gallery = ID_TOWN_IMAGES.gallery.map((g) => ({ ...g }));

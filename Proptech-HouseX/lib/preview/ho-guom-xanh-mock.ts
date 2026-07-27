@@ -56,7 +56,7 @@ function housexHotlineCta(landing: ProjectLanding): ProjectLanding {
   const phone = getSupportPhoneDisplay();
   landing.ctaLabel = "Đăng ký tư vấn House X";
   landing.ctaHref = "/lien-he";
-  landing.ctaSubtext = `Hotline House X ${phone} — tư vấn điều kiện NOXH, hồ sơ và đợt mở bán. Không dùng hotline trên website CĐT.`;
+  landing.ctaSubtext = `Hotline House X ${phone} — tư vấn điều kiện NOXH, hồ sơ và đợt mở bán.`;
   return landing;
 }
 
@@ -102,7 +102,7 @@ Dự án khởi công khoảng 27/06/2025, dự kiến bàn giao khoảng 2028. 
   highlights: [
     {
       title: "Chung cư NOXH 5–12 tầng trong đại đô thị",
-      text: "Phân khu nhà ở xã hội nằm trong KĐT ~26,4 ha TBS Land — cư dân NOXH tiếp cận tiện ích đô thị đồng bộ (hồ cảnh quan, công viên, giáo dục, thương mại) theo masterplan.",
+      text: "Phân khu nhà ở xã hội nằm trong KĐT ~26,4 ha TBS Land — cư dân tiếp cận hồ cảnh quan, công viên, giáo dục và thương mại trong khu đô thị.",
     },
     {
       title: "Mặt tiền Đại lộ Bình Dương — cửa ngõ TP.HCM",
@@ -147,27 +147,27 @@ Dự án khởi công khoảng 27/06/2025, dự kiến bàn giao khoảng 2028. 
     },
     {
       q: "Giá nhà ở xã hội Hồ Gươm Xanh bao nhiêu?",
-      a: `Chưa có bảng giá NOXH công bố công khai. Giá thương mại (nếu có trên thị trường) không áp dụng cho đối tượng mua NOXH. Gọi hotline House X ${getSupportPhoneDisplay()} để được cập nhật khi CĐT / cơ quan NN công bố đợt.`,
+      a: `Bảng giá nhà ở xã hội chưa công bố. Liên hệ hotline House X ${getSupportPhoneDisplay()} để được cập nhật khi có đợt mở bán.`,
     },
     {
       q: "Ai được mua nhà ở xã hội tại Hồ Gươm Xanh?",
-      a: "Người mua phải thuộc đối tượng và đủ điều kiện thu nhập, nhà ở, cư trú theo Luật Nhà ở và hướng dẫn địa phương. Hồ sơ đăng ký theo từng đợt do CĐT / cơ quan NN thông báo — không mua theo cơ chế căn hộ thương mại.",
+      a: "Người thuộc đối tượng và đủ điều kiện về thu nhập, nhà ở, cư trú theo Luật Nhà ở và hướng dẫn địa phương. Hồ sơ đăng ký theo từng đợt mở bán.",
     },
     {
       q: "Quy mô KĐT Hồ Gươm Xanh thế nào?",
-      a: "Khoảng 26,4 ha; hơn 4.200 sản phẩm (thấp tầng, chung cư và NOXH); dân số ước ~10.500 khi lấp đầy. Có tổ hợp khách sạn–TTTM ~24 tầng và cụm cao tầng tới ~40 tầng theo công bố CĐT.",
+      a: "Khoảng 26,4 ha, hơn 4.200 sản phẩm (nhà thấp tầng, chung cư thương mại và nhà ở xã hội), dân số ước khoảng 10.500 người khi lấp đầy. Trong khu còn tổ hợp khách sạn–trung tâm thương mại khoảng 24 tầng và cụm cao tầng tới khoảng 40 tầng.",
     },
     {
       q: "Dự án khởi công và bàn giao khi nào?",
-      a: "Tham chiếu công khai: khởi công khoảng 27/06/2025; bàn giao tham chiếu khoảng 2028. Tiến độ phân khu NOXH có thể khác phân khu thương mại — cần xác nhận từng đợt.",
+      a: "Khởi công khoảng 27/06/2025; dự kiến bàn giao khoảng 2028.",
     },
     {
       q: "Chủ đầu tư Hồ Gươm Xanh là ai?",
-      a: "TBS Land (thành viên TBS Group) là chủ đầu tư dự án. House X không thay thế CĐT — chỉ hỗ trợ tư vấn điều kiện NOXH và theo dõi thông tin công bố.",
+      a: "TBS Land — thành viên TBS Group — là chủ đầu tư khu đô thị Hồ Gươm Xanh tại Thuận An, Bình Dương.",
     },
     {
       q: "Liên hệ tư vấn nhà ở xã hội Hồ Gươm Xanh ở đâu?",
-      a: `Qua hotline House X ${getSupportPhoneDisplay()} hoặc form Liên hệ trên House X (timnhaxahoi.com). Không dùng hotline / số điện thoại trên website CĐT TBS Land để tư vấn qua kênh House X.`,
+      a: `Qua hotline House X ${getSupportPhoneDisplay()} hoặc form Liên hệ trên House X (timnhaxahoi.com).`,
     },
   ],
   gallery: HGX_IMAGES.gallery.map((g) => ({ ...g })),

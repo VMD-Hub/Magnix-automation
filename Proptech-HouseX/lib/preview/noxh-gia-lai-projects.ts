@@ -236,7 +236,7 @@ function enrichEcohomeNhonBinh(def: NoxhLandingDef): NoxhLandingDef {
       "Quy Nhơn Nhơn Bình · 1.380 căn · 5 tòa EDGE · Capital House · đã bàn giao",
     locationNotes: `Ecohome Nhơn Bình trên khoảng 4,6 ha tại Phường Nhơn Bình, TP. Quy Nhơn — thuộc tỉnh Gia Lai (Bình Định cũ).
 
-Đối chiếu Sở Xây dựng Gia Lai trước khi giao dịch. House X không thu đặt cọc thay chủ đầu tư.`,
+Đối chiếu Sở Xây dựng Gia Lai trước khi giao dịch.`,
     highlights: [
       {
         title: "1.380 căn · 5 tòa",

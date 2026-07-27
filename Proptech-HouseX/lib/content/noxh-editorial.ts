@@ -43,7 +43,7 @@ export function housexNoxhServiceFaqs(projectName: string) {
   return [
     {
       q: `HouseX hỗ trợ mua ${projectName} như thế nào?`,
-      a: "HouseX cung cấp thông tin dự án có cấu trúc, công cụ tính vay NHCSXH, tra cứu pháp lý và kết nối tư vấn điều kiện NOXH — giúp bạn chuẩn bị hồ sơ trước từng đợt mở bán, không thay thế vai trò CĐT.",
+      a: "HouseX cung cấp thông tin dự án có cấu trúc, công cụ tính vay NHCSXH, tra cứu pháp lý và kết nối tư vấn điều kiện nhà ở xã hội — giúp bạn chuẩn bị hồ sơ trước từng đợt mở bán.",
     },
     {
       q: "Vay mua nhà ở xã hội qua NHCSXH được bao nhiêu phần trăm?",

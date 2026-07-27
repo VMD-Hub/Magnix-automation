@@ -216,7 +216,7 @@ function enrichAnPhu(def: NoxhLandingDef): NoxhLandingDef {
 
 Quy mô: 9 khối 3 tầng · 330 căn · khoảng 27.478 m² · 264 căn bán và 66 căn thuê. Đang bàn giao từng đợt; phần còn lại dự kiến quý III/2026.
 
-House X không thu đặt cọc thay chủ đầu tư.`,
+`,
     highlights: [
       {
         title: "330 căn · 9 khối 3 tầng",
@@ -239,7 +239,7 @@ House X không thu đặt cọc thay chủ đầu tư.`,
     faqs: [
       {
         q: "Ai là chủ đầu tư nhà ở xã hội Ân Phú?",
-        a: "CTCP Đầu tư PTĐT Ân Phú. House X tư vấn qua form trên trang dự án.",
+        a: "CTCP Đầu tư PTĐT Ân Phú.",
       },
       {
         q: "Bao nhiêu căn / diện tích?",

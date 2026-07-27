@@ -407,7 +407,7 @@ House X hỗ trợ wiki điều kiện NOXH và form tư vấn — không thay t
       },
       {
         q: "Có nên đặt cọc qua môi giới tự do không?",
-        a: "UDIC đã cảnh báo dự án từng chưa đủ điều kiện nhận đặt cọc / HĐMB giả mạo. Chỉ đăng ký qua kênh Sở Xây dựng / CĐT công bố; House X hỗ trợ tư vấn điều kiện, không thu đặt cọc thay CĐT.",
+        a: "UDIC đã cảnh báo dự án từng chưa đủ điều kiện nhận đặt cọc / hợp đồng mua bán giả mạo. Chỉ đăng ký qua kênh Sở Xây dựng hoặc chủ đầu tư công bố; House X hỗ trợ tư vấn điều kiện mua.",
       },
     ],
     unitTypes: [

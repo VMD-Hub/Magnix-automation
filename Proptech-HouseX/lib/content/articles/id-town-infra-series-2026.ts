@@ -93,7 +93,7 @@ ${ID_TOWN_PR_CLOSINGS.haTangKetNoi}
 
 Tra cứu mặt bằng, gallery và FAQ dự án: [/du-an/id-town-long-thanh](/du-an/id-town-long-thanh) · Hub tỉnh: [/du-an/nha-o-xa-hoi/dong-nai](/du-an/nha-o-xa-hoi/dong-nai)
 
-*HouseX tổng hợp từ website CĐT và báo chí — vị trí ga, tiến độ đường sắt/Vành đai và bảng giá căn có thể thay đổi theo văn bản phê duyệt và đợt mở bán chính thức.*`,
+*Vị trí ga, tiến độ đường sắt/Vành đai và bảng giá căn có thể thay đổi theo phê duyệt và đợt mở bán.*`,
     status: "PUBLISHED",
     publishedAt: new Date("2026-07-27T08:00:00.000Z"),
     updatedAt: UPDATED,

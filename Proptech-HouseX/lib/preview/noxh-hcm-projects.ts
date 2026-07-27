@@ -545,7 +545,7 @@ function enrichHappyHomeLongPhuoc(def: NoxhLandingDef): NoxhLandingDef {
 
 Quy mô đất khoảng 44,16 ha. Số căn và bảng giá đang được xác minh theo công bố Sở Xây dựng hoặc chủ đầu tư.
 
-House X không thu đặt cọc thay chủ đầu tư.`,
+`,
     highlights: [
       {
         title: "Khu đô thị khoảng 44,16 ha",
@@ -603,7 +603,7 @@ function enrichPhucDatTanUyen(def: NoxhLandingDef): NoxhLandingDef {
 
 Quy mô: 936 căn · 3 block cao 18 tầng · diện tích đất 11.440,8 m² · căn hộ khoảng 32–62 m² · vốn khoảng 1.300 tỷ.
 
-Nguồn tham chiếu: phucdat.vn · báo chí · Sở Xây dựng. House X không thu đặt cọc thay chủ đầu tư.`,
+Nguồn: phucdat.vn · báo chí · Sở Xây dựng.`,
     highlights: [
       {
         title: "936 căn · 3 block 18 tầng",
@@ -653,7 +653,7 @@ Vị trí đúng là TP. Phú Mỹ (không phải phường 11 Vũng Tàu như m
 
 340 căn · đất 3.767,5 m² · căn 32,32–59,41 m² · giá tham chiếu khoảng 19,87 triệu/m² · khởi công 11/2024.
 
-House X không thu đặt cọc thay chủ đầu tư.`,
+`,
     highlights: [
       {
         title: "340 căn · TP. Phú Mỹ",

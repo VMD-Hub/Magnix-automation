@@ -18,6 +18,10 @@ export const EDITORIAL_BANNED_BODY_PATTERNS: readonly RegExp[] = [
   /không thay tư vấn pháp lý/i,
   /không thay quyết định/i,
   /không thay thế vai trò/i,
+  /người đọc nên/i,
+  /timeline marketing/i,
+  /Không dùng hotline/i,
+  /không thu đặt cọc thay/i,
 ];
 
 /**
@@ -74,7 +78,7 @@ export const DTA_PR_CLOSINGS = {
 /** Đoạn kết PR — ID Town Long Thành (iD Junction). */
 export const ID_TOWN_PR_CLOSINGS = {
   haTangKetNoi:
-    "Với người đủ điều kiện NOXH và ưu tiên khoảng cách thực tế tới sân bay Long Thành cùng hành lang đường sắt liên vùng, [ID Town Long Thành](/du-an/id-town-long-thanh) trong iD Junction — mặt tiền Phạm Văn Đồng, gần nút cao tốc – QL51 — là phương án an cư cận kề ga quy hoạch (~1,5–2 km tới ga Long Thành 1) và khoảng ~5 km tới khu vực sân bay (theo CĐT). HouseX hỗ trợ rà soát điều kiện đối tượng và đối chiếu đợt mở bán — bạn có thể [để lại thông tin tại đây](/lien-he).",
+    "Nếu bạn đang cân nhắc nhà ở xã hội gần sân bay Long Thành và hành lang đường sắt liên vùng, [ID Town Long Thành](/du-an/id-town-long-thanh) đáng để đối chiếu: khoảng 5 km tới khu vực sân bay và khoảng 1,5–2 km tới ga quy hoạch Long Thành 1. HouseX hỗ trợ rà soát điều kiện và theo dõi đợt mở bán — [để lại thông tin tại đây](/lien-he).",
 } as const;
 
 /** Đoạn kết PR — NOXH Hồ Gươm Xanh (Thuận An). */

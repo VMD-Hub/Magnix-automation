@@ -247,7 +247,7 @@ function enrichCicTayBac(def: NoxhLandingDef): NoxhLandingDef {
 
 Theo địa giới hiện hành: An Giang (sau sáp nhập Kiên Giang). Nguồn: cicgroups.com — đối chiếu Sở Xây dựng trước khi nộp hồ sơ.
 
-House X không thu đặt cọc thay CĐT.`,
+`,
     highlights: [
       {
         title: "1.011 căn liền kề trệt + 1 lầu",

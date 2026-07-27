@@ -1,0 +1,61 @@
+---
+description: House X — nguyên tắc viết FAQ / Hỏi–Đáp trên landing & bài (trả lời đúng câu hỏi)
+globs:
+  - Proptech-HouseX/lib/preview/**/*mock*
+  - Proptech-HouseX/lib/preview/**/*projects*
+  - Proptech-HouseX/lib/content/**/*landing*
+  - Proptech-HouseX/lib/content/articles/**
+  - Proptech-HouseX/docs/content/**
+  - Proptech-HouseX/app/**/du-an/**
+  - Proptech-HouseX/app/**/cau-hoi*
+alwaysApply: false
+---
+
+# House X — FAQ / Hỏi–Đáp (người đọc)
+
+Áp dụng khi viết hoặc sửa `faqs[]` landing dự án, H2 dạng câu hỏi trong bài, FAQPage, accordion Q&A trên web.
+
+## Nguyên tắc vàng
+
+1. **Một câu hỏi → một nhiệm vụ trả lời.** Đọc lại câu hỏi; câu trả lời chỉ cần đủ để người đọc hết thắc mắc đó.
+2. **Trả lời trước, CTA sau (nếu cần).** Chỉ gắn hotline/form khi câu hỏi về giá chưa có, liên hệ, hoặc bước tiếp theo — không nhét House X vào mọi FAQ.
+3. **Không disclaimer thừa.** Tránh cụm kiểu “House X không thay thế CĐT”, “không dùng hotline website CĐT”, “không thu đặt cọc thay CĐT”, “chỉ hỗ trợ…”, “người đọc nên…”, “tham chiếu công khai / timeline marketing”. Nghe như đổ trách nhiệm — và AI Overview hay trích đúng các câu này.
+4. **Không gộp hai ý khác nhau.** Ví dụ: “bảng giá chưa công bố” ≠ “điều kiện chưa công bố”. Điều kiện mua theo Luật; giá mới là thứ có thể chưa niêm yết.
+5. **Không nhồi từ khóa SEO.** Thân FAQ / đoạn kết không nhồi đủ slug, ha, ga, CĐT, tên đường trong một câu. Chi tiết đã có ở section khác thì đừng lặp.
+6. **Không lộ ngôn ngữ nội bộ / bán hàng.** Cấm trên copy public: `USP`, `masterplan` (thay bằng “quy hoạch khu đô thị”), ghi chú ops, so sánh kênh bán.
+7. **Thuật ngữ người mua.** Ưu tiên “nhà ở xã hội”; dùng “NOXH” khi đã quen trong silo hoặc bảng ngắn. “CĐT / cơ quan NN” → “chủ đầu tư / cơ quan nhà nước” khi cần nhắc.
+
+## Checklist trước khi ship
+
+- [ ] Bỏ hết câu sau dấu “—” hoặc ngoặc đơn nếu đó là ghi chú biên tập, không phải thông tin người mua cần.
+- [ ] Câu hỏi “X là ai / bao nhiêu / khi nào / ở đâu?” → trả lời thẳng X, số, mốc, địa điểm — không kèm triết lý kênh House X.
+- [ ] Câu hỏi về pháp lý / điều kiện → nêu khung Luật + đợt mở bán; không nhét giá thương mại hay so sánh sản phẩm khác trừ khi câu hỏi yêu cầu so sánh.
+- [ ] Preview mental: người lạ đọc FAQ có cảm giác được trả lời rõ, không bị “đẩy trách nhiệm”.
+
+## Ví dụ
+
+```text
+❌ Chủ đầu tư là ai?
+TBS Land… House X không thay thế CĐT — chỉ hỗ trợ tư vấn…
+
+✅ Chủ đầu tư là ai?
+TBS Land — thành viên TBS Group — là chủ đầu tư khu đô thị Hồ Gươm Xanh tại Thuận An, Bình Dương.
+
+❌ Giá bao nhiêu?
+Chưa công bố. Giá thương mại không áp dụng… Gọi khi CĐT / cơ quan NN…
+
+✅ Giá bao nhiêu?
+Bảng giá nhà ở xã hội chưa công bố. Liên hệ hotline House X … khi có đợt mở bán.
+
+❌ Khởi công / bàn giao khi nào?
+Tham chiếu công khai: … bàn giao tham chiếu… Tiến độ NOXH có thể khác thương mại…
+
+✅ Khởi công / bàn giao khi nào?
+Khởi công khoảng 27/06/2025; dự kiến bàn giao khoảng 2028.
+```
+
+## Ghi chú kỹ thuật
+
+Rule nội bộ “không hotlink CĐT / không nhúng hotline CĐT trên House X” → giữ trong `docs/` hoặc comment code — **không** đưa vào FAQ public.
+
+Liên quan: `.cursor/rules/housex-public-trust-content.mdc` (cấm path/meta trên trang legal/trust).

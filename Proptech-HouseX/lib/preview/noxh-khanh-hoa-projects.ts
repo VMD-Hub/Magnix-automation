@@ -241,7 +241,7 @@ function enrichHappyHomeCamRanh(def: NoxhLandingDef): NoxhLandingDef {
 
 Tên pháp lý: Khu nhà ở xã hội phường Cam Nghĩa. Tên thương mại: Vinhomes Happy Home.
 
-House X không thu đặt cọc thay chủ đầu tư. Đối chiếu sxd.khanhhoa.gov.vn.`,
+Đối chiếu sxd.khanhhoa.gov.vn.`,
     highlights: [
       {
         title: "Khoảng 3.565 căn · khoảng 87,6 ha",
