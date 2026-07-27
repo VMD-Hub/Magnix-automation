@@ -29,4 +29,4 @@ export const NOXH_PRICE_VERIFYING_SHORT =
 
 /** FAQ giá khi chưa có công bố (+ CTA tư vấn hồ sơ miễn phí). */
 export const NOXH_PRICE_FAQ_VERIFYING =
-  "Giá và suất đang được xác minh theo công bố Sở Xây dựng hoặc chủ đầu tư. House X tư vấn hồ sơ mua nhà ở xã hội miễn phí và cập nhật tiến độ dự án. Đăng ký ngay trên trang dự án hoặc tại /lien-he." as const;
+  "Giá và suất đang được xác minh theo công bố Sở Xây dựng hoặc chủ đầu tư. House X tư vấn hồ sơ mua nhà ở xã hội miễn phí và cập nhật tiến độ dự án. [Đăng ký ngay](/lien-he)." as const;

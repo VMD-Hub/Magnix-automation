@@ -106,7 +106,7 @@ const OPENINGS: readonly string[] = [
   "Căn {code} Block A10 Happy Home: {highlight} — tra cứu pháp lý NOXH trên trang dự án.",
   "NOXH {code} tại {location}: {highlight}, giá niêm yết {price}.",
   "Suất {code} — một trong 30 căn giỏ hàng chung Block A10 đang mở bán trên HouseX.",
-  "Happy Home mở suất {code}: {highlight}; đăng ký tư vấn hồ sơ NOXH miễn phí trên House X — đăng ký ngay tại /lien-he.",
+  "Happy Home mở suất {code}: {highlight}; đăng ký tư vấn hồ sơ NOXH miễn phí trên House X — đăng ký ngay.",
   "Căn NOXH {code} DTA City — {highlight}, phù hợp an cư lâu dài cho người lao động miền Nam.",
 ];
 

@@ -1,3 +1,4 @@
+import { InlineMdText } from "@/components/content/inline-md-text";
 import type { FaqContentBlock } from "@/lib/content/faq-content";
 import { plainTextToFaqBlocks } from "@/lib/content/faq-content";
 
@@ -6,13 +7,19 @@ export function FaqAnswerBody({ blocks }: { blocks: FaqContentBlock[] }) {
     <div className="space-y-3 text-sm leading-relaxed text-slate-600">
       {blocks.map((block, i) => {
         if (block.type === "p") {
-          return <p key={i}>{block.text}</p>;
+          return (
+            <p key={i}>
+              <InlineMdText text={block.text} />
+            </p>
+          );
         }
         if (block.type === "ul") {
           return (
             <ul key={i} className="list-disc space-y-1.5 pl-5 marker:text-brand-500">
               {block.items.map((item) => (
-                <li key={item}>{item}</li>
+                <li key={item}>
+                  <InlineMdText text={item} />
+                </li>
               ))}
             </ul>
           );

@@ -94,7 +94,7 @@ Kết nối ngoại khu (tham chiếu CĐT):
 
 Nội khu có hồ cảnh quan trung tâm, công viên, phố đi bộ và các tiện ích giáo dục, thương mại, thể thao phục vụ cư dân trong khu đô thị.
 
-Dự án khởi công khoảng 27/06/2025, dự kiến bàn giao khoảng 2028. Bảng giá nhà ở xã hội chưa công bố. Điều kiện mua theo Luật Nhà ở và thông báo từng đợt của cơ quan nhà nước cùng chủ đầu tư. House X tư vấn hồ sơ mua nhà ở xã hội miễn phí và cập nhật tiến độ dự án — đăng ký ngay tại [/lien-he](/lien-he).`,
+Dự án khởi công khoảng 27/06/2025, dự kiến bàn giao khoảng 2028. Bảng giá nhà ở xã hội chưa công bố. Điều kiện mua theo Luật Nhà ở và thông báo từng đợt của cơ quan nhà nước cùng chủ đầu tư. House X tư vấn hồ sơ mua nhà ở xã hội miễn phí và cập nhật tiến độ dự án — [đăng ký ngay](/lien-he).`,
   highlights: [
     {
       title: "Chung cư NOXH 5–12 tầng trong đại đô thị",
@@ -143,7 +143,7 @@ Dự án khởi công khoảng 27/06/2025, dự kiến bàn giao khoảng 2028. 
     },
     {
       q: "Giá nhà ở xã hội Hồ Gươm Xanh bao nhiêu?",
-      a: `Bảng giá nhà ở xã hội chưa công bố. House X tư vấn hồ sơ mua nhà ở xã hội miễn phí và cập nhật tiến độ dự án — hotline ${getSupportPhoneDisplay()} hoặc đăng ký ngay tại [/lien-he](/lien-he).`,
+      a: `Bảng giá nhà ở xã hội chưa công bố. House X tư vấn hồ sơ mua nhà ở xã hội miễn phí và cập nhật tiến độ dự án — hotline ${getSupportPhoneDisplay()} hoặc [đăng ký ngay](/lien-he).`,
     },
     {
       q: "Ai được mua nhà ở xã hội tại Hồ Gươm Xanh?",
@@ -163,7 +163,7 @@ Dự án khởi công khoảng 27/06/2025, dự kiến bàn giao khoảng 2028. 
     },
     {
       q: "Liên hệ tư vấn nhà ở xã hội Hồ Gươm Xanh ở đâu?",
-      a: `House X tư vấn hồ sơ mua nhà ở xã hội miễn phí và cập nhật tiến độ dự án. Hotline ${getSupportPhoneDisplay()} — đăng ký ngay tại [/lien-he](/lien-he).`,
+      a: `House X tư vấn hồ sơ mua nhà ở xã hội miễn phí và cập nhật tiến độ dự án. Hotline ${getSupportPhoneDisplay()} — [đăng ký ngay](/lien-he).`,
     },
   ],
   gallery: HGX_IMAGES.gallery.map((g) => ({ ...g })),

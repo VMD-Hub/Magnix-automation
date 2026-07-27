@@ -1,3 +1,4 @@
+import { InlineMdText } from "@/components/content/inline-md-text";
 import type { ProjectLandingLocationMap } from "@/lib/content/project-landing";
 import { FallbackImage } from "@/components/ui/fallback-image";
 
@@ -80,7 +81,7 @@ export function ProjectLocationSection({
             <div className="space-y-4 text-base leading-relaxed text-slate-700">
               {locationNotes!.split(/\n{2,}/).map((paragraph, i) => (
                 <p key={i} className="whitespace-pre-line">
-                  {paragraph.trim()}
+                  <InlineMdText text={paragraph.trim()} />
                 </p>
               ))}
             </div>

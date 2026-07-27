@@ -17,7 +17,7 @@ export const HOUSEX_NOXH_CTA = {
 
 /** FAQ / soft-follow khi cần nêu cách liên hệ House X. */
 export const HOUSEX_NOXH_CONSULT_FAQ_ANSWER =
-  "House X tư vấn hồ sơ mua nhà ở xã hội miễn phí và cập nhật tiến độ dự án. Đăng ký ngay trên trang dự án hoặc tại /lien-he." as const;
+  "House X tư vấn hồ sơ mua nhà ở xã hội miễn phí và cập nhật tiến độ dự án. [Đăng ký ngay](/lien-he)." as const;
 
 export function housexNoxhCtaSubtext(phone?: string): string {
   if (phone?.trim()) {

@@ -1,5 +1,6 @@
 import type { AffiliateFaq, AffiliateService, AffiliateVertical } from "@/lib/content/affiliate-verticals";
 import { showcasePagePath } from "@/lib/content/affiliate-verticals";
+import { stripInlineMdLinks } from "@/lib/content/inline-md-links";
 import type { InteriorCaseStudy } from "@/lib/content/noi-that-content";
 import { caseStudyPagePath, NHA_DEP_PATH } from "@/lib/content/noi-that-content";
 import { getSiteUrl, getBrandName } from "@/lib/site-config";
@@ -28,7 +29,10 @@ export function buildFaqJsonLd(faqs: AffiliateFaq[]) {
     mainEntity: faqs.map((f) => ({
       "@type": "Question",
       name: f.q,
-      acceptedAnswer: { "@type": "Answer", text: f.a },
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: stripInlineMdLinks(f.a),
+      },
     })),
   };
 }
