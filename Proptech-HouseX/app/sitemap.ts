@@ -103,6 +103,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "monthly" as const,
       priority: 0.7,
     },
+    ...[
+      "cat-mau-hoa-hong-moi-gioi-va-cong-tac-vien-minh-bach",
+      "mo-hinh-cong-tac-vien-bat-dong-san-house-x",
+      "chan-dung-doi-tac-cong-tac-vien-bds",
+      "dang-ky-ctv-ban-hang-lien-ket-huong-dan",
+    ].map((slug) => ({
+      url: `${BASE}/affiliate-bat-dong-san/${slug}`,
+      changeFrequency: "monthly" as const,
+      priority: 0.65,
+    })),
     { url: `${BASE}/cau-hoi-thuong-gap`, changeFrequency: "monthly", priority: 0.5 },
     { url: `${BASE}/lien-he`, changeFrequency: "monthly", priority: 0.5 },
     { url: `${BASE}/dieu-khoan`, changeFrequency: "yearly", priority: 0.3 },

@@ -1,16 +1,20 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ButtonLink } from "@/components/ui/button";
+import { CtvArticleGrid } from "@/components/ctv/ctv-article-grid";
+import { CtvCashflowInfographic } from "@/components/ctv/ctv-cashflow-infographic";
+import { CtvPersonaCards } from "@/components/ctv/ctv-persona-cards";
 import {
+  CTV_AFFILIATE_ARTICLES_SECTION,
   CTV_AFFILIATE_BENEFITS,
   CTV_AFFILIATE_CLOSING_HEADING,
-  CTV_AFFILIATE_COMPARE,
   CTV_AFFILIATE_CTAS,
   CTV_AFFILIATE_FAQS,
   CTV_AFFILIATE_H1,
   CTV_AFFILIATE_LEAD,
   CTV_AFFILIATE_PAIN,
   CTV_AFFILIATE_PATH,
+  CTV_AFFILIATE_PERSONAS,
   CTV_AFFILIATE_RULES,
   CTV_AFFILIATE_SEO_DESCRIPTION,
   CTV_AFFILIATE_SEO_TITLE,
@@ -131,26 +135,27 @@ export default function CtvAffiliateLandingPage() {
           </section>
 
           <section>
+            <CtvCashflowInfographic />
+          </section>
+
+          <section>
             <h2 className="text-2xl font-bold text-slate-900">
               {CTV_AFFILIATE_WHO.heading}
             </h2>
             <p className="mt-4 leading-relaxed text-slate-600">
               {CTV_AFFILIATE_WHO.intro}
             </p>
-            <ul className="mt-6 space-y-3">
-              {CTV_AFFILIATE_WHO.personas.map((item) => (
-                <li
-                  key={item.slice(0, 48)}
-                  className="flex gap-3 text-slate-700"
-                >
-                  <span
-                    className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-brand-600"
-                    aria-hidden
-                  />
-                  <span className="leading-relaxed">{item}</span>
-                </li>
-              ))}
-            </ul>
+            <CtvPersonaCards personas={CTV_AFFILIATE_PERSONAS} />
+          </section>
+
+          <section>
+            <h2 className="text-2xl font-bold text-slate-900">
+              {CTV_AFFILIATE_ARTICLES_SECTION.heading}
+            </h2>
+            <p className="mt-4 leading-relaxed text-slate-600">
+              {CTV_AFFILIATE_ARTICLES_SECTION.intro}
+            </p>
+            <CtvArticleGrid />
           </section>
 
           <section>
@@ -205,34 +210,6 @@ export default function CtvAffiliateLandingPage() {
                     </li>
                   ))}
                 </ul>
-              </div>
-            </div>
-          </section>
-
-          <section>
-            <h2 className="text-2xl font-bold text-slate-900">
-              {CTV_AFFILIATE_COMPARE.heading}
-            </h2>
-            <div className="mt-6 grid gap-4 sm:grid-cols-2">
-              <div className="rounded-2xl border border-slate-200 bg-white p-5">
-                <h3 className="font-semibold text-slate-800">
-                  {CTV_AFFILIATE_COMPARE.oldModel.title}
-                </h3>
-                <ol className="mt-4 list-decimal space-y-2 pl-5 text-sm text-slate-600">
-                  {CTV_AFFILIATE_COMPARE.oldModel.steps.map((s) => (
-                    <li key={s}>{s}</li>
-                  ))}
-                </ol>
-              </div>
-              <div className="rounded-2xl border border-brand-200 bg-brand-50/40 p-5">
-                <h3 className="font-semibold text-brand-900">
-                  {CTV_AFFILIATE_COMPARE.newModel.title}
-                </h3>
-                <ol className="mt-4 list-decimal space-y-2 pl-5 text-sm text-slate-700">
-                  {CTV_AFFILIATE_COMPARE.newModel.steps.map((s) => (
-                    <li key={s}>{s}</li>
-                  ))}
-                </ol>
               </div>
             </div>
           </section>

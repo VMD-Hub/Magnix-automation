@@ -29,17 +29,49 @@ export const CTV_AFFILIATE_PAIN = {
   ],
 } as const;
 
+export type CtvPersonaCard = {
+  role: string;
+  pain: string;
+  onHouseX: string;
+};
+
+export const CTV_AFFILIATE_PERSONAS: readonly CtvPersonaCard[] = [
+  {
+    role: "Nhân viên ngân hàng, bảo hiểm, chứng khoán",
+    pain: "Khách tin bạn về tài chính nhưng hỏi nhà / NOXH — bạn không muốn đóng vai “cò cắt máu”.",
+    onHouseX:
+      "Giới thiệu đúng kênh sau khi có mã; House X hỗ trợ tư vấn sản phẩm tùy mức sau duyệt. Bạn giữ vai trò người tin cậy.",
+  },
+  {
+    role: "Môi giới bất động sản tự do",
+    pain: "Bị kéo vào đua cắt máu; mất giá trị tư vấn và hậu mãi.",
+    onHouseX:
+      "Bán trên nền tảng có quy trình claim; cạnh tranh bằng chuyên môn pháp lý — không bằng ai cắt nhiều hơn.",
+  },
+  {
+    role: "Người có mạng lưới nhưng ngại bán",
+    pain: "Người thân muốn mua; bạn ngại ra mặt tư vấn và sợ bị kéo vào mặc cả hoa hồng.",
+    onHouseX:
+      "Chỉ giới thiệu; House X hỗ trợ tư vấn và chốt theo quy trình sau duyệt.",
+  },
+  {
+    role: "Người mua cho chính mình",
+    pain: "Không muốn ép môi giới cắt máu; cũng không tin “bớt lộc” thiếu minh bạch.",
+    onHouseX:
+      "Đi cùng luật chơi CTV — thưởng / ưu đãi (nếu có) theo hồ sơ sau duyệt, không thỏa thuận miệng ngoài luồng.",
+  },
+  {
+    role: "Truyền thông, HR, công đoàn, mạng lưới KCN",
+    pain: "Có đối tượng quan tâm nhà ở nhưng thiếu kênh sản phẩm và quy trình sạch.",
+    onHouseX:
+      "Giới thiệu có kiểm chứng; gắn mã sau duyệt; đồng hành nội dung / dự án khi phù hợp.",
+  },
+] as const;
+
 export const CTV_AFFILIATE_WHO = {
-  heading: "Ai có thể tham gia?",
+  heading: "Ai có thể tham gia? Chân dung đối tác",
   intro:
-    "Không chỉ môi giới bất động sản. Ai có mạng lưới, nhu cầu mua, hoặc muốn giới thiệu đúng kênh đều có chỗ — sau khi hoàn tất hồ sơ đăng ký.",
-  personas: [
-    "Nhân viên ngân hàng, bảo hiểm, chứng khoán — có khách tin tưởng và cần sản phẩm nhà ở / NOXH / dự án.",
-    "Môi giới bất động sản tự do — muốn bán trên nền tảng có quy trình và không đua cắt máu.",
-    "Người có khách hoặc người thân muốn mua nhưng ngại đóng vai tư vấn — chỉ giới thiệu, House X hỗ trợ tư vấn và chốt.",
-    "Người muốn mua cho chính mình: không muốn ép môi giới cắt hoa hồng, cũng không tin quy trình “bớt lộc” thiếu minh bạch.",
-    "Người làm nghề liên quan (truyền thông, HR, công đoàn, mạng lưới KCN…) muốn giới thiệu sản phẩm đúng nhu cầu.",
-  ],
+    "Không chỉ môi giới bất động sản. Đối chiếu chân dung dưới đây — rồi đăng ký và hoàn tất hồ sơ.",
 } as const;
 
 export const CTV_AFFILIATE_RULES = {
@@ -62,7 +94,7 @@ export const CTV_AFFILIATE_RULES = {
       desc: "Lead gắn mã của bạn; mức thưởng và mức hỗ trợ từ House X phụ thuộc năng lực và chứng chỉ — xem trong tài khoản sau duyệt, không công bố bảng công khai.",
     },
   ],
-  note: "House X không công bố bảng hoa hồng trên trang này. Cơ chế đầy đủ (theo mức độ giới thiệu, tham quan, tư vấn, chốt deal và chứng chỉ) chỉ chia sẻ sau khi hồ sơ được duyệt.",
+  note: "House X không công bố bảng hoa hồng trên trang này. Cơ chế đầy đủ chỉ chia sẻ sau khi hồ sơ được duyệt.",
 } as const;
 
 export const CTV_AFFILIATE_BENEFITS = {
@@ -154,3 +186,9 @@ export const CTV_AFFILIATE_CTAS = {
 } as const;
 
 export const CTV_AFFILIATE_CLOSING_HEADING = "Sẵn sàng đi đường minh bạch?" as const;
+
+export const CTV_AFFILIATE_ARTICLES_SECTION = {
+  heading: "Bài viết chuyên mục cộng tác viên",
+  intro:
+    "Bốn bài: hiểu cắt máu, mô hình CTV, chân dung đối tác và hướng dẫn đăng ký — đọc đúng nhu cầu trước khi nộp hồ sơ.",
+} as const;
