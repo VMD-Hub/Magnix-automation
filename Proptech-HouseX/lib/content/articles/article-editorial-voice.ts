@@ -78,13 +78,13 @@ export const DTA_PR_CLOSINGS = {
 /** Đoạn kết PR — ID Town Long Thành (iD Junction). */
 export const ID_TOWN_PR_CLOSINGS = {
   haTangKetNoi:
-    "Nếu bạn đang cân nhắc nhà ở xã hội gần sân bay Long Thành và hành lang đường sắt liên vùng, [ID Town Long Thành](/du-an/id-town-long-thanh) đáng để đối chiếu: khoảng 5 km tới khu vực sân bay và khoảng 1,5–2 km tới ga quy hoạch Long Thành 1. HouseX hỗ trợ rà soát điều kiện và theo dõi đợt mở bán — [để lại thông tin tại đây](/lien-he).",
+    "Nếu bạn đang cân nhắc nhà ở xã hội gần sân bay Long Thành và hành lang đường sắt liên vùng, [ID Town Long Thành](/du-an/id-town-long-thanh) đáng để đối chiếu: khoảng 5 km tới khu vực sân bay và khoảng 1,5–2 km tới ga quy hoạch Long Thành 1. House X tư vấn hồ sơ mua nhà ở xã hội miễn phí và cập nhật tiến độ dự án — [đăng ký ngay](/lien-he).",
 } as const;
 
 /** Đoạn kết PR — NOXH Hồ Gươm Xanh (Thuận An). */
 export const HGX_PR_CLOSINGS = {
   metroTod:
-    "Nếu bạn đang tìm chỗ ở xã hội gần hành lang metro tương lai trên Quốc lộ 13, [Hồ Gươm Xanh](/du-an/nha-o-xa-hoi-ho-guom-xanh-thuan-an) đáng để đối chiếu: ga quy hoạch tại Lái Thiêu chỉ cách vài trăm mét theo các phương án đã công bố. HouseX hỗ trợ rà soát điều kiện và theo dõi đợt mở bán — [để lại thông tin tại đây](/lien-he).",
+    "Nếu bạn đang tìm chỗ ở xã hội gần hành lang metro tương lai trên Quốc lộ 13, [Hồ Gươm Xanh](/du-an/nha-o-xa-hoi-ho-guom-xanh-thuan-an) đáng để đối chiếu: ga quy hoạch tại Lái Thiêu chỉ cách vài trăm mét theo các phương án đã công bố. House X tư vấn hồ sơ mua nhà ở xã hội miễn phí và cập nhật tiến độ dự án — [đăng ký ngay](/lien-he).",
 } as const;
 
 export function getEditorialBodyIssues(body: string): string[] {

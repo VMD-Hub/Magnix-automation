@@ -5,6 +5,7 @@ import {
   defaultProjectLanding,
 } from "@/lib/content/project-landing";
 import { PHUC_LOC_THO_PUBLISHED_IMAGES } from "@/lib/content/phuc-loc-tho-images";
+import { applyHousexNoxhCta } from "@/lib/content/noxh-editorial";
 
 const NOW = new Date("2026-06-29T00:00:00.000Z");
 
@@ -94,11 +95,7 @@ Phân khu NOXH được quy hoạch tại Block C theo phê duyệt UBND TP.HCM 
     },
   ];
   landing.gallery = [...PHUC_LOC_THO_PUBLISHED_IMAGES.gallery];
-  landing.ctaLabel = "Liên hệ tư vấn";
-  landing.ctaHref = "/lien-he";
-  landing.ctaSubtext =
-    "Tư vấn chi tiết hơn về dự án — liên hệ với chúng tôi.";
-  return landing;
+  return applyHousexNoxhCta(landing);
 }
 
 export function buildPhucLocThoMock(): ProjectDetail {

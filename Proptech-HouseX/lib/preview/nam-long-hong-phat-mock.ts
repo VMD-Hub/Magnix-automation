@@ -5,6 +5,7 @@ import {
   defaultProjectLanding,
 } from "@/lib/content/project-landing";
 import { NAM_LONG_HP_IMAGES } from "@/lib/content/nam-long-hong-phat-images";
+import { applyHousexNoxhCta } from "@/lib/content/noxh-editorial";
 
 const NOW = new Date("2026-06-29T00:00:00.000Z");
 
@@ -98,11 +99,7 @@ Dự án NOXH đầu tiên tại Cần Thơ (2019), khởi công 9/2019, bàn gi
     },
   ];
   landing.gallery = [...NAM_LONG_HP_IMAGES.gallery];
-  landing.ctaLabel = "Liên hệ tư vấn";
-  landing.ctaHref = "/lien-he";
-  landing.ctaSubtext =
-    "Tư vấn căn chuyển nhượng, pháp lý NOXH và giá thị trường — liên hệ HouseX.";
-  return landing;
+  return applyHousexNoxhCta(landing);
 }
 
 export function buildNamLongHongPhatMock(): ProjectDetail {

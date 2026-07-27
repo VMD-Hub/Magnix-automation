@@ -2,11 +2,35 @@ import { faqBlocksToPlainText } from "@/lib/content/faq-content";
 import { noxhEligibilityFaqForRegion } from "@/lib/content/noxh-eligibility-faq";
 import type { ProjectLanding } from "@/lib/content/project-landing";
 
+/**
+ * Thông điệp CTA chuẩn mọi landing nhà ở xã hội (AIO + conversion).
+ * Không dùng cụm mơ hồ kiểu “hỗ trợ tư vấn điều kiện / đồng hành…”.
+ */
+export const HOUSEX_NOXH_CTA_MESSAGE =
+  "House X tư vấn hồ sơ mua nhà ở xã hội miễn phí và cập nhật tiến độ dự án. Đăng ký ngay!" as const;
+
+export const HOUSEX_NOXH_CTA = {
+  label: "Đăng ký tư vấn hồ sơ miễn phí",
+  href: "/lien-he",
+  subtext: HOUSEX_NOXH_CTA_MESSAGE,
+} as const;
+
+/** FAQ / soft-follow khi cần nêu cách liên hệ House X. */
+export const HOUSEX_NOXH_CONSULT_FAQ_ANSWER =
+  "House X tư vấn hồ sơ mua nhà ở xã hội miễn phí và cập nhật tiến độ dự án. Đăng ký ngay trên trang dự án hoặc tại /lien-he." as const;
+
+export function housexNoxhCtaSubtext(phone?: string): string {
+  if (phone?.trim()) {
+    return `House X tư vấn hồ sơ mua nhà ở xã hội miễn phí và cập nhật tiến độ dự án. Hotline ${phone.trim()} — đăng ký ngay.`;
+  }
+  return HOUSEX_NOXH_CTA_MESSAGE;
+}
+
 /** Gói dịch vụ HouseX cho landing NOXH — mô hình hành trình trọn vòng đời (tham chiếu Citics Agent). */
 export const HOUSEX_NOXH_SERVICES: NonNullable<ProjectLanding["services"]> = [
   {
-    title: "Rà soát điều kiện mua NOXH",
-    text: "Checklist thu nhập, nhà ở, hộ khẩu và đối tượng ưu tiên theo Luật Nhà ở — giúp bạn biết mình có đủ điều kiện trước khi nộp hồ sơ đợt mở bán.",
+    title: "Tư vấn hồ sơ mua nhà ở xã hội miễn phí",
+    text: "Rà soát điều kiện đối tượng, thu nhập, nhà ở và checklist hồ sơ theo Luật Nhà ở — đăng ký ngay để được cập nhật đợt mở bán.",
     href: "/lien-he",
   },
   {
@@ -16,38 +40,31 @@ export const HOUSEX_NOXH_SERVICES: NonNullable<ProjectLanding["services"]> = [
   },
   {
     title: "Tra cứu pháp lý dự án",
-    text: "Tổng hợp GPXD, quy hoạch 1/500, chấp thuận NOXH ngay trên trang dự án — nền tảng dữ liệu giúp quyết định an tâm hơn.",
+    text: "Tổng hợp GPXD, quy hoạch 1/500, chấp thuận nhà ở xã hội ngay trên trang dự án — nền tảng dữ liệu giúp quyết định an tâm hơn.",
     href: "#project-legal-heading",
   },
   {
     title: "Định giá tham chiếu khu vực",
-    text: "So sánh mức giá NOXH với thị trường xung quanh — hỗ trợ đánh giá mức độ cạnh tranh trước khi đặt cọc.",
+    text: "So sánh mức giá nhà ở xã hội với thị trường xung quanh — hỗ trợ đánh giá mức độ cạnh tranh trước khi đặt cọc.",
     href: "/cong-cu/dinh-gia",
   },
   {
-    title: "Nhận tin đợt mở bán",
-    text: "Đăng ký nhận thông báo khi CĐT/Sở Xây dựng công bố bảng giá và thời gian nộp hồ sơ — không bỏ lỡ suất NOXH.",
+    title: "Cập nhật tiến độ & đợt mở bán",
+    text: "Nhận thông báo khi có bảng giá, lịch nộp hồ sơ và tiến độ dự án — đăng ký tư vấn miễn phí trên House X.",
     href: "/lien-he",
   },
 ];
-
-export const HOUSEX_NOXH_CTA = {
-  label: "Đăng ký tư vấn NOXH",
-  href: "/lien-he",
-  subtext:
-    "HouseX đồng hành từ rà soát điều kiện, tính vay NHCSXH đến theo dõi tiến độ — một điểm chạm, minh bạch dữ liệu.",
-} as const;
 
 /** FAQ dịch vụ HouseX — gắn cuối mọi landing NOXH. */
 export function housexNoxhServiceFaqs(projectName: string) {
   return [
     {
-      q: `HouseX hỗ trợ mua ${projectName} như thế nào?`,
-      a: "HouseX cung cấp thông tin dự án có cấu trúc, công cụ tính vay NHCSXH, tra cứu pháp lý và kết nối tư vấn điều kiện nhà ở xã hội — giúp bạn chuẩn bị hồ sơ trước từng đợt mở bán.",
+      q: `House X hỗ trợ mua ${projectName} như thế nào?`,
+      a: HOUSEX_NOXH_CONSULT_FAQ_ANSWER,
     },
     {
       q: "Vay mua nhà ở xã hội qua NHCSXH được bao nhiêu phần trăm?",
-      a: "Theo chương trình tín dụng 120.000 tỷ, đối tượng NOXH thường được vay tối đa 70% giá trị căn (tùy ngân hàng và hồ sơ). Dùng công cụ tính khoản vay trên HouseX để ước lượng trước.",
+      a: "Theo chương trình tín dụng 120.000 tỷ, đối tượng nhà ở xã hội thường được vay tối đa 70% giá trị căn (tùy ngân hàng và hồ sơ). Dùng công cụ tính khoản vay trên House X để ước lượng trước.",
     },
   ];
 }
@@ -58,11 +75,24 @@ export function noxhEligibilityFaq(regionLabel: string) {
   return { q: item.q, a: faqBlocksToPlainText(item.blocks) };
 }
 
-/** Gắn gói dịch vụ + CTA chuẩn vào landing NOXH. */
-export function attachHousexNoxhServices(landing: ProjectLanding): ProjectLanding {
-  landing.services = HOUSEX_NOXH_SERVICES;
+/**
+ * Gắn CTA chuẩn NOXH.
+ * `attachServices: false` khi landing đã có services riêng (vd. DTA Happy Home).
+ */
+export function applyHousexNoxhCta(
+  landing: ProjectLanding,
+  opts?: { phone?: string; attachServices?: boolean },
+): ProjectLanding {
+  if (opts?.attachServices !== false) {
+    landing.services = HOUSEX_NOXH_SERVICES;
+  }
   landing.ctaLabel = HOUSEX_NOXH_CTA.label;
   landing.ctaHref = HOUSEX_NOXH_CTA.href;
-  landing.ctaSubtext = HOUSEX_NOXH_CTA.subtext;
+  landing.ctaSubtext = housexNoxhCtaSubtext(opts?.phone);
   return landing;
+}
+
+/** Gắn gói dịch vụ + CTA chuẩn vào landing NOXH (factory tỉnh / seed). */
+export function attachHousexNoxhServices(landing: ProjectLanding): ProjectLanding {
+  return applyHousexNoxhCta(landing);
 }

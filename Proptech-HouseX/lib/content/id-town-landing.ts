@@ -4,6 +4,7 @@ import {
   type ProjectLanding,
 } from "@/lib/content/project-landing";
 import { ID_TOWN_IMAGES } from "@/lib/content/id-town-images";
+import { applyHousexNoxhCta } from "@/lib/content/noxh-editorial";
 
 export const ID_TOWN_SLUG = "id-town-long-thanh" as const;
 export const ID_TOWN_NAME = "ID Town Long Thành" as const;
@@ -106,11 +107,7 @@ export function buildIdTownLanding(): ProjectLanding {
     },
   ];
   landing.gallery = ID_TOWN_IMAGES.gallery.map((g) => ({ ...g }));
-  landing.ctaLabel = "Liên hệ tư vấn";
-  landing.ctaHref = "/lien-he";
-  landing.ctaSubtext =
-    "Tư vấn chi tiết hơn về dự án — liên hệ với chúng tôi.";
-  return landing;
+  return applyHousexNoxhCta(landing);
 }
 
 export function buildIdTownOverviewData() {

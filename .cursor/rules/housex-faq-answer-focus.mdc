@@ -54,6 +54,14 @@ Tham chiếu công khai: … bàn giao tham chiếu… Tiến độ NOXH có th�
 Khởi công khoảng 27/06/2025; dự kiến bàn giao khoảng 2028.
 ```
 
+## CTA chuẩn mọi landing NOXH
+
+Dùng `HOUSEX_NOXH_CTA` / `applyHousexNoxhCta()` từ `Proptech-HouseX/lib/content/noxh-editorial.ts`:
+
+> House X tư vấn hồ sơ mua nhà ở xã hội miễn phí và cập nhật tiến độ dự án. Đăng ký ngay!
+
+Không viết biến thể mơ hồ (“hỗ trợ tư vấn điều kiện”, “đồng hành…”, “liên hệ với chúng tôi”).
+
 ## Ghi chú kỹ thuật
 
 Rule nội bộ “không hotlink CĐT / không nhúng hotline CĐT trên House X” → giữ trong `docs/` hoặc comment code — **không** đưa vào FAQ public.

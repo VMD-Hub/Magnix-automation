@@ -14,6 +14,7 @@ import {
   buildNoxhSeedLanding,
   type NoxhLandingDef,
 } from "@/lib/preview/_noxh-landing-factory";
+import { HOUSEX_NOXH_CONSULT_FAQ_ANSWER } from "@/lib/content/noxh-editorial";
 
 type AgRow = {
   stt: number;
@@ -200,7 +201,7 @@ Sau NQ 2025, Kiên Giang sáp nhập vào tỉnh An Giang mới. Vị trí trên
       },
       {
         q: "Tư vấn thế nào?",
-        a: "Form trang dự án hoặc hotline House X · Wiki nhà ở xã hội.",
+        a: HOUSEX_NOXH_CONSULT_FAQ_ANSWER,
       },
     ],
     heroImage: {

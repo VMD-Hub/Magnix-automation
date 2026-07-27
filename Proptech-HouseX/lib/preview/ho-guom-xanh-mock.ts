@@ -10,11 +10,11 @@ import {
   buildNoxhSeedLanding,
   type NoxhLandingDef,
 } from "@/lib/preview/_noxh-landing-factory";
+import { applyHousexNoxhCta } from "@/lib/content/noxh-editorial";
 import { getSupportPhoneDisplay } from "@/lib/site-config";
 
 /**
  * Phân khu nhà ở xã hội trong KĐT Hồ Gươm Xanh (TBS Land = CĐT).
- * Liên hệ tư vấn trên House X: hotline House X — không dùng hotline website CĐT.
  * Nguồn công bố: hoguom-xanh.vn — giá/số căn NOXH chưa niêm yết.
  */
 export const HGX_PROJECT_NAME = "Nhà ở xã hội Hồ Gươm Xanh";
@@ -53,11 +53,7 @@ const HGX_IMAGES = {
 } as const;
 
 function housexHotlineCta(landing: ProjectLanding): ProjectLanding {
-  const phone = getSupportPhoneDisplay();
-  landing.ctaLabel = "Đăng ký tư vấn House X";
-  landing.ctaHref = "/lien-he";
-  landing.ctaSubtext = `Hotline House X ${phone} — tư vấn điều kiện NOXH, hồ sơ và đợt mở bán.`;
-  return landing;
+  return applyHousexNoxhCta(landing, { phone: getSupportPhoneDisplay() });
 }
 
 export const HGX_DEF: NoxhLandingDef = {
@@ -98,7 +94,7 @@ Kết nối ngoại khu (tham chiếu CĐT):
 
 Nội khu có hồ cảnh quan trung tâm, công viên, phố đi bộ và các tiện ích giáo dục, thương mại, thể thao phục vụ cư dân trong khu đô thị.
 
-Dự án khởi công khoảng 27/06/2025, dự kiến bàn giao khoảng 2028. Bảng giá nhà ở xã hội chưa công bố. Điều kiện mua theo Luật Nhà ở và thông báo từng đợt của cơ quan nhà nước cùng chủ đầu tư. House X hỗ trợ tư vấn điều kiện và cập nhật đợt mở bán.`,
+Dự án khởi công khoảng 27/06/2025, dự kiến bàn giao khoảng 2028. Bảng giá nhà ở xã hội chưa công bố. Điều kiện mua theo Luật Nhà ở và thông báo từng đợt của cơ quan nhà nước cùng chủ đầu tư. House X tư vấn hồ sơ mua nhà ở xã hội miễn phí và cập nhật tiến độ dự án — đăng ký ngay tại [/lien-he](/lien-he).`,
   highlights: [
     {
       title: "Chung cư NOXH 5–12 tầng trong đại đô thị",
@@ -114,11 +110,11 @@ Dự án khởi công khoảng 27/06/2025, dự kiến bàn giao khoảng 2028. 
     },
     {
       title: "Tách rõ NOXH và sản phẩm thương mại",
-      text: "KĐT còn nhà phố, biệt thự, căn hộ cao cấp — giá và điều kiện khác NOXH. Landing House X tập trung tư vấn điều kiện, hồ sơ và đợt mở bán nhà ở xã hội.",
+      text: "KĐT còn nhà phố, biệt thự, căn hộ cao cấp — giá và điều kiện khác nhà ở xã hội. Landing House X tập trung tư vấn hồ sơ mua nhà ở xã hội miễn phí và cập nhật tiến độ dự án.",
     },
     {
-      title: "Giá NOXH đang cập nhật — gọi House X",
-      text: `Website CĐT chưa niêm yết bảng giá nhà ở xã hội. Không dùng số liệu thị trường thương mại làm giá NOXH. Hotline House X ${getSupportPhoneDisplay()} khi cần cập nhật đợt mở bán.`,
+      title: "Giá nhà ở xã hội đang cập nhật",
+      text: `Bảng giá chưa công bố. House X tư vấn hồ sơ mua nhà ở xã hội miễn phí và cập nhật tiến độ dự án — hotline ${getSupportPhoneDisplay()} hoặc đăng ký ngay.`,
     },
     {
       title: "Gần cụm tiện ích lớn vùng Thuận An – QL13",
@@ -147,7 +143,7 @@ Dự án khởi công khoảng 27/06/2025, dự kiến bàn giao khoảng 2028. 
     },
     {
       q: "Giá nhà ở xã hội Hồ Gươm Xanh bao nhiêu?",
-      a: `Bảng giá nhà ở xã hội chưa công bố. Liên hệ hotline House X ${getSupportPhoneDisplay()} để được cập nhật khi có đợt mở bán.`,
+      a: `Bảng giá nhà ở xã hội chưa công bố. House X tư vấn hồ sơ mua nhà ở xã hội miễn phí và cập nhật tiến độ dự án — hotline ${getSupportPhoneDisplay()} hoặc đăng ký ngay tại [/lien-he](/lien-he).`,
     },
     {
       q: "Ai được mua nhà ở xã hội tại Hồ Gươm Xanh?",
@@ -167,7 +163,7 @@ Dự án khởi công khoảng 27/06/2025, dự kiến bàn giao khoảng 2028. 
     },
     {
       q: "Liên hệ tư vấn nhà ở xã hội Hồ Gươm Xanh ở đâu?",
-      a: `Qua hotline House X ${getSupportPhoneDisplay()} hoặc form Liên hệ trên House X (timnhaxahoi.com).`,
+      a: `House X tư vấn hồ sơ mua nhà ở xã hội miễn phí và cập nhật tiến độ dự án. Hotline ${getSupportPhoneDisplay()} — đăng ký ngay tại [/lien-he](/lien-he).`,
     },
   ],
   gallery: HGX_IMAGES.gallery.map((g) => ({ ...g })),

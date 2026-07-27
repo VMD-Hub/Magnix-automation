@@ -5,6 +5,7 @@ import {
   defaultProjectLanding,
 } from "@/lib/content/project-landing";
 import { PHU_THO_DMC_IMAGES } from "@/lib/content/phu-tho-dmc-images";
+import { applyHousexNoxhCta } from "@/lib/content/noxh-editorial";
 
 const NOW = new Date("2026-06-29T00:00:00.000Z");
 
@@ -102,11 +103,7 @@ Dự án do Công ty Cổ phần Đức Mạnh (Đức Mạnh Group) phát tri�
     },
   ];
   landing.gallery = [...PHU_THO_DMC_IMAGES.gallery];
-  landing.ctaLabel = "Liên hệ tư vấn";
-  landing.ctaHref = "/lien-he";
-  landing.ctaSubtext =
-    "Tư vấn điều kiện NOXH, layout căn hộ và tiến độ bàn giao — liên hệ HouseX.";
-  return landing;
+  return applyHousexNoxhCta(landing);
 }
 
 export function buildPhuThoDmcMock(): ProjectDetail {

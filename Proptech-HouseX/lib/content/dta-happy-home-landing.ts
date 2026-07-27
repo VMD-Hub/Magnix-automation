@@ -7,6 +7,7 @@ import {
   DTA_HAPPY_HOME_IMAGES,
   dtaHappyHomeGallery,
 } from "@/lib/content/dta-happy-home-images";
+import { applyHousexNoxhCta } from "@/lib/content/noxh-editorial";
 
 export const DTA_HAPPY_HOME_SLUG = "dta-happy-home-nhon-trach" as const;
 export const DTA_HAPPY_HOME_NAME = "DTA Happy Home Nhơn Trạch" as const;
@@ -160,11 +161,7 @@ export function buildDtaHappyHomeLanding(): ProjectLanding {
     ],
   };
   landing.gallery = dtaHappyHomeGallery();
-  landing.ctaLabel = "Liên hệ tư vấn";
-  landing.ctaHref = "/lien-he";
-  landing.ctaSubtext =
-    "Tư vấn bảng giá, phương thức thanh toán và hồ sơ vay — liên hệ HouseX.";
-  return landing;
+  return applyHousexNoxhCta(landing, { attachServices: false });
 }
 
 export function buildDtaHappyHomeOverviewData() {

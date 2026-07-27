@@ -5,6 +5,7 @@ import {
   defaultProjectLanding,
 } from "@/lib/content/project-landing";
 import { THU_THIEM_GREEN_HOUSE_IMAGES } from "@/lib/content/thu-thiem-green-house-images";
+import { applyHousexNoxhCta } from "@/lib/content/noxh-editorial";
 
 const NOW = new Date("2026-06-29T00:00:00.000Z");
 
@@ -96,11 +97,7 @@ Dự án do Thủ Thiêm Group phát triển; tổng thầu Phước Thành Cons
     },
   ];
   landing.gallery = [...THU_THIEM_GREEN_HOUSE_IMAGES.gallery];
-  landing.ctaLabel = "Liên hệ tư vấn";
-  landing.ctaHref = "/lien-he";
-  landing.ctaSubtext =
-    "Tư vấn chi tiết hơn về dự án — liên hệ với chúng tôi.";
-  return landing;
+  return applyHousexNoxhCta(landing);
 }
 
 export function buildThuThiemGreenHouseMock(): ProjectDetail {

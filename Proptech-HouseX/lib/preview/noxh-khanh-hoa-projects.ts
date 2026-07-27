@@ -14,6 +14,7 @@ import {
   buildNoxhSeedLanding,
   type NoxhLandingDef,
 } from "@/lib/preview/_noxh-landing-factory";
+import { HOUSEX_NOXH_CONSULT_FAQ_ANSWER } from "@/lib/content/noxh-editorial";
 
 type KhRow = {
   stt: number;
@@ -193,7 +194,7 @@ Sau NQ 2025, Ninh Thuận sáp nhập vào tỉnh Khánh Hòa. Vị trí trên b
       },
       {
         q: "Tư vấn thế nào?",
-        a: "Form trang dự án hoặc hotline House X · Wiki nhà ở xã hội.",
+        a: HOUSEX_NOXH_CONSULT_FAQ_ANSWER,
       },
     ],
     heroImage: {

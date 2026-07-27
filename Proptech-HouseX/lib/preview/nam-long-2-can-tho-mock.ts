@@ -5,6 +5,7 @@ import {
   defaultProjectLanding,
 } from "@/lib/content/project-landing";
 import { NAM_LONG_2_CT_IMAGES } from "@/lib/content/nam-long-2-can-tho-images";
+import { applyHousexNoxhCta } from "@/lib/content/noxh-editorial";
 
 const NOW = new Date("2026-06-29T00:00:00.000Z");
 
@@ -95,11 +96,7 @@ CĐT: Công ty Cổ phần Đầu tư Nam Long (Nam Long Group) — dòng Ehome.
     },
   ];
   landing.gallery = [...NAM_LONG_2_CT_IMAGES.gallery];
-  landing.ctaLabel = "Liên hệ tư vấn";
-  landing.ctaHref = "/lien-he";
-  landing.ctaSubtext =
-    "Tư vấn điều kiện NOXH, hồ sơ đăng ký và tiến độ thanh toán — liên hệ HouseX.";
-  return landing;
+  return applyHousexNoxhCta(landing);
 }
 
 export function buildNamLong2CanThoMock(): ProjectDetail {

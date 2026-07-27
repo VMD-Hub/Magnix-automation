@@ -5,6 +5,7 @@ import {
   defaultProjectLanding,
 } from "@/lib/content/project-landing";
 import { KDC_CHANG_SONG_IMAGES } from "@/lib/content/kdc-chang-song-images";
+import { applyHousexNoxhCta } from "@/lib/content/noxh-editorial";
 
 const NOW = new Date("2026-06-29T00:00:00.000Z");
 
@@ -95,11 +96,7 @@ Tiến độ (6/2026): Đang san lấp, hoàn thiện hạ tầng kỹ thuật n
     },
   ];
   landing.gallery = [...KDC_CHANG_SONG_IMAGES.gallery];
-  landing.ctaLabel = "Liên hệ tư vấn";
-  landing.ctaHref = "/lien-he";
-  landing.ctaSubtext =
-    "Đăng ký quan tâm NOXH KDC Chàng Sông — nhận thông báo giá và lịch nộp hồ sơ.";
-  return landing;
+  return applyHousexNoxhCta(landing);
 }
 
 export function buildKdcChangSongMock(): ProjectDetail {

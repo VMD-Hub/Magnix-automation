@@ -15,6 +15,7 @@ import {
   buildNoxhSeedLanding,
   type NoxhLandingDef,
 } from "@/lib/preview/_noxh-landing-factory";
+import { HOUSEX_NOXH_CONSULT_FAQ_ANSWER } from "@/lib/content/noxh-editorial";
 
 type HcmRow = {
   stt: number;
@@ -505,7 +506,7 @@ ${
       },
       {
         q: "Tư vấn thế nào?",
-        a: "Form trang dự án hoặc hotline House X · Wiki nhà ở xã hội.",
+        a: HOUSEX_NOXH_CONSULT_FAQ_ANSWER,
       },
     ],
     heroImage: {
@@ -576,7 +577,7 @@ Quy mô đất khoảng 44,16 ha. Số căn và bảng giá đang được xác 
       },
       {
         q: "Tư vấn thế nào?",
-        a: "Để lại thông tin trên form trang dự án hoặc xem Wiki nhà ở xã hội trên House X.",
+        a: HOUSEX_NOXH_CONSULT_FAQ_ANSWER,
       },
     ],
     legalDocs: [{ docType: "chap_thuan_noxh", status: "dang_lam" }],

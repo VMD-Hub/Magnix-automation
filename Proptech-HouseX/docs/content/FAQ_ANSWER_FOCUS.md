@@ -19,6 +19,14 @@ Dùng cho `faqs[]` landing dự án, accordion Q&A, H2 dạng câu hỏi trong b
 2. Có cảm giác đổ trách nhiệm / vô trách nhiệm không?
 3. Có lộ ghi chú biên tập hoặc so sánh kênh bán không?
 
+## CTA chuẩn (đồng nhất mọi landing NOXH)
+
+Dùng `HOUSEX_NOXH_CTA` / `HOUSEX_NOXH_CTA_MESSAGE` trong `lib/content/noxh-editorial.ts`:
+
+> House X tư vấn hồ sơ mua nhà ở xã hội miễn phí và cập nhật tiến độ dự án. Đăng ký ngay!
+
+Không viết lại biến thể mơ hồ (“hỗ trợ tư vấn điều kiện”, “đồng hành…”, “liên hệ với chúng tôi”).
+
 ## Liên quan AIO / đề xuất AI
 
 FAQ và đoạn ngắn trên landing là nguồn AI Overview hay trích. Câu disclaimer nội bộ (“không thay thế CĐT”, “không dùng hotline CĐT”, “không thu đặt cọc…”) dễ bị AI nhắc lại → web trông thiếu tin cậy. Giữ ghi chú ops trong `docs/` / comment code.

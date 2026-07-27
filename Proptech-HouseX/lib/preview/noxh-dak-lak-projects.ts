@@ -14,6 +14,7 @@ import {
   buildNoxhSeedLanding,
   type NoxhLandingDef,
 } from "@/lib/preview/_noxh-landing-factory";
+import { HOUSEX_NOXH_CONSULT_FAQ_ANSWER } from "@/lib/content/noxh-editorial";
 
 type DlRow = {
   stt: number;
@@ -171,7 +172,7 @@ Sau NQ 2025, Phú Yên sáp nhập vào tỉnh Đắk Lắk mới. Vị trí tr�
       },
       {
         q: "Tư vấn thế nào?",
-        a: "Form trang dự án hoặc hotline House X · Wiki nhà ở xã hội.",
+        a: HOUSEX_NOXH_CONSULT_FAQ_ANSWER,
       },
     ],
     heroImage: {

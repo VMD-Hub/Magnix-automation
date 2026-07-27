@@ -5,6 +5,7 @@ import {
   defaultProjectLanding,
 } from "@/lib/content/project-landing";
 import { ECO_RESIDENCE_PUBLISHED_IMAGES } from "@/lib/content/eco-residence-images";
+import { applyHousexNoxhCta } from "@/lib/content/noxh-editorial";
 
 const NOW = new Date("2026-06-29T00:00:00.000Z");
 
@@ -92,11 +93,7 @@ Phù hợp công nhân, người lao động KCN và các nhóm đối tượng 
     },
   ];
   landing.gallery = [...ECO_RESIDENCE_PUBLISHED_IMAGES.gallery];
-  landing.ctaLabel = "Liên hệ tư vấn";
-  landing.ctaHref = "/lien-he";
-  landing.ctaSubtext =
-    "Tư vấn chi tiết hơn về dự án — liên hệ với chúng tôi.";
-  return landing;
+  return applyHousexNoxhCta(landing);
 }
 
 export function buildEcoResidenceMock(): ProjectDetail {

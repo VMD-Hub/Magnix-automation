@@ -10,6 +10,11 @@ import {
   CONNECTIVITY_TITLE_HOOKS,
   pickConnectivityLead,
 } from "@/lib/content/dta-happy-home-connectivity";
+import {
+  HOUSEX_NOXH_CONSULT_FAQ_ANSWER,
+  HOUSEX_NOXH_CTA,
+  HOUSEX_NOXH_CTA_MESSAGE,
+} from "@/lib/content/noxh-editorial";
 
 const PROJECT = "DTA Happy Home Nhơn Trạch";
 const LOCATION = "Khu đô thị DTA City, Nguyễn Văn Cừ, Phước An, Nhơn Trạch, Đồng Nai";
@@ -21,9 +26,9 @@ const CTAS = [
     line: "Dùng công cụ tính lãi suất & trả góp trên HouseX để ước lượng vốn tự có và dòng tiền hàng tháng trước khi giữ suất.",
   },
   {
-    label: "Đăng ký tư vấn hồ sơ NOXH miễn phí",
-    href: "/lien-he",
-    line: "HouseX hỗ trợ rà soát điều kiện mua nhà ở xã hội và checklist hồ sơ — miễn phí, không thay vai trò CĐT.",
+    label: HOUSEX_NOXH_CTA.label,
+    href: HOUSEX_NOXH_CTA.href,
+    line: HOUSEX_NOXH_CTA_MESSAGE,
   },
   {
     label: "Xem dự án & chính sách thanh toán",
@@ -101,7 +106,7 @@ const OPENINGS: readonly string[] = [
   "Căn {code} Block A10 Happy Home: {highlight} — tra cứu pháp lý NOXH trên trang dự án.",
   "NOXH {code} tại {location}: {highlight}, giá niêm yết {price}.",
   "Suất {code} — một trong 30 căn giỏ hàng chung Block A10 đang mở bán trên HouseX.",
-  "Happy Home mở suất {code}: {highlight}; liên hệ tư vấn khi bạn cần hỗ trợ hồ sơ vay.",
+  "Happy Home mở suất {code}: {highlight}; đăng ký tư vấn hồ sơ NOXH miễn phí trên House X — đăng ký ngay tại /lien-he.",
   "Căn NOXH {code} DTA City — {highlight}, phù hợp an cư lâu dài cho người lao động miền Nam.",
 ];
 
@@ -282,7 +287,7 @@ export function buildDtaUnitListingCopy(
     index % 3 === 0
       ? "Bạn cũng có thể dùng công cụ tính khoản vay tại /tinh-tra-gop với mức giá suất này."
       : index % 3 === 1
-        ? "Cần rà soát điều kiện NOXH? Đăng ký tư vấn miễn phí tại /lien-he."
+        ? HOUSEX_NOXH_CONSULT_FAQ_ANSWER
         : "Xem mặt bằng, nhà mẫu và chính sách thanh toán: /du-an/dta-happy-home-nhon-trach.",
   ].join("\n");
 

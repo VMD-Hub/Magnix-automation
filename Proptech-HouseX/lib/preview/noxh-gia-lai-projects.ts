@@ -14,6 +14,7 @@ import {
   buildNoxhSeedLanding,
   type NoxhLandingDef,
 } from "@/lib/preview/_noxh-landing-factory";
+import { HOUSEX_NOXH_CONSULT_FAQ_ANSWER } from "@/lib/content/noxh-editorial";
 
 type GlRow = {
   stt: number;
@@ -193,7 +194,7 @@ Sau NQ 2025, Bình Định sáp nhập vào tỉnh Gia Lai mới. Vị trí trê
       },
       {
         q: "Tư vấn thế nào?",
-        a: "Form trang dự án hoặc hotline House X · Wiki nhà ở xã hội.",
+        a: HOUSEX_NOXH_CONSULT_FAQ_ANSWER,
       },
     ],
     heroImage: {

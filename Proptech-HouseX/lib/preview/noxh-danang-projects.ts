@@ -14,6 +14,7 @@ import {
   buildNoxhSeedLanding,
   type NoxhLandingDef,
 } from "@/lib/preview/_noxh-landing-factory";
+import { HOUSEX_NOXH_CONSULT_FAQ_ANSWER } from "@/lib/content/noxh-editorial";
 
 type DnRow = {
   stt: number;
@@ -157,7 +158,7 @@ Xem Wiki nhà ở xã hội, công cụ tính trả góp hoặc để lại thô
       },
       {
         q: "Đăng ký tư vấn thế nào?",
-        a: "Form trên trang dự án hoặc hotline House X. Xem trước điều kiện tại Wiki nhà ở xã hội.",
+        a: HOUSEX_NOXH_CONSULT_FAQ_ANSWER,
       },
     ],
     heroImage: {
