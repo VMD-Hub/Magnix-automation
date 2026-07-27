@@ -1,6 +1,6 @@
 /**
  * 4 bài SEO chuyên mục CTV — `/affiliate-bat-dong-san/[slug]`.
- * Không công bố bảng hoa hồng theo cấp / số tiền cố định.
+ * Copy người đọc: không lộ thuật ngữ vận hành (mã, claim, hội nhập, duyệt…).
  */
 
 import { CTV_AFFILIATE_PATH } from "@/lib/content/ctv-affiliate-landing";
@@ -34,7 +34,7 @@ export function ctvAffiliateArticlePath(slug: string): string {
 
 const CTA_BLOCK = `## Đăng ký cộng tác viên House X
 
-Tạo [tài khoản cộng tác viên](/dang-ky/moi-gioi?next=/moi-gioi/dang-ky-ctv), nộp [hồ sơ CTV](/moi-gioi/dang-ky-ctv), hoặc [liên hệ](/lien-he) nếu bạn muốn hỏi trước. Cơ chế thưởng chi tiết mở sau khi hồ sơ được duyệt — không công bố bảng số trên trang công khai.
+[Đăng ký tham gia](/dang-ky/moi-gioi?next=/moi-gioi/dang-ky-ctv), [tiếp tục nếu đã có tài khoản](/moi-gioi/dang-ky-ctv), hoặc [liên hệ](/lien-he) nếu bạn muốn hỏi trước.
 
 Xem tổng quan chương trình: [${HUB}](${HUB}).`;
 
@@ -47,7 +47,7 @@ export const CTV_AFFILIATE_ARTICLES: readonly CtvAffiliateArticle[] = [
       "Cắt máu — trả lại phần lớn hoa hồng cá nhân để chốt deal — đẩy nghề xuống đáy: mất hậu mãi, phí ngầm, niềm tin sụp. Có đường khác: cộng tác viên minh bạch trên House X.",
     seoTitle: "Cắt máu hoa hồng môi giới — vòng xoáy và lối ra CTV | House X",
     seoDesc:
-      "Cắt máu hoa hồng là gì, vì sao hại cả nghề và khách hàng, và cộng tác viên House X khác cuộc đua ngoài luồng thế nào — không hứa bảng thưởng công khai.",
+      "Cắt máu hoa hồng là gì, vì sao hại cả nghề và khách hàng, và cộng tác viên House X khác cuộc đua ngoài luồng thế nào.",
     publishedAt: "2026-07-27T10:00:00.000Z",
     body: `## Cắt máu hoa hồng đang biến nghề thành cuộc đua xuống đáy
 
@@ -55,11 +55,11 @@ Trong bất động sản, “cắt máu” là khi người làm trung gian t�
 
 Dưới góc nhìn thực tế nghề, đây là cuộc đua xuống đáy: các bên kéo nhau vào vòng xoáy tự hủy giá trị lao động. Một khi biên thưởng bị ép về mức gần bằng không, chuỗi trách nhiệm sau ký cũng mỏng đi.
 
-## Hai hệ lụy đen khi đã cắt máu để tranh khách
+## Hai hệ lụy khi đã cắt máu để tranh khách
 
 ### Hậu mãi và pháp lý bị cắt theo
 
-Hoa hồng không phải tiền từ trên trời. Đó là chi phí cho thời gian, chất xám và trách nhiệm dài hạn quanh hồ sơ, tranh chấp, cấp sổ. Khi lợi nhuận sau cắt máu kiệt quệ, động lực đồng hành sau ký thường biến mất: khách bị bỏ rơi, không còn người rà soát, không ai cầm tay làm thủ tục. Số tiền tưởng “tiết kiệm” thực chất có thể là khoản cắt đi từ sự an toàn pháp lý của chính giao dịch.
+Hoa hồng không phải tiền từ trên trời. Đó là chi phí cho thời gian, chất xám và trách nhiệm dài hạn quanh giấy tờ, tranh chấp, cấp sổ. Khi lợi nhuận sau cắt máu kiệt quệ, động lực đồng hành sau ký thường biến mất: khách bị bỏ rơi, không còn người rà soát, không ai cầm tay làm thủ tục. Số tiền tưởng “tiết kiệm” thực chất có thể là khoản cắt đi từ sự an toàn pháp lý của chính giao dịch.
 
 ### Bù đắp sai lệch và phí ngầm
 
@@ -70,20 +70,20 @@ Hoa hồng không phải tiền từ trên trời. Đó là chi phí cho thời 
 Khách nghĩ mình thắng vì nhận lại một phần hoa hồng. Thực tế họ thường đánh đổi:
 
 - Ít hỗ trợ sau ký hơn khi biên thưởng của bên kia đã cạn.
-- Rủi ro phí hồ sơ / lời hứa ngoài hợp đồng CĐT.
+- Rủi ro phí dịch vụ / lời hứa ngoài hợp đồng chủ đầu tư.
 - Khó phân biệt ưu đãi dự án chính thức với cắt hoa hồng cá nhân ngoài luồng.
 
 Muốn tối ưu chi phí đúng luật, hãy tách: chính sách dự án / đợt mở bán (có công bố) khác với đòi cắt hoa hồng cá nhân không kiểm chứng được.
 
 ## Lối ra: cộng tác viên minh bạch, không đua cắt máu
 
-Thay vì giấu thưởng rồi bị ép cắt ngoài luồng, House X mở chương trình [cộng tác viên / bán hàng liên kết](${HUB}): đăng ký, hoàn tất hồ sơ, được duyệt — rồi mới xem cơ chế thưởng trong hệ thống. Bạn có thể giới thiệu, bán hoặc mua cho mình trên cùng luật chơi rõ ràng.
+Thay vì giấu thưởng rồi bị ép cắt ngoài luồng, House X mở chương trình [cộng tác viên](${HUB}): giới thiệu, bán hoặc mua trên luật chơi rõ ràng — không đua cắt máu.
 
 Đọc tiếp:
 
 - [Mô hình cộng tác viên BĐS House X](${ctvAffiliateArticlePath(SLUG_MODEL)})
 - [Chân dung đối tác phù hợp](${ctvAffiliateArticlePath(SLUG_PERSONA)})
-- [Hướng dẫn đăng ký CTV](${ctvAffiliateArticlePath(SLUG_GUIDE)})
+- [Cách bắt đầu với House X](${ctvAffiliateArticlePath(SLUG_GUIDE)})
 
 ${CTA_BLOCK}
 `,
@@ -91,37 +91,36 @@ ${CTA_BLOCK}
   {
     slug: SLUG_MODEL,
     title:
-      "Mô hình cộng tác viên bất động sản House X: từ đối thủ ngoài luồng thành đối tác có hồ sơ",
+      "Mô hình cộng tác viên bất động sản House X: từ đối thủ ngoài luồng thành đối tác",
     excerpt:
-      "CTV House X: đăng ký tài khoản, nộp hồ sơ, duyệt mã — rồi giới thiệu hoặc mua đúng kênh. Thưởng theo quy trình sau duyệt; không đua cắt máu ngoài luồng.",
+      "Cộng tác viên House X: đăng ký tham gia, rồi giới thiệu hoặc mua đúng kênh. Hợp tác minh bạch, không đua cắt máu ngoài luồng.",
     seoTitle: "Mô hình cộng tác viên BĐS House X — luật chơi minh bạch | House X",
     seoDesc:
-      "Cộng tác viên bất động sản House X vận hành thế nào: đăng ký, hồ sơ, duyệt mã, giới thiệu hoặc mua — cơ chế thưởng sau duyệt, không bảng số công khai.",
+      "Cộng tác viên bất động sản House X là gì: giới thiệu, bán hoặc mua minh bạch — khác cuộc đua cắt máu ngoài luồng thế nào.",
     publishedAt: "2026-07-27T11:00:00.000Z",
     body: `## Vì sao cần mô hình khác cuộc đua cắt máu?
 
-Khi hoa hồng bị mặc cả ngoài luồng, cả người bán lẫn người mua đều khó tin quy trình. House X tái cấu trúc bằng chương trình cộng tác viên: ghi nhận giới thiệu / bán hàng liên kết qua hồ sơ và mã — thay vì “bớt lộc” miệng.
+Khi hoa hồng bị mặc cả ngoài luồng, cả người bán lẫn người mua đều khó tin. House X mở chương trình cộng tác viên: ghi nhận giới thiệu và bán hàng liên kết một cách chính danh — thay vì “bớt lộc” miệng.
 
 Xem gốc nỗi đau: [Cắt máu hoa hồng môi giới](${ctvAffiliateArticlePath(SLUG_PILLAR)}).
 
-## Luật chơi bốn bước (không lộ bảng thưởng công khai)
+## Bạn làm gì được khi tham gia?
 
-1. Tạo tài khoản cộng tác viên — đăng ký bán hàng liên kết trên House X.
-2. Nộp và hoàn tất hồ sơ CTV — vùng làm việc, kinh nghiệm, động lực; khóa hội nhập khi được yêu cầu.
-3. Được duyệt và nhận mã — admin cấp mã khi đủ điều kiện; lúc này mới mở cơ chế thưởng chi tiết trong tài khoản.
-4. Giới thiệu, bán hoặc mua đúng kênh — lead gắn mã; mức hỗ trợ tư vấn/chốt từ House X tùy năng lực và chứng chỉ (xem sau duyệt).
+- Giới thiệu người thân / khách — House X hỗ trợ tư vấn và chốt nếu bạn không muốn đóng vai bán hàng.
+- Bán hàng liên kết trên sản phẩm / dự án đang mở.
+- Mua cho chính mình trên cùng luật chơi rõ ràng — không ép ai cắt máu để “ưu đãi”.
 
-House X không đăng bảng hoa hồng hay “cấp thưởng” trên trang công khai. Điều đó tránh hiểu nhầm và giữ đúng quy trình nội bộ.
+## Ba bước bắt đầu
 
-## Bạn làm gì được sau khi có mã?
+1. Đăng ký tham gia chương trình cộng tác viên.
+2. House X hướng dẫn cách giới thiệu hoặc mua phù hợp với bạn.
+3. Bắt đầu giới thiệu, bán hoặc mua — minh bạch, không đua cắt máu.
 
-- Giới thiệu người thân / khách — House X có thể hỗ trợ tư vấn và chốt nếu bạn không muốn đóng vai bán hàng.
-- Bán hàng liên kết trên sản phẩm / dự án đang mở theo quy trình claim.
-- Mua cho chính mình trên cùng luật chơi minh bạch — không ép ai cắt máu để “ưu đãi”.
+Chi tiết hợp tác được trao đổi trực tiếp khi bạn tham gia.
 
-## Khác gì môi giới chỉ đăng tin?
+## Khác gì chỉ đăng tin?
 
-Đăng tin đưa sản phẩm lên sàn. Cộng tác viên gắn mã giới thiệu, claim và thưởng theo quy trình House X. Bạn có thể làm cả hai khi đủ điều kiện tài khoản. Chi tiết bước: [Hướng dẫn đăng ký CTV](${ctvAffiliateArticlePath(SLUG_GUIDE)}).
+Đăng tin đưa sản phẩm lên sàn. Cộng tác viên là chương trình giới thiệu và bán hàng liên kết với House X. Bạn có thể làm cả hai nếu phù hợp. Cách bắt đầu: [Hướng dẫn đăng ký](${ctvAffiliateArticlePath(SLUG_GUIDE)}).
 
 Ai phù hợp: [Chân dung đối tác](${ctvAffiliateArticlePath(SLUG_PERSONA)}).
 
@@ -133,52 +132,52 @@ ${CTA_BLOCK}
     title:
       "Chân dung đối tác cộng tác viên BĐS: ai nên tham gia chương trình House X?",
     excerpt:
-      "Nhân viên ngân hàng, bảo hiểm, chứng khoán, môi giới tự do, người chỉ muốn giới thiệu, người mua cho mình — chân dung rõ để tự nhận diện trước khi đăng ký CTV.",
+      "Nhân viên ngân hàng, bảo hiểm, chứng khoán, môi giới tự do, người chỉ muốn giới thiệu, người mua cho mình — chân dung rõ để tự nhận diện trước khi đăng ký.",
     seoTitle: "Chân dung cộng tác viên BĐS House X — ai phù hợp? | House X",
     seoDesc:
-      "Đối tượng cộng tác viên House X: ngân hàng, bảo hiểm, chứng khoán, MG tự do, giới thiệu người thân, tự mua — nỗi đau và việc làm trên hệ thống.",
+      "Đối tượng cộng tác viên House X: ngân hàng, bảo hiểm, chứng khoán, MG tự do, giới thiệu người thân, tự mua — nỗi đau và việc làm cùng House X.",
     publishedAt: "2026-07-27T12:00:00.000Z",
     body: `## Không chỉ dành cho môi giới bất động sản
 
-Chương trình cộng tác viên House X mở cho ai có mạng lưới, nhu cầu mua, hoặc muốn giới thiệu đúng kênh — sau khi hoàn tất hồ sơ. Dưới đây là chân dung thường gặp.
+Chương trình cộng tác viên House X mở cho ai có mạng lưới, nhu cầu mua, hoặc muốn giới thiệu đúng kênh. Dưới đây là chân dung thường gặp.
 
-Tổng quan mô hình: [Mô hình CTV House X](${ctvAffiliateArticlePath(SLUG_MODEL)}).
+Tổng quan mô hình: [Mô hình cộng tác viên House X](${ctvAffiliateArticlePath(SLUG_MODEL)}).
 
 ## Nhân viên ngân hàng, bảo hiểm, chứng khoán
 
 Nỗi đau: Khách tin bạn về tài chính nhưng hỏi nhà / NOXH / dự án — bạn không muốn (hoặc không được) đóng vai “cò cắt máu”.
 
-Trên House X: Giới thiệu đúng kênh; sau duyệt mã, lead được ghi nhận. Bạn giữ vai trò người tin cậy; đội ngũ House X hỗ trợ tư vấn sản phẩm tùy mức sau duyệt.
+Trên House X: Bạn giới thiệu đúng chỗ; House X tư vấn sản phẩm. Bạn vẫn là người khách tin tưởng.
 
 ## Môi giới bất động sản tự do
 
 Nỗi đau: Bị kéo vào đua cắt máu; mất giá trị tư vấn và hậu mãi.
 
-Trên House X: Bán trên nền tảng có quy trình claim; tập trung chuyên môn pháp lý / lựa chọn căn — không lấy “cắt nhiều nhất” làm lợi thế cạnh tranh. Đọc thêm [vòng xoáy cắt máu](${ctvAffiliateArticlePath(SLUG_PILLAR)}).
+Trên House X: Cạnh tranh bằng chuyên môn pháp lý và lựa chọn căn — không bằng ai cắt nhiều hơn. Đọc thêm [vòng xoáy cắt máu](${ctvAffiliateArticlePath(SLUG_PILLAR)}).
 
 ## Người có mạng lưới nhưng ngại bán
 
 Nỗi đau: Người thân / đồng nghiệp muốn mua; bạn ngại ra mặt tư vấn và sợ bị kéo vào mặc cả hoa hồng.
 
-Trên House X: Chỉ giới thiệu; House X hỗ trợ tư vấn và chốt theo quy trình sau duyệt. Bạn không phải diễn vai môi giới nếu không muốn.
+Trên House X: Bạn chỉ cần giới thiệu; House X hỗ trợ tư vấn và chốt. Không buộc phải đóng vai môi giới.
 
 ## Người mua cho chính mình
 
 Nỗi đau: Không muốn ép môi giới cắt máu; cũng không tin “bớt lộc” thiếu minh bạch.
 
-Trên House X: Đi cùng luật chơi CTV — thưởng / ưu đãi (nếu có) theo hồ sơ sau duyệt, không dựa trên thỏa thuận miệng ngoài luồng.
+Trên House X: Mua qua chương trình cộng tác viên — rõ ràng, không thỏa thuận miệng ngoài luồng.
 
 ## Truyền thông, HR, công đoàn, mạng lưới KCN
 
-Nỗi đau: Có đối tượng quan tâm nhà ở / NOXH nhưng thiếu kênh sản phẩm và quy trình sạch.
+Nỗi đau: Có người quan tâm nhà ở / NOXH nhưng thiếu kênh sản phẩm đáng tin.
 
-Trên House X: Giới thiệu có kiểm chứng; gắn mã sau duyệt; đồng hành nội dung / dự án khi phù hợp.
+Trên House X: Giới thiệu có kiểm chứng; đồng hành nội dung hoặc dự án khi phù hợp.
 
 ## Bạn thuộc nhóm nào — bước tiếp theo
 
 1. Đối chiếu chân dung ở trên.
-2. Đọc [hướng dẫn đăng ký](${ctvAffiliateArticlePath(SLUG_GUIDE)}).
-3. Nộp hồ sơ; cơ chế thưởng chi tiết chỉ mở sau duyệt.
+2. Đọc [cách bắt đầu](${ctvAffiliateArticlePath(SLUG_GUIDE)}).
+3. Đăng ký tham gia.
 
 ${CTA_BLOCK}
 `,
@@ -186,44 +185,44 @@ ${CTA_BLOCK}
   {
     slug: SLUG_GUIDE,
     title:
-      "Đăng ký CTV bán hàng liên kết House X: hướng dẫn từng bước và câu hỏi thường gặp",
+      "Đăng ký cộng tác viên bán hàng liên kết House X: cách bắt đầu và câu hỏi thường gặp",
     excerpt:
-      "Từ tạo tài khoản đến nộp hồ sơ CTV, duyệt mã và bắt đầu giới thiệu — checklist thực tế, FAQ, CTA. Không kèm bảng hoa hồng công khai.",
-    seoTitle: "Đăng ký CTV bán hàng liên kết House X — hướng dẫn | House X",
+      "Từ đăng ký tham gia đến giới thiệu hoặc mua — các bước thực tế, FAQ và liên hệ. Rõ ràng, không đua cắt máu.",
+    seoTitle: "Đăng ký cộng tác viên House X — hướng dẫn bắt đầu | House X",
     seoDesc:
-      "Cách đăng ký cộng tác viên House X: tài khoản, hồ sơ CTV, duyệt mã, FAQ — cơ chế thưởng sau duyệt, không bảng số trên trang công khai.",
+      "Cách đăng ký cộng tác viên House X: các bước bắt đầu, FAQ — hợp tác minh bạch, không đua cắt máu.",
     publishedAt: "2026-07-27T13:00:00.000Z",
-    body: `## Bạn sẽ đi những bước nào?
+    body: `## Bạn sẽ bắt đầu như thế nào?
 
-1. Đọc [tổng quan chương trình](${HUB}) và [mô hình CTV](${ctvAffiliateArticlePath(SLUG_MODEL)}).
-2. [Đăng ký tài khoản cộng tác viên](/dang-ky/moi-gioi?next=/moi-gioi/dang-ky-ctv).
-3. [Nộp hồ sơ CTV](/moi-gioi/dang-ky-ctv) (cần đã đăng nhập tài khoản).
-4. Hoàn thành khóa hội nhập nếu được yêu cầu; chờ admin duyệt và cấp mã.
-5. Sau duyệt: xem cơ chế thưởng trong tài khoản; bắt đầu giới thiệu / bán / mua đúng kênh.
+1. Đọc [tổng quan chương trình](${HUB}) và [mô hình cộng tác viên](${ctvAffiliateArticlePath(SLUG_MODEL)}).
+2. [Đăng ký tham gia](/dang-ky/moi-gioi?next=/moi-gioi/dang-ky-ctv).
+3. Nếu đã có tài khoản: [tiếp tục đăng ký](/moi-gioi/dang-ky-ctv).
+4. House X hướng dẫn cách giới thiệu hoặc mua phù hợp với bạn.
+5. Bắt đầu giới thiệu, bán hoặc mua đúng kênh.
 
-## Checklist trước khi nộp hồ sơ
+## Trước khi đăng ký
 
 - Biết mình thuộc chân dung nào: [Chân dung đối tác](${ctvAffiliateArticlePath(SLUG_PERSONA)}).
-- Chuẩn bị mô tả vùng làm việc / mạng lưới / động lực (form yêu cầu).
-- Không kỳ vọng thấy bảng hoa hồng trên trang marketing — chỉ sau duyệt.
+- Sẵn sàng hợp tác rõ ràng với House X — không dựa vào thỏa thuận miệng ngoài luồng.
+- Có câu hỏi? [Liên hệ](/lien-he) trước cũng được.
 
 ## Câu hỏi thường gặp
 
 ### Tôi chưa làm môi giới BĐS có đăng ký được không?
 
-Được quan tâm và nộp hồ sơ nếu bạn có nhu cầu giới thiệu, bán hàng liên kết hoặc mua qua House X. Điều kiện duyệt do House X xác nhận theo hồ sơ.
+Được, nếu bạn muốn giới thiệu, bán hàng liên kết hoặc mua qua House X.
 
-### Có cần chứng chỉ môi giới ngay từ đầu?
+### Tôi có cần chứng chỉ môi giới không?
 
-Không bắt buộc để đăng ký quan tâm. Mức hỗ trợ và cơ chế thưởng sau duyệt có thể khác nhau tùy bạn tự tư vấn/chốt hay nhờ House X, và tùy chứng chỉ — chi tiết trong tài khoản sau duyệt.
+Không bắt buộc ngay từ đầu. Cách đồng hành có thể khác nhau tùy bạn tự tư vấn hay nhờ House X — đội ngũ sẽ trao đổi khi bạn tham gia.
 
-### Khi nào biết mức thưởng?
+### Thưởng được thỏa thuận thế nào?
 
-Sau khi hoàn tất hồ sơ và được admin duyệt. Trang công khai không đăng bảng số.
+Theo thỏa thuận hợp tác rõ ràng với House X — không mặc cả “bớt lộc” miệng ngoài luồng. Chi tiết phù hợp từng trường hợp khi bạn tham gia.
 
 ### Khác gì chỉ đăng tin?
 
-Đăng tin = đưa sản phẩm lên sàn. CTV = mã giới thiệu + claim + thưởng theo quy trình. Có thể làm cả hai khi đủ điều kiện.
+Đăng tin = đưa sản phẩm lên sàn. Cộng tác viên = chương trình giới thiệu và bán hàng liên kết với House X. Có thể làm cả hai nếu phù hợp.
 
 ### Tôi chỉ muốn hỏi trước khi đăng ký?
 

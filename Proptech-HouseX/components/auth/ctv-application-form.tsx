@@ -97,10 +97,10 @@ export function CtvApplicationForm() {
     return (
       <div className="mx-auto max-w-md rounded-2xl border border-brand-200 bg-brand-50 p-8 text-center">
         <Icon.BadgeCheck className="mx-auto text-4xl text-brand-600" />
-        <h2 className="mt-3 text-xl font-bold text-slate-900">Bạn đã là CTV</h2>
+        <h2 className="mt-3 text-xl font-bold text-slate-900">Bạn đã là cộng tác viên</h2>
         <p className="mt-2 text-2xl font-mono font-bold text-brand-700">{state.ctvCode}</p>
         <p className="mt-2 text-sm text-slate-600">
-          Dùng mã này khi tham gia chương trình affiliate / bán sản phẩm liên kết.
+          Giữ thông tin này để House X hỗ trợ khi bạn giới thiệu hoặc bán hàng liên kết.
         </p>
       </div>
     );
@@ -109,10 +109,9 @@ export function CtvApplicationForm() {
   if (state.ctvApplication?.status === "PENDING" || done) {
     return (
       <div className="mx-auto max-w-md rounded-2xl border border-amber-200 bg-amber-50 p-8 text-center">
-        <h2 className="text-xl font-bold text-slate-900">Đơn đang chờ duyệt</h2>
+        <h2 className="text-xl font-bold text-slate-900">Đã nhận đăng ký</h2>
         <p className="mt-2 text-sm text-slate-600">
-          Admin sẽ xem xét hồ sơ. Bạn cần hoàn thành khóa đào tạo hội nhập trước khi
-          được duyệt CTV và nhận mã tại đây.
+          House X đang xem xét. Đội ngũ sẽ liên hệ hướng dẫn các bước tiếp theo.
         </p>
       </div>
     );
@@ -122,8 +121,8 @@ export function CtvApplicationForm() {
     return (
       <div className="mx-auto max-w-md space-y-4">
         <div className="rounded-2xl border border-rose-200 bg-rose-50 p-4 text-sm text-rose-800">
-          Đơn trước bị từ chối: {state.ctvApplication.rejectReason ?? "—"}. Bạn có thể
-          nộp lại.
+          Đăng ký trước chưa được chấp nhận:{" "}
+          {state.ctvApplication.rejectReason ?? "—"}. Bạn có thể gửi lại.
         </div>
         <Form
           {...{ idNumber, setIdNumber, experience, setExperience, region, setRegion, motivation, setMotivation, error, loading, submit }}
@@ -187,7 +186,7 @@ function Form(props: {
         />
       </label>
       <label className="block">
-        <span className="text-sm font-medium text-slate-700">Lý do đăng ký CTV</span>
+        <span className="text-sm font-medium text-slate-700">Lý do muốn tham gia</span>
         <textarea
           required
           rows={3}
@@ -200,7 +199,7 @@ function Form(props: {
         <p className="rounded-lg bg-rose-50 px-3 py-2 text-sm text-rose-700">{props.error}</p>
       ) : null}
       <Button type="submit" className="w-full" disabled={props.loading}>
-        {props.loading ? "Đang gửi…" : "Gửi đơn đăng ký CTV"}
+        {props.loading ? "Đang gửi…" : "Gửi đăng ký"}
       </Button>
     </form>
   );

@@ -71,8 +71,7 @@ export function CtvCashflowInfographic() {
         </div>
       </div>
       <p className="mt-3 text-center text-xs text-slate-500">
-        Sơ đồ minh họa quy trình — không phải bảng hoa hồng. Chi tiết thưởng sau khi
-        hồ sơ được duyệt.{" "}
+        Sơ đồ minh họa hai cách hợp tác — cắt máu ngoài luồng so với cộng tác viên minh bạch.{" "}
         <Link href="/affiliate-bat-dong-san" className="text-brand-700 hover:underline">
           Về hub cộng tác viên
         </Link>
