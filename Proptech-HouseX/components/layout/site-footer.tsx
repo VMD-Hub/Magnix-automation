@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { AFFILIATE_VERTICALS } from "@/lib/content/affiliate-verticals";
+import { CTV_AFFILIATE_PATH } from "@/lib/content/ctv-affiliate-landing";
 import { PLATFORM_FOOTER_BLURB } from "@/lib/content/messaging/platform-public";
 import {
   NOXH_CATALOG_PATH,
@@ -169,6 +170,9 @@ export function SiteFooter() {
             </Link>
             <Link href="/hop-tac" className={FOOTER_LINK}>
               Hợp tác &amp; Đăng tin
+            </Link>
+            <Link href={CTV_AFFILIATE_PATH} className={FOOTER_LINK}>
+              Cộng tác viên
             </Link>
             <Link href="/cau-hoi-thuong-gap" className={FOOTER_LINK}>
               FAQ

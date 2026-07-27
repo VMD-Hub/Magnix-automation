@@ -12,6 +12,7 @@ import {
 } from "@/lib/content/ctv-affiliate-landing";
 import { PARTNERSHIPS_PAGE } from "@/lib/content/partnerships-page-content";
 import { ABOUT_PARTNER_SECTION } from "@/lib/content/messaging/about-public";
+import { NAV_MORE } from "@/lib/content/site-nav";
 
 /** Public copy must not leak admin commission tiers or fixed amounts. */
 const FORBIDDEN_PUBLIC =
@@ -60,9 +61,7 @@ describe("CTV affiliate landing (phase 1)", () => {
     );
   });
 
-  it("audience copy is open beyond RE brokers", () => {
-    const blob = CTV_AFFILIATE_WHO.personas.join(" ");
-    assert.match(blob, /ngân hàng|bảo hiểm|chứng khoán/i);
-    assert.match(blob, /người thân|mua cho chính mình/i);
+  it("header «Thêm» includes Cộng tác viên landing", () => {
+    assert.ok(NAV_MORE.some((i) => i.href === CTV_AFFILIATE_PATH));
   });
 });

@@ -1,3 +1,4 @@
+import { CTV_AFFILIATE_PATH } from "@/lib/content/ctv-affiliate-landing";
 import { NOXH_HANDBOOK_PATH } from "@/lib/content/article-routes";
 import {
   NOXH_CATALOG_PATH,
@@ -21,4 +22,5 @@ export const NAV_MORE = [
   { label: "Dịch vụ", href: "/dich-vu" },
   { label: NOXH_HANDBOOK_TITLE, href: NOXH_HANDBOOK_PATH },
   { label: NOXH_CATALOG_TITLE, href: NOXH_CATALOG_PATH },
+  { label: "Cộng tác viên", href: CTV_AFFILIATE_PATH },
 ] as const;
