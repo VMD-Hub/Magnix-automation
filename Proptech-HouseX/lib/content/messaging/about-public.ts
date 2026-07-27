@@ -79,7 +79,7 @@ export const ABOUT_PARTNER_SECTION = {
   ],
   ctas: [
     { label: "Đăng ký đăng tin", href: "/dang-ky/moi-gioi" },
-    { label: "Tìm hiểu chương trình CTV", href: "/moi-gioi/dang-ky-ctv" },
+    { label: "Tìm hiểu chương trình CTV", href: "/affiliate-bat-dong-san" },
   ],
 } as const;
 

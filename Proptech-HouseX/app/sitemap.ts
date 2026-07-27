@@ -98,6 +98,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.4,
     })),
     { url: `${BASE}/hop-tac`, changeFrequency: "monthly", priority: 0.45 },
+    {
+      url: `${BASE}/affiliate-bat-dong-san`,
+      changeFrequency: "monthly" as const,
+      priority: 0.7,
+    },
     { url: `${BASE}/cau-hoi-thuong-gap`, changeFrequency: "monthly", priority: 0.5 },
     { url: `${BASE}/lien-he`, changeFrequency: "monthly", priority: 0.5 },
     { url: `${BASE}/dieu-khoan`, changeFrequency: "yearly", priority: 0.3 },

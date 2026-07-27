@@ -196,9 +196,9 @@ export const PARTNERSHIPS_PAGE = {
     headingVi: "Chương trình cộng tác viên",
     headingEn: "Collaborator program",
     introVi:
-      "Nếu bạn muốn tham gia sâu hơn vào hệ sinh thái House X, hãy xem chương trình cộng tác viên của chúng tôi. Đây là cơ hội dành cho những cá nhân hoặc tổ chức muốn giới thiệu, kết nối hoặc hỗ trợ lan tỏa sản phẩm chất lượng trong thị trường bất động sản.",
+      "Nếu bạn muốn tham gia sâu hơn vào hệ sinh thái House X — giới thiệu khách, bán hàng liên kết hoặc mua minh bạch — xem trang cộng tác viên. Cơ chế hoa hồng chi tiết mở sau khi hoàn tất hồ sơ.",
     introEn:
-      "If you want to get more involved in the House X ecosystem, explore our collaborator program. It is designed for individuals or organizations that want to introduce, connect, or help promote quality properties in the real estate market.",
+      "If you want to get more involved — refer clients, partner on sales, or buy with clear incentives — see our collaborator program. Commission details open after your application is approved.",
     suitableLabelVi: "Phù hợp với",
     suitableLabelEn: "Suitable for",
     suitableFor: [
@@ -210,7 +210,7 @@ export const PARTNERSHIPS_PAGE = {
         en: "Individuals interested in promoting listings to the right audience.",
       },
     ] satisfies BilingualLine[],
-    href: "/moi-gioi/dang-ky-ctv",
+    href: "/affiliate-bat-dong-san",
   },
 
   contact: {
@@ -228,7 +228,7 @@ export const PARTNERSHIPS_PAGE = {
     {
       labelVi: "Tìm hiểu chương trình CTV",
       labelEn: "Learn about the collaborator program",
-      href: "/moi-gioi/dang-ky-ctv",
+      href: "/affiliate-bat-dong-san",
     },
   ],
 } as const;
