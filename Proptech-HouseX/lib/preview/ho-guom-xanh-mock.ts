@@ -96,9 +96,9 @@ Kết nối ngoại khu (tham chiếu CĐT):
 • Gần Phạm Văn Đồng, Quốc lộ 1K, Quốc lộ 1A; di chuyển về trung tâm TP.HCM theo công bố CĐT khoảng dưới 30 phút (tùy giờ)
 • Tiện ích ngoại khu lân cận (bán kính ~500 m – 2 km, tham chiếu): AEON Mall Bình Dương Canary, Lotte Mart, Bệnh viện quốc tế Becamex, sân golf Sông Bé, trường học / liên cấp các cấp; công viên bờ kè Lái Thiêu và hạ tầng đô thị Thuận An
 
-Điểm nhấn cảnh quan nội khu: hồ trung tâm mô phỏng không gian Hồ Gươm, công viên, phố đi bộ và tiện ích giáo dục–thương mại–thể thao trong masterplan.
+Nội khu có hồ cảnh quan trung tâm, công viên, phố đi bộ và các tiện ích giáo dục, thương mại, thể thao phục vụ cư dân trong khu đô thị.
 
-Tiến độ (tham chiếu công khai 2025–2026): khởi công khoảng 27/06/2025; bàn giao tham chiếu khoảng 2028. Bảng giá và điều kiện mua nhà ở xã hội chưa công bố công khai — người mua cần đủ điều kiện đối tượng theo Luật Nhà ở và thông báo từng đợt của cơ quan NN / CĐT. Tư vấn điều kiện và theo dõi đợt mở bán: hotline House X (không dùng số trên website CĐT).`,
+Dự án khởi công khoảng 27/06/2025, dự kiến bàn giao khoảng 2028. Bảng giá nhà ở xã hội chưa công bố. Điều kiện mua theo Luật Nhà ở và thông báo từng đợt của cơ quan nhà nước cùng chủ đầu tư. House X hỗ trợ tư vấn điều kiện và cập nhật đợt mở bán.`,
   highlights: [
     {
       title: "Chung cư NOXH 5–12 tầng trong đại đô thị",
@@ -122,7 +122,7 @@ Tiến độ (tham chiếu công khai 2025–2026): khởi công khoảng 27/06/
     },
     {
       title: "Gần cụm tiện ích lớn vùng Thuận An – QL13",
-      text: "Trong bán kính khoảng 500 m – 2 km (tham chiếu kênh giới thiệu KĐT): AEON Mall Bình Dương Canary, Lotte Mart, Bệnh viện quốc tế Becamex, sân golf Sông Bé và hệ thống trường liên cấp / trường học các cấp — đủ mua sắm, y tế, giáo dục quanh chỗ ở mà không phải vào sâu nội thành mỗi ngày.",
+      text: "Trong bán kính khoảng 500 m – 2 km: AEON Mall Bình Dương Canary, Lotte Mart, Bệnh viện quốc tế Becamex, sân golf Sông Bé và hệ thống trường liên cấp / trường học các cấp — đủ mua sắm, y tế, giáo dục quanh chỗ ở mà không phải vào sâu nội thành mỗi ngày.",
     },
   ],
   amenities: [
@@ -182,7 +182,8 @@ Tiến độ (tham chiếu công khai 2025–2026): khởi công khoảng 27/06/
   ],
   legalDocs: [
     { docType: "quy_hoach_1_500", status: "da_co" },
-    { docType: "chap_thuan_noxh", status: "dang_lam" },
+    { docType: "chap_thuan_noxh", status: "da_co" },
+    { docType: "giay_phep_xay_dung", status: "da_co", issuedDate: new Date("2025-06-27") },
   ],
 };
 

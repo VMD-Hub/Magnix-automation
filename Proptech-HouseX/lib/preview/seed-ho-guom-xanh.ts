@@ -31,7 +31,7 @@ export async function seedHoGuomXanhNoxh(prisma: PrismaClient): Promise<void> {
     landing,
   });
 
-  await prisma.project.upsert({
+  const project = await prisma.project.upsert({
     where: { slug: HGX_PROJECT_SLUG },
     update: {
       name: def.name,
@@ -76,13 +76,31 @@ export async function seedHoGuomXanhNoxh(prisma: PrismaClient): Promise<void> {
           priceFrom: u.priceFrom ?? null,
         })),
       },
-      legalDocs: {
-        create: def.legalDocs.map((ld) => ({
+    },
+  });
+
+  for (const ld of def.legalDocs) {
+    const existing = await prisma.projectLegalDoc.findFirst({
+      where: { projectId: project.id, docType: ld.docType },
+      select: { id: true },
+    });
+    if (existing) {
+      await prisma.projectLegalDoc.update({
+        where: { id: existing.id },
+        data: {
+          status: ld.status,
+          issuedDate: ld.issuedDate ?? null,
+        },
+      });
+    } else {
+      await prisma.projectLegalDoc.create({
+        data: {
+          projectId: project.id,
           docType: ld.docType,
           status: ld.status,
           issuedDate: ld.issuedDate ?? null,
-        })),
-      },
-    },
-  });
+        },
+      });
+    }
+  }
 }

@@ -67,7 +67,7 @@ Hạ tầng chỉ là một nửa câu chuyện. Khi cân nhắc suất nhà ở
 | Hạng mục | Thông tin tham chiếu |
 |----------|----------------------|
 | Mô hình đô thị đồng bộ | NOXH 5–12 tầng nằm trong KĐT ~26,4 ha (~4.200 sản phẩm, dân số ước ~10.500) — không phải block đơn lẻ ven đường |
-| Cảnh quan nội khu | Hồ trung tâm mô phỏng không gian Hồ Gươm, công viên, phố đi bộ theo masterplan |
+| Cảnh quan nội khu | Hồ cảnh quan trung tâm, công viên, phố đi bộ và tiện ích giáo dục, thương mại, thể thao |
 | Tách rõ NOXH / thương mại | KĐT còn nhà phố, biệt thự, cao tầng thương mại tới ~40 tầng và tổ hợp khách sạn–TTTM — giá & điều kiện khác hẳn NOXH |
 | Tiến độ | Khởi công khoảng 27/06/2025; bàn giao tham chiếu khoảng 2028 (theo kênh công bố — xác nhận từng đợt) |
 | Giá NOXH | Chưa niêm yết công khai trên website CĐT — không lấy giá thương mại làm giá NOXH |

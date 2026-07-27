@@ -25,7 +25,7 @@ Nguồn nghiên cứu (tham khảo công khai, đối chiếu trước publish):
 | **Quy mô KĐT** | ~26,4 ha · ~4.200 sản phẩm (thấp tầng + cao tầng + NOXH) · dân số ước ~10.500 |
 | **Phân khu NOXH** | Chung cư nhà ở xã hội cao **5–12 tầng** (theo công bố quy hoạch CĐT) |
 | **Khác trong KĐT** | Khách sạn–TTTM ~24 tầng; chung cư thương mại tới ~40 tầng; nhà phố / biệt thự |
-| **Pháp lý (tham chiếu)** | Quy hoạch 1/500 đã phê duyệt (theo CĐT / đối tác) |
+| **Pháp lý** | Quy hoạch 1/500 đã phê duyệt · Chấp thuận chủ trương đã có · Giấy phép xây dựng đã có (theo kênh CĐT/đối tác; khởi công 27/06/2025) |
 | **Tiến độ** | Khởi công ~27/06/2025 · bàn giao tham chiếu ~2028 |
 | **Status catalog** | **`SAP_MO_BAN` / Sắp mở bán** — phân biệt với DTA Happy Home, Solena, Thủ Thiêm Green House (`DANG_BAN`) |
 | **Giá NOXH** | **Chưa công bố** — liên hệ tư vấn House X khi CĐT / Sở mở đợt |
