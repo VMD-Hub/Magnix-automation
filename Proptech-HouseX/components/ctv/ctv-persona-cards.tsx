@@ -6,21 +6,26 @@ export function CtvPersonaCards({
   personas: readonly CtvPersonaCard[];
 }) {
   return (
-    <ul className="mt-6 grid gap-4 sm:grid-cols-2">
+    <ul className="mt-8 divide-y divide-slate-200 overflow-hidden rounded-2xl border border-slate-200 bg-white">
       {personas.map((p) => (
-        <li
-          key={p.role}
-          className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm"
-        >
-          <h3 className="font-bold text-slate-900">{p.role}</h3>
-          <p className="mt-2 text-sm leading-relaxed text-slate-600">
-            <span className="font-medium text-slate-800">Nỗi đau: </span>
-            {p.pain}
-          </p>
-          <p className="mt-2 text-sm leading-relaxed text-slate-600">
-            <span className="font-medium text-brand-800">Trên House X: </span>
-            {p.onHouseX}
-          </p>
+        <li key={p.role} className="grid gap-4 p-5 sm:grid-cols-[minmax(0,11rem)_1fr] sm:gap-8 sm:p-6">
+          <h3 className="text-base font-semibold leading-snug text-slate-900">
+            {p.role}
+          </h3>
+          <div className="space-y-3 text-sm leading-relaxed text-slate-600">
+            <p>
+              <span className="block text-xs font-semibold uppercase tracking-wide text-slate-400">
+                Bối cảnh
+              </span>
+              <span className="mt-1 block">{p.context}</span>
+            </p>
+            <p>
+              <span className="block text-xs font-semibold uppercase tracking-wide text-brand-700">
+                Cách hợp tác
+              </span>
+              <span className="mt-1 block text-slate-700">{p.partnership}</span>
+            </p>
+          </div>
         </li>
       ))}
     </ul>

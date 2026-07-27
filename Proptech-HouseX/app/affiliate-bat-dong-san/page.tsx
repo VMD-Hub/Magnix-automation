@@ -91,7 +91,7 @@ export default function CtvAffiliateLandingPage() {
               <span className="text-slate-800">Cộng tác viên</span>
             </nav>
             <p className="mt-4 text-sm font-semibold uppercase tracking-wide text-brand-700">
-              Bán hàng liên kết · Cộng tác viên
+              Chương trình đối tác
             </p>
             <h1 className="mt-2 text-3xl font-extrabold leading-tight text-slate-900 sm:text-4xl">
               {CTV_AFFILIATE_H1}

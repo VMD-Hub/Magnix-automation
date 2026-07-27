@@ -51,7 +51,7 @@ export const CTV_AFFILIATE_ARTICLES: readonly CtvAffiliateArticle[] = [
     publishedAt: "2026-07-27T10:00:00.000Z",
     body: `## Cắt máu hoa hồng đang biến nghề thành cuộc đua xuống đáy
 
-Trong bất động sản, “cắt máu” là khi người làm trung gian tự nguyện trả lại một phần — đôi khi gần hết — hoa hồng cá nhân cho khách để đổi lấy cái gật đầu chốt cọc. Nhiều người mua coi đó là “bớt lộc” xứng đáng. Nhiều người bán coi đó là “linh hoạt để sống”.
+Trong bất động sản, “cắt máu” là khi người làm trung gian tự nguyện trả lại một phần — đôi khi gần hết — hoa hồng cá nhân cho khách để đổi lấy cái gật đầu chốt cọc. Nhiều người mua coi đó là ưu đãi xứng đáng. Nhiều người bán coi đó là cách linh hoạt để giữ giao dịch.
 
 Dưới góc nhìn thực tế nghề, đây là cuộc đua xuống đáy: các bên kéo nhau vào vòng xoáy tự hủy giá trị lao động. Một khi biên thưởng bị ép về mức gần bằng không, chuỗi trách nhiệm sau ký cũng mỏng đi.
 
@@ -100,9 +100,9 @@ ${CTA_BLOCK}
     publishedAt: "2026-07-27T11:00:00.000Z",
     body: `## Vì sao cần mô hình khác cuộc đua cắt máu?
 
-Khi hoa hồng bị mặc cả ngoài luồng, cả người bán lẫn người mua đều khó tin. House X mở chương trình cộng tác viên: ghi nhận giới thiệu và bán hàng liên kết một cách chính danh — thay vì “bớt lộc” miệng.
+Khi hoa hồng bị mặc cả ngoài luồng, cả người bán lẫn người mua đều khó tin. House X mở chương trình cộng tác viên: ghi nhận giới thiệu và bán hàng liên kết một cách chính danh — thay vì thỏa thuận miệng ngoài quy trình.
 
-Xem gốc nỗi đau: [Cắt máu hoa hồng môi giới](${ctvAffiliateArticlePath(SLUG_PILLAR)}).
+Xem bối cảnh: [Cắt máu hoa hồng môi giới](${ctvAffiliateArticlePath(SLUG_PILLAR)}).
 
 ## Bạn làm gì được khi tham gia?
 
@@ -135,49 +135,49 @@ ${CTA_BLOCK}
       "Nhân viên ngân hàng, bảo hiểm, chứng khoán, môi giới tự do, người chỉ muốn giới thiệu, người mua cho mình — chân dung rõ để tự nhận diện trước khi đăng ký.",
     seoTitle: "Chân dung cộng tác viên BĐS House X — ai phù hợp? | House X",
     seoDesc:
-      "Đối tượng cộng tác viên House X: ngân hàng, bảo hiểm, chứng khoán, MG tự do, giới thiệu người thân, tự mua — nỗi đau và việc làm cùng House X.",
+      "Đối tượng cộng tác viên House X: ngân hàng, bảo hiểm, chứng khoán, môi giới độc lập, giới thiệu mạng lưới, tự mua — bối cảnh và cách hợp tác.",
     publishedAt: "2026-07-27T12:00:00.000Z",
     body: `## Không chỉ dành cho môi giới bất động sản
 
-Chương trình cộng tác viên House X mở cho ai có mạng lưới, nhu cầu mua, hoặc muốn giới thiệu đúng kênh. Dưới đây là chân dung thường gặp.
+Chương trình cộng tác viên House X mở cho nhiều nhóm đối tác: người có mạng lưới, nhu cầu mua, hoặc muốn giới thiệu đúng kênh. Dưới đây là các nhóm thường gặp và cách hợp tác.
 
 Tổng quan mô hình: [Mô hình cộng tác viên House X](${ctvAffiliateArticlePath(SLUG_MODEL)}).
 
 ## Nhân viên ngân hàng, bảo hiểm, chứng khoán
 
-Nỗi đau: Khách tin bạn về tài chính nhưng hỏi nhà / NOXH / dự án — bạn không muốn (hoặc không được) đóng vai “cò cắt máu”.
+Bối cảnh: Khách hàng tin tưởng bạn về tài chính và thường hỏi thêm về nhà ở xã hội hoặc dự án bất động sản.
 
-Trên House X: Bạn giới thiệu đúng chỗ; House X tư vấn sản phẩm. Bạn vẫn là người khách tin tưởng.
+Cách hợp tác: Bạn giới thiệu đúng kênh; House X đảm nhiệm tư vấn sản phẩm. Bạn giữ vai trò người cố vấn đáng tin cậy.
 
-## Môi giới bất động sản tự do
+## Môi giới bất động sản độc lập
 
-Nỗi đau: Bị kéo vào đua cắt máu; mất giá trị tư vấn và hậu mãi.
+Bối cảnh: Bạn muốn giữ chuẩn tư vấn và đồng hành sau giao dịch, thay vì cạnh tranh chỉ bằng giảm hoa hồng.
 
-Trên House X: Cạnh tranh bằng chuyên môn pháp lý và lựa chọn căn — không bằng ai cắt nhiều hơn. Đọc thêm [vòng xoáy cắt máu](${ctvAffiliateArticlePath(SLUG_PILLAR)}).
+Cách hợp tác: Hợp tác trên nền tảng có quy trình rõ — tập trung chuyên môn pháp lý và lựa chọn căn. Đọc thêm [vòng xoáy cắt máu hoa hồng](${ctvAffiliateArticlePath(SLUG_PILLAR)}).
 
-## Người có mạng lưới nhưng ngại bán
+## Người có mạng lưới, không muốn bán trực tiếp
 
-Nỗi đau: Người thân / đồng nghiệp muốn mua; bạn ngại ra mặt tư vấn và sợ bị kéo vào mặc cả hoa hồng.
+Bối cảnh: Người thân hoặc đồng nghiệp cần mua nhà; bạn muốn hỗ trợ giới thiệu mà không đóng vai môi giới.
 
-Trên House X: Bạn chỉ cần giới thiệu; House X hỗ trợ tư vấn và chốt. Không buộc phải đóng vai môi giới.
+Cách hợp tác: Bạn thực hiện giới thiệu; House X hỗ trợ tư vấn và hoàn tất giao dịch khi cần.
 
 ## Người mua cho chính mình
 
-Nỗi đau: Không muốn ép môi giới cắt máu; cũng không tin “bớt lộc” thiếu minh bạch.
+Bối cảnh: Bạn ưu tiên giao dịch minh bạch, không dựa trên thỏa thuận hoa hồng miệng ngoài quy trình.
 
-Trên House X: Mua qua chương trình cộng tác viên — rõ ràng, không thỏa thuận miệng ngoài luồng.
+Cách hợp tác: Tham gia chương trình cộng tác viên để mua trên cùng khung hợp tác rõ ràng với House X.
 
-## Truyền thông, HR, công đoàn, mạng lưới KCN
+## Truyền thông, HR, công đoàn, mạng lưới khu công nghiệp
 
-Nỗi đau: Có người quan tâm nhà ở / NOXH nhưng thiếu kênh sản phẩm đáng tin.
+Bối cảnh: Bạn tiếp cận nhóm quan tâm nhà ở / NOXH nhưng cần kênh sản phẩm đáng tin cậy.
 
-Trên House X: Giới thiệu có kiểm chứng; đồng hành nội dung hoặc dự án khi phù hợp.
+Cách hợp tác: Giới thiệu có kiểm chứng; đồng hành nội dung hoặc dự án khi hai bên phù hợp.
 
-## Bạn thuộc nhóm nào — bước tiếp theo
+## Bước tiếp theo
 
-1. Đối chiếu chân dung ở trên.
-2. Đọc [cách bắt đầu](${ctvAffiliateArticlePath(SLUG_GUIDE)}).
-3. Đăng ký tham gia.
+1. Đối chiếu nhóm đối tác ở trên.
+2. Đọc [hướng dẫn bắt đầu](${ctvAffiliateArticlePath(SLUG_GUIDE)}).
+3. Đăng ký tham gia hoặc [tư vấn thêm](/lien-he?goi=tu-van-cong-tac-vien#tu-van).
 
 ${CTA_BLOCK}
 `,
@@ -218,7 +218,7 @@ Không bắt buộc ngay từ đầu. Cách đồng hành có thể khác nhau t
 
 ### Thưởng được thỏa thuận thế nào?
 
-Theo thỏa thuận hợp tác rõ ràng với House X — không mặc cả “bớt lộc” miệng ngoài luồng. Chi tiết phù hợp từng trường hợp khi bạn tham gia.
+Theo thỏa thuận hợp tác rõ ràng với House X — không mặc cả miệng ngoài quy trình. Chi tiết phù hợp từng trường hợp khi bạn tham gia.
 
 ### Khác gì chỉ đăng tin?
 

@@ -21,14 +21,16 @@ import { ABOUT_PARTNER_SECTION } from "@/lib/content/messaging/about-public";
 import { NAV_MORE } from "@/lib/content/site-nav";
 
 const FORBIDDEN_PUBLIC =
-  /cấp\s*[1-4]|cap\s*[1-4]|15[.\s]?000[.\s]?000|15000000|Build-to-Share|đại dương xanh|công khai\s*(cơ chế|hoa hồng)?\s*100%|Affiliate NOXH thế hệ mới|loại bỏ hoàn toàn|rồi mới được xem cơ chế|cơ chế thưởng chi tiết mở sau|không công bố bảng|\bclaim\b|HX-CTV|khóa hội nhập|Lead gắn|nhận mã cộng tác|nộp hồ sơ CTV|admin duyệt|Liên hệ hỏi chương trình/i;
+  /cấp\s*[1-4]|cap\s*[1-4]|15[.\s]?000[.\s]?000|15000000|Build-to-Share|đại dương xanh|công khai\s*(cơ chế|hoa hồng)?\s*100%|Affiliate NOXH thế hệ mới|loại bỏ hoàn toàn|rồi mới được xem cơ chế|cơ chế thưởng chi tiết mở sau|không công bố bảng|\bclaim\b|HX-CTV|khóa hội nhập|Lead gắn|nhận mã cộng tác|nộp hồ sơ CTV|admin duyệt|Liên hệ hỏi chương trình|Nỗi đau:|Trên House X:|cò cắt máu|bớt lộc|win-win|Kiếm tiền/i;
 
 function allPublicBlob(): string {
   const landing = [
     CTV_AFFILIATE_SEO_TITLE,
     CTV_AFFILIATE_SEO_DESCRIPTION,
     CTV_AFFILIATE_LEAD,
-    ...CTV_AFFILIATE_PERSONAS.map((p) => `${p.role} ${p.pain} ${p.onHouseX}`),
+    ...CTV_AFFILIATE_PERSONAS.map(
+      (p) => `${p.role} ${p.context} ${p.partnership}`,
+    ),
     ...CTV_AFFILIATE_RULES.steps.map((s) => `${s.title} ${s.desc}`),
     CTV_AFFILIATE_RULES.note,
     CTV_AFFILIATE_CTAS.closing,
