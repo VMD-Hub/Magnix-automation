@@ -7,6 +7,7 @@ import {
   EMERALD_68_SLUG,
   EMERALD_BOULEVARD_SLUG,
 } from "@/lib/preview/ql13-commercial-mocks";
+import { topicPath } from "@/lib/content/article-routes";
 import {
   NOXH_TAG_AIRPORT,
   NOXH_TAG_EAST_COAST,
@@ -47,7 +48,7 @@ export const GROWTH_CORRIDORS: readonly GrowthCorridor[] = [
     nameVi: "Hành lang Bắc – Nam (dọc sông Sài Gòn hướng biển)",
     seoBlurb:
       "Trục dọc sông từ Củ Chi về Nhà Bè – Cần Giờ: kinh tế dịch vụ, du lịch, giao thông thủy và BĐS ven sông Nam Sài Gòn.",
-    hubPath: `/wiki-nha-o-xa-hoi/chu-de/${NOXH_TAG_NORTH_SOUTH.slug}`,
+    hubPath: topicPath(NOXH_TAG_NORTH_SOUTH.slug),
     tagSlug: NOXH_TAG_NORTH_SOUTH.slug,
   },
   {
@@ -55,7 +56,7 @@ export const GROWTH_CORRIDORS: readonly GrowthCorridor[] = [
     nameVi: "Hành lang Đông – Tây (Võ Văn Kiệt – Mai Chí Thọ)",
     seoBlurb:
       "Xương sống liên kết vùng: Long An xuyên lõi trung tâm đến Đồng Nai — cửa ngõ công nghiệp hai đầu.",
-    hubPath: `/wiki-nha-o-xa-hoi/chu-de/${NOXH_TAG_EAST_WEST.slug}`,
+    hubPath: topicPath(NOXH_TAG_EAST_WEST.slug),
     tagSlug: NOXH_TAG_EAST_WEST.slug,
   },
   {
@@ -63,7 +64,7 @@ export const GROWTH_CORRIDORS: readonly GrowthCorridor[] = [
     nameVi: "Hành lang kinh tế biển phía Đông (hướng Bà Rịa – Vũng Tàu)",
     seoBlurb:
       "Chuỗi logistics TP.HCM – Nhơn Trạch – Long Thành – Cái Mép – Thị Vải; cao tốc Biên Hòa – Vũng Tàu / Bến Lức – Long Thành.",
-    hubPath: `/wiki-nha-o-xa-hoi/chu-de/${NOXH_TAG_EAST_COAST.slug}`,
+    hubPath: topicPath(NOXH_TAG_EAST_COAST.slug),
     tagSlug: NOXH_TAG_EAST_COAST.slug,
   },
   {
@@ -71,7 +72,7 @@ export const GROWTH_CORRIDORS: readonly GrowthCorridor[] = [
     nameVi: "Hành lang Vành đai 3 & Vành đai 4 (đô thị vệ tinh)",
     seoBlurb:
       "Chuỗi đô thị vệ tinh quanh Vành đai 3–4: Thủ Đức, Củ Chi, Bình Chánh, Thuận An, Bình Dương, Đồng Nai, Long An.",
-    hubPath: `/wiki-nha-o-xa-hoi/chu-de/${NOXH_TAG_RING_ROAD.slug}`,
+    hubPath: topicPath(NOXH_TAG_RING_ROAD.slug),
     tagSlug: NOXH_TAG_RING_ROAD.slug,
   },
   {
@@ -79,7 +80,7 @@ export const GROWTH_CORRIDORS: readonly GrowthCorridor[] = [
     nameVi: "Hành lang kết nối sân bay (Long Thành & Tân Sơn Nhất)",
     seoBlurb:
       "Trục liên cảng hàng không: Long Thành – TSN, đường sắt Thủ Thiêm – Long Thành, đô thị sân bay bán kính 5–10 km.",
-    hubPath: `/wiki-nha-o-xa-hoi/chu-de/${NOXH_TAG_AIRPORT.slug}`,
+    hubPath: topicPath(NOXH_TAG_AIRPORT.slug),
     tagSlug: NOXH_TAG_AIRPORT.slug,
   },
   {
@@ -87,15 +88,15 @@ export const GROWTH_CORRIDORS: readonly GrowthCorridor[] = [
     nameVi: "Trục Đông Bắc – Đại lộ tài chính Quốc lộ 13",
     seoBlurb:
       "Lái Thiêu, Thuận An, Dĩ An: mở rộng QL13, Metro số 2, cửa ngõ Thủ Đức — Đại lộ tài chính Đông Bắc.",
-    hubPath: `/wiki-nha-o-xa-hoi/chu-de/${NOXH_TAG_QL13.slug}`,
+    hubPath: topicPath(NOXH_TAG_QL13.slug),
     tagSlug: NOXH_TAG_QL13.slug,
   },
   {
     id: "framework",
     nameVi: "Khung hạ tầng & TOD (toàn vùng)",
     seoBlurb:
-      "Pillar điều hướng 6 trục, TOD khái niệm / quy hoạch tổng thể — không gắn một hành lang địa lý duy nhất.",
-    hubPath: `/wiki-nha-o-xa-hoi/chu-de/${NOXH_TAG_HA_TANG.slug}`,
+      "Bài tổng quan 6 trục, TOD khái niệm / quy hoạch tổng thể — không gắn một hành lang địa lý duy nhất.",
+    hubPath: topicPath(NOXH_TAG_HA_TANG.slug),
     tagSlug: NOXH_TAG_HA_TANG.slug,
   },
 ] as const;

@@ -91,9 +91,9 @@ ${EDITORIAL_FIGURES.idTownTienIch}
 
 ${ID_TOWN_PR_CLOSINGS.haTangKetNoi}
 
-Tra cứu mặt bằng, gallery và FAQ dự án: [/du-an/id-town-long-thanh](/du-an/id-town-long-thanh) · Hub tỉnh: [/du-an/nha-o-xa-hoi/dong-nai](/du-an/nha-o-xa-hoi/dong-nai)
+Tra cứu mặt bằng, gallery và FAQ dự án: [/du-an/id-town-long-thanh](/du-an/id-town-long-thanh) · Danh mục tỉnh: [/du-an/nha-o-xa-hoi/dong-nai](/du-an/nha-o-xa-hoi/dong-nai)
 
-ID Town thuộc hành lang kết nối sân bay Long Thành – Tân Sơn Nhất — không nằm trên trục Quốc lộ 13 (Lái Thiêu / Thuận An) và khác hành lang kinh tế biển phía Đông (Nhơn Trạch / DTA). Bản đồ 6 trục: [Sáu trục tăng trưởng đô thị TP.HCM](/wiki-nha-o-xa-hoi/bon-cuc-tang-truong-do-thi-tp-hcm-2026).
+ID Town thuộc hành lang kết nối sân bay Long Thành – Tân Sơn Nhất — không nằm trên trục Quốc lộ 13 (Lái Thiêu / Thuận An) và khác hành lang kinh tế biển phía Đông (Nhơn Trạch / DTA). Bản đồ 6 trục: [Sáu trục tăng trưởng đô thị TP.HCM](/tin-tuc/kien-thuc/bon-cuc-tang-truong-do-thi-tp-hcm-2026).
 
 *Vị trí ga, tiến độ đường sắt/Vành đai và bảng giá căn có thể thay đổi theo phê duyệt và đợt mở bán.*`,
     status: "PUBLISHED",

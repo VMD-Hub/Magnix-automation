@@ -6,9 +6,9 @@ import { NORTHERN_SUPPORT_CLOSING } from "@/lib/content/articles/northern-editor
 import { HANOI_GROWTH_CORRIDORS_PILLAR_SLUG } from "@/lib/content/growth-corridors-hanoi";
 
 const UPDATED = new Date("2026-07-27T00:00:00.000Z");
-const PILLAR_HREF = `/wiki-nha-o-xa-hoi/${HANOI_GROWTH_CORRIDORS_PILLAR_SLUG}`;
+const PILLAR_HREF = `/tin-tuc/kien-thuc/${HANOI_GROWTH_CORRIDORS_PILLAR_SLUG}`;
 const HUB_HREF =
-  "/wiki-nha-o-xa-hoi/chu-de/truc-vanh-dai-4-vung-thu-do";
+  "/tin-tuc/kien-thuc/chu-de/truc-vanh-dai-4-vung-thu-do";
 
 /**
  * Trục Vành đai 4 Vùng Thủ đô — ba lớp: quy hoạch–thể chế → dịch chuyển không gian → thẩm định.
@@ -26,7 +26,7 @@ export const HANOI_RING4_CORRIDOR_ARTICLES_2026: ArticleDetail[] = [
 
 Trong đồ án tầm nhìn dài hạn và khung Quy hoạch Thủ đô (QĐ 1569/QĐ-TTg), hệ vành đai (3.5 – 4 – 4.5 – 5) là công cụ điều phối vùng: giảm tải cửa ngõ nội đô lịch sử và kết nối đô thị vệ tinh / đối trọng quanh hạt nhân. Vành đai 4 Vùng Thủ đô (~113,52 km qua Hà Nội – Hưng Yên – Bắc Ninh; tổng mức đầu tư quanh 85–86 nghìn tỷ theo các bản tổng hợp) là vòng ngoài đang ở giai đoạn nước rút thi công — tín hiệu gốc là GPMB, sản lượng song hành và mốc thông xe / khai thác theo Ban quản lý dự án, không phải “tin đồn toàn tuyến một ngày”.
 
-Đọc trong khung năm hành lang: [Năm trục tăng trưởng Vùng Thủ đô Hà Nội](${PILLAR_HREF}). Hub: [${HUB_HREF}](${HUB_HREF}).
+Đọc trong khung năm hành lang: [Năm trục tăng trưởng Vùng Thủ đô Hà Nội](${PILLAR_HREF}). Chủ đề: [${HUB_HREF}](${HUB_HREF}).
 
 ${EDITORIAL_FIGURES.hcmSkyline}
 
@@ -74,8 +74,8 @@ Hướng phấn đấu được nêu công khai: thông xe kỹ thuật các c�
 | Lớp đọc | Bài trên cùng hành lang |
 |---------|-------------------------|
 | Quy hoạch – thể chế (bài này) | Tiến độ VD4 |
-| Dịch chuyển không gian | [TOD và nút giao Vành đai 4](/wiki-nha-o-xa-hoi/tod-doc-vanh-dai-4-vung-thu-do-2026) |
-| Thẩm định dự án | [Thửa đất, nhà phố Bắc Ninh – Hưng Yên – Mê Linh](/wiki-nha-o-xa-hoi/dat-nen-nha-pho-don-dau-vanh-dai-4-bac-ninh-hung-yen-2026) |
+| Dịch chuyển không gian | [TOD và nút giao Vành đai 4](/tin-tuc/kien-thuc/tod-doc-vanh-dai-4-vung-thu-do-2026) |
+| Thẩm định dự án | [Thửa đất, nhà phố Bắc Ninh – Hưng Yên – Mê Linh](/tin-tuc/kien-thuc/dat-nen-nha-pho-don-dau-vanh-dai-4-bac-ninh-hung-yen-2026) |
 
 ${NORTHERN_SUPPORT_CLOSING}
 
@@ -117,7 +117,7 @@ ${EDITORIAL_FIGURES.metroHub}
 | Nút giao vành đai, xa ga | Đô thị vệ tinh đường bộ — rút ngắn thời gian vùng | Phụ thuộc xe cá nhân; quy hoạch chi tiết |
 | Vệ tinh KCN / logistics gần vành đai | Nhà ở phục vụ lao động, thuê dài hạn | Không đồng nghĩa tăng giá thửa đất ngắn hạn |
 
-House X không công bố phần trăm tăng giá quanh nút giao — chỉ mô tả cơ chế hưởng lợi hạ tầng khi tuyến thông xe từng đoạn. Tiến độ macro: [Tiến độ Vành đai 4](/wiki-nha-o-xa-hoi/tien-do-vanh-dai-4-vung-thu-do-2026) · Khung 5 trục: [Năm trục tăng trưởng Vùng Thủ đô](${PILLAR_HREF}).
+House X không công bố phần trăm tăng giá quanh nút giao — chỉ mô tả cơ chế hưởng lợi hạ tầng khi tuyến thông xe từng đoạn. Tiến độ macro: [Tiến độ Vành đai 4](/tin-tuc/kien-thuc/tien-do-vanh-dai-4-vung-thu-do-2026) · Khung 5 trục: [Năm trục tăng trưởng Vùng Thủ đô](${PILLAR_HREF}).
 
 ${EDITORIAL_FIGURES.bitexcoMetro}
 
@@ -128,7 +128,7 @@ ${EDITORIAL_FIGURES.bitexcoMetro}
 - Thăng Long – Hòa Lạc: công nghệ – giáo dục và an cư cao tầng phía Tây.
 - Tây Nam: QL1A / Pháp Vân – Cầu Giẽ và vệ tinh Hà Nam.
 
-Hub trục này: [${HUB_HREF}](${HUB_HREF}).
+Chủ đề trục này: [${HUB_HREF}](${HUB_HREF}).
 
 ## Câu hỏi chuyên môn trước khi thẩm định vị trí quanh vành đai?
 
@@ -136,7 +136,7 @@ Hub trục này: [${HUB_HREF}](${HUB_HREF}).
 2. Lợi thế chính là thời gian ô tô khi thông xe đoạn gần nhà — hay là sống gần ga?
 3. Pháp lý thửa đất / dự án có sổ đỏ, quy hoạch rõ, không vướng hành lang kỹ thuật tuyến không?
 
-Lớp thẩm định: [Thửa đất, nhà phố quanh Vành đai 4](/wiki-nha-o-xa-hoi/dat-nen-nha-pho-don-dau-vanh-dai-4-bac-ninh-hung-yen-2026).
+Lớp thẩm định: [Thửa đất, nhà phố quanh Vành đai 4](/tin-tuc/kien-thuc/dat-nen-nha-pho-don-dau-vanh-dai-4-bac-ninh-hung-yen-2026).
 
 ${NORTHERN_SUPPORT_CLOSING}
 
@@ -166,7 +166,7 @@ ${EDITORIAL_FIGURES.thuThiem}
 
 Thông xe từng đoạn rút ngắn thời gian liên vùng và mở thêm lựa chọn an cư vệ tinh — nhưng không đồng nghĩa mọi thửa đất gần đường đều thanh khoản tốt. Tín hiệu gốc là pháp lý thửa, hành lang kỹ thuật tuyến và khả năng tiếp cận mặt đường hiện hữu; thông xe chỉ là điều kiện cần, không đủ. House X mô tả lợi ích định tính theo khu vực — không công bố phần trăm tăng giá.
 
-Đọc tiến độ trước: [Tiến độ Vành đai 4](/wiki-nha-o-xa-hoi/tien-do-vanh-dai-4-vung-thu-do-2026) · Khung TOD: [TOD và nút giao Vành đai 4](/wiki-nha-o-xa-hoi/tod-doc-vanh-dai-4-vung-thu-do-2026) · Pillar: [Năm trục tăng trưởng Vùng Thủ đô](${PILLAR_HREF}).
+Đọc tiến độ trước: [Tiến độ Vành đai 4](/tin-tuc/kien-thuc/tien-do-vanh-dai-4-vung-thu-do-2026) · Khung TOD: [TOD và nút giao Vành đai 4](/tin-tuc/kien-thuc/tod-doc-vanh-dai-4-vung-thu-do-2026) · Pillar: [Năm trục tăng trưởng Vùng Thủ đô](${PILLAR_HREF}).
 
 ${EDITORIAL_FIGURES.hcmSkyline}
 
@@ -194,8 +194,8 @@ Thiếu một trong các mục trên thì đặt cọc theo tin thông xe dễ t
 
 Có. Logic thửa đất – nhà phố vệ tinh quanh VD4 khác căn hộ cao tầng Mỹ Đình / Đại lộ Thăng Long (trục phía Tây) và khác hành lang Nội Bài. Chọn đúng trục trước khi so sản phẩm:
 
-- Hub VD4: [${HUB_HREF}](${HUB_HREF})
-- Trục Tây (nếu ưu tiên cao tầng): [/wiki-nha-o-xa-hoi/chu-de/truc-dai-lo-thang-long-hoa-lac](/wiki-nha-o-xa-hoi/chu-de/truc-dai-lo-thang-long-hoa-lac)
+- Chủ đề Vành đai 4: [${HUB_HREF}](${HUB_HREF})
+- Trục Tây (nếu ưu tiên cao tầng): [/tin-tuc/kien-thuc/chu-de/truc-dai-lo-thang-long-hoa-lac](/tin-tuc/kien-thuc/chu-de/truc-dai-lo-thang-long-hoa-lac)
 
 ${EDITORIAL_FIGURES.bitexcoMetro}
 

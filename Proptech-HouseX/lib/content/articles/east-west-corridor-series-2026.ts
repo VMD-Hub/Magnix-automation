@@ -7,7 +7,7 @@ const TTGH_SLUG = "thu-thiem-green-house-thu-duc";
 const TTGH_NAME = "Thủ Thiêm Green House";
 const TTGH_HREF = `/du-an/${TTGH_SLUG}`;
 const PILLAR_HREF =
-  "/wiki-nha-o-xa-hoi/bon-cuc-tang-truong-do-thi-tp-hcm-2026";
+  "/tin-tuc/kien-thuc/bon-cuc-tang-truong-do-thi-tp-hcm-2026";
 
 /**
  * Series hành lang Đông–Tây Võ Văn Kiệt – Mai Chí Thọ — phễu Vĩ mô → Tiềm năng → Thực tế.
@@ -57,7 +57,7 @@ ${EDITORIAL_FIGURES.metroHub}
 - Kết nối metro / TOD lõi: bổ sung lớp vận tải công cộng — đối chiếu bài TOD khung trên House X khi cần.
 - Vành đai 3–4 và hành lang sân bay: cắt ngang hoặc bổ trợ Đông–Tây — đừng gộp thành một thị trường.
 
-Đối chiếu Bắc–Nam sông: [Trục dọc sông Sài Gòn](/wiki-nha-o-xa-hoi/truc-doc-song-sai-gon-hanh-lang-kinh-te-ty-do-2026). Hub Đông–Tây: [/wiki-nha-o-xa-hoi/chu-de/hanh-lang-dong-tay-vvk-mct](/wiki-nha-o-xa-hoi/chu-de/hanh-lang-dong-tay-vvk-mct).
+Đối chiếu Bắc–Nam sông: [Trục dọc sông Sài Gòn](/tin-tuc/kien-thuc/truc-doc-song-sai-gon-hanh-lang-kinh-te-ty-do-2026). Chủ đề Đông–Tây: [/tin-tuc/kien-thuc/chu-de/hanh-lang-dong-tay-vvk-mct](/tin-tuc/kien-thuc/chu-de/hanh-lang-dong-tay-vvk-mct).
 
 ${EDITORIAL_FIGURES.bitexcoMetro}
 
@@ -66,8 +66,8 @@ ${EDITORIAL_FIGURES.bitexcoMetro}
 | Tầng | Bài |
 |------|-----|
 | Vĩ mô (bài này) | Toàn cảnh VVK–MCT |
-| Tiềm năng | [Biên độ giá cửa ngõ Đông–Tây](/wiki-nha-o-xa-hoi/bds-truc-dong-tay-bien-do-gia-cua-ngo-2026) |
-| Thực tế | [Căn hộ Võ Văn Kiệt – Mai Chí Thọ](/wiki-nha-o-xa-hoi/can-ho-vo-van-kiet-mai-chi-tho-an-cu-dau-tu-2026) |
+| Tiềm năng | [Biên độ giá cửa ngõ Đông–Tây](/tin-tuc/kien-thuc/bds-truc-dong-tay-bien-do-gia-cua-ngo-2026) |
+| Thực tế | [Căn hộ Võ Văn Kiệt – Mai Chí Thọ](/tin-tuc/kien-thuc/can-ho-vo-van-kiet-mai-chi-tho-an-cu-dau-tu-2026) |
 
 House X hỗ trợ chọn trục trước khi xem dự án — [đăng ký ngay](/lien-he).
 
@@ -97,7 +97,7 @@ ${EDITORIAL_FIGURES.thuThiem}
 
 “Biên độ” ở đây là khoảng chênh lệch cảm nhận giữa cửa ngõ, đoạn xuyên lõi và phía Đông mới — về tổng vốn, thanh khoản và độ nhạy tin hạ tầng — không phải một con số % tăng giá thống nhất cho cả đại lộ. House X không công bố chỉ số appreciation bịa đặt; thay vào đó so sánh logic rủi ro / cơ hội theo vị trí trên hành lang.
 
-Bối cảnh macro: [Trục Đông–Tây Võ Văn Kiệt – Mai Chí Thọ](/wiki-nha-o-xa-hoi/truc-dong-tay-tphcm-vo-van-kiet-mai-chi-tho-2026). Khung 6 trục: [Sáu trục tăng trưởng đô thị TP.HCM](${PILLAR_HREF}).
+Bối cảnh macro: [Trục Đông–Tây Võ Văn Kiệt – Mai Chí Thọ](/tin-tuc/kien-thuc/truc-dong-tay-tphcm-vo-van-kiet-mai-chi-tho-2026). Khung 6 trục: [Sáu trục tăng trưởng đô thị TP.HCM](${PILLAR_HREF}).
 
 ${EDITORIAL_FIGURES.hcmSkyline}
 
@@ -128,7 +128,7 @@ ${EDITORIAL_FIGURES.bitexcoMetro}
 
 Cùng một căn hộ “gần trung tâm” có thể thuộc narrative khác nhau:
 
-- Bắc–Nam sông Sài Gòn: ven sông, hướng Nhà Bè – Cần Giờ, động lực cảng / dịch vụ thủy — xem [Ly tâm Nam Sài Gòn – Cần Giờ](/wiki-nha-o-xa-hoi/ly-tam-bds-nam-sai-gon-can-gio-dong-tien-2026).
+- Bắc–Nam sông Sài Gòn: ven sông, hướng Nhà Bè – Cần Giờ, động lực cảng / dịch vụ thủy — xem [Ly tâm Nam Sài Gòn – Cần Giờ](/tin-tuc/kien-thuc/ly-tam-bds-nam-sai-gon-can-gio-dong-tien-2026).
 - Đông–Tây VVK–MCT: xuyên tâm công nghiệp hai đầu — bài bạn đang đọc.
 - Sân bay Long Thành: đô thị sân bay / đường sắt liên cảng — khác chu kỳ và nhóm khách thuê.
 
@@ -143,7 +143,7 @@ ${EDITORIAL_FIGURES.metroHub}
 3. Có cần sản phẩm NOXH / tổng vốn thấp hơn trên vùng ảnh hưởng Đông (ví dụ neo [Thủ Thiêm Green House](${TTGH_HREF})) thay vì săn “% tăng giá” cửa ngõ không?
 4. Đã loại trừ kỳ vọng bịa từ tin đồn vành đai / sân bay chưa?
 
-Tầng thực tế: [Căn hộ Võ Văn Kiệt – Mai Chí Thọ](/wiki-nha-o-xa-hoi/can-ho-vo-van-kiet-mai-chi-tho-an-cu-dau-tu-2026).
+Tầng thực tế: [Căn hộ Võ Văn Kiệt – Mai Chí Thọ](/tin-tuc/kien-thuc/can-ho-vo-van-kiet-mai-chi-tho-an-cu-dau-tu-2026).
 
 House X tư vấn chọn trục và hồ sơ an cư — [đăng ký ngay](/lien-he).
 
@@ -178,7 +178,7 @@ Hai nhóm nhu cầu gặp nhau trên cùng hành lang nhưng tiêu chí khác nh
 
 Lợi thế chung của hành lang là khả năng tiếp cận lõi theo hướng Đông–Tây ngắn hơn nhiều tuyến vành đai — đây là lợi ích định tính của xương sống xuyên tâm, không phải cam kết “luôn về trung tâm trong 15 phút” mọi khung giờ. Ùn tắc vẫn xảy ra; hãy chạy thử giờ cao điểm trước khi ký.
 
-Bối cảnh: [Macro VVK–MCT](/wiki-nha-o-xa-hoi/truc-dong-tay-tphcm-vo-van-kiet-mai-chi-tho-2026) · [Biên độ cửa ngõ](/wiki-nha-o-xa-hoi/bds-truc-dong-tay-bien-do-gia-cua-ngo-2026) · [6 trục tăng trưởng](${PILLAR_HREF}).
+Bối cảnh: [Macro VVK–MCT](/tin-tuc/kien-thuc/truc-dong-tay-tphcm-vo-van-kiet-mai-chi-tho-2026) · [Biên độ cửa ngõ](/tin-tuc/kien-thuc/bds-truc-dong-tay-bien-do-gia-cua-ngo-2026) · [6 trục tăng trưởng](${PILLAR_HREF}).
 
 ${EDITORIAL_FIGURES.hcmSkyline}
 
@@ -220,7 +220,7 @@ ${EDITORIAL_FIGURES.thuThiem}
 | Tổng vốn thấp / đúng đối tượng NOXH | Hồ sơ đối tượng + dự án như TTGH |
 | Đón cửa ngõ Tây | Chấp nhận chu kỳ hạ tầng dài hơn; soi pháp lý kỹ |
 
-Không dùng một công thức lợi nhuận cho cả đại lộ. Đối chiếu thêm hành lang sông nếu bạn thiên về nam / ven nước: [Top dự án ven sông Nam Sài Gòn](/wiki-nha-o-xa-hoi/top-du-an-can-ho-biet-thu-ven-song-nam-sai-gon-2026).
+Không dùng một công thức lợi nhuận cho cả đại lộ. Đối chiếu thêm hành lang sông nếu bạn thiên về nam / ven nước: [Top dự án ven sông Nam Sài Gòn](/tin-tuc/kien-thuc/top-du-an-can-ho-biet-thu-ven-song-nam-sai-gon-2026).
 
 ${EDITORIAL_FIGURES.bitexcoMetro}
 
@@ -231,7 +231,7 @@ ${EDITORIAL_FIGURES.bitexcoMetro}
 3. Nếu NOXH: chuẩn bị hồ sơ và đối chiếu [${TTGH_NAME}](${TTGH_HREF}).
 4. [Liên hệ House X](/lien-he) để được hỗ trợ định hướng — không chèo kéo đặt cọc.
 
-Hub: [/wiki-nha-o-xa-hoi/chu-de/hanh-lang-dong-tay-vvk-mct](/wiki-nha-o-xa-hoi/chu-de/hanh-lang-dong-tay-vvk-mct)
+Chủ đề: [/tin-tuc/kien-thuc/chu-de/hanh-lang-dong-tay-vvk-mct](/tin-tuc/kien-thuc/chu-de/hanh-lang-dong-tay-vvk-mct)
 
 *Thời gian di chuyển vào trung tâm là lợi thế định tính của hành lang — không phải cam kết phút cụ thể mọi thời điểm. Giá NOXH theo CĐT tại thời điểm biên tập.*`,
     status: "PUBLISHED",

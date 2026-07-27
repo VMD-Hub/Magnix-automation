@@ -1,5 +1,7 @@
 import {
+  isGeneralReKnowledgeArticle,
   isNoxhHandbookArticle,
+  GENERAL_RE_TAG_SLUGS,
   NOXH_HANDBOOK_TAG_DESCRIPTIONS,
   NOXH_HANDBOOK_TAG_SLUGS,
   PHONG_THUY_ARTICLE_TAG,
@@ -113,14 +115,20 @@ export async function listPublishedArticles(params: {
   pageSize?: number;
   tagSlug?: string;
   projectSlug?: string;
-  /** Chỉ bài thuộc cẩm nang NOXH (loại bài phong thủy-only). */
+  /** Chỉ bài thuộc cẩm nang NOXH (loại bài phong thủy-only / kiến thức BĐS). */
   handbookOnly?: boolean;
+  /** Chỉ bài kiến thức BĐS (BTR, hành lang, hạ tầng). */
+  knowledgeOnly?: boolean;
 } = {}): Promise<{ items: ArticleCardData[]; total: number; source: "db" | "demo" }> {
   const page = Math.max(1, params.page ?? 1);
   const pageSize = Math.min(50, params.pageSize ?? 12);
+  const knowledgeOnly = params.knowledgeOnly === true;
   const handbookOnly =
     params.handbookOnly ??
-    params.tagSlug !== PHONG_THUY_ARTICLE_TAG.slug;
+    (!knowledgeOnly &&
+      !params.projectSlug &&
+      params.tagSlug !== PHONG_THUY_ARTICLE_TAG.slug &&
+      !(params.tagSlug && GENERAL_RE_TAG_SLUGS.has(params.tagSlug)));
 
   try {
     const where = {
@@ -143,6 +151,7 @@ export async function listPublishedArticles(params: {
         listDemoArticleCards({
           ...params,
           handbookOnly,
+          knowledgeOnly,
           page: 1,
           pageSize: DEMO_CATALOG_PAGE_SIZE,
         }),
@@ -153,9 +162,11 @@ export async function listPublishedArticles(params: {
       rows.map(mapToCard),
       demoAll.items,
     );
-    const scoped = handbookOnly
-      ? merged.filter(isNoxhHandbookArticle)
-      : merged;
+    const scoped = knowledgeOnly
+      ? merged.filter(isGeneralReKnowledgeArticle)
+      : handbookOnly
+        ? merged.filter(isNoxhHandbookArticle)
+        : merged;
     if (scoped.length > 0) {
       const paged = paginateArticleCards(scoped, page, pageSize);
       return {
@@ -170,6 +181,7 @@ export async function listPublishedArticles(params: {
   const demo = listDemoArticleCards({
     ...params,
     handbookOnly,
+    knowledgeOnly,
     page,
     pageSize,
   });
@@ -243,7 +255,11 @@ export async function listPublishedTags(): Promise<ArticleTagSummary[]> {
         include: articleCardInclude,
       }),
       Promise.resolve(
-        listDemoArticleCards({ page: 1, pageSize: DEMO_CATALOG_PAGE_SIZE }),
+        listDemoArticleCards({
+          page: 1,
+          pageSize: DEMO_CATALOG_PAGE_SIZE,
+          handbookOnly: false,
+        }),
       ),
     ]);
     const merged = mergeArticleCards(

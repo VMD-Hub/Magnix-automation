@@ -5,9 +5,9 @@ import { NORTHERN_SUPPORT_CLOSING } from "@/lib/content/articles/northern-editor
 
 const UPDATED = new Date("2026-07-27T00:00:00.000Z");
 const PILLAR_HREF =
-  "/wiki-nha-o-xa-hoi/nam-truc-tang-truong-vung-thu-do-ha-noi-2026";
+  "/tin-tuc/kien-thuc/nam-truc-tang-truong-vung-thu-do-ha-noi-2026";
 const HUB_HREF =
-  "/wiki-nha-o-xa-hoi/chu-de/truc-san-bay-noi-bai-bac-song-hong";
+  "/tin-tuc/kien-thuc/chu-de/truc-san-bay-noi-bai-bac-song-hong";
 
 const SLUG_MACRO =
   "quy-hoach-nhat-tan-noi-bai-dai-lo-vo-nguyen-giap-2026";
@@ -36,7 +36,7 @@ export const HANOI_AIRPORT_CORRIDOR_ARTICLES_2026: ArticleDetail[] = [
 
 Trong Quyết định 1569/QĐ-TTg (Quy hoạch Thủ đô thời kỳ 2021–2030, tầm nhìn 2050), không gian phía Bắc được định hướng như một cực phát triển gắn logistics quốc tế và đô thị hóa Bắc sông Hồng. Đại lộ Võ Nguyên Giáp (Nhật Tân – Nội Bài) là mặt cắt thực thi lớp đó: kết nối cầu Nhật Tân với sân bay quốc tế Nội Bài, đồng thời tạo khung cho quy hoạch chi tiết hai bên tuyến tại Đông Anh – Sóc Sơn (ảnh hưởng kéo dài tới Mê Linh).
 
-Khác hành lang Đông – Đông Nam (cao tốc – cảng biển), trục này lấy cửa ngõ hàng không và đô thị hóa hành chính làm động lực chính — không phải khẩu hiệu “biểu tượng” tách khỏi thể chế. Đối chiếu năm hành lang: [Năm trục tăng trưởng Vùng Thủ đô Hà Nội](${PILLAR_HREF}). Hub: [${HUB_HREF}](${HUB_HREF}).
+Khác hành lang Đông – Đông Nam (cao tốc – cảng biển), trục này lấy cửa ngõ hàng không và đô thị hóa hành chính làm động lực chính — không phải khẩu hiệu “biểu tượng” tách khỏi thể chế. Đối chiếu năm hành lang: [Năm trục tăng trưởng Vùng Thủ đô Hà Nội](${PILLAR_HREF}). Chủ đề: [${HUB_HREF}](${HUB_HREF}).
 
 ${EDITORIAL_FIGURES.hcmSkyline}
 
@@ -72,8 +72,8 @@ ${EDITORIAL_FIGURES.metroHub}
 | Lớp đọc | Câu hỏi chuyên môn | Bài House X |
 |---------|--------------------|-------------|
 | Quy hoạch – thể chế (bài này) | QH 1/500 Nhật Tân – Nội Bài & Đông Anh lên quận? | Bạn đang đọc |
-| Dịch chuyển không gian | Đô thị sân bay / nhu cầu ở–thuê Bắc sông Hồng? | [Đô thị sân bay Nội Bài](/wiki-nha-o-xa-hoi/${SLUG_POTENTIAL}) |
-| Thẩm định dự án | Căn hộ / thửa đất Đông Anh – Mê Linh? | [Thẩm định Đông Anh – Mê Linh](/wiki-nha-o-xa-hoi/${SLUG_REALITY}) |
+| Dịch chuyển không gian | Đô thị sân bay / nhu cầu ở–thuê Bắc sông Hồng? | [Đô thị sân bay Nội Bài](/tin-tuc/kien-thuc/${SLUG_POTENTIAL}) |
+| Thẩm định dự án | Căn hộ / thửa đất Đông Anh – Mê Linh? | [Thẩm định Đông Anh – Mê Linh](/tin-tuc/kien-thuc/${SLUG_REALITY}) |
 
 ${NORTHERN_SUPPORT_CLOSING}
 
@@ -103,7 +103,7 @@ ${EDITORIAL_FIGURES.bitexcoMetro}
 
 Trong khung đa cực – đa trung tâm (QĐ 1569/QĐ-TTg), hướng Bắc gắn cửa ngõ quốc tế Nội Bài với đô thị hóa Đông Anh – Sóc Sơn và vùng ảnh hưởng Mê Linh. “Đô thị sân bay” ở đây là lớp chức năng: việc làm logistics hàng không, dịch vụ sân bay và KCN — nơi phút di chuyển tới Nội Bài quyết định nhu cầu ở / thuê nhiều hơn tin đồn thửa đất.
 
-Khác hành lang Đông – Đông Nam (cao tốc – cảng biển), động lực gốc là năng lực hàng không và lộ trình đô thị hóa hành chính (kể cả tiêu chí lên quận Đông Anh). Khung năm hành lang: [pillar Vùng Thủ đô](${PILLAR_HREF}). Lớp thể chế: [QH Nhật Tân – Nội Bài / Võ Nguyên Giáp](/wiki-nha-o-xa-hoi/${SLUG_MACRO}).
+Khác hành lang Đông – Đông Nam (cao tốc – cảng biển), động lực gốc là năng lực hàng không và lộ trình đô thị hóa hành chính (kể cả tiêu chí lên quận Đông Anh). Khung năm hành lang: [pillar Vùng Thủ đô](${PILLAR_HREF}). Lớp thể chế: [QH Nhật Tân – Nội Bài / Võ Nguyên Giáp](/tin-tuc/kien-thuc/${SLUG_MACRO}).
 
 ${EDITORIAL_FIGURES.hcmSkyline}
 
@@ -132,7 +132,7 @@ ${EDITORIAL_FIGURES.thuThiem}
 
 ## Nên đọc tiếp bài thực tế hay đối chiếu trục khác?
 
-Tầng thực tế cùng hành lang: [Căn hộ / thửa đất Đông Anh – Mê Linh](/wiki-nha-o-xa-hoi/${SLUG_REALITY}). Đối chiếu Đông – Đông Nam: [Hub trục Đông](/wiki-nha-o-xa-hoi/chu-de/truc-dong-dong-nam-vung-thu-do).
+Tầng thực tế cùng hành lang: [Căn hộ / thửa đất Đông Anh – Mê Linh](/tin-tuc/kien-thuc/${SLUG_REALITY}). Đối chiếu Đông – Đông Nam: [Chủ đề trục Đông](/tin-tuc/kien-thuc/chu-de/truc-dong-dong-nam-vung-thu-do).
 
 ${NORTHERN_SUPPORT_CLOSING}
 
@@ -166,7 +166,7 @@ Trên trục Nội Bài – Bắc sông Hồng, khung thực tế khoảng 40-30
 2. Khoảng 30% — giá và so sánh định tính: phân khúc, chính sách thanh toán công bố, đối chiếu cùng huyện — không bịa số tuyệt đối từng căn hay từng thửa.
 3. Khoảng 30% — tài chính sở hữu + hỗ trợ hồ sơ: vốn tự có, vay, điều kiện NOXH (nếu thuộc đối tượng); [liên hệ House X](/lien-he).
 
-Bối cảnh: [QH Nhật Tân – Nội Bài](/wiki-nha-o-xa-hoi/${SLUG_MACRO}) · [Thành phố sân bay / cho thuê](/wiki-nha-o-xa-hoi/${SLUG_POTENTIAL}) · [pillar năm trục](${PILLAR_HREF}).
+Bối cảnh: [QH Nhật Tân – Nội Bài](/tin-tuc/kien-thuc/${SLUG_MACRO}) · [Thành phố sân bay / cho thuê](/tin-tuc/kien-thuc/${SLUG_POTENTIAL}) · [pillar năm trục](${PILLAR_HREF}).
 
 ${EDITORIAL_FIGURES.hcmSkyline}
 
@@ -207,14 +207,14 @@ ${EDITORIAL_FIGURES.noxhEligibility}
 | Nhu cầu | Hướng gợi ý |
 |---------|-------------|
 | Gần sân bay / KCN Bắc sông Hồng | Trục Nội Bài (series này) |
-| Gần cao tốc HN–HP / hướng ven biển | [Hub Đông – Đông Nam](/wiki-nha-o-xa-hoi/chu-de/truc-dong-dong-nam-vung-thu-do) |
-| Nút giao vành đai vùng | Hub Vành đai 4 trên [pillar](${PILLAR_HREF}) |
+| Gần cao tốc HN–HP / hướng ven biển | [Chủ đề Đông – Đông Nam](/tin-tuc/kien-thuc/chu-de/truc-dong-dong-nam-vung-thu-do) |
+| Nút giao vành đai vùng | Chủ đề Vành đai 4 trên [pillar](${PILLAR_HREF}) |
 
 ${NORTHERN_SUPPORT_CLOSING}
 
 ${EDITORIAL_FIGURES.bitexcoMetro}
 
-Hub: [${HUB_HREF}](${HUB_HREF})
+Chủ đề: [${HUB_HREF}](${HUB_HREF})
 
 *Không dùng bài này như danh mục giá căn hộ thương mại Đông Anh / Sóc Sơn. Giá và điều kiện NOXH xác nhận tại thời điểm giao dịch.*`,
     status: "PUBLISHED",

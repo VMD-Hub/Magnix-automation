@@ -70,7 +70,7 @@ export const NOXH_LOAN_QUICK_FAQ = [
 ] as const;
 
 export const NOXH_LOAN_QUICK_ARTICLE_LINKS = [
-  { href: "/tin-tuc/tham-dinh-khoan-vay-mua-nha-o-xa-hoi", label: "Pillar — Tự kiểm tra trước khi nộp hồ sơ" },
+  { href: "/tin-tuc/tham-dinh-khoan-vay-mua-nha-o-xa-hoi", label: "Tự kiểm tra trước khi nộp hồ sơ" },
   ...noxhLoanClusterArticleLinks(),
   { href: "/tin-tuc/vay-noxh-vo-chong-dong-vay-cic", label: "Vợ/chồng đồng vay & CIC" },
 ] as const;

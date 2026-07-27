@@ -6,6 +6,7 @@ import {
   NOXH_TAG_HN_SOUTHWEST,
   NOXH_TAG_HN_WEST,
 } from "@/lib/content/articles/noxh-handbook-tags";
+import { topicPath } from "@/lib/content/article-routes";
 
 /**
  * 5 trục tăng trưởng Vùng Thủ đô Hà Nội (đô thị chùm) — SoR SEO.
@@ -33,7 +34,7 @@ export const HANOI_GROWTH_CORRIDORS: readonly HanoiGrowthCorridor[] = [
     nameVi: "Trục Đông – Đông Nam (Hà Nội – Hưng Yên – Hải Phòng – Quảng Ninh)",
     seoBlurb:
       "Hành lang kinh tế ven biển / cao tốc 5B: lõi Thủ đô nối cụm cảng Hải Phòng và vùng di sản Quảng Ninh; Hưng Yên là cửa ngõ ly tâm bờ Đông sông Hồng.",
-    hubPath: `/wiki-nha-o-xa-hoi/chu-de/${NOXH_TAG_HN_EAST.slug}`,
+    hubPath: topicPath(NOXH_TAG_HN_EAST.slug),
     tagSlug: NOXH_TAG_HN_EAST.slug,
   },
   {
@@ -41,7 +42,7 @@ export const HANOI_GROWTH_CORRIDORS: readonly HanoiGrowthCorridor[] = [
     nameVi: "Trục Nội Bài & hành lang kinh tế phía Bắc",
     seoBlurb:
       "Đại lộ Võ Nguyên Giáp (Nhật Tân – Nội Bài), Đông Anh / Sóc Sơn / Mê Linh — logistics hàng không và KCN phía Bắc sông Hồng.",
-    hubPath: `/wiki-nha-o-xa-hoi/chu-de/${NOXH_TAG_HN_AIRPORT.slug}`,
+    hubPath: topicPath(NOXH_TAG_HN_AIRPORT.slug),
     tagSlug: NOXH_TAG_HN_AIRPORT.slug,
   },
   {
@@ -49,7 +50,7 @@ export const HANOI_GROWTH_CORRIDORS: readonly HanoiGrowthCorridor[] = [
     nameVi: "Trục Vành đai 4 – Vùng Thủ đô",
     seoBlurb:
       "Siêu hạ tầng ~113,5 km qua Hà Nội, Hưng Yên, Bắc Ninh — giảm tải nội đô lịch sử, mở đô thị vệ tinh quanh nút giao.",
-    hubPath: `/wiki-nha-o-xa-hoi/chu-de/${NOXH_TAG_HN_RING4.slug}`,
+    hubPath: topicPath(NOXH_TAG_HN_RING4.slug),
     tagSlug: NOXH_TAG_HN_RING4.slug,
   },
   {
@@ -57,7 +58,7 @@ export const HANOI_GROWTH_CORRIDORS: readonly HanoiGrowthCorridor[] = [
     nameVi: "Trục phía Tây – Đại lộ Thăng Long / Hòa Lạc",
     seoBlurb:
       "Hành lang công nghệ – giáo dục bậc cao: Nam Từ Liêm, Mỹ Đình tới trung tâm Hòa Lạc và cửa ngõ Tây Bắc.",
-    hubPath: `/wiki-nha-o-xa-hoi/chu-de/${NOXH_TAG_HN_WEST.slug}`,
+    hubPath: topicPath(NOXH_TAG_HN_WEST.slug),
     tagSlug: NOXH_TAG_HN_WEST.slug,
   },
   {
@@ -65,15 +66,15 @@ export const HANOI_GROWTH_CORRIDORS: readonly HanoiGrowthCorridor[] = [
     nameVi: "Trục Tây Nam (Hà Nội – Hà Nam – Ninh Bình)",
     seoBlurb:
       "Công nghiệp sạch, logistics QL1A / Pháp Vân – Cầu Giẽ và du lịch tâm linh – sinh thái phía Nam Vùng Thủ đô.",
-    hubPath: `/wiki-nha-o-xa-hoi/chu-de/${NOXH_TAG_HN_SOUTHWEST.slug}`,
+    hubPath: topicPath(NOXH_TAG_HN_SOUTHWEST.slug),
     tagSlug: NOXH_TAG_HN_SOUTHWEST.slug,
   },
   {
     id: "hn-framework",
     nameVi: "Khung đô thị chùm Vùng Thủ đô",
     seoBlurb:
-      "Pillar điều hướng 5 trục: hạt nhân Hà Nội và đô thị vệ tinh / đối trọng Hưng Yên, Bắc Ninh, Vĩnh Phúc, Hải Phòng, Quảng Ninh, Hà Nam.",
-    hubPath: `/wiki-nha-o-xa-hoi/chu-de/${NOXH_TAG_HA_TANG.slug}`,
+      "Bài tổng quan 5 trục: hạt nhân Hà Nội và đô thị vệ tinh / đối trọng Hưng Yên, Bắc Ninh, Vĩnh Phúc, Hải Phòng, Quảng Ninh, Hà Nam.",
+    hubPath: topicPath(NOXH_TAG_HA_TANG.slug),
     tagSlug: NOXH_TAG_HA_TANG.slug,
   },
 ] as const;

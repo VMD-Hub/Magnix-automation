@@ -5,9 +5,9 @@ import { NORTHERN_SUPPORT_CLOSING } from "@/lib/content/articles/northern-editor
 
 const UPDATED = new Date("2026-07-27T00:00:00.000Z");
 const PILLAR_HREF =
-  "/wiki-nha-o-xa-hoi/nam-truc-tang-truong-vung-thu-do-ha-noi-2026";
+  "/tin-tuc/kien-thuc/nam-truc-tang-truong-vung-thu-do-ha-noi-2026";
 const HUB_HREF =
-  "/wiki-nha-o-xa-hoi/chu-de/truc-dong-dong-nam-vung-thu-do";
+  "/tin-tuc/kien-thuc/chu-de/truc-dong-dong-nam-vung-thu-do";
 
 const SLUG_POTENTIAL = "di-dan-quan-phia-dong-hung-yen-dong-tien-2026";
 const SLUG_MACRO =
@@ -31,7 +31,7 @@ export const HANOI_EAST_CORRIDOR_ARTICLES_2026: ArticleDetail[] = [
 
 Trong khung quy hoạch thời kỳ 2021–2030, tầm nhìn đến 2050 (Thủ tướng phê duyệt tại Quyết định 1569/QĐ-TTg ngày 12/12/2024), Thủ đô được tổ chức theo mô hình đa cực – đa trung tâm: hạt nhân chính trị – hành chính tại lõi Hà Nội, các đô thị vệ tinh và đô thị đối trọng tại các tỉnh liên kết vùng. Hưng Yên nằm trên hướng Đông sông Hồng — cửa ngõ nối lõi Thủ đô với hành lang kinh tế ven biển Hà Nội – Hải Phòng – Quảng Ninh.
 
-Trong truyền thông thị trường, địa danh này thường được gọi như lớp “quận phía Đông” mở rộng. Cách đọc chuyên môn chính xác hơn: Hưng Yên là đô thị vệ tinh / đối trọng trên trục Đông – Đông Nam, nơi quỹ đất và nhà chung cư mới tiếp nhận một phần áp lực dân số và nhu cầu an cư từ Long Biên – Gia Lâm, đồng thời hưởng lợi từ luồng logistics hướng cảng biển. Đối chiếu khung năm trục: [Năm trục tăng trưởng Vùng Thủ đô Hà Nội](${PILLAR_HREF}). Hub chủ đề: [${HUB_HREF}](${HUB_HREF}).
+Trong truyền thông thị trường, địa danh này thường được gọi như lớp “quận phía Đông” mở rộng. Cách đọc chuyên môn chính xác hơn: Hưng Yên là đô thị vệ tinh / đối trọng trên trục Đông – Đông Nam, nơi quỹ đất và nhà chung cư mới tiếp nhận một phần áp lực dân số và nhu cầu an cư từ Long Biên – Gia Lâm, đồng thời hưởng lợi từ luồng logistics hướng cảng biển. Đối chiếu khung năm trục: [Năm trục tăng trưởng Vùng Thủ đô Hà Nội](${PILLAR_HREF}). Chủ đề: [${HUB_HREF}](${HUB_HREF}).
 
 ${EDITORIAL_FIGURES.hcmSkyline}
 
@@ -55,7 +55,7 @@ ${EDITORIAL_FIGURES.metroHub}
 
 - Hành lang công nghiệp – logistics hướng cảng biển (Hải Phòng, Quảng Ninh).
 - Đô thị vệ tinh tiếp nhận nhu cầu an cư ly tâm (Hưng Yên, một phần Gia Lâm).
-- Kết nối liên vùng qua cao tốc CT.04 (QL5B) đã vận hành — chi tiết hạ tầng: [Cao tốc 5B và hành lang kinh tế ven biển](/wiki-nha-o-xa-hoi/${SLUG_MACRO}).
+- Kết nối liên vùng qua cao tốc CT.04 (QL5B) đã vận hành — chi tiết hạ tầng: [Cao tốc 5B và hành lang kinh tế ven biển](/tin-tuc/kien-thuc/${SLUG_MACRO}).
 
 Phân kỳ đầu tư trên trục này không đồng nhất: ô đất ven cao tốc, nhà chung cư trong đại đô thị và thửa đất nông nghiệp chờ quy hoạch có chu kỳ pháp lý và rủi ro khác nhau. Người theo dõi quy hoạch cần tách bạch lớp thể chế (văn bản phê duyệt) và lớp vật chất (hạ tầng đã / đang thi công) trước khi thẩm định từng sản phẩm.
 
@@ -71,13 +71,13 @@ Cách đọc đúng:
 - Đo phút di chuyển từ thửa đất hoặc nhà chung cư đến chỗ làm, trường học và nút cao tốc — không chỉ khoảng cách km trên bản đồ.
 - Đối chiếu pháp lý độc lập của từng sản phẩm, không “ăn theo” tên thương mại khu vực.
 
-Bài thẩm định cùng hành lang sẽ đi sâu checklist pháp lý và cộng đồng cư dân: [Đánh giá đại đô thị / nhà chung cư trục phía Đông](/wiki-nha-o-xa-hoi/${SLUG_REALITY}).
+Bài thẩm định cùng hành lang sẽ đi sâu checklist pháp lý và cộng đồng cư dân: [Đánh giá đại đô thị / nhà chung cư trục phía Đông](/tin-tuc/kien-thuc/${SLUG_REALITY}).
 
 ## Dịch chuyển không gian trên trục Đông — tín hiệu nào đáng theo dõi trước khi thẩm định dự án?
 
 Checklist định tính (không phải công thức lợi nhuận):
 
-- Tiến độ cao tốc / đường nối và các nút giao có công bố rõ giai đoạn không? Bài quy hoạch – thể chế: [Cao tốc 5B và hành lang kinh tế ven biển](/wiki-nha-o-xa-hoi/${SLUG_MACRO}).
+- Tiến độ cao tốc / đường nối và các nút giao có công bố rõ giai đoạn không? Bài quy hoạch – thể chế: [Cao tốc 5B và hành lang kinh tế ven biển](/tin-tuc/kien-thuc/${SLUG_MACRO}).
 - Dự án nhà ở có pháp lý độc lập (quy hoạch, giấy phép, điều kiện chuyển nhượng) không?
 - Thời gian di chuyển giờ cao điểm từ ô đất / nhà chung cư đến chỗ làm có chấp nhận được không?
 - Đã loại trừ nhầm với trục Nội Bài – Bắc sông Hồng hoặc Vành đai 4 chưa? Khung năm trục: [pillar Vùng Thủ đô](${PILLAR_HREF}).
@@ -89,12 +89,12 @@ ${EDITORIAL_FIGURES.bitexcoMetro}
 | Lớp đọc | Câu hỏi chuyên môn | Bài House X |
 |---------|--------------------|-------------|
 | Dịch chuyển không gian (bài này) | Hưng Yên và bờ Đông trong cấu trúc vệ tinh? | Bạn đang đọc |
-| Quy hoạch – thể chế | Cao tốc 5B và hành lang ven biển? | [Cao tốc 5B – hành lang ven biển Đông Nam](/wiki-nha-o-xa-hoi/${SLUG_MACRO}) |
-| Thẩm định dự án | Đánh giá đại đô thị / nhà chung cư thế nào? | [Dự án đại đô thị trục phía Đông](/wiki-nha-o-xa-hoi/${SLUG_REALITY}) |
+| Quy hoạch – thể chế | Cao tốc 5B và hành lang ven biển? | [Cao tốc 5B – hành lang ven biển Đông Nam](/tin-tuc/kien-thuc/${SLUG_MACRO}) |
+| Thẩm định dự án | Đánh giá đại đô thị / nhà chung cư thế nào? | [Dự án đại đô thị trục phía Đông](/tin-tuc/kien-thuc/${SLUG_REALITY}) |
 
 ${NORTHERN_SUPPORT_CLOSING}
 
-Khung đối chiếu: [Năm trục tăng trưởng Vùng Thủ đô](${PILLAR_HREF}) · Hub: [${HUB_HREF}](${HUB_HREF})
+Khung đối chiếu: [Năm trục tăng trưởng Vùng Thủ đô](${PILLAR_HREF}) · Chủ đề: [${HUB_HREF}](${HUB_HREF})
 
 *Logic ly tâm và tên vùng Ocean City / Ocean Park là tham chiếu địa lý định tính — không thay thế bảng giá CĐT hay thẩm định độc lập.*`,
     status: "PUBLISHED",
@@ -120,7 +120,7 @@ Khung đối chiếu: [Năm trục tăng trưởng Vùng Thủ đô](${PILLAR_HR
 
 Đường cao tốc Hà Nội – Hải Phòng (ký hiệu toàn tuyến [CT.04](https://vi.wikipedia.org/wiki/%C4%90%C6%B0%E1%BB%9Dng_cao_t%E1%BB%91c_H%C3%A0_N%E1%BB%99i_%E2%80%93_H%E1%BA%A3i_Ph%C3%B2ng), còn gọi Quốc lộ 5B) là xương sống đường bộ nối lõi Thủ đô với cụm cảng Hải Phòng. Trong khung Quyết định 1569/QĐ-TTg, hành lang Đông – Đông Nam được định hướng như trục liên kết Thủ đô – công nghiệp – cảng biển; CT.04 là lớp hạ tầng đã vận hành — khác các tuyến còn trên giấy — giúp đọc phút di chuyển vùng thay vì chỉ nhìn bán kính nội đô.
 
-Với người theo dõi quy hoạch, cao tốc này không phải “tin hạ tầng” rời rạc mà là công cụ thực thi cấu trúc chùm đô thị hướng tâm: kết nối hạt nhân Hà Nội với đô thị vệ tinh Hưng Yên, cụm cảng Hải Phòng và không gian dịch vụ – di sản Quảng Ninh. Đối chiếu khung năm trục: [Năm trục tăng trưởng Vùng Thủ đô Hà Nội](${PILLAR_HREF}). Hub: [${HUB_HREF}](${HUB_HREF}).
+Với người theo dõi quy hoạch, cao tốc này không phải “tin hạ tầng” rời rạc mà là công cụ thực thi cấu trúc chùm đô thị hướng tâm: kết nối hạt nhân Hà Nội với đô thị vệ tinh Hưng Yên, cụm cảng Hải Phòng và không gian dịch vụ – di sản Quảng Ninh. Đối chiếu khung năm trục: [Năm trục tăng trưởng Vùng Thủ đô Hà Nội](${PILLAR_HREF}). Chủ đề: [${HUB_HREF}](${HUB_HREF}).
 
 ${EDITORIAL_FIGURES.hcmSkyline}
 
@@ -174,8 +174,8 @@ Theo báo chí kinh tế và cập nhật địa phương, UBND TP Hải Phòng 
 | Lớp đọc | Câu hỏi chuyên môn | Bài House X |
 |---------|--------------------|-------------|
 | Quy hoạch – thể chế (bài này) | Cao tốc 5B và ven biển? | Bạn đang đọc |
-| Dịch chuyển không gian | Hưng Yên và bờ Đông trong cấu trúc vệ tinh? | [Di dân “quận phía Đông” Hưng Yên](/wiki-nha-o-xa-hoi/${SLUG_POTENTIAL}) |
-| Thẩm định dự án | Đánh giá đại đô thị / nhà chung cư? | [Dự án đại đô thị trục phía Đông](/wiki-nha-o-xa-hoi/${SLUG_REALITY}) |
+| Dịch chuyển không gian | Hưng Yên và bờ Đông trong cấu trúc vệ tinh? | [Di dân “quận phía Đông” Hưng Yên](/tin-tuc/kien-thuc/${SLUG_POTENTIAL}) |
+| Thẩm định dự án | Đánh giá đại đô thị / nhà chung cư? | [Dự án đại đô thị trục phía Đông](/tin-tuc/kien-thuc/${SLUG_REALITY}) |
 
 ${NORTHERN_SUPPORT_CLOSING}
 
@@ -209,7 +209,7 @@ Trên hành lang Đông – Đông Nam, khung thẩm định House X ưu tiên t
 2. Khoảng 30% — pháp lý và so sánh định tính: phân khúc (thương mại / NOXH), chính sách thanh toán công bố, đối chiếu cùng khu vực — không bịa số tuyệt đối từng căn.
 3. Khoảng 30% — tài chính sở hữu và hỗ trợ: vốn tự có, vay, phí quản lý, điều kiện chuyển nhượng.
 
-Đây là lớp thẩm định dự án trong chuỗi ba lớp đọc: sau quy hoạch – thể chế ([Cao tốc 5B – hành lang ven biển](/wiki-nha-o-xa-hoi/${SLUG_MACRO})) và dịch chuyển không gian ([Hưng Yên / bờ Đông sông Hồng](/wiki-nha-o-xa-hoi/${SLUG_POTENTIAL})). Khung năm trục: [pillar Vùng Thủ đô](${PILLAR_HREF}).
+Đây là lớp thẩm định dự án trong chuỗi ba lớp đọc: sau quy hoạch – thể chế ([Cao tốc 5B – hành lang ven biển](/tin-tuc/kien-thuc/${SLUG_MACRO})) và dịch chuyển không gian ([Hưng Yên / bờ Đông sông Hồng](/tin-tuc/kien-thuc/${SLUG_POTENTIAL})). Khung năm trục: [pillar Vùng Thủ đô](${PILLAR_HREF}).
 
 ${EDITORIAL_FIGURES.hcmSkyline}
 
@@ -244,7 +244,7 @@ ${EDITORIAL_FIGURES.thuThiem}
 - Chất lượng vận hành: an ninh, vệ sinh, thang máy, không gian chung.
 - Sự ổn định của nhóm cư dân (gia đình an cư so với dòng đầu cơ ngắn hạn) — quan sát qua thực tế nội khu, không qua lời quảng cáo.
 
-House X không xếp hạng dự án bằng bảng giá bịa. Thay vào đó, neo đúng trục, đúng phút di chuyển, rồi mới so sản phẩm. Hub: [${HUB_HREF}](${HUB_HREF}).
+House X không xếp hạng dự án bằng bảng giá bịa. Thay vào đó, neo đúng trục, đúng phút di chuyển, rồi mới so sản phẩm. Chủ đề: [${HUB_HREF}](${HUB_HREF}).
 
 ${EDITORIAL_FIGURES.bitexcoMetro}
 
@@ -253,16 +253,16 @@ ${EDITORIAL_FIGURES.bitexcoMetro}
 | Nhu cầu | Hướng gợi ý |
 |---------|-------------|
 | Gần hành lang cao tốc HN–HP / hướng cảng – ven biển | Trục Đông – Đông Nam (series này) |
-| Gần sân bay Nội Bài / Bắc sông Hồng | [Hub Nội Bài – Bắc sông Hồng](/wiki-nha-o-xa-hoi/chu-de/truc-san-bay-noi-bai-bac-song-hong) |
-| Nút giao vành đai vùng | Hub Vành đai 4 trên [pillar năm trục](${PILLAR_HREF}) |
+| Gần sân bay Nội Bài / Bắc sông Hồng | [Chủ đề Nội Bài – Bắc sông Hồng](/tin-tuc/kien-thuc/chu-de/truc-san-bay-noi-bai-bac-song-hong) |
+| Nút giao vành đai vùng | Chủ đề Vành đai 4 trên [pillar năm trục](${PILLAR_HREF}) |
 
 ## Nên đọc tiếp bài nào trên cùng trục Đông – Đông Nam?
 
 | Lớp đọc | Câu hỏi chuyên môn | Bài House X |
 |---------|--------------------|-------------|
 | Thẩm định dự án (bài này) | Pháp lý và không gian sống? | Bạn đang đọc |
-| Quy hoạch – thể chế | Cao tốc 5B và ven biển? | [Cao tốc 5B – hành lang ven biển Đông Nam](/wiki-nha-o-xa-hoi/${SLUG_MACRO}) |
-| Dịch chuyển không gian | Hưng Yên và bờ Đông trong cấu trúc vệ tinh? | [Di dân “quận phía Đông” Hưng Yên](/wiki-nha-o-xa-hoi/${SLUG_POTENTIAL}) |
+| Quy hoạch – thể chế | Cao tốc 5B và ven biển? | [Cao tốc 5B – hành lang ven biển Đông Nam](/tin-tuc/kien-thuc/${SLUG_MACRO}) |
+| Dịch chuyển không gian | Hưng Yên và bờ Đông trong cấu trúc vệ tinh? | [Di dân “quận phía Đông” Hưng Yên](/tin-tuc/kien-thuc/${SLUG_POTENTIAL}) |
 
 ${NORTHERN_SUPPORT_CLOSING}
 

@@ -7,6 +7,9 @@ import {
   NEWS_HUB_SEO_TITLE,
   NEWS_HUB_TITLE,
   NOXH_HANDBOOK_PATH,
+  RE_KNOWLEDGE_INTRO,
+  RE_KNOWLEDGE_PATH,
+  RE_KNOWLEDGE_TITLE,
 } from "@/lib/content/article-routes";
 import {
   NOXH_HANDBOOK_INTRO,
@@ -40,10 +43,10 @@ const SECTIONS = [
     status: "live" as const,
   },
   {
-    title: "Kiến thức bất động sản",
-    description:
-      "Phân tích thị trường, mua bán và đầu tư — chuyên mục đang được biên tập, sẽ ra mắt sau.",
-    status: "soon" as const,
+    href: RE_KNOWLEDGE_PATH,
+    title: RE_KNOWLEDGE_TITLE,
+    description: RE_KNOWLEDGE_INTRO,
+    status: "live" as const,
   },
 ];
 

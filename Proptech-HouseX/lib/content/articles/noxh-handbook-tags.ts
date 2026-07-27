@@ -1,7 +1,6 @@
 import type { ArticleCardData, ArticleTagSummary } from "@/lib/data/article-types";
-import { NOXH_HANDBOOK_PATH } from "@/lib/content/article-routes";
 
-/** Tag chính — mỗi bài cẩm nang NOXH chỉ gắn một tag. */
+/** Tag hành trình hồ sơ / dự án NOXH — silo Wiki nhà ở xã hội. */
 export const NOXH_TAG_CHINH_SACH = {
   slug: "chinh-sach-ho-so-noxh",
   name: "Chính sách & hồ sơ NOXH",
@@ -22,6 +21,7 @@ export const NOXH_TAG_DU_AN_GIA = {
   name: "Dự án, giá & tiến độ",
 } as const;
 
+/** Hạ tầng & hành lang — silo Kiến thức BĐS (`/tin-tuc/kien-thuc`). */
 export const NOXH_TAG_HA_TANG = {
   slug: "ha-tang-ket-noi-vung",
   name: "Hạ tầng & kết nối vùng",
@@ -93,17 +93,22 @@ export const NOXH_TAG_HN_SOUTHWEST = {
   name: "Trục Tây Nam Hà Nam – Ninh Bình",
 } as const;
 
-/** Nhà ở cho thuê dài hạn (BTR) — GENERAL_POLICY, không thuộc hành trình hồ sơ NOXH. */
+/** Nhà ở cho thuê dài hạn (BTR) — kiến thức BĐS, không thuộc hành trình hồ sơ NOXH. */
 export const NOXH_TAG_BTR = {
   slug: "nha-o-cho-thue-dai-han",
   name: "Nhà ở cho thuê dài hạn",
 } as const;
 
-export const NOXH_HANDBOOK_TAGS = [
+/** Tag Wiki NOXH — chỉ hành trình hồ sơ / dự án. */
+export const NOXH_JOURNEY_TAGS = [
   NOXH_TAG_CHINH_SACH,
   NOXH_TAG_CHON_NHA,
   NOXH_TAG_THAM_DINH_VAY,
   NOXH_TAG_DU_AN_GIA,
+] as const;
+
+/** Tag Kiến thức BĐS — BTR, hạ tầng, hành lang tăng trưởng. */
+export const GENERAL_RE_KNOWLEDGE_TAGS = [
   NOXH_TAG_HA_TANG,
   NOXH_TAG_NORTH_SOUTH,
   NOXH_TAG_EAST_WEST,
@@ -119,8 +124,15 @@ export const NOXH_HANDBOOK_TAGS = [
   NOXH_TAG_BTR,
 ] as const;
 
+/** @deprecated Alias — dùng NOXH_JOURNEY_TAGS cho listing Wiki. */
+export const NOXH_HANDBOOK_TAGS = NOXH_JOURNEY_TAGS;
+
 export const NOXH_HANDBOOK_TAG_SLUGS = new Set<string>(
-  NOXH_HANDBOOK_TAGS.map((t) => t.slug),
+  NOXH_JOURNEY_TAGS.map((t) => t.slug),
+);
+
+export const GENERAL_RE_TAG_SLUGS = new Set<string>(
+  GENERAL_RE_KNOWLEDGE_TAGS.map((t) => t.slug),
 );
 
 /** Bài chỉ thuộc silo /phong-thuy — không liệt kê trên cẩm nang NOXH. */
@@ -134,10 +146,10 @@ export const PHONG_THUY_ARTICLE_TAG = {
   name: "Phong thủy nhà ở",
 } as const;
 
-export const NOXH_HANDBOOK_TAG_DESCRIPTIONS: Record<
-  (typeof NOXH_HANDBOOK_TAGS)[number]["slug"],
-  string
-> = {
+const WIKI_PATH = "/wiki-nha-o-xa-hoi";
+const RE_KNOWLEDGE_PATH = "/tin-tuc/kien-thuc";
+
+export const NOXH_HANDBOOK_TAG_DESCRIPTIONS: Record<string, string> = {
   [NOXH_TAG_CHINH_SACH.slug]:
     "Luật Nhà ở, điều kiện đối tượng, thu nhập, quy trình mua và hồ sơ NOXH.",
   [NOXH_TAG_CHON_NHA.slug]:
@@ -171,20 +183,20 @@ export const NOXH_HANDBOOK_TAG_DESCRIPTIONS: Record<
   [NOXH_TAG_HN_SOUTHWEST.slug]:
     "Tây Nam Vùng Thủ đô: Hà Nam – Ninh Bình; QL1A, Pháp Vân – Cầu Giẽ, công nghiệp sạch và sinh thái.",
   [NOXH_TAG_BTR.slug]:
-    "Nhà ở cho thuê dài hạn (Build-to-Rent): chính sách quốc gia, hợp đồng dài hạn, TOD và dòng vốn — tách khỏi hồ sơ NOXH.",
+    "Nhà ở cho thuê dài hạn (Build-to-Rent): chính sách quốc gia, hợp đồng dài hạn, TOD và dòng tiền vận hành thuê chuyên nghiệp.",
 };
 
-/** 301 slug chủ đề cũ → slug mới hoặc hub cẩm nang. */
+/** 301 slug chủ đề cũ → hub đúng silo. */
 export const LEGACY_NOXH_TOPIC_REDIRECTS: Record<string, string> = {
-  noxh: NOXH_HANDBOOK_PATH,
-  "goc-chuyen-gia": NOXH_HANDBOOK_PATH,
-  "phap-ly": `/wiki-nha-o-xa-hoi/chu-de/${NOXH_TAG_CHINH_SACH.slug}`,
-  "tien-do-du-an": `/wiki-nha-o-xa-hoi/chu-de/${NOXH_TAG_DU_AN_GIA.slug}`,
-  "dau-tu": `/wiki-nha-o-xa-hoi/chu-de/${NOXH_TAG_DU_AN_GIA.slug}`,
-  "ha-tang-giao-thong": `/wiki-nha-o-xa-hoi/chu-de/${NOXH_TAG_HA_TANG.slug}`,
-  "do-thi-ve-tinh-tod": `/wiki-nha-o-xa-hoi/chu-de/${NOXH_TAG_AIRPORT.slug}`,
-  "nha-o-xa-hoi-ly-thuong-kiet": NOXH_HANDBOOK_PATH,
-  "dta-happy-home-nhon-trach": `/wiki-nha-o-xa-hoi/chu-de/${NOXH_TAG_EAST_COAST.slug}`,
+  noxh: WIKI_PATH,
+  "goc-chuyen-gia": WIKI_PATH,
+  "phap-ly": `${WIKI_PATH}/chu-de/${NOXH_TAG_CHINH_SACH.slug}`,
+  "tien-do-du-an": `${WIKI_PATH}/chu-de/${NOXH_TAG_DU_AN_GIA.slug}`,
+  "dau-tu": `${WIKI_PATH}/chu-de/${NOXH_TAG_DU_AN_GIA.slug}`,
+  "ha-tang-giao-thong": `${RE_KNOWLEDGE_PATH}/chu-de/${NOXH_TAG_HA_TANG.slug}`,
+  "do-thi-ve-tinh-tod": `${RE_KNOWLEDGE_PATH}/chu-de/${NOXH_TAG_AIRPORT.slug}`,
+  "nha-o-xa-hoi-ly-thuong-kiet": WIKI_PATH,
+  "dta-happy-home-nhon-trach": `${RE_KNOWLEDGE_PATH}/chu-de/${NOXH_TAG_EAST_COAST.slug}`,
 };
 
 export const NOXH_HANDBOOK_PILLAR_CLUSTERS = [
@@ -202,64 +214,21 @@ export const NOXH_HANDBOOK_PILLAR_CLUSTERS = [
   },
 ] as const;
 
+/** Cụm phụ trên Wiki — chỉ dự án/giá NOXH. */
 export const NOXH_HANDBOOK_SECONDARY_CLUSTERS = [
   {
     ...NOXH_TAG_DU_AN_GIA,
     description: NOXH_HANDBOOK_TAG_DESCRIPTIONS[NOXH_TAG_DU_AN_GIA.slug],
   },
-  {
-    ...NOXH_TAG_HA_TANG,
-    description: NOXH_HANDBOOK_TAG_DESCRIPTIONS[NOXH_TAG_HA_TANG.slug],
-  },
-  {
-    ...NOXH_TAG_NORTH_SOUTH,
-    description: NOXH_HANDBOOK_TAG_DESCRIPTIONS[NOXH_TAG_NORTH_SOUTH.slug],
-  },
-  {
-    ...NOXH_TAG_EAST_WEST,
-    description: NOXH_HANDBOOK_TAG_DESCRIPTIONS[NOXH_TAG_EAST_WEST.slug],
-  },
-  {
-    ...NOXH_TAG_EAST_COAST,
-    description: NOXH_HANDBOOK_TAG_DESCRIPTIONS[NOXH_TAG_EAST_COAST.slug],
-  },
-  {
-    ...NOXH_TAG_RING_ROAD,
-    description: NOXH_HANDBOOK_TAG_DESCRIPTIONS[NOXH_TAG_RING_ROAD.slug],
-  },
-  {
-    ...NOXH_TAG_AIRPORT,
-    description: NOXH_HANDBOOK_TAG_DESCRIPTIONS[NOXH_TAG_AIRPORT.slug],
-  },
-  {
-    ...NOXH_TAG_QL13,
-    description: NOXH_HANDBOOK_TAG_DESCRIPTIONS[NOXH_TAG_QL13.slug],
-  },
-  {
-    ...NOXH_TAG_HN_EAST,
-    description: NOXH_HANDBOOK_TAG_DESCRIPTIONS[NOXH_TAG_HN_EAST.slug],
-  },
-  {
-    ...NOXH_TAG_HN_AIRPORT,
-    description: NOXH_HANDBOOK_TAG_DESCRIPTIONS[NOXH_TAG_HN_AIRPORT.slug],
-  },
-  {
-    ...NOXH_TAG_HN_RING4,
-    description: NOXH_HANDBOOK_TAG_DESCRIPTIONS[NOXH_TAG_HN_RING4.slug],
-  },
-  {
-    ...NOXH_TAG_HN_WEST,
-    description: NOXH_HANDBOOK_TAG_DESCRIPTIONS[NOXH_TAG_HN_WEST.slug],
-  },
-  {
-    ...NOXH_TAG_HN_SOUTHWEST,
-    description: NOXH_HANDBOOK_TAG_DESCRIPTIONS[NOXH_TAG_HN_SOUTHWEST.slug],
-  },
-  {
-    ...NOXH_TAG_BTR,
-    description: NOXH_HANDBOOK_TAG_DESCRIPTIONS[NOXH_TAG_BTR.slug],
-  },
 ] as const;
+
+/** Cụm chủ đề trên hub Kiến thức BĐS. */
+export const GENERAL_RE_KNOWLEDGE_CLUSTERS = GENERAL_RE_KNOWLEDGE_TAGS.map(
+  (t) => ({
+    ...t,
+    description: NOXH_HANDBOOK_TAG_DESCRIPTIONS[t.slug],
+  }),
+);
 
 export function isNoxhHandbookArticle(
   article: Pick<ArticleCardData, "slug" | "tags">,
@@ -268,11 +237,27 @@ export function isNoxhHandbookArticle(
   return article.tags.some((t) => NOXH_HANDBOOK_TAG_SLUGS.has(t.slug));
 }
 
+export function isGeneralReKnowledgeArticle(
+  article: Pick<ArticleCardData, "slug" | "tags">,
+): boolean {
+  if (PHONG_THUY_ONLY_ARTICLE_SLUGS.has(article.slug)) return false;
+  return article.tags.some((t) => GENERAL_RE_TAG_SLUGS.has(t.slug));
+}
+
 export function handbookTagSummaries(): ArticleTagSummary[] {
-  return NOXH_HANDBOOK_TAGS.map((t) => ({
+  return NOXH_JOURNEY_TAGS.map((t) => ({
     slug: t.slug,
     name: t.name,
-    description: NOXH_HANDBOOK_TAG_DESCRIPTIONS[t.slug],
+    description: NOXH_HANDBOOK_TAG_DESCRIPTIONS[t.slug] ?? "",
+    articleCount: 0,
+  }));
+}
+
+export function generalReKnowledgeTagSummaries(): ArticleTagSummary[] {
+  return GENERAL_RE_KNOWLEDGE_TAGS.map((t) => ({
+    slug: t.slug,
+    name: t.name,
+    description: NOXH_HANDBOOK_TAG_DESCRIPTIONS[t.slug] ?? "",
     articleCount: 0,
   }));
 }

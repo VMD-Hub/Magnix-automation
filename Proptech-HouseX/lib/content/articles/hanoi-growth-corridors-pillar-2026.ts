@@ -55,7 +55,7 @@ Tin một đoạn Vành đai, một nút cao tốc hay một dự án đại đ�
 
 Độc giả cần phân biệt ba lớp địa lý trên cùng hướng Đông: cận lõi (Long Biên / Gia Lâm), đệm tỉnh (Hưng Yên), và hành lang cảng – ven biển. Chu kỳ hạ tầng và pháp lý dự án không đồng nhất giữa ba lớp.
 
-Hub: [/wiki-nha-o-xa-hoi/chu-de/truc-dong-dong-nam-vung-thu-do](/wiki-nha-o-xa-hoi/chu-de/truc-dong-dong-nam-vung-thu-do) · [Hành lang cao tốc & kinh tế ven biển](/wiki-nha-o-xa-hoi/cao-toc-5b-hanh-lang-kinh-te-ven-bien-dong-nam-vung-thu-do-2026) · [Dịch chuyển Hưng Yên / bờ Đông](/wiki-nha-o-xa-hoi/di-dan-quan-phia-dong-hung-yen-dong-tien-2026) · [Thẩm định đại đô thị trục Đông](/wiki-nha-o-xa-hoi/du-an-dai-do-thi-chung-cu-truc-phia-dong-ha-noi-2026).
+Chủ đề: [/tin-tuc/kien-thuc/chu-de/truc-dong-dong-nam-vung-thu-do](/tin-tuc/kien-thuc/chu-de/truc-dong-dong-nam-vung-thu-do) · [Hành lang cao tốc & kinh tế ven biển](/tin-tuc/kien-thuc/cao-toc-5b-hanh-lang-kinh-te-ven-bien-dong-nam-vung-thu-do-2026) · [Dịch chuyển Hưng Yên / bờ Đông](/tin-tuc/kien-thuc/di-dan-quan-phia-dong-hung-yen-dong-tien-2026) · [Thẩm định đại đô thị trục Đông](/tin-tuc/kien-thuc/du-an-dai-do-thi-chung-cu-truc-phia-dong-ha-noi-2026).
 
 ## Trục Nội Bài và Bắc sông Hồng giải quyết bài toán nào của Thủ đô?
 
@@ -63,7 +63,7 @@ Hub: [/wiki-nha-o-xa-hoi/chu-de/truc-dong-dong-nam-vung-thu-do](/wiki-nha-o-xa-h
 
 Vấn đề then chốt không phải khẩu hiệu “thành phố sân bay”, mà là đồng bộ giữa: nâng cấp / mở rộng năng lực Nội Bài theo công bố; quy hoạch hai bên đại lộ; lộ trình đô thị hóa Đông Anh (kể cả định hướng lên quận khi có quyết định hành chính); và kiểm soát pháp lý đất đai quanh nút giao — khu vực dễ phát sinh giao dịch nóng khi tin quy hoạch lan truyền.
 
-Hub: [/wiki-nha-o-xa-hoi/chu-de/truc-san-bay-noi-bai-bac-song-hong](/wiki-nha-o-xa-hoi/chu-de/truc-san-bay-noi-bai-bac-song-hong) · [Quy hoạch Nhật Tân – Nội Bài](/wiki-nha-o-xa-hoi/quy-hoach-nhat-tan-noi-bai-dai-lo-vo-nguyen-giap-2026).
+Chủ đề: [/tin-tuc/kien-thuc/chu-de/truc-san-bay-noi-bai-bac-song-hong](/tin-tuc/kien-thuc/chu-de/truc-san-bay-noi-bai-bac-song-hong) · [Quy hoạch Nhật Tân – Nội Bài](/tin-tuc/kien-thuc/quy-hoach-nhat-tan-noi-bai-dai-lo-vo-nguyen-giap-2026).
 
 ${EDITORIAL_FIGURES.metroHub}
 
@@ -73,7 +73,7 @@ Vành đai 4 Vùng Thủ đô (quy mô khoảng 113,5 km, đi qua Hà Nội – 
 
 Với người theo dõi tiến độ: cần đọc tách bạch GPMB, tỷ lệ thi công theo đoạn, và mốc khai thác / thông xe kỹ thuật theo cơ quan nhà nước (hướng 2027 trong nhiều tin chính thống năm 2026). Giá thửa đất quanh nút giao chỉ là hệ quả thứ cấp; tín hiệu gốc là pháp lý đất và khả năng kết nối thực tế sau khi tuyến vận hành.
 
-Hub: [/wiki-nha-o-xa-hoi/chu-de/truc-vanh-dai-4-vung-thu-do](/wiki-nha-o-xa-hoi/chu-de/truc-vanh-dai-4-vung-thu-do) · [Tiến độ Vành đai 4](/wiki-nha-o-xa-hoi/tien-do-vanh-dai-4-vung-thu-do-2026).
+Chủ đề: [/tin-tuc/kien-thuc/chu-de/truc-vanh-dai-4-vung-thu-do](/tin-tuc/kien-thuc/chu-de/truc-vanh-dai-4-vung-thu-do) · [Tiến độ Vành đai 4](/tin-tuc/kien-thuc/tien-do-vanh-dai-4-vung-thu-do-2026).
 
 ## Trục Đại lộ Thăng Long – Hòa Lạc định hình cực nào phía Tây?
 
@@ -81,7 +81,7 @@ Phía Tây Thủ đô gắn hành lang khoa học – giáo dục – công ngh�
 
 Khi thẩm định nhà chung cư trên hành lang này, câu hỏi chuyên môn là: chỗ làm / trường học nằm lớp nào (lõi Mỹ Đình – Nam Từ Liêm hay vành Hòa Lạc); tiến độ đường sắt đô thị / nút giao công bố đến đâu; pháp lý và chính sách bán hàng của từng dự án — thay vì suy ra giá từ tên đại lộ.
 
-Hub: [/wiki-nha-o-xa-hoi/chu-de/truc-dai-lo-thang-long-hoa-lac](/wiki-nha-o-xa-hoi/chu-de/truc-dai-lo-thang-long-hoa-lac).
+Chủ đề: [/tin-tuc/kien-thuc/chu-de/truc-dai-lo-thang-long-hoa-lac](/tin-tuc/kien-thuc/chu-de/truc-dai-lo-thang-long-hoa-lac).
 
 ## Trục Tây Nam (Hà Nội – Hà Nam – Ninh Bình) trong phân công vùng?
 
@@ -89,7 +89,7 @@ Hướng Tây Nam gắn QL1A, cao tốc Pháp Vân – Cầu Giẽ và chuỗi �
 
 Với thửa đất và nhà phố ven KCN: ưu tiên kiểm chứng quy hoạch sử dụng đất, điều kiện chuyển nhượng và hạ tầng kỹ thuật đã đầu tư — vì đây là kênh tích sản dài hạn chỉ khi pháp lý và chức năng khu vực khớp nhau. Không đánh đồng với chu kỳ đại đô thị thương mại phía Đông sông Hồng.
 
-Hub: [/wiki-nha-o-xa-hoi/chu-de/truc-tay-nam-ha-nam-ninh-binh](/wiki-nha-o-xa-hoi/chu-de/truc-tay-nam-ha-nam-ninh-binh).
+Chủ đề: [/tin-tuc/kien-thuc/chu-de/truc-tay-nam-ha-nam-ninh-binh](/tin-tuc/kien-thuc/chu-de/truc-tay-nam-ha-nam-ninh-binh).
 
 ## Làm sao chọn đúng hành lang trước khi thẩm định dự án?
 

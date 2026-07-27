@@ -7,7 +7,7 @@ const TTGH_SLUG = "thu-thiem-green-house-thu-duc";
 const TTGH_NAME = "Thủ Thiêm Green House";
 const TTGH_HREF = `/du-an/${TTGH_SLUG}`;
 const PILLAR_HREF =
-  "/wiki-nha-o-xa-hoi/bon-cuc-tang-truong-do-thi-tp-hcm-2026";
+  "/tin-tuc/kien-thuc/bon-cuc-tang-truong-do-thi-tp-hcm-2026";
 
 /**
  * Series hành lang Bắc–Nam dọc sông Sài Gòn — phễu Vĩ mô → Tiềm năng → Thực tế.
@@ -45,7 +45,7 @@ Báo chí chính thống đã khái quát hướng “sông trong lòng đô th�
 
 Trong nhóm trục Bắc–Nam của đồ án điều chỉnh, trục ven sông Sài Gòn – Huỳnh Tấn Phát được nhắc như một trong các xương sống liên kết lõi trung tâm với phía Nam thành phố. Khác Quốc lộ 13 (Đông Bắc) hay hành lang sân bay Long Thành, trục này lấy sông làm trục cảnh quan và kinh tế dịch vụ — ưu tiên mặt tiền nước, kè sông và tuyến đường ven sông đồng bộ.
 
-Người mua nhà nên phân biệt rõ: sống trên hành lang Bắc–Nam sông Sài Gòn là logic “ven sông – hướng biển”, không cùng một thị trường với căn hộ dọc QL13 Lái Thiêu hay đô thị vệ tinh Nhơn Trạch. Hub chủ đề: [/wiki-nha-o-xa-hoi/chu-de/hanh-lang-bac-nam-song-sai-gon](/wiki-nha-o-xa-hoi/chu-de/hanh-lang-bac-nam-song-sai-gon).
+Người mua nhà nên phân biệt rõ: sống trên hành lang Bắc–Nam sông Sài Gòn là logic “ven sông – hướng biển”, không cùng một thị trường với căn hộ dọc QL13 Lái Thiêu hay đô thị vệ tinh Nhơn Trạch. Chủ đề: [/tin-tuc/kien-thuc/chu-de/hanh-lang-bac-nam-song-sai-gon](/tin-tuc/kien-thuc/chu-de/hanh-lang-bac-nam-song-sai-gon).
 
 ${EDITORIAL_FIGURES.metroHub}
 
@@ -72,14 +72,14 @@ ${EDITORIAL_FIGURES.thuThiem}
 | Tầng phễu | Câu hỏi | Bài House X |
 |-----------|---------|-------------|
 | Vĩ mô (bài này) | Quy hoạch sông và trục Bắc–Nam? | Bạn đang đọc |
-| Tiềm năng | Vì sao dòng tiền đổ Nam Sài Gòn – Cần Giờ? | [Ly tâm BĐS Nam Sài Gòn – Cần Giờ](/wiki-nha-o-xa-hoi/ly-tam-bds-nam-sai-gon-can-gio-dong-tien-2026) |
-| Thực tế | Đánh giá dự án ven sông thế nào? | [Top căn hộ / biệt thự ven sông Nam Sài Gòn](/wiki-nha-o-xa-hoi/top-du-an-can-ho-biet-thu-ven-song-nam-sai-gon-2026) |
+| Tiềm năng | Vì sao dòng tiền đổ Nam Sài Gòn – Cần Giờ? | [Ly tâm BĐS Nam Sài Gòn – Cần Giờ](/tin-tuc/kien-thuc/ly-tam-bds-nam-sai-gon-can-gio-dong-tien-2026) |
+| Thực tế | Đánh giá dự án ven sông thế nào? | [Top căn hộ / biệt thự ven sông Nam Sài Gòn](/tin-tuc/kien-thuc/top-du-an-can-ho-biet-thu-ven-song-nam-sai-gon-2026) |
 
 House X tư vấn hồ sơ nhà ở xã hội và định hướng chọn trục trước khi so dự án — [đăng ký ngay](/lien-he).
 
 ${EDITORIAL_FIGURES.bitexcoMetro}
 
-Khung đối chiếu: [Sáu trục tăng trưởng đô thị TP.HCM](${PILLAR_HREF}) · Hub: [/wiki-nha-o-xa-hoi/chu-de/hanh-lang-bac-nam-song-sai-gon](/wiki-nha-o-xa-hoi/chu-de/hanh-lang-bac-nam-song-sai-gon)
+Khung đối chiếu: [Sáu trục tăng trưởng đô thị TP.HCM](${PILLAR_HREF}) · Chủ đề: [/tin-tuc/kien-thuc/chu-de/hanh-lang-bac-nam-song-sai-gon](/tin-tuc/kien-thuc/chu-de/hanh-lang-bac-nam-song-sai-gon)
 
 *Chỉ tiêu quy hoạch, chiều dài tuyến ven sông và tiến độ kè sông theo công bố cơ quan nhà nước — có thể điều chỉnh theo đồ án chi tiết.*`,
     status: "PUBLISHED",
@@ -105,7 +105,7 @@ Khung đối chiếu: [Sáu trục tăng trưởng đô thị TP.HCM](${PILLAR_H
 
 Ly tâm ở đây là dịch chuyển nhu cầu ở và làm việc theo hành lang hạ tầng dài hạn về phía Nam thành phố: Quận 7, Nhà Bè, hướng Cần Giờ — nơi sông, cảng và đô thị dịch vụ gặp nhau. Không phải mọi “tin hạ tầng” đều tạo cùng một dòng tiền: hành lang Bắc–Nam sông Sài Gòn gắn logistics biển / cảng trung chuyển; QL13 gắn cửa ngõ Đông Bắc và chuyên gia KCN; sân bay Long Thành gắn đô thị sân bay.
 
-Chọn đúng trục trước khi so sánh dự án — khung tổng quan: [Sáu trục tăng trưởng đô thị TP.HCM](${PILLAR_HREF}). Bài vĩ mô sông: [Trục dọc sông Sài Gòn — hành lang kinh tế tỷ đô](/wiki-nha-o-xa-hoi/truc-doc-song-sai-gon-hanh-lang-kinh-te-ty-do-2026).
+Chọn đúng trục trước khi so sánh dự án — khung tổng quan: [Sáu trục tăng trưởng đô thị TP.HCM](${PILLAR_HREF}). Bài vĩ mô sông: [Trục dọc sông Sài Gòn — hành lang kinh tế tỷ đô](/tin-tuc/kien-thuc/truc-doc-song-sai-gon-hanh-lang-kinh-te-ty-do-2026).
 
 ${EDITORIAL_FIGURES.hcmSkyline}
 
@@ -153,7 +153,7 @@ ${EDITORIAL_FIGURES.metroHub}
 
 ## Nên đọc tiếp bài thực tế hay đối chiếu trục khác?
 
-Tầng thực tế cùng hành lang: [Top dự án căn hộ / biệt thự ven sông Nam Sài Gòn](/wiki-nha-o-xa-hoi/top-du-an-can-ho-biet-thu-ven-song-nam-sai-gon-2026). Đối chiếu Đông–Tây: [Trục Võ Văn Kiệt – Mai Chí Thọ](/wiki-nha-o-xa-hoi/truc-dong-tay-tphcm-vo-van-kiet-mai-chi-tho-2026).
+Tầng thực tế cùng hành lang: [Top dự án căn hộ / biệt thự ven sông Nam Sài Gòn](/tin-tuc/kien-thuc/top-du-an-can-ho-biet-thu-ven-song-nam-sai-gon-2026). Đối chiếu Đông–Tây: [Trục Võ Văn Kiệt – Mai Chí Thọ](/tin-tuc/kien-thuc/truc-dong-tay-tphcm-vo-van-kiet-mai-chi-tho-2026).
 
 House X hỗ trợ định hướng chọn trục và hồ sơ NOXH — [đăng ký ngay](/lien-he).
 
@@ -189,7 +189,7 @@ View sông là yếu tố cảm xúc — chưa đủ để quyết định. Trê
 4. Rủi ro ngập / kè / cao độ: hỏi hồ sơ kỹ thuật và quy hoạch kè sông khu vực.
 5. Thanh khoản và chi phí sở hữu: phí quản lý, chỗ đậu xe, khả năng chuyển nhượng theo loại hình.
 
-Bối cảnh vĩ mô: [Trục dọc sông Sài Gòn](/wiki-nha-o-xa-hoi/truc-doc-song-sai-gon-hanh-lang-kinh-te-ty-do-2026). Dòng tiền / cảng: [Ly tâm Nam Sài Gòn – Cần Giờ](/wiki-nha-o-xa-hoi/ly-tam-bds-nam-sai-gon-can-gio-dong-tien-2026). Khung 6 trục: [Sáu trục tăng trưởng đô thị TP.HCM](${PILLAR_HREF}).
+Bối cảnh vĩ mô: [Trục dọc sông Sài Gòn](/tin-tuc/kien-thuc/truc-doc-song-sai-gon-hanh-lang-kinh-te-ty-do-2026). Dòng tiền / cảng: [Ly tâm Nam Sài Gòn – Cần Giờ](/tin-tuc/kien-thuc/ly-tam-bds-nam-sai-gon-can-gio-dong-tien-2026). Khung 6 trục: [Sáu trục tăng trưởng đô thị TP.HCM](${PILLAR_HREF}).
 
 ${EDITORIAL_FIGURES.hcmSkyline}
 
@@ -230,14 +230,14 @@ ${EDITORIAL_FIGURES.metroHub}
 | Nhu cầu | Hướng gợi ý |
 |---------|-------------|
 | Ven sông / hướng biển – cảng Cần Giờ | Bắc–Nam sông Sài Gòn (series này) |
-| Đi lại Đông–Tây, gần Võ Văn Kiệt – Mai Chí Thọ | [Trục Đông–Tây](/wiki-nha-o-xa-hoi/truc-dong-tay-tphcm-vo-van-kiet-mai-chi-tho-2026) |
+| Đi lại Đông–Tây, gần Võ Văn Kiệt – Mai Chí Thọ | [Trục Đông–Tây](/tin-tuc/kien-thuc/truc-dong-tay-tphcm-vo-van-kiet-mai-chi-tho-2026) |
 | Cửa ngõ QL13 / Lái Thiêu / chuyên gia KCN | Series QL13 trên pillar [6 trục](${PILLAR_HREF}) |
 
 House X đồng hành chọn trục và rà hồ sơ NOXH — [đăng ký ngay](/lien-he).
 
 ${EDITORIAL_FIGURES.bitexcoMetro}
 
-Landing: [${TTGH_NAME}](${TTGH_HREF}) · Hub: [/wiki-nha-o-xa-hoi/chu-de/hanh-lang-bac-nam-song-sai-gon](/wiki-nha-o-xa-hoi/chu-de/hanh-lang-bac-nam-song-sai-gon)
+Trang dự án: [${TTGH_NAME}](${TTGH_HREF}) · Chủ đề: [/tin-tuc/kien-thuc/chu-de/hanh-lang-bac-nam-song-sai-gon](/tin-tuc/kien-thuc/chu-de/hanh-lang-bac-nam-song-sai-gon)
 
 *Giá NOXH là tham chiếu CĐT tại thời điểm biên tập — xác nhận bảng giá và điều kiện đối tượng trước khi đặt cọc. Không dùng bài này như danh mục giá thương mại Phú Mỹ Hưng.*`,
     status: "PUBLISHED",

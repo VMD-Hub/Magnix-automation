@@ -14,8 +14,8 @@ import {
 import { HGX_PROJECT_SLUG } from "@/lib/preview/ho-guom-xanh-mock";
 
 const UPDATED = new Date("2026-07-27T00:00:00.000Z");
-const PILLAR_HREF = `/wiki-nha-o-xa-hoi/${BTR_PILLAR_SLUG}`;
-const HUB_HREF = "/wiki-nha-o-xa-hoi/chu-de/nha-o-cho-thue-dai-han";
+const PILLAR_HREF = `/tin-tuc/kien-thuc/${BTR_PILLAR_SLUG}`;
+const HUB_HREF = "/tin-tuc/kien-thuc/chu-de/nha-o-cho-thue-dai-han";
 
 const EMERALD_68_NAME = "The Emerald 68 Thuận An";
 const EMERALD_BLVD_NAME = "The Emerald Boulevard Thuận An";
@@ -40,7 +40,7 @@ Chu kỳ trước nhiều nhà đầu tư cá nhân ưu tiên lướt sóng đ�
 2. Giá trị thực gắn vị trí việc làm và chuẩn vận hành.
 3. Ít phụ thuộc tin đồn hạ tầng ngắn hạn hơn đất nền phân lô.
 
-Pillar chính sách: [Thuê dài hạn đến 2030](${PILLAR_HREF}).
+Bài trụ cột: [Thuê dài hạn đến 2030](${PILLAR_HREF}).
 
 ${EDITORIAL_FIGURES.hcmSkyline}
 
@@ -52,7 +52,7 @@ Tỷ suất cho thuê gộp thường được mô tả là tiền thuê năm / 
 - So với lãi vay nếu dùng đòn bẩy.
 - Kiểm hợp đồng thuê thực tế, không lấy giá chào trên mạng.
 
-Công thức khung: [Tính dòng tiền và đòn bẩy](/wiki-nha-o-xa-hoi/tinh-dong-tien-don-bay-can-ho-cho-thue-2026).
+Công thức khung: [Tính dòng tiền và đòn bẩy](/tin-tuc/kien-thuc/tinh-dong-tien-don-bay-can-ho-cho-thue-2026).
 
 ${EDITORIAL_FIGURES.metroHub}
 
@@ -64,9 +64,9 @@ ${EDITORIAL_FIGURES.thuThiem}
 
 ## Đọc tiếp?
 
-- [Khung chọn dự án vận hành cho thuê](/wiki-nha-o-xa-hoi/du-an-can-ho-van-hanh-cho-thue-dai-han-2026)
-- [Thuế cho thuê & mã 68103](/wiki-nha-o-xa-hoi/thue-cho-thue-nha-2026-ma-nganh-68103)
-- Hub: [${HUB_HREF}](${HUB_HREF})
+- [Khung chọn dự án vận hành cho thuê](/tin-tuc/kien-thuc/du-an-can-ho-van-hanh-cho-thue-dai-han-2026)
+- [Thuế cho thuê & mã 68103](/tin-tuc/kien-thuc/thue-cho-thue-nha-2026-ma-nganh-68103)
+- Chủ đề: [${HUB_HREF}](${HUB_HREF})
 
 ${BTR_SUPPORT_CLOSING}
 
@@ -91,7 +91,7 @@ ${BTR_LEGAL_DISCLAIMER}`,
     title:
       "Khung chọn dự án căn hộ phù hợp vận hành cho thuê dài hạn",
     excerpt:
-      "Checklist thiết kế, bàn giao nội thất, phí quản lý và vị trí việc làm — soft-link ID Town, Emerald 68 / Boulevard, Hồ Gươm Xanh trên House X; không liệt kê bảng giá bịa.",
+      "Checklist thiết kế, bàn giao nội thất, phí quản lý và vị trí việc làm — đối chiếu ID Town, Emerald 68 / Boulevard, Hồ Gươm Xanh trên House X; không liệt kê bảng giá bịa.",
     body: `## “Đáp ứng vận hành cho thuê dài hạn” nghĩa là gì?
 
 Không phải mọi căn hộ bán trên thị trường đều phù hợp BTR / cho thuê dài hạn. Khung chọn định tính:
@@ -102,7 +102,7 @@ Không phải mọi căn hộ bán trên thị trường đều phù hợp BTR /
 4. Phí quản lý và ban vận hành minh bạch.
 5. Pháp lý đủ điều kiện giao dịch / cho thuê theo quy định.
 
-Pillar: [Chính sách thuê dài hạn](${PILLAR_HREF}) · Dòng vốn: [Quỹ và yield định tính](/wiki-nha-o-xa-hoi/dong-von-dau-tu-can-ho-cho-thue-dai-han-2026).
+Pillar: [Chính sách thuê dài hạn](${PILLAR_HREF}) · Dòng vốn: [Quỹ và yield định tính](/tin-tuc/kien-thuc/dong-von-dau-tu-can-ho-cho-thue-dai-han-2026).
 
 ${EDITORIAL_FIGURES.hcmSkyline}
 
@@ -124,7 +124,7 @@ ${EDITORIAL_FIGURES.metroHub}
 1. Quy hoạch và pháp lý đủ điều kiện mua / cho thuê.
 2. Ước phí quản lý + thuế (xem bài thuế).
 3. Kịch bản trống căn 1–2 tháng / năm.
-4. So sánh với nhu cầu chuyên gia trên [QL13 / vành đai](/wiki-nha-o-xa-hoi/can-ho-cho-thue-chuyen-gia-truc-ql13-vanh-dai-4-2026).
+4. So sánh với nhu cầu chuyên gia trên [QL13 / vành đai](/tin-tuc/kien-thuc/can-ho-cho-thue-chuyen-gia-truc-ql13-vanh-dai-4-2026).
 
 ${EDITORIAL_FIGURES.thuThiem}
 
@@ -141,7 +141,7 @@ ${BTR_LEGAL_DISCLAIMER}`,
     seoTitle:
       "Chọn dự án căn hộ vận hành cho thuê dài hạn — checklist | HouseX",
     seoDesc:
-      "Checklist thiết kế–vận hành; soft-link ID Town, Emerald, HGX — không bịa bảng giá.",
+      "Checklist thiết kế–vận hành; đối chiếu ID Town, Emerald, HGX — không bịa bảng giá.",
     tags: [NOXH_TAG_BTR],
     projects: [
       { slug: ID_TOWN_SLUG, name: ID_TOWN_NAME },
@@ -195,9 +195,9 @@ ${EDITORIAL_FIGURES.thuThiem}
 
 ## Đọc tiếp thuế và chọn dự án?
 
-- [Thuế cho thuê nhà & mã 68103](/wiki-nha-o-xa-hoi/thue-cho-thue-nha-2026-ma-nganh-68103)
-- [Khung chọn dự án](/wiki-nha-o-xa-hoi/du-an-can-ho-van-hanh-cho-thue-dai-han-2026)
-- Hub: [${HUB_HREF}](${HUB_HREF})
+- [Thuế cho thuê nhà & mã 68103](/tin-tuc/kien-thuc/thue-cho-thue-nha-2026-ma-nganh-68103)
+- [Khung chọn dự án](/tin-tuc/kien-thuc/du-an-can-ho-van-hanh-cho-thue-dai-han-2026)
+- Chủ đề: [${HUB_HREF}](${HUB_HREF})
 
 ${BTR_SUPPORT_CLOSING}
 
@@ -227,7 +227,7 @@ ${BTR_LEGAL_DISCLAIMER}`,
 
 Nghĩa vụ thuế thay đổi theo văn bản hướng dẫn và ngưỡng doanh thu. House X nêu khung để nhà đầu tư biết hỏi đúng cơ quan / đại lý thuế — không thay thế tư vấn thuế chuyên nghiệp và không cam kết mức phải nộp cho từng hồ sơ.
 
-Pillar: [Chính sách thuê dài hạn](${PILLAR_HREF}) · Dòng tiền: [Công thức định tính](/wiki-nha-o-xa-hoi/tinh-dong-tien-don-bay-can-ho-cho-thue-2026).
+Pillar: [Chính sách thuê dài hạn](${PILLAR_HREF}) · Dòng tiền: [Công thức định tính](/tin-tuc/kien-thuc/tinh-dong-tien-don-bay-can-ho-cho-thue-2026).
 
 ${EDITORIAL_FIGURES.hcmSkyline}
 
@@ -256,7 +256,7 @@ ${EDITORIAL_FIGURES.thuThiem}
 
 ## Liên hệ House X hay cơ quan thuế?
 
-House X hỗ trợ định hướng an cư và pháp lý dự án ở mức tham khảo. Nghĩa vụ thuế: liên hệ Chi cục Thuế quản lý hoặc đơn vị tư vấn thuế có tư cách. Hub silo: [${HUB_HREF}](${HUB_HREF}).
+House X hỗ trợ định hướng an cư và pháp lý dự án ở mức tham khảo. Nghĩa vụ thuế: liên hệ Chi cục Thuế quản lý hoặc đơn vị tư vấn thuế có tư cách. Chủ đề: [${HUB_HREF}](${HUB_HREF}).
 
 ${BTR_SUPPORT_CLOSING}
 

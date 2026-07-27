@@ -143,12 +143,12 @@ const nextConfig = {
       },
       {
         source: "/tin-tuc/cam-nang-noxh/chu-de/ha-tang-giao-thong",
-        destination: "/wiki-nha-o-xa-hoi/chu-de/ha-tang-ket-noi-vung",
+        destination: "/tin-tuc/kien-thuc/chu-de/ha-tang-ket-noi-vung",
         permanent: true,
       },
       {
         source: "/tin-tuc/cam-nang-noxh/chu-de/do-thi-ve-tinh-tod",
-        destination: "/wiki-nha-o-xa-hoi/chu-de/ha-tang-ket-noi-vung",
+        destination: "/tin-tuc/kien-thuc/chu-de/hanh-lang-san-bay-long-thanh",
         permanent: true,
       },
       {
@@ -158,7 +158,7 @@ const nextConfig = {
       },
       {
         source: "/tin-tuc/cam-nang-noxh/chu-de/dta-happy-home-nhon-trach",
-        destination: "/wiki-nha-o-xa-hoi",
+        destination: "/tin-tuc/kien-thuc/chu-de/hanh-lang-kinh-te-bien-phia-dong",
         permanent: true,
       },
       {
@@ -279,7 +279,7 @@ const nextConfig = {
         permanent: true,
       },
       {
-        source: "/tin-tuc/:slug((?!cam-nang-noxh|chu-de)[^/]+)",
+        source: "/tin-tuc/:slug((?!cam-nang-noxh|kien-thuc|chu-de)[^/]+)",
         destination: "/wiki-nha-o-xa-hoi/:slug",
         permanent: true,
       },

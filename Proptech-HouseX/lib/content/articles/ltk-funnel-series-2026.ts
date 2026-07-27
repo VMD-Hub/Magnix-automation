@@ -108,7 +108,7 @@ ${NOXH_SUPPORT_CLOSING}
 
 NOXH nội thành cạnh tranh cực cao. Nhiều hồ sơ bị loại vì sai nhóm đối tượng, vượt trần thu nhập, còn nhà ở tên hộ, hoặc giấy xác nhận không đúng mẫu. Bài này neo theo Luật Nhà ở và nghị định hướng dẫn — chi tiết khung chung: [Ai được mua NOXH 2026?](/wiki-nha-o-xa-hoi/dieu-kien-mua-nha-o-xa-hoi-2026-tom-tat).
 
-Giá và quỹ căn: [Bóc tách giá 23,2 triệu/m²](/wiki-nha-o-xa-hoi/${SLUG_GIA}) · Landing: [${LANDING}](${LANDING}).
+Giá và quỹ căn: [Bóc tách giá 23,2 triệu/m²](/wiki-nha-o-xa-hoi/${SLUG_GIA}) · Trang dự án: [${LANDING}](${LANDING}).
 
 ${EDITORIAL_FIGURES.noxhEligibility}
 
@@ -264,7 +264,7 @@ Theo khung nhà ở xã hội / hợp đồng mua bán thông dụng, chủ đ�
 |-------|--------|
 | NOXH vùng ven tổng vốn thấp hơn | [DTA Happy Home Nhơn Trạch](/du-an/${DTA_HAPPY_HOME_SLUG}) |
 | An cư cửa ngõ QL13 / Bình Dương | [${EMERALD_68_NAME}](/du-an/${EMERALD_68_SLUG}) · [NOXH Hồ Gươm Xanh](/du-an/${HGX_PROJECT_SLUG}) |
-| Hub hành lang QL13 | [/wiki-nha-o-xa-hoi/chu-de/truc-quoc-lo-13-dong-bac](/wiki-nha-o-xa-hoi/chu-de/truc-quoc-lo-13-dong-bac) |
+| Chủ đề hành lang QL13 | [/tin-tuc/kien-thuc/chu-de/truc-quoc-lo-13-dong-bac](/tin-tuc/kien-thuc/chu-de/truc-quoc-lo-13-dong-bac) |
 
 Vị trí & chênh giá LTK: [Vì sao dự án sốt?](/wiki-nha-o-xa-hoi/${SLUG_SOT}).
 
@@ -296,7 +296,7 @@ ${NOXH_SUPPORT_CLOSING}
 
 Giá NOXH Lý Thường Kiệt được công bố khoảng 23.251.398 đồng/m² (đã VAT) khiến nhiều hộ Sài Gòn vừa hy vọng vừa sợ mất cơ hội. Cùng lúc, người thân thường cảnh báo: “đừng mua suất ngoài luồng”. Căng thẳng thật. Bài này không thay [cảnh báo bẫy cụ thể](/wiki-nha-o-xa-hoi/${SLUG_CANHBAO}) — mà giải thích vì sao nạn nhân vẫn tự nguyện bỏ qua lời khuyên đúng.
 
-Neo số liệu và quỹ căn: [Bóc tách giá & 755 bán / 270 thuê](/wiki-nha-o-xa-hoi/${SLUG_GIA}) · Landing: [${LANDING}](${LANDING}).
+Neo số liệu và quỹ căn: [Bóc tách giá & 755 bán / 270 thuê](/wiki-nha-o-xa-hoi/${SLUG_GIA}) · Trang dự án: [${LANDING}](${LANDING}).
 
 ${EDITORIAL_FIGURES.ltkPhoiCanh}
 
@@ -363,7 +363,7 @@ Nếu không trúng suất Lý Thường Kiệt, vẫn có phương án an cư �
 |-------|---------------------|
 | NOXH vùng ven tổng vốn thấp hơn | [DTA Happy Home Nhơn Trạch](/du-an/${DTA_HAPPY_HOME_SLUG}) |
 | Cửa ngõ QL13 / Bình Dương | [${EMERALD_68_NAME}](/du-an/${EMERALD_68_SLUG}) · [NOXH Hồ Gươm Xanh](/du-an/${HGX_PROJECT_SLUG}) |
-| Hub hành lang QL13 | [/wiki-nha-o-xa-hoi/chu-de/truc-quoc-lo-13-dong-bac](/wiki-nha-o-xa-hoi/chu-de/truc-quoc-lo-13-dong-bac) |
+| Chủ đề hành lang QL13 | [/tin-tuc/kien-thuc/chu-de/truc-quoc-lo-13-dong-bac](/tin-tuc/kien-thuc/chu-de/truc-quoc-lo-13-dong-bac) |
 
 ${NOXH_SUPPORT_CLOSING}
 
@@ -393,7 +393,7 @@ Nhiều hộ quanh NOXH Lý Thường Kiệt gặp đúng nghịch lý này: đ�
 
 Dân gian gọi là thân lừa ưa nặng: sẵn sàng bỏ tiền mua sự sợ hãi. Bài này neo góc chuyên gia — Complexity Bias và ám ảnh rào cản — rồi vạch kịch bản “vẽ bùa thủ tục” quanh dự án Quận 10. Checklist đúng luật: [Hồ sơ / đối tượng LTK](/wiki-nha-o-xa-hoi/${SLUG_HOSO}). Lớp thao túng khác: [4 đòn tâm lý suất nội bộ](/wiki-nha-o-xa-hoi/${SLUG_TAMLY}).
 
-Landing: [${LANDING}](${LANDING}).
+Trang dự án: [${LANDING}](${LANDING}).
 
 ${EDITORIAL_FIGURES.ltkPhoiCanh}
 
@@ -452,7 +452,7 @@ Nếu mệt với vòng xét duyệt NOXH và muốn phương án ký hợp đ�
 |-------|---------------------|
 | NOXH vùng ven | [DTA Happy Home Nhơn Trạch](/du-an/${DTA_HAPPY_HOME_SLUG}) |
 | QL13 / Bình Dương | [${EMERALD_68_NAME}](/du-an/${EMERALD_68_SLUG}) · [NOXH Hồ Gươm Xanh](/du-an/${HGX_PROJECT_SLUG}) |
-| Hub QL13 | [/wiki-nha-o-xa-hoi/chu-de/truc-quoc-lo-13-dong-bac](/wiki-nha-o-xa-hoi/chu-de/truc-quoc-lo-13-dong-bac) |
+| Chủ đề QL13 | [/tin-tuc/kien-thuc/chu-de/truc-quoc-lo-13-dong-bac](/tin-tuc/kien-thuc/chu-de/truc-quoc-lo-13-dong-bac) |
 
 ${NOXH_SUPPORT_CLOSING}
 

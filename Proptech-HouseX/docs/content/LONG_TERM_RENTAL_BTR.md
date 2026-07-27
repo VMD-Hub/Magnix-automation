@@ -6,15 +6,16 @@ Voice: [`lib/content/articles/long-term-rental-editorial-voice.ts`](../../lib/co
 
 ## Positioning
 
-- **GENERAL_POLICY** — chính sách, pháp luật, mô hình thị trường; **không** thuộc hành trình hồ sơ NOXH (`chinh-sach-ho-so-noxh`).
-- Tag hub: `nha-o-cho-thue-dai-han` (secondary cluster).
-- Soft-link NOXH / growth corridors khi so sánh hoặc nêu rõ tên trục — không đổi silo.
-- Hấp thụ brief CCTM P3 (`nha-o-cho-thue` trong `LUAT_NHA_O_CCTM_CLUSTER_2026.md`) — interlink, không trùng entity.
+- **GENERAL_POLICY** — chính sách, pháp luật, mô hình thị trường; **không** thuộc hành trình hồ sơ NOXH.
+- Hub công khai: **`/tin-tuc/kien-thuc`** (Kiến thức BĐS), không nằm dưới Wiki NOXH.
+- Tag: `nha-o-cho-thue-dai-han` · `BTR_HUB_PATH` = `/tin-tuc/kien-thuc/chu-de/nha-o-cho-thue-dai-han`.
+- Soft-link Wiki NOXH / corridors khi so sánh — giữ silo đúng.
+- Hấp thụ brief CCTM P3 — interlink, không trùng entity.
 
 ## Pillar
 
 Slug: `chinh-sach-nha-o-cho-thue-dai-han-tru-cot-an-cu-2030`  
-URL: `/wiki-nha-o-xa-hoi/chinh-sach-nha-o-cho-thue-dai-han-tru-cot-an-cu-2030`
+URL: `/tin-tuc/kien-thuc/chinh-sach-nha-o-cho-thue-dai-han-tru-cot-an-cu-2030`
 
 ## Tone (Empathetic Expert)
 
@@ -28,8 +29,4 @@ Cấm trên bài: mỏ vàng, đón sóng, cam kết lợi nhuận, phễu, X2/X
 
 ## Citation
 
-- Phân biệt **chỉ đạo / dự thảo** vs văn bản **đã hiệu lực**.
-- Disclaimer pháp lý cuối bài (`BTR_LEGAL_DISCLAIMER`).
-- Bài thuế (12): L2 `/devil` trước publish production.
-
-*Cập nhật: 2026-07-27*
+Neo Luật Nhà ở / nghị định / báo chí chính sách khi nêu khung pháp lý; không bịa bảng giá thuê hay công suất lấp đầy.

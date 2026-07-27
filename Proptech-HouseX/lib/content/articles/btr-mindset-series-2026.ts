@@ -8,8 +8,8 @@ import {
 import { BTR_PILLAR_SLUG } from "@/lib/content/long-term-rental-btr";
 
 const UPDATED = new Date("2026-07-27T00:00:00.000Z");
-const PILLAR_HREF = `/wiki-nha-o-xa-hoi/${BTR_PILLAR_SLUG}`;
-const HUB_HREF = "/wiki-nha-o-xa-hoi/chu-de/nha-o-cho-thue-dai-han";
+const PILLAR_HREF = `/tin-tuc/kien-thuc/${BTR_PILLAR_SLUG}`;
+const HUB_HREF = "/tin-tuc/kien-thuc/chu-de/nha-o-cho-thue-dai-han";
 
 /**
  * Nhóm 2 — Tâm lý & văn hóa an cư (Bài 4–6). Empathetic Expert.
@@ -31,7 +31,7 @@ Hai lựa chọn cần được nhìn ngang hàng — không phải lệnh cấm
 1. Tiếp tục lộ trình mua (thương mại hoặc NOXH nếu đủ điều tượng) với kế hoạch trả góp trung thực.
 2. Chọn thuê dài hạn chuyên nghiệp để ổn định chất lượng sống và bảo toàn dòng vốn trong giai đoạn thu nhập còn biến động.
 
-Pillar chính sách: [Nhà ở cho thuê dài hạn đến 2030](${PILLAR_HREF}).
+Bài trụ cột: [Nhà ở cho thuê dài hạn đến 2030](${PILLAR_HREF}).
 
 ${EDITORIAL_FIGURES.hcmSkyline}
 
@@ -62,9 +62,9 @@ ${EDITORIAL_FIGURES.thuThiem}
 
 ## Đọc tiếp trên cùng silo?
 
-- So sánh sản phẩm: [Thuê dài hạn vs chung cư mini / phòng trọ](/wiki-nha-o-xa-hoi/thue-can-ho-dai-han-vs-chung-cu-mini-phong-tro-2026)
-- Quyền lợi người thuê: [Nhà ở cho thuê thế hệ mới](/wiki-nha-o-xa-hoi/quyen-loi-nguoi-thue-nha-o-cho-thue-the-he-moi-2026)
-- Hub: [${HUB_HREF}](${HUB_HREF})
+- So sánh sản phẩm: [Thuê dài hạn vs chung cư mini / phòng trọ](/tin-tuc/kien-thuc/thue-can-ho-dai-han-vs-chung-cu-mini-phong-tro-2026)
+- Quyền lợi người thuê: [Nhà ở cho thuê thế hệ mới](/tin-tuc/kien-thuc/quyen-loi-nguoi-thue-nha-o-cho-thue-the-he-moi-2026)
+- Chủ đề: [${HUB_HREF}](${HUB_HREF})
 
 ${BTR_SUPPORT_CLOSING}
 
@@ -124,7 +124,7 @@ ${EDITORIAL_FIGURES.thuThiem}
 
 ## Khi nào phòng trọ vẫn hợp lý?
 
-Phòng trọ phù hợp giai đoạn thử việc ngắn, ngân sách rất hạn chế, hoặc ở gần chỗ làm tạm. Không nên mặc định “rẻ là tối ưu” nếu bạn cần ổn định 3–5 năm trở lên cho gia đình nhỏ. Đọc thêm: [Quyền lợi người thuê thế hệ mới](/wiki-nha-o-xa-hoi/quyen-loi-nguoi-thue-nha-o-cho-thue-the-he-moi-2026).
+Phòng trọ phù hợp giai đoạn thử việc ngắn, ngân sách rất hạn chế, hoặc ở gần chỗ làm tạm. Không nên mặc định “rẻ là tối ưu” nếu bạn cần ổn định 3–5 năm trở lên cho gia đình nhỏ. Đọc thêm: [Quyền lợi người thuê thế hệ mới](/tin-tuc/kien-thuc/quyen-loi-nguoi-thue-nha-o-cho-thue-the-he-moi-2026).
 
 ${BTR_SUPPORT_CLOSING}
 
@@ -183,13 +183,13 @@ ${EDITORIAL_FIGURES.metroHub}
 | Thông báo chấm dứt | Thời gian tìm chỗ mới |
 | Biên bản bàn giao | Tránh tranh chấp cọc |
 
-So sánh sản phẩm: [Bảng BTR vs mini / phòng trọ](/wiki-nha-o-xa-hoi/thue-can-ho-dai-han-vs-chung-cu-mini-phong-tro-2026). Hub: [${HUB_HREF}](${HUB_HREF}).
+So sánh sản phẩm: [Bảng BTR vs mini / phòng trọ](/tin-tuc/kien-thuc/thue-can-ho-dai-han-vs-chung-cu-mini-phong-tro-2026). Chủ đề: [${HUB_HREF}](${HUB_HREF}).
 
 ${EDITORIAL_FIGURES.thuThiem}
 
 ## Nhà đầu tư đọc bài này thế nào?
 
-Nếu bạn cho thuê lại căn mua: chuẩn vận hành và hợp đồng rõ cũng là cách bảo toàn dòng vốn và giảm trống căn. Khung dòng tiền: [Tính dòng tiền – đòn bẩy](/wiki-nha-o-xa-hoi/tinh-dong-tien-don-bay-can-ho-cho-thue-2026).
+Nếu bạn cho thuê lại căn mua: chuẩn vận hành và hợp đồng rõ cũng là cách bảo toàn dòng vốn và giảm trống căn. Khung dòng tiền: [Tính dòng tiền – đòn bẩy](/tin-tuc/kien-thuc/tinh-dong-tien-don-bay-can-ho-cho-thue-2026).
 
 ${BTR_SUPPORT_CLOSING}
 

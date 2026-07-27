@@ -8,8 +8,8 @@ import {
 import { BTR_PILLAR_SLUG } from "@/lib/content/long-term-rental-btr";
 
 const UPDATED = new Date("2026-07-27T00:00:00.000Z");
-const PILLAR_HREF = `/wiki-nha-o-xa-hoi/${BTR_PILLAR_SLUG}`;
-const HUB_HREF = "/wiki-nha-o-xa-hoi/chu-de/nha-o-cho-thue-dai-han";
+const PILLAR_HREF = `/tin-tuc/kien-thuc/${BTR_PILLAR_SLUG}`;
+const HUB_HREF = "/tin-tuc/kien-thuc/chu-de/nha-o-cho-thue-dai-han";
 const SLUG_BTR = "mo-hinh-build-to-rent-nha-o-cho-thue-dai-han-tai-cau-truc-2026";
 const SLUG_LEASE =
   "hop-dong-thue-nha-dai-han-15-20-nam-lech-pha-cung-cau-2026";
@@ -35,7 +35,7 @@ Ba đặc trưng thường gặp trên thị trường quốc tế:
 2. Hợp đồng thuê ổn định hơn, chính sách điều chỉnh giá theo khung công bố.
 3. Dịch vụ quản lý, bảo trì và tiện ích nội khu theo tiêu chuẩn tòa nhà, không theo từng chủ hộ.
 
-Đối chiếu chính sách trụ cột: [Chính sách nhà ở cho thuê dài hạn đến 2030](${PILLAR_HREF}). Hub: [${HUB_HREF}](${HUB_HREF}).
+Đối chiếu chính sách trụ cột: [Chính sách nhà ở cho thuê dài hạn đến 2030](${PILLAR_HREF}). Chủ đề: [${HUB_HREF}](${HUB_HREF}).
 
 ${EDITORIAL_FIGURES.hcmSkyline}
 
@@ -43,7 +43,7 @@ ${EDITORIAL_FIGURES.hcmSkyline}
 
 Khi giá nhà để bán vượt khả năng chi trả của một bộ phận lớn lao động đô thị, hệ thống chỉ dựa vào “mua đứt” dễ lệch pha: tồn kho cao cấp / trung cấp song song với thiếu chỗ ở ổn định cho thuê. BTR tách nhu cầu an cư khỏi áp lực sở hữu ngay lập tức — tạo lớp cung có kiểm soát chất lượng và pháp lý hợp đồng rõ hơn phòng trọ phân tán.
 
-Trên báo chí và diễn đàn chính sách 2025–2026, nhà ở cho thuê dài hạn được nêu như trụ cột bổ sung bên cạnh nhà ở để bán và nhà ở xã hội — không thay thế NOXH, mà mở rộng công cụ an cư. Soft neo: [Wiki nhà ở xã hội](/wiki-nha-o-xa-hoi) khi bạn thuộc đối tượng hỗ trợ; còn lại đọc silo thuê dài hạn này.
+Trên báo chí và diễn đàn chính sách 2025–2026, nhà ở cho thuê dài hạn được nêu như trụ cột bổ sung bên cạnh nhà ở để bán và nhà ở xã hội — không thay thế NOXH, mà mở rộng công cụ an cư. Soft neo: [Wiki nhà ở xã hội](/wiki-nha-o-xa-hoi) khi bạn thuộc đối tượng hỗ trợ; còn lại đọc cụm bài thuê dài hạn này.
 
 ${EDITORIAL_FIGURES.metroHub}
 
@@ -55,7 +55,7 @@ ${EDITORIAL_FIGURES.metroHub}
 | Singapore | Kết hợp nhà công và thị trường thuê có kiểm soát | Thể chế đất đai và quy hoạch chặt |
 | Nhật Bản | Văn hóa thuê dài hạn phổ biến ở đô thị lớn | Chất lượng vận hành + ổn định pháp lý |
 
-Việt Nam không sao chép nguyên xi. Điểm chuyển giao hữu ích: (i) ưu tiên quỹ đất / thể chế cho sản phẩm thuê dài hạn; (ii) hợp đồng và thuế rõ; (iii) vận hành chuyên nghiệp quanh TOD / việc làm. Xem thêm: [Hợp đồng thuê 15–20 năm](/wiki-nha-o-xa-hoi/${SLUG_LEASE}).
+Việt Nam không sao chép nguyên xi. Điểm chuyển giao hữu ích: (i) ưu tiên quỹ đất / thể chế cho sản phẩm thuê dài hạn; (ii) hợp đồng và thuế rõ; (iii) vận hành chuyên nghiệp quanh TOD / việc làm. Xem thêm: [Hợp đồng thuê 15–20 năm](/tin-tuc/kien-thuc/${SLUG_LEASE}).
 
 ${EDITORIAL_FIGURES.thuThiem}
 
@@ -67,7 +67,7 @@ Giai đoạn hiện tại chủ yếu là định hướng chính sách và thí
 - Dự thảo sửa đổi Luật Nhà ở hoặc nghị định hướng dẫn — nêu rõ “dự thảo” nếu chưa hiệu lực.
 - Sản phẩm thương mại “dễ cho thuê” trên thị trường bán — gần BTR về vận hành nhưng khác về sở hữu.
 
-Pillar chính sách: [Trụ cột an cư nhà ở cho thuê dài hạn](${PILLAR_HREF}).
+Bài trụ cột: [Trụ cột an cư nhà ở cho thuê dài hạn](${PILLAR_HREF}).
 
 ${BTR_SUPPORT_CLOSING}
 
@@ -97,7 +97,7 @@ ${BTR_LEGAL_DISCLAIMER}`,
 
 Quy hoạch quốc gia định hướng rõ: đến năm 2030, bên cạnh nhà ở để bán, nhà ở cho thuê dài hạn là một trụ cột nhằm giảm áp lực giá nhà vượt khả năng chi trả tại đô thị lớn. Đây không phải giải pháp tình thế thay cho một chu kỳ sốt đất, mà là công cụ thiết lập lại trật tự an cư — tạo lớp cung ổn định về hợp đồng, vận hành và giá thuê theo khung công bố.
 
-House X gom kiến thức theo cụm chủ đề: mô hình BTR, hợp đồng dài hạn, tư duy an cư, TOD / vành đai, và dòng vốn – thuế. Hub: [${HUB_HREF}](${HUB_HREF}).
+House X gom kiến thức theo cụm chủ đề: mô hình BTR, hợp đồng dài hạn, tư duy an cư, TOD / vành đai, và dòng vốn – thuế. Chủ đề: [${HUB_HREF}](${HUB_HREF}).
 
 ${EDITORIAL_FIGURES.hcmSkyline}
 
@@ -124,17 +124,17 @@ ${EDITORIAL_FIGURES.metroHub}
 
 Hai trụ NOXH và thuê dài hạn bổ sung nhau: người đủ điều kiện NOXH vẫn ưu tiên kiểm tra [điều kiện mua nhà ở xã hội](/wiki-nha-o-xa-hoi/dieu-kien-mua-nha-o-xa-hoi-2026-tom-tat); người chưa thuộc đối tượng hoặc cần linh hoạt địa điểm làm việc có thể đọc thuê dài hạn như lựa chọn an cư chính danh.
 
-## Hệ thống bài House X trên silo này đi theo lớp nào?
+## Hệ thống bài House X về thuê dài hạn đi theo lớp nào?
 
 | Lớp | Câu hỏi | Bài |
 |-----|---------|-----|
-| Mô hình | BTR là gì? | [Build-to-Rent tái cấu trúc thị trường](/wiki-nha-o-xa-hoi/${SLUG_BTR}) |
+| Mô hình | BTR là gì? | [Build-to-Rent tái cấu trúc thị trường](/tin-tuc/kien-thuc/${SLUG_BTR}) |
 | Thể chế (pillar) | Chính sách đến 2030? | Bạn đang đọc |
-| Hợp đồng dài hạn | Thuê 15–20 năm? | [Hợp đồng thuê dài hạn](/wiki-nha-o-xa-hoi/${SLUG_LEASE}) |
-| Tư duy an cư | Có nên thuê thay vì mua bằng mọi giá? | [Giá nhà vượt khả năng](/wiki-nha-o-xa-hoi/gia-nha-vuot-kha-nang-co-nen-thue-dai-han-2026) |
-| So sánh sản phẩm | BTR vs mini / phòng trọ? | [So sánh chuyên nghiệp vs mini](/wiki-nha-o-xa-hoi/thue-can-ho-dai-han-vs-chung-cu-mini-phong-tro-2026) |
-| TOD / vành đai | Quỹ đất quanh ga? | [TOD và thuê dài hạn](/wiki-nha-o-xa-hoi/tod-vanh-dai-nha-o-cho-thue-dai-han-2026) |
-| Dòng vốn / thuế | Yield định tính & 68103? | [Dòng vốn](/wiki-nha-o-xa-hoi/dong-von-dau-tu-can-ho-cho-thue-dai-han-2026) · [Thuế cho thuê](/wiki-nha-o-xa-hoi/thue-cho-thue-nha-2026-ma-nganh-68103) |
+| Hợp đồng dài hạn | Thuê 15–20 năm? | [Hợp đồng thuê dài hạn](/tin-tuc/kien-thuc/${SLUG_LEASE}) |
+| Tư duy an cư | Có nên thuê thay vì mua bằng mọi giá? | [Giá nhà vượt khả năng](/tin-tuc/kien-thuc/gia-nha-vuot-kha-nang-co-nen-thue-dai-han-2026) |
+| So sánh sản phẩm | BTR vs mini / phòng trọ? | [So sánh chuyên nghiệp vs mini](/tin-tuc/kien-thuc/thue-can-ho-dai-han-vs-chung-cu-mini-phong-tro-2026) |
+| TOD / vành đai | Quỹ đất quanh ga? | [TOD và thuê dài hạn](/tin-tuc/kien-thuc/tod-vanh-dai-nha-o-cho-thue-dai-han-2026) |
+| Dòng vốn / thuế | Yield định tính & 68103? | [Dòng vốn](/tin-tuc/kien-thuc/dong-von-dau-tu-can-ho-cho-thue-dai-han-2026) · [Thuế cho thuê](/tin-tuc/kien-thuc/thue-cho-thue-nha-2026-ma-nganh-68103) |
 
 ${EDITORIAL_FIGURES.bitexcoMetro}
 
@@ -176,7 +176,7 @@ ${BTR_LEGAL_DISCLAIMER}`,
 
 Lệch pha cung cầu đô thị thường biểu hiện ở chỗ: nguồn cung để bán không khớp khả năng trả của phần lớn hộ trẻ, trong khi thị trường thuê ngắn hạn thiếu ổn định về giá và thời hạn. Hợp đồng thuê dài hạn (khung 15–20 năm được truyền thông và một số địa phương nhắc như hướng thí điểm) nhằm tạo tâm thế an cư lạc nghiệp — biết trước thời gian ở và nguyên tắc điều chỉnh giá — mà không buộc mua đứt.
 
-Bối cảnh chính sách: [Pillar trụ cột thuê dài hạn](${PILLAR_HREF}) · Mô hình: [Build-to-Rent](/wiki-nha-o-xa-hoi/${SLUG_BTR}).
+Bối cảnh chính sách: [Chính sách nhà ở cho thuê dài hạn đến 2030](${PILLAR_HREF}) · Mô hình: [Build-to-Rent](/tin-tuc/kien-thuc/${SLUG_BTR}).
 
 ${EDITORIAL_FIGURES.hcmSkyline}
 
@@ -209,7 +209,7 @@ ${EDITORIAL_FIGURES.thuThiem}
 
 Không nhất thiết. Thuê dài hạn giải phóng áp lực mua bằng mọi giá trong giai đoạn thu nhập chưa ổn định hoặc địa điểm làm việc còn dịch chuyển. Nhiều hộ vẫn tích sản sau này qua NOXH (nếu đủ điều kiện) hoặc mua thương mại khi dòng tiền cho phép. Soft neo: [điều kiện NOXH](/wiki-nha-o-xa-hoi/dieu-kien-mua-nha-o-xa-hoi-2026-tom-tat).
 
-Đọc tiếp tư duy an cư: [Giá nhà vượt khả năng — có nên thuê dài hạn?](/wiki-nha-o-xa-hoi/gia-nha-vuot-kha-nang-co-nen-thue-dai-han-2026).
+Đọc tiếp tư duy an cư: [Giá nhà vượt khả năng — có nên thuê dài hạn?](/tin-tuc/kien-thuc/gia-nha-vuot-kha-nang-co-nen-thue-dai-han-2026).
 
 ${BTR_SUPPORT_CLOSING}
 

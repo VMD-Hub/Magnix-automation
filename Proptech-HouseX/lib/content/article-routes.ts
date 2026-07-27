@@ -1,3 +1,8 @@
+import {
+  GENERAL_RE_TAG_SLUGS,
+  NOXH_HANDBOOK_TAG_SLUGS,
+} from "@/lib/content/articles/noxh-handbook-tags";
+
 /** Hub phong thủy — tách khỏi phong-thuy-public để tránh circular import. */
 const PHONG_THUY_HUB_PATH = "/phong-thuy" as const;
 
@@ -24,33 +29,90 @@ export const NOXH_HANDBOOK_FS_SEGMENT = "cam-nang-noxh" as const;
 /** Canonical public hub — Wiki nhà ở xã hội. */
 export const NOXH_HANDBOOK_PATH = "/wiki-nha-o-xa-hoi" as const;
 
+/** Hub kiến thức BĐS chung (BTR, hành lang, hạ tầng vùng). */
+export const RE_KNOWLEDGE_PATH = "/tin-tuc/kien-thuc" as const;
+
+export const RE_KNOWLEDGE_TITLE = "Kiến thức bất động sản" as const;
+
+export const RE_KNOWLEDGE_SEO_TITLE =
+  "Kiến thức bất động sản — hành lang, thuê dài hạn & hạ tầng | House X" as const;
+
+export const RE_KNOWLEDGE_INTRO =
+  "Phân tích hành lang tăng trưởng, nhà ở cho thuê dài hạn, TOD và hạ tầng vùng — đọc theo chủ đề, không lẫn với hồ sơ nhà ở xã hội." as const;
+
+export const RE_KNOWLEDGE_SEO_DESCRIPTION =
+  "Kiến thức BĐS trên House X: hành lang đô thị TP.HCM & Hà Nội, thuê dài hạn (BTR), TOD và hạ tầng kết nối vùng." as const;
+
 /** @deprecated Dùng NOXH_HANDBOOK_PATH — giữ alias tên cũ trong import. */
 export const NOXH_HANDBOOK_SEGMENT = NOXH_HANDBOOK_FS_SEGMENT;
 
 const LEGACY_ARTICLE_RE =
-  /^\/tin-tuc\/(?!cam-nang-noxh(?:\/|$)|chu-de(?:\/|$))([^?#]+)/;
+  /^\/tin-tuc\/(?!cam-nang-noxh(?:\/|$)|kien-thuc(?:\/|$)|chu-de(?:\/|$))([^?#]+)/;
 
 const LEGACY_TOPIC_RE = /^\/tin-tuc\/chu-de\/([^?#]+)/;
 
 const LEGACY_WIKI_SILO_RE = /^\/tin-tuc\/cam-nang-noxh(\/.*)?$/;
 
-/** URL bài viết NOXH — silo `/wiki-nha-o-xa-hoi/[slug]`. */
+const LEGACY_KNOWLEDGE_SILO_RE = /^\/tin-tuc\/kien-thuc(\/.*)?$/;
+
+/** URL bài viết Wiki NOXH — silo `/wiki-nha-o-xa-hoi/[slug]`. */
 export function articlePath(slug: string): string {
   return `${NOXH_HANDBOOK_PATH}/${slug}`;
 }
 
-/** URL hub chủ đề trong wiki nhà ở xã hội. */
+/** URL bài viết Kiến thức BĐS. */
+export function knowledgeArticlePath(slug: string): string {
+  return `${RE_KNOWLEDGE_PATH}/${slug}`;
+}
+
+/** URL hub chủ đề — nhánh theo tag (Wiki NOXH / Kiến thức / phong thủy). */
 export function topicPath(tagSlug: string): string {
   if (tagSlug === "phong-thuy") return PHONG_THUY_HUB_PATH;
+  if (GENERAL_RE_TAG_SLUGS.has(tagSlug)) {
+    return `${RE_KNOWLEDGE_PATH}/chu-de/${tagSlug}`;
+  }
   return `${NOXH_HANDBOOK_PATH}/chu-de/${tagSlug}`;
 }
 
-/** Rewrite link nội bộ cũ `/tin-tuc/...` → canonical wiki. */
+/** @deprecated Alias — dùng topicPath. */
+export function knowledgeTopicPath(tagSlug: string): string {
+  return topicPath(tagSlug);
+}
+
+/** Canonical URL bài theo tag (ưu tiên Kiến thức BĐS nếu có tag RE). */
+export function canonicalArticlePath(article: {
+  slug: string;
+  tags: readonly { slug: string }[];
+}): string {
+  if (article.tags.some((t) => GENERAL_RE_TAG_SLUGS.has(t.slug))) {
+    return knowledgeArticlePath(article.slug);
+  }
+  if (article.tags.some((t) => NOXH_HANDBOOK_TAG_SLUGS.has(t.slug))) {
+    return articlePath(article.slug);
+  }
+  return articlePath(article.slug);
+}
+
+/** Canonical hub chủ đề theo tag slug. */
+export function canonicalTopicPath(tagSlug: string): string {
+  return topicPath(tagSlug);
+}
+
+/** Rewrite link nội bộ cũ `/tin-tuc/...` → canonical silo. */
 export function rewriteLegacyArticleHref(href: string): string {
   if (!href.startsWith("/tin-tuc")) return href;
 
   const [path, query] = href.split("?");
   const suffix = query ? `?${query}` : "";
+
+  if (path === RE_KNOWLEDGE_PATH || path?.startsWith(`${RE_KNOWLEDGE_PATH}/`)) {
+    return href;
+  }
+
+  const knowledgeSilo = path.match(LEGACY_KNOWLEDGE_SILO_RE);
+  if (knowledgeSilo) {
+    return href;
+  }
 
   const wikiSilo = path.match(LEGACY_WIKI_SILO_RE);
   if (wikiSilo) {
@@ -72,5 +134,28 @@ export function rewriteLegacyArticleHref(href: string): string {
     return `${articlePath(articleMatch[1]!)}${suffix}`;
   }
 
+  return href;
+}
+
+/**
+ * Rewrite href wiki cũ sang silo đúng nếu biết tag bài/chủ đề.
+ * Dùng khi body còn hardcode `/wiki-nha-o-xa-hoi/...`.
+ */
+export function rewriteWikiHrefToCanonical(
+  href: string,
+  opts?: { tagSlug?: string; isKnowledgeArticle?: boolean },
+): string {
+  if (!href.startsWith(NOXH_HANDBOOK_PATH)) return href;
+  const rest = href.slice(NOXH_HANDBOOK_PATH.length) || "";
+  if (opts?.tagSlug && GENERAL_RE_TAG_SLUGS.has(opts.tagSlug)) {
+    return `${RE_KNOWLEDGE_PATH}${rest}`;
+  }
+  if (opts?.isKnowledgeArticle) {
+    return `${RE_KNOWLEDGE_PATH}${rest}`;
+  }
+  const topicMatch = rest.match(/^\/chu-de\/([^/?#]+)/);
+  if (topicMatch && GENERAL_RE_TAG_SLUGS.has(topicMatch[1]!)) {
+    return `${RE_KNOWLEDGE_PATH}${rest}`;
+  }
   return href;
 }

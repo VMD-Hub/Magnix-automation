@@ -26,7 +26,7 @@ export const AIRPORT_CORRIDOR_POTENTIAL_ARTICLES_2026: ArticleDetail[] = [
 
 Mô hình airport city nhìn dòng tiền từ dịch vụ hàng không, logistic, khách sạn / căn hộ dịch vụ và nhà ở cho lao động quanh sân bay trong bán kính khoảng 5–10 km — khác săn đất nền đón Vành đai thuần túy và khác NOXH vệ tinh logistics biển Đông (Nhơn Trạch / DTA).
 
-Pillar 6 trục: [Sáu trục tăng trưởng đô thị TP.HCM](/wiki-nha-o-xa-hoi/bon-cuc-tang-truong-do-thi-tp-hcm-2026). Vĩ mô đường sắt liên vùng: [Metro Thủ Thiêm – Long Thành ~175.000 tỷ](/tin-tuc/metro-thu-thiem-long-thanh-175000-ty-khoi-cong-2026).
+Khung sáu trục: [Sáu trục tăng trưởng đô thị TP.HCM](/tin-tuc/kien-thuc/bon-cuc-tang-truong-do-thi-tp-hcm-2026). Vĩ mô đường sắt liên vùng: [Metro Thủ Thiêm – Long Thành ~175.000 tỷ](/tin-tuc/metro-thu-thiem-long-thanh-175000-ty-khoi-cong-2026).
 
 ${EDITORIAL_FIGURES.thuThiem}
 

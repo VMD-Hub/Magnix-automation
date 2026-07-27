@@ -292,7 +292,7 @@ Khi bị cuốn vào ba yếu tố trên, người mua thường quên:
 | Xem CIC và nợ hiện tại | [Tra CIC an toàn](${NOXH_MINDSET_ACTION_LINKS.cic}) |
 | Tính tổng chi phí sở hữu | [Hạn mức vay](${NOXH_MINDSET_ACTION_LINKS.hanMucVay}) |
 | Đánh giá quãng đường đi làm thực tế | [3 tiêu chuẩn chọn NOXH](/tin-tuc/ba-tieu-chuan-moi-chon-noxh) |
-| So sánh với các dự án khác | [Pillar chọn NOXH đúng cách](${NOXH_MINDSET_PILLAR.href}) |
+| So sánh với các dự án khác | [Chọn nhà ở xã hội đúng cách](${NOXH_MINDSET_PILLAR.href}) |
 | Hỏi: mua để ở thật hay chỉ vì sợ mất suất? | [Chọn nhà để ở khác chọn nhà giữ suất](/tin-tuc/chon-nha-de-o-khac-chon-nha-giu-suat) |
 
 Đây mới là những câu hỏi quyết định một căn nhà có phù hợp hay không.

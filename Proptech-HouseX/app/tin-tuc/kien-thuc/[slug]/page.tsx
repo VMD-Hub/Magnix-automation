@@ -21,19 +21,18 @@ import {
 import {
   NEWS_HUB_PATH,
   NEWS_HUB_TITLE,
+  RE_KNOWLEDGE_PATH,
+  RE_KNOWLEDGE_TITLE,
   articlePath,
   canonicalArticlePath,
   knowledgeArticlePath,
 } from "@/lib/content/article-routes";
 import {
   isGeneralReKnowledgeArticle,
+  isNoxhHandbookArticle,
 } from "@/lib/content/articles/noxh-handbook-tags";
 import { buildArticleJsonLd } from "@/lib/seo/article-json-ld";
 import { buildBreadcrumbJsonLd } from "@/lib/seo/affiliate-json-ld";
-import {
-  NOXH_HANDBOOK_PATH,
-  NOXH_HANDBOOK_TITLE,
-} from "@/lib/content/messaging/noxh-public";
 import { getSiteUrl } from "@/lib/site-config";
 import {
   normalizeSeoDescription,
@@ -55,20 +54,16 @@ export async function generateMetadata({
 
   const { article: raw } = result;
   const article = applyEditorialMedia(raw);
-  if (isGeneralReKnowledgeArticle(article)) {
-    return {
-      title: normalizeSeoTitle(article.seoTitle ?? article.title),
-      alternates: {
-        canonical: `${getSiteUrl()}${knowledgeArticlePath(article.slug)}`,
-      },
-    };
+  if (isNoxhHandbookArticle(article) && !isGeneralReKnowledgeArticle(article)) {
+    return { title: article.title };
   }
+
   const siteUrl = getSiteUrl();
   const title = normalizeSeoTitle(article.seoTitle ?? article.title);
   const description = normalizeSeoDescription(
     article.seoDesc ?? article.excerpt ?? article.title.slice(0, 160),
   );
-  const canonical = `${siteUrl}${articlePath(article.slug)}`;
+  const canonical = `${siteUrl}${knowledgeArticlePath(article.slug)}`;
   const ogImage = absoluteArticleImageUrl(
     resolveArticleOgImageUrl(article.coverImageUrl),
     siteUrl,
@@ -97,7 +92,7 @@ export async function generateMetadata({
   };
 }
 
-export default async function NoxhArticleDetailPage({ params }: PageProps) {
+export default async function ReKnowledgeArticlePage({ params }: PageProps) {
   const { slug } = await params;
   const result = await getPublishedArticleBySlug(slug);
   if (!result) notFound();
@@ -105,16 +100,21 @@ export default async function NoxhArticleDetailPage({ params }: PageProps) {
   const { article: raw } = result;
   const article = applyEditorialMedia(raw);
 
-  if (isGeneralReKnowledgeArticle(article)) {
-    permanentRedirect(knowledgeArticlePath(article.slug));
+  if (isNoxhHandbookArticle(article) && !isGeneralReKnowledgeArticle(article)) {
+    permanentRedirect(articlePath(article.slug));
+  }
+  if (!isGeneralReKnowledgeArticle(article)) {
+    notFound();
   }
 
   const related = await listPublishedArticles({
     tagSlug: article.tags[0]?.slug,
     pageSize: 4,
-    handbookOnly: true,
+    handbookOnly: false,
   });
-  const relatedItems = related.items.filter((a) => a.slug !== article.slug).slice(0, 3);
+  const relatedItems = related.items
+    .filter((a) => a.slug !== article.slug)
+    .slice(0, 3);
 
   const tagSlugs = article.tags.map((t) => t.slug);
   const expert = resolveExpertForTags(tagSlugs);
@@ -124,7 +124,7 @@ export default async function NoxhArticleDetailPage({ params }: PageProps) {
   const breadcrumb = buildBreadcrumbJsonLd([
     { name: "Trang chủ", path: "/" },
     { name: NEWS_HUB_TITLE, path: NEWS_HUB_PATH },
-    { name: NOXH_HANDBOOK_TITLE, path: NOXH_HANDBOOK_PATH },
+    { name: RE_KNOWLEDGE_TITLE, path: RE_KNOWLEDGE_PATH },
     { name: article.title, path },
   ]);
   const jsonLd = buildArticleJsonLd(article, { expert, sources });
@@ -155,8 +155,8 @@ export default async function NoxhArticleDetailPage({ params }: PageProps) {
               {NEWS_HUB_TITLE}
             </Link>
             <span className="mx-2">/</span>
-            <Link href={NOXH_HANDBOOK_PATH} className="hover:text-brand-700">
-              {NOXH_HANDBOOK_TITLE}
+            <Link href={RE_KNOWLEDGE_PATH} className="hover:text-brand-700">
+              {RE_KNOWLEDGE_TITLE}
             </Link>
           </nav>
         </div>

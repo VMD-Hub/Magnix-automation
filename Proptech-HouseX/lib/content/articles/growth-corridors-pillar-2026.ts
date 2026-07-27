@@ -21,7 +21,7 @@ export const GROWTH_CORRIDORS_PILLAR_ARTICLES_2026: ArticleDetail[] = [
 
 Thị trường nhà ở quanh TP.HCM và vùng phụ cận đang mở theo nhiều hành lang cùng lúc, bám quy hoạch quốc gia và liên vùng. Mỗi trục có động lực riêng: sông và hướng biển phía Nam; đại lộ Đông–Tây nối thủ phủ công nghiệp; logistics biển Đông; vành đai đô thị vệ tinh; liên cảng hàng không Long Thành – Tân Sơn Nhất; và Đại lộ tài chính Quốc lộ 13 Đông Bắc.
 
-Chuỗi nội dung House X theo phễu chuyển đổi: Vĩ mô (nhận diện hạ tầng / quy hoạch) → Tiềm năng (dòng tiền / biên độ) → Thực tế (dự án / giá / pháp lý). Chọn đúng trục trước, rồi mới so sánh dự án trong cùng hành lang — tránh đặt ID Town cạnh Emerald 68 như cùng một thị trường.
+Chuỗi nội dung House X theo ba lớp: Vĩ mô (nhận diện hạ tầng / quy hoạch) → Tiềm năng (dòng tiền / biên độ) → Thực tế (dự án / giá / pháp lý). Chọn đúng trục trước, rồi mới so sánh dự án trong cùng hành lang — tránh đặt ID Town cạnh Emerald 68 như cùng một thị trường.
 
 ${EDITORIAL_FIGURES.hcmSkyline}
 
@@ -37,35 +37,35 @@ ${EDITORIAL_FIGURES.hcmSkyline}
 
 Từ Củ Chi về Nhà Bè – Cần Giờ: hành lang kinh tế dịch vụ, du lịch và giao thông thủy. BĐS ven sông Nam Sài Gòn và siêu cảng trung chuyển Cần Giờ là động lực dài hạn — khác cửa ngõ QL13 và khác đô thị sân bay Long Thành.
 
-Hub: [/wiki-nha-o-xa-hoi/chu-de/hanh-lang-bac-nam-song-sai-gon](/wiki-nha-o-xa-hoi/chu-de/hanh-lang-bac-nam-song-sai-gon). Neo nhẹ trên House X: [Thủ Thiêm Green House](/du-an/thu-thiem-green-house-thu-duc) (mặt tiền Võ Chí Công / chân cầu Phú Mỹ). Series đầy đủ sẽ bổ sung theo phễu 3 tầng.
+Chủ đề: [/tin-tuc/kien-thuc/chu-de/hanh-lang-bac-nam-song-sai-gon](/tin-tuc/kien-thuc/chu-de/hanh-lang-bac-nam-song-sai-gon). Neo nhẹ trên House X: [Thủ Thiêm Green House](/du-an/thu-thiem-green-house-thu-duc) (mặt tiền Võ Chí Công / chân cầu Phú Mỹ). Các bài chi tiết sẽ được bổ sung theo từng lớp nội dung.
 
 ## Trục 2 — Đông – Tây Võ Văn Kiệt – Mai Chí Thọ?
 
 Xương sống liên kết vùng: Long An xuyên lõi trung tâm đến Đồng Nai — cửa ngõ công nghiệp hai đầu. An cư / đầu tư dọc đại lộ hưởng lợi thời gian về trung tâm ngắn, khác hành lang biển Đông và khác Vành đai vệ tinh.
 
-Hub: [/wiki-nha-o-xa-hoi/chu-de/hanh-lang-dong-tay-vvk-mct](/wiki-nha-o-xa-hoi/chu-de/hanh-lang-dong-tay-vvk-mct).
+Chủ đề: [/tin-tuc/kien-thuc/chu-de/hanh-lang-dong-tay-vvk-mct](/tin-tuc/kien-thuc/chu-de/hanh-lang-dong-tay-vvk-mct).
 
 ## Trục 3 — Kinh tế biển phía Đông (hướng Bà Rịa – Vũng Tàu)?
 
 Chuỗi logistics TP.HCM – Nhơn Trạch – Long Thành – Cái Mép – Thị Vải, đồng bộ cao tốc Biên Hòa – Vũng Tàu và Bến Lức – Long Thành. Đây là trục của đô thị vệ tinh / NOXH gần KCN — không phải “sân bay city” thuần túy.
 
-Neo House X: [DTA Happy Home Nhơn Trạch](/du-an/dta-happy-home-nhon-trach). Đã publish tầng Tiềm năng: [Nhơn Trạch cực tăng trưởng hạ tầng](/wiki-nha-o-xa-hoi/nhon-trach-cu-tang-truong-ha-tang-tod-2026).
+Neo House X: [DTA Happy Home Nhơn Trạch](/du-an/dta-happy-home-nhon-trach). Đã publish tầng Tiềm năng: [Nhơn Trạch cực tăng trưởng hạ tầng](/tin-tuc/kien-thuc/nhon-trach-cu-tang-truong-ha-tang-tod-2026).
 
-Hub: [/wiki-nha-o-xa-hoi/chu-de/hanh-lang-kinh-te-bien-phia-dong](/wiki-nha-o-xa-hoi/chu-de/hanh-lang-kinh-te-bien-phia-dong).
+Chủ đề: [/tin-tuc/kien-thuc/chu-de/hanh-lang-kinh-te-bien-phia-dong](/tin-tuc/kien-thuc/chu-de/hanh-lang-kinh-te-bien-phia-dong).
 
 ## Trục 4 — Vành đai 3 & Vành đai 4?
 
 Chuỗi đô thị vệ tinh quanh vành đai: Thủ Đức, Củ Chi, Bình Chánh, Thuận An và các điểm nút Bình Dương / Đồng Nai / Long An. TOD quanh nút giao Vành đai 3 là lớp “tiềm năng”; săn đất nền / nhà phố đón thông xe là lớp “thực tế”.
 
-Hub: [/wiki-nha-o-xa-hoi/chu-de/hanh-lang-vanh-dai-3-4](/wiki-nha-o-xa-hoi/chu-de/hanh-lang-vanh-dai-3-4).
+Chủ đề: [/tin-tuc/kien-thuc/chu-de/hanh-lang-vanh-dai-3-4](/tin-tuc/kien-thuc/chu-de/hanh-lang-vanh-dai-3-4).
 
 ## Trục 5 — Kết nối sân bay Long Thành & Tân Sơn Nhất?
 
 Trục liên cảng hàng không và đường sắt Thủ Thiêm – Long Thành. Đô thị sân bay trong bán kính 5–10 km có logic cho thuê / thương mại riêng — không gộp với QL13 Lái Thiêu.
 
-Neo House X: [ID Town Long Thành](/du-an/id-town-long-thanh) trong iD Junction. Đã publish: [Metro / đường sắt TTLT](/wiki-nha-o-xa-hoi/metro-thu-thiem-long-thanh-175000-ty-khoi-cong-2026) (Vĩ mô) · [hạ tầng ID Town](/wiki-nha-o-xa-hoi/id-town-long-thanh-ha-tang-san-bay-metro-2026) (Thực tế).
+Neo House X: [ID Town Long Thành](/du-an/id-town-long-thanh) trong iD Junction. Đã publish: [Metro / đường sắt TTLT](/tin-tuc/kien-thuc/metro-thu-thiem-long-thanh-175000-ty-khoi-cong-2026) (Vĩ mô) · [hạ tầng ID Town](/tin-tuc/kien-thuc/id-town-long-thanh-ha-tang-san-bay-metro-2026) (Thực tế).
 
-Hub: [/wiki-nha-o-xa-hoi/chu-de/hanh-lang-san-bay-long-thanh](/wiki-nha-o-xa-hoi/chu-de/hanh-lang-san-bay-long-thanh).
+Chủ đề: [/tin-tuc/kien-thuc/chu-de/hanh-lang-san-bay-long-thanh](/tin-tuc/kien-thuc/chu-de/hanh-lang-san-bay-long-thanh).
 
 ${EDITORIAL_FIGURES.metroHub}
 
@@ -75,9 +75,9 @@ Mở rộng QL13, Metro số 2, cửa ngõ Thủ Đức – Lái Thiêu – Thu�
 
 Neo: [Hồ Gươm Xanh NOXH](/du-an/nha-o-xa-hoi-ho-guom-xanh-thuan-an) · [Emerald 68](/du-an/the-emerald-68-thuan-an) · [A&T Sky Garden](/du-an/at-sky-garden-lai-thieu) · [Astral City](/du-an/astral-city-thuan-an) · [Emerald Boulevard](/du-an/the-emerald-boulevard-thuan-an).
 
-Phễu đã có bài: [quy hoạch Lái Thiêu 2040](/wiki-nha-o-xa-hoi/lai-thieu-quy-hoach-2040-phuong-trung-tam-metro-2026) (Vĩ mô) · [ở thực hay cho thuê](/wiki-nha-o-xa-hoi/mua-can-ho-lai-thieu-o-thuc-hay-dau-tu-cho-thue-2026) (Tiềm năng) · [căn hộ QL13 đang mở bán](/wiki-nha-o-xa-hoi/can-ho-lai-thieu-quoc-lo-13-du-an-noi-bat-2026) (Thực tế) · [Metro số 2 QL13 & TOD](/wiki-nha-o-xa-hoi/ho-guom-xanh-metro-so-2-ql13-tod-2026).
+Phễu đã có bài: [quy hoạch Lái Thiêu 2040](/tin-tuc/kien-thuc/lai-thieu-quy-hoach-2040-phuong-trung-tam-metro-2026) (Vĩ mô) · [ở thực hay cho thuê](/tin-tuc/kien-thuc/mua-can-ho-lai-thieu-o-thuc-hay-dau-tu-cho-thue-2026) (Tiềm năng) · [căn hộ QL13 đang mở bán](/tin-tuc/kien-thuc/can-ho-lai-thieu-quoc-lo-13-du-an-noi-bat-2026) (Thực tế) · [Metro số 2 QL13 & TOD](/tin-tuc/kien-thuc/ho-guom-xanh-metro-so-2-ql13-tod-2026).
 
-Hub: [/wiki-nha-o-xa-hoi/chu-de/truc-quoc-lo-13-dong-bac](/wiki-nha-o-xa-hoi/chu-de/truc-quoc-lo-13-dong-bac).
+Chủ đề: [/tin-tuc/kien-thuc/chu-de/truc-quoc-lo-13-dong-bac](/tin-tuc/kien-thuc/chu-de/truc-quoc-lo-13-dong-bac).
 
 ## Làm sao chọn trục trước khi xem dự án?
 

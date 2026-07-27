@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import type { ArticleAdminSaveInput } from "@/lib/validation/article-admin";
-import { articlePath } from "@/lib/content/article-routes";
+import { canonicalArticlePath } from "@/lib/content/article-routes";
 import { notifyIndexNowUrls } from "@/lib/seo/indexnow";
 import { getSiteUrl } from "@/lib/site-config";
 
@@ -67,9 +67,17 @@ function articleData(input: ArticleAdminSaveInput) {
   };
 }
 
-function notifyArticleIfPublished(slug: string, status: string) {
+function notifyArticleIfPublished(
+  slug: string,
+  status: string,
+  tagSlugs: string[] = [],
+) {
   if (status !== "PUBLISHED") return;
-  notifyIndexNowUrls([`${getSiteUrl()}${articlePath(slug)}`]);
+  const path = canonicalArticlePath({
+    slug,
+    tags: tagSlugs.map((s) => ({ slug: s })),
+  });
+  notifyIndexNowUrls([`${getSiteUrl()}${path}`]);
 }
 
 export async function createArticleFromAdmin(input: ArticleAdminSaveInput) {
@@ -90,7 +98,7 @@ export async function createArticleFromAdmin(input: ArticleAdminSaveInput) {
       projects: { include: { project: true } },
     },
   });
-  notifyArticleIfPublished(created.slug, created.status);
+  notifyArticleIfPublished(created.slug, created.status, input.tagSlugs);
   return created;
 }
 
@@ -119,7 +127,7 @@ export async function updateArticleFromAdmin(
       },
     });
   });
-  notifyArticleIfPublished(updated.slug, updated.status);
+  notifyArticleIfPublished(updated.slug, updated.status, input.tagSlugs);
   return updated;
 }
 

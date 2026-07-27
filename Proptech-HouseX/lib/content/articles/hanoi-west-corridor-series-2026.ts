@@ -5,9 +5,9 @@ import { NORTHERN_SUPPORT_CLOSING } from "@/lib/content/articles/northern-editor
 import { HANOI_GROWTH_CORRIDORS_PILLAR_SLUG } from "@/lib/content/growth-corridors-hanoi";
 
 const UPDATED = new Date("2026-07-27T00:00:00.000Z");
-const PILLAR_HREF = `/wiki-nha-o-xa-hoi/${HANOI_GROWTH_CORRIDORS_PILLAR_SLUG}`;
+const PILLAR_HREF = `/tin-tuc/kien-thuc/${HANOI_GROWTH_CORRIDORS_PILLAR_SLUG}`;
 const HUB_HREF =
-  "/wiki-nha-o-xa-hoi/chu-de/truc-dai-lo-thang-long-hoa-lac";
+  "/tin-tuc/kien-thuc/chu-de/truc-dai-lo-thang-long-hoa-lac";
 
 /**
  * Trục Đại lộ Thăng Long / Hòa Lạc — ba lớp: quy hoạch–thể chế → dịch chuyển không gian → thẩm định.
@@ -25,7 +25,7 @@ export const HANOI_WEST_CORRIDOR_ARTICLES_2026: ArticleDetail[] = [
 
 Trong Quyết định 1569/QĐ-TTg, phát triển khoa học công nghệ và đổi mới sáng tạo là một trong các khâu đột phá của Thủ đô. Phía Tây hiện thực hóa lớp đó quanh Đại lộ Thăng Long: từ Nam Từ Liêm / Mỹ Đình kéo dài hướng Hòa Lạc — nơi quy hoạch và truyền thông chuyên ngành gắn cụm đại học, viện nghiên cứu và khu chức năng hỗ trợ. Khác Vành đai 4 (vòng ngoài liên tỉnh) và khác Nội Bài (logistics hàng không), động lực dài hạn ở đây là việc làm tri thức và mật độ tiện ích xã hội đã hình thành ở lõi phía Tây — không phải một tin metro đơn lẻ.
 
-Đọc trong khung năm hành lang: [Năm trục tăng trưởng Vùng Thủ đô Hà Nội](${PILLAR_HREF}). Hub: [${HUB_HREF}](${HUB_HREF}).
+Đọc trong khung năm hành lang: [Năm trục tăng trưởng Vùng Thủ đô Hà Nội](${PILLAR_HREF}). Chủ đề: [${HUB_HREF}](${HUB_HREF}).
 
 ${EDITORIAL_FIGURES.hcmSkyline}
 
@@ -36,7 +36,7 @@ Hòa Lạc thường được định vị như cực công nghệ – giáo d�
 | Lớp | Vai trò tham chiếu |
 |-----|-------------------|
 | Đại lộ Thăng Long | Xương sống đường bộ Đông–Tây phía Tây |
-| Hòa Lạc | Hub công nghệ / giáo dục và đô thị chức năng |
+| Hòa Lạc | Trung tâm công nghệ / giáo dục và đô thị chức năng |
 | Nam Từ Liêm – Mỹ Đình | Lõi an cư – tiện ích gần trung tâm hành chính / thể thao |
 
 ## Metro dọc Đại lộ Thăng Long đang được báo chí mô tả thế nào?
@@ -57,8 +57,8 @@ ${EDITORIAL_FIGURES.metroHub}
 | Lớp đọc | Bài trên cùng hành lang |
 |---------|-------------------------|
 | Quy hoạch – thể chế (bài này) | Quy hoạch Thăng Long – Hòa Lạc |
-| Dịch chuyển không gian | [An cư Nam Từ Liêm – Mỹ Đình](/wiki-nha-o-xa-hoi/an-cu-phia-tay-nam-tu-liem-my-dinh-2026) |
-| Thẩm định dự án | [Căn hộ cao cấp đang mở bán](/wiki-nha-o-xa-hoi/can-ho-cao-cap-dai-lo-thang-long-dang-mo-ban-2026) |
+| Dịch chuyển không gian | [An cư Nam Từ Liêm – Mỹ Đình](/tin-tuc/kien-thuc/an-cu-phia-tay-nam-tu-liem-my-dinh-2026) |
+| Thẩm định dự án | [Căn hộ cao cấp đang mở bán](/tin-tuc/kien-thuc/can-ho-cao-cap-dai-lo-thang-long-dang-mo-ban-2026) |
 
 ${NORTHERN_SUPPORT_CLOSING}
 
@@ -88,7 +88,7 @@ ${EDITORIAL_FIGURES.bitexcoMetro}
 
 Lõi phía Tây gần Mỹ Đình hưởng lợi từ cụm thể thao – hội nghị, mật độ dịch vụ và kết nối vào trung tâm hành chính. Tây Mỗ và Đại Mỗ mở thêm quỹ căn hộ cao tầng với không gian sống rộng hơn một số khu lõi lịch sử, đồng thời vẫn bám Đại lộ Thăng Long. Trên thực địa Hà Nội, thanh khoản “ở thực” thường gắn cộng đồng cư dân ổn định, căn vuông vức và hướng ban công Đông Nam / Nam khi có lựa chọn — hơn là khẩu hiệu ngắn hạn gắn tên đại lộ.
 
-Bối cảnh macro: [Quy hoạch Thăng Long – Hòa Lạc](/wiki-nha-o-xa-hoi/quy-hoach-truc-phia-tay-dai-lo-thang-long-hoa-lac-2026) · Pillar: [Năm trục tăng trưởng Vùng Thủ đô](${PILLAR_HREF}).
+Bối cảnh macro: [Quy hoạch Thăng Long – Hòa Lạc](/tin-tuc/kien-thuc/quy-hoach-truc-phia-tay-dai-lo-thang-long-hoa-lac-2026) · Pillar: [Năm trục tăng trưởng Vùng Thủ đô](${PILLAR_HREF}).
 
 ${EDITORIAL_FIGURES.hcmSkyline}
 
@@ -114,13 +114,13 @@ Với hộ có thu nhập đều (công chức, viên chức, chuyên viên), kh
 4. Tách rõ: vay ngân hàng theo hợp đồng vs cam kết truyền miệng của môi giới.
 5. Nếu thuộc đối tượng nhà ở xã hội: điều kiện hồ sơ khác hẳn căn hộ thương mại cao cấp trên cùng hành lang.
 
-Công cụ tham chiếu nội bộ: [/tinh-tra-gop](/tinh-tra-gop) — chỉ để mô phỏng, không thay thế tư vấn tín dụng chính thức.
+Công cụ mô phỏng: [/tinh-tra-gop](/tinh-tra-gop) — chỉ để mô phỏng, không thay thế tư vấn tín dụng chính thức.
 
 ## Có nên lấy tiến độ metro làm lý do duy nhất mua ngay?
 
 Không nên. Metro số 5 là lớp dài hạn theo phân kỳ đầu tư công; nhu cầu ở thực tại Mỹ Đình / Tây Mỗ / Đại Mỗ đã tồn tại nhờ tiện ích và việc làm. Hãy dùng tiến độ metro như yếu tố bổ sung trong thẩm định kết nối, không phải lý do duy nhất đặt cọc.
 
-Lớp thẩm định: [Căn hộ cao cấp dọc Đại lộ Thăng Long](/wiki-nha-o-xa-hoi/can-ho-cao-cap-dai-lo-thang-long-dang-mo-ban-2026). Hub: [${HUB_HREF}](${HUB_HREF}).
+Lớp thẩm định: [Căn hộ cao cấp dọc Đại lộ Thăng Long](/tin-tuc/kien-thuc/can-ho-cao-cap-dai-lo-thang-long-dang-mo-ban-2026). Chủ đề: [${HUB_HREF}](${HUB_HREF}).
 
 ${NORTHERN_SUPPORT_CLOSING}
 
@@ -150,7 +150,7 @@ ${EDITORIAL_FIGURES.thuThiem}
 
 Thị trường cao tầng phía Tây luôn có quỹ căn chào bán theo từng đợt. House X không liệt kê bảng giá gắn tên thương hiệu lớn, cũng không cam kết biên độ tăng giá. Thay vào đó, bài này đưa khung thẩm định chính sách tài chính và pháp lý — đối chiếu đúng dự án đang mở với công bố chủ đầu tư tại thời điểm xem nhà.
 
-Bối cảnh: [Quy hoạch Thăng Long – Hòa Lạc](/wiki-nha-o-xa-hoi/quy-hoach-truc-phia-tay-dai-lo-thang-long-hoa-lac-2026) · [An cư Mỹ Đình – Tây Mỗ – Đại Mỗ](/wiki-nha-o-xa-hoi/an-cu-phia-tay-nam-tu-liem-my-dinh-2026) · [Năm trục tăng trưởng Vùng Thủ đô](${PILLAR_HREF}).
+Bối cảnh: [Quy hoạch Thăng Long – Hòa Lạc](/tin-tuc/kien-thuc/quy-hoach-truc-phia-tay-dai-lo-thang-long-hoa-lac-2026) · [An cư Mỹ Đình – Tây Mỗ – Đại Mỗ](/tin-tuc/kien-thuc/an-cu-phia-tay-nam-tu-liem-my-dinh-2026) · [Năm trục tăng trưởng Vùng Thủ đô](${PILLAR_HREF}).
 
 ${EDITORIAL_FIGURES.hcmSkyline}
 
@@ -183,7 +183,7 @@ ${EDITORIAL_FIGURES.metroHub}
 
 Bảng giá thay đổi theo đợt, tầng, hướng và chính sách chiết khấu. Neo số giả tạo rủi ro pháp lý và sai lệch quyết định. Khi bạn cần đối chiếu đúng dự án đang mở bán / điều kiện vay, hãy dùng kênh tư vấn có trách nhiệm.
 
-Hub: [${HUB_HREF}](${HUB_HREF}).
+Chủ đề: [${HUB_HREF}](${HUB_HREF}).
 
 ${EDITORIAL_FIGURES.bitexcoMetro}
 

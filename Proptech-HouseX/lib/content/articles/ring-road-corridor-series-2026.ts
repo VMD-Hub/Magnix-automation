@@ -20,7 +20,7 @@ export const RING_ROAD_CORRIDOR_ARTICLES_2026: ArticleDetail[] = [
 
 Hai vành đai tạo “vòng” kết nối Thủ Đức, Củ Chi, Bình Chánh, Thuận An và các nút Bình Dương / Đồng Nai / Tây Ninh – Long An — lớp hạ tầng cho chuỗi đô thị vệ tinh, khác hành lang biển Đông (Cái Mép) và khác Đại lộ tài chính QL13.
 
-Đọc trong khung 6 trục: [Sáu trục tăng trưởng đô thị TP.HCM](/wiki-nha-o-xa-hoi/bon-cuc-tang-truong-do-thi-tp-hcm-2026).
+Đọc trong khung 6 trục: [Sáu trục tăng trưởng đô thị TP.HCM](/tin-tuc/kien-thuc/bon-cuc-tang-truong-do-thi-tp-hcm-2026).
 
 ${EDITORIAL_FIGURES.hcmSkyline}
 
@@ -103,7 +103,7 @@ ${EDITORIAL_FIGURES.bitexcoMetro}
 - Biển Đông: logistics Cái Mép + NOXH vệ tinh Nhơn Trạch — [Nhơn Trạch cực tăng trưởng](/tin-tuc/nhon-trach-cu-tang-truong-ha-tang-tod-2026).
 - Vành đai: chuỗi vệ tinh quanh vòng ngoài — tiến độ: [Vành đai 3 & 4](/tin-tuc/tien-do-vanh-dai-3-vanh-dai-4-do-thi-ve-tinh-2026).
 
-Pillar điều hướng: [Sáu trục tăng trưởng đô thị TP.HCM](/wiki-nha-o-xa-hoi/bon-cuc-tang-truong-do-thi-tp-hcm-2026).
+Bài tổng quan: [Sáu trục tăng trưởng đô thị TP.HCM](/tin-tuc/kien-thuc/bon-cuc-tang-truong-do-thi-tp-hcm-2026).
 
 ## Nhà đầu tư cá nhân nên hỏi gì trước khi “săn TOD vành đai”?
 
@@ -136,7 +136,7 @@ Cần tư vấn định hướng an cư theo đúng trục — [liên hệ House
 
 Thông xe từng đoạn giúp rút ngắn thời gian liên vùng và mở thêm lựa chọn an cư vệ tinh — nhưng không đồng nghĩa mọi thửa đất gần đường đều “tăng giá chắc chắn”. House X chỉ mô tả lợi ích định tính theo khu vực; không công bố % tăng giá đất nền và không neo bảng giá dự án đất nền giả.
 
-Đọc tiến độ trước: [Tiến độ Vành đai 3 & 4](/tin-tuc/tien-do-vanh-dai-3-vanh-dai-4-do-thi-ve-tinh-2026) · Khung trục: [Sáu trục tăng trưởng đô thị TP.HCM](/wiki-nha-o-xa-hoi/bon-cuc-tang-truong-do-thi-tp-hcm-2026).
+Đọc tiến độ trước: [Tiến độ Vành đai 3 & 4](/tin-tuc/tien-do-vanh-dai-3-vanh-dai-4-do-thi-ve-tinh-2026) · Khung trục: [Sáu trục tăng trưởng đô thị TP.HCM](/tin-tuc/kien-thuc/bon-cuc-tang-truong-do-thi-tp-hcm-2026).
 
 ${EDITORIAL_FIGURES.hcmSkyline}
 
@@ -164,7 +164,7 @@ Thiếu một trong các mục trên thì “đón đầu thông xe” dễ thà
 
 Không. Hồ Gươm Xanh và các căn hộ dọc Quốc lộ 13 thuộc trục Đông Bắc – Đại lộ tài chính QL13 (Lái Thiêu / Thuận An): logic metro, thuê chuyên gia KCN và phố thị ven sông — gần địa lý một phần Thuận An nhưng không phải cùng phễu “săn đất nền đón VD3”.
 
-Đối chiếu QL13 nếu bạn đang cân nhắc căn hộ / NOXH cửa ngõ: hub [/wiki-nha-o-xa-hoi/chu-de/truc-quoc-lo-13-dong-bac](/wiki-nha-o-xa-hoi/chu-de/truc-quoc-lo-13-dong-bac). TOD khái niệm: [TOD dọc Vành đai 3](/tin-tuc/tod-doc-vanh-dai-3-mo-vang-nha-dau-tu-2026).
+Đối chiếu QL13 nếu bạn đang cân nhắc căn hộ / NOXH cửa ngõ: hub [/tin-tuc/kien-thuc/chu-de/truc-quoc-lo-13-dong-bac](/tin-tuc/kien-thuc/chu-de/truc-quoc-lo-13-dong-bac). TOD khái niệm: [TOD dọc Vành đai 3](/tin-tuc/tod-doc-vanh-dai-3-mo-vang-nha-dau-tu-2026).
 
 ${EDITORIAL_FIGURES.bitexcoMetro}
 

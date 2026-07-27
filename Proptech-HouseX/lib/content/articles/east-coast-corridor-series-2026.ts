@@ -25,7 +25,7 @@ export const EAST_COAST_CORRIDOR_ARTICLES_2026: ArticleDetail[] = [
 
 Hành lang kinh tế biển phía Đông là chuỗi logistics và đô thị vệ tinh nối TP.HCM với Nhơn Trạch – Long Thành rồi xuống cụm cảng nước sâu Cái Mép – Thị Vải (hướng Bà Rịa – Vũng Tàu). Động lực chính là hàng hóa, KCN và cao tốc ven biển — không phải “thành phố sân bay” thuần túy quanh Long Thành, cũng không phải cửa ngõ tài chính – metro Quốc lộ 13 (Lái Thiêu / Thuận An).
 
-Bản đồ 6 trục để chọn đúng hành lang trước khi xem dự án: [Sáu trục tăng trưởng đô thị TP.HCM](/wiki-nha-o-xa-hoi/bon-cuc-tang-truong-do-thi-tp-hcm-2026).
+Bản đồ 6 trục để chọn đúng hành lang trước khi xem dự án: [Sáu trục tăng trưởng đô thị TP.HCM](/tin-tuc/kien-thuc/bon-cuc-tang-truong-do-thi-tp-hcm-2026).
 
 ${EDITORIAL_FIGURES.hcmSkyline}
 
@@ -87,7 +87,7 @@ House X tư vấn hồ sơ nhà ở xã hội miễn phí — [đăng ký ngay](
 
 Trên hành lang kinh tế biển phía Đông, dòng tiền dài hạn gắn lao động KCN, logistics cảng và cao tốc — không phụ thuộc một “mốc tăng giá %” chưa có số liệu công bố độc lập. Câu hỏi thực tế hơn: có chỗ ở hợp pháp gần nơi làm việc không, kết nối đường bộ / đường sắt tương lai ra sao, và pháp lý NOXH có đủ điều kiện mua không?
 
-Khung trục: [Sáu trục tăng trưởng đô thị TP.HCM](/wiki-nha-o-xa-hoi/bon-cuc-tang-truong-do-thi-tp-hcm-2026) · Vĩ mô hành lang: [Hành lang kinh tế biển phía Đông – Cái Mép](/tin-tuc/hanh-lang-kinh-te-bien-phia-dong-tphcm-cai-mep-2026).
+Khung trục: [Sáu trục tăng trưởng đô thị TP.HCM](/tin-tuc/kien-thuc/bon-cuc-tang-truong-do-thi-tp-hcm-2026) · Vĩ mô hành lang: [Hành lang kinh tế biển phía Đông – Cái Mép](/tin-tuc/hanh-lang-kinh-te-bien-phia-dong-tphcm-cai-mep-2026).
 
 ${EDITORIAL_FIGURES.dtaPhoiCanh}
 

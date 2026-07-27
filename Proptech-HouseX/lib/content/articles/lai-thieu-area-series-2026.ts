@@ -62,9 +62,9 @@ Khác nhiều hành lang công nghiệp nặng, Lái Thiêu được định hư
 
 Nhờ hạ tầng đổi nhanh, quỹ đất trống dọc QL13 và ven rạch Cầu Đình ưu tiên chuyển đổi thành khu đô thị cao tầng và căn hộ tầm trung đến cao cấp — hút kỹ sư, chuyên gia và gia đình trẻ làm việc tại KCN kế cận về an cư ([CafeF / căn hộ dọc QL13](https://cafef.vn/hang-chuc-du-an-can-ho-dua-nhau-moc-len-doc-doan-quoc-lo-188260615182537089.chn)).
 
-Trong bức tranh đó, tổ hợp đô thị tích hợp như [Hồ Gươm Xanh](${HGX_HREF}) (TBS Land, ~26,4 ha tại 136 Đại lộ Bình Dương) minh họa mô hình “sống trong đô thị đồng bộ” — có cả phân khu nhà ở xã hội và sản phẩm thương mại. Chi tiết hành lang metro trước cửa: [Hồ Gươm Xanh — Metro số 2 QL13 & TOD](/wiki-nha-o-xa-hoi/ho-guom-xanh-metro-so-2-ql13-tod-2026).
+Trong bức tranh đó, tổ hợp đô thị tích hợp như [Hồ Gươm Xanh](${HGX_HREF}) (TBS Land, ~26,4 ha tại 136 Đại lộ Bình Dương) minh họa mô hình “sống trong đô thị đồng bộ” — có cả phân khu nhà ở xã hội và sản phẩm thương mại. Chi tiết hành lang metro trước cửa: [Hồ Gươm Xanh — Metro số 2 QL13 & TOD](/tin-tuc/kien-thuc/ho-guom-xanh-metro-so-2-ql13-tod-2026).
 
-Lưu ý bản đồ 6 trục tăng trưởng: Lái Thiêu / QL13 thuộc Đông Bắc TP.HCM — khác hành lang sân bay Long Thành và khác hành lang kinh tế biển phía Đông (Nhơn Trạch). Đối chiếu khung: [Sáu trục tăng trưởng đô thị TP.HCM](/wiki-nha-o-xa-hoi/bon-cuc-tang-truong-do-thi-tp-hcm-2026).
+Lưu ý bản đồ 6 trục tăng trưởng: Lái Thiêu / QL13 thuộc Đông Bắc TP.HCM — khác hành lang sân bay Long Thành và khác hành lang kinh tế biển phía Đông (Nhơn Trạch). Đối chiếu khung: [Sáu trục tăng trưởng đô thị TP.HCM](/tin-tuc/kien-thuc/bon-cuc-tang-truong-do-thi-tp-hcm-2026).
 
 ${EDITORIAL_FIGURES.hgxPhoiCanh}
 
@@ -96,7 +96,7 @@ Bài liên quan: [5 khu TOD metro số 2 Bến Thành – Tham Lương](/tin-tuc
 
 Trục Đại lộ Bình Dương (Quốc lộ 13) đoạn Thuận An – Lái Thiêu đang có cuộc đua căn hộ cao tầng. Danh mục dưới đây chỉ gồm dự án đang mở bán hoặc thi công rầm rộ trong năm 2026 — đã loại các dự án cũ đã bàn giao ([CafeF](https://cafef.vn/hang-chuc-du-an-can-ho-dua-nhau-moc-len-doc-doan-quoc-lo-188260615182537089.chn)).
 
-Ba lực đẩy chung: lõi Lái Thiêu mở rộng sau sáp nhập, lộ giới QL13 hướng 8 làn, và Metro quy hoạch dọc Đại lộ kết nối TP.HCM. Chi tiết quy hoạch khu vực: [Quy hoạch Lái Thiêu 2040](/wiki-nha-o-xa-hoi/lai-thieu-quy-hoach-2040-phuong-trung-tam-metro-2026).
+Ba lực đẩy chung: lõi Lái Thiêu mở rộng sau sáp nhập, lộ giới QL13 hướng 8 làn, và Metro quy hoạch dọc Đại lộ kết nối TP.HCM. Chi tiết quy hoạch khu vực: [Quy hoạch Lái Thiêu 2040](/tin-tuc/kien-thuc/lai-thieu-quy-hoach-2040-phuong-trung-tam-metro-2026).
 
 ${EDITORIAL_FIGURES.hcmSkyline}
 
@@ -128,7 +128,7 @@ ${EDITORIAL_FIGURES.metroHub}
 | A&T Sky Garden | Lõi Lái Thiêu — sát HGX | 31–35 tr/m² | ~Q1/2026 | [/du-an/at-sky-garden-lai-thieu](/du-an/at-sky-garden-lai-thieu) |
 | Astral City | Bình Hòa — gần Lotte | 48–55 tr/m² | Theo từng tháp | [/du-an/astral-city-thuan-an](/du-an/astral-city-thuan-an) |
 
-Dự án sắp mở bán (Emerald Boulevard, phân khu cao cấp Hồ Gươm Xanh): [bài cập nhật sắp mở bán](/wiki-nha-o-xa-hoi/can-ho-lai-thieu-sap-mo-ban-emerald-boulevard-hgx-2026). Phân khu nhà ở xã hội trong cùng KĐT: [${HGX_PROJECT_NAME}](${HGX_HREF}).
+Dự án sắp mở bán (Emerald Boulevard, phân khu cao cấp Hồ Gươm Xanh): [bài cập nhật sắp mở bán](/tin-tuc/kien-thuc/can-ho-lai-thieu-sap-mo-ban-emerald-boulevard-hgx-2026). Phân khu nhà ở xã hội trong cùng KĐT: [${HGX_PROJECT_NAME}](${HGX_HREF}).
 
 ${LAI_THIEU_PR_CLOSINGS.duAn}
 
@@ -176,7 +176,7 @@ Giá thuê tham chiếu căn hộ 2 phòng ngủ (~60 m²) tại Lái Thiêu: nh
 
 Chiến lược nhận nhà sớm hơn để cho thuê: ưu tiên A&T Sky Garden nếu tiến độ Q1/2026 giữ được — hoặc các tháp Astral đã đủ điều kiện bàn giao từng đợt.
 
-Chiến lược cuốn chiếu đón Metro / cửa ngõ: Emerald 68 — thanh toán theo tiến độ, vị trí chuyên gia ưa chuộng; đổi lại chờ bàn giao ~2027–2028. Nhóm sắp mở bán hạng sang (Emerald Boulevard): [bài sắp mở bán](/wiki-nha-o-xa-hoi/can-ho-lai-thieu-sap-mo-ban-emerald-boulevard-hgx-2026).
+Chiến lược cuốn chiếu đón Metro / cửa ngõ: Emerald 68 — thanh toán theo tiến độ, vị trí chuyên gia ưa chuộng; đổi lại chờ bàn giao ~2027–2028. Nhóm sắp mở bán hạng sang (Emerald Boulevard): [bài sắp mở bán](/tin-tuc/kien-thuc/can-ho-lai-thieu-sap-mo-ban-emerald-boulevard-hgx-2026).
 
 ## Công thức tối ưu lợi nhuận cho nhà đầu tư thuê?
 
@@ -194,7 +194,7 @@ ${EDITORIAL_FIGURES.hgxKetNoi}
 
 ${LAI_THIEU_PR_CLOSINGS.oThucDauTu}
 
-Đối chiếu: [3 dự án đang mở bán](/wiki-nha-o-xa-hoi/can-ho-lai-thieu-quoc-lo-13-du-an-noi-bat-2026) · [quy hoạch Lái Thiêu 2040](/wiki-nha-o-xa-hoi/lai-thieu-quy-hoach-2040-phuong-trung-tam-metro-2026)
+Đối chiếu: [3 dự án đang mở bán](/tin-tuc/kien-thuc/can-ho-lai-thieu-quoc-lo-13-du-an-noi-bat-2026) · [quy hoạch Lái Thiêu 2040](/tin-tuc/kien-thuc/lai-thieu-quy-hoach-2040-phuong-trung-tam-metro-2026)
 
 *Giá thuê và tỷ suất là tham chiếu thị trường — không phải cam kết lợi nhuận.*`,
     status: "PUBLISHED",
@@ -220,7 +220,7 @@ ${LAI_THIEU_PR_CLOSINGS.oThucDauTu}
 
 Ngoài nhóm đang thi công / mở bán (Emerald 68, A&T Sky Garden, Astral City), thị trường đang theo dõi hai quỹ sắp công bố hoặc nhận đặt chỗ: The Emerald Boulevard (Lê Phong) và phân khu căn hộ thương mại cao cấp trong KĐT Hồ Gươm Xanh (TBS Land).
 
-Đối chiếu nhóm đang bán: [căn hộ QL13 đang mở bán 2026](/wiki-nha-o-xa-hoi/can-ho-lai-thieu-quoc-lo-13-du-an-noi-bat-2026).
+Đối chiếu nhóm đang bán: [căn hộ QL13 đang mở bán 2026](/tin-tuc/kien-thuc/can-ho-lai-thieu-quoc-lo-13-du-an-noi-bat-2026).
 
 ${EDITORIAL_FIGURES.metroHub}
 
@@ -236,7 +236,7 @@ Sau hạ tầng thấp tầng và phân khu nhà ở xã hội, TBS Land đang c
 
 Điểm khác biệt: sống trong đại đô thị đồng bộ lớn nhất Lái Thiêu — không gian nghỉ dưỡng khép kín. Phân khu này là sản phẩm thương mại, điều kiện và giá khác hẳn nhà ở xã hội.
 
-Tra cứu phân khu NOXH (đối tượng Luật Nhà ở): [${HGX_PROJECT_NAME}](${HGX_HREF}) · [Metro số 2 QL13 & TOD](/wiki-nha-o-xa-hoi/ho-guom-xanh-metro-so-2-ql13-tod-2026).
+Tra cứu phân khu NOXH (đối tượng Luật Nhà ở): [${HGX_PROJECT_NAME}](${HGX_HREF}) · [Metro số 2 QL13 & TOD](/tin-tuc/kien-thuc/ho-guom-xanh-metro-so-2-ql13-tod-2026).
 
 ${EDITORIAL_FIGURES.hgxPhoiCanh}
 

@@ -422,7 +422,7 @@ export const ARTICLE_EDITORIAL_COVERS: Record<string, EditorialCover> = {
     url: HERO.thuThiemNight,
     alt: "Cao tầng cửa ngõ — minh họa dự án phù hợp vận hành cho thuê",
     caption:
-      "Checklist thiết kế–vận hành; soft-link ID Town, Emerald, HGX trên House X.",
+      "Checklist thiết kế–vận hành; đối chiếu ID Town, Emerald, HGX trên House X.",
   },
   "tinh-dong-tien-don-bay-can-ho-cho-thue-2026": {
     url: HERO.civic,

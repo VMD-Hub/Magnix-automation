@@ -14,13 +14,10 @@ import {
 import {
   NEWS_HUB_PATH,
   NEWS_HUB_TITLE,
-  knowledgeTopicPath,
+  RE_KNOWLEDGE_PATH,
+  RE_KNOWLEDGE_TITLE,
   topicPath,
 } from "@/lib/content/article-routes";
-import {
-  NOXH_HANDBOOK_PATH,
-  NOXH_HANDBOOK_TITLE,
-} from "@/lib/content/messaging/noxh-public";
 import { getSiteUrl } from "@/lib/site-config";
 
 export const revalidate = 300;
@@ -35,15 +32,19 @@ export async function generateMetadata({
 }: PageProps): Promise<Metadata> {
   const { tagSlug } = await params;
   const legacy = LEGACY_NOXH_TOPIC_REDIRECTS[tagSlug];
-  if (legacy) return { title: NOXH_HANDBOOK_TITLE };
+  if (legacy) return { title: RE_KNOWLEDGE_TITLE };
+
+  if (NOXH_HANDBOOK_TAG_SLUGS.has(tagSlug)) {
+    return { title: RE_KNOWLEDGE_TITLE };
+  }
 
   const tag = await getPublishedTagBySlug(tagSlug);
   if (!tag) return { title: "Không tìm thấy chủ đề" };
 
-  const title = `${tag.name} — ${NOXH_HANDBOOK_TITLE}`;
+  const title = `${tag.name} — ${RE_KNOWLEDGE_TITLE}`;
   const description =
     tag.description ??
-    `Bài viết về ${tag.name.toLowerCase()} — ${NOXH_HANDBOOK_TITLE} HouseX.`;
+    `Bài viết về ${tag.name.toLowerCase()} — ${RE_KNOWLEDGE_TITLE} HouseX.`;
 
   return {
     title,
@@ -57,7 +58,10 @@ export async function generateMetadata({
   };
 }
 
-export default async function NoxhTopicHubPage({ params, searchParams }: PageProps) {
+export default async function ReKnowledgeTopicPage({
+  params,
+  searchParams,
+}: PageProps) {
   const { tagSlug } = await params;
   const sp = await searchParams;
   const page = Math.max(1, Number(sp.page) || 1);
@@ -65,10 +69,10 @@ export default async function NoxhTopicHubPage({ params, searchParams }: PagePro
   const legacy = LEGACY_NOXH_TOPIC_REDIRECTS[tagSlug];
   if (legacy) permanentRedirect(legacy);
 
-  if (GENERAL_RE_TAG_SLUGS.has(tagSlug)) {
-    permanentRedirect(knowledgeTopicPath(tagSlug));
+  if (NOXH_HANDBOOK_TAG_SLUGS.has(tagSlug)) {
+    permanentRedirect(`/wiki-nha-o-xa-hoi/chu-de/${tagSlug}`);
   }
-  if (!NOXH_HANDBOOK_TAG_SLUGS.has(tagSlug)) notFound();
+  if (!GENERAL_RE_TAG_SLUGS.has(tagSlug)) notFound();
 
   const tag = await getPublishedTagBySlug(tagSlug);
   if (!tag) notFound();
@@ -77,7 +81,8 @@ export default async function NoxhTopicHubPage({ params, searchParams }: PagePro
     tagSlug,
     page,
     pageSize: 12,
-    handbookOnly: true,
+    knowledgeOnly: true,
+    handbookOnly: false,
   });
 
   const totalPages = Math.max(1, Math.ceil(total / 12));
@@ -92,8 +97,8 @@ export default async function NoxhTopicHubPage({ params, searchParams }: PagePro
               {NEWS_HUB_TITLE}
             </Link>
             <span className="mx-2">/</span>
-            <Link href={NOXH_HANDBOOK_PATH} className="hover:text-brand-700">
-              {NOXH_HANDBOOK_TITLE}
+            <Link href={RE_KNOWLEDGE_PATH} className="hover:text-brand-700">
+              {RE_KNOWLEDGE_TITLE}
             </Link>
             <span className="mx-2">/</span>
             <span className="text-slate-800">{tag.name}</span>
@@ -123,25 +128,19 @@ export default async function NoxhTopicHubPage({ params, searchParams }: PagePro
 
         {totalPages > 1 && (
           <nav className="mt-10 flex justify-center gap-2">
-            {page > 1 && (
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
               <Link
-                href={`${topicBase}?page=${page - 1}`}
-                className="rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm"
+                key={p}
+                href={p === 1 ? topicBase : `${topicBase}?page=${p}`}
+                className={`rounded-lg px-3 py-1.5 text-sm font-medium ${
+                  p === page
+                    ? "bg-brand-700 text-white"
+                    : "bg-white text-slate-700 ring-1 ring-slate-200 hover:bg-slate-50"
+                }`}
               >
-                ← Trước
+                {p}
               </Link>
-            )}
-            <span className="flex items-center px-3 text-sm text-slate-600">
-              Trang {page}/{totalPages}
-            </span>
-            {page < totalPages && (
-              <Link
-                href={`${topicBase}?page=${page + 1}`}
-                className="rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm"
-              >
-                Sau →
-              </Link>
-            )}
+            ))}
           </nav>
         )}
       </div>

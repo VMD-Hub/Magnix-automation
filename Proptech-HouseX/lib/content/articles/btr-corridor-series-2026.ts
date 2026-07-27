@@ -11,10 +11,10 @@ import { GROWTH_CORRIDORS_PILLAR_SLUG } from "@/lib/content/growth-corridors";
 import { HANOI_GROWTH_CORRIDORS_PILLAR_SLUG } from "@/lib/content/growth-corridors-hanoi";
 
 const UPDATED = new Date("2026-07-27T00:00:00.000Z");
-const PILLAR_HREF = `/wiki-nha-o-xa-hoi/${BTR_PILLAR_SLUG}`;
-const HUB_HREF = "/wiki-nha-o-xa-hoi/chu-de/nha-o-cho-thue-dai-han";
-const HCMC_CORRIDORS = `/wiki-nha-o-xa-hoi/${GROWTH_CORRIDORS_PILLAR_SLUG}`;
-const HN_CORRIDORS = `/wiki-nha-o-xa-hoi/${HANOI_GROWTH_CORRIDORS_PILLAR_SLUG}`;
+const PILLAR_HREF = `/tin-tuc/kien-thuc/${BTR_PILLAR_SLUG}`;
+const HUB_HREF = "/tin-tuc/kien-thuc/chu-de/nha-o-cho-thue-dai-han";
+const HCMC_CORRIDORS = `/tin-tuc/kien-thuc/${GROWTH_CORRIDORS_PILLAR_SLUG}`;
+const HN_CORRIDORS = `/tin-tuc/kien-thuc/${HANOI_GROWTH_CORRIDORS_PILLAR_SLUG}`;
 
 /**
  * Nhóm 3 — TOD / vành đai & nhu cầu chuyên gia (Bài 7–8).
@@ -33,7 +33,7 @@ Nhà ở cho thuê dài hạn chỉ bền nếu người thuê đến được c
 
 ${TOD_CONCEPT_EDITORIAL}
 
-Pillar thuê dài hạn: [Chính sách đến 2030](${PILLAR_HREF}).
+Bài trụ cột thuê dài hạn: [Chính sách đến 2030](${PILLAR_HREF}).
 
 ${EDITORIAL_FIGURES.hcmSkyline}
 
@@ -59,7 +59,7 @@ ${EDITORIAL_FIGURES.thuThiem}
 
 ## Đọc tiếp nhu cầu chuyên gia trên hành lang công nghiệp?
 
-[Căn hộ cho thuê chuyên gia QL13 & Vành đai 4](/wiki-nha-o-xa-hoi/can-ho-cho-thue-chuyen-gia-truc-ql13-vanh-dai-4-2026) · Hub: [${HUB_HREF}](${HUB_HREF}).
+[Căn hộ cho thuê chuyên gia QL13 & Vành đai 4](/tin-tuc/kien-thuc/can-ho-cho-thue-chuyen-gia-truc-ql13-vanh-dai-4-2026) · Chủ đề: [${HUB_HREF}](${HUB_HREF}).
 
 ${BTR_SUPPORT_CLOSING}
 
@@ -84,12 +84,12 @@ ${BTR_LEGAL_DISCLAIMER}`,
     title:
       "Căn hộ cho thuê chuyên gia trên trục QL13 và hành lang Vành đai 4",
     excerpt:
-      "Nhu cầu thuê của kỹ sư / chuyên gia quanh KCN Bình Dương và vành đai liên tỉnh — soft-link trục QL13 và Vành đai 4; không bịa giá thuê hay công suất lấp đầy.",
+      "Nhu cầu thuê của kỹ sư / chuyên gia quanh KCN Bình Dương và vành đai liên tỉnh — đối chiếu trục QL13 và Vành đai 4; không bịa giá thuê hay công suất lấp đầy.",
     body: `## Vì sao chuyên gia KCN tạo nhu cầu thuê ổn định?
 
 Các khu công nghiệp lớn (VSIP, Việt Hương và chuỗi phụ trợ trên hành lang Đông Bắc TP.HCM – Bình Dương) thu hút lao động kỹ thuật và chuyên gia nước ngoài cần chỗ ở gần việc, hợp đồng rõ, PCCC và dịch vụ đạt chuẩn — ít chấp nhận phòng trọ phân tán. Phân khúc căn hộ cho thuê chuyên gia gắn trực tiếp nhu cầu đó.
 
-Trục tham chiếu: [Hub Quốc lộ 13](/wiki-nha-o-xa-hoi/chu-de/truc-quoc-lo-13-dong-bac) · Khung sáu trục: [Pillar HCMC](${HCMC_CORRIDORS}). Vành đai vùng Thủ đô (nếu đối chiếu Bắc): [Pillar Hà Nội](${HN_CORRIDORS}) · [Hub Vành đai 4](/wiki-nha-o-xa-hoi/chu-de/truc-vanh-dai-4-vung-thu-do).
+Trục tham chiếu: [Chủ đề Quốc lộ 13](/tin-tuc/kien-thuc/chu-de/truc-quoc-lo-13-dong-bac) · Khung sáu trục: [Sáu trục tăng trưởng đô thị TP.HCM](${HCMC_CORRIDORS}). Vành đai vùng Thủ đô (nếu đối chiếu Bắc): [Năm trục tăng trưởng Vùng Thủ đô Hà Nội](${HN_CORRIDORS}) · [Chủ đề Vành đai 4](/tin-tuc/kien-thuc/chu-de/truc-vanh-dai-4-vung-thu-do).
 
 ${EDITORIAL_FIGURES.hcmSkyline}
 
@@ -108,13 +108,13 @@ ${EDITORIAL_FIGURES.metroHub}
 
 ## Vành đai 4 và thuê chuyên gia — đừng nhầm với sốt thửa đất?
 
-Vành đai mở kết nối liên tỉnh; nhu cầu thuê gắn việc làm và thời gian di chuyển. Thửa đất quanh nút giao là logic khác (pháp lý đất / tích sản). Thuê căn hộ chuyên gia ưu tiên tòa có vận hành, không ưu tiên “gần đường chưa có hạ tầng nội khu”. Xem TOD: [TOD & thuê dài hạn](/wiki-nha-o-xa-hoi/tod-vanh-dai-nha-o-cho-thue-dai-han-2026).
+Vành đai mở kết nối liên tỉnh; nhu cầu thuê gắn việc làm và thời gian di chuyển. Thửa đất quanh nút giao là logic khác (pháp lý đất / tích sản). Thuê căn hộ chuyên gia ưu tiên tòa có vận hành, không ưu tiên “gần đường chưa có hạ tầng nội khu”. Xem TOD: [TOD & thuê dài hạn](/tin-tuc/kien-thuc/tod-vanh-dai-nha-o-cho-thue-dai-han-2026).
 
 ${EDITORIAL_FIGURES.thuThiem}
 
 ## Soft neo dự án dễ vận hành cho thuê?
 
-Khung chọn dự án (không bảng giá): [Dự án vận hành cho thuê dài hạn](/wiki-nha-o-xa-hoi/du-an-can-ho-van-hanh-cho-thue-dai-han-2026). Pillar chính sách: [Thuê dài hạn đến 2030](${PILLAR_HREF}). Hub: [${HUB_HREF}](${HUB_HREF}).
+Khung chọn dự án (không bảng giá): [Dự án vận hành cho thuê dài hạn](/tin-tuc/kien-thuc/du-an-can-ho-van-hanh-cho-thue-dai-han-2026). Bài trụ cột: [Thuê dài hạn đến 2030](${PILLAR_HREF}). Chủ đề: [${HUB_HREF}](${HUB_HREF}).
 
 ${BTR_SUPPORT_CLOSING}
 
@@ -129,7 +129,7 @@ ${BTR_LEGAL_DISCLAIMER}`,
     seoTitle:
       "Căn hộ cho thuê chuyên gia — QL13 & Vành đai 4 | HouseX",
     seoDesc:
-      "Nhu cầu thuê chuyên gia KCN trên trục QL13 và vành đai; soft-link corridors — không bịa giá thuê.",
+      "Nhu cầu thuê chuyên gia KCN trên trục QL13 và vành đai; đối chiếu hành lang tăng trưởng — không bịa giá thuê.",
     tags: [NOXH_TAG_BTR],
     projects: [],
   },

@@ -31,7 +31,10 @@ import { BTR_CASHFLOW_SERIES_2026 } from "@/lib/content/articles/btr-cashflow-se
 import { LTK_FUNNEL_SERIES_2026 } from "@/lib/content/articles/ltk-funnel-series-2026";
 import {
   handbookTagSummaries,
+  generalReKnowledgeTagSummaries,
   isNoxhHandbookArticle,
+  isGeneralReKnowledgeArticle,
+  GENERAL_RE_TAG_SLUGS,
   NOXH_HANDBOOK_TAG_SLUGS,
   PHONG_THUY_ARTICLE_TAG,
 } from "@/lib/content/articles/noxh-handbook-tags";
@@ -41,6 +44,7 @@ const NOW = new Date("2026-06-29T00:00:00.000Z");
 
 export const DEMO_ARTICLE_TAGS: ArticleTagSummary[] = [
   ...handbookTagSummaries(),
+  ...generalReKnowledgeTagSummaries(),
   {
     slug: PHONG_THUY_ARTICLE_TAG.slug,
     name: PHONG_THUY_ARTICLE_TAG.name,
@@ -339,14 +343,22 @@ export function listDemoArticleCards(params: {
   tagSlug?: string;
   projectSlug?: string;
   handbookOnly?: boolean;
+  knowledgeOnly?: boolean;
 } = {}): { items: ArticleCardData[]; total: number } {
   const page = params.page ?? 1;
   const pageSize = params.pageSize ?? 12;
+  const knowledgeOnly = params.knowledgeOnly === true;
   const handbookOnly =
-    params.handbookOnly ?? params.tagSlug !== PHONG_THUY_ARTICLE_TAG.slug;
+    params.handbookOnly ??
+    (!knowledgeOnly &&
+      !params.projectSlug &&
+      params.tagSlug !== PHONG_THUY_ARTICLE_TAG.slug &&
+      !(params.tagSlug && GENERAL_RE_TAG_SLUGS.has(params.tagSlug)));
   let filtered = DEMO_ARTICLES.filter((a) => a.status === "PUBLISHED");
 
-  if (handbookOnly) {
+  if (knowledgeOnly) {
+    filtered = filtered.filter((a) => isGeneralReKnowledgeArticle(a));
+  } else if (handbookOnly) {
     filtered = filtered.filter((a) => isNoxhHandbookArticle(a));
   }
 
@@ -385,7 +397,11 @@ export function getDemoArticlesForProject(
   projectSlug: string,
   limit = 6,
 ): ArticleCardData[] {
-  return listDemoArticleCards({ projectSlug, pageSize: limit }).items;
+  return listDemoArticleCards({
+    projectSlug,
+    pageSize: limit,
+    handbookOnly: false,
+  }).items;
 }
 
 export function getDemoTagBySlug(slug: string): ArticleTagSummary | null {
@@ -400,14 +416,14 @@ export function getDemoTagBySlug(slug: string): ArticleTagSummary | null {
 
 export function listDemoTags(): ArticleTagSummary[] {
   return DEMO_ARTICLE_TAGS.map((t) => {
-    const count = DEMO_ARTICLES.filter(
-      (a) =>
-        a.status === "PUBLISHED" &&
-        a.tags.some((x) => x.slug === t.slug) &&
-        (NOXH_HANDBOOK_TAG_SLUGS.has(t.slug)
-          ? isNoxhHandbookArticle(a)
-          : true),
-    ).length;
+    const count = DEMO_ARTICLES.filter((a) => {
+      if (a.status !== "PUBLISHED" || !a.tags.some((x) => x.slug === t.slug)) {
+        return false;
+      }
+      if (NOXH_HANDBOOK_TAG_SLUGS.has(t.slug)) return isNoxhHandbookArticle(a);
+      if (GENERAL_RE_TAG_SLUGS.has(t.slug)) return isGeneralReKnowledgeArticle(a);
+      return true;
+    }).length;
     return { ...t, articleCount: count };
   }).filter((t) => t.articleCount > 0);
 }

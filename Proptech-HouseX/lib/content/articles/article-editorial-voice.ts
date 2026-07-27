@@ -22,6 +22,17 @@ export const EDITORIAL_BANNED_BODY_PATTERNS: readonly RegExp[] = [
   /timeline marketing/i,
   /Không dùng hotline/i,
   /không thu đặt cọc thay/i,
+  /Hub silo/i,
+  /\bsoft-link\b/i,
+  /Pillar HCMC/i,
+  /Pillar Hà Nội/i,
+  /Pillar chính sách:/i,
+  /Pillar điều hướng/i,
+  /trên silo này/i,
+  /tham chiếu nội bộ/i,
+  /theo phễu 3 tầng/i,
+  /Hub: \[/,
+  /Landing: \[/,
 ];
 
 /**

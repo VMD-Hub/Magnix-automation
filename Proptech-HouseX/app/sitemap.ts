@@ -13,7 +13,17 @@ import { toolSitemapPaths } from "@/lib/content/housex-tools-registry";
 import { listExpertSlugs } from "@/lib/content/editorial-trust";
 import { getCatalogSlugs } from "@/lib/seed/catalog-project-slugs";
 import { listDemoSaleListingCards } from "@/lib/preview/demo-listings";
-import { articlePath, NOXH_HANDBOOK_PATH } from "@/lib/content/article-routes";
+import {
+  canonicalArticlePath,
+  NOXH_HANDBOOK_PATH,
+  RE_KNOWLEDGE_PATH,
+  topicPath,
+} from "@/lib/content/article-routes";
+import {
+  GENERAL_RE_TAG_SLUGS,
+  NOXH_HANDBOOK_TAG_SLUGS,
+} from "@/lib/content/articles/noxh-handbook-tags";
+import { getDemoArticleBySlug } from "@/lib/preview/demo-articles";
 import { getSiteUrl } from "@/lib/site-config";
 import { allowDemoProjectFallback } from "@/lib/deploy/demo-fallback";
 import {
@@ -61,6 +71,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${BASE}${COMMERCIAL_CATALOG_PATH}`, changeFrequency: "daily", priority: 0.88 },
     { url: `${BASE}/tin-tuc`, changeFrequency: "daily", priority: 0.85 },
     { url: `${BASE}${NOXH_HANDBOOK_PATH}`, changeFrequency: "daily", priority: 0.85 },
+    { url: `${BASE}${RE_KNOWLEDGE_PATH}`, changeFrequency: "daily", priority: 0.85 },
+    ...[...NOXH_HANDBOOK_TAG_SLUGS, ...GENERAL_RE_TAG_SLUGS].map((tag) => ({
+      url: `${BASE}${topicPath(tag)}`,
+      changeFrequency: "weekly" as const,
+      priority: 0.7,
+    })),
     { url: `${BASE}/cong-cu`, changeFrequency: "monthly", priority: 0.65 },
     { url: `${BASE}/khuyen-mai`, changeFrequency: "weekly", priority: 0.75 },
     { url: `${BASE}/phong-thuy`, changeFrequency: "weekly", priority: 0.8 },
@@ -118,7 +134,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       }),
       prisma.article.findMany({
         where: { status: "PUBLISHED" },
-        select: { slug: true, updatedAt: true },
+        select: {
+          slug: true,
+          updatedAt: true,
+          tags: { include: { tag: { select: { slug: true } } } },
+        },
         orderBy: { publishedAt: "desc" },
         take: 2000,
       }),
@@ -148,12 +168,17 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       ...staticRoutes,
       ...listingEntries,
       ...projectEntries,
-      ...articles.map((a) => ({
-        url: `${BASE}${articlePath(a.slug)}`,
-        lastModified: a.updatedAt,
-        changeFrequency: "weekly" as const,
-        priority: 0.75,
-      })),
+      ...articles.map((a) => {
+        const demo = getDemoArticleBySlug(a.slug);
+        const tags = demo?.tags ?? a.tags.map((t) => ({ slug: t.tag.slug }));
+        const path = canonicalArticlePath({ slug: a.slug, tags });
+        return {
+          url: `${BASE}${path}`,
+          lastModified: a.updatedAt,
+          changeFrequency: "weekly" as const,
+          priority: 0.75,
+        };
+      }),
     ];
   } catch {
     return [

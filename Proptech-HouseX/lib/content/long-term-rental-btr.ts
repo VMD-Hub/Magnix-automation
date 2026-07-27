@@ -1,8 +1,9 @@
 import { NOXH_TAG_BTR } from "@/lib/content/articles/noxh-handbook-tags";
+import { topicPath } from "@/lib/content/article-routes";
 
 /**
  * Silo SEO Nhà ở cho thuê dài hạn (Build-to-Rent) — GENERAL_POLICY.
- * Tách khỏi hành trình hồ sơ NOXH; soft-link NOXH / corridors khi cần.
+ * Hub: Kiến thức BĐS (`/tin-tuc/kien-thuc`); soft-link NOXH / corridors khi cần.
  */
 
 export type BtrToneGroup =
@@ -22,8 +23,7 @@ export const BTR_PILLAR_SLUG =
 
 export const BTR_TAG_SLUG = NOXH_TAG_BTR.slug;
 
-export const BTR_HUB_PATH =
-  `/wiki-nha-o-xa-hoi/chu-de/${NOXH_TAG_BTR.slug}` as const;
+export const BTR_HUB_PATH = topicPath(NOXH_TAG_BTR.slug);
 
 export const BTR_ARTICLE_META: Readonly<Record<string, BtrArticleMeta>> = {
   "mo-hinh-build-to-rent-nha-o-cho-thue-dai-han-tai-cau-truc-2026": {

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { ArticleCardData } from "@/lib/data/article-types";
-import { articlePath } from "@/lib/content/article-routes";
+import { canonicalArticlePath } from "@/lib/content/article-routes";
 import { ArticleBrandCover } from "@/components/articles/article-brand-cover";
 import {
   PhongThuyArticleCover,
@@ -25,7 +25,7 @@ export function ArticleCard({ article }: { article: ArticleCardData }) {
 
   return (
     <Link
-      href={articlePath(article.slug)}
+      href={canonicalArticlePath(article)}
       className="group flex h-full flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm transition hover:border-brand-200 hover:shadow-md"
     >
       {coverUrl ? (
@@ -85,7 +85,7 @@ export function ArticleCardCompact({ article }: { article: ArticleCardData }) {
 
   return (
     <Link
-      href={articlePath(article.slug)}
+      href={canonicalArticlePath(article)}
       className="group flex gap-4 rounded-xl border border-slate-200 bg-white p-4 shadow-sm transition hover:border-brand-200 hover:shadow-md"
     >
       {coverUrl ? (

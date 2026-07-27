@@ -101,7 +101,7 @@ export const BTR_ARTICLE_PLAN: readonly BtrFunnelSlot[] = [
     titleVi:
       "Căn hộ cho thuê chuyên gia trên trục QL13 và hành lang Vành đai 4",
     objective:
-      "Nhu cầu KCN / chuyên gia; soft-link growth corridors — không bịa giá thuê.",
+      "Nhu cầu KCN / chuyên gia; đối chiếu hành lang tăng trưởng — không bịa giá thuê.",
     toneGroup: "corridor-tod",
     status: "published",
     publishedSlug: "can-ho-cho-thue-chuyen-gia-truc-ql13-vanh-dai-4-2026",
@@ -123,7 +123,7 @@ export const BTR_ARTICLE_PLAN: readonly BtrFunnelSlot[] = [
     titleVi:
       "Khung chọn dự án căn hộ phù hợp vận hành cho thuê dài hạn",
     objective:
-      "Checklist thiết kế / bàn giao / vận hành; soft-link ID Town, Emerald, HGX — không bảng giá bịa.",
+      "Checklist thiết kế / bàn giao / vận hành; đối chiếu ID Town, Emerald, HGX — không bảng giá bịa.",
     toneGroup: "cashflow-ops",
     status: "published",
     publishedSlug: "du-an-can-ho-van-hanh-cho-thue-dai-han-2026",
