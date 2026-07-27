@@ -36,7 +36,7 @@ export const QL13_COMMERCIAL_SLUGS = [
 type ImgPack = {
   hero: { url: string; alt: string };
   locationMap: { url: string; alt: string; caption: string };
-  gallery: { url: string; caption: string }[];
+  gallery: readonly { readonly url: string; readonly caption: string }[];
 };
 
 function applyCommercialCta(landing: ProjectLanding, projectName: string) {
@@ -465,7 +465,7 @@ export function buildEmeraldBoulevardMock(): ProjectDetail {
 
 function previewListings(
   idPrefix: string,
-  imgs: ImgPack["gallery"],
+  imgs: readonly { readonly url: string; readonly caption: string }[],
 ): ProjectLandingListingCard[] {
   return [
     {
