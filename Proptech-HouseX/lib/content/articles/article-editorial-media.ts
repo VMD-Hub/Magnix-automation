@@ -334,6 +334,78 @@ export const ARTICLE_EDITORIAL_COVERS: Record<string, EditorialCover> = {
     caption:
       "Khung chọn dự án Phủ Lý, Duy Tiên, Thường Tín, Thanh Trì — pháp lý trước giá.",
   },
+  "mo-hinh-build-to-rent-nha-o-cho-thue-dai-han-tai-cau-truc-2026": {
+    url: HERO.skyline,
+    alt: "Đô thị cao tầng — minh họa mô hình Build-to-Rent / nhà ở cho thuê dài hạn",
+    caption:
+      "BTR: xây để cho thuê dài hạn chuyên nghiệp — khác mua lẻ rồi cho thuê lại.",
+  },
+  "chinh-sach-nha-o-cho-thue-dai-han-tru-cot-an-cu-2030": {
+    url: HERO.civic,
+    alt: "Không gian đô thị — minh họa chính sách nhà ở cho thuê dài hạn đến 2030",
+    caption:
+      "Trụ cột an cư quốc gia: thuê dài hạn bên cạnh nhà để bán và nhà ở xã hội.",
+  },
+  "hop-dong-thue-nha-dai-han-15-20-nam-lech-pha-cung-cau-2026": {
+    url: HERO.metroHub,
+    alt: "Cửa ngõ đô thị — minh họa hợp đồng thuê nhà dài hạn 15–20 năm",
+    caption:
+      "Khung thuê dài hạn giúp an cư mà không chịu áp lực mua đứt ngay.",
+  },
+  "gia-nha-vuot-kha-nang-co-nen-thue-dai-han-2026": {
+    url: HERO.urban,
+    alt: "Skyline đô thị — minh họa bài toán giá nhà vượt khả năng chi trả",
+    caption:
+      "Thuê dài hạn như lựa chọn bảo toàn dòng tiền khi giá nội đô vượt thu nhập.",
+  },
+  "thue-can-ho-dai-han-vs-chung-cu-mini-phong-tro-2026": {
+    url: HERO.thuThiemDay,
+    alt: "Không gian sống đô thị — so sánh thuê dài hạn với mini / phòng trọ",
+    caption:
+      "Đối chiếu PCCC, vận hành và ổn định hợp đồng trước khi ký thuê.",
+  },
+  "quyen-loi-nguoi-thue-nha-o-cho-thue-the-he-moi-2026": {
+    url: HERO.bitexcoMetro,
+    alt: "Đô thị hiện đại — minh họa quyền lợi người thuê thế hệ mới",
+    caption:
+      "Giá thuê ổn định theo khung hợp đồng và vận hành chuyên nghiệp.",
+  },
+  "tod-vanh-dai-nha-o-cho-thue-dai-han-2026": {
+    url: HERO.viaduct,
+    alt: "Hạ tầng metro / vành đai — minh họa TOD gắn nhà ở cho thuê",
+    caption:
+      "Ưu tiên quỹ đất quanh ga và nút giao cho sản phẩm thuê dài hạn.",
+  },
+  "can-ho-cho-thue-chuyen-gia-truc-ql13-vanh-dai-4-2026": {
+    url: HERO.urban,
+    alt: "Cửa ngõ công nghiệp — minh họa căn hộ cho thuê chuyên gia QL13",
+    caption:
+      "Nhu cầu KCN trên hành lang QL13 và vành đai — không bịa giá thuê.",
+  },
+  "dong-von-dau-tu-can-ho-cho-thue-dai-han-2026": {
+    url: HERO.skyline,
+    alt: "Toàn cảnh đô thị — minh họa dòng vốn dài hạn vào căn hộ cho thuê",
+    caption:
+      "Logic quỹ và NĐT: dòng tiền đều, bảo toàn dòng vốn — không cam kết lợi nhuận.",
+  },
+  "du-an-can-ho-van-hanh-cho-thue-dai-han-2026": {
+    url: HERO.thuThiemNight,
+    alt: "Cao tầng cửa ngõ — minh họa dự án phù hợp vận hành cho thuê",
+    caption:
+      "Checklist thiết kế–vận hành; soft-link ID Town, Emerald, HGX trên House X.",
+  },
+  "tinh-dong-tien-don-bay-can-ho-cho-thue-2026": {
+    url: HERO.civic,
+    alt: "Không gian làm việc đô thị — minh họa tính dòng tiền căn hộ cho thuê",
+    caption:
+      "Bảng khung vốn tự có, lãi vay, tiền thuê và trống căn — định tính.",
+  },
+  "thue-cho-thue-nha-2026-ma-nganh-68103": {
+    url: HERO.metroHub,
+    alt: "Trung tâm đô thị — minh họa thuế cho thuê nhà và mã ngành 68103",
+    caption:
+      "Khung thuế và thủ tục — xác minh văn bản hiệu lực trước khi kê khai.",
+  },
 };
 
 /** Khối markdown ảnh minh hoạ trong thân bài (chuẩn báo chí). */

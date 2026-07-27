@@ -93,6 +93,12 @@ export const NOXH_TAG_HN_SOUTHWEST = {
   name: "Trục Tây Nam Hà Nam – Ninh Bình",
 } as const;
 
+/** Nhà ở cho thuê dài hạn (BTR) — GENERAL_POLICY, không thuộc hành trình hồ sơ NOXH. */
+export const NOXH_TAG_BTR = {
+  slug: "nha-o-cho-thue-dai-han",
+  name: "Nhà ở cho thuê dài hạn",
+} as const;
+
 export const NOXH_HANDBOOK_TAGS = [
   NOXH_TAG_CHINH_SACH,
   NOXH_TAG_CHON_NHA,
@@ -110,6 +116,7 @@ export const NOXH_HANDBOOK_TAGS = [
   NOXH_TAG_HN_RING4,
   NOXH_TAG_HN_WEST,
   NOXH_TAG_HN_SOUTHWEST,
+  NOXH_TAG_BTR,
 ] as const;
 
 export const NOXH_HANDBOOK_TAG_SLUGS = new Set<string>(
@@ -163,6 +170,8 @@ export const NOXH_HANDBOOK_TAG_DESCRIPTIONS: Record<
     "Đại lộ Thăng Long – Hòa Lạc: công nghệ, giáo dục bậc cao, Nam Từ Liêm / Mỹ Đình.",
   [NOXH_TAG_HN_SOUTHWEST.slug]:
     "Tây Nam Vùng Thủ đô: Hà Nam – Ninh Bình; QL1A, Pháp Vân – Cầu Giẽ, công nghiệp sạch và sinh thái.",
+  [NOXH_TAG_BTR.slug]:
+    "Nhà ở cho thuê dài hạn (Build-to-Rent): chính sách quốc gia, hợp đồng dài hạn, TOD và dòng vốn — tách khỏi hồ sơ NOXH.",
 };
 
 /** 301 slug chủ đề cũ → slug mới hoặc hub cẩm nang. */
@@ -245,6 +254,10 @@ export const NOXH_HANDBOOK_SECONDARY_CLUSTERS = [
   {
     ...NOXH_TAG_HN_SOUTHWEST,
     description: NOXH_HANDBOOK_TAG_DESCRIPTIONS[NOXH_TAG_HN_SOUTHWEST.slug],
+  },
+  {
+    ...NOXH_TAG_BTR,
+    description: NOXH_HANDBOOK_TAG_DESCRIPTIONS[NOXH_TAG_BTR.slug],
   },
 ] as const;
 

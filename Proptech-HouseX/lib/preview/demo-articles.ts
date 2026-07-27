@@ -24,6 +24,10 @@ import { HANOI_AIRPORT_CORRIDOR_ARTICLES_2026 } from "@/lib/content/articles/han
 import { HANOI_RING4_CORRIDOR_ARTICLES_2026 } from "@/lib/content/articles/hanoi-ring4-corridor-series-2026";
 import { HANOI_WEST_CORRIDOR_ARTICLES_2026 } from "@/lib/content/articles/hanoi-west-corridor-series-2026";
 import { HANOI_SOUTHWEST_CORRIDOR_ARTICLES_2026 } from "@/lib/content/articles/hanoi-southwest-corridor-series-2026";
+import { BTR_POLICY_SERIES_2026 } from "@/lib/content/articles/btr-policy-series-2026";
+import { BTR_MINDSET_SERIES_2026 } from "@/lib/content/articles/btr-mindset-series-2026";
+import { BTR_CORRIDOR_SERIES_2026 } from "@/lib/content/articles/btr-corridor-series-2026";
+import { BTR_CASHFLOW_SERIES_2026 } from "@/lib/content/articles/btr-cashflow-series-2026";
 import {
   handbookTagSummaries,
   isNoxhHandbookArticle,
@@ -349,6 +353,10 @@ Xem thêm [chuyên mục phong thủy](/phong-thuy) và [xem hướng nhà](/con
   ...HANOI_RING4_CORRIDOR_ARTICLES_2026,
   ...HANOI_WEST_CORRIDOR_ARTICLES_2026,
   ...HANOI_SOUTHWEST_CORRIDOR_ARTICLES_2026,
+  ...BTR_POLICY_SERIES_2026,
+  ...BTR_MINDSET_SERIES_2026,
+  ...BTR_CORRIDOR_SERIES_2026,
+  ...BTR_CASHFLOW_SERIES_2026,
 ];
 
 const DEMO_ARTICLES: ArticleDetail[] = DEMO_ARTICLES_RAW.map(applyEditorialMedia);
