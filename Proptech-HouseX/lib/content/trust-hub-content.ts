@@ -153,7 +153,7 @@ export const EXPERTS_INDEX = {
 export const CONTACT_PAGE = {
   metaTitle: "Liên hệ House X (timnhaxahoi.com)",
   metaDescription:
-    "Liên hệ House X tại /lien-he: tư vấn dịch vụ vay, định giá, thiết kế–thi công; báo tin sai; hỗ trợ tài khoản khách hàng và môi giới trong giờ hành chính.",
+    "Liên hệ House X tại /lien-he: tư vấn vay, định giá, nội thất, cộng tác viên; báo tin sai; hỗ trợ tài khoản trong giờ hành chính.",
   title: "Liên hệ & hỗ trợ House X",
   lead: "Chọn đúng kênh — chúng tôi phản hồi trong giờ hành chính (T2–T6, 8:30–17:30). Trang chính thức: /lien-he.",
   routes: [
@@ -161,6 +161,11 @@ export const CONTACT_PAGE = {
       title: "Tư vấn dịch vụ",
       desc: "Vay mua nhà, thẩm định giá, thiết kế nội thất — để lại form bên dưới.",
       href: "/lien-he",
+    },
+    {
+      title: "Tư vấn cộng tác viên",
+      desc: "Làm rõ mô hình giới thiệu / bán hàng liên kết trước khi đăng ký.",
+      href: "/lien-he?goi=tu-van-cong-tac-vien#tu-van",
     },
     {
       title: "Báo tin sai / góp ý nội dung",

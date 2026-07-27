@@ -21,7 +21,7 @@ import { ABOUT_PARTNER_SECTION } from "@/lib/content/messaging/about-public";
 import { NAV_MORE } from "@/lib/content/site-nav";
 
 const FORBIDDEN_PUBLIC =
-  /cấp\s*[1-4]|cap\s*[1-4]|15[.\s]?000[.\s]?000|15000000|Build-to-Share|đại dương xanh|công khai\s*(cơ chế|hoa hồng)?\s*100%|Affiliate NOXH thế hệ mới|loại bỏ hoàn toàn|rồi mới được xem cơ chế|cơ chế thưởng chi tiết mở sau|không công bố bảng|\bclaim\b|HX-CTV|khóa hội nhập|Lead gắn|nhận mã cộng tác|nộp hồ sơ CTV|admin duyệt/i;
+  /cấp\s*[1-4]|cap\s*[1-4]|15[.\s]?000[.\s]?000|15000000|Build-to-Share|đại dương xanh|công khai\s*(cơ chế|hoa hồng)?\s*100%|Affiliate NOXH thế hệ mới|loại bỏ hoàn toàn|rồi mới được xem cơ chế|cơ chế thưởng chi tiết mở sau|không công bố bảng|\bclaim\b|HX-CTV|khóa hội nhập|Lead gắn|nhận mã cộng tác|nộp hồ sơ CTV|admin duyệt|Liên hệ hỏi chương trình/i;
 
 function allPublicBlob(): string {
   const landing = [
@@ -57,10 +57,14 @@ describe("CTV affiliate landing (phase 1+SEO hub)", () => {
     }
   });
 
-  it("CTAs point at register, CTV form, and contact", () => {
+  it("CTAs point at register, CTV form, and consult deep-link", () => {
     assert.match(CTV_AFFILIATE_CTAS.primary.href, /dang-ky\/moi-gioi/);
     assert.equal(CTV_AFFILIATE_CTAS.secondary.href, "/moi-gioi/dang-ky-ctv");
-    assert.equal(CTV_AFFILIATE_CTAS.tertiary.href, "/lien-he");
+    assert.equal(CTV_AFFILIATE_CTAS.tertiary.label, "Tư vấn thêm");
+    assert.match(
+      CTV_AFFILIATE_CTAS.tertiary.href,
+      /lien-he\?goi=tu-van-cong-tac-vien/,
+    );
   });
 
   it("does not publish commission tiers or internal marketing jargon", () => {

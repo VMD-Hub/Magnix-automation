@@ -174,8 +174,8 @@ export const CTV_AFFILIATE_CTAS = {
     href: "/moi-gioi/dang-ky-ctv",
   },
   tertiary: {
-    label: "Liên hệ hỏi chương trình",
-    href: "/lien-he",
+    label: "Tư vấn thêm",
+    href: "/lien-he?goi=tu-van-cong-tac-vien#tu-van",
   },
   closing:
     "Thị trường đang thanh lọc chiêu chụp giật và đua cắt máu. Minh bạch và chia sẻ đúng việc, đúng người mới đi được đường dài. Đăng ký hôm nay để tham gia mạng lưới cộng tác viên House X.",

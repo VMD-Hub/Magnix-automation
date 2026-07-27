@@ -34,7 +34,7 @@ export function ctvAffiliateArticlePath(slug: string): string {
 
 const CTA_BLOCK = `## Đăng ký cộng tác viên House X
 
-[Đăng ký tham gia](/dang-ky/moi-gioi?next=/moi-gioi/dang-ky-ctv), [tiếp tục nếu đã có tài khoản](/moi-gioi/dang-ky-ctv), hoặc [liên hệ](/lien-he) nếu bạn muốn hỏi trước.
+[Đăng ký tham gia](/dang-ky/moi-gioi?next=/moi-gioi/dang-ky-ctv), [tiếp tục nếu đã có tài khoản](/moi-gioi/dang-ky-ctv), hoặc [tư vấn thêm](/lien-he?goi=tu-van-cong-tac-vien#tu-van) nếu bạn muốn làm rõ trước khi đăng ký.
 
 Xem tổng quan chương trình: [${HUB}](${HUB}).`;
 
@@ -204,7 +204,7 @@ ${CTA_BLOCK}
 
 - Biết mình thuộc chân dung nào: [Chân dung đối tác](${ctvAffiliateArticlePath(SLUG_PERSONA)}).
 - Sẵn sàng hợp tác rõ ràng với House X — không dựa vào thỏa thuận miệng ngoài luồng.
-- Có câu hỏi? [Liên hệ](/lien-he) trước cũng được.
+- Cần làm rõ trước? [Tư vấn thêm](/lien-he?goi=tu-van-cong-tac-vien#tu-van).
 
 ## Câu hỏi thường gặp
 
@@ -226,7 +226,7 @@ Theo thỏa thuận hợp tác rõ ràng với House X — không mặc cả “
 
 ### Tôi chỉ muốn hỏi trước khi đăng ký?
 
-Dùng [liên hệ](/lien-he) hoặc đọc lại [hub cộng tác viên](${HUB}).
+[Tư vấn thêm](/lien-he?goi=tu-van-cong-tac-vien#tu-van) hoặc đọc lại [hub cộng tác viên](${HUB}).
 
 ${CTA_BLOCK}
 `,

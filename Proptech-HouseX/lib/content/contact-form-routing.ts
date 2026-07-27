@@ -20,6 +20,15 @@ export const CONTACT_FORM_INTENTS = {
     defaultMessage:
       "Tôi muốn đặt lịch rà soát pháp lý & tài chính 15 phút (miễn phí) trước khi quyết định xuống tiền.",
   },
+  "tu-van-cong-tac-vien": {
+    vertical: "cong-tac-vien",
+    need: "mo-hinh-ctv",
+    sectionTitle: "Tư vấn chương trình cộng tác viên",
+    sectionLead:
+      "Dành cho người muốn giới thiệu, bán hàng liên kết hoặc mua qua House X — làm rõ mô hình phù hợp trước khi đăng ký.",
+    defaultMessage:
+      "Tôi muốn được tư vấn thêm về chương trình cộng tác viên House X.",
+  },
 } as const satisfies Record<string, ContactFormIntent>;
 
 export type ContactFormIntentKey = keyof typeof CONTACT_FORM_INTENTS;
