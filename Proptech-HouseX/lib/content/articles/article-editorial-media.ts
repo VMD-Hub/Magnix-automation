@@ -47,6 +47,24 @@ export const ARTICLE_EDITORIAL_COVERS: Record<string, EditorialCover> = {
     alt: "Phối cảnh block NOXH Lý Thường Kiệt",
     caption: "Công trình NOXH tại 324 Lý Thường Kiệt, Quận 10 — bàn giao dự kiến 08/2026.",
   },
+  "ho-so-mua-noxh-ly-thuong-kiet-doi-tuong-checklist-2026": {
+    url: PHU_THO_DMC_IMAGES.gallery[2].url,
+    alt: "Thiết kế căn hộ NOXH Lý Thường Kiệt — minh họa đối tượng hồ sơ",
+    caption:
+      "Hồ sơ mua NOXH Lý Thường Kiệt — đối chiếu đối tượng, nhà ở và thu nhập theo Luật Nhà ở.",
+  },
+  "vi-sao-noxh-ly-thuong-kiet-sot-so-sanh-gia-quan-10-2026": {
+    url: PHU_THO_DMC_IMAGES.locationMap.url,
+    alt: PHU_THO_DMC_IMAGES.locationMap.alt,
+    caption:
+      "Vị trí 324 Lý Thường Kiệt gần Nhà thi đấu Phú Thọ và tiện ích trung tâm Quận 10.",
+  },
+  "canh-bao-lua-dao-suat-noi-bo-noxh-ly-thuong-kiet-2026": {
+    url: PHU_THO_DMC_IMAGES.gallery[1].url,
+    alt: "Mặt tiền dự án NOXH Lý Thường Kiệt — cảnh báo giao dịch ngoài luồng",
+    caption:
+      "Chỉ giao dịch qua hợp đồng và kênh chính thức CĐT Đức Mạnh / Sở Xây dựng — tránh suất nội bộ trên mạng.",
+  },
   "so-sanh-gia-noxh-ly-thuong-kiet-dta-happy-home-2026": {
     url: DTA_HAPPY_HOME_IMAGES.hero.url,
     alt: DTA_HAPPY_HOME_IMAGES.hero.alt,

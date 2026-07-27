@@ -28,6 +28,7 @@ import { BTR_POLICY_SERIES_2026 } from "@/lib/content/articles/btr-policy-series
 import { BTR_MINDSET_SERIES_2026 } from "@/lib/content/articles/btr-mindset-series-2026";
 import { BTR_CORRIDOR_SERIES_2026 } from "@/lib/content/articles/btr-corridor-series-2026";
 import { BTR_CASHFLOW_SERIES_2026 } from "@/lib/content/articles/btr-cashflow-series-2026";
+import { LTK_FUNNEL_SERIES_2026 } from "@/lib/content/articles/ltk-funnel-series-2026";
 import {
   handbookTagSummaries,
   isNoxhHandbookArticle,
@@ -35,7 +36,6 @@ import {
   PHONG_THUY_ARTICLE_TAG,
 } from "@/lib/content/articles/noxh-handbook-tags";
 import { CS_PROJECT_SLUG } from "@/lib/preview/kdc-chang-song-mock";
-import { LTK_PROJECT_SLUG } from "@/lib/preview/phu-tho-dmc-mock";
 
 const NOW = new Date("2026-06-29T00:00:00.000Z");
 
@@ -51,40 +51,6 @@ export const DEMO_ARTICLE_TAGS: ArticleTagSummary[] = [
 ];
 
 const DEMO_ARTICLES_RAW: ArticleDetail[] = [
-  {
-    id: "demo-article-ltk-gia",
-    slug: "gia-nha-o-xa-hoi-ly-thuong-kiet-cong-bo-6-2026",
-    title: "Giá nhà ở xã hội Lý Thường Kiệt công bố chính thức cuối 6/2026",
-    excerpt:
-      "Sở Xây dựng TP.HCM và CĐT công bố mức 23,25 triệu/m² — căn tham chiếu từ ~800 triệu đến ~1,8 tỷ tùy diện tích.",
-    body: `## Giá NOXH Lý Thường Kiệt được công bố chính thức
-
-Cuối tháng 6/2026, Sở Xây dựng TP.HCM và Công ty Cổ phần Đức Mạnh công bố phương án giá bán cho dự án Nhà ở xã hội Lý Thường Kiệt (Phú Thọ DMC) tại 324 Lý Thường Kiệt, Quận 10 — chi tiết trên [VnExpress](https://vnexpress.net/hai-du-an-nha-xa-hoi-noi-thanh-tp-hcm-co-gia-tu-23-trieu-va-35-trieu-mot-m2-5090748.html).
-
-${EDITORIAL_FIGURES.ltkPhoiCanh}
-
-Mức giá chính thức: 23.251.398 đồng/m² (đã VAT), chưa gồm 2% phí bảo trì và hệ số điều chỉnh theo vị trí căn. Với diện tích 34,5–77 m², giá căn tham chiếu khoảng 800 triệu – 1,8 tỷ.
-
-## Quy mô bán và áp lực hồ sơ
-
-Dự án mở bán 755 căn NOXH; hơn 12.000 hồ sơ đăng ký từ các đợt rà soát trước. Công trình đang hoàn thiện cuối, dự kiến bàn giao khoảng tháng 8/2026.
-
-Tra cứu mặt bằng và gallery trên trang dự án [/du-an/nha-o-xa-hoi-ly-thuong-kiet](/du-an/nha-o-xa-hoi-ly-thuong-kiet). Cùng chủ đề: [công bố giá hai dự án NOXH nội thành](/tin-tuc/tp-hcm-cong-bo-gia-2-du-an-noxh-ly-thuong-kiet-phu-tho-dmc) và [so sánh với phương án vùng ven](/tin-tuc/so-sanh-gia-noxh-ly-thuong-kiet-dta-happy-home-2026).
-
-*HouseX tổng hợp từ VnExpress và thông tin CĐT — không phải công bố chính thức của cơ quan nhà nước.*`,
-    status: "PUBLISHED",
-    publishedAt: new Date("2026-06-28T00:00:00.000Z"),
-    updatedAt: NOW,
-    coverImageUrl: "/images/articles/phu-tho-dmc-phoi-canh.jpg",
-    authorName: "Ban biên tập House X",
-    seoTitle: "Giá NOXH Lý Thường Kiệt 6/2026 — ~23,25 triệu/m²",
-    seoDesc:
-      "Công bố giá Nhà ở xã hội Lý Thường Kiệt (Phú Thọ DMC): 23,25 tr/m², 755 căn bán, bàn giao 08/2026.",
-    tags: [{ slug: "du-an-gia-tien-do-noxh", name: "Dự án, giá & tiến độ" }],
-    projects: [
-      { slug: LTK_PROJECT_SLUG, name: "Nhà ở xã hội Lý Thường Kiệt" },
-    ],
-  },
   {
     id: "demo-article-cs-tiendo",
     slug: "tien-do-noxh-kdc-chang-song-phuoc-tan-2026",
@@ -357,6 +323,7 @@ Xem thêm [chuyên mục phong thủy](/phong-thuy) và [xem hướng nhà](/con
   ...BTR_MINDSET_SERIES_2026,
   ...BTR_CORRIDOR_SERIES_2026,
   ...BTR_CASHFLOW_SERIES_2026,
+  ...LTK_FUNNEL_SERIES_2026,
 ];
 
 const DEMO_ARTICLES: ArticleDetail[] = DEMO_ARTICLES_RAW.map(applyEditorialMedia);

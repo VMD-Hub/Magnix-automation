@@ -27,6 +27,7 @@ import { BTR_POLICY_SERIES_2026 } from "@/lib/content/articles/btr-policy-series
 import { BTR_MINDSET_SERIES_2026 } from "@/lib/content/articles/btr-mindset-series-2026";
 import { BTR_CORRIDOR_SERIES_2026 } from "@/lib/content/articles/btr-corridor-series-2026";
 import { BTR_CASHFLOW_SERIES_2026 } from "@/lib/content/articles/btr-cashflow-series-2026";
+import { LTK_FUNNEL_SERIES_2026 } from "@/lib/content/articles/ltk-funnel-series-2026";
 import { getDemoArticleBySlug } from "@/lib/preview/demo-articles";
 
 const EDITORIAL_SERIES = [
@@ -53,10 +54,10 @@ const EDITORIAL_SERIES = [
   ...BTR_MINDSET_SERIES_2026,
   ...BTR_CORRIDOR_SERIES_2026,
   ...BTR_CASHFLOW_SERIES_2026,
+  ...LTK_FUNNEL_SERIES_2026,
 ];
 
 const LEGACY_DEMO_SLUGS = [
-  "gia-nha-o-xa-hoi-ly-thuong-kiet-cong-bo-6-2026",
   "tien-do-noxh-kdc-chang-song-phuoc-tan-2026",
   "dieu-kien-mua-nha-o-xa-hoi-2026-tom-tat",
 ];
