@@ -88,7 +88,7 @@ ${EDITORIAL_FIGURES.bitexcoMetro}
 
 Lõi phía Tây gần Mỹ Đình hưởng lợi từ cụm thể thao – hội nghị, mật độ dịch vụ và kết nối vào trung tâm hành chính. Tây Mỗ và Đại Mỗ mở thêm quỹ căn hộ cao tầng với không gian sống rộng hơn một số khu lõi lịch sử, đồng thời vẫn bám Đại lộ Thăng Long. Trên thực địa Hà Nội, thanh khoản “ở thực” thường gắn cộng đồng cư dân ổn định, căn vuông vức và hướng ban công Đông Nam / Nam khi có lựa chọn — hơn là khẩu hiệu ngắn hạn gắn tên đại lộ.
 
-Bối cảnh macro: [Quy hoạch Thăng Long – Hòa Lạc](/tin-tuc/kien-thuc/quy-hoach-truc-phia-tay-dai-lo-thang-long-hoa-lac-2026) · Pillar: [Năm trục tăng trưởng Vùng Thủ đô](${PILLAR_HREF}).
+Bối cảnh: [Quy hoạch Thăng Long – Hòa Lạc](/tin-tuc/kien-thuc/quy-hoach-truc-phia-tay-dai-lo-thang-long-hoa-lac-2026) · Xem thêm: [Năm trục tăng trưởng Vùng Thủ đô](${PILLAR_HREF}).
 
 ${EDITORIAL_FIGURES.hcmSkyline}
 

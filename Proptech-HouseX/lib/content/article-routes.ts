@@ -17,11 +17,11 @@ export const NEWS_HUB_SEO_TITLE =
   "Tin tức bất động sản — kiến thức & cẩm nang" as const;
 
 export const NEWS_HUB_INTRO =
-  "Cập nhật biến động thị trường bất động sản, lộ trình mua nhà ở xã hội và phân tích thực tế theo từng chuyên mục — đọc đúng chỗ, quyết định có căn cứ." as const;
+  "Tin thị trường, lộ trình mua nhà ở xã hội và phân tích dự án — thông tin có căn cứ để bạn quyết định." as const;
 
 /** Meta description riêng hub tin tức (70–160 ký tự). */
 export const NEWS_HUB_SEO_DESCRIPTION =
-  "Tin tức và cẩm nang BĐS trên House X: nhà ở xã hội, vay mua nhà, dự án và kiến thức thực tế — giúp bạn quyết định có căn cứ." as const;
+  "Tin tức bất động sản trên House X: nhà ở xã hội, vay mua nhà, dự án và phân tích thực tế — giúp bạn quyết định có căn cứ." as const;
 
 /** Segment filesystem (app/tin-tuc/cam-nang-noxh) — không dùng làm URL công khai. */
 export const NOXH_HANDBOOK_FS_SEGMENT = "cam-nang-noxh" as const;
@@ -35,13 +35,13 @@ export const RE_KNOWLEDGE_PATH = "/tin-tuc/kien-thuc" as const;
 export const RE_KNOWLEDGE_TITLE = "Kiến thức bất động sản" as const;
 
 export const RE_KNOWLEDGE_SEO_TITLE =
-  "Kiến thức bất động sản — hành lang, thuê dài hạn & hạ tầng | House X" as const;
+  "Kiến thức bất động sản — hạ tầng, thuê dài hạn & đô thị | House X" as const;
 
 export const RE_KNOWLEDGE_INTRO =
-  "Phân tích hành lang tăng trưởng, nhà ở cho thuê dài hạn, TOD và hạ tầng vùng — đọc theo chủ đề, không lẫn với hồ sơ nhà ở xã hội." as const;
+  "Hạ tầng vùng, hành lang đô thị và nhà ở cho thuê dài hạn — khung để chọn vị trí và cách an cư phù hợp khả năng." as const;
 
 export const RE_KNOWLEDGE_SEO_DESCRIPTION =
-  "Kiến thức BĐS trên House X: hành lang đô thị TP.HCM & Hà Nội, thuê dài hạn (BTR), TOD và hạ tầng kết nối vùng." as const;
+  "Kiến thức bất động sản trên House X: hành lang đô thị TP.HCM và Hà Nội, nhà ở cho thuê dài hạn, hạ tầng và quy hoạch kết nối vùng." as const;
 
 /** @deprecated Dùng NOXH_HANDBOOK_PATH — giữ alias tên cũ trong import. */
 export const NOXH_HANDBOOK_SEGMENT = NOXH_HANDBOOK_FS_SEGMENT;

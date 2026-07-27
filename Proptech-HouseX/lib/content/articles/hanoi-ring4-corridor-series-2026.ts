@@ -166,7 +166,7 @@ ${EDITORIAL_FIGURES.thuThiem}
 
 Thông xe từng đoạn rút ngắn thời gian liên vùng và mở thêm lựa chọn an cư vệ tinh — nhưng không đồng nghĩa mọi thửa đất gần đường đều thanh khoản tốt. Tín hiệu gốc là pháp lý thửa, hành lang kỹ thuật tuyến và khả năng tiếp cận mặt đường hiện hữu; thông xe chỉ là điều kiện cần, không đủ. House X mô tả lợi ích định tính theo khu vực — không công bố phần trăm tăng giá.
 
-Đọc tiến độ trước: [Tiến độ Vành đai 4](/tin-tuc/kien-thuc/tien-do-vanh-dai-4-vung-thu-do-2026) · Khung TOD: [TOD và nút giao Vành đai 4](/tin-tuc/kien-thuc/tod-doc-vanh-dai-4-vung-thu-do-2026) · Pillar: [Năm trục tăng trưởng Vùng Thủ đô](${PILLAR_HREF}).
+Đọc tiến độ trước: [Tiến độ Vành đai 4](/tin-tuc/kien-thuc/tien-do-vanh-dai-4-vung-thu-do-2026) · Phát triển quanh ga: [TOD và nút giao Vành đai 4](/tin-tuc/kien-thuc/tod-doc-vanh-dai-4-vung-thu-do-2026) · Xem thêm: [Năm trục tăng trưởng Vùng Thủ đô](${PILLAR_HREF}).
 
 ${EDITORIAL_FIGURES.hcmSkyline}
 

@@ -85,7 +85,7 @@ ${EDITORIAL_FIGURES.bitexcoMetro}
 
 Khi FDI và nhà máy ưu tiên khu công nghiệp sạch (tiêu chuẩn môi trường, hạ tầng kỹ thuật đồng bộ), lực lượng chuyên gia và lao động kỹ thuật cần chỗ ở gần việc. Thửa đất hoặc nhà phố mặt đường quanh hành lang phía Nam trở thành kênh tích sản dài hạn — nếu pháp lý rõ và hạ tầng thực tế đủ dùng. Đây không phải lời hứa tăng giá ngắn hạn, mà là hệ quả của phân vai vệ tinh công nghiệp – dịch vụ trong cấu trúc vùng.
 
-Bối cảnh macro: [Quy hoạch trục phía Nam – Hà Nam](/tin-tuc/kien-thuc/quy-hoach-truc-phia-nam-ha-nam-ve-tinh-2026) · Pillar: [Năm trục tăng trưởng Vùng Thủ đô](${PILLAR_HREF}).
+Bối cảnh: [Quy hoạch trục phía Nam – Hà Nam](/tin-tuc/kien-thuc/quy-hoach-truc-phia-nam-ha-nam-ve-tinh-2026) · Xem thêm: [Năm trục tăng trưởng Vùng Thủ đô](${PILLAR_HREF}).
 
 ${EDITORIAL_FIGURES.hcmSkyline}
 

@@ -60,11 +60,11 @@ Công cụ mô phỏng: [/tinh-tra-gop](/tinh-tra-gop) — chỉ tham khảo.
 
 ${EDITORIAL_FIGURES.thuThiem}
 
-## Đọc tiếp trên cùng silo?
+## Đọc thêm
 
 - So sánh sản phẩm: [Thuê dài hạn vs chung cư mini / phòng trọ](/tin-tuc/kien-thuc/thue-can-ho-dai-han-vs-chung-cu-mini-phong-tro-2026)
 - Quyền lợi người thuê: [Nhà ở cho thuê thế hệ mới](/tin-tuc/kien-thuc/quyen-loi-nguoi-thue-nha-o-cho-thue-the-he-moi-2026)
-- Chủ đề: [${HUB_HREF}](${HUB_HREF})
+- Xem thêm chủ đề [nhà ở cho thuê dài hạn](${HUB_HREF})
 
 ${BTR_SUPPORT_CLOSING}
 
@@ -79,7 +79,7 @@ ${BTR_LEGAL_DISCLAIMER}`,
     seoTitle:
       "Giá nhà vượt khả năng — có nên thuê dài hạn? | HouseX",
     seoDesc:
-      "Empathetic Expert: thuê dài hạn vs mua bằng mọi giá khi giá nội đô vượt thu nhập — không sỉ nhục nhu cầu sở hữu.",
+      "Khi giá nhà nội đô vượt thu nhập khả dụng: cân nhắc thuê dài hạn thay vì mua bằng mọi giá — khung tự đối chiếu trước khi quyết định.",
     tags: [NOXH_TAG_BTR],
     projects: [],
   },
@@ -94,7 +94,7 @@ ${BTR_LEGAL_DISCLAIMER}`,
 
 Nhiều người trẻ chọn chung cư mini hoặc phòng trọ vì giá thuê khởi điểm thấp, nhưng đánh đổi an toàn PCCC, không gian sống và rủi ro tăng giá / đuổi nhà ngắn hạn. Tổ hợp căn hộ cho thuê dài hạn chuyên nghiệp thường đắt hơn theo tháng — đổi lại vận hành và hợp đồng rõ hơn. Bảng dưới là khung định tính, không phải bảng giá thị trường.
 
-Pillar: [Chính sách thuê dài hạn](${PILLAR_HREF}).
+Xem thêm: [Chính sách thuê dài hạn](${PILLAR_HREF}).
 
 ${EDITORIAL_FIGURES.hcmSkyline}
 
@@ -139,7 +139,7 @@ ${BTR_LEGAL_DISCLAIMER}`,
     seoTitle:
       "Thuê căn hộ dài hạn vs chung cư mini / phòng trọ — bảng so sánh | HouseX",
     seoDesc:
-      "So sánh PCCC, vận hành, hợp đồng và ổn định giá thuê giữa BTR chuyên nghiệp, chung cư mini và phòng trọ.",
+      "So sánh PCCC, vận hành, hợp đồng và ổn định giá thuê giữa tổ hợp cho thuê dài hạn chuyên nghiệp, chung cư mini và phòng trọ.",
     tags: [NOXH_TAG_BTR],
     projects: [],
   },
@@ -159,7 +159,7 @@ Khảo sát truyền thông và phản ánh thực địa thường lặp lại 
 3. Sửa chữa chậm hoặc chi phí đẩy sang người thuê không rõ ràng.
 4. Thiếu không gian xanh / chỗ để xe / an ninh đêm.
 
-Nhà ở cho thuê thế hệ mới (tổ hợp chuyên nghiệp / hướng BTR) được kỳ vọng giải quyết các điểm trên bằng hợp đồng dài hơn, phụ lục điều chỉnh giá, và ban quản lý có trách nhiệm. Pillar: [Chính sách đến 2030](${PILLAR_HREF}).
+Nhà ở cho thuê thế hệ mới (tổ hợp chuyên nghiệp / xây để cho thuê dài hạn) được kỳ vọng giải quyết các điểm trên bằng hợp đồng dài hơn, phụ lục điều chỉnh giá, và ban quản lý có trách nhiệm. Xem thêm: [Chính sách đến 2030](${PILLAR_HREF}).
 
 ${EDITORIAL_FIGURES.hcmSkyline}
 

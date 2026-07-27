@@ -75,9 +75,11 @@ describe("LTK SEO funnel series 2026", () => {
     );
   });
 
-  it("article 6 exposes procedure-fear fee scam and Complexity Bias", () => {
+  it("article 6 exposes procedure-fear fee scam without editorial jargon", () => {
     const a = LTK_FUNNEL_SERIES_2026[5]!;
-    assert.ok(/Complexity Bias|phức tạp|vẽ bùa|hù dọa/i.test(a.body));
+    assert.ok(/phức tạp|vẽ bùa|hù dọa|thân lừa/i.test(a.body));
+    assert.ok(!/Complexity Bias|Barrier Obsession|neo góc chuyên gia|Lớp thao túng/i.test(a.body));
+    assert.ok(!/Complexity Bias|neo góc|Lớp thao túng/i.test(a.excerpt));
     assert.ok(a.body.includes("/lien-he"));
     assert.ok(
       a.body.includes("ho-so-mua-noxh-ly-thuong-kiet-doi-tuong-checklist-2026"),

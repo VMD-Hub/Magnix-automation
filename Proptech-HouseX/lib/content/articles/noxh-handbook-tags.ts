@@ -159,7 +159,7 @@ export const NOXH_HANDBOOK_TAG_DESCRIPTIONS: Record<string, string> = {
   [NOXH_TAG_DU_AN_GIA.slug]:
     "Giá bán, tiến độ, so sánh dự án và cập nhật thị trường NOXH.",
   [NOXH_TAG_HA_TANG.slug]:
-    "Khung TOD, quy hoạch tổng thể và điều hướng trục tăng trưởng (TP.HCM / Vùng Thủ đô).",
+    "Quy hoạch, metro/đường vành đai và các trục tăng trưởng ở TP.HCM và Vùng Thủ đô.",
   [NOXH_TAG_NORTH_SOUTH.slug]:
     "Trục dọc sông Sài Gòn hướng biển: Củ Chi – lõi – Nhà Bè – Cần Giờ; BĐS ven sông Nam Sài Gòn.",
   [NOXH_TAG_EAST_WEST.slug]:
@@ -183,7 +183,7 @@ export const NOXH_HANDBOOK_TAG_DESCRIPTIONS: Record<string, string> = {
   [NOXH_TAG_HN_SOUTHWEST.slug]:
     "Tây Nam Vùng Thủ đô: Hà Nam – Ninh Bình; QL1A, Pháp Vân – Cầu Giẽ, công nghiệp sạch và sinh thái.",
   [NOXH_TAG_BTR.slug]:
-    "Nhà ở cho thuê dài hạn (Build-to-Rent): chính sách quốc gia, hợp đồng dài hạn, TOD và dòng tiền vận hành thuê chuyên nghiệp.",
+    "Nhà ở xây để cho thuê dài hạn: chính sách, hợp đồng dài hạn và vận hành thuê chuyên nghiệp.",
 };
 
 /** 301 slug chủ đề cũ → hub đúng silo. */

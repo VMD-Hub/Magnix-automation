@@ -102,7 +102,7 @@ Không phải mọi căn hộ bán trên thị trường đều phù hợp BTR /
 4. Phí quản lý và ban vận hành minh bạch.
 5. Pháp lý đủ điều kiện giao dịch / cho thuê theo quy định.
 
-Pillar: [Chính sách thuê dài hạn](${PILLAR_HREF}) · Dòng vốn: [Quỹ và yield định tính](/tin-tuc/kien-thuc/dong-von-dau-tu-can-ho-cho-thue-dai-han-2026).
+Xem thêm: [Chính sách thuê dài hạn](${PILLAR_HREF}) · Dòng vốn: [Quỹ và yield định tính](/tin-tuc/kien-thuc/dong-von-dau-tu-can-ho-cho-thue-dai-han-2026).
 
 ${EDITORIAL_FIGURES.hcmSkyline}
 
@@ -166,7 +166,7 @@ Nhà đầu tư cần tách hai lớp:
 
 House X không điền số tuyệt đối cho mọi dự án. Bạn thay số từ hợp đồng thuê và lịch vay thực tế.
 
-Pillar: [Thuê dài hạn đến 2030](${PILLAR_HREF}).
+Xem thêm: [Thuê dài hạn đến 2030](${PILLAR_HREF}).
 
 ${EDITORIAL_FIGURES.hcmSkyline}
 
@@ -227,7 +227,7 @@ ${BTR_LEGAL_DISCLAIMER}`,
 
 Nghĩa vụ thuế thay đổi theo văn bản hướng dẫn và ngưỡng doanh thu. House X nêu khung để nhà đầu tư biết hỏi đúng cơ quan / đại lý thuế — không thay thế tư vấn thuế chuyên nghiệp và không cam kết mức phải nộp cho từng hồ sơ.
 
-Pillar: [Chính sách thuê dài hạn](${PILLAR_HREF}) · Dòng tiền: [Công thức định tính](/tin-tuc/kien-thuc/tinh-dong-tien-don-bay-can-ho-cho-thue-2026).
+Xem thêm: [Chính sách thuê dài hạn](${PILLAR_HREF}) · Dòng tiền: [Công thức định tính](/tin-tuc/kien-thuc/tinh-dong-tien-don-bay-can-ho-cho-thue-2026).
 
 ${EDITORIAL_FIGURES.hcmSkyline}
 
