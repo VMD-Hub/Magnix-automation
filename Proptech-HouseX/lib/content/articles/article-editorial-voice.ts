@@ -80,7 +80,7 @@ export const ID_TOWN_PR_CLOSINGS = {
 /** Đoạn kết PR — NOXH Hồ Gươm Xanh (Thuận An). */
 export const HGX_PR_CLOSINGS = {
   metroTod:
-    "Với người đủ điều kiện NOXH và ưu tiên hành lang metro dọc Quốc lộ 13, [Nhà ở xã hội Hồ Gươm Xanh](/du-an/nha-o-xa-hoi-ho-guom-xanh-thuan-an) trong KĐT ~26,4 ha TBS Land — mặt tiền Đại lộ Bình Dương, Lái Thiêu — thuộc nhóm dự án sát trục ga quy hoạch Metro số 2 Bình Dương – TP.HCM (tiếp cận ga Lái Thiêu trong bán kính vài trăm mét theo tổng hợp quy hoạch). HouseX hỗ trợ rà soát điều kiện đối tượng và theo dõi đợt mở bán — bạn có thể [để lại thông tin tại đây](/lien-he).",
+    "Nếu bạn đang tìm chỗ ở xã hội gần hành lang metro tương lai trên Quốc lộ 13, [Hồ Gươm Xanh](/du-an/nha-o-xa-hoi-ho-guom-xanh-thuan-an) đáng để đối chiếu: ga quy hoạch tại Lái Thiêu chỉ cách vài trăm mét theo các phương án đã công bố. HouseX hỗ trợ rà soát điều kiện và theo dõi đợt mở bán — [để lại thông tin tại đây](/lien-he).",
 } as const;
 
 export function getEditorialBodyIssues(body: string): string[] {

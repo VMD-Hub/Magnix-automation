@@ -11,7 +11,7 @@ const UPDATED = new Date("2026-07-27T00:00:00.000Z");
 
 /**
  * Bài hạ tầng — NOXH Hồ Gươm Xanh (Thuận An).
- * Trọng điểm: Metro số 2 Bình Dương – TP.HCM dọc QL13 + TOD tương lai; lồng USP NOXH.
+ * Trọng điểm: Metro số 2 Bình Dương – TP.HCM dọc QL13 + TOD tương lai; lồng điểm nổi bật NOXH.
  * Số liệu ga/khoảng cách: tổng hợp báo chí + CĐT — admin xác minh trước L3 nếu đổi nguồn.
  */
 export const HGX_INFRA_ARTICLES_2026: ArticleDetail[] = [
@@ -54,18 +54,18 @@ ${EDITORIAL_FIGURES.metroHub}
 
 Theo các phương án điều chỉnh được báo chí cập nhật, hướng tuyến dọc QL13 từ Bình Dương đi qua Hiệp Bình Phước và hướng nối vào hệ Metro số 2 TP.HCM (điểm nút thường được nhắc: khu vực Tao Đàn / Quận 1) — nhằm tạo hành lang tàu điện xuyên suốt từ Thuận An vào trung tâm mà không phụ thuộc ùn tắc đường bộ ([Dân trí](https://dantri.com.vn/thoi-su/tphcm-them-tuyen-metro-ket-noi-binh-duong-ben-thanh-vao-nhom-uu-tien-dau-tu-20260605221130643.htm), [VnExpress](https://vnexpress.net/nghien-cuu-keo-dai-tuyen-metro-thu-dau-mot-vao-trung-tam-tp-hcm-5081925.html)).
 
-Tuyến được xếp vào nhóm dự án hạ tầng ưu tiên đầu tư; tiến độ và mốc hoàn thành phụ thuộc phê duyệt, GPMB và vốn — người đọc nên theo dõi văn bản chính thức, không lấy timeline marketing làm cam kết bàn giao metro.
+Tuyến được xếp vào nhóm dự án hạ tầng ưu tiên đầu tư. Tiến độ thực tế phụ thuộc phê duyệt, GPMB và bố trí vốn — mốc hoàn thành sẽ theo công bố của cơ quan nhà nước và chủ đầu tư dự án metro.
 
 Bài liên quan nội thành: [5 khu TOD metro số 2 Bến Thành – Tham Lương](/tin-tuc/tp-hcm-5-khu-tod-metro-so-2-ben-thanh-tham-luong) · [TOD — chiến lược đô thị Việt Nam](/tin-tuc/tod-xuong-song-phat-trien-do-thi-viet-nam-2025-2045)
 
 ${EDITORIAL_FIGURES.bitexcoMetro}
 
-## USP nhà ở xã hội Hồ Gươm Xanh — ngoài “metro trước cửa”?
+## Ngoài metro trước cửa — phân khu NOXH Hồ Gươm Xanh còn những điểm gì?
 
-Hạ tầng chỉ là một nửa câu chuyện. Phân khu NOXH trong KĐT Hồ Gươm Xanh còn các điểm cần cân nhắc khi so sánh suất:
+Hạ tầng chỉ là một nửa câu chuyện. Khi cân nhắc suất nhà ở xã hội trong KĐT Hồ Gươm Xanh, các điểm sau thường được đối chiếu cùng lúc:
 
-| USP | Chi tiết tham chiếu |
-|-----|---------------------|
+| Hạng mục | Thông tin tham chiếu |
+|----------|----------------------|
 | Mô hình đô thị đồng bộ | NOXH 5–12 tầng nằm trong KĐT ~26,4 ha (~4.200 sản phẩm, dân số ước ~10.500) — không phải block đơn lẻ ven đường |
 | Cảnh quan nội khu | Hồ trung tâm mô phỏng không gian Hồ Gươm, công viên, phố đi bộ theo masterplan |
 | Tách rõ NOXH / thương mại | KĐT còn nhà phố, biệt thự, cao tầng thương mại tới ~40 tầng và tổ hợp khách sạn–TTTM — giá & điều kiện khác hẳn NOXH |
@@ -88,7 +88,7 @@ Tra cứu landing dự án: [/du-an/nha-o-xa-hoi-ho-guom-xanh-thuan-an](/du-an/n
     seoTitle:
       "Hồ Gươm Xanh — Metro số 2 QL13, ga Lái Thiêu & TOD NOXH | HouseX",
     seoDesc:
-      "Phân tích NOXH Hồ Gươm Xanh Thuận An: Metro số 2 dọc QL13 trước cửa, ga Lái Thiêu vài trăm mét, QL13 8 làn, cửa ngõ Thủ Đức — USP KĐT 26,4 ha TBS Land.",
+      "NOXH Hồ Gươm Xanh Thuận An: Metro số 2 dọc QL13 trước cửa, ga Lái Thiêu vài trăm mét, QL13 8 làn, cửa ngõ Thủ Đức — KĐT 26,4 ha TBS Land.",
     tags: [NOXH_TAG_HA_TANG],
     projects: [{ slug: HGX_PROJECT_SLUG, name: HGX_PROJECT_NAME }],
   },

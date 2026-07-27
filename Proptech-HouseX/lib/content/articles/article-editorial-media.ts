@@ -253,7 +253,7 @@ export const EDITORIAL_FIGURES = {
     url: HGX.tienIch,
     alt: "Tiện ích và cảnh quan đô thị vùng ven — minh họa KĐT Hồ Gươm Xanh",
     caption:
-      "USP nội khu: hồ cảnh quan, công viên và tiện ích đô thị đồng bộ trong masterplan TBS Land",
+      "Hồ cảnh quan, công viên và tiện ích đô thị đồng bộ trong masterplan TBS Land",
     source: "minh họa",
   }),
 } as const;

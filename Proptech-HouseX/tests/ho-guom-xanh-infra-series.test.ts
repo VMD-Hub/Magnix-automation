@@ -27,7 +27,7 @@ describe("Ho Guom Xanh infra article series", () => {
     }
   });
 
-  it("covers Metro 2 / TOD and USP facts for SEO", () => {
+  it("covers Metro 2 / TOD and project facts for SEO", () => {
     const body = HGX_INFRA_ARTICLES_2026[0]!.body;
     assert.match(body, /Metro số 2|metro số 2/i);
     assert.match(body, /Quốc lộ 13|QL13|Đại lộ Bình Dương/);
@@ -35,5 +35,8 @@ describe("Ho Guom Xanh infra article series", () => {
     assert.match(body, /TOD|vài trăm mét/);
     assert.match(body, /26[,.]4\s*ha/);
     assert.match(body, /5\s*[–-]\s*12\s*tầng/);
+    assert.doesNotMatch(body, /\bUSP\b/);
+    assert.doesNotMatch(body, /người đọc nên/);
+    assert.doesNotMatch(body, /timeline marketing/);
   });
 });

@@ -58,7 +58,7 @@ Stock local (`noxh-stock-images`) — chưa nội bộ hóa ảnh CĐT.
 
 | Slug | Tiêu đề ngắn | Tag |
 |------|--------------|-----|
-| `ho-guom-xanh-metro-so-2-ql13-tod-2026` | Metro số 2 QL13 · ga Lái Thiêu · TOD + USP NOXH | `ha-tang-ket-noi-vung` |
+| `ho-guom-xanh-metro-so-2-ql13-tod-2026` | Metro số 2 QL13 · ga Lái Thiêu · TOD + điểm nổi bật NOXH | `ha-tang-ket-noi-vung` |
 
 - File: `lib/content/articles/ho-guom-xanh-infra-series-2026.ts`
 - Preview: `/wiki-nha-o-xa-hoi/ho-guom-xanh-metro-so-2-ql13-tod-2026`
