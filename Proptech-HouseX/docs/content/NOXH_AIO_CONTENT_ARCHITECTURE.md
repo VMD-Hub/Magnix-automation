@@ -94,6 +94,7 @@ flowchart TB
 | `nha-o-xa-hoi-ly-thuong-kiet` | trend 01, gia LTK, so sánh | `nha-o-xa-hoi-ly-thuong-kiet` |
 | `dta-happy-home-nhon-trach` | TOD series, vay, so sánh | `dta-happy-home-nhon-trach` |
 | `id-town-long-thanh` | hạ tầng sân bay/metro 2026 | `ha-tang-ket-noi-vung` |
+| `nha-o-xa-hoi-ho-guom-xanh-thuan-an` | Metro số 2 QL13 / TOD 2026 | `ha-tang-ket-noi-vung` |
 | `chung-cu-phuc-loc-tho-noxh` | PLT article, TP.HCM trend | `noxh` |
 | `noxh-kdc-chang-song-phuoc-tan` | tiến độ Chàng Sông | `noxh` |
 | Long An (6 slug) | `noxh-long-an-6-du-an-...` | `noxh` |

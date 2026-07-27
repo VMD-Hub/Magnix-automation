@@ -77,6 +77,12 @@ export const ID_TOWN_PR_CLOSINGS = {
     "Với người đủ điều kiện NOXH và ưu tiên khoảng cách thực tế tới sân bay Long Thành cùng hành lang đường sắt liên vùng, [ID Town Long Thành](/du-an/id-town-long-thanh) trong iD Junction — mặt tiền Phạm Văn Đồng, gần nút cao tốc – QL51 — là phương án an cư cận kề ga quy hoạch (~1,5–2 km tới ga Long Thành 1) và khoảng ~5 km tới khu vực sân bay (theo CĐT). HouseX hỗ trợ rà soát điều kiện đối tượng và đối chiếu đợt mở bán — bạn có thể [để lại thông tin tại đây](/lien-he).",
 } as const;
 
+/** Đoạn kết PR — NOXH Hồ Gươm Xanh (Thuận An). */
+export const HGX_PR_CLOSINGS = {
+  metroTod:
+    "Với người đủ điều kiện NOXH và ưu tiên hành lang metro dọc Quốc lộ 13, [Nhà ở xã hội Hồ Gươm Xanh](/du-an/nha-o-xa-hoi-ho-guom-xanh-thuan-an) trong KĐT ~26,4 ha TBS Land — mặt tiền Đại lộ Bình Dương, Lái Thiêu — thuộc nhóm dự án sát trục ga quy hoạch Metro số 2 Bình Dương – TP.HCM (tiếp cận ga Lái Thiêu trong bán kính vài trăm mét theo tổng hợp quy hoạch). HouseX hỗ trợ rà soát điều kiện đối tượng và theo dõi đợt mở bán — bạn có thể [để lại thông tin tại đây](/lien-he).",
+} as const;
+
 export function getEditorialBodyIssues(body: string): string[] {
   const text = String(body || "");
   const issues: string[] = [];

@@ -8,6 +8,7 @@ import {
 import { NOXH_TREND_ARTICLES_2026 } from "@/lib/content/articles/noxh-trend-series-2026";
 import { TOD_NHON_TRACH_ARTICLES_2026 } from "@/lib/content/articles/tod-nhon-trach-series-2026";
 import { ID_TOWN_INFRA_ARTICLES_2026 } from "@/lib/content/articles/id-town-infra-series-2026";
+import { HGX_INFRA_ARTICLES_2026 } from "@/lib/content/articles/ho-guom-xanh-infra-series-2026";
 import { getDemoArticleBySlug } from "@/lib/preview/demo-articles";
 
 describe("article editorial media standards", () => {
@@ -16,6 +17,7 @@ describe("article editorial media standards", () => {
       ...NOXH_TREND_ARTICLES_2026.map((a) => a.slug),
       ...TOD_NHON_TRACH_ARTICLES_2026.map((a) => a.slug),
       ...ID_TOWN_INFRA_ARTICLES_2026.map((a) => a.slug),
+      ...HGX_INFRA_ARTICLES_2026.map((a) => a.slug),
       "gia-nha-o-xa-hoi-ly-thuong-kiet-cong-bo-6-2026",
       "tien-do-noxh-kdc-chang-song-phuoc-tan-2026",
       "dieu-kien-mua-nha-o-xa-hoi-2026-tom-tat",
@@ -34,6 +36,7 @@ describe("article editorial media standards", () => {
       ...NOXH_TREND_ARTICLES_2026,
       ...TOD_NHON_TRACH_ARTICLES_2026,
       ...ID_TOWN_INFRA_ARTICLES_2026,
+      ...HGX_INFRA_ARTICLES_2026,
     ]) {
       assert.match(a.body, /!\[[^\]]+\]\([^)]+\)/, `${a.slug} missing inline image`);
       assert.match(a.body, /\*Ảnh:/, `${a.slug} missing figure caption`);

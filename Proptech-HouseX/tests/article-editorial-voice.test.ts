@@ -9,6 +9,7 @@ import { NOXH_KNOWLEDGE_ARTICLES_2026 } from "@/lib/content/articles/noxh-knowle
 import { NOXH_TREND_ARTICLES_2026 } from "@/lib/content/articles/noxh-trend-series-2026";
 import { TOD_NHON_TRACH_ARTICLES_2026 } from "@/lib/content/articles/tod-nhon-trach-series-2026";
 import { ID_TOWN_INFRA_ARTICLES_2026 } from "@/lib/content/articles/id-town-infra-series-2026";
+import { HGX_INFRA_ARTICLES_2026 } from "@/lib/content/articles/ho-guom-xanh-infra-series-2026";
 import { getDemoArticleBySlug } from "@/lib/preview/demo-articles";
 
 const EDITORIAL_SERIES = [
@@ -17,6 +18,7 @@ const EDITORIAL_SERIES = [
   ...NOXH_HANDBOOK_JOURNEY_ARTICLES_2026,
   ...TOD_NHON_TRACH_ARTICLES_2026,
   ...ID_TOWN_INFRA_ARTICLES_2026,
+  ...HGX_INFRA_ARTICLES_2026,
 ];
 
 const LEGACY_DEMO_SLUGS = [

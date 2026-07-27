@@ -14,6 +14,13 @@ const HERO = {
   urban: "/images/hero/urban-skyline-golden-hour.jpg",
 } as const;
 
+/** Ảnh minh họa NOXH Hồ Gươm Xanh — stock local (chưa nội bộ hóa ảnh CĐT). */
+const HGX = {
+  phoiCanh: HERO.urban,
+  ketNoi: HERO.metroHub,
+  tienIch: HERO.skyline,
+} as const;
+
 export type EditorialFigure = {
   url: string;
   alt: string;
@@ -123,6 +130,12 @@ export const ARTICLE_EDITORIAL_COVERS: Record<string, EditorialCover> = {
     caption:
       "ID Town Long Thành trong iD Junction — NOXH cận nút cao tốc HCM – Long Thành – Dầu Giây và QL51.",
   },
+  "ho-guom-xanh-metro-so-2-ql13-tod-2026": {
+    url: HGX.ketNoi,
+    alt: "Minh họa metro và kết nối đô thị — hành lang Metro số 2 dọc Quốc lộ 13",
+    caption:
+      "NOXH Hồ Gươm Xanh Thuận An — mặt tiền Đại lộ Bình Dương / QL13, gần ga Metro số 2 quy hoạch tại Lái Thiêu.",
+  },
 };
 
 /** Khối markdown ảnh minh hoạ trong thân bài (chuẩn báo chí). */
@@ -221,6 +234,27 @@ export const EDITORIAL_FIGURES = {
     alt: "Tiện ích nội khu ID Town Long Thành",
     caption: "Hồ bơi và cảnh quan nội khu — mật độ xây dựng khoảng 35%",
     source: "id-town.com.vn",
+  }),
+  hgxPhoiCanh: editorialFigure({
+    url: HGX.phoiCanh,
+    alt: "Nhà ở xã hội Hồ Gươm Xanh Thuận An — chung cư NOXH 5–12 tầng trong KĐT TBS Land",
+    caption:
+      "Phân khu NOXH trong KĐT Hồ Gươm Xanh ~26,4 ha tại 136 Đại lộ Bình Dương, Lái Thiêu",
+    source: "minh họa",
+  }),
+  hgxKetNoi: editorialFigure({
+    url: HGX.ketNoi,
+    alt: "Kết nối Metro và Quốc lộ 13 — cửa ngõ Bình Dương – TP.HCM",
+    caption:
+      "Trục QL13 / Đại lộ Bình Dương trước mặt dự án — hướng tuyến Metro số 2 Bình Dương – TP.HCM",
+    source: "minh họa",
+  }),
+  hgxTienIch: editorialFigure({
+    url: HGX.tienIch,
+    alt: "Tiện ích và cảnh quan đô thị vùng ven — minh họa KĐT Hồ Gươm Xanh",
+    caption:
+      "USP nội khu: hồ cảnh quan, công viên và tiện ích đô thị đồng bộ trong masterplan TBS Land",
+    source: "minh họa",
   }),
 } as const;
 
