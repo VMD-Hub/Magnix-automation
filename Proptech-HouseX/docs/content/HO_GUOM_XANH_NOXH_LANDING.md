@@ -10,6 +10,8 @@ Nguồn nghiên cứu (tham khảo công khai, đối chiếu trước publish):
 
 **Slug:** `nha-o-xa-hoi-ho-guom-xanh-thuan-an`
 
+**Cực tăng trưởng:** `ql13-northeast` (trục đặc biệt QL13) — không thuộc hành lang sân bay hay biển Đông. Taxonomy: [`GROWTH_CORRIDORS.md`](./GROWTH_CORRIDORS.md).
+
 ---
 
 ## Thông tin cơ bản
@@ -59,8 +61,8 @@ Stock local (`noxh-stock-images`) — chưa nội bộ hóa ảnh CĐT.
 
 | Slug | Tiêu đề ngắn | Tag |
 |------|--------------|-----|
-| `ho-guom-xanh-metro-so-2-ql13-tod-2026` | Metro số 2 QL13 · ga Lái Thiêu · TOD + điểm nổi bật NOXH | `ha-tang-ket-noi-vung` |
-| `lai-thieu-quy-hoach-2040-phuong-trung-tam-metro-2026` | Quy hoạch Lái Thiêu 2040 · phường trung tâm · Metro · ven sông | `ha-tang-ket-noi-vung` |
+| `ho-guom-xanh-metro-so-2-ql13-tod-2026` | Metro số 2 QL13 · ga Lái Thiêu · TOD + điểm nổi bật NOXH | `truc-quoc-lo-13-dong-bac` |
+| `lai-thieu-quy-hoach-2040-phuong-trung-tam-metro-2026` | Quy hoạch Lái Thiêu 2040 · phường trung tâm · Metro · ven sông | `truc-quoc-lo-13-dong-bac` |
 | `can-ho-lai-thieu-quoc-lo-13-du-an-noi-bat-2026` | Emerald 68 · A&T · Astral đang mở bán | `du-an-gia-tien-do-noxh` |
 | `can-ho-lai-thieu-sap-mo-ban-emerald-boulevard-hgx-2026` | Emerald Boulevard · HGX cao cấp sắp mở bán | `du-an-gia-tien-do-noxh` |
 | `mua-can-ho-lai-thieu-o-thuc-hay-dau-tu-cho-thue-2026` | Ở thực vs cho thuê đón hạ tầng Lái Thiêu | `chon-noxh-dung-cach` |

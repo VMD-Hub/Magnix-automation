@@ -12,6 +12,12 @@ import { TOD_NHON_TRACH_ARTICLES_2026 } from "@/lib/content/articles/tod-nhon-tr
 import { ID_TOWN_INFRA_ARTICLES_2026 } from "@/lib/content/articles/id-town-infra-series-2026";
 import { HGX_INFRA_ARTICLES_2026 } from "@/lib/content/articles/ho-guom-xanh-infra-series-2026";
 import { LAI_THIEU_AREA_ARTICLES_2026 } from "@/lib/content/articles/lai-thieu-area-series-2026";
+import { GROWTH_CORRIDORS_PILLAR_ARTICLES_2026 } from "@/lib/content/articles/growth-corridors-pillar-2026";
+import { NORTH_SOUTH_CORRIDOR_ARTICLES_2026 } from "@/lib/content/articles/north-south-corridor-series-2026";
+import { EAST_WEST_CORRIDOR_ARTICLES_2026 } from "@/lib/content/articles/east-west-corridor-series-2026";
+import { EAST_COAST_CORRIDOR_ARTICLES_2026 } from "@/lib/content/articles/east-coast-corridor-series-2026";
+import { RING_ROAD_CORRIDOR_ARTICLES_2026 } from "@/lib/content/articles/ring-road-corridor-series-2026";
+import { AIRPORT_CORRIDOR_POTENTIAL_ARTICLES_2026 } from "@/lib/content/articles/airport-corridor-potential-2026";
 import {
   handbookTagSummaries,
   isNoxhHandbookArticle,
@@ -325,6 +331,12 @@ Xem thêm [chuyên mục phong thủy](/phong-thuy) và [xem hướng nhà](/con
   ...ID_TOWN_INFRA_ARTICLES_2026,
   ...HGX_INFRA_ARTICLES_2026,
   ...LAI_THIEU_AREA_ARTICLES_2026,
+  ...GROWTH_CORRIDORS_PILLAR_ARTICLES_2026,
+  ...NORTH_SOUTH_CORRIDOR_ARTICLES_2026,
+  ...EAST_WEST_CORRIDOR_ARTICLES_2026,
+  ...EAST_COAST_CORRIDOR_ARTICLES_2026,
+  ...RING_ROAD_CORRIDOR_ARTICLES_2026,
+  ...AIRPORT_CORRIDOR_POTENTIAL_ARTICLES_2026,
 ];
 
 const DEMO_ARTICLES: ArticleDetail[] = DEMO_ARTICLES_RAW.map(applyEditorialMedia);

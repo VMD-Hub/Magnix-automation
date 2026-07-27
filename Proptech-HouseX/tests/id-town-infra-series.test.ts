@@ -10,7 +10,8 @@ describe("ID Town infra article series", () => {
     assert.equal(ID_TOWN_INFRA_ARTICLES_2026.length, 1);
     for (const a of ID_TOWN_INFRA_ARTICLES_2026) {
       assert.equal(a.status, "PUBLISHED");
-      assert.ok(a.tags.some((t) => t.slug === "ha-tang-ket-noi-vung"));
+      assert.ok(a.tags.some((t) => t.slug === "hanh-lang-san-bay-long-thanh"));
+      assert.ok(!a.tags.some((t) => t.slug === "ha-tang-ket-noi-vung"));
       assert.ok(a.projects.some((p) => p.slug === ID_TOWN_SLUG));
       assert.ok(a.body.includes("/du-an/id-town-long-thanh"));
       assert.match(a.body, /!\[[^\]]+\]\([^)]+\)/);

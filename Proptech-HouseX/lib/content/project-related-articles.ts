@@ -8,21 +8,53 @@ import {
   MY_HANH_SLUG,
   ORI_SLUG,
 } from "@/lib/preview/noxh-long-an-projects";
-import { LEGACY_NOXH_TOPIC_REDIRECTS } from "@/lib/content/articles/noxh-handbook-tags";
+import {
+  LEGACY_NOXH_TOPIC_REDIRECTS,
+  NOXH_TAG_AIRPORT,
+  NOXH_TAG_EAST_COAST,
+  NOXH_TAG_QL13,
+} from "@/lib/content/articles/noxh-handbook-tags";
 import {
   ASTRAL_CITY_SLUG,
   AT_SKY_GARDEN_SLUG,
   EMERALD_68_SLUG,
   EMERALD_BOULEVARD_SLUG,
 } from "@/lib/preview/ql13-commercial-mocks";
+import { GROWTH_CORRIDORS_PILLAR_SLUG } from "@/lib/content/growth-corridors";
 
 const PHUC_LOC_THO_SLUG = "chung-cu-phuc-loc-tho-noxh";
 
+/** Featured QL13 / Lái Thiêu — không lẫn sân bay / biển Đông. */
 const QL13_FEATURED = [
+  GROWTH_CORRIDORS_PILLAR_SLUG,
+  "ho-guom-xanh-metro-so-2-ql13-tod-2026",
+  "lai-thieu-quy-hoach-2040-phuong-trung-tam-metro-2026",
   "can-ho-lai-thieu-quoc-lo-13-du-an-noi-bat-2026",
   "can-ho-lai-thieu-sap-mo-ban-emerald-boulevard-hgx-2026",
-  "lai-thieu-quy-hoach-2040-phuong-trung-tam-metro-2026",
   "mua-can-ho-lai-thieu-o-thuc-hay-dau-tu-cho-thue-2026",
+] as const;
+
+/** Featured hành lang sân bay — ID Town; không lẫn QL13. */
+const AIRPORT_FEATURED = [
+  GROWTH_CORRIDORS_PILLAR_SLUG,
+  "id-town-long-thanh-ha-tang-san-bay-metro-2026",
+  "bds-thanh-pho-san-bay-long-thanh-mo-hinh-sinh-loi-2026",
+  "metro-thu-thiem-long-thanh-175000-ty-khoi-cong-2026",
+  "tod-xuong-song-phat-trien-do-thi-viet-nam-2025-2045",
+  "quy-hoach-tong-the-tphcm-tam-nhin-100-nam-sieu-do-thi",
+] as const;
+
+/**
+ * Featured hành lang biển Đông — DTA / Nhơn Trạch.
+ * Có thể link bài sân bay liên vùng nhưng hub tag là east-coast.
+ */
+const EAST_COAST_FEATURED = [
+  GROWTH_CORRIDORS_PILLAR_SLUG,
+  "hanh-lang-kinh-te-bien-phia-dong-tphcm-cai-mep-2026",
+  "nhon-trach-cu-tang-truong-ha-tang-tod-2026",
+  "bds-do-thi-bien-phia-dong-cua-ngo-dau-tu-dai-han-2026",
+  "metro-thu-thiem-long-thanh-175000-ty-khoi-cong-2026",
+  "tod-xuong-song-phat-trien-do-thi-viet-nam-2025-2045",
 ] as const;
 
 /** Thứ tự ưu tiên bài trend trên landing từng dự án. */
@@ -36,32 +68,19 @@ export const PROJECT_FEATURED_ARTICLE_SLUGS: Partial<Record<string, string[]>> =
       "dieu-kien-nha-o-mua-noxh-dieu-77-2026",
     ],
     [DTA_HAPPY_HOME_SLUG]: [
-      "nhon-trach-cu-tang-truong-ha-tang-tod-2026",
-      "metro-thu-thiem-long-thanh-175000-ty-khoi-cong-2026",
+      ...EAST_COAST_FEATURED,
       "so-sanh-gia-noxh-ly-thuong-kiet-dta-happy-home-2026",
       "lai-suat-vay-noxh-duoi-35-tuoi-nhnn-2026",
       "vay-noxh-goi-120000-ty-nhcsxh-2026",
       "quy-trinh-mua-thue-mua-noxh-2026",
-      "tod-xuong-song-phat-trien-do-thi-viet-nam-2025-2045",
-      "quy-hoach-tong-the-tphcm-tam-nhin-100-nam-sieu-do-thi",
     ],
     [ID_TOWN_SLUG]: [
-      "id-town-long-thanh-ha-tang-san-bay-metro-2026",
-      "metro-thu-thiem-long-thanh-175000-ty-khoi-cong-2026",
-      "tod-xuong-song-phat-trien-do-thi-viet-nam-2025-2045",
-      "quy-hoach-tong-the-tphcm-tam-nhin-100-nam-sieu-do-thi",
+      ...AIRPORT_FEATURED,
       "dieu-kien-mua-nha-o-xa-hoi-2026-tom-tat",
       "quy-trinh-mua-thue-mua-noxh-2026",
     ],
     [HGX_PROJECT_SLUG]: [
-      "ho-guom-xanh-metro-so-2-ql13-tod-2026",
-      "lai-thieu-quy-hoach-2040-phuong-trung-tam-metro-2026",
-      "can-ho-lai-thieu-quoc-lo-13-du-an-noi-bat-2026",
-      "can-ho-lai-thieu-sap-mo-ban-emerald-boulevard-hgx-2026",
-      "mua-can-ho-lai-thieu-o-thuc-hay-dau-tu-cho-thue-2026",
-      "tp-hcm-5-khu-tod-metro-so-2-ben-thanh-tham-luong",
-      "tod-xuong-song-phat-trien-do-thi-viet-nam-2025-2045",
-      "quy-hoach-tong-the-tphcm-tam-nhin-100-nam-sieu-do-thi",
+      ...QL13_FEATURED,
       "dieu-kien-mua-nha-o-xa-hoi-2026-tom-tat",
       "quy-trinh-mua-thue-mua-noxh-2026",
     ],
@@ -90,16 +109,20 @@ export const PROJECT_FEATURED_ARTICLE_SLUGS: Partial<Record<string, string[]>> =
     [EMERALD_BOULEVARD_SLUG]: [...QL13_FEATURED],
   };
 
-/** Tag chủ đề tương ứng — dùng link “Xem thêm” từ landing dự án. */
+/** Tag chủ đề “Xem thêm” — tách 6 trục (sân bay vs biển Đông vs QL13). */
 export const PROJECT_ARTICLE_TAG_SLUG: Partial<Record<string, string>> = {
   [LTK_PROJECT_SLUG]: "nha-o-xa-hoi-ly-thuong-kiet",
-  [DTA_HAPPY_HOME_SLUG]: "dta-happy-home-nhon-trach",
-  [ID_TOWN_SLUG]: "ha-tang-ket-noi-vung",
-  [HGX_PROJECT_SLUG]: "ha-tang-ket-noi-vung",
+  [DTA_HAPPY_HOME_SLUG]: NOXH_TAG_EAST_COAST.slug,
+  [ID_TOWN_SLUG]: NOXH_TAG_AIRPORT.slug,
+  [HGX_PROJECT_SLUG]: NOXH_TAG_QL13.slug,
+  [EMERALD_68_SLUG]: NOXH_TAG_QL13.slug,
+  [AT_SKY_GARDEN_SLUG]: NOXH_TAG_QL13.slug,
+  [ASTRAL_CITY_SLUG]: NOXH_TAG_QL13.slug,
+  [EMERALD_BOULEVARD_SLUG]: NOXH_TAG_QL13.slug,
 };
 
-/** Tag hub bổ sung cho bài hạ tầng / TOD (landing DTA). */
-export const DTA_INFRA_ARTICLE_TAG_SLUG = "do-thi-ve-tinh-tod" as const;
+/** @deprecated Dùng NOXH_TAG_EAST_COAST cho DTA; giữ alias cũ. */
+export const DTA_INFRA_ARTICLE_TAG_SLUG = NOXH_TAG_EAST_COAST.slug;
 
 export function orderProjectRelatedArticles(
   projectSlug: string,

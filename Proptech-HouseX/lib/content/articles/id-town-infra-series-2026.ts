@@ -1,4 +1,4 @@
-import { NOXH_TAG_HA_TANG } from "@/lib/content/articles/noxh-handbook-tags";
+import { NOXH_TAG_AIRPORT } from "@/lib/content/articles/noxh-handbook-tags";
 import type { ArticleDetail } from "@/lib/data/article-types";
 import { EDITORIAL_FIGURES } from "@/lib/content/articles/article-editorial-media";
 import { ID_TOWN_PR_CLOSINGS } from "@/lib/content/articles/article-editorial-voice";
@@ -93,6 +93,8 @@ ${ID_TOWN_PR_CLOSINGS.haTangKetNoi}
 
 Tra cứu mặt bằng, gallery và FAQ dự án: [/du-an/id-town-long-thanh](/du-an/id-town-long-thanh) · Hub tỉnh: [/du-an/nha-o-xa-hoi/dong-nai](/du-an/nha-o-xa-hoi/dong-nai)
 
+ID Town thuộc hành lang kết nối sân bay Long Thành – Tân Sơn Nhất — không nằm trên trục Quốc lộ 13 (Lái Thiêu / Thuận An) và khác hành lang kinh tế biển phía Đông (Nhơn Trạch / DTA). Bản đồ 6 trục: [Sáu trục tăng trưởng đô thị TP.HCM](/wiki-nha-o-xa-hoi/bon-cuc-tang-truong-do-thi-tp-hcm-2026).
+
 *Vị trí ga, tiến độ đường sắt/Vành đai và bảng giá căn có thể thay đổi theo phê duyệt và đợt mở bán.*`,
     status: "PUBLISHED",
     publishedAt: new Date("2026-07-27T08:00:00.000Z"),
@@ -103,7 +105,7 @@ Tra cứu mặt bằng, gallery và FAQ dự án: [/du-an/id-town-long-thanh](/d
       "ID Town Long Thành — hạ tầng sân bay 5km, ga metro 1,5–2km | HouseX",
     seoDesc:
       "Phân tích kết nối ID Town (iD Junction): sân bay Long Thành ~5 km, cao tốc & QL51, ga Long Thành 1 ~1,5–2 km trên tuyến Thủ Thiêm – Long Thành.",
-    tags: [NOXH_TAG_HA_TANG],
+    tags: [NOXH_TAG_AIRPORT],
     projects: [{ slug: ID_TOWN_SLUG, name: ID_TOWN_NAME }],
   },
 ];

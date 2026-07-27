@@ -17,6 +17,7 @@ describe("Lái Thiêu area article series", () => {
     assert.equal(LAI_THIEU_AREA_ARTICLES_2026.length, 4);
     for (const a of LAI_THIEU_AREA_ARTICLES_2026) {
       assert.equal(a.status, "PUBLISHED");
+      assert.ok(a.tags.some((t) => t.slug === "truc-quoc-lo-13-dong-bac"));
       assert.ok(a.projects.some((p) => p.slug === HGX_PROJECT_SLUG));
       assert.ok(a.body.includes("/du-an/nha-o-xa-hoi-ho-guom-xanh-thuan-an"));
       assert.ok(a.body.includes("/lien-he"));

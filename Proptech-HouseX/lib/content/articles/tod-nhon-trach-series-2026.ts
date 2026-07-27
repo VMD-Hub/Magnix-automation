@@ -1,4 +1,8 @@
-import { NOXH_TAG_HA_TANG } from "@/lib/content/articles/noxh-handbook-tags";
+import {
+  NOXH_TAG_AIRPORT,
+  NOXH_TAG_EAST_COAST,
+  NOXH_TAG_HA_TANG,
+} from "@/lib/content/articles/noxh-handbook-tags";
 import type { ArticleDetail } from "@/lib/data/article-types";
 import { EDITORIAL_FIGURES } from "@/lib/content/articles/article-editorial-media";
 import {
@@ -190,7 +194,7 @@ Bài liên quan: [Nhơn Trạch bứt phá hạ tầng](/tin-tuc/nhon-trach-cu-t
       "Metro Thủ Thiêm Long Thành 175.000 tỷ — khởi công 2026 | HouseX",
     seoDesc:
       "Tổng hợp tuyến đường sắt Thủ Thiêm – Long Thành: 47,7 km, 19 ga, 7 ga Nhơn Trạch. Phân biệt lõi TOD quanh ga vs DTA Happy Home (đô thị vệ tinh ~3–5 km).",
-    tags: [NOXH_TAG_HA_TANG],
+    tags: [NOXH_TAG_AIRPORT],
     projects: [{ slug: DTA_HAPPY_HOME_SLUG, name: DTA_HAPPY_HOME_NAME }],
   },
   {
@@ -237,7 +241,7 @@ Tra cứu suất Block A10: [/tin-dang/DTA-HH-A10511](/tin-dang/DTA-HH-A10511) �
       "Nhơn Trạch cực tăng trưởng — hạ tầng ga & DTA Happy Home | HouseX",
     seoDesc:
       "Phân tích Nhơn Trạch: 25B, Vành đai 3, ga đường sắt quy hoạch. DTA Happy Home — đô thị vệ tinh hưởng lợi giao thông công cộng (~3–5 km tới ga).",
-    tags: [NOXH_TAG_HA_TANG],
+    tags: [NOXH_TAG_EAST_COAST],
     projects: [{ slug: DTA_HAPPY_HOME_SLUG, name: DTA_HAPPY_HOME_NAME }],
   },
 ];

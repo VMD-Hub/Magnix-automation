@@ -10,7 +10,21 @@ import { TOD_NHON_TRACH_ARTICLES_2026 } from "@/lib/content/articles/tod-nhon-tr
 import { ID_TOWN_INFRA_ARTICLES_2026 } from "@/lib/content/articles/id-town-infra-series-2026";
 import { HGX_INFRA_ARTICLES_2026 } from "@/lib/content/articles/ho-guom-xanh-infra-series-2026";
 import { LAI_THIEU_AREA_ARTICLES_2026 } from "@/lib/content/articles/lai-thieu-area-series-2026";
+import { GROWTH_CORRIDORS_PILLAR_ARTICLES_2026 } from "@/lib/content/articles/growth-corridors-pillar-2026";
+import { NORTH_SOUTH_CORRIDOR_ARTICLES_2026 } from "@/lib/content/articles/north-south-corridor-series-2026";
+import { EAST_WEST_CORRIDOR_ARTICLES_2026 } from "@/lib/content/articles/east-west-corridor-series-2026";
+import { EAST_COAST_CORRIDOR_ARTICLES_2026 } from "@/lib/content/articles/east-coast-corridor-series-2026";
+import { RING_ROAD_CORRIDOR_ARTICLES_2026 } from "@/lib/content/articles/ring-road-corridor-series-2026";
+import { AIRPORT_CORRIDOR_POTENTIAL_ARTICLES_2026 } from "@/lib/content/articles/airport-corridor-potential-2026";
 import { getDemoArticleBySlug } from "@/lib/preview/demo-articles";
+
+const CORRIDOR_SERIES_2026 = [
+  ...NORTH_SOUTH_CORRIDOR_ARTICLES_2026,
+  ...EAST_WEST_CORRIDOR_ARTICLES_2026,
+  ...EAST_COAST_CORRIDOR_ARTICLES_2026,
+  ...RING_ROAD_CORRIDOR_ARTICLES_2026,
+  ...AIRPORT_CORRIDOR_POTENTIAL_ARTICLES_2026,
+];
 
 describe("article editorial media standards", () => {
   it("every editorial slug has cover url, alt and caption", () => {
@@ -20,6 +34,8 @@ describe("article editorial media standards", () => {
       ...ID_TOWN_INFRA_ARTICLES_2026.map((a) => a.slug),
       ...HGX_INFRA_ARTICLES_2026.map((a) => a.slug),
       ...LAI_THIEU_AREA_ARTICLES_2026.map((a) => a.slug),
+      ...GROWTH_CORRIDORS_PILLAR_ARTICLES_2026.map((a) => a.slug),
+      ...CORRIDOR_SERIES_2026.map((a) => a.slug),
       "gia-nha-o-xa-hoi-ly-thuong-kiet-cong-bo-6-2026",
       "tien-do-noxh-kdc-chang-song-phuoc-tan-2026",
       "dieu-kien-mua-nha-o-xa-hoi-2026-tom-tat",
@@ -40,6 +56,8 @@ describe("article editorial media standards", () => {
       ...ID_TOWN_INFRA_ARTICLES_2026,
       ...HGX_INFRA_ARTICLES_2026,
       ...LAI_THIEU_AREA_ARTICLES_2026,
+      ...GROWTH_CORRIDORS_PILLAR_ARTICLES_2026,
+      ...CORRIDOR_SERIES_2026,
     ]) {
       assert.match(a.body, /!\[[^\]]+\]\([^)]+\)/, `${a.slug} missing inline image`);
       assert.match(a.body, /\*Ảnh:/, `${a.slug} missing figure caption`);

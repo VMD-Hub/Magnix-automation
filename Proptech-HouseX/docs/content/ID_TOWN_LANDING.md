@@ -62,11 +62,12 @@ Mapping: `lib/content/id-town-images.ts`
 
 | Slug | Tiêu đề ngắn | Tag |
 |------|--------------|-----|
-| `id-town-long-thanh-ha-tang-san-bay-metro-2026` | Sân bay ~5 km · ga ~1,5–2 km · cao tốc/QL51 | `ha-tang-ket-noi-vung` |
+| `id-town-long-thanh-ha-tang-san-bay-metro-2026` | Sân bay ~5 km · ga ~1,5–2 km · cao tốc/QL51 | `hanh-lang-san-bay-long-thanh` |
 
 - File: `lib/content/articles/id-town-infra-series-2026.ts`
 - Preview: `/wiki-nha-o-xa-hoi/id-town-long-thanh-ha-tang-san-bay-metro-2026`
 - Featured trên landing: `PROJECT_FEATURED_ARTICLE_SLUGS[id-town-long-thanh]`
+- Cực tăng trưởng: `airport-long-thanh` (trục 5 — sân bay) — không thuộc QL13 hay biển Đông primary. Xem [`GROWTH_CORRIDORS.md`](./GROWTH_CORRIDORS.md).
 
 ---
 

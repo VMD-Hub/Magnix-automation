@@ -1,8 +1,4 @@
-import {
-  NOXH_TAG_CHON_NHA,
-  NOXH_TAG_DU_AN_GIA,
-  NOXH_TAG_HA_TANG,
-} from "@/lib/content/articles/noxh-handbook-tags";
+import { NOXH_TAG_QL13 } from "@/lib/content/articles/noxh-handbook-tags";
 import type { ArticleDetail } from "@/lib/data/article-types";
 import { EDITORIAL_FIGURES } from "@/lib/content/articles/article-editorial-media";
 import { LAI_THIEU_PR_CLOSINGS } from "@/lib/content/articles/article-editorial-voice";
@@ -68,6 +64,8 @@ Nhờ hạ tầng đổi nhanh, quỹ đất trống dọc QL13 và ven rạch C
 
 Trong bức tranh đó, tổ hợp đô thị tích hợp như [Hồ Gươm Xanh](${HGX_HREF}) (TBS Land, ~26,4 ha tại 136 Đại lộ Bình Dương) minh họa mô hình “sống trong đô thị đồng bộ” — có cả phân khu nhà ở xã hội và sản phẩm thương mại. Chi tiết hành lang metro trước cửa: [Hồ Gươm Xanh — Metro số 2 QL13 & TOD](/wiki-nha-o-xa-hoi/ho-guom-xanh-metro-so-2-ql13-tod-2026).
 
+Lưu ý bản đồ 6 trục tăng trưởng: Lái Thiêu / QL13 thuộc Đông Bắc TP.HCM — khác hành lang sân bay Long Thành và khác hành lang kinh tế biển phía Đông (Nhơn Trạch). Đối chiếu khung: [Sáu trục tăng trưởng đô thị TP.HCM](/wiki-nha-o-xa-hoi/bon-cuc-tang-truong-do-thi-tp-hcm-2026).
+
 ${EDITORIAL_FIGURES.hgxPhoiCanh}
 
 ${LAI_THIEU_PR_CLOSINGS.quyHoach}
@@ -84,7 +82,7 @@ Bài liên quan: [5 khu TOD metro số 2 Bến Thành – Tham Lương](/tin-tuc
       "Quy hoạch Lái Thiêu 2040 — phường trung tâm, Metro QL13, ven sông | HouseX",
     seoDesc:
       "Lái Thiêu sau sáp nhập ~15,46 km², hơn 118.000 dân; QL13 8 làn, Metro dọc Đại lộ Bình Dương, đường ven sông và đô thị vườn trái cây — cửa ngõ Bình Dương–TP.HCM.",
-    tags: [NOXH_TAG_HA_TANG],
+    tags: [NOXH_TAG_QL13],
     projects: [{ slug: HGX_PROJECT_SLUG, name: HGX_PROJECT_NAME }],
   },
   {
@@ -144,7 +142,7 @@ ${LAI_THIEU_PR_CLOSINGS.duAn}
       "Căn hộ QL13 2026 — Emerald 68, A&T Sky Garden, Astral City | HouseX",
     seoDesc:
       "3 dự án căn hộ thương mại đang mở bán trên Quốc lộ 13 Thuận An: Emerald 68, A&T Sky Garden, Astral City — giá, tiến độ, landing House X.",
-    tags: [NOXH_TAG_DU_AN_GIA],
+    tags: [NOXH_TAG_QL13],
     projects: [{ slug: HGX_PROJECT_SLUG, name: HGX_PROJECT_NAME }],
   },
   {
@@ -208,7 +206,7 @@ ${LAI_THIEU_PR_CLOSINGS.oThucDauTu}
       "Căn hộ Lái Thiêu: ở thực hay cho thuê đón hạ tầng? | HouseX",
     seoDesc:
       "Ở thực với A&T Sky Garden, Emerald 68, Astral City; đầu tư cho thuê đón chuyên gia KCN trên QL13 — checklist 3 bước.",
-    tags: [NOXH_TAG_CHON_NHA],
+    tags: [NOXH_TAG_QL13],
     projects: [{ slug: HGX_PROJECT_SLUG, name: HGX_PROJECT_NAME }],
   },
   {
@@ -265,7 +263,7 @@ ${LAI_THIEU_PR_CLOSINGS.sapMoBan}
       "Emerald Boulevard & HGX cao cấp — căn hộ Lái Thiêu sắp mở bán | HouseX",
     seoDesc:
       "Theo dõi The Emerald Boulevard (view sân golf Sông Bé, ~62 tr/m²) và phân khu căn hộ thương mại cao cấp Hồ Gươm Xanh quanh hồ 7 ha.",
-    tags: [NOXH_TAG_DU_AN_GIA],
+    tags: [NOXH_TAG_QL13],
     projects: [{ slug: HGX_PROJECT_SLUG, name: HGX_PROJECT_NAME }],
   },
 ];

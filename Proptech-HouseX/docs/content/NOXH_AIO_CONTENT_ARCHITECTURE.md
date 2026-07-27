@@ -92,9 +92,9 @@ flowchart TB
 | Project slug | Featured articles (ưu tiên) | Tag hub |
 |--------------|----------------------------|---------|
 | `nha-o-xa-hoi-ly-thuong-kiet` | trend 01, gia LTK, so sánh | `nha-o-xa-hoi-ly-thuong-kiet` |
-| `dta-happy-home-nhon-trach` | TOD series, vay, so sánh | `dta-happy-home-nhon-trach` |
-| `id-town-long-thanh` | hạ tầng sân bay/metro 2026 | `ha-tang-ket-noi-vung` |
-| `nha-o-xa-hoi-ho-guom-xanh-thuan-an` | Metro số 2 QL13 / TOD 2026 | `ha-tang-ket-noi-vung` |
+| `dta-happy-home-nhon-trach` | TOD / Nhơn Trạch biển Đông + pillar 6 trục | `hanh-lang-kinh-te-bien-phia-dong` |
+| `id-town-long-thanh` | hạ tầng sân bay/metro 2026 + pillar 6 trục | `hanh-lang-san-bay-long-thanh` |
+| `nha-o-xa-hoi-ho-guom-xanh-thuan-an` | Metro số 2 QL13 / Lái Thiêu + pillar 6 trục | `truc-quoc-lo-13-dong-bac` |
 | `chung-cu-phuc-loc-tho-noxh` | PLT article, TP.HCM trend | `noxh` |
 | `noxh-kdc-chang-song-phuoc-tan` | tiến độ Chàng Sông | `noxh` |
 | Long An (6 slug) | `noxh-long-an-6-du-an-...` | `noxh` |

@@ -13,5 +13,6 @@ Allowlist 2026 (đã loại dự án bàn giao cũ):
 - Ảnh stock: `lib/content/ql13-commercial-images.ts`
 - Seed: `npm run db:seed:commercial` (gồm QL13)
 - NOXH Hồ Gươm Xanh (khác sản phẩm): `/du-an/nha-o-xa-hoi-ho-guom-xanh-thuan-an`
+- Cực tăng trưởng: `ql13-northeast` — tag hub `truc-quoc-lo-13-dong-bac`. Không lẫn ID Town / sân bay / DTA biển Đông. Xem [`GROWTH_CORRIDORS.md`](./GROWTH_CORRIDORS.md).
 
-Bài wiki: series `lai-thieu-area-series-2026.ts` (4 bài).
+Bài wiki: series `lai-thieu-area-series-2026.ts` (4 bài) + pillar 6 trục `bon-cuc-tang-truong-do-thi-tp-hcm-2026`.

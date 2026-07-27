@@ -1,4 +1,4 @@
-import { NOXH_TAG_HA_TANG } from "@/lib/content/articles/noxh-handbook-tags";
+import { NOXH_TAG_QL13 } from "@/lib/content/articles/noxh-handbook-tags";
 import type { ArticleDetail } from "@/lib/data/article-types";
 import { EDITORIAL_FIGURES } from "@/lib/content/articles/article-editorial-media";
 import { HGX_PR_CLOSINGS } from "@/lib/content/articles/article-editorial-voice";
@@ -89,7 +89,7 @@ Tra cứu landing dự án: [/du-an/nha-o-xa-hoi-ho-guom-xanh-thuan-an](/du-an/n
       "Hồ Gươm Xanh — Metro số 2 QL13, ga Lái Thiêu & TOD NOXH | HouseX",
     seoDesc:
       "NOXH Hồ Gươm Xanh Thuận An: Metro số 2 dọc QL13 trước cửa, ga Lái Thiêu vài trăm mét, QL13 8 làn, cửa ngõ Thủ Đức — KĐT 26,4 ha TBS Land.",
-    tags: [NOXH_TAG_HA_TANG],
+    tags: [NOXH_TAG_QL13],
     projects: [{ slug: HGX_PROJECT_SLUG, name: HGX_PROJECT_NAME }],
   },
 ];

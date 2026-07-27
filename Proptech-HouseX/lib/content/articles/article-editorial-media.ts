@@ -160,6 +160,84 @@ export const ARTICLE_EDITORIAL_COVERS: Record<string, EditorialCover> = {
     caption:
       "Emerald Boulevard (view sân golf Sông Bé) và phân khu cao cấp Hồ Gươm Xanh — quỹ sắp mở bán Lái Thiêu.",
   },
+  "bon-cuc-tang-truong-do-thi-tp-hcm-2026": {
+    url: HERO.skyline,
+    alt: "Toàn cảnh đô thị TP.HCM — minh họa sáu trục tăng trưởng liên vùng",
+    caption:
+      "Sáu trục: Bắc–Nam sông Sài Gòn, Đông–Tây VVK–MCT, biển Đông, Vành đai 3–4, sân bay Long Thành, và QL13 Đông Bắc.",
+  },
+  "truc-doc-song-sai-gon-hanh-lang-kinh-te-ty-do-2026": {
+    url: HERO.skyline,
+    alt: "Toàn cảnh TP.HCM ven sông — hành lang Bắc–Nam dọc sông Sài Gòn",
+    caption:
+      "Quyết định 1125/QĐ-TTg: hành lang dọc sông Sài Gòn là mặt tiền đô thị đến 2040–2060.",
+  },
+  "ly-tam-bds-nam-sai-gon-can-gio-dong-tien-2026": {
+    url: HERO.thuThiemDay,
+    alt: "Không gian đô thị phía Đông – Nam TP.HCM — minh họa ly tâm Nam Sài Gòn",
+    caption:
+      "Siêu cảng Cần Giờ và hành lang Nam Sài Gòn – Cần Giờ trong dòng tiền ly tâm dài hạn.",
+  },
+  "top-du-an-can-ho-biet-thu-ven-song-nam-sai-gon-2026": {
+    url: HERO.thuThiemNight,
+    alt: "Thủ Thiêm và cửa ngõ phía Đông — neo an cư ven sông / cầu Phú Mỹ",
+    caption:
+      "Đối chiếu thực tế: Thủ Thiêm Green House và khung chọn dự án ven sông Nam Sài Gòn.",
+  },
+  "truc-dong-tay-tphcm-vo-van-kiet-mai-chi-tho-2026": {
+    url: HERO.metroHub,
+    alt: "Trục giao thông đô thị TP.HCM — minh họa hành lang Đông–Tây",
+    caption:
+      "Võ Văn Kiệt – Mai Chí Thọ: xương sống liên kết Long An – lõi – Đồng Nai.",
+  },
+  "bds-truc-dong-tay-bien-do-gia-cua-ngo-2026": {
+    url: HERO.urban,
+    alt: "Cảnh quan đô thị cửa ngõ — minh họa biên độ BĐS trục Đông–Tây",
+    caption:
+      "Cửa ngõ Tây và Đông trên đại lộ VVK–MCT: logic dòng tiền định tính, không cam kết biên độ.",
+  },
+  "can-ho-vo-van-kiet-mai-chi-tho-an-cu-dau-tu-2026": {
+    url: HERO.bitexcoMetro,
+    alt: "Trung tâm TP.HCM và metro — lợi thế an cư trên trục Đông–Tây",
+    caption:
+      "Checklist chọn căn hộ gần Võ Văn Kiệt – Mai Chí Thọ; neo Thủ Thiêm Green House.",
+  },
+  "hanh-lang-kinh-te-bien-phia-dong-tphcm-cai-mep-2026": {
+    url: HERO.viaduct,
+    alt: "Hạ tầng giao thông liên vùng phía Đông — minh họa hành lang biển",
+    caption:
+      "Cao tốc Biên Hòa – Vũng Tàu và chuỗi logistics tới Cái Mép – Thị Vải.",
+  },
+  "bds-do-thi-bien-phia-dong-cua-ngo-dau-tu-dai-han-2026": {
+    url: HERO.urban,
+    alt: "Đô thị vệ tinh phía Đông — minh họa an cư gần KCN Nhơn Trạch",
+    caption:
+      "DTA Happy Home: NOXH đô thị vệ tinh trên hành lang kinh tế biển phía Đông.",
+  },
+  "tien-do-vanh-dai-3-vanh-dai-4-do-thi-ve-tinh-2026": {
+    url: HERO.viaduct,
+    alt: "Công trình giao thông vành đai — minh họa Vành đai 3 & 4",
+    caption:
+      "Vành đai 3 hướng hoàn thành theo đoạn trong 2026; Vành đai 4 đang GPMB / khởi công.",
+  },
+  "tod-doc-vanh-dai-3-mo-vang-nha-dau-tu-2026": {
+    url: HERO.metroHub,
+    alt: "Ga và nút giao đô thị — minh họa TOD quanh Vành đai 3",
+    caption:
+      "Phân biệt lõi TOD quanh nút giao với đô thị vệ tinh hưởng lợi vành đai.",
+  },
+  "dat-nen-nha-pho-don-dau-thong-xe-vanh-dai-3-2026": {
+    url: HERO.urban,
+    alt: "Không gian đô thị vệ tinh — minh họa săn đất nền đón Vành đai 3",
+    caption:
+      "Checklist Thủ Đức, Củ Chi, Bình Chánh, Thuận An — thẩm định pháp lý trước khi xuống tiền.",
+  },
+  "bds-thanh-pho-san-bay-long-thanh-mo-hinh-sinh-loi-2026": {
+    url: HERO.thuThiemNight,
+    alt: "Hạ tầng kết nối vùng phía Đông — minh họa thành phố sân bay Long Thành",
+    caption:
+      "ACV hướng khai thác thương mại Long Thành giai đoạn 1 từ 1/12/2026; bán kính 5–10 km.",
+  },
 };
 
 /** Khối markdown ảnh minh hoạ trong thân bài (chuẩn báo chí). */
