@@ -161,6 +161,72 @@ const nextConfig = {
         destination: "/tin-tuc/kien-thuc/chu-de/hanh-lang-kinh-te-bien-phia-dong",
         permanent: true,
       },
+      // Dual silo: topic Kiến thức BĐS còn dính URL wiki → 308 cứng (trước rewrite)
+      {
+        source: "/wiki-nha-o-xa-hoi/chu-de/nha-o-cho-thue-dai-han",
+        destination: "/tin-tuc/kien-thuc/chu-de/nha-o-cho-thue-dai-han",
+        permanent: true,
+      },
+      {
+        source: "/wiki-nha-o-xa-hoi/chu-de/ha-tang-ket-noi-vung",
+        destination: "/tin-tuc/kien-thuc/chu-de/ha-tang-ket-noi-vung",
+        permanent: true,
+      },
+      {
+        source: "/wiki-nha-o-xa-hoi/chu-de/hanh-lang-bac-nam-song-sai-gon",
+        destination: "/tin-tuc/kien-thuc/chu-de/hanh-lang-bac-nam-song-sai-gon",
+        permanent: true,
+      },
+      {
+        source: "/wiki-nha-o-xa-hoi/chu-de/hanh-lang-dong-tay-vvk-mct",
+        destination: "/tin-tuc/kien-thuc/chu-de/hanh-lang-dong-tay-vvk-mct",
+        permanent: true,
+      },
+      {
+        source: "/wiki-nha-o-xa-hoi/chu-de/hanh-lang-kinh-te-bien-phia-dong",
+        destination: "/tin-tuc/kien-thuc/chu-de/hanh-lang-kinh-te-bien-phia-dong",
+        permanent: true,
+      },
+      {
+        source: "/wiki-nha-o-xa-hoi/chu-de/hanh-lang-vanh-dai-3-4",
+        destination: "/tin-tuc/kien-thuc/chu-de/hanh-lang-vanh-dai-3-4",
+        permanent: true,
+      },
+      {
+        source: "/wiki-nha-o-xa-hoi/chu-de/hanh-lang-san-bay-long-thanh",
+        destination: "/tin-tuc/kien-thuc/chu-de/hanh-lang-san-bay-long-thanh",
+        permanent: true,
+      },
+      {
+        source: "/wiki-nha-o-xa-hoi/chu-de/truc-quoc-lo-13-dong-bac",
+        destination: "/tin-tuc/kien-thuc/chu-de/truc-quoc-lo-13-dong-bac",
+        permanent: true,
+      },
+      {
+        source: "/wiki-nha-o-xa-hoi/chu-de/truc-dong-dong-nam-vung-thu-do",
+        destination: "/tin-tuc/kien-thuc/chu-de/truc-dong-dong-nam-vung-thu-do",
+        permanent: true,
+      },
+      {
+        source: "/wiki-nha-o-xa-hoi/chu-de/truc-san-bay-noi-bai-bac-song-hong",
+        destination: "/tin-tuc/kien-thuc/chu-de/truc-san-bay-noi-bai-bac-song-hong",
+        permanent: true,
+      },
+      {
+        source: "/wiki-nha-o-xa-hoi/chu-de/truc-vanh-dai-4-vung-thu-do",
+        destination: "/tin-tuc/kien-thuc/chu-de/truc-vanh-dai-4-vung-thu-do",
+        permanent: true,
+      },
+      {
+        source: "/wiki-nha-o-xa-hoi/chu-de/truc-dai-lo-thang-long-hoa-lac",
+        destination: "/tin-tuc/kien-thuc/chu-de/truc-dai-lo-thang-long-hoa-lac",
+        permanent: true,
+      },
+      {
+        source: "/wiki-nha-o-xa-hoi/chu-de/truc-tay-nam-ha-nam-ninh-binh",
+        destination: "/tin-tuc/kien-thuc/chu-de/truc-tay-nam-ha-nam-ninh-binh",
+        permanent: true,
+      },
       {
         source: "/du-an",
         has: [{ type: "query", key: "projectType", value: "NHA_O_XA_HOI" }],

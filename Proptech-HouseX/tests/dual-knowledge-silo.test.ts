@@ -48,6 +48,10 @@ describe("dual knowledge silo", () => {
       topicPath(NOXH_TAG_HA_TANG.slug),
       `${RE_KNOWLEDGE_PATH}/chu-de/${NOXH_TAG_HA_TANG.slug}`,
     );
+    assert.equal(
+      topicPath(NOXH_TAG_BTR.slug),
+      `${RE_KNOWLEDGE_PATH}/chu-de/${NOXH_TAG_BTR.slug}`,
+    );
   });
 
   it("demo catalog resolves BTR under knowledge path helper", () => {

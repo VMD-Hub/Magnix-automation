@@ -3,10 +3,14 @@ import type { NextRequest } from "next/server";
 import { buildCampaignLaneRedirectUrl } from "@/lib/miniapp/campaign-lane-host";
 import { isBlockedScraperUserAgent } from "@/lib/security/scrape-guard";
 import {
+  RE_KNOWLEDGE_PATH,
   rewriteLegacyArticleHref,
   topicPath,
 } from "@/lib/content/article-routes";
-import { LEGACY_NOXH_TOPIC_REDIRECTS } from "@/lib/content/articles/noxh-handbook-tags";
+import {
+  GENERAL_RE_TAG_SLUGS,
+  LEGACY_NOXH_TOPIC_REDIRECTS,
+} from "@/lib/content/articles/noxh-handbook-tags";
 import {
   getNoxhProvinceBySlug,
   NOXH_LEGACY_HUB_REDIRECTS,
@@ -49,6 +53,27 @@ function seoPermanentRedirect(req: NextRequest): NextResponse | null {
   };
   if (exact[path]) {
     return redirectPath(req, exact[path]);
+  }
+
+  // Kiến thức BĐS — wiki/cam-nang topic → /tin-tuc/kien-thuc (trước rewrite;
+  // page-level permanentRedirect không emit 308 qua rewrite).
+  const wikiKnowledgeTopic = path.match(
+    /^\/wiki-nha-o-xa-hoi\/chu-de\/([^/]+)\/?$/,
+  );
+  if (wikiKnowledgeTopic?.[1] && GENERAL_RE_TAG_SLUGS.has(wikiKnowledgeTopic[1])) {
+    return redirectPath(
+      req,
+      `${RE_KNOWLEDGE_PATH}/chu-de/${wikiKnowledgeTopic[1]}`,
+    );
+  }
+  const camKnowledgeTopic = path.match(
+    /^\/tin-tuc\/cam-nang-noxh\/chu-de\/([^/]+)\/?$/,
+  );
+  if (camKnowledgeTopic?.[1] && GENERAL_RE_TAG_SLUGS.has(camKnowledgeTopic[1])) {
+    return redirectPath(
+      req,
+      `${RE_KNOWLEDGE_PATH}/chu-de/${camKnowledgeTopic[1]}`,
+    );
   }
 
   // Prefix silos
@@ -154,6 +179,8 @@ export const config = {
     "/cam-nang-noxh/",
     "/tin-tuc/cam-nang-noxh",
     "/tin-tuc/cam-nang-noxh/:path*",
+    "/wiki-nha-o-xa-hoi",
+    "/wiki-nha-o-xa-hoi/:path*",
     "/tai-chinh",
     "/tai-chinh/:path*",
     "/noi-that",
