@@ -20,13 +20,17 @@ const SLUG_HOSO = "ho-so-mua-noxh-ly-thuong-kiet-doi-tuong-checklist-2026";
 const SLUG_SOT = "vi-sao-noxh-ly-thuong-kiet-sot-so-sanh-gia-quan-10-2026";
 const SLUG_CANHBAO =
   "canh-bao-lua-dao-suat-noi-bo-noxh-ly-thuong-kiet-2026";
+const SLUG_TAMLY =
+  "giai-ma-4-don-thao-tung-tam-ly-suat-noi-bo-noxh-ly-thuong-kiet-2026";
+const SLUG_VEBUA =
+  "mua-noxh-ly-thuong-kiet-co-kho-khong-canh-giac-ve-bua-thu-tuc-2026";
 
 const TAG = NOXH_TAG_DU_AN_GIA;
 const PROJECT = { slug: LTK_PROJECT_SLUG, name: LTK_PROJECT_NAME };
 
 /**
- * Phễu SEO 4 bài NOXH Lý Thường Kiệt — tone chuyên gia sòng phẳng (miền Nam).
- * Số liệu giá / quỹ căn theo công bố CĐT & Sở XD; không bịa bảng giá thương mại.
+ * Phễu SEO NOXH Lý Thường Kiệt — tone chuyên gia sòng phẳng (miền Nam).
+ * Vận hành + lớp tâm lý trust; số liệu giá theo công bố CĐT & Sở XD.
  */
 export const LTK_FUNNEL_SERIES_2026: ArticleDetail[] = [
   {
@@ -75,6 +79,8 @@ Công trình đang ở giai đoạn hoàn thiện cuối. Chủ đầu tư và b
 | Hồ sơ / đối tượng | [Ai có suất mua? Checklist hồ sơ](/wiki-nha-o-xa-hoi/${SLUG_HOSO}) |
 | Vì sao sốt | [Vị trí & chênh giá Quận 10](/wiki-nha-o-xa-hoi/${SLUG_SOT}) |
 | An toàn tiền | [Cảnh báo suất nội bộ & quy trình thanh toán](/wiki-nha-o-xa-hoi/${SLUG_CANHBAO}) |
+| Tâm lý | [Vì sao dễ sập bẫy — 4 đòn thao túng](/wiki-nha-o-xa-hoi/${SLUG_TAMLY}) |
+| Thủ tục | [NOXH có khó? Cảnh giác vẽ bùa thu phí](/wiki-nha-o-xa-hoi/${SLUG_VEBUA}) |
 
 ${NOXH_SUPPORT_CLOSING}
 
@@ -262,6 +268,8 @@ Theo khung nhà ở xã hội / hợp đồng mua bán thông dụng, chủ đ�
 
 Vị trí & chênh giá LTK: [Vì sao dự án sốt?](/wiki-nha-o-xa-hoi/${SLUG_SOT}).
 
+Đọc thêm lớp tâm lý: [Vì sao dễ sập bẫy suất nội bộ — 4 đòn thao túng](/wiki-nha-o-xa-hoi/${SLUG_TAMLY}) · [NOXH có khó? Cảnh giác vẽ bùa thủ tục](/wiki-nha-o-xa-hoi/${SLUG_VEBUA}).
+
 ${NOXH_SUPPORT_CLOSING}
 
 *Bài mang tính cảnh báo phòng chống lừa đảo — vụ việc cụ thể báo cáo cơ quan chức năng; mọi giao dịch tiền chỉ qua hợp đồng và tài khoản chính thức của CĐT.*`,
@@ -274,6 +282,190 @@ ${NOXH_SUPPORT_CLOSING}
       "Cảnh báo lừa đảo suất nội bộ NOXH Lý Thường Kiệt — thanh toán an toàn | HouseX",
     seoDesc:
       "Ba bẫy Facebook, bẫy thuê quỹ 270 căn, 3 không–3 có, lịch ≤95% trước sổ — bảo vệ tiền khi săn suất Quận 10.",
+    tags: [TAG],
+    projects: [PROJECT],
+  },
+  {
+    id: "article-ltk-funnel-05-tamly",
+    slug: SLUG_TAMLY,
+    title:
+      'Vì sao dễ sập bẫy "suất nội bộ"? Giải mã 4 đòn thao túng tâm lý quanh NOXH Lý Thường Kiệt',
+    excerpt:
+      "Khi cơ hội mua nhà giá công bố ~23,2 triệu/m² tại Quận 10 đụng lời cảnh báo của người thân — bốn chiêu đánh tráo khái niệm, đặc quyền giả, bình thường hóa rủi ro và phản kháng tâm lý khiến nạn nhân tự nguyện phản bác gia đình.",
+    body: `## Giằng xé giữa giá rẻ Quận 10 và lời khuyên người thân
+
+Giá NOXH Lý Thường Kiệt được công bố khoảng 23.251.398 đồng/m² (đã VAT) khiến nhiều hộ Sài Gòn vừa hy vọng vừa sợ mất cơ hội. Cùng lúc, người thân thường cảnh báo: “đừng mua suất ngoài luồng”. Căng thẳng thật. Bài này không thay [cảnh báo bẫy cụ thể](/wiki-nha-o-xa-hoi/${SLUG_CANHBAO}) — mà giải thích vì sao nạn nhân vẫn tự nguyện bỏ qua lời khuyên đúng.
+
+Neo số liệu và quỹ căn: [Bóc tách giá & 755 bán / 270 thuê](/wiki-nha-o-xa-hoi/${SLUG_GIA}) · Landing: [${LANDING}](${LANDING}).
+
+${EDITORIAL_FIGURES.ltkPhoiCanh}
+
+Bốn đòn dưới đây thường đi cùng nhau. Nhận ra một đòn đã đủ để dừng tay trước khi chuyển khoản. Cùng chủ đề “thân lừa ưa nặng”: [Mua NOXH Lý Thường Kiệt có khó không?](/wiki-nha-o-xa-hoi/${SLUG_VEBUA}).
+
+## 1. Bẫy ngữ nghĩa nghịch lý — đánh tráo khái niệm pháp lý
+
+Khái niệm: kẻ gian làm mờ ranh giới giữa hai thứ luật tách bạch, rồi khoác tên “thương mại” để nạn nhân thấy việc xuống tiền nghe chuyên nghiệp.
+
+Cách vận dụng quanh LTK:
+
+- Biến hợp đồng thuê nhà ở xã hội thành “hợp đồng mua trả góp dài hạn” hoặc “giữ chỗ hóa sổ sau vài năm” — đặc biệt nguy hiểm với quỹ 270 căn thuê.
+- Gọi tiền chênh / tiền “chạy suất” thành “phí tư vấn hồ sơ”, “quỹ cam kết bảo đảm”, “phí giữ chỗ ưu tiên”.
+
+Đòn tâm lý: tên gọi mỹ miều làm mất cảnh giác tối thiểu. Câu tự kiểm trước khi ký: tên giấy tờ trên mặt trước có khớp đúng loại giao dịch CĐT / Sở XD công bố không? Nếu chỉ có giấy tay / hợp đồng tư vấn cá nhân mà đã đòi tiền lớn — dừng.
+
+## 2. Hiệu ứng đặc quyền giả tạo — khi “bạn là người đặc biệt”
+
+Khái niệm: Illusion of Unique Privilege kết hợp Self-Serving Bias — xu hướng tin mình may mắn và đặc biệt hơn người khác.
+
+Kịch bản hay gặp:
+
+- “Bên em chỉ chọn đúng vài khách hoàn cảnh khó để hỗ trợ suất này.”
+- “Vì quý tính cách anh/chị nên em để lại suất ngoại giao người nhà.”
+
+Đòn tâm lý: cảm giác thuộc nhóm đặc quyền làm tê liệt lý trí rà soát. Thực tế xét duyệt NOXH đi theo thông báo đợt, đối tượng và quy trình chính thức — không có “suất ngoại giao hợp pháp bằng tiền chênh”. Câu tự kiểm: nếu suất thật sự đặc biệt đến vậy, vì sao phải giữ bí mật với gia đình và chuyển khoản ngoài hợp đồng CĐT?
+
+## 3. Lý thuyết triển vọng và bẫy chấp nhận rủi ro để “đổi đời”
+
+Khái niệm: Prospect Theory (lòng tham / nỗi sợ mất cơ hội làm méo đánh giá rủi ro) cộng Sunk Cost Fallacy (đã bỏ tiền thì càng khó dừng).
+
+Cách cò mồi vận dụng: lấy mức giá công bố ~23,2 triệu/m² của dự án (con số CĐT / Sở XD công khai), rồi vẽ sang tay ngay khi có sổ lên khoảng 80 triệu/m² như căn thương mại cùng khu. Lời dẫn thường là “làm giàu phải mạo hiểm”, “cơ hội trung tâm không liều thì bao giờ”.
+
+Lưu ý sòng phẳng: công bố giá bán NOXH không đồng nghĩa khuyến khích chạy suất hay đầu cơ sang tay. NOXH còn ràng buộc đối tượng, thời gian chuyển nhượng và điều kiện pháp lý — “lãi gấp ba” trên lời môi giới không phải cam kết của CĐT.
+
+Đòn tâm lý: khi viễn cảnh lãi cực lớn được kích, não tự bình thường hóa rủi ro; có người giấu gia đình, vay nóng, cắm xe để bù chênh, rồi biện minh là “hy sinh vì con”. Câu tự kiểm: nếu trừ phần “lãi trên miệng”, rủi ro mất trắng tiền chênh còn chấp nhận được không — và đã đọc [quy tắc 3 không – 3 có](/wiki-nha-o-xa-hoi/${SLUG_CANHBAO}) chưa?
+
+## 4. Hội chứng phản kháng tâm lý — vì sao nạn nhân chống lại gia đình?
+
+Khái niệm: Psychological Reactance (phản ứng khi cảm thấy bị kiểm soát) cộng Halo Effect (hào quang từ bề ngoài lịch lãm / từ ngữ “chuyên môn”).
+
+Cách vận dụng:
+
+- Xây hình ảnh bóng bẩy (xe, ăn mặc, đạo lý, thuật ngữ pháp lý nửa vời) để tạo uy tín giả.
+- Gieo chia rẽ: “Anh/chị giữ bí mật; người nhà không hiểu sẽ bàn ra làm mất cơ hội.”
+
+Đòn tâm lý: khi gia đình khuyên ngăn, nạn nhân kích hoạt phản kháng — cho rằng người thân “thiếu tầm nhìn”, “nhát gan” — rồi chọn tin lời hứa người ngoài. Đây là dấu hiệu đỏ, không phải bằng chứng bạn “có tầm”. Câu tự kiểm: nếu giao dịch sạch và đúng luật, vì sao lại cần giấu người thân và né kênh chính thức của CĐT?
+
+${EDITORIAL_FIGURES.metroHub}
+
+## Lời kết: tỉnh thức trước khi ký — và chia sẻ cho người thân
+
+Ba việc làm ngay nếu đang bị “vuốt ve” suất nội bộ:
+
+1. So giấy tờ với loại giao dịch thật (mua / thuê) và quỹ căn 755 bán vs 270 thuê.
+2. Chỉ nộp tiền theo lịch trên hợp đồng gốc với tài khoản CĐT — đối chiếu [cảnh báo thanh toán ≤95%](/wiki-nha-o-xa-hoi/${SLUG_CANHBAO}).
+3. Gửi bài này (hoặc checklist) cho vợ/chồng, anh chị em trước khi quyết — chống lại đúng đòn “giữ bí mật”.
+
+Cùng chủ đề “bỏ tiền mua sự sợ hãi thủ tục”: [Mua NOXH Lý Thường Kiệt có khó không?](/wiki-nha-o-xa-hoi/${SLUG_VEBUA}).
+
+Nếu không trúng suất Lý Thường Kiệt, vẫn có phương án an cư đúng luật thay vì mua chênh ngoài luồng:
+
+| Hướng | Gợi ý trên House X |
+|-------|---------------------|
+| NOXH vùng ven tổng vốn thấp hơn | [DTA Happy Home Nhơn Trạch](/du-an/${DTA_HAPPY_HOME_SLUG}) |
+| Cửa ngõ QL13 / Bình Dương | [${EMERALD_68_NAME}](/du-an/${EMERALD_68_SLUG}) · [NOXH Hồ Gươm Xanh](/du-an/${HGX_PROJECT_SLUG}) |
+| Hub hành lang QL13 | [/wiki-nha-o-xa-hoi/chu-de/truc-quoc-lo-13-dong-bac](/wiki-nha-o-xa-hoi/chu-de/truc-quoc-lo-13-dong-bac) |
+
+${NOXH_SUPPORT_CLOSING}
+
+*Bài mang tính giáo dục phòng chống thao túng tâm lý trong giao dịch NOXH — vụ việc cụ thể báo cáo cơ quan chức năng; mọi giao dịch tiền chỉ qua hợp đồng và tài khoản chính thức của CĐT.*`,
+    status: "PUBLISHED",
+    publishedAt: new Date("2026-07-27T14:00:00.000Z"),
+    updatedAt: UPDATED,
+    coverImageUrl: "/images/articles/phu-tho-dmc-phoi-canh.jpg",
+    authorName: "Ban biên tập House X",
+    seoTitle:
+      "4 đòn thao túng tâm lý suất nội bộ NOXH Lý Thường Kiệt | HouseX",
+    seoDesc:
+      "Giải mã bẫy ngữ nghĩa, đặc quyền giả, lý thuyết triển vọng và phản kháng tâm lý — vì sao nạn nhân phản bác lời khuyên gia đình quanh NOXH Quận 10.",
+    tags: [TAG],
+    projects: [PROJECT],
+  },
+  {
+    id: "article-ltk-funnel-06-vebua",
+    slug: SLUG_VEBUA,
+    title:
+      "Mua Nhà ở xã hội Lý Thường Kiệt có thực sự khó? Cảnh giác chiêu hù dọa thủ tục để trục lợi hồ sơ",
+    excerpt:
+      "Nghịch lý thân lừa ưa nặng: hồ sơ minh bạch tự nộp thì nghi ngờ, còn khi bị hù dọa thủ tục và hét phí vài triệu đến chục triệu thì lại tin là đúng quy trình — bóc tách Complexity Bias, kịch bản vẽ bùa 3 bước và cái giá của lối tắt.",
+    body: `## Khi lời khuyên đúng luật nghe “quá dễ”, còn lời hù dọa lại nghe “đúng gu”
+
+Nhiều hộ quanh NOXH Lý Thường Kiệt gặp đúng nghịch lý này: được hướng dẫn tự làm hồ sơ theo mẫu công khai thì nghi “lẻ tẻ quá, chắc lừa”; ngược lại, nghe môi giới dọa “1 chọi trăm, tự nộp chắc rớt từ vòng gửi xe”, rồi hét phí dịch vụ vài triệu hoặc cọc giữ chỗ chục triệu — lại gật đầu vì nghĩ “phải gian nan thế mới thật”.
+
+Dân gian gọi là thân lừa ưa nặng: sẵn sàng bỏ tiền mua sự sợ hãi. Bài này neo góc chuyên gia — Complexity Bias và ám ảnh rào cản — rồi vạch kịch bản “vẽ bùa thủ tục” quanh dự án Quận 10. Checklist đúng luật: [Hồ sơ / đối tượng LTK](/wiki-nha-o-xa-hoi/${SLUG_HOSO}). Lớp thao túng khác: [4 đòn tâm lý suất nội bộ](/wiki-nha-o-xa-hoi/${SLUG_TAMLY}).
+
+Landing: [${LANDING}](${LANDING}).
+
+${EDITORIAL_FIGURES.ltkPhoiCanh}
+
+## 1. Định kiến về sự phức tạp: vì sao người mua tự giăng bẫy?
+
+Complexity Bias: bộ não dễ tin phần thưởng lớn (căn trung tâm giá công bố ~23,2 triệu/m²) buộc phải đi kèm quy trình cực kỳ phức tạp. Việc đúng luật mà nghe thẳng thắn — mẫu đơn công khai, nộp đúng nơi, chờ xét duyệt — lại kích hoạt nghi ngờ: “dễ thế sao được?”.
+
+Cộng thêm ám ảnh rào cản (Barrier Obsession): nhiều người đã từng mệt với giấy tờ hành chính, mặc định “không quan hệ, không tiền lót tay thì không chạm NOXH”. Định kiến này là nguyên liệu sẵn. Cò mồi chỉ cần xác nhận nỗi sợ đó, không cần chứng minh đường dây thật.
+
+Câu tự kiểm: bạn đang trả tiền cho kết quả xét duyệt — thứ không ai ngoài cơ quan có thẩm quyền bán được — hay đang trả tiền để được nghe đúng câu chuyện mà bạn sợ từ trước?
+
+## 2. Kịch bản “vẽ bùa”: biến việc có thể tự làm thành bất khả thi
+
+Minh họa tổng hợp (không phải hồ sơ cá nhân nào công khai): anh H. đủ điều kiện đối tượng, đã in sẵn mẫu xác nhận nhà ở / thu nhập. Trên hội nhóm, được inbox: “LTK siết chặt lắm, tự nộp chắc chắn loại; bên em có người hỗ trợ làm đẹp hồ sơ, phí 5 triệu — muốn chắc suất thì cọc thêm”. Anh chuyển khoản vì sợ mất cơ hội Quận 10. Vài tuần sau: “đợt này Sở siết, hồ sơ anh chưa qua” — tiền phí không hoàn, hoặc bị kéo sang “suất ưu tiên” đòi thêm chênh. Bộ hồ sơ lẽ ra anh tự nộp miễn phí vẫn nằm đúng chỗ công khai.
+
+Ba bước tinh vi:
+
+| Bước | Việc cò làm | Mục đích |
+|------|-------------|----------|
+| 1. Phóng đại khó khăn | “Hồ sơ gắt”, “1 chọi 100”, “tự nộp rớt từ vòng gửi xe” | Tạo hoảng sợ |
+| 2. Đóng vai cứu thế | “Đường dây riêng”, “ban quản lý hỗ trợ”, “làm đẹp hồ sơ” | Bán lối tắt |
+| 3. Thu phí / kéo dài | Phí vài triệu/bộ; hoặc cọc chục triệu “giữ chỗ bốc thăm”; nặng hơn là chênh suất | Ăn tiền dù đậu hay rớt |
+
+Sự thật trần trụi: phần lớn trường hợp, bên kia chỉ cầm bộ giấy hợp pháp của bạn đi nộp như mọi người. Bạn đậu — họ nhận công “có đường dây”. Bạn rớt — họ đổ “đợt siết” rồi quỵt hoặc níu thêm phí. Không có bằng chứng công khai nào cho thấy CĐT Đức Mạnh hay Sở Xây dựng bán “suất qua môi giới cá nhân”. Giá và kênh chính thức xem [bài công bố giá](/wiki-nha-o-xa-hoi/${SLUG_GIA}) và thông báo đợt mở bán.
+
+## 3. Sự thật sòng phẳng: khó ở cạnh tranh, không phải ở “bùa thủ tục”
+
+Hai việc dễ lẫn:
+
+- Khó vì cạnh tranh: vài trăm suất bán (755 căn bán tại LTK) trước hàng nghìn / chục nghìn hồ sơ — tỷ lệ chọi cao là thật.
+- Khó vì giấy tờ “bí truyền”: thường là lời vẽ. Mẫu đơn, xác nhận thực trạng nhà ở, thu nhập theo đợt đều có form và hướng dẫn công khai khi Sở / CĐT mở cổng tiếp nhận.
+
+Bạn thuộc đúng đối tượng, đủ ba trụ nhà ở – thu nhập – nhóm ưu tiên thì hoàn toàn có thể tự hoàn thiện checklist — không cần trả phí “bôi trơn hồ sơ”. Điểm nào chưa rõ: đối chiếu [checklist LTK](/wiki-nha-o-xa-hoi/${SLUG_HOSO}) và bài điều kiện chung [Ai được mua NOXH 2026?](/wiki-nha-o-xa-hoi/dieu-kien-mua-nha-o-xa-hoi-2026-tom-tat). House X không nhận làm dịch vụ bao đậu; hỗ trợ hướng dẫn tự làm đúng luật qua [/lien-he](/lien-he).
+
+## 4. Cái giá khi chọn lối tắt qua môi giới bất chính
+
+- Mất phí dịch vụ / cọc giữ chỗ vào tài khoản cá nhân — khó đòi khi “hồ sơ rớt”.
+- Bị dụ làm khống giấy tờ: rủi ro hậu kiểm, thu hồi nhà, chế tài tham gia NOXH sau này — nặng hơn vài triệu phí.
+- Lẫn sang bẫy suất nội bộ / thuê mang danh mua: xem [cảnh báo suất nội bộ & quỹ 270 thuê](/wiki-nha-o-xa-hoi/${SLUG_CANHBAO}).
+
+Tự lấy dây buộc mình xảy ra khi bạn trả tiền để được sợ đúng cách cò muốn bạn sợ — rồi tin rằng nỗi sợ đó là bằng chứng quy trình “chuyên nghiệp”.
+
+${EDITORIAL_FIGURES.noxhEligibility}
+
+## Lời kết: tin quy trình công khai, không tin lời hù dọa vô căn cứ
+
+Ba việc làm ngay nếu đang bị dọa thủ tục:
+
+1. In / tải mẫu theo thông báo đợt chính thức — so với lời môi giới xem họ có bịa thêm giấy “đặc biệt” không.
+2. Không chuyển phí hồ sơ / giữ chỗ vào tài khoản cá nhân; chỉ nộp tiền theo hợp đồng CĐT khi đã được duyệt đúng luật.
+3. Gửi bài này cho người thân trước khi “cọc cho chắc” — chống đúng tâm lý thân lừa ưa nặng.
+
+Nếu mệt với vòng xét duyệt NOXH và muốn phương án ký hợp đồng mua bán thương mại / NOXH vùng ven đúng kênh:
+
+| Hướng | Gợi ý trên House X |
+|-------|---------------------|
+| NOXH vùng ven | [DTA Happy Home Nhơn Trạch](/du-an/${DTA_HAPPY_HOME_SLUG}) |
+| QL13 / Bình Dương | [${EMERALD_68_NAME}](/du-an/${EMERALD_68_SLUG}) · [NOXH Hồ Gươm Xanh](/du-an/${HGX_PROJECT_SLUG}) |
+| Hub QL13 | [/wiki-nha-o-xa-hoi/chu-de/truc-quoc-lo-13-dong-bac](/wiki-nha-o-xa-hoi/chu-de/truc-quoc-lo-13-dong-bac) |
+
+${NOXH_SUPPORT_CLOSING}
+
+*Bài giáo dục phòng chống trục lợi hồ sơ NOXH — vụ việc cụ thể báo cáo cơ quan chức năng; mọi giao dịch tiền chỉ qua hợp đồng và tài khoản chính thức của CĐT.*`,
+    status: "PUBLISHED",
+    publishedAt: new Date("2026-07-27T16:00:00.000Z"),
+    updatedAt: UPDATED,
+    coverImageUrl: "/images/articles/phu-tho-dmc-phoi-canh.jpg",
+    authorName: "Ban biên tập House X",
+    seoTitle:
+      "Mua NOXH Lý Thường Kiệt có khó? Cảnh giác vẽ bùa thủ tục | HouseX",
+    seoDesc:
+      "Complexity Bias và kịch bản hù dọa thủ tục thu phí hồ sơ — vì sao người mua bỏ tiền mua sự sợ hãi quanh NOXH Quận 10.",
     tags: [TAG],
     projects: [PROJECT],
   },

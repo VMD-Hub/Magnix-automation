@@ -65,6 +65,18 @@ export const ARTICLE_EDITORIAL_COVERS: Record<string, EditorialCover> = {
     caption:
       "Chỉ giao dịch qua hợp đồng và kênh chính thức CĐT Đức Mạnh / Sở Xây dựng — tránh suất nội bộ trên mạng.",
   },
+  "giai-ma-4-don-thao-tung-tam-ly-suat-noi-bo-noxh-ly-thuong-kiet-2026": {
+    url: PHU_THO_DMC_IMAGES.gallery[6].url,
+    alt: "Tiện ích nội khu NOXH Lý Thường Kiệt — minh họa bài giải mã thao túng tâm lý",
+    caption:
+      "Giải mã bốn đòn thao túng tâm lý quanh suất nội bộ NOXH — đọc cùng người thân trước khi xuống tiền.",
+  },
+  "mua-noxh-ly-thuong-kiet-co-kho-khong-canh-giac-ve-bua-thu-tuc-2026": {
+    url: PHU_THO_DMC_IMAGES.gallery[3].url,
+    alt: "Nội thất mẫu căn hộ NOXH Lý Thường Kiệt — minh họa cảnh giác vẽ bùa thủ tục",
+    caption:
+      "Thủ tục NOXH khó vì cạnh tranh suất, không phải vì phí bôi trơn hồ sơ — tự làm theo mẫu công khai.",
+  },
   "so-sanh-gia-noxh-ly-thuong-kiet-dta-happy-home-2026": {
     url: DTA_HAPPY_HOME_IMAGES.hero.url,
     alt: DTA_HAPPY_HOME_IMAGES.hero.alt,

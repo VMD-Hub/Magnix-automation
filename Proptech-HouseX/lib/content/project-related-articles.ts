@@ -65,6 +65,8 @@ export const PROJECT_FEATURED_ARTICLE_SLUGS: Partial<Record<string, string[]>> =
       "ho-so-mua-noxh-ly-thuong-kiet-doi-tuong-checklist-2026",
       "vi-sao-noxh-ly-thuong-kiet-sot-so-sanh-gia-quan-10-2026",
       "canh-bao-lua-dao-suat-noi-bo-noxh-ly-thuong-kiet-2026",
+      "giai-ma-4-don-thao-tung-tam-ly-suat-noi-bo-noxh-ly-thuong-kiet-2026",
+      "mua-noxh-ly-thuong-kiet-co-kho-khong-canh-giac-ve-bua-thu-tuc-2026",
       "tp-hcm-cong-bo-gia-2-du-an-noxh-ly-thuong-kiet-phu-tho-dmc",
       "so-sanh-gia-noxh-ly-thuong-kiet-dta-happy-home-2026",
       "dieu-kien-mua-nha-o-xa-hoi-2026-tom-tat",

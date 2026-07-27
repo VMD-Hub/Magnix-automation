@@ -14,11 +14,13 @@ const EXPECTED_SLUGS = [
   "ho-so-mua-noxh-ly-thuong-kiet-doi-tuong-checklist-2026",
   "vi-sao-noxh-ly-thuong-kiet-sot-so-sanh-gia-quan-10-2026",
   "canh-bao-lua-dao-suat-noi-bo-noxh-ly-thuong-kiet-2026",
+  "giai-ma-4-don-thao-tung-tam-ly-suat-noi-bo-noxh-ly-thuong-kiet-2026",
+  "mua-noxh-ly-thuong-kiet-co-kho-khong-canh-giac-ve-bua-thu-tuc-2026",
 ] as const;
 
 describe("LTK SEO funnel series 2026", () => {
-  it("exports 4 published articles with DU_AN_GIA tag and LTK project", () => {
-    assert.equal(LTK_FUNNEL_SERIES_2026.length, 4);
+  it("exports 6 published articles with DU_AN_GIA tag and LTK project", () => {
+    assert.equal(LTK_FUNNEL_SERIES_2026.length, 6);
     assert.deepEqual(
       LTK_FUNNEL_SERIES_2026.map((a) => a.slug),
       [...EXPECTED_SLUGS],
@@ -34,7 +36,7 @@ describe("LTK SEO funnel series 2026", () => {
     }
   });
 
-  it("all four slugs resolve in demo catalog and LTK project hub", () => {
+  it("all six slugs resolve in demo catalog and LTK project hub", () => {
     for (const slug of EXPECTED_SLUGS) {
       assert.ok(getDemoArticleBySlug(slug), `missing demo ${slug}`);
     }
@@ -60,5 +62,26 @@ describe("LTK SEO funnel series 2026", () => {
     assert.ok(a.body.includes("270"));
     assert.ok(a.body.includes("/lien-he"));
     assert.ok(a.body.includes("95%"));
+  });
+
+  it("article 5 covers four psychology levers and invite-to-share CTA", () => {
+    const a = LTK_FUNNEL_SERIES_2026[4]!;
+    assert.ok(/ngữ nghĩa|đặc quyền|triển vọng|phản kháng/i.test(a.body));
+    assert.ok(a.body.includes("270"));
+    assert.ok(a.body.includes("/lien-he"));
+    assert.ok(/người thân|gia đình/i.test(a.body));
+    assert.ok(
+      a.body.includes("canh-bao-lua-dao-suat-noi-bo-noxh-ly-thuong-kiet-2026"),
+    );
+  });
+
+  it("article 6 exposes procedure-fear fee scam and Complexity Bias", () => {
+    const a = LTK_FUNNEL_SERIES_2026[5]!;
+    assert.ok(/Complexity Bias|phức tạp|vẽ bùa|hù dọa/i.test(a.body));
+    assert.ok(a.body.includes("/lien-he"));
+    assert.ok(
+      a.body.includes("ho-so-mua-noxh-ly-thuong-kiet-doi-tuong-checklist-2026"),
+    );
+    assert.ok(/không nhận làm dịch vụ bao đậu|tự làm/i.test(a.body));
   });
 });
