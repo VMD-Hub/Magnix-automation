@@ -36,6 +36,7 @@
     "db:bootstrap:agent-entitlements": "node --env-file=.env --import tsx scripts/bootstrap-agent-entitlements.ts",
     "db:seed:promotion": "node --env-file=.env --import tsx scripts/seed-promotion-campaign.ts",
     "db:reseed:dta": "node --env-file=.env --import tsx scripts/seed-dta-happy-home.ts",
+    "db:reseed:id-town": "node --env-file=.env --import tsx scripts/seed-id-town.ts",
     "db:seed:priority": "node --env-file=.env --import tsx scripts/seed-priority-miniapp-projects.ts",
     "db:seed:cctm-luat-nha-o-queue": "node --env-file=.env --import tsx scripts/seed-cctm-luat-nha-o-queue.ts",
     "db:seed:cctm-luat-nha-o-queue:dry": "node --import tsx scripts/seed-cctm-luat-nha-o-queue.ts --dry-run",

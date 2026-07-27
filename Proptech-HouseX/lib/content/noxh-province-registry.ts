@@ -152,6 +152,7 @@ export const NOXH_PROVINCE_REGISTRY_P0 = [
       "NOXH Bình Phước",
       "NOXH Nhơn Trạch",
       "NOXH Long Thành",
+      "ID Town Long Thành",
     ],
   },
   {

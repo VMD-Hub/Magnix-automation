@@ -79,10 +79,12 @@ npm run db:studio   # Prisma Studio
 npm run dev
 # http://localhost:3000
 # http://localhost:3000/preview/du-an/dta-happy-home-nhon-trach  (duyệt giao diện, không cần DB)
+# http://localhost:3000/preview/du-an/id-town-long-thanh  (NOXH ID Town Long Thành, không cần DB)
 # http://localhost:3000/du-an/solena-green-town-binh-tan  (căn hộ TM mẫu, demo/seed)
 # http://localhost:3000/du-an/the-prive-nam-rach-chiec  (The Privé Nam Rạch Chiếc, demo/seed)
 # http://localhost:3000/du-an/iki-village  (căn hộ wellness TM, demo/seed)
 # http://localhost:3000/du-an/dta-happy-home-nhon-trach  (NOXH, sau seed)
+# http://localhost:3000/du-an/id-town-long-thanh  (NOXH ID Town Long Thành, demo/seed)
 # http://localhost:3000/du-an/eco-residence-long-binh-tan  (NOXH Eco Residence, demo/seed)
 # http://localhost:3000/du-an/chung-cu-phuc-loc-tho-noxh  (NOXH Phúc Lộc Thọ Block C, demo/seed)
 # http://localhost:3000/du-an/dragon-e-home-phu-huu  (NOXH Dragon E-Home Phú Long, demo/seed)

@@ -93,6 +93,7 @@ flowchart TB
 |--------------|----------------------------|---------|
 | `nha-o-xa-hoi-ly-thuong-kiet` | trend 01, gia LTK, so sánh | `nha-o-xa-hoi-ly-thuong-kiet` |
 | `dta-happy-home-nhon-trach` | TOD series, vay, so sánh | `dta-happy-home-nhon-trach` |
+| `id-town-long-thanh` | (backlog bài) | `noxh` |
 | `chung-cu-phuc-loc-tho-noxh` | PLT article, TP.HCM trend | `noxh` |
 | `noxh-kdc-chang-song-phuoc-tan` | tiến độ Chàng Sông | `noxh` |
 | Long An (6 slug) | `noxh-long-an-6-du-an-...` | `noxh` |
@@ -104,7 +105,7 @@ Cấu hình: `lib/content/project-related-articles.ts`.
 | Ưu tiên | Chủ đề | Ghi chú |
 |---------|--------|---------|
 | P0 | Hub mua nhà lần đầu + đảo nợ/DTI (8 bài) | Brief: `FIRST_BUYER_DEBT_HUB_BRIEF_2026.md` · JSON: `FIRST_BUYER_DEBT_HUB_BRIEFS_V1.json` — nest `/vay-mua-nha`, không cannibalize pillar thẩm định vay |
-| P1 | Eco Residence, Dragon E-Home, Thu Thiem Green House | Có landing, chưa có bài |
+| P1 | Eco Residence, Dragon E-Home, Thu Thiem Green House, ID Town | Có landing, chưa có bài |
 | P1 | Nam Long Cần Thơ (2 dự án) | Regional gap |
 | P2 | Điều 67 — quân nhân/công an | Deep dive |
 | P2 | Chuyển nhượng / thời hạn sở hữu NOXH | AIO pháp lý |

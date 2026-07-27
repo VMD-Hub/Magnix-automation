@@ -1,5 +1,6 @@
 import { parseProjectOverview, resolveLandingHeroImage } from "@/lib/content/project-landing";
 import { DTA_HAPPY_HOME_IMAGES } from "@/lib/content/dta-happy-home-images";
+import { ID_TOWN_IMAGES } from "@/lib/content/id-town-images";
 import { getNoxhStockHeroUrl } from "@/lib/content/noxh-stock-images";
 import { getDemoProjectBySlug } from "@/lib/preview/demo-projects";
 import { getCatalogSlugs } from "@/lib/seed/catalog-project-slugs";
@@ -11,6 +12,7 @@ const GENERIC_COMMERCIAL = "/images/hero/hcmc-skyline-river-day.webp";
 /** Ảnh bìa dự phòng khi hero landing thiếu hoặc hotlink lỗi — admin thay sau. */
 const SLUG_OVERRIDES: Record<string, string> = {
   "dta-happy-home-nhon-trach": DTA_HAPPY_HOME_IMAGES.hero.url,
+  "id-town-long-thanh": ID_TOWN_IMAGES.hero.url,
 };
 
 export function getCatalogCoverUrl(slug: string): string | null {

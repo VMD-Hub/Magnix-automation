@@ -7,6 +7,8 @@ import {
   defaultProjectLanding,
 } from "../lib/content/project-landing";
 import { seedDtaHappyHome } from "../lib/seed/dta-happy-home";
+import { seedIdTown } from "../lib/seed/id-town";
+import { ID_TOWN_SLUG } from "../lib/content/id-town-landing";
 import {
   HOUSEX_RIVERSIDE_DEMO_IMAGES,
 } from "../lib/content/project-landing-demo-images";
@@ -242,6 +244,9 @@ async function main() {
   // CĐT thực — mẫu landing NOXH tiêu biểu. Landing/ảnh là code-authored
   // (lib/content/dta-happy-home-*), dùng chung với scripts/seed-dta-happy-home.ts.
   await seedDtaHappyHome(prisma);
+
+  // NOXH — ID Town Long Thành (tham khảo id-town.com.vn).
+  await seedIdTown(prisma);
 
   // NOXH — Eco Residence / Nhà ở xã hội Long Bình Tân (tham khảo hpdgroup.vn/eco-residence).
   const cdhDeveloper = await prisma.developer.upsert({
@@ -1522,6 +1527,7 @@ Mức giá chính thức: 23.251.398 đồng/m² (đã VAT, chưa gồm 2% phí 
 
   console.log("Seed completed.");
   console.log("  NOXH mẫu: /du-an/dta-happy-home-nhon-trach");
+  console.log(`  NOXH mẫu: /du-an/${ID_TOWN_SLUG}`);
   console.log("  NOXH mẫu: /du-an/eco-residence-long-binh-tan");
   console.log("  NOXH mẫu: /du-an/chung-cu-phuc-loc-tho-noxh");
   console.log("  NOXH mẫu: /du-an/dragon-e-home-phu-huu");

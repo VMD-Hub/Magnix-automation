@@ -47,6 +47,11 @@ import {
   CS_PROJECT_SLUG,
 } from "@/lib/preview/kdc-chang-song-mock";
 import {
+  buildIdTownMock,
+  buildIdTownPreviewListings,
+  ID_TOWN_SLUG,
+} from "@/lib/preview/id-town-mock";
+import {
   buildThePriveMock,
   buildThePrivePreviewListings,
   THE_PRIVE_PROJECT_SLUG,
@@ -204,6 +209,10 @@ const DEMO_REGISTRY: Record<string, DemoEntry> = {
   [CS_PROJECT_SLUG]: {
     build: buildKdcChangSongMock,
     listings: buildKdcChangSongPreviewListings,
+  },
+  [ID_TOWN_SLUG]: {
+    build: buildIdTownMock,
+    listings: buildIdTownPreviewListings,
   },
   [NL2_PROJECT_SLUG]: {
     build: buildNamLong2CanThoMock,

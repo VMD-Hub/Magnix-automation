@@ -92,6 +92,24 @@ export const NOXH_STOCK_BY_SLUG: Record<string, NoxhStockPack> = {
       { url: IMG.skylineDay, caption: "Quy hoạch khu dân cư" },
     ],
   ),
+  "id-town-long-thanh": pack(
+    "/images/projects/id-town/hero.jpg",
+    "ID Town Long Thành — NOXH gần sân bay",
+    [
+      {
+        url: "/images/projects/id-town/phoi-canh-1.jpg",
+        caption: "Phối cảnh ID Town",
+      },
+      {
+        url: "/images/projects/id-town/tien-ich-1.jpg",
+        caption: "Tiện ích nội khu",
+      },
+      {
+        url: "/images/projects/id-town/mat-bang-1.jpg",
+        caption: "Mặt bằng căn hộ",
+      },
+    ],
+  ),
   "nha-o-xa-hoi-nam-long-2-can-tho": pack(
     IMG.skylineNight,
     "Nhà ở xã hội Nam Long 2 — Cần Thơ",
@@ -198,12 +216,14 @@ const DEFAULT_NOXH_STOCK: NoxhStockPack = pack(
   ],
 );
 
-/** DTA giữ ảnh đã nội bộ hóa trong /public (không cần thay bằng stock). */
+/** Dự án đã nội bộ hóa ảnh trong /public — giữ nguyên landing. */
 export function ensureNoxhLandingMedia(
   landing: ProjectLanding,
   slug: string,
 ): ProjectLanding {
-  if (slug === "dta-happy-home-nhon-trach") return landing;
+  if (slug === "dta-happy-home-nhon-trach" || slug === "id-town-long-thanh") {
+    return landing;
+  }
 
   const stock = NOXH_STOCK_BY_SLUG[slug] ?? DEFAULT_NOXH_STOCK;
 
@@ -229,6 +249,8 @@ export function ensureNoxhLandingMedia(
 }
 
 export function getNoxhStockHeroUrl(slug: string): string | null {
-  if (slug === "dta-happy-home-nhon-trach") return null;
+  if (slug === "dta-happy-home-nhon-trach" || slug === "id-town-long-thanh") {
+    return null;
+  }
   return NOXH_STOCK_BY_SLUG[slug]?.hero.url ?? null;
 }
