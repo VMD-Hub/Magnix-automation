@@ -94,7 +94,7 @@ Theo công bố CĐT TBS Land (hoguom-xanh.vn và tài liệu đối tác): KĐT
 Kết nối ngoại khu (tham chiếu CĐT):
 • Mặt tiền Đại lộ Bình Dương / Quốc lộ 13 — huyết mạch Thuận An
 • Gần Phạm Văn Đồng, Quốc lộ 1K, Quốc lộ 1A; di chuyển về trung tâm TP.HCM theo công bố CĐT khoảng dưới 30 phút (tùy giờ)
-• Tiện ích ngoại khu lân cận: trung tâm mua sắm, công viên bờ kè Lái Thiêu, hạ tầng đô thị Thuận An
+• Tiện ích ngoại khu lân cận (bán kính ~500 m – 2 km, tham chiếu): AEON Mall Bình Dương Canary, Lotte Mart, Bệnh viện quốc tế Becamex, sân golf Sông Bé, trường học / liên cấp các cấp; công viên bờ kè Lái Thiêu và hạ tầng đô thị Thuận An
 
 Điểm nhấn cảnh quan nội khu: hồ trung tâm mô phỏng không gian Hồ Gươm, công viên, phố đi bộ và tiện ích giáo dục–thương mại–thể thao trong masterplan.
 
@@ -119,6 +119,10 @@ Tiến độ (tham chiếu công khai 2025–2026): khởi công khoảng 27/06/
     {
       title: "Giá NOXH đang cập nhật — gọi House X",
       text: `Website CĐT chưa niêm yết bảng giá nhà ở xã hội. Không dùng số liệu thị trường thương mại làm giá NOXH. Hotline House X ${getSupportPhoneDisplay()} khi cần cập nhật đợt mở bán.`,
+    },
+    {
+      title: "Gần cụm tiện ích lớn vùng Thuận An – QL13",
+      text: "Trong bán kính khoảng 500 m – 2 km (tham chiếu kênh giới thiệu KĐT): AEON Mall Bình Dương Canary, Lotte Mart, Bệnh viện quốc tế Becamex, sân golf Sông Bé và hệ thống trường liên cấp / trường học các cấp — đủ mua sắm, y tế, giáo dục quanh chỗ ở mà không phải vào sâu nội thành mỗi ngày.",
     },
   ],
   amenities: [

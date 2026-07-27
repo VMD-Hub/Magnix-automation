@@ -21,6 +21,7 @@ Nguồn nghiên cứu (tham khảo công khai, đối chiếu trước publish):
 | **Loại hình** | `NHA_O_XA_HOI` (landing tập trung phân khu chung cư NOXH trong KĐT hỗn hợp) |
 | **CĐT** | TBS Land (thành viên TBS Group) |
 | **Địa chỉ** | 136 Đại lộ Bình Dương, Lái Thiêu, TP. Thuận An, Bình Dương |
+| **Tiện ích ngoại khu** | ~500 m – 2 km: AEON Mall Bình Dương Canary, Lotte Mart, BV quốc tế Becamex, sân golf Sông Bé, trường liên cấp / các cấp |
 | **Quy mô KĐT** | ~26,4 ha · ~4.200 sản phẩm (thấp tầng + cao tầng + NOXH) · dân số ước ~10.500 |
 | **Phân khu NOXH** | Chung cư nhà ở xã hội cao **5–12 tầng** (theo công bố quy hoạch CĐT) |
 | **Khác trong KĐT** | Khách sạn–TTTM ~24 tầng; chung cư thương mại tới ~40 tầng; nhà phố / biệt thự |
