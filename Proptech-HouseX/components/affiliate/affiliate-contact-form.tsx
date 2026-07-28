@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { resolveContactFormIntent } from "@/lib/content/contact-form-routing";
 
 const VERTICAL_OPTIONS = [
+  { value: "nha-o-xa-hoi", label: "Tư vấn dự án Nhà ở xã hội" },
   { value: "tai-chinh", label: "Vay vốn / Tài chính ngân hàng" },
   { value: "dinh-gia", label: "Định giá & thẩm định BĐS" },
   { value: "noi-that", label: "Thiết kế & thi công nội thất" },
@@ -14,6 +15,13 @@ const VERTICAL_OPTIONS = [
 ] as const;
 
 const NEED_BY_VERTICAL: Record<string, { value: string; label: string }[]> = {
+  "nha-o-xa-hoi": [
+    { value: "tu-van-du-an-noxh", label: "Tư vấn dự án / giỏ căn NOXH" },
+    { value: "dieu-kien-doi-tuong", label: "Điều kiện đối tượng mua NOXH" },
+    { value: "ho-so-thu-tuc", label: "Hồ sơ & thủ tục đăng ký" },
+    { value: "vay-mua-noxh", label: "Vay mua nhà ở xã hội" },
+    { value: "tu-van-chung-noxh", label: "Chưa rõ — cần tư vấn thêm" },
+  ],
   "tai-chinh": [
     {
       value: "ra-soat-phap-ly-15-phut",

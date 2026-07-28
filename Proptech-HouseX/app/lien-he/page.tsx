@@ -54,7 +54,7 @@ export default async function LienHePage({ searchParams }: Props) {
         </h2>
         <p className="mt-1 text-sm text-slate-600">
           {intent?.sectionLead ??
-            "Vay mua nhà, thẩm định giá, nội thất, cộng tác viên — điền form, chúng tôi phản hồi trong giờ hành chính."}
+            "Nhà ở xã hội, vay mua nhà, thẩm định giá, nội thất, cộng tác viên — điền form, chúng tôi phản hồi trong giờ hành chính."}
         </p>
         <div className="mt-6">
           <Suspense fallback={<p className="text-slate-500">Đang tải form…</p>}>

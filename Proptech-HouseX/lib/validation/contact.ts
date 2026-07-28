@@ -5,6 +5,7 @@ export const affiliateContactSchema = z.object({
   phone: z.string().trim().min(8, "Số điện thoại không hợp lệ."),
   email: z.string().trim().email("Email không hợp lệ.").optional().or(z.literal("")),
   vertical: z.enum([
+    "nha-o-xa-hoi",
     "tai-chinh",
     "dinh-gia",
     "noi-that",

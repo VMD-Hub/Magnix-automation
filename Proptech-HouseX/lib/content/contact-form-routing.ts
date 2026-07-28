@@ -20,6 +20,15 @@ export const CONTACT_FORM_INTENTS = {
     defaultMessage:
       "Tôi muốn đặt lịch rà soát pháp lý & tài chính 15 phút (miễn phí) trước khi quyết định xuống tiền.",
   },
+  "tu-van-nha-o-xa-hoi": {
+    vertical: "nha-o-xa-hoi",
+    need: "tu-van-du-an-noxh",
+    sectionTitle: "Tư vấn dự án nhà ở xã hội",
+    sectionLead:
+      "Dành cho người cần làm rõ dự án, điều kiện đối tượng, hồ sơ hoặc vay mua NOXH — House X hỗ trợ định hướng, không cam kết duyệt hồ sơ.",
+    defaultMessage:
+      "Tôi muốn được tư vấn về dự án nhà ở xã hội trên House X.",
+  },
   "tu-van-cong-tac-vien": {
     vertical: "cong-tac-vien",
     need: "mo-hinh-ctv",
