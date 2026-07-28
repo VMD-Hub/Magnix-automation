@@ -137,7 +137,7 @@ Nếu bị trả hoặc loại: [Bị loại hồ sơ — làm gì tiếp theo](
 
 ## Đăng ký tư vấn hồ sơ trên House X
 
-Khi cần hỗ trợ đối chiếu checklist trước hạn nộp, để lại thông tin tại [/lien-he?goi=tu-van-nha-o-xa-hoi](/lien-he?goi=tu-van-nha-o-xa-hoi). Có thể kèm ước lượng vay: [/cong-cu/tham-dinh-vay-noxh](/cong-cu/tham-dinh-vay-noxh).
+Khi cần hỗ trợ đối chiếu checklist trước hạn nộp, [đăng ký tư vấn nhà ở xã hội](/lien-he?goi=tu-van-nha-o-xa-hoi#tu-van). Có thể kèm [ước lượng vay nhà ở xã hội](/cong-cu/tham-dinh-vay-noxh).
 
 ${NOXH_SUPPORT_CLOSING}`,
     status: "PUBLISHED",
