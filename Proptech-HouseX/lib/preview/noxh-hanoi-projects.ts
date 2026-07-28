@@ -332,7 +332,7 @@ Xem Wiki nhà ở xã hội, công cụ tính trả góp hoặc để lại thô
       },
     ],
     heroImage: {
-      url: "/images/noxh-stock/hero-generic.jpg",
+      url: "/images/hero/housex-hero-slide-01-civic-center-1920.jpg",
       alt: `${row.name} — Hà Nội`,
     },
     gallery: [],

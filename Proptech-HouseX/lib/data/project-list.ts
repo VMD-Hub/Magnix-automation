@@ -8,6 +8,9 @@ import {
   parseProjectOverview,
   resolveLandingHeroImage,
 } from "@/lib/content/project-landing";
+import { ensureNoxhLandingMedia } from "@/lib/content/noxh-stock-images";
+import { ensureCatalogCoverUrl } from "@/lib/content/catalog-cover-fallback";
+import { isSafeImageUrl } from "@/lib/content/safe-image";
 import { allowDemoProjectFallback } from "@/lib/deploy/demo-fallback";
 import {
   listCatalogProjectCards,
@@ -41,6 +44,21 @@ export type ProjectListResult = {
   isCatalog?: boolean;
 };
 
+function resolveListCardImage(
+  overviewData: unknown,
+  projectType: string,
+  slug: string,
+  name: string,
+): string | null {
+  const overview = parseProjectOverview(overviewData);
+  const landing =
+    overview.landing && projectType === "NHA_O_XA_HOI"
+      ? ensureNoxhLandingMedia(overview.landing, slug)
+      : overview.landing;
+  const hero = resolveLandingHeroImage(landing, name);
+  return isSafeImageUrl(hero?.url) ? hero!.url : ensureCatalogCoverUrl(slug);
+}
+
 function rowToCard(p: {
   slug: string;
   name: string;
@@ -53,8 +71,6 @@ function rowToCard(p: {
   unitTypes: { priceFrom: { toString(): string } | null }[];
   _count: { listings: number };
 }): ProjectCardData {
-  const overview = parseProjectOverview(p.overviewData);
-  const hero = resolveLandingHeroImage(overview.landing, p.name);
   return {
     slug: p.slug,
     name: p.name,
@@ -65,7 +81,12 @@ function rowToCard(p: {
     developerName: p.developer?.name ?? null,
     priceFrom: p.unitTypes[0]?.priceFrom?.toString() ?? null,
     listingCount: p._count.listings,
-    imageUrl: hero?.url ?? null,
+    imageUrl: resolveListCardImage(
+      p.overviewData,
+      p.projectType,
+      p.slug,
+      p.name,
+    ),
   };
 }
 

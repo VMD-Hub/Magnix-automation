@@ -78,6 +78,23 @@ describe("catalog media fallbacks", () => {
     assert.ok(isSafeImageUrl(risky.heroImage?.url));
     assert.ok(risky.gallery.length >= 2);
     assert.ok(risky.gallery.every((g) => isSafeImageUrl(g.url)));
+
+    const deadLocal = ensureNoxhLandingMedia(
+      {
+        ...dta,
+        heroImage: {
+          url: "/images/noxh-stock/hero-generic.jpg",
+          alt: "dead",
+        },
+        gallery: [{ url: "/images/noxh-stock/hero-generic.jpg", caption: "y" }],
+      },
+      "nha-o-xa-hoi-udic-eco-tower-ha-dinh",
+    );
+    assert.notEqual(
+      deadLocal.heroImage?.url,
+      "/images/noxh-stock/hero-generic.jpg",
+    );
+    assert.ok(deadLocal.heroImage?.url.startsWith("/images/hero/"));
   });
 
   it("parseProjectOverview keeps landing when blocks is invalid but landing valid", () => {

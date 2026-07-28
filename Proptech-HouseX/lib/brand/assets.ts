@@ -102,7 +102,7 @@ export const BRAND_ASSETS = {
   /** Vũ Nguyễn — personal brand Lớp 3 · /vu-nguyen */
   vuNguyen: {
     portrait: {
-      path: "/brand/vu-nguyen/portrait.jpg",
+      path: "/brand/vu-nguyen/portrait.png",
       usage: "Digital profile NFC — NEXT_PUBLIC_VU_NGUYEN_PORTRAIT_URL",
       decorative: true,
     },

@@ -198,10 +198,15 @@ export const NOXH_STOCK_BY_SLUG: Record<string, NoxhStockPack> = {
 };
 
 /**
- * Rủi ro = KHÔNG nằm trong allowlist ảnh an toàn (xem `lib/content/safe-image.ts`).
+ * Rủi ro = KHÔNG nằm trong allowlist ảnh an toàn (xem `lib/content/safe-image.ts`),
+ * hoặc path local đã biết là chết (vd. `/images/noxh-stock/*` không còn trong repo).
  * Mọi hotlink CĐT bên thứ ba / http:// / domain lạ đều rủi ro → tự thay bằng stock.
  */
+const DEAD_LOCAL_IMAGE_PREFIXES = ["/images/noxh-stock/"] as const;
+
 export function isRiskyNoxhImageUrl(url: string | undefined): boolean {
+  if (!url) return true;
+  if (DEAD_LOCAL_IMAGE_PREFIXES.some((p) => url.startsWith(p))) return true;
   return !isSafeImageUrl(url);
 }
 
