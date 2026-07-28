@@ -3,6 +3,8 @@ import { applyEditorialMedia, EDITORIAL_FIGURES } from "@/lib/content/articles/a
 import { NOXH_SUPPORT_CLOSING } from "@/lib/content/articles/article-editorial-voice";
 import { NOXH_HANDBOOK_JOURNEY_ARTICLES_2026 } from "@/lib/content/articles/noxh-handbook-journey-2026";
 import { NOXH_KNOWLEDGE_ARTICLES_2026 } from "@/lib/content/articles/noxh-knowledge-series-2026";
+import { NOXH_INTENT_HUB_ARTICLES_2026 } from "@/lib/content/articles/noxh-intent-hub-series-2026";
+import { NOXH_HANOI_TRENDING_HUB_ARTICLES_2026 } from "@/lib/content/articles/noxh-hanoi-trending-hub-2026";
 import { NOXH_MINDSET_ARTICLES_2026 } from "@/lib/content/articles/noxh-mindset-series-2026";
 import { NOXH_LOAN_ASSESSMENT_ARTICLES_2026 } from "@/lib/content/articles/noxh-loan-assessment-series-2026";
 import { FIRST_BUYER_FINANCE_MYTHS_ARTICLES_2026 } from "@/lib/content/articles/first-buyer-finance-myths-2026";
@@ -301,6 +303,8 @@ Xem thêm [chuyên mục phong thủy](/phong-thuy) và [xem hướng nhà](/con
     projects: [],
   },
   ...NOXH_TREND_ARTICLES_2026,
+  ...NOXH_INTENT_HUB_ARTICLES_2026,
+  ...NOXH_HANOI_TRENDING_HUB_ARTICLES_2026,
   ...NOXH_KNOWLEDGE_ARTICLES_2026,
   ...NOXH_HANDBOOK_JOURNEY_ARTICLES_2026,
   ...NOXH_LOAN_ASSESSMENT_ARTICLES_2026,

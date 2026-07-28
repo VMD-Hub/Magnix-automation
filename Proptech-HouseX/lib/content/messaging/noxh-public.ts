@@ -44,7 +44,7 @@ export const NOXH_HANDBOOK_SEO_TITLE =
 
 /** Meta description riêng — không dùng INTRO dài trên trang. */
 export const NOXH_HANDBOOK_SEO_DESCRIPTION =
-  "Wiki nhà ở xã hội trên House X: điều kiện mua, hồ sơ, quy trình và vay — thông tin có căn cứ để bạn kiểm tra trước khi quyết định." as const;
+  "Wiki nhà ở xã hội trên House X: nhà ở xã hội là gì, điều kiện mua, đăng ký hồ sơ, quy trình và vay — thông tin có căn cứ trước khi quyết định." as const;
 
 export const NOXH_HANDBOOK_INTRO =
   "Mua nhà ở xã hội cần thông tin có căn cứ — không dựa vào tin đồn hay lời giới thiệu miệng. Wiki này hệ thống hóa tiến độ dự án, khung pháp lý và phương án tài chính từ chuyên gia, giúp bạn chủ động kiểm tra điều kiện, hồ sơ và khả năng vay trước khi quyết định." as const;
@@ -54,6 +54,22 @@ export const NOXH_TOPIC_HUB_INTRO = NOXH_HANDBOOK_INTRO;
 
 /** Bài pillar & cluster — hiển thị trên hub chủ đề NOXH. */
 export const NOXH_TOPIC_PILLAR_LINKS = [
+  {
+    href: articlePath("nha-o-xa-hoi-la-gi"),
+    label: "Nhà ở xã hội là gì?",
+  },
+  {
+    href: articlePath("dang-ky-nha-o-xa-hoi"),
+    label: "Đăng ký nhà ở xã hội — hồ sơ & thứ tự",
+  },
+  {
+    href: articlePath("noxh-phia-tay-ha-noi-dai-mo-to-huu-me-tri-2026"),
+    label: "NOXH phía Tây Hà Nội — Đại Mỗ, Tố Hữu, Mễ Trì",
+  },
+  {
+    href: articlePath("noxh-long-bien-him-lam-phuc-loi-rice-city-2026"),
+    label: "NOXH Long Biên — Him Lam & Rice City",
+  },
   {
     href: articlePath("dieu-kien-mua-nha-o-xa-hoi-2026-tom-tat"),
     label: "Chọn NOXH đúng cách — bài tổng quan",

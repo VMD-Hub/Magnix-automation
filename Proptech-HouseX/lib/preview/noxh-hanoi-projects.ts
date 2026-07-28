@@ -435,6 +435,236 @@ House X hỗ trợ wiki điều kiện NOXH và form tư vấn — không thay t
 
 DEFS[0] = enrichUdicEcoTower(DEFS[0]!);
 
+/** P1 SEO lite — alias tìm kiếm + FAQ; không bịa giá / số căn. */
+export const HN_FLC_DAI_MO_SLUG = "nha-o-xa-hoi-flc-garden-city-dai-mo" as const;
+export const HN_RICE_CITY_TO_HUU_SLUG = "nha-o-xa-hoi-rice-city-to-huu" as const;
+export const HN_GREEN_TOWER_ME_TRI_SLUG = "nha-o-xa-hoi-green-tower-me-tri" as const;
+export const HN_HIM_LAM_THUONG_THANH_SLUG =
+  "nha-o-xa-hoi-him-lam-thuong-thanh" as const;
+export const HN_RICE_CITY_SONG_HONG_SLUG =
+  "nha-o-xa-hoi-rice-city-song-hong" as const;
+
+function enrichFlcDaiMo(def: NoxhLandingDef): NoxhLandingDef {
+  return {
+    ...def,
+    seoTitle:
+      "Nhà ở xã hội FLC Garden City Đại Mỗ (Green Tower Đại Mỗ) | House X",
+    seoDesc:
+      "NOXH FLC Garden City / Green Tower Đại Mỗ, Nam Từ Liêm, Hà Nội. CĐT FLC / Địa ốc Alaska. Alias tìm kiếm: Green Tower Đại Mỗ. Giá & suất đang xác minh — điều kiện mua và tư vấn trên House X.",
+    heroSubtitle:
+      "Đại Mỗ · Nam Từ Liêm — FLC Garden City (HH1/HH4) · còn gọi Green Tower Đại Mỗ",
+    locationNotes: `FLC Garden City (tòa HH1/HH4) tại KĐT FLC Garden City, phường Đại Mỗ, Nam Từ Liêm, Hà Nội. Trên tìm kiếm và truyền thông thường gọi Green Tower Đại Mỗ — cùng địa điểm, không phải dự án khác.
+
+Thuộc hành lang phía Tây (Mỹ Đình – Đại Mỗ – Tố Hữu). Giá, số căn và lịch mở bán chỉ theo thông báo Sở Xây dựng Hà Nội / chủ đầu tư.
+
+Wiki điều kiện · đăng ký hồ sơ · form tư vấn trên House X.`,
+    highlights: [
+      {
+        title: "Vị trí Nam Từ Liêm",
+        text: "KĐT FLC Garden City, phường Đại Mỗ — gần trục Mỹ Đình / Đại lộ Thăng Long.",
+      },
+      {
+        title: "Tên gọi thường gặp",
+        text: "Green Tower Đại Mỗ = FLC Garden City (HH1/HH4) trên cùng địa điểm inventory House X.",
+      },
+      {
+        title: "Giá & suất",
+        text: `Giá và suất đang được xác minh. ${NOXH_UPDATING_SOON}`,
+      },
+    ],
+    faqs: [
+      {
+        q: "Green Tower Đại Mỗ và FLC Garden City có phải một dự án?",
+        a: "Trên danh mục House X, Green Tower Đại Mỗ là tên gọi thường gặp của khu NOXH tại FLC Garden City (tòa HH1/HH4), phường Đại Mỗ, Nam Từ Liêm — cùng địa chỉ inventory, không tách thành hai dự án khác nhau.",
+      },
+      {
+        q: "Nhà ở xã hội FLC Garden City Đại Mỗ nằm ở đâu?",
+        a: "KĐT FLC Garden City, phường Đại Mỗ, Nam Từ Liêm, Hà Nội.",
+      },
+      {
+        q: "Giá bao nhiêu?",
+        a: NOXH_PRICE_FAQ_VERIFYING,
+      },
+      {
+        q: "Làm sao đăng ký tư vấn?",
+        a: "Dùng form trên trang dự án hoặc hotline House X. Có thể xem trước điều kiện tại Wiki nhà ở xã hội và hub đăng ký hồ sơ.",
+      },
+    ],
+  };
+}
+
+function enrichRiceCityToHuu(def: NoxhLandingDef): NoxhLandingDef {
+  return {
+    ...def,
+    seoTitle: "Nhà ở xã hội Rice City Tố Hữu — Nam Từ Liêm | House X",
+    seoDesc:
+      "NOXH Rice City Tố Hữu tại Mễ Trì – Trung Văn, Nam Từ Liêm, Hà Nội. CĐT BIC Việt Nam. Giá & suất đang xác minh — tra cứu điều kiện mua trên House X.",
+    heroSubtitle:
+      "Tố Hữu · Mễ Trì / Trung Văn — Rice City · hành lang phía Tây Hà Nội",
+    locationNotes: `Rice City Tố Hữu dọc đường Tố Hữu, khu vực phường Mễ Trì và Trung Văn, Nam Từ Liêm, Hà Nội (CĐT: Công ty CP BIC Việt Nam).
+
+Cùng cụm phía Tây với FLC Đại Mỗ và Green Tower Mễ Trì (Tây Nam Mễ Trì trên một số tìm kiếm). Đối chiếu thông báo mở bán chính thức trước khi nộp hồ sơ.`,
+    highlights: [
+      {
+        title: "Trục Tố Hữu",
+        text: "Địa chỉ theo PDF: đường Tố Hữu, Mễ Trì & Trung Văn, Nam Từ Liêm.",
+      },
+      {
+        title: "Chủ đầu tư",
+        text: "Công ty CP BIC Việt Nam.",
+      },
+      {
+        title: "Giá & suất",
+        text: `Giá và suất đang được xác minh. ${NOXH_UPDATING_SOON}`,
+      },
+    ],
+    faqs: [
+      {
+        q: "Rice City Tố Hữu nằm ở đâu?",
+        a: "Đường Tố Hữu, khu vực phường Mễ Trì và Trung Văn, Nam Từ Liêm, Hà Nội.",
+      },
+      {
+        q: "Giá bao nhiêu?",
+        a: NOXH_PRICE_FAQ_VERIFYING,
+      },
+      {
+        q: "Làm sao đăng ký tư vấn?",
+        a: "Dùng form trên trang dự án hoặc hotline House X. Wiki nhà ở xã hội giúp rà điều kiện trước khi nộp hồ sơ đợt mở bán.",
+      },
+    ],
+  };
+}
+
+function enrichGreenTowerMeTri(def: NoxhLandingDef): NoxhLandingDef {
+  return {
+    ...def,
+    seoTitle:
+      "Nhà ở xã hội Green Tower Mễ Trì (Tây Nam Mễ Trì) | House X",
+    seoDesc:
+      "NOXH Green Tower Mễ Trì, Nam Từ Liêm, Hà Nội — còn được tìm với cụm Tây Nam Mễ Trì. Liên danh Vinaconex 3 & PIV. Giá & suất đang xác minh trên House X.",
+    heroSubtitle:
+      "Mễ Trì · Nam Từ Liêm — Green Tower · alias tìm kiếm: Tây Nam Mễ Trì",
+    locationNotes: `Green Tower Mễ Trì tại phường Mễ Trì, Nam Từ Liêm, Hà Nội (liên danh Vinaconex 3 & Tổng công ty PIV). Một số tìm kiếm dùng cụm Tây Nam Mễ Trì cho cùng khu vực — đối chiếu địa chỉ CĐT trước khi nộp hồ sơ.`,
+    faqs: [
+      {
+        q: "Tây Nam Mễ Trì và Green Tower Mễ Trì có liên quan không?",
+        a: "Tây Nam Mễ Trì là cụm tìm kiếm khu vực; trên danh mục House X, dự án NOXH tại phường Mễ Trì được ghi Green Tower Mễ Trì (Vinaconex 3 & PIV). Luôn đối chiếu địa chỉ và thông báo CĐT.",
+      },
+      {
+        q: "Green Tower Mễ Trì nằm ở đâu?",
+        a: "Phường Mễ Trì, Nam Từ Liêm, Hà Nội — theo inventory House X.",
+      },
+      {
+        q: "Giá bao nhiêu?",
+        a: NOXH_PRICE_FAQ_VERIFYING,
+      },
+      {
+        q: "Làm sao đăng ký tư vấn?",
+        a: "Dùng form trên trang dự án hoặc hotline House X.",
+      },
+    ],
+  };
+}
+
+function enrichHimLamThuongThanh(def: NoxhLandingDef): NoxhLandingDef {
+  return {
+    ...def,
+    seoTitle:
+      "Nhà ở xã hội Him Lam Thượng Thanh (Him Lam Phúc Lợi) | House X",
+    seoDesc:
+      "NOXH Him Lam Thượng Thanh, Long Biên, Hà Nội — thường tìm với tên Him Lam Phúc Lợi. CĐT Him Lam Thủ Đô & BIC Việt Nam. Giá & suất đang xác minh trên House X.",
+    heroSubtitle:
+      "Thượng Thanh · Long Biên — Him Lam · alias tìm kiếm: Him Lam Phúc Lợi",
+    locationNotes: `Him Lam Thượng Thanh tại phường Thượng Thanh, Long Biên, Hà Nội (Him Lam Thủ Đô & BIC Việt Nam). Truyền thông / tìm kiếm thường dùng Him Lam Phúc Lợi — cùng dự án trên inventory House X, không tách slug riêng.
+
+Thuộc cụm Long Biên cùng Rice City Sông Hồng (Rice City Thạch Bàn).`,
+    highlights: [
+      {
+        title: "Vị trí Long Biên",
+        text: "Phường Thượng Thanh, Long Biên — bờ Đông sông Hồng / cửa ngõ phía Đông nội đô.",
+      },
+      {
+        title: "Tên gọi thường gặp",
+        text: "Him Lam Phúc Lợi = Him Lam Thượng Thanh trên danh mục House X.",
+      },
+      {
+        title: "Giá & suất",
+        text: `Giá và suất đang được xác minh. ${NOXH_UPDATING_SOON}`,
+      },
+    ],
+    faqs: [
+      {
+        q: "Him Lam Phúc Lợi và Him Lam Thượng Thanh có phải một dự án?",
+        a: "Có — trên danh mục House X, Him Lam Phúc Lợi là tên gọi thường gặp của Nhà ở xã hội Him Lam Thượng Thanh tại phường Thượng Thanh, Long Biên.",
+      },
+      {
+        q: "Him Lam Thượng Thanh nằm ở đâu?",
+        a: "Phường Thượng Thanh, Long Biên, Hà Nội.",
+      },
+      {
+        q: "Giá bao nhiêu?",
+        a: NOXH_PRICE_FAQ_VERIFYING,
+      },
+      {
+        q: "Làm sao đăng ký tư vấn?",
+        a: "Dùng form trên trang dự án hoặc hotline House X. Có thể đọc hub đăng ký nhà ở xã hội trước khi chuẩn bị hồ sơ.",
+      },
+    ],
+  };
+}
+
+function enrichRiceCitySongHong(def: NoxhLandingDef): NoxhLandingDef {
+  return {
+    ...def,
+    seoTitle:
+      "Nhà ở xã hội Rice City Sông Hồng (Rice City Thạch Bàn) | House X",
+    seoDesc:
+      "NOXH Rice City Sông Hồng tại Thạch Bàn, Long Biên, Hà Nội — alias Rice City Thạch Bàn. CĐT BIC Việt Nam. Giá & suất đang xác minh trên House X.",
+    heroSubtitle:
+      "Thạch Bàn · Long Biên — Rice City Sông Hồng · alias: Rice City Thạch Bàn",
+    locationNotes: `Rice City Sông Hồng tại phường Thạch Bàn, Long Biên, Hà Nội (CĐT BIC Việt Nam). Alias tìm kiếm phổ biến: Rice City Thạch Bàn — cùng địa điểm inventory.`,
+    faqs: [
+      {
+        q: "Rice City Thạch Bàn và Rice City Sông Hồng có phải một dự án?",
+        a: "Trên danh mục House X, Rice City Thạch Bàn là tên gọi theo địa danh phường của Rice City Sông Hồng tại Long Biên — cùng slug dự án.",
+      },
+      {
+        q: "Rice City Sông Hồng nằm ở đâu?",
+        a: "Phường Thạch Bàn, Long Biên, Hà Nội.",
+      },
+      {
+        q: "Giá bao nhiêu?",
+        a: NOXH_PRICE_FAQ_VERIFYING,
+      },
+      {
+        q: "Làm sao đăng ký tư vấn?",
+        a: "Dùng form trên trang dự án hoặc hotline House X.",
+      },
+    ],
+  };
+}
+
+function applyEnrichBySlug(def: NoxhLandingDef): NoxhLandingDef {
+  switch (def.slug) {
+    case HN_FLC_DAI_MO_SLUG:
+      return enrichFlcDaiMo(def);
+    case HN_RICE_CITY_TO_HUU_SLUG:
+      return enrichRiceCityToHuu(def);
+    case HN_GREEN_TOWER_ME_TRI_SLUG:
+      return enrichGreenTowerMeTri(def);
+    case HN_HIM_LAM_THUONG_THANH_SLUG:
+      return enrichHimLamThuongThanh(def);
+    case HN_RICE_CITY_SONG_HONG_SLUG:
+      return enrichRiceCitySongHong(def);
+    default:
+      return def;
+  }
+}
+
+for (let i = 0; i < DEFS.length; i++) {
+  DEFS[i] = applyEnrichBySlug(DEFS[i]!);
+}
+
 export function allNoxhHanoiSlugs(): string[] {
   return DEFS.map((d) => d.slug);
 }

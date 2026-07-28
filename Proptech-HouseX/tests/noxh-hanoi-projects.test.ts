@@ -34,3 +34,18 @@ test("Hà Nội skeletons: province TP. Hà Nội; only researched STT-1 may cit
   assert.match(udic!.developerName, /Haweicco/);
   assert.equal(udic!.totalUnits, 440);
 });
+
+test("P1 SEO lite: alias FAQ without invented price digits", () => {
+  const flc = getNoxhHanoiDef("nha-o-xa-hoi-flc-garden-city-dai-mo");
+  assert.ok(flc);
+  assert.ok(flc!.faqs.some((f) => /Green Tower Đại Mỗ/i.test(f.q)));
+  assert.doesNotMatch(flc!.seoDesc, /\d+\s*(triệu|tỷ)/i);
+
+  const him = getNoxhHanoiDef("nha-o-xa-hoi-him-lam-thuong-thanh");
+  assert.ok(him);
+  assert.ok(him!.faqs.some((f) => /Him Lam Phúc Lợi/i.test(f.q)));
+
+  const riceTb = getNoxhHanoiDef("nha-o-xa-hoi-rice-city-song-hong");
+  assert.ok(riceTb);
+  assert.ok(riceTb!.faqs.some((f) => /Thạch Bàn/i.test(f.q)));
+});

@@ -60,6 +60,10 @@ flowchart TB
 
 | Vai trò | Slug | Tag chính |
 |---------|------|-----------|
+| Intent hub | `nha-o-xa-hoi-la-gi` | `chinh-sach-ho-so-noxh` |
+| Intent hub | `dang-ky-nha-o-xa-hoi` | `chinh-sach-ho-so-noxh` |
+| HN Trends hub | `noxh-phia-tay-ha-noi-dai-mo-to-huu-me-tri-2026` | `du-an-gia-tien-do-noxh` |
+| HN Trends hub | `noxh-long-bien-him-lam-phuc-loi-rice-city-2026` | `du-an-gia-tien-do-noxh` |
 | Pillar | `dieu-kien-mua-nha-o-xa-hoi-2026-tom-tat` | `noxh`, `phap-ly` |
 | Cluster pháp lý | `dieu-kien-nha-o-mua-noxh-dieu-77-2026` | `noxh`, `phap-ly` |
 | Cluster pháp lý | `quy-trinh-mua-thue-mua-noxh-2026` | `noxh`, `phap-ly` |
@@ -73,7 +77,7 @@ flowchart TB
 | Vùng Đồng Nai | `tien-do-noxh-kdc-chang-song-...` | `noxh` |
 | TOD → DTA | 5 bài `tod-nhon-trach-series-2026` | `do-thi-ve-tinh-tod` + `noxh` |
 
-**Nguồn code:** `lib/content/articles/noxh-knowledge-series-2026.ts`, `noxh-trend-series-2026.ts`, `tod-nhon-trach-series-2026.ts`, `lib/preview/demo-articles.ts`.
+**Nguồn code:** `lib/content/articles/noxh-intent-hub-series-2026.ts`, `noxh-hanoi-trending-hub-2026.ts`, `noxh-knowledge-series-2026.ts`, `noxh-trend-series-2026.ts`, `tod-nhon-trach-series-2026.ts`, `lib/preview/demo-articles.ts`.
 
 ## 4. Chuẩn biên tập (AIO)
 

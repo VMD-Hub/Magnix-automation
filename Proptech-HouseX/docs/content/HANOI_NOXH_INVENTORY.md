@@ -15,14 +15,14 @@ SoT biên tập House X — **skeleton** = chỉ tên / CĐT / địa chỉ PDF;
 | 6 | CT6B Kim Giang | CT6B Kim Giang | CTCP ĐT & PT Thương mại Hạ Đình | 320 Khương Đình (gần Kim Giang), Thanh Xuân | `nha-o-xa-hoi-ct6b-kim-giang` | Thanh Xuân | 20.995 / 105.815 | skeleton |
 | 7 | X2 Trần Phú | X2 Đại Kim | TCT ĐTPT nhà và đô thị (MHDI) | Ô X2, P. Đại Kim, Hoàng Mai | `nha-o-xa-hoi-x2-dai-kim` | Hoàng Mai | 20.978 / 105.848 | skeleton |
 | 8 | HUD Vân Canh | Vân Canh HUD | TCT ĐTPT nhà và đô thị (HUD) | Ô CT1, KĐT mới Vân Canh, Hoài Đức | `nha-o-xa-hoi-hud-van-canh` | Hoài Đức | 21.035 / 105.735 | skeleton |
-| 9 | Green Tower Đại Mỗ | FLC Garden City (HH1/HH4) | FLC / CTCP Địa ốc Alaska | KĐT FLC Garden City, Đại Mỗ, Nam Từ Liêm | `nha-o-xa-hoi-flc-garden-city-dai-mo` | Nam Từ Liêm | 21.010 / 105.755 | skeleton |
-| 10 | Rice City Tố Hữu | Rice City Tố Hữu | CTCP BIC Việt Nam | Đường Tố Hữu, Mễ Trì & Trung Văn, Nam Từ Liêm | `nha-o-xa-hoi-rice-city-to-huu` | Nam Từ Liêm | 21.015 / 105.780 | skeleton |
-| 11 | Tây Nam Mễ Trì | Green Tower Mễ Trì | Vinaconex 3 & TCT PIV | P. Mễ Trì, Nam Từ Liêm | `nha-o-xa-hoi-green-tower-me-tri` | Nam Từ Liêm | 21.020 / 105.775 | skeleton |
+| 9 | Green Tower Đại Mỗ | FLC Garden City (HH1/HH4) | FLC / CTCP Địa ốc Alaska | KĐT FLC Garden City, Đại Mỗ, Nam Từ Liêm | `nha-o-xa-hoi-flc-garden-city-dai-mo` | Nam Từ Liêm | 21.010 / 105.755 | **p1-seo-lite** (alias FAQ) |
+| 10 | Rice City Tố Hữu | Rice City Tố Hữu | CTCP BIC Việt Nam | Đường Tố Hữu, Mễ Trì & Trung Văn, Nam Từ Liêm | `nha-o-xa-hoi-rice-city-to-huu` | Nam Từ Liêm | 21.015 / 105.780 | **p1-seo-lite** |
+| 11 | Tây Nam Mễ Trì | Green Tower Mễ Trì | Vinaconex 3 & TCT PIV | P. Mễ Trì, Nam Từ Liêm | `nha-o-xa-hoi-green-tower-me-tri` | Nam Từ Liêm | 21.020 / 105.775 | **p1-seo-lite** (alias Tây Nam Mễ Trì) |
 | 12 | Hồng Hà Eco City | Hồng Hà Eco City (CT1–CT4) | CTCP Đầu tư Tứ Hiệp | KĐT Hồng Hà Eco City, Tứ Hiệp, Thanh Trì | `nha-o-xa-hoi-hong-ha-eco-city` | Thanh Trì | 20.960 / 105.845 | skeleton |
 | 13 | HUD Mê Linh | HUD Melinh Central | TCT ĐTPT nhà và đô thị (HUD) | KĐT Thanh Lâm – Đại Thịnh 2, Mê Linh | `nha-o-xa-hoi-hud-me-linh` | Mê Linh | 21.180 / 105.720 | skeleton |
 | 14 | Minh Đức | Minh Đức Mê Linh | TNHH Minh Đức | Xã Tiền Phong, Mê Linh | `nha-o-xa-hoi-minh-duc-me-linh` | Mê Linh | 21.165 / 105.710 | skeleton |
-| 15 | Him Lam Phúc Lợi | Him Lam Thượng Thanh | Him Lam Thủ Đô & BIC Việt Nam | P. Thượng Thanh, Long Biên | `nha-o-xa-hoi-him-lam-thuong-thanh` | Long Biên | 21.055 / 105.890 | skeleton |
-| 16 | Rice City Thạch Bàn | Rice City Sông Hồng | CTCP BIC Việt Nam | P. Thạch Bàn, Long Biên | `nha-o-xa-hoi-rice-city-song-hong` | Long Biên | 21.040 / 105.905 | skeleton |
+| 15 | Him Lam Phúc Lợi | Him Lam Thượng Thanh | Him Lam Thủ Đô & BIC Việt Nam | P. Thượng Thanh, Long Biên | `nha-o-xa-hoi-him-lam-thuong-thanh` | Long Biên | 21.055 / 105.890 | **p1-seo-lite** (alias Him Lam Phúc Lợi) |
+| 16 | Rice City Thạch Bàn | Rice City Sông Hồng | CTCP BIC Việt Nam | P. Thạch Bàn, Long Biên | `nha-o-xa-hoi-rice-city-song-hong` | Long Biên | 21.040 / 105.905 | **p1-seo-lite** (alias Thạch Bàn) |
 | 17 | Bảo Ngọc City | Bảo Ngọc City (Bảo Ngọc Towers) | CTCP Đầu tư Bảo Ngọc Corp | P. Thạch Bàn, Long Biên | `nha-o-xa-hoi-bao-ngoc-city` | Long Biên | 21.038 / 105.910 | skeleton |
 
 ## Seed / hub
@@ -34,3 +34,17 @@ SoT biên tập House X — **skeleton** = chỉ tên / CĐT / địa chỉ PDF;
 ## Enrich tiếp theo
 
 Thứ tự mặc định STT 1 → 17. Brief mẫu: `docs/content/HO_GUOM_XANH_NOXH_LANDING.md`.
+
+**P1 SEO lite (2026-07-28):** landing alias FAQ + 2 hub bài
+- Tây: `noxh-phia-tay-ha-noi-dai-mo-to-huu-me-tri-2026`
+- Đông: `noxh-long-bien-him-lam-phuc-loi-rice-city-2026`
+- Code: `lib/content/articles/noxh-hanoi-trending-hub-2026.ts` · enrich trong `lib/preview/noxh-hanoi-projects.ts`
+
+## Watchlist Trends (chưa đủ PDF → chưa tạo slug)
+
+| Cụm tìm kiếm | Ghi chú | Hành động |
+|--------------|---------|-----------|
+| CT3 Kim Chung / NOXH Kim Chung | Không có trong bảng 17 PDF (CT6B Kim Giang ≠ Kim Chung) | Chờ nguồn CĐT / Sở; không bịa landing |
+| Ngọc Hồi (NOXH) | Ngoài 17 STT hiện tại | Theo dõi; thêm inventory khi có địa chỉ–CĐT |
+
+Không tạo stub dự án chỉ vì đột biến Google Trends.

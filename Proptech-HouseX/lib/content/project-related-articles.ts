@@ -4,6 +4,17 @@ import { ID_TOWN_SLUG } from "@/lib/content/id-town-landing";
 import { HGX_PROJECT_SLUG } from "@/lib/preview/ho-guom-xanh-mock";
 import { LTK_PROJECT_SLUG } from "@/lib/preview/phu-tho-dmc-mock";
 import {
+  HN_FLC_DAI_MO_SLUG,
+  HN_GREEN_TOWER_ME_TRI_SLUG,
+  HN_HIM_LAM_THUONG_THANH_SLUG,
+  HN_RICE_CITY_SONG_HONG_SLUG,
+  HN_RICE_CITY_TO_HUU_SLUG,
+} from "@/lib/preview/noxh-hanoi-projects";
+import {
+  SLUG_HN_EAST_NOXH_HUB,
+  SLUG_HN_WEST_NOXH_HUB,
+} from "@/lib/content/articles/noxh-hanoi-trending-hub-2026";
+import {
   LA_HOME_SLUG,
   MY_HANH_SLUG,
   ORI_SLUG,
@@ -107,6 +118,37 @@ export const PROJECT_FEATURED_ARTICLE_SLUGS: Partial<Record<string, string[]>> =
     [ORI_SLUG]: [
       "noxh-long-an-6-du-an-mien-nam-2026",
       "so-sanh-gia-noxh-ly-thuong-kiet-dta-happy-home-2026",
+    ],
+    [HN_FLC_DAI_MO_SLUG]: [
+      SLUG_HN_WEST_NOXH_HUB,
+      "nha-o-xa-hoi-la-gi",
+      "dieu-kien-mua-nha-o-xa-hoi-2026-tom-tat",
+      "dang-ky-nha-o-xa-hoi",
+      "quy-trinh-mua-thue-mua-noxh-2026",
+    ],
+    [HN_RICE_CITY_TO_HUU_SLUG]: [
+      SLUG_HN_WEST_NOXH_HUB,
+      "dieu-kien-mua-nha-o-xa-hoi-2026-tom-tat",
+      "dang-ky-nha-o-xa-hoi",
+      "quy-trinh-mua-thue-mua-noxh-2026",
+    ],
+    [HN_GREEN_TOWER_ME_TRI_SLUG]: [
+      SLUG_HN_WEST_NOXH_HUB,
+      "dieu-kien-mua-nha-o-xa-hoi-2026-tom-tat",
+      "dang-ky-nha-o-xa-hoi",
+    ],
+    [HN_HIM_LAM_THUONG_THANH_SLUG]: [
+      SLUG_HN_EAST_NOXH_HUB,
+      "nha-o-xa-hoi-la-gi",
+      "dieu-kien-mua-nha-o-xa-hoi-2026-tom-tat",
+      "dang-ky-nha-o-xa-hoi",
+      "quy-trinh-mua-thue-mua-noxh-2026",
+    ],
+    [HN_RICE_CITY_SONG_HONG_SLUG]: [
+      SLUG_HN_EAST_NOXH_HUB,
+      "dieu-kien-mua-nha-o-xa-hoi-2026-tom-tat",
+      "dang-ky-nha-o-xa-hoi",
+      "quy-trinh-mua-thue-mua-noxh-2026",
     ],
     [EMERALD_68_SLUG]: [...QL13_FEATURED],
     [AT_SKY_GARDEN_SLUG]: [...QL13_FEATURED],

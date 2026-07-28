@@ -124,6 +124,26 @@ export const ARTICLE_EDITORIAL_COVERS: Record<string, EditorialCover> = {
     alt: "Phối cảnh NOXH KDC Chàng Sông Phước Tân",
     caption: "Dự án NOXH tại Phước Tân, Biên Hòa — giai đoạn hạ tầng và móng.",
   },
+  "nha-o-xa-hoi-la-gi": {
+    url: HERO.urban,
+    alt: "Minh họa nhà ở đô thị và an cư",
+    caption: "Nhà ở xã hội là gì — định nghĩa và khác biệt với căn thương mại.",
+  },
+  "dang-ky-nha-o-xa-hoi": {
+    url: HERO.civic,
+    alt: "Minh họa đăng ký hồ sơ nhà ở xã hội",
+    caption: "Đăng ký nhà ở xã hội — hồ sơ, đơn mẫu và thứ tự nộp.",
+  },
+  "noxh-phia-tay-ha-noi-dai-mo-to-huu-me-tri-2026": {
+    url: HERO.skyline,
+    alt: "Minh họa đô thị phía Tây Hà Nội",
+    caption: "Cụm NOXH Nam Từ Liêm: Đại Mỗ, Tố Hữu, Mễ Trì — khớp tên gọi và bước kiểm tra.",
+  },
+  "noxh-long-bien-him-lam-phuc-loi-rice-city-2026": {
+    url: HERO.metroHub,
+    alt: "Minh họa đô thị Long Biên / phía Đông Hà Nội",
+    caption: "NOXH Long Biên: Him Lam Phúc Lợi và Rice City Thạch Bàn.",
+  },
   "dieu-kien-mua-nha-o-xa-hoi-2026-tom-tat": {
     url: HERO.urban,
     alt: "Minh họa an cư và nhà ở đô thị",
