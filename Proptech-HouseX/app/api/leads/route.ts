@@ -373,8 +373,7 @@ export async function POST(req: NextRequest) {
     }
 
     const partnerOptIn = body.partnerReferralOptIn === true;
-    const rentalIntentPrisma = toPrismaRentalLeadIntent(body.rentalIntent);
-    if (partnerOptIn && rentalIntentPrisma === "TAX_HELP") {
+    if (partnerOptIn && body.rentalIntent === "tax_help") {
       const { grantPartnerReferralConsent, parsePartnerReferralKind } =
         await import("@/lib/leads/rental-partner-referral");
       const kind =
