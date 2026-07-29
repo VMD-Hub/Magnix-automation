@@ -143,9 +143,9 @@ export const BTR_ARTICLE_PLAN: readonly BtrFunnelSlot[] = [
     order: 12,
     slug: "thue-cho-thue-nha-2026-ma-nganh-68103",
     titleVi:
-      "Cho thuê nhà phải đóng thuế thế nào? Mã ngành 68103 và việc nên làm trước",
+      "Cá nhân cho thuê nhà có phải nộp thuế không? Ngưỡng doanh thu, cách kê khai và mã đăng ký kinh doanh",
     objective:
-      "Q&A người đọc: có phải đóng thuế, mã 68103, checklist trước kê khai.",
+      "Giải thích chính xác ngưỡng miễn thuế 100tr/năm, mẫu 01/TTS, vai trò của mã ngành 68103 trong đăng ký kinh doanh — phân biệt rõ với kê khai thuế.",
     toneGroup: "cashflow-ops",
     status: "published",
     publishedSlug: "thue-cho-thue-nha-2026-ma-nganh-68103",

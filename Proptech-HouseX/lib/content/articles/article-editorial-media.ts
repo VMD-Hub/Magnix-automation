@@ -452,9 +452,9 @@ export const ARTICLE_EDITORIAL_COVERS: Record<string, EditorialCover> = {
   },
   "thue-cho-thue-nha-2026-ma-nganh-68103": {
     url: HERO.metroHub,
-    alt: "Trung tâm đô thị — minh họa thuế khi cho thuê nhà",
+    alt: "Chủ nhà cần biết ngưỡng miễn thuế và cách kê khai thuế cho thuê nhà đúng quy định",
     caption:
-      "Biết hỏi gì trước khi kê khai — đối chiếu cơ quan thuế hoặc kế toán.",
+      "Dưới 100 triệu/năm miễn thuế; trên ngưỡng kê khai theo mẫu 01/TTS tại Chi cục Thuế nơi có bất động sản.",
   },
 };
 

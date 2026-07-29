@@ -213,47 +213,74 @@ ${BTR_LEGAL_DISCLAIMER}`,
     id: "article-btr-12-tax",
     slug: "thue-cho-thue-nha-2026-ma-nganh-68103",
     title:
-      "Cho thuê nhà phải đóng thuế thế nào? Mã ngành 68103 và việc nên làm trước",
+      "Cá nhân cho thuê nhà có phải nộp thuế không? Ngưỡng doanh thu, cách kê khai và mã đăng ký kinh doanh",
     excerpt:
-      "Nhiều chủ nhà chỉ nghĩ đến thuế khi đã thu tiền thuê vài tháng. Bài này giúp bạn biết hỏi gì trước khi kê khai — mức phải nộp cụ thể vẫn cần đối chiếu với cơ quan thuế hoặc kế toán.",
-    body: `## Cho thuê nhà thì có phải đóng thuế không?
+      "Dưới 100 triệu đồng/năm: miễn thuế. Từ 100 triệu trở lên: nộp 5% GTGT + 5% TNCN theo Thông tư 40/2021/TT-BTC. Mã ngành 68103 là mã đăng ký kinh doanh — không phải mã kê khai thuế.",
+    body: `## Cá nhân cho thuê nhà có phải nộp thuế không?
 
-Có thể có — tùy doanh thu thuê trong năm và cách bạn đang kê khai. Không phải mọi căn cho thuê đều cùng một mức, cũng không nên lấy «con số trên mạng» áp thẳng vào căn của mình.
+Có — nếu tổng doanh thu cho thuê trong năm vượt ngưỡng miễn thuế.
 
-Việc thực tế nhất lúc này: cộng đúng tiền thuê theo hợp đồng (kể cả phụ lục), rồi hỏi Chi cục Thuế quản lý hoặc kế toán: mình thuộc nhóm nào, nộp theo phương pháp nào.
+Ngưỡng hiện hành theo Thông tư 40/2021/TT-BTC:
 
-Ước tính sơ bộ dòng tiền (gồm thuế giả định) có thể làm trên [công cụ dòng tiền cho thuê](/cong-cu/dong-tien-cho-thue).
+| Tổng doanh thu thuê trong năm | Thuế GTGT | Thuế TNCN |
+|-------------------------------|-----------|-----------|
+| Từ 100 triệu đồng trở xuống | Không phải nộp | Không phải nộp |
+| Trên 100 triệu đồng | 5% trên doanh thu tính thuế | 5% trên doanh thu tính thuế |
 
-## Mã ngành 68103 là gì?
+Từ ngày 1/1/2026, ngưỡng miễn thuế tăng lên 200 triệu đồng/năm theo Luật Thuế GTGT 2024. Nếu bạn đang kê khai, cần theo dõi thời điểm áp dụng chính thức.
 
-Trong danh mục ngành kinh tế, nhóm kinh doanh bất động sản có mã chi tiết gắn với cho thuê / điều hành nhà ở — truyền thông và hướng dẫn thường nhắc mã 68103. Khi doanh thu thuê đạt ngưỡng phải đăng ký / kê khai theo quy định hiện hành, hộ hoặc cá nhân kinh doanh có thể cần đăng ký mã ngành phù hợp.
+## Doanh thu tính thuế là gì — và đừng bỏ sót phụ lục
 
-Cách làm an toàn:
+Cơ quan thuế tính doanh thu dựa trên toàn bộ tiền thuê theo hợp đồng, không phải tiền thực về tài khoản. Bao gồm:
 
-1. Tra mã và hướng dẫn mới nhất trên cổng đăng ký kinh doanh / cơ quan thuế.
-2. Đối chiếu ngưỡng doanh thu phải nộp thuế theo văn bản đang hiệu lực.
-3. Giữ hợp đồng thuê và chứng từ thu tiền — khi cần giải trình sẽ đỡ thiếu giấy.
+- Tiền thuê theo hợp đồng gốc.
+- Tiền thuê theo từng phụ lục điều chỉnh (nếu ký sau).
+- Các khoản tiền nhận thêm ngoài hợp đồng nếu có.
 
-## Trước khi kê khai, nên chuẩn bị gì?
+Sai sót hay gặp: chủ nhà chỉ cộng tiền thu hàng tháng, bỏ qua phụ lục hoặc khoản nhận trước theo mùa. Khi thanh tra, cơ quan thuế đối chiếu hợp đồng — không đối chiếu sao kê tài khoản.
 
-| Câu hỏi | Việc nên làm |
-|---------|----------------|
-| Năm nay thu bao nhiêu từ thuê? | Cộng đúng hợp đồng, không bỏ phụ lục |
-| Đang nộp theo cách nào? | Khoán hay kê khai — hỏi cơ quan thuế |
-| Có cần đăng ký hộ kinh doanh không? | Khi vượt ngưỡng quy định |
-| Chi phí nào được trừ? | Theo văn bản hiệu lực — hỏi kế toán |
+## Hồ sơ kê khai thuế cho thuê nhà gồm những gì?
 
-Đừng nộp dựa trên bài viết hoặc tin nhắn nhóm. Mở văn bản gốc hoặc nhờ người có tư cách kê khai trước khi nộp.
+Theo Điều 14 Thông tư 40/2021/TT-BTC, cá nhân trực tiếp khai thuế với cơ quan thuế cần:
 
-## House X giúp gì — và không làm thay gì?
+1. Tờ khai theo mẫu 01/TTS — khai theo kỳ thanh toán hoặc theo năm dương lịch.
+2. Phụ lục bảng kê 01-1/BK-TTS nếu là lần khai đầu tiên của hợp đồng hoặc phụ lục hợp đồng.
+3. Bản sao hợp đồng thuê và phụ lục (lần khai đầu tiên).
+4. Bản sao giấy ủy quyền nếu nhờ người khai thay.
 
-House X giúp bạn hiểu khung: dòng tiền ròng, checklist giấy tờ, nối liên hệ nếu bạn cần kế toán / pháp lý hợp đồng thuê (khi bạn đồng ý chia sẻ thông tin).
+Nơi nộp: Chi cục Thuế quản lý trực tiếp nơi có bất động sản cho thuê — không phải nơi bạn đăng ký hộ khẩu.
 
-House X không thay Chi cục Thuế, không cam kết mức thuế phải nộp cho từng hồ sơ, và không bán «gói quản lý căn» chỉ vì bạn hỏi thuế.
+## Mã ngành 68103 là gì — và tại sao không phải mã kê khai thuế?
 
-Cần người hỗ trợ thủ tục: form trên [hub cho thuê](/cho-thue) hoặc [Liên hệ](/lien-he).
+Đây là điểm hay bị nhầm lẫn nghiêm trọng khi tra cứu trên mạng.
 
-Nền chính sách dài hạn: [Thuê dài hạn đến 2030](${PILLAR_HREF}) · chủ đề [nhà ở cho thuê dài hạn](${HUB_HREF}).
+68103 là mã ngành đăng ký kinh doanh, thuộc Hệ thống ngành kinh tế Việt Nam (VSIC) ban hành theo Quyết định 36/2025/QĐ-TTg, có hiệu lực từ 15/11/2025. Tên chính thức: "Cho thuê và vận hành nhà ở và đất ở".
+
+Mã này được dùng khi:
+- Đăng ký ngành nghề kinh doanh trên Giấy phép đăng ký kinh doanh.
+- Phân loại hoạt động kinh tế cho mục đích thống kê và cấp phép nhà nước.
+
+Mã 68103 không dùng khi kê khai thuế. Tờ khai thuế cho thuê nhà của cá nhân dùng mẫu 01/TTS theo Thông tư 40/2021/TT-BTC — mã ngành đăng ký kinh doanh không xuất hiện trong tờ khai đó.
+
+## Hai phương pháp kê khai — chọn một và nhất quán
+
+Cá nhân cho thuê nhà được chọn một trong hai cách khai thuế:
+
+- Khai theo từng lần phát sinh kỳ thanh toán: nộp chậm nhất ngày thứ 10 kể từ ngày bắt đầu kỳ thuê.
+- Khai theo năm dương lịch: nộp chậm nhất ngày cuối cùng của tháng đầu tiên năm tiếp theo.
+
+Từ 1/1/2026, cơ chế thuế khoán bị bãi bỏ, áp dụng tự khai, tự nộp theo hướng dẫn sửa đổi Luật Quản lý thuế. Nếu bạn đang nộp khoán, cần điều chỉnh phương pháp kê khai theo quy định mới.
+
+## Lỗi hay gặp khiến hồ sơ bị trả lại
+
+- Bỏ sót phụ lục hợp đồng khi cộng doanh thu năm.
+- Nộp hồ sơ tại chi cục thuế nơi cư trú thay vì nơi có bất động sản.
+- Dùng mẫu khai cũ (mẫu trước Thông tư 40/2021/TT-BTC đã hết hiệu lực).
+- Hiểu nhầm mã ngành đăng ký kinh doanh 68103 là mã số thuế rồi điền vào tờ khai.
+
+Để ước tính tác động dòng tiền sau thuế, dùng [công cụ tính dòng tiền cho thuê](/cong-cu/dong-tien-cho-thue). Để xác định nghĩa vụ cụ thể, liên hệ Chi cục Thuế quản lý hoặc kế toán có chứng chỉ hành nghề.
+
+Bài trụ cột về chính sách cho thuê dài hạn: [Thuê dài hạn đến 2030](${PILLAR_HREF}).
 
 ${BTR_SUPPORT_CLOSING}
 
@@ -264,9 +291,9 @@ ${BTR_LEGAL_DISCLAIMER}`,
     coverImageUrl: "/images/hero/housex-hero-slide-02-metro-hub.webp",
     authorName: "Ban biên tập House X",
     seoTitle:
-      "Cho thuê nhà phải đóng thuế thế nào? Mã ngành 68103 | HouseX",
+      "Cá nhân cho thuê nhà có phải nộp thuế không? Ngưỡng, cách kê khai | HouseX",
     seoDesc:
-      "Biết hỏi gì trước khi kê khai thuế cho thuê nhà và mã 68103 — đối chiếu cơ quan thuế/kế toán trước khi nộp.",
+      "Dưới 100 triệu/năm miễn thuế. Trên ngưỡng: 5% GTGT + 5% TNCN. Kê khai theo mẫu 01/TTS tại Chi cục Thuế nơi có bất động sản. Mã 68103 là mã đăng ký kinh doanh — không phải mã kê khai thuế.",
     tags: [NOXH_TAG_BTR],
     projects: [],
   },
