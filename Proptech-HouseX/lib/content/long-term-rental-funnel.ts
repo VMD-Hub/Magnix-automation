@@ -143,9 +143,9 @@ export const BTR_ARTICLE_PLAN: readonly BtrFunnelSlot[] = [
     order: 12,
     slug: "thue-cho-thue-nha-2026-ma-nganh-68103",
     titleVi:
-      "Cá nhân cho thuê nhà có phải nộp thuế không? Ngưỡng doanh thu, cách kê khai và mã ngành 68103",
+      "Cho thuê nhà: mã ngành 68103, ngưỡng thuế và cách kê khai theo quy định mới",
     objective:
-      "Ngưỡng miễn thuế 100tr/năm, mẫu 01/TTS; mã ngành dịch vụ cho thuê nhà của hộ KD / DN là 68103.",
+      "68103 cho hộ KD/DN thuê nhà dài hạn; cá nhân dùng 01/TTS; từ 2026 bỏ khoán → tự khai tự nộp.",
     toneGroup: "cashflow-ops",
     status: "published",
     publishedSlug: "thue-cho-thue-nha-2026-ma-nganh-68103",
