@@ -29,7 +29,7 @@ export const RENTAL_LEAD_INTENT_LABEL: Record<RentalLeadIntent, string> = {
   LANDLORD: "Chủ nhà — tìm khách",
   TENANT: "Khách thuê",
   TAX_HELP: "Thuế / kế toán cho thuê",
-  NEED_PM: "Quan tâm QL sau (waitlist)",
+  NEED_PM: "Quan tâm quản lý vận hành sau",
 };
 
 export function toPrismaRentalLeadIntent(

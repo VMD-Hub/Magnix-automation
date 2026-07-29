@@ -104,7 +104,7 @@ export function LeadContactForm({
     setLoading(true);
     try {
       if (waitlist && emailDigestOptIn && !email.trim()) {
-        setError("Nhập email nếu muốn nhận bản tin / digest qua email.");
+        setError("Nhập email nếu muốn nhận bản tin cập nhật qua email.");
         setLoading(false);
         return;
       }
@@ -401,9 +401,8 @@ export function LeadContactForm({
             className="mt-0.5 rounded border-slate-300"
           />
           <span>
-            Nhận thêm bản tin / digest tiến độ qua <strong>email</strong> (kênh
-            phụ — cập nhật chính vẫn trên thông báo tài khoản). Có thể hủy bất
-            cứ lúc nào.
+            Nhận thêm bản tin cập nhật qua email (bổ sung cho thông báo trên tài
+            khoản). Có thể hủy bất cứ lúc nào.
           </span>
         </label>
       ) : null}

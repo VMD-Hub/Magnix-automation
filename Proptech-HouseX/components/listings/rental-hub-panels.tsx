@@ -88,8 +88,8 @@ export function RentalHubLandlordPanel() {
             <LeadContactForm
               rentalIntent="tax_help"
               compact
-              title="Cần kế toán / pháp lý HĐ thuê"
-              placeholderMessage="Số căn, khu vực, thuế hay soạn HĐ…"
+              title="Cần kế toán hoặc pháp lý hợp đồng thuê"
+              placeholderMessage="Số căn, khu vực, thuế hoặc soạn hợp đồng thuê…"
             />
           </div>
         </div>
@@ -97,21 +97,21 @@ export function RentalHubLandlordPanel() {
 
       <section className="mb-8 rounded-2xl border border-dashed border-slate-300 bg-white p-6">
         <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-500">
-          Danh sách chờ — không bán ngay
+          Ghi nhận nhu cầu — chưa mở dịch vụ
         </p>
         <h2 className="mt-2 text-lg font-bold text-slate-900">
-          Quan tâm quản lý vận hành sau?
+          Quan tâm quản lý vận hành căn sau này?
         </h2>
         <p className="mt-2 max-w-2xl text-sm leading-relaxed text-slate-600">
-          {RENTAL_NEED_PM_NO_PROMISE} Ghi danh để nhận cập nhật khi có gói phù hợp —
-          ưu tiên tìm khách (hoa hồng) và hiểu thuế / dòng tiền trước.
+          {RENTAL_NEED_PM_NO_PROMISE} Để lại liên hệ để nhận cập nhật khi có dịch vụ
+          phù hợp. Hiện tại ưu tiên hỗ trợ tìm khách thuê và làm rõ thuế / dòng tiền.
         </p>
         <div className="mt-6 max-w-xl">
           <LeadContactForm
             rentalIntent="need_pm"
             compact
             defaultOpen
-            title="Ghi danh sách chờ QL sau"
+            title="Đăng ký nhận cập nhật quản lý vận hành"
           />
         </div>
       </section>

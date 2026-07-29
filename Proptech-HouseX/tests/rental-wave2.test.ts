@@ -34,9 +34,17 @@ test("resolveRentalKpiWindow defaults 30", () => {
   assert.equal(resolveRentalKpiWindow("99"), 30);
 });
 
-test("NEED_PM copy không hứa QL", () => {
+test("NEED_PM copy không hứa mở dịch vụ quản lý ngay", () => {
   assert.match(RENTAL_NEED_PM_NO_PROMISE, /chưa mở dịch vụ quản lý/i);
-  assert.match(rentalNeedPmWaitlistCopy.consentLabel, /Không phải đăng ký mua/i);
+  assert.match(
+    rentalNeedPmWaitlistCopy.consentLabel,
+    /không phải đăng ký mua dịch vụ quản lý ngay/i,
+  );
+  assert.doesNotMatch(rentalNeedPmWaitlistCopy.title, /\bQL\b|digest|NEED_PM/i);
+  assert.doesNotMatch(
+    rentalNeedPmWaitlistCopy.successTitle,
+    /\bQL\b|digest|NEED_PM/i,
+  );
 });
 
 test("leadCreateSchema partnerReferral cho tax_help orphan", () => {

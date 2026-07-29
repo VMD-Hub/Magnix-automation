@@ -46,6 +46,7 @@ export const EDITORIAL_BANNED_BODY_PATTERNS: readonly RegExp[] = [
   /House X nêu khung/i,
   /định hướng thủ tục/i,
   /theo phễu 3 tầng/i,
+  /\bfit-out\b/i,
   /Hub: \[/,
   /Landing: \[/,
 ];

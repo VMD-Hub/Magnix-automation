@@ -440,9 +440,9 @@ export const ARTICLE_EDITORIAL_COVERS: Record<string, EditorialCover> = {
   },
   "du-an-can-ho-van-hanh-cho-thue-dai-han-2026": {
     url: HERO.thuThiemNight,
-    alt: "Cao tầng cửa ngõ — minh họa dự án phù hợp vận hành cho thuê",
+    alt: "Chọn căn hộ cho thuê dài hạn — năm tiêu chí vị trí, bố trí, nội thất, phí và pháp lý",
     caption:
-      "Checklist thiết kế–vận hành; đối chiếu ID Town, Emerald, HGX trên House X.",
+      "Đối chiếu vị trí việc làm, bố trí căn và phí quản lý trước khi mua để cho thuê.",
   },
   "tinh-dong-tien-don-bay-can-ho-cho-thue-2026": {
     url: HERO.civic,

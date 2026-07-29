@@ -251,7 +251,7 @@ export async function POST(req: NextRequest) {
           customerId: created.customerId,
           type: CUSTOMER_NOTIFY_TYPE.WAITLIST_WELCOME,
           title: needPm
-            ? "Đã ghi danh sách chờ QL sau"
+            ? "Đã ghi nhận nhu cầu quan tâm quản lý vận hành"
             : "Đã ghi nhận đăng ký nhận tin",
           body: needPm
             ? `${WAITLIST_NO_COLD_CALL} Đây chỉ là danh sách quan tâm — chưa mở dịch vụ quản lý căn. Cập nhật sẽ hiện trong thông báo tài khoản.`

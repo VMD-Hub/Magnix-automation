@@ -64,7 +64,7 @@ ${EDITORIAL_FIGURES.thuThiem}
 
 ## Đọc tiếp?
 
-- [Khung chọn dự án vận hành cho thuê](/tin-tuc/kien-thuc/du-an-can-ho-van-hanh-cho-thue-dai-han-2026)
+- [Chọn căn hộ nào để cho thuê dài hạn?](/tin-tuc/kien-thuc/du-an-can-ho-van-hanh-cho-thue-dai-han-2026)
 - [Cho thuê nhà: mã ngành 68103 và cách kê khai](/tin-tuc/kien-thuc/thue-cho-thue-nha-2026-ma-nganh-68103)
 - Chủ đề: [${HUB_HREF}](${HUB_HREF})
 
@@ -89,59 +89,57 @@ ${BTR_LEGAL_DISCLAIMER}`,
     id: "article-btr-10-projects",
     slug: "du-an-can-ho-van-hanh-cho-thue-dai-han-2026",
     title:
-      "Khung chọn dự án căn hộ phù hợp vận hành cho thuê dài hạn",
+      "Chọn căn hộ nào để cho thuê dài hạn? Năm tiêu chí trước khi mua",
     excerpt:
-      "Checklist thiết kế, bàn giao nội thất, phí quản lý và vị trí việc làm — đối chiếu ID Town, Emerald 68 / Boulevard, Hồ Gươm Xanh trên House X; không liệt kê bảng giá bịa.",
-    body: `## “Đáp ứng vận hành cho thuê dài hạn” nghĩa là gì?
+      "Không phải căn hộ nào cũng dễ cho thuê ổn định. Bài này nêu năm tiêu chí: vị trí việc làm, bố trí căn, nội thất bàn giao, phí quản lý và pháp lý — kèm vài dự án tham chiếu trên House X.",
+    body: `## Căn hộ «mua để ở» và căn «mua để cho thuê dài hạn» khác nhau thế nào?
 
-Không phải mọi căn hộ bán trên thị trường đều phù hợp BTR / cho thuê dài hạn. Khung chọn định tính:
+Không phải căn hộ nào đang bán trên thị trường cũng phù hợp cho thuê dài hạn. Căn dễ bán lại không đồng nghĩa căn dễ có khách thuê ổn định, hợp đồng rõ và chi phí vận hành kiểm soát được.
 
-1. Vị trí gắn việc làm hoặc TOD (phút di chuyển thực tế).
-2. Diện tích và bố trí dễ cho thuê (1–2 PN, căn vuông, đủ ánh sáng).
-3. Nội thất / thiết bị bàn giao rõ — giảm chi phí fit-out.
-4. Phí quản lý và ban vận hành minh bạch.
-5. Pháp lý đủ điều kiện giao dịch / cho thuê theo quy định.
+Trước khi mua, nên tự hỏi: khách thuê mục tiêu là ai, họ đi làm bao lâu thì tới nơi, căn có sẵn nội thất không, phí quản lý bao nhiêu, và pháp lý có cho phép cho thuê theo quy định hiện hành không.
 
-Xem thêm: [Chính sách thuê dài hạn](${PILLAR_HREF}) · Dòng vốn: [Quỹ và yield định tính](/tin-tuc/kien-thuc/dong-von-dau-tu-can-ho-cho-thue-dai-han-2026).
+## Năm tiêu chí chọn căn để cho thuê dài hạn
 
-${EDITORIAL_FIGURES.hcmSkyline}
+1. Vị trí gần việc làm hoặc gần ga / trạm giao thông công cộng — tính bằng thời gian di chuyển thực tế, không chỉ khoảng cách trên bản đồ.
+2. Diện tích và bố trí dễ thuê: thường 1–2 phòng ngủ, căn vuông, đủ ánh sáng — dễ khớp nhu cầu người thuê dài hạn.
+3. Nội thất và thiết bị bàn giao rõ ràng — giảm chi phí sửa sang trước khi cho thuê.
+4. Phí quản lý và đơn vị vận hành minh bạch — biết trước khoản trừ hàng tháng khỏi tiền thuê.
+5. Pháp lý đủ điều kiện giao dịch và cho thuê theo quy định hiện hành.
 
-## Soft neo dự án trên House X (tham chiếu vận hành / vị trí)
+Nền chính sách: [Thuê dài hạn đến 2030](${PILLAR_HREF}). Cách đọc dòng tiền: [tiền thuê về và tiền còn lại](/tin-tuc/kien-thuc/tinh-dong-tien-don-bay-can-ho-cho-thue-2026).
 
-| Dự án | Vì sao nhắc | Link |
-|-------|-------------|------|
-| ${ID_TOWN_NAME} | NOXH cửa ngõ Long Thành — gần việc làm / hạ tầng sân bay | [/du-an/${ID_TOWN_SLUG}](/du-an/${ID_TOWN_SLUG}) |
-| ${EMERALD_68_NAME} | Cao tầng QL13 / Thuận An — gần KCN & dịch vụ | [/du-an/${EMERALD_68_SLUG}](/du-an/${EMERALD_68_SLUG}) |
-| ${EMERALD_BLVD_NAME} | Phân khu thương mại cùng hành lang | [/du-an/${EMERALD_BOULEVARD_SLUG}](/du-an/${EMERALD_BOULEVARD_SLUG}) |
-| ${HGX_NAME} | NOXH trong KĐT TBS — chuẩn vận hành khu đô thị | [/du-an/${HGX_PROJECT_SLUG}](/du-an/${HGX_PROJECT_SLUG}) |
+## Một số dự án tham chiếu trên House X
 
-Giá, tiến độ và điều kiện cho thuê xác nhận tại thời điểm giao dịch với CĐT / đơn vị phân phối — bài không thay bảng giá.
+Các dự án dưới đây được nhắc vì vị trí việc làm hoặc mô hình vận hành khu đô thị — không phải bảng xếp hạng hay cam kết giá thuê.
 
-${EDITORIAL_FIGURES.metroHub}
+| Dự án | Vì sao đáng đối chiếu | Link |
+|-------|----------------------|------|
+| ${ID_TOWN_NAME} | Nhà ở xã hội cửa ngõ Long Thành — gần việc làm và hạ tầng sân bay | [/du-an/${ID_TOWN_SLUG}](/du-an/${ID_TOWN_SLUG}) |
+| ${EMERALD_68_NAME} | Cao tầng dọc Quốc lộ 13 / Thuận An — gần khu công nghiệp và dịch vụ | [/du-an/${EMERALD_68_SLUG}](/du-an/${EMERALD_68_SLUG}) |
+| ${EMERALD_BLVD_NAME} | Phân khu thương mại cùng hành lang Quốc lộ 13 | [/du-an/${EMERALD_BOULEVARD_SLUG}](/du-an/${EMERALD_BOULEVARD_SLUG}) |
+| ${HGX_NAME} | Nhà ở xã hội trong khu đô thị — chuẩn vận hành khu ở đồng bộ | [/du-an/${HGX_PROJECT_SLUG}](/du-an/${HGX_PROJECT_SLUG}) |
 
-## Checklist trước khi mua để cho thuê dài hạn?
+Giá bán, tiến độ và điều kiện cho thuê cần xác nhận tại thời điểm giao dịch với chủ đầu tư hoặc đơn vị phân phối.
 
-1. Quy hoạch và pháp lý đủ điều kiện mua / cho thuê.
-2. Ước phí quản lý + thuế (xem bài thuế).
-3. Kịch bản trống căn 1–2 tháng / năm.
-4. So sánh với nhu cầu chuyên gia trên [QL13 / vành đai](/tin-tuc/kien-thuc/can-ho-cho-thue-chuyen-gia-truc-ql13-vanh-dai-4-2026).
+## Checklist trước khi xuống tiền
 
-${EDITORIAL_FIGURES.thuThiem}
+1. Rà pháp lý: đủ điều kiện mua và cho thuê theo quy định hiện hành.
+2. Ước phí quản lý + thuế cho thuê — xem [bài thuế & mã ngành 68103](/tin-tuc/kien-thuc/thue-cho-thue-nha-2026-ma-nganh-68103).
+3. Dự phòng 1–2 tháng trống mỗi năm khi tính tiền còn lại.
+4. Đối chiếu nhu cầu thuê quanh [Quốc lộ 13 / vành đai](/tin-tuc/kien-thuc/can-ho-cho-thue-chuyen-gia-truc-ql13-vanh-dai-4-2026).
 
-${BTR_SUPPORT_CLOSING}
+Công cụ hỗ trợ: [tính dòng tiền cho thuê](/cong-cu/dong-tien-cho-thue). Cần đồng hành thủ tục: [Liên hệ](/lien-he) hoặc form trên [hub cho thuê](/cho-thue).
 
-${EDITORIAL_FIGURES.bitexcoMetro}
-
-${BTR_LEGAL_DISCLAIMER}`,
+Chủ đề: [nhà ở cho thuê dài hạn](${HUB_HREF}).`,
     status: "PUBLISHED",
     publishedAt: new Date("2026-07-26T14:00:00.000Z"),
     updatedAt: UPDATED,
     coverImageUrl: "/images/hero/urban-skyline-golden-hour.jpg",
     authorName: "Ban biên tập House X",
     seoTitle:
-      "Chọn dự án căn hộ vận hành cho thuê dài hạn — checklist | HouseX",
+      "Chọn căn hộ nào để cho thuê dài hạn? Năm tiêu chí | HouseX",
     seoDesc:
-      "Checklist thiết kế–vận hành; đối chiếu ID Town, Emerald, HGX — không bịa bảng giá.",
+      "Năm tiêu chí: vị trí việc làm, bố trí căn, nội thất bàn giao, phí quản lý, pháp lý — kèm dự án tham chiếu ID Town, Emerald, Hồ Gươm Xanh.",
     tags: [NOXH_TAG_BTR],
     projects: [
       { slug: ID_TOWN_SLUG, name: ID_TOWN_NAME },

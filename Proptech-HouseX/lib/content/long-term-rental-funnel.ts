@@ -112,7 +112,7 @@ export const BTR_ARTICLE_PLAN: readonly BtrFunnelSlot[] = [
     titleVi:
       "Dòng vốn dài hạn vào căn hộ cho thuê: Vì sao quỹ đầu tư quan tâm phân khúc này?",
     objective:
-      "Logic yield định tính / dòng tiền đều — không cam kết lợi nhuận.",
+      "Logic dòng tiền đều cho quỹ và nhà đầu tư — không cam kết lợi nhuận.",
     toneGroup: "cashflow-ops",
     status: "published",
     publishedSlug: "dong-von-dau-tu-can-ho-cho-thue-dai-han-2026",
@@ -121,9 +121,9 @@ export const BTR_ARTICLE_PLAN: readonly BtrFunnelSlot[] = [
     order: 10,
     slug: "du-an-can-ho-van-hanh-cho-thue-dai-han-2026",
     titleVi:
-      "Khung chọn dự án căn hộ phù hợp vận hành cho thuê dài hạn",
+      "Chọn căn hộ nào để cho thuê dài hạn? Năm tiêu chí trước khi mua",
     objective:
-      "Checklist thiết kế / bàn giao / vận hành; đối chiếu ID Town, Emerald, HGX — không bảng giá bịa.",
+      "Năm tiêu chí tiếng Việt rõ: vị trí, bố trí, nội thất, phí quản lý, pháp lý — không jargon BTR/TOD/fit-out.",
     toneGroup: "cashflow-ops",
     status: "published",
     publishedSlug: "du-an-can-ho-van-hanh-cho-thue-dai-han-2026",
