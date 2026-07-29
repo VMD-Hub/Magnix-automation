@@ -189,6 +189,7 @@ Vay thêm chỉ nên cân nhắc nếu tiền còn lại sau trả góp vẫn d�
 
 ## Đọc thêm
 
+- [Thuê dài hạn đến 2030](${PILLAR_HREF})
 - [Cho thuê nhà phải đóng thuế thế nào?](/tin-tuc/kien-thuc/thue-cho-thue-nha-2026-ma-nganh-68103)
 - [Chọn dự án phù hợp cho thuê](/tin-tuc/kien-thuc/du-an-can-ho-van-hanh-cho-thue-dai-han-2026)
 - Chủ đề [nhà ở cho thuê dài hạn](${HUB_HREF})
@@ -251,6 +252,8 @@ House X giúp bạn hiểu khung: dòng tiền ròng, checklist giấy tờ, n�
 House X không thay Chi cục Thuế, không cam kết mức thuế phải nộp cho từng hồ sơ, và không bán «gói quản lý căn» chỉ vì bạn hỏi thuế.
 
 Cần người hỗ trợ thủ tục: form trên [hub cho thuê](/cho-thue) hoặc [Liên hệ](/lien-he).
+
+Nền chính sách dài hạn: [Thuê dài hạn đến 2030](${PILLAR_HREF}) · chủ đề [nhà ở cho thuê dài hạn](${HUB_HREF}).
 
 ${BTR_SUPPORT_CLOSING}
 
