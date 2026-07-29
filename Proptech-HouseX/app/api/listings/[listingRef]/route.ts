@@ -48,6 +48,7 @@ export async function PATCH(
         unitTypeId: true,
         tier: true,
         status: true,
+        transactionType: true,
         propertyType: true,
         province: true,
         district: true,
@@ -120,7 +121,7 @@ export async function PATCH(
         readyVideoCount: counts.readyVideoCount,
         descriptionLength: effectiveDesc?.length ?? 0,
         transactionType: existing.transactionType,
-        price: effectivePrice?.toString?.() ?? effectivePrice,
+        price: effectivePrice != null ? String(effectivePrice) : null,
         propertyType: effectivePropertyType,
         area: effectiveArea ?? null,
       });
