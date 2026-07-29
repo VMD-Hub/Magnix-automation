@@ -8,7 +8,8 @@ export type ToolCategoryId =
   | "tai-chinh"
   | "phong-thuy"
   | "xay-dung"
-  | "noxh";
+  | "noxh"
+  | "cho-thue";
 
 export type ToolCategory = {
   id: ToolCategoryId;
@@ -25,20 +26,26 @@ export const TOOL_CATEGORIES: ToolCategory[] = [
     intro: "Thẩm định vay, hạn mức, tính trả góp và lịch trả nợ chi tiết — mạnh hơn các trang BĐS thông thường.",
   },
   {
-    id: "phong-thuy",
+    id: "cho-thue",
     order: 2,
+    title: "Cho thuê & dòng tiền",
+    intro: "Ước tính dòng tiền ròng, thuế tham chiếu — hỗ trợ chủ nhà trước khi đăng tin tìm khách.",
+  },
+  {
+    id: "phong-thuy",
+    order: 3,
     title: "Phong thủy & tuổi làm nhà",
     intro: "Tra cứu hướng nhà, tuổi động thổ, màu sơn và bàn làm việc — miễn phí, kết quả tức thì.",
   },
   {
     id: "xay-dung",
-    order: 3,
+    order: 4,
     title: "Xây dựng & chi phí",
     intro: "Ước tính chi phí, dự toán chi tiết và dự trù vật liệu trước khi gặp nhà thầu.",
   },
   {
     id: "noxh",
-    order: 4,
+    order: 5,
     title: "Nhà ở xã hội (NOXH)",
     intro: "Kiểm tra điều kiện và thẩm định vay NOXH theo quy định 2026.",
   },
@@ -63,6 +70,16 @@ export const ALL_TOOLS: (ToolCardDef & { category: ToolCategoryId })[] = [
     desc: "Ước tính số tiền vay tối đa theo thu nhập, DTI — như ngân hàng thẩm định.",
     cta: "Tính ngay",
     ready: true,
+  },
+  {
+    id: "rental-cashflow",
+    category: "cho-thue",
+    href: "/cong-cu/dong-tien-cho-thue",
+    title: "Tính dòng tiền cho thuê",
+    desc: "Giá thuê, chi phí, tháng trống và thuế ước tính ~10% — dòng tiền ròng sơ bộ.",
+    cta: "Tính ngay",
+    ready: true,
+    badge: "Cho thuê",
   },
   {
     id: "xem-huong-nha",

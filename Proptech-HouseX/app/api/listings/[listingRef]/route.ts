@@ -109,11 +109,20 @@ export async function PATCH(
       const counts = await mediaCountsFor(prisma, id);
       const effectiveDesc =
         "description" in patch ? patch.description : existing.description;
+      const effectivePrice =
+        "price" in patch ? patch.price : existing.price;
+      const effectivePropertyType =
+        "propertyType" in patch ? patch.propertyType : existing.propertyType;
+      const effectiveArea = "area" in patch ? patch.area : existing.area;
       const publishGate = assertPublishGate({
         readyImageCount: counts.readyImageCount,
         totalVideoCount: counts.totalVideoCount,
         readyVideoCount: counts.readyVideoCount,
         descriptionLength: effectiveDesc?.length ?? 0,
+        transactionType: existing.transactionType,
+        price: effectivePrice?.toString?.() ?? effectivePrice,
+        propertyType: effectivePropertyType,
+        area: effectiveArea ?? null,
       });
       if (!publishGate.ok) {
         return fail(422, publishGate.code, publishGate.message);

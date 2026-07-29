@@ -14,6 +14,9 @@ export const opsLeadListQuerySchema = z.object({
   status: leadStatusEnum.optional(),
   source: z.string().max(80).optional(),
   segment: z.enum(["NOXH", "CCTM"]).optional(),
+  rentalIntent: z
+    .enum(["LANDLORD", "TENANT", "TAX_HELP", "NEED_PM"])
+    .optional(),
 });
 
 export const opsLeadPatchSchema = z.object({
@@ -27,6 +30,24 @@ export const opsLeadPatchSchema = z.object({
       rate: z.number().min(0).max(1).optional(),
       dealValue: z.number().nonnegative().optional(),
       brokerId: z.string().uuid().optional(),
+    })
+    .optional(),
+  /** ADR-018 Wave 1 — ghi SalesActivity hoa hồng thuê. */
+  rentalPlacement: z
+    .object({
+      outcome: z.enum(["WON", "LOST"]),
+      feeVnd: z.number().nonnegative().optional(),
+      monthsFee: z.number().positive().max(12).optional(),
+      listingCode: z.string().max(40).optional(),
+      lostReason: z.string().max(80).optional(),
+    })
+    .optional(),
+  /** ADR-018 Wave 2 — đã chuyển lead TAX_HELP cho đối tác KT/PL. */
+  partnerReferralHanded: z
+    .object({
+      kind: z.enum(["ACCOUNTING", "LEGAL", "BOTH"]).optional(),
+      partnerLabel: z.string().max(80).optional(),
+      note: z.string().max(200).optional(),
     })
     .optional(),
 });

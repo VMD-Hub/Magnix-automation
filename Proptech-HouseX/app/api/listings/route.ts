@@ -147,6 +147,10 @@ export async function POST(req: NextRequest) {
         totalVideoCount: vids.length,
         readyVideoCount: vids.length, // video upload trực tiếp trong POST coi như READY
         descriptionLength: body.description?.length ?? 0,
+        transactionType: body.transactionType,
+        price: body.price,
+        propertyType: body.propertyType,
+        area: body.area ?? null,
       });
       if (!publishGate.ok) {
         return fail(422, publishGate.code, publishGate.message);

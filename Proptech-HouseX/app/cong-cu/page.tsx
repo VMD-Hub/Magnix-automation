@@ -64,6 +64,11 @@ export default function CongCuPage() {
                   Mở máy tính vay →
                 </Link>
               ) : null}
+              {cat.id === "cho-thue" ? (
+                <Link href="/cho-thue" className="text-sm font-semibold text-brand-700 hover:text-brand-800">
+                  Hub cho thuê →
+                </Link>
+              ) : null}
               {cat.id === "phong-thuy" ? (
                 <Link href="/phong-thuy" className="text-sm font-semibold text-brand-700 hover:text-brand-800">
                   Phong thủy nhà ở →

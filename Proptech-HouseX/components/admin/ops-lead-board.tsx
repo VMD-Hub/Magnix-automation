@@ -19,6 +19,9 @@ type OpsLeadRow = {
   source: string;
   sourceLabel: string;
   segment: string | null;
+  rentalIntent?: string | null;
+  rentalIntentLabel?: string | null;
+  landlordSla?: "ok" | "due" | "overdue" | null;
   waitlist?: boolean;
   voiceCallAllowed?: boolean;
   customerName: string | null;
@@ -54,6 +57,11 @@ type OpsLeadDetail = OpsLeadRow & {
   } | null;
   nurtureCatalog: NurtureOption[];
   updatedAt: string;
+  partnerReferralConsent?: {
+    granted: boolean;
+    action: string | null;
+    occurredAt: string | null;
+  } | null;
 };
 
 const STATUSES = [
@@ -68,6 +76,7 @@ export function OpsLeadBoard() {
   const [items, setItems] = useState<OpsLeadRow[]>([]);
   const [counts, setCounts] = useState<Record<string, number>>({});
   const [statusFilter, setStatusFilter] = useState<string>("");
+  const [rentalIntentFilter, setRentalIntentFilter] = useState<string>("");
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [detail, setDetail] = useState<OpsLeadDetail | null>(null);
   const [status, setStatus] = useState("NEW");
@@ -79,13 +88,20 @@ export function OpsLeadBoard() {
     email: "",
     facebook: "",
   });
+  const [rentalFeeVnd, setRentalFeeVnd] = useState("");
+  const [rentalLostReason, setRentalLostReason] = useState("price");
+  const [partnerKind, setPartnerKind] = useState("BOTH");
+  const [partnerLabel, setPartnerLabel] = useState("");
   const [loading, setLoading] = useState(true);
   const [msg, setMsg] = useState<string | null>(null);
 
   const load = useCallback(async () => {
     setLoading(true);
-    const q = statusFilter ? `?status=${statusFilter}` : "";
-    const res = await fetch(`/api/admin/ops-leads${q}`);
+    const q = new URLSearchParams();
+    if (statusFilter) q.set("status", statusFilter);
+    if (rentalIntentFilter) q.set("rentalIntent", rentalIntentFilter);
+    const qs = q.toString();
+    const res = await fetch(`/api/admin/ops-leads${qs ? `?${qs}` : ""}`);
     if (res.status === 403) {
       window.location.href = "/admin/login";
       return;
@@ -94,7 +110,7 @@ export function OpsLeadBoard() {
     setItems(data.data?.items ?? []);
     setCounts(data.data?.counts ?? {});
     setLoading(false);
-  }, [statusFilter]);
+  }, [statusFilter, rentalIntentFilter]);
 
   const loadDetail = useCallback(async (id: string) => {
     const res = await fetch(`/api/admin/ops-leads/${id}`);
@@ -118,37 +134,88 @@ export function OpsLeadBoard() {
   }, [load]);
 
   useEffect(() => {
+    if (typeof window === "undefined") return;
+    const intent = new URLSearchParams(window.location.search).get(
+      "rentalIntent",
+    );
+    if (
+      intent === "LANDLORD" ||
+      intent === "TENANT" ||
+      intent === "TAX_HELP" ||
+      intent === "NEED_PM"
+    ) {
+      setRentalIntentFilter(intent);
+    }
+  }, []);
+
+  useEffect(() => {
     if (selectedId) void loadDetail(selectedId);
     else setDetail(null);
   }, [selectedId, loadDetail]);
 
-  async function save() {
+  async function save(opts?: {
+    recordRentalWon?: boolean;
+    recordRentalLost?: boolean;
+    recordPartnerHanded?: boolean;
+  }) {
     if (!selectedId) return;
     setMsg(null);
+    const body: Record<string, unknown> = {
+      status,
+      opsNote: opsNote || null,
+      nurtureScriptId: nurtureScriptId || null,
+      channels: {
+        phone: channels.phone || null,
+        zalo: channels.zalo || null,
+        email: channels.email || null,
+        facebook: channels.facebook || null,
+      },
+    };
+    if (opts?.recordRentalWon) {
+      body.status = "WON";
+      body.rentalPlacement = {
+        outcome: "WON",
+        feeVnd: rentalFeeVnd ? Number(rentalFeeVnd) : undefined,
+        listingCode: detail?.listingTitle ?? undefined,
+      };
+    }
+    if (opts?.recordRentalLost) {
+      body.status = "LOST";
+      body.rentalPlacement = {
+        outcome: "LOST",
+        lostReason: rentalLostReason || "other",
+      };
+    }
+    if (opts?.recordPartnerHanded) {
+      body.partnerReferralHanded = {
+        kind: partnerKind,
+        partnerLabel: partnerLabel.trim() || undefined,
+      };
+    }
     const res = await fetch(`/api/admin/ops-leads/${selectedId}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        status,
-        opsNote: opsNote || null,
-        nurtureScriptId: nurtureScriptId || null,
-        channels: {
-          phone: channels.phone || null,
-          zalo: channels.zalo || null,
-          email: channels.email || null,
-          facebook: channels.facebook || null,
-        },
-      }),
+      body: JSON.stringify(body),
     });
     const json = await res.json();
     if (!res.ok) {
       setMsg(json.error?.message ?? "Lưu thất bại.");
       return;
     }
-    setMsg("Đã lưu.");
+    setMsg(
+      opts?.recordRentalWon
+        ? "Đã ghi deal hoa hồng thuê (WON)."
+        : opts?.recordRentalLost
+          ? "Đã ghi LOST thuê + lý do."
+          : opts?.recordPartnerHanded
+            ? "Đã ghi chuyển partner KT/PL."
+            : "Đã lưu.",
+    );
     notifyAdminQueueRefresh();
     await load();
     setDetail(json.data);
+    if (opts?.recordRentalWon) setStatus("WON");
+    if (opts?.recordRentalLost) setStatus("LOST");
   }
 
   return (
@@ -161,25 +228,49 @@ export function OpsLeadBoard() {
             notifyAdminQueueRefresh();
           }}
         />
-        <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 bg-slate-50/80 px-4 py-3">
-          <div>
-            <h2 className="font-semibold text-slate-900">Danh sách lead</h2>
-            <p className="text-xs text-slate-500">
-              Chọn dòng → telesales (gọi/SMS/Zalo) + nurture & trạng thái
-            </p>
+        <div className="flex flex-col gap-2 border-b border-slate-100 bg-slate-50/80 px-4 py-3">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <div>
+              <h2 className="font-semibold text-slate-900">Danh sách lead</h2>
+              <p className="text-xs text-slate-500">
+                Chọn dòng → telesales (gọi/SMS/Zalo) + nurture & trạng thái
+              </p>
+            </div>
+            <div className="flex flex-wrap gap-1">
+              <FilterChip
+                active={!statusFilter}
+                label={`Tất cả (${items.length})`}
+                onClick={() => setStatusFilter("")}
+              />
+              {STATUSES.map((s) => (
+                <FilterChip
+                  key={s.id}
+                  active={statusFilter === s.id}
+                  label={`${s.label} (${counts[s.id] ?? 0})`}
+                  onClick={() => setStatusFilter(s.id)}
+                />
+              ))}
+            </div>
           </div>
           <div className="flex flex-wrap gap-1">
             <FilterChip
-              active={!statusFilter}
-              label={`Tất cả (${items.length})`}
-              onClick={() => setStatusFilter("")}
+              active={!rentalIntentFilter}
+              label="Mọi intent thuê"
+              onClick={() => setRentalIntentFilter("")}
             />
-            {STATUSES.map((s) => (
+            {(
+              [
+                ["LANDLORD", "Chủ nhà"],
+                ["TENANT", "Khách thuê"],
+                ["TAX_HELP", "Thuế"],
+                ["NEED_PM", "QL sau"],
+              ] as const
+            ).map(([id, label]) => (
               <FilterChip
-                key={s.id}
-                active={statusFilter === s.id}
-                label={`${s.label} (${counts[s.id] ?? 0})`}
-                onClick={() => setStatusFilter(s.id)}
+                key={id}
+                active={rentalIntentFilter === id}
+                label={label}
+                onClick={() => setRentalIntentFilter(id)}
               />
             ))}
           </div>
@@ -214,11 +305,28 @@ export function OpsLeadBoard() {
                       <p className="mt-0.5 text-xs text-slate-500">
                         {row.sourceLabel}
                         {row.segment ? ` · ${row.segment}` : ""}
+                        {row.rentalIntentLabel
+                          ? ` · ${row.rentalIntentLabel}`
+                          : ""}
                         {row.projectName ? ` · ${row.projectName}` : ""}
                       </p>
                       {row.waitlist ? (
                         <p className="mt-1 text-xs font-medium text-sky-800">
                           Waitlist — không gọi nóng (in-app)
+                        </p>
+                      ) : null}
+                      {row.landlordSla === "overdue" ? (
+                        <p className="mt-1 text-xs font-semibold text-rose-700">
+                          SLA chủ nhà quá hạn (&gt; 4 giờ)
+                        </p>
+                      ) : row.landlordSla === "due" ? (
+                        <p className="mt-1 text-xs font-medium text-amber-800">
+                          SLA chủ nhà sắp tới hạn (≤ 4 giờ)
+                        </p>
+                      ) : row.rentalIntent === "LANDLORD" &&
+                        row.status === "NEW" ? (
+                        <p className="mt-1 text-xs text-slate-600">
+                          SLA liên hệ ≤ 4 giờ
                         </p>
                       ) : null}
                       {row.nurtureScriptLabel ? (
@@ -345,6 +453,130 @@ export function OpsLeadBoard() {
                 onChange={(e) => setOpsNote(e.target.value)}
               />
             </label>
+
+            {detail.rentalIntent === "LANDLORD" ||
+            detail.rentalIntent === "TENANT" ? (
+              <fieldset className="space-y-2 rounded-lg border border-emerald-100 bg-emerald-50/50 p-3 text-sm">
+                <legend className="px-1 text-xs font-semibold uppercase tracking-wide text-emerald-900">
+                  Deal hoa hồng thuê (ADR-018)
+                </legend>
+                <label className="block">
+                  <span className="text-xs font-medium text-slate-700">
+                    Phí hoa hồng (VND)
+                  </span>
+                  <input
+                    type="number"
+                    min={0}
+                    className="mt-1 w-full rounded-md border border-slate-200 px-2 py-1.5 text-sm"
+                    value={rentalFeeVnd}
+                    onChange={(e) => setRentalFeeVnd(e.target.value)}
+                    placeholder="Vd. 5000000"
+                  />
+                </label>
+                <label className="block">
+                  <span className="text-xs font-medium text-slate-700">
+                    Lý do LOST (nếu đóng)
+                  </span>
+                  <select
+                    className="mt-1 w-full rounded-md border border-slate-200 px-2 py-1.5 text-sm"
+                    value={rentalLostReason}
+                    onChange={(e) => setRentalLostReason(e.target.value)}
+                  >
+                    <option value="no_response">no_response</option>
+                    <option value="price">price</option>
+                    <option value="tax_fear">tax_fear</option>
+                    <option value="want_pm_only">want_pm_only</option>
+                    <option value="legal_block">legal_block</option>
+                    <option value="other">other</option>
+                  </select>
+                </label>
+                <div className="flex flex-col gap-2 sm:flex-row">
+                  <Button
+                    type="button"
+                    variant="brand"
+                    className="flex-1"
+                    onClick={() => void save({ recordRentalWon: true })}
+                  >
+                    Chốt hoa hồng (WON)
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="flex-1"
+                    onClick={() => void save({ recordRentalLost: true })}
+                  >
+                    Ghi LOST thuê
+                  </Button>
+                </div>
+              </fieldset>
+            ) : null}
+
+            {detail.rentalIntent === "TAX_HELP" ? (
+              <fieldset className="space-y-2 rounded-lg border border-amber-100 bg-amber-50/40 p-3 text-sm">
+                <legend className="px-1 text-xs font-semibold uppercase tracking-wide text-amber-900">
+                  Referral KT / PL (Wave 2)
+                </legend>
+                <p
+                  className={
+                    detail.partnerReferralConsent?.granted
+                      ? "text-[11px] font-medium text-emerald-800"
+                      : "text-[11px] font-medium text-rose-800"
+                  }
+                >
+                  Consent partner_referral:{" "}
+                  {detail.partnerReferralConsent?.granted
+                    ? `OK (${detail.partnerReferralConsent.action ?? "GRANTED"})`
+                    : detail.partnerReferralConsent
+                      ? `Chưa đủ (${detail.partnerReferralConsent.action ?? "none"}) — không share SĐT`
+                      : "Đang kiểm tra…"}
+                </p>
+                <p className="text-[11px] text-amber-900/80">
+                  Chỉ chuyển partner khi consent OK. Không tư vấn thuế thay KTV.
+                </p>
+                <label className="block">
+                  <span className="text-xs font-medium text-slate-700">Loại</span>
+                  <select
+                    className="mt-1 w-full rounded-md border border-slate-200 px-2 py-1.5 text-sm"
+                    value={partnerKind}
+                    onChange={(e) => setPartnerKind(e.target.value)}
+                  >
+                    <option value="BOTH">BOTH</option>
+                    <option value="ACCOUNTING">ACCOUNTING</option>
+                    <option value="LEGAL">LEGAL</option>
+                  </select>
+                </label>
+                <label className="block">
+                  <span className="text-xs font-medium text-slate-700">
+                    Partner (nhãn nội bộ)
+                  </span>
+                  <input
+                    className="mt-1 w-full rounded-md border border-slate-200 px-2 py-1.5 text-sm"
+                    value={partnerLabel}
+                    onChange={(e) => setPartnerLabel(e.target.value)}
+                    placeholder="Vd. KT-A / PL-B"
+                  />
+                </label>
+                <Button
+                  type="button"
+                  variant="brand"
+                  className="w-full"
+                  disabled={!detail.partnerReferralConsent?.granted}
+                  onClick={() => void save({ recordPartnerHanded: true })}
+                >
+                  Đã chuyển partner
+                </Button>
+              </fieldset>
+            ) : null}
+
+            {detail.rentalIntent === "NEED_PM" ? (
+              <div className="rounded-lg border border-slate-200 bg-slate-50 p-3 text-xs text-slate-600">
+                <p className="font-semibold text-slate-800">NEED_PM — waitlist</p>
+                <p className="mt-1">
+                  Sense only: không bán Lớp 3, không hứa quản lý căn. Chỉ ghi nhận
+                  và nurture nhẹ khi có cập nhật.
+                </p>
+              </div>
+            ) : null}
 
             <div>
               <p className="text-xs font-medium text-slate-700">

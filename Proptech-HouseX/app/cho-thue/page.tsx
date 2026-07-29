@@ -11,6 +11,7 @@ import {
   buildListingListJsonLd,
   propertyTypeToSlug,
 } from "@/components/listings/listing-browse-page";
+import { RentalHubLandlordPanel } from "@/components/listings/rental-hub-panels";
 import { propertyTypeLabel } from "@/lib/format";
 import { isBrowseRateLimited } from "@/lib/security/browse-rate-limit";
 import { RateLimitNotice } from "@/components/security/rate-limit-notice";
@@ -105,8 +106,9 @@ export default async function ChoThuePage({ searchParams }: PageProps) {
           kicker: copy.kicker,
           title: copy.heroTitle,
           subtitle: copy.heroSubtitle,
-          badge: "Coming Soon",
+          badge: "Tin quảng cáo",
         }}
+        hubExtras={<RentalHubLandlordPanel />}
         items={items}
         pagination={pagination}
         emptyMode={items.length === 0 ? "coming-soon" : "no-results"}

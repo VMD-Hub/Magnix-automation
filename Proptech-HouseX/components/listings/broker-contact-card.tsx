@@ -27,6 +27,7 @@ export function BrokerContactCard({
   licenseVerified,
   brokerLabel,
   autoReveal = false,
+  transactionType,
 }: {
   code: string;
   listingId: string;
@@ -35,6 +36,8 @@ export function BrokerContactCard({
   licenseVerified?: boolean;
   brokerLabel?: string;
   autoReveal?: boolean;
+  /** ADR-018 — tin RENT gắn rentalIntent=tenant trên form lead. */
+  transactionType?: "SALE" | "RENT" | string;
 }) {
   const [state, setState] = useState<State>({ kind: "idle" });
   const [resendMsg, setResendMsg] = useState<string | null>(null);
@@ -219,7 +222,11 @@ export function BrokerContactCard({
         <Button type="button" variant="zalo" className="w-full">
           <Icon.Chat className="text-base" /> Chat Zalo
         </Button>
-        <LeadContactForm listingId={listingId} compact />
+        <LeadContactForm
+          listingId={listingId}
+          compact
+          rentalIntent={transactionType === "RENT" ? "tenant" : undefined}
+        />
       </div>
 
       {state.kind === "need_login" ? (

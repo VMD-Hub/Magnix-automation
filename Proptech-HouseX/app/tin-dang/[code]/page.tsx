@@ -143,6 +143,12 @@ export default async function ListingPage({ params, searchParams }: PageProps) {
             <Badge tone="brand">
               {TRANSACTION_TYPE_LABEL[listing.transactionType]}
             </Badge>
+            {listing.transactionType === "RENT" &&
+              listing.track === "ADVERTISING" && (
+                <Badge tone="neutral" className="bg-white/10 text-silver-100 ring-white/20">
+                  Tin quảng cáo
+                </Badge>
+              )}
             {listing.tier !== "FREE" && (
               <Badge tone="neutral" className="bg-gold-500/15 text-gold-700 ring-gold-500/30">
                 {LISTING_TIER_LABEL[listing.tier]}
@@ -165,6 +171,13 @@ export default async function ListingPage({ params, searchParams }: PageProps) {
               <span className="text-base font-medium text-silver-200"> / tháng</span>
             )}
           </p>
+          {listing.transactionType === "RENT" &&
+            listing.track === "ADVERTISING" && (
+              <p className="mt-2 max-w-2xl text-sm text-silver-200">
+                Tin đăng quảng cáo trên House X — kết nối chủ nhà / môi giới với
+                người thuê. Không đồng nghĩa House X đang quản lý căn này.
+              </p>
+            )}
         </div>
       </div>
 
@@ -232,6 +245,7 @@ export default async function ListingPage({ params, searchParams }: PageProps) {
                   : "Môi giới"
               }
               autoReveal={reveal === "1"}
+              transactionType={listing.transactionType}
             />
           </div>
         </section>

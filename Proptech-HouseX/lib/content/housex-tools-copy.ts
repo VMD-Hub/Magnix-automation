@@ -47,6 +47,21 @@ export const LOAN_AFFORDABILITY_COPY = {
   faqHeading: "Câu hỏi thường gặp về hạn mức vay mua nhà",
 } as const;
 
+export const RENTAL_CASHFLOW_COPY = {
+  metaTitle: "Tính dòng tiền cho thuê & thuế ước tính",
+  metaDescription:
+    "Ước tính dòng tiền ròng khi cho thuê: giá thuê, chi phí vận hành, tháng trống và thuế tham chiếu ~10%. Miễn phí trên House X — không thay thế tư vấn thuế.",
+  kicker: "Công cụ · Cho thuê",
+  title: "Tính dòng tiền cho thuê",
+  subtitle:
+    "Nhập giá thuê và chi phí — xem dòng tiền ròng sau thuế ước tính và tháng trống. Để lại SĐT nếu cần tìm khách hoặc kế toán.",
+  primaryCta: "Bắt đầu tính",
+  primaryCtaHref: "#tinh-toan",
+  secondaryCta: "Hub cho thuê",
+  secondaryCtaHref: "/cho-thue",
+  faqHeading: "Câu hỏi thường gặp về dòng tiền & thuế cho thuê",
+} as const;
+
 export const NOXH_CHECK_COPY = {
   metaTitle: "Kiểm tra điều kiện mua NOXH 2026",
   metaDescription:

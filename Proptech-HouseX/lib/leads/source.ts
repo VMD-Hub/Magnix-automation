@@ -12,6 +12,8 @@ export const LEAD_SOURCE = {
   TOOL_NOXH_LOAN_QUICK: "tool:noxh-loan-quick-check",
   MINIAPP_CONSULT: "miniapp:consult",
   WEB_LEAD: "web:lead",
+  /** ADR-018 — form hub /cho-thue (chủ nhà / thuế / QL sau). */
+  RENTAL_HUB: "web:rental_hub",
   OPS_MANUAL: "ops:manual",
   HOT_MANUAL: "hot:manual",
   ADS_OFFLINE: "ads:offline",
@@ -35,6 +37,8 @@ export type LeadSourceMeta = {
   salesRegion?: "SOUTH" | "CENTRAL" | "NORTH";
   leadLane?: "ACTIVE_SALE" | "PIPELINE_CDT";
   projectSlug?: string;
+  /** ADR-018 — mirror rentalIntent trên sourceMeta để audit. */
+  rentalIntent?: "landlord" | "tenant" | "tax_help" | "need_pm";
 };
 
 export type ResolveLeadSourceInput = {

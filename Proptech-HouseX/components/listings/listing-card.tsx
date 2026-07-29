@@ -18,6 +18,8 @@ export type ListingCardData = {
   title?: string | null;
   propertyType: string;
   transactionType: string;
+  /** ADR-009/018 — ADVERTISING | MANAGED */
+  track?: string | null;
   price: number | string;
   area?: number | null;
   province: string;
@@ -73,6 +75,10 @@ export function ListingCard({ item }: { item: ListingCardData }) {
             <Badge tone="dark">
               <Icon.Video className="text-sm" /> Video
             </Badge>
+          ) : null}
+          {item.transactionType === "RENT" &&
+          (item.track === "ADVERTISING" || !item.track) ? (
+            <Badge tone="neutral">Tin QC</Badge>
           ) : null}
         </div>
         {item.verified ? (

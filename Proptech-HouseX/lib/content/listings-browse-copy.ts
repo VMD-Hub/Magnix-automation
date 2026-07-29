@@ -18,15 +18,15 @@ export const LISTINGS_BROWSE_COPY = {
     kicker: "HouseX · Cho thuê",
     heroTitle: "Thuê nhà — lọc đúng nhu cầu trước khi gọi",
     heroSubtitle:
-      "Căn hộ, CHDV, phòng trọ — kho tin đang mở rộng. Xem tin mua bán hoặc đăng tin cho thuê sớm.",
+      "Căn hộ, CHDV, phòng trọ — tin quảng cáo đã kiểm duyệt nội dung. Chủ nhà có thể đăng tin hoặc nhờ tìm khách.",
     listTitle: "Cho thuê bất động sản",
-    comingSoonTitle: "Kho tin cho thuê đang cập nhật",
+    comingSoonTitle: "Chưa có tin khớp — bạn vẫn có thể bắt đầu",
     comingSoonBody:
-      "HouseX đang mở rộng tin cho thuê tại TP.HCM. Bạn có thể xem tin mua bán hoặc đăng ký nhận thông báo khi có tin mới.",
-    comingSoonCta: "Xem tin mua bán",
-    comingSoonCtaHref: "/mua-ban",
+      "Kho tin đang mở rộng. Đăng tin cho thuê, để lại liên hệ nếu bạn là chủ nhà cần tìm khách, hoặc xem kiến thức thuế & dòng tiền.",
+    comingSoonCta: "Đăng tin cho thuê",
+    comingSoonCtaHref: "/moi-gioi/dang-tin",
     /** Hub `/cho-thue` — Ahrefs ~120–160 ký tự. */
     seoDescriptionSuffix:
-      "Kho tin cho thuê House X đang mở rộng — lọc căn hộ, CHDV, phòng trọ; xem chi tiết trước khi gọi.",
+      "Tin cho thuê trên House X — căn hộ, CHDV, phòng trọ; chủ nhà đăng tin hoặc nhờ tìm khách; xem thuế & dòng tiền trước khi quyết định.",
   },
 } as const;

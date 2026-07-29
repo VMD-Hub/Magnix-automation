@@ -1,5 +1,9 @@
 import { z } from "zod";
 import { leadSegmentInputSchema } from "@/lib/rules/lead-segment";
+import {
+  rentalIntentAllowsOrphanLead,
+  rentalLeadIntentInputSchema,
+} from "@/lib/rules/rental-lead-intent";
 import { parseLeadUtmFromRecord } from "@/lib/leads/utm";
 
 const leadUtmSchema = z
@@ -41,6 +45,8 @@ export const leadCreateSchema = z
     utm_term: z.string().max(200).optional(),
     /** Intent lane — Mini App gửi `noxh` | `cctm`; server suy ra từ project nếu thiếu. */
     segment: leadSegmentInputSchema.optional(),
+    /** ADR-018 — hub thuê / tin RENT. */
+    rentalIntent: rentalLeadIntentInputSchema.optional(),
     /**
      * ADR-016 — `waitlist` = nhận tin (không cold-call);
      * `consult_request` = xin tư vấn; omit = consult (legacy).
@@ -56,10 +62,25 @@ export const leadCreateSchema = z
      * Không suy từ checkbox liên hệ chung.
      */
     marketingEmailOptIn: z.boolean().optional().default(false),
+    /**
+     * ADR-018 Wave 2 — đồng ý Minh An chuyển liên hệ cho đối tác KT/PL.
+     * Chỉ có nghĩa khi rentalIntent=tax_help; ghi ConsentRecord riêng.
+     */
+    partnerReferralOptIn: z.boolean().optional().default(false),
+    partnerReferralKind: z
+      .enum(["ACCOUNTING", "LEGAL", "BOTH", "accounting", "legal", "both"])
+      .optional(),
   })
-  .refine((d) => !!d.listingId || !!d.projectId, {
-    message: "Lead cần gắn với ít nhất listingId hoặc projectId.",
-  })
+  .refine(
+    (d) =>
+      !!d.listingId ||
+      !!d.projectId ||
+      rentalIntentAllowsOrphanLead(d.rentalIntent),
+    {
+      message:
+        "Lead cần gắn listingId hoặc projectId — trừ intent chủ nhà / thuế / QL sau (ADR-018).",
+    },
+  )
   .transform((d) => {
     const utm =
       parseLeadUtmFromRecord(d.utm ?? {}) ??
@@ -77,7 +98,16 @@ export const leadCreateSchema = z
     void utm_campaign;
     void utm_content;
     void utm_term;
-    return { ...rest, utm };
+    const kindRaw = rest.partnerReferralKind;
+    const partnerReferralKind =
+      kindRaw === "accounting" || kindRaw === "ACCOUNTING"
+        ? ("ACCOUNTING" as const)
+        : kindRaw === "legal" || kindRaw === "LEGAL"
+          ? ("LEGAL" as const)
+          : kindRaw === "both" || kindRaw === "BOTH"
+            ? ("BOTH" as const)
+            : undefined;
+    return { ...rest, utm, partnerReferralKind };
   });
 
 export type LeadCreateInput = z.infer<typeof leadCreateSchema>;

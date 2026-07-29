@@ -65,6 +65,7 @@ function toCard(
     code: l.code,
     propertyType: l.propertyType,
     transactionType: l.transactionType,
+    track: l.track,
     price: l.price.toString(),
     area: l.area,
     province: l.province,

@@ -218,6 +218,14 @@ enum LeadSegment {
   CCTM
 }
 
+/// ADR-018 Wave 0 — intent thuê (Sense P1–P4); tách khỏi LeadSegment NOXH/CCTM.
+enum RentalLeadIntent {
+  LANDLORD
+  TENANT
+  TAX_HELP
+  NEED_PM
+}
+
 enum AttributionConflictKind {
   CTV_CLAIM_BLOCKED
   OPS_LEAD_CTV_LOCK
@@ -1030,6 +1038,8 @@ model Lead {
   /// CRM-R4 — kênh liên hệ nurture + script gợi ý (channels, nurtureScriptId, opsNote).
   opsMeta          Json         @default("{}") @map("ops_meta")
   segment          LeadSegment? @map("segment")
+  /// ADR-018 — landlord / tenant / tax_help / need_pm (hub thuê & tin RENT).
+  rentalIntent     RentalLeadIntent? @map("rental_intent")
   message          String?      @db.Text
   status           LeadStatus   @default(NEW)
   createdAt        DateTime     @default(now()) @map("created_at")
@@ -1060,6 +1070,7 @@ model Lead {
   @@index([status])
   @@index([assignedBrokerId, status])
   @@index([segment])
+  @@index([rentalIntent])
   @@map("leads")
 }
 

@@ -15,6 +15,11 @@ import {
 } from "@/lib/events/lead-inquiry";
 import { resolveLeadSegmentPrisma } from "@/lib/rules/lead-segment-resolve";
 import {
+  toPrismaRentalLeadIntent,
+  rentalIntentAllowsOrphanLead,
+} from "@/lib/rules/rental-lead-intent";
+import type { RentalLeadIntentInput } from "@/lib/rules/rental-lead-intent";
+import {
   LEAD_CHANNEL_HEADER,
   LEAD_SOURCE,
   parseLeadChannelHeader,
@@ -179,6 +184,38 @@ export async function POST(req: NextRequest) {
         };
       }
 
+      const rentalIntentInput = body.rentalIntent as
+        | RentalLeadIntentInput
+        | undefined;
+      const rentalIntent = rentalIntentInput
+        ? toPrismaRentalLeadIntent(rentalIntentInput)
+        : undefined;
+
+      if (
+        rentalIntentAllowsOrphanLead(rentalIntentInput) &&
+        !body.listingId &&
+        !body.projectId
+      ) {
+        source = LEAD_SOURCE.RENTAL_HUB;
+        sourceMeta = {
+          ...(sourceMeta ?? {}),
+          rawSource: body.source ?? LEAD_SOURCE.RENTAL_HUB,
+          channel,
+          rentalIntent: rentalIntentInput,
+        };
+      }
+
+      // NEED_PM = Sense P4 only — không cold-call như HOT.
+      if (rentalIntentInput === "need_pm" && !waitlist) {
+        source = WAITLIST_LEAD_SOURCE;
+        sourceMeta = {
+          ...(sourceMeta ?? {}),
+          rawSource: body.source ?? LEAD_SOURCE.RENTAL_HUB,
+          channel,
+          rentalIntent: rentalIntentInput,
+        };
+      }
+
       const created = await tx.lead.create({
         data: {
           customerId: customer.id,
@@ -193,10 +230,14 @@ export async function POST(req: NextRequest) {
             email: body.email,
             segment,
             source,
-            captureType,
+            captureType:
+              rentalIntentInput === "need_pm" && !captureType
+                ? "waitlist"
+                : captureType,
             channelPreference,
           }) as Prisma.InputJsonValue,
           segment,
+          rentalIntent,
           message: body.message,
         },
       });
@@ -205,14 +246,19 @@ export async function POST(req: NextRequest) {
       // Waitlist: không auto-enqueue nurture gọi/Zalo “trong 24h” — script manual.
       // P2: tạo thông báo in-app chào + CTA tài khoản / bài lọc đối tượng.
       if (waitlist && created.customerId) {
+        const needPm = rentalIntentInput === "need_pm";
         await createCustomerNotification(tx, {
           customerId: created.customerId,
           type: CUSTOMER_NOTIFY_TYPE.WAITLIST_WELCOME,
-          title: "Đã ghi nhận đăng ký nhận tin",
-          body: `${WAITLIST_NO_COLD_CALL} Cập nhật sẽ hiện trong thông báo tài khoản. Nên hoàn thiện hồ sơ và làm bài lọc đối tượng NOXH.`,
+          title: needPm
+            ? "Đã ghi danh sách chờ QL sau"
+            : "Đã ghi nhận đăng ký nhận tin",
+          body: needPm
+            ? `${WAITLIST_NO_COLD_CALL} Đây chỉ là danh sách quan tâm — chưa mở dịch vụ quản lý căn. Cập nhật sẽ hiện trong thông báo tài khoản.`
+            : `${WAITLIST_NO_COLD_CALL} Cập nhật sẽ hiện trong thông báo tài khoản. Nên hoàn thiện hồ sơ và làm bài lọc đối tượng NOXH.`,
           projectId: body.projectId ?? null,
           leadId: created.id,
-          href: "/khach-hang/tai-khoan",
+          href: needPm ? "/cho-thue" : "/khach-hang/tai-khoan",
           dedupeKey: `waitlist_welcome:${created.id}`,
         });
       }
@@ -324,6 +370,22 @@ export async function POST(req: NextRequest) {
 
     if (idemKey) {
       await kv.set(`idem:lead:${idemKey}`, lead.id, IDEMPOTENCY_TTL_SEC);
+    }
+
+    const partnerOptIn = body.partnerReferralOptIn === true;
+    const rentalIntentPrisma = toPrismaRentalLeadIntent(body.rentalIntent);
+    if (partnerOptIn && rentalIntentPrisma === "TAX_HELP") {
+      const { grantPartnerReferralConsent, parsePartnerReferralKind } =
+        await import("@/lib/leads/rental-partner-referral");
+      const kind =
+        parsePartnerReferralKind(body.partnerReferralKind) ?? "BOTH";
+      await grantPartnerReferralConsent({
+        leadId: lead.id,
+        source: lead.source,
+        kind,
+        proofType: "web_form_checkbox",
+        proofRef: normalizedPhone,
+      });
     }
 
     return applyApiCors(created(lead), req);

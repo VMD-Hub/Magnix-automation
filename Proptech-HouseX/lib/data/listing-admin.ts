@@ -93,6 +93,9 @@ export async function approveListing(listingId: string): Promise<{ code: string 
       expireAt: true,
       propertyType: true,
       district: true,
+      transactionType: true,
+      price: true,
+      area: true,
     },
   });
 
@@ -106,6 +109,10 @@ export async function approveListing(listingId: string): Promise<{ code: string 
     totalVideoCount: counts.totalVideoCount,
     readyVideoCount: counts.readyVideoCount,
     descriptionLength: listing.description?.length ?? 0,
+    transactionType: listing.transactionType,
+    price: listing.price.toString(),
+    propertyType: listing.propertyType,
+    area: listing.area,
   });
   if (!publishGate.ok) {
     throw new Error(`GATE_${publishGate.code}`);

@@ -34,6 +34,7 @@ export async function GET(req: NextRequest) {
       status: req.nextUrl.searchParams.get("status") ?? undefined,
       source: req.nextUrl.searchParams.get("source") ?? undefined,
       segment: req.nextUrl.searchParams.get("segment") ?? undefined,
+      rentalIntent: req.nextUrl.searchParams.get("rentalIntent") ?? undefined,
     });
 
     const rows = await listOpsLeadsForAdmin(parsed);

@@ -8,12 +8,20 @@ import {
   interestWaitlistFormCopy,
   type LeadCaptureIntent,
 } from "@/lib/content/messaging/interest-waitlist-copy";
+import {
+  rentalNeedPmWaitlistCopy,
+  rentalTaxHelpFormCopy,
+} from "@/lib/content/messaging/rental-waitlist-copy";
+import type { RentalLeadIntentInput } from "@/lib/rules/rental-lead-intent";
+import type { PartnerReferralKind } from "@/lib/leads/rental-partner-referral";
 
 type Props = {
   listingId?: string;
   projectId?: string;
   /** consult = tư vấn/gọi; waitlist = nhận tin, không cold-call (ADR-016 P0). */
   intent?: LeadCaptureIntent;
+  /** ADR-018 — hub thuê / tin RENT. */
+  rentalIntent?: RentalLeadIntentInput;
   /** Tiêu đề form — mặc định theo ngữ cảnh / intent. */
   title?: string;
   /** Gọn cho sidebar tin đăng. */
@@ -27,7 +35,11 @@ function defaultTitle(
   intent: LeadCaptureIntent,
   listingId?: string,
   projectId?: string,
+  rentalIntent?: RentalLeadIntentInput,
 ) {
+  if (rentalIntent === "landlord") return "Chủ nhà — cần tìm khách thuê";
+  if (rentalIntent === "tax_help") return "Tư vấn thuế / kế toán cho thuê";
+  if (rentalIntent === "need_pm") return rentalNeedPmWaitlistCopy.title;
   if (intent === "waitlist") return interestWaitlistFormCopy.title;
   if (listingId) return "Để lại số — tư vấn tin này";
   if (projectId) return "Đăng ký tư vấn dự án";
@@ -38,6 +50,7 @@ export function LeadContactForm({
   listingId,
   projectId,
   intent = "consult",
+  rentalIntent,
   title,
   compact = false,
   defaultOpen = false,
@@ -51,11 +64,19 @@ export function LeadContactForm({
   const [message, setMessage] = useState("");
   const [consent, setConsent] = useState(false);
   const [emailDigestOptIn, setEmailDigestOptIn] = useState(false);
+  const [partnerReferralOptIn, setPartnerReferralOptIn] = useState(false);
+  const [partnerReferralKind, setPartnerReferralKind] =
+    useState<PartnerReferralKind>("BOTH");
   const [loading, setLoading] = useState(false);
   const [done, setDone] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const waitlist = intent === "waitlist";
+  const needPmWaitlist = rentalIntent === "need_pm";
+  const waitlist = intent === "waitlist" || needPmWaitlist;
+  const taxHelp = rentalIntent === "tax_help";
+  const waitlistCopy = needPmWaitlist
+    ? rentalNeedPmWaitlistCopy
+    : interestWaitlistFormCopy;
 
   useEffect(() => {
     fetch("/api/auth/me")
@@ -100,9 +121,17 @@ export function LeadContactForm({
         message: message.trim() || undefined,
         listingId,
         projectId,
+        rentalIntent,
+        source: rentalIntent && !listingId && !projectId ? "web:rental_hub" : undefined,
         captureType: waitlist ? "waitlist" : "consult_request",
         channelPreference,
         marketingEmailOptIn: waitlist ? emailDigestOptIn : false,
+        ...(taxHelp && partnerReferralOptIn
+          ? {
+              partnerReferralOptIn: true,
+              partnerReferralKind,
+            }
+          : {}),
         ...(utm ? { utm } : {}),
       };
 
@@ -110,7 +139,7 @@ export function LeadContactForm({
         method: "POST",
         headers: {
           "content-type": "application/json",
-          "idempotency-key": `${formId}-${phone.trim()}-${listingId ?? projectId ?? "x"}`,
+          "idempotency-key": `${formId}-${phone.trim()}-${listingId ?? projectId ?? rentalIntent ?? "x"}`,
         },
         body: JSON.stringify(body),
       });
@@ -127,10 +156,18 @@ export function LeadContactForm({
     }
   }
 
-  const heading = title ?? defaultTitle(intent, listingId, projectId);
+  const heading = title ?? defaultTitle(intent, listingId, projectId, rentalIntent);
   const messagePlaceholder =
     placeholderMessage ??
-    (waitlist ? interestWaitlistFormCopy.placeholderMessage : undefined);
+    (rentalIntent === "landlord"
+      ? "Khu vực, loại căn, giá thuê kỳ vọng…"
+      : rentalIntent === "tax_help"
+        ? "Số căn đang cho thuê / thắc mắc thuế…"
+        : needPmWaitlist
+          ? rentalNeedPmWaitlistCopy.placeholderMessage
+          : waitlist
+            ? interestWaitlistFormCopy.placeholderMessage
+            : undefined);
 
   if (done) {
     return (
@@ -142,13 +179,11 @@ export function LeadContactForm({
         }
       >
         <p className="font-semibold text-emerald-900">
-          {waitlist
-            ? interestWaitlistFormCopy.successTitle
-            : "Đã gửi yêu cầu tư vấn"}
+          {waitlist ? waitlistCopy.successTitle : "Đã gửi yêu cầu tư vấn"}
         </p>
         <p className="mt-2 text-sm text-emerald-800">
           {waitlist ? (
-            interestWaitlistFormCopy.successBody
+            waitlistCopy.successBody
           ) : (
             <>
               Chuyên viên sẽ liên hệ trong giờ làm việc. Bạn có thể theo dõi trạng
@@ -160,7 +195,23 @@ export function LeadContactForm({
             </>
           )}
         </p>
-        {waitlist ? (
+        {needPmWaitlist ? (
+          <div className="mt-3 flex flex-col items-center gap-2 text-sm sm:flex-row sm:justify-center">
+            <a
+              href={rentalNeedPmWaitlistCopy.successToolHref}
+              className="font-semibold text-emerald-900 underline"
+            >
+              {rentalNeedPmWaitlistCopy.successToolCta}
+            </a>
+            <span className="hidden text-emerald-700 sm:inline">·</span>
+            <a
+              href={rentalNeedPmWaitlistCopy.successHubHref}
+              className="font-semibold text-emerald-900 underline"
+            >
+              {rentalNeedPmWaitlistCopy.successHubCta}
+            </a>
+          </div>
+        ) : waitlist ? (
           <div className="mt-3 flex flex-col items-center gap-2 text-sm sm:flex-row sm:justify-center">
             <a
               href="/khach-hang/tai-khoan"
@@ -189,9 +240,7 @@ export function LeadContactForm({
         className="w-full"
         onClick={() => setOpen(true)}
       >
-        {waitlist
-          ? interestWaitlistFormCopy.compactTrigger
-          : "Để lại số điện thoại"}
+        {waitlist ? waitlistCopy.compactTrigger : "Để lại số điện thoại"}
       </Button>
     );
   }
@@ -220,7 +269,9 @@ export function LeadContactForm({
       {!compact && (
         <p className="mt-1 text-sm text-slate-600">
           {waitlist ? (
-            interestWaitlistFormCopy.intro
+            waitlistCopy.intro
+          ) : taxHelp ? (
+            rentalTaxHelpFormCopy.intro
           ) : (
             <>
               Ghi nhận nhu cầu gắn với {listingId ? "tin đăng" : "dự án"} này —
@@ -231,7 +282,12 @@ export function LeadContactForm({
       )}
       {waitlist && compact ? (
         <p className="mt-1 text-[11px] text-slate-600">
-          {interestWaitlistFormCopy.intro}
+          {waitlistCopy.intro}
+        </p>
+      ) : null}
+      {taxHelp && compact ? (
+        <p className="mt-1 text-[11px] text-slate-600">
+          {rentalTaxHelpFormCopy.intro}
         </p>
       ) : null}
 
@@ -287,7 +343,7 @@ export function LeadContactForm({
         <span>
           {waitlist ? (
             <>
-              {interestWaitlistFormCopy.consentLabel} (xem{" "}
+              {waitlistCopy.consentLabel} (xem{" "}
               <a href="/bao-mat" className="text-brand-700 underline">
                 chính sách bảo mật
               </a>
@@ -305,6 +361,36 @@ export function LeadContactForm({
           )}
         </span>
       </label>
+
+      {taxHelp ? (
+        <>
+          <label className="mt-2 flex items-start gap-2 text-xs text-slate-600">
+            <input
+              type="checkbox"
+              checked={partnerReferralOptIn}
+              onChange={(e) => setPartnerReferralOptIn(e.target.checked)}
+              className="mt-0.5 rounded border-slate-300"
+            />
+            <span>{rentalTaxHelpFormCopy.partnerConsentLabel}</span>
+          </label>
+          {partnerReferralOptIn ? (
+            <label className="mt-2 block text-xs text-slate-600">
+              <span className="font-medium text-slate-700">Loại hỗ trợ</span>
+              <select
+                className="mt-1 h-10 w-full rounded-xl border border-slate-200 px-3 text-sm"
+                value={partnerReferralKind}
+                onChange={(e) =>
+                  setPartnerReferralKind(e.target.value as PartnerReferralKind)
+                }
+              >
+                <option value="BOTH">Kế toán + pháp lý HĐ</option>
+                <option value="ACCOUNTING">Kế toán / thuế</option>
+                <option value="LEGAL">Pháp lý hợp đồng thuê</option>
+              </select>
+            </label>
+          ) : null}
+        </>
+      ) : null}
 
       {waitlist ? (
         <label className="mt-2 flex items-start gap-2 text-xs text-slate-600">
@@ -333,7 +419,7 @@ export function LeadContactForm({
           {loading
             ? "Đang gửi…"
             : waitlist
-              ? interestWaitlistFormCopy.submitLabel
+              ? waitlistCopy.submitLabel
               : "Gửi yêu cầu"}
         </Button>
         {compact && (

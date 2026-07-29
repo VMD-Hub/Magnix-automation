@@ -52,6 +52,14 @@ export const ADMIN_NAV_GROUPS: AdminNavGroup[] = [
         matchPrefix: true,
       },
       {
+        href: "/admin/rental-kpi",
+        label: "KPI thuê",
+        title:
+          "ADR-018 — P1 tin RENT, P2 hoa hồng/SLA, P3 TAX_HELP, P4 NEED_PM Sense",
+        roles: ["super"],
+        matchPrefix: true,
+      },
+      {
         href: "/admin/partner-targets",
         label: "Partner targets",
         title:

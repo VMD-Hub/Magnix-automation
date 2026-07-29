@@ -1,4 +1,5 @@
 import Link from "next/link";
+import type { ReactNode } from "react";
 import { RubyHolder } from "@/components/brand/ruby-holder";
 import { ListingBrowseHero } from "@/components/listings/listing-browse-hero";
 import { ListingCard } from "@/components/listings/listing-card";
@@ -44,6 +45,8 @@ type Props = {
     cta: string;
     ctaHref: string;
   };
+  /** ADR-018 — panel chủ nhà / thuế dưới hero (chỉ /cho-thue). */
+  hubExtras?: ReactNode;
 };
 
 function buildHref(
@@ -71,6 +74,7 @@ export function ListingBrowsePage({
   filters,
   emptyMode = "no-results",
   comingSoon,
+  hubExtras,
 }: Props) {
   const { location } = filters;
   const activeSlug = filters.propertyTypeSlug;
@@ -94,6 +98,8 @@ export function ListingBrowsePage({
           <span className="proptech-catalog-badge">{banner.badge}</span>
         </div>
       ) : null}
+
+      {hubExtras}
 
       {banner.coverageNote ? (
         <p className="mb-4 text-center text-xs leading-relaxed text-slate-500 sm:text-left">
@@ -208,7 +214,7 @@ function ComingSoonPanel({
     <RubyHolder className="overflow-hidden p-0">
       <div className="px-6 py-10 text-center sm:px-8 sm:py-12">
         <p className="text-xs font-bold uppercase tracking-[0.2em] text-gold-400">
-          Coming Soon
+          Kho tin đang mở
         </p>
         <p className="mt-2 text-xl font-extrabold text-white sm:text-2xl">{title}</p>
         <p className="mx-auto mt-4 max-w-md text-sm leading-relaxed text-silver-200">{body}</p>
@@ -216,8 +222,11 @@ function ComingSoonPanel({
           <ButtonLink href={ctaHref} variant="primary" size="md">
             {cta}
           </ButtonLink>
-          <ButtonLink href="/dang-ky/moi-gioi" variant="brand" size="md">
-            Đăng tin cho thuê
+          <ButtonLink href="/mua-ban" variant="brand" size="md">
+            Xem tin mua bán
+          </ButtonLink>
+          <ButtonLink href="/dang-ky/moi-gioi" variant="outline" size="md">
+            Đăng ký môi giới
           </ButtonLink>
         </div>
       </div>

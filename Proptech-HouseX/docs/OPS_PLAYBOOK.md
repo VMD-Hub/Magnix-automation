@@ -28,6 +28,8 @@
 | **Magnix Inbound** | `/admin/inbound-leads` | UID Magnix thô → nhập SĐT → tạo lead/hồ sơ |
 | **Playbook** | `/admin/playbook` | SOP & đào tạo (trang này) |
 
+**Cho thuê (ADR-018):** SOP hoa hồng tìm khách + pain tag → [`docs/ops/RENTAL_LEASING_COMMISSION_SOP.md`](./ops/RENTAL_LEASING_COMMISSION_SOP.md). Referral KT/PL → [`docs/ops/RENTAL_PARTNER_REFERRAL_SOP.md`](./ops/RENTAL_PARTNER_REFERRAL_SOP.md). Field calls P2/P3/P4 → [`docs/ops/RENTAL_FIELD_CALLS_CHECKLIST.md`](./ops/RENTAL_FIELD_CALLS_CHECKLIST.md). Lead hub `/cho-thue` có `rentalIntent` (LANDLORD / TENANT / TAX_HELP / NEED_PM). KPI Super: `/admin/rental-kpi`.
+
 ---
 
 ## 3. Luồng hàng ngày (ưu tiên)

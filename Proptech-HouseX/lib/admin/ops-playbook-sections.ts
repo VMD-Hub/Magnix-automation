@@ -42,6 +42,12 @@ export const PLAYBOOK_QUICK_LINKS: PlaybookQuickLink[] = [
     roles: ["super"],
   },
   {
+    href: "/admin/rental-kpi",
+    label: "KPI thuê",
+    description: "P1 tin RENT · P2 hoa hồng/SLA · P3 TAX_HELP · P4 NEED_PM",
+    roles: ["super"],
+  },
+  {
     href: "/admin/ops-leads",
     label: "Lead marketing",
     description: "Pipeline + telesales (gọi/SMS/Zalo) & nurture",
@@ -151,6 +157,31 @@ export const PLAYBOOK_SECTIONS: PlaybookSection[] = [
     bullets: [
       "Không hứa «chắc đủ điều kiện NOXH» — chỉ CĐT/Sở quyết định.",
     ],
+  },
+  {
+    id: "rental-leasing",
+    title: "Cho thuê — tìm khách & referral (ADR-018)",
+    subtitle:
+      "Lớp 1–2 only: tin quảng cáo + hoa hồng tìm khách. Không bán quản lý căn.",
+    checklist: [
+      "Filter rentalIntent: LANDLORD (SLA ≤ 4h) · TENANT · TAX_HELP · NEED_PM.",
+      "LANDLORD/TENANT: thỏa thuận hoa hồng trước khi đẩy; ghi WON/LOST trên Ops.",
+      "TAX_HELP: chỉ «Đã chuyển partner» khi consent partner_referral = OK.",
+      "NEED_PM: waitlist Sense — không hứa / không bán Lớp 3.",
+      "KPI Super: /admin/rental-kpi · SOP docs/ops/RENTAL_PARTNER_REFERRAL_SOP.md.",
+    ],
+    bullets: [
+      "Pain tag P1–P4 trên note gọi — xem RENTAL_LEASING_COMMISSION_SOP.",
+      "Field calls xếp hạng pain: RENTAL_FIELD_CALLS_CHECKLIST (Minh An).",
+    ],
+    table: {
+      head: ["Intent", "Hành động Ops"],
+      rows: [
+        ["LANDLORD", "Gọi ≤ 4h · tìm khách · hoa hồng"],
+        ["TAX_HELP", "Làm rõ nhu cầu · referral KT/PL nếu consent"],
+        ["NEED_PM", "Ghi waitlist · không bán QL"],
+      ],
+    },
   },
   {
     id: "telesales",

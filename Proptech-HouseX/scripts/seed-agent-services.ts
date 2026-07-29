@@ -15,6 +15,10 @@ import {
   NGUON_KHACH_VAY_SERVICE_META,
 } from "../lib/content/agent-guides/nguon-khach-vay";
 import {
+  RENTAL_LEASING_CTV_CONTENT_MARKDOWN,
+  RENTAL_LEASING_CTV_SERVICE_META,
+} from "../lib/content/agent-guides/rental-leasing-ctv";
+import {
   PHAP_LY_BDS_CONTENT_MARKDOWN,
   PHAP_LY_BDS_SERVICE_META,
 } from "../lib/content/agent-guides/phap-ly-bds";
@@ -521,6 +525,57 @@ Sau khi đậu khóa hội nhập, bạn có thể:
 
 Hoa hồng theo chính sách sàn khi hồ sơ đạt mốc ký.
 `,
+  });
+
+  await upsertService({
+    code: RENTAL_LEASING_CTV_SERVICE_META.code,
+    category: RENTAL_LEASING_CTV_SERVICE_META.category,
+    name: RENTAL_LEASING_CTV_SERVICE_META.name,
+    description: RENTAL_LEASING_CTV_SERVICE_META.description,
+    sortOrder: RENTAL_LEASING_CTV_SERVICE_META.sortOrder,
+    contentMarkdown: RENTAL_LEASING_CTV_CONTENT_MARKDOWN,
+    quiz: {
+      title: "Bài kiểm tra tìm khách thuê & hoa hồng",
+      passScore: 70,
+      questions: [
+        {
+          prompt: "Lớp 2 ADR-018 kiếm tiền chủ yếu bằng gì?",
+          options: [
+            { id: "a", label: "Phí quản lý % thuê hàng tháng" },
+            { id: "b", label: "Hoa hồng khi tìm khách / chốt thuê" },
+            { id: "c", label: "Thuê lại căn rồi cho thuê" },
+          ],
+          correct: "b",
+        },
+        {
+          prompt: "Lead LANDLORD trên Ops nên liên hệ trong bao lâu (giờ hành chính)?",
+          options: [
+            { id: "a", label: "≤ 4 giờ" },
+            { id: "b", label: "≤ 48 giờ" },
+            { id: "c", label: "Không cần — chỉ nurture tự động" },
+          ],
+          correct: "a",
+        },
+        {
+          prompt: "Khi chủ hỏi quản lý thu tiền / bảo trì ngay, CTV nên?",
+          options: [
+            { id: "a", label: "Hứa quản lý ngay trên House X" },
+            { id: "b", label: "Ghi NEED_PM waitlist — không bán Lớp 3 sớm" },
+            { id: "c", label: "Ký thuê lại căn lấy biên" },
+          ],
+          correct: "b",
+        },
+        {
+          prompt: "Pain tag P3 nghĩa là gì?",
+          options: [
+            { id: "a", label: "Tin ảo / không phản hồi" },
+            { id: "b", label: "Sợ thuế / cần kế toán" },
+            { id: "c", label: "Khách thuê muốn xem nhà" },
+          ],
+          correct: "b",
+        },
+      ],
+    },
   });
 
   await upsertService({

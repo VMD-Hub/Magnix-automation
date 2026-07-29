@@ -1,4 +1,4 @@
-import type { LeadSegment, LeadStatus, Prisma } from "@prisma/client";
+import type { LeadSegment, LeadStatus, Prisma, RentalLeadIntent } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { LEAD_SOURCE } from "@/lib/leads/source";
 import {
@@ -42,6 +42,7 @@ import {
   voiceCallAllowedForCapture,
 } from "@/lib/leads/capture-type";
 import { WAITLIST_NO_COLD_CALL } from "@/lib/content/messaging/interest-waitlist-copy";
+import { RENTAL_LEAD_INTENT_LABEL } from "@/lib/rules/rental-lead-intent";
 
 const OPS_EXCLUDED_SOURCES = new Set([
   LEAD_SOURCE.REFERRAL,
@@ -68,6 +69,7 @@ export const LEAD_SOURCE_LABELS: Record<string, string> = {
   [LEAD_SOURCE.ADS_OFFLINE]: "Ads offline",
   [LEAD_SOURCE.PARTNER]: "Đối tác / công ty",
   [LEAD_SOURCE.WAITLIST_PROJECT]: "Waitlist — nhận tin dự án",
+  [LEAD_SOURCE.RENTAL_HUB]: "Hub cho thuê",
   [LEAD_SOURCE.ORGANIC]: "Web (legacy)",
 };
 
@@ -83,6 +85,7 @@ export type OpsLeadListFilters = {
   status?: LeadStatus;
   source?: string;
   segment?: LeadSegment;
+  rentalIntent?: RentalLeadIntent;
 };
 
 const leadListInclude = {
@@ -100,6 +103,25 @@ export type OpsLeadWithRelations = Prisma.LeadGetPayload<{
   include: typeof leadListInclude;
 }>;
 
+/** SLA lead chủ nhà cần tìm khách — giờ hành chính (ADR-018 / SOP). */
+export const LANDLORD_CONTACT_SLA_HOURS = 4;
+
+export function landlordSlaState(row: {
+  rentalIntent?: RentalLeadIntent | null;
+  status: LeadStatus;
+  createdAt: Date;
+  now?: Date;
+}): "ok" | "due" | "overdue" | null {
+  if (row.rentalIntent !== "LANDLORD") return null;
+  if (row.status !== "NEW") return "ok";
+  const now = row.now ?? new Date();
+  const ageMs = now.getTime() - row.createdAt.getTime();
+  const limitMs = LANDLORD_CONTACT_SLA_HOURS * 60 * 60 * 1000;
+  if (ageMs >= limitMs) return "overdue";
+  if (ageMs >= limitMs * 0.75) return "due";
+  return "ok";
+}
+
 function opsLeadWhere(filters: OpsLeadListFilters): Prisma.LeadWhereInput {
   return {
     assignedBrokerId: null,
@@ -107,6 +129,7 @@ function opsLeadWhere(filters: OpsLeadListFilters): Prisma.LeadWhereInput {
     ...(filters.status ? { status: filters.status } : {}),
     ...(filters.source ? { source: filters.source } : {}),
     ...(filters.segment ? { segment: filters.segment } : {}),
+    ...(filters.rentalIntent ? { rentalIntent: filters.rentalIntent } : {}),
   };
 }
 
@@ -292,6 +315,11 @@ export function serializeOpsLeadListItem(row: OpsLeadWithRelations) {
     source: row.source,
     sourceLabel: LEAD_SOURCE_LABELS[row.source] ?? row.source,
     segment: row.segment,
+    rentalIntent: row.rentalIntent ?? null,
+    rentalIntentLabel: row.rentalIntent
+      ? RENTAL_LEAD_INTENT_LABEL[row.rentalIntent]
+      : null,
+    landlordSla: landlordSlaState(row),
     captureType: ops.captureType ?? null,
     channelPreference: ops.channelPreference ?? [],
     waitlist,

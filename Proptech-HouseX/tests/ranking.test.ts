@@ -131,3 +131,47 @@ test("publish gate: đủ điều kiện → ok", () => {
   });
   assert.equal(r.ok, true);
 });
+
+test("publish gate RENT: thiếu giá → RENT_PRICE", () => {
+  const r = assertPublishGate({
+    readyImageCount: 5,
+    totalVideoCount: 0,
+    readyVideoCount: 0,
+    descriptionLength: 80,
+    transactionType: "RENT",
+    price: 0,
+    propertyType: "can_ho",
+    area: 45,
+  });
+  assert.equal(r.ok, false);
+  assert.equal(r.ok === false && r.code, "RENT_PRICE");
+});
+
+test("publish gate RENT: căn hộ thiếu diện tích → RENT_AREA", () => {
+  const r = assertPublishGate({
+    readyImageCount: 5,
+    totalVideoCount: 0,
+    readyVideoCount: 0,
+    descriptionLength: 80,
+    transactionType: "RENT",
+    price: 12_000_000,
+    propertyType: "can_ho",
+    area: null,
+  });
+  assert.equal(r.ok, false);
+  assert.equal(r.ok === false && r.code, "RENT_AREA");
+});
+
+test("publish gate RENT: phòng trọ không bắt buộc area → ok", () => {
+  const r = assertPublishGate({
+    readyImageCount: 5,
+    totalVideoCount: 0,
+    readyVideoCount: 0,
+    descriptionLength: 80,
+    transactionType: "RENT",
+    price: 3_500_000,
+    propertyType: "phong_tro",
+    area: null,
+  });
+  assert.equal(r.ok, true);
+});
