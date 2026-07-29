@@ -52,7 +52,7 @@ Tỷ suất cho thuê gộp thường được mô tả là tiền thuê năm / 
 - So với lãi vay nếu dùng đòn bẩy.
 - Kiểm hợp đồng thuê thực tế, không lấy giá chào trên mạng.
 
-Công thức khung: [Tiền thuê về có đủ trả góp không?](/tin-tuc/kien-thuc/tinh-dong-tien-don-bay-can-ho-cho-thue-2026).
+Công thức khung: [Bản chất dòng tiền căn hộ cho thuê](/tin-tuc/kien-thuc/tinh-dong-tien-don-bay-can-ho-cho-thue-2026).
 
 ${EDITORIAL_FIGURES.metroHub}
 
@@ -154,58 +154,65 @@ ${BTR_LEGAL_DISCLAIMER}`,
     id: "article-btr-11-cashflow",
     slug: "tinh-dong-tien-don-bay-can-ho-cho-thue-2026",
     title:
-      "Tiền thuê về có đủ trả góp không? Cách tính dòng tiền căn hộ cho thuê",
+      "Bản chất dòng tiền thực tế của căn hộ cho thuê: tiền thuê về và tiền còn lại",
     excerpt:
-      "Tách tiền thuê thu về, phí, thuế ước tính và trả góp vay — rồi nhìn số còn lại mỗi tháng. Tự điền số của bạn; không có «yield chuẩn» chung cho mọi căn.",
-    body: `## Tiền thuê về và tiền còn lại khác nhau thế nào?
+      "Sai lầm phổ biến: nhìn tiền thuê trên hợp đồng rồi tưởng đó là lợi nhuận. Bài này tách doanh thu gộp, phí, thuế, trả góp và dự phòng tháng trống — rồi xem vay thêm còn hợp lý không.",
+    body: `## Bản chất dòng tiền thực tế của căn hộ cho thuê
 
-Nhiều chủ nhà nhìn số thuê niêm yết rồi kết luận «đủ sống». Thực tế nên tách hai lớp:
+Trong đầu tư bất động sản cho thuê, sai lầm lớn nhất là nhầm tiền thuê thu về với tiền còn lại trong túi. Tiền trên hợp đồng thuê chỉ là doanh thu gộp. Tiền còn lại mới phản ánh hiệu quả sau phí vận hành, nghĩa vụ thuế, trả góp vốn vay và dự phòng tháng trống.
 
-1. Tiền thuê thu về trong tháng (theo hợp đồng, không theo giá miệng).
-2. Tiền còn lại sau phí quản lý, bảo trì, thuế ước tính, trả góp (nếu vay) và dự phòng tháng trống.
+Chỉ khi tách rõ các lớp này, bạn mới trả lời được: căn này tự nuôi nợ được không, hay đang trông vào bán lại sau này.
 
-Số còn lại mới trả lời được câu: giữ căn có đỡ gánh vay không, hay đang trông vào bán lại sau này.
+## Tiền thuê về và tiền còn lại khác nhau thế nào?
 
-Bạn có thể tự điền nhanh trên [công cụ dòng tiền cho thuê](/cong-cu/dong-tien-cho-thue).
+Để quản trị dòng tiền, cần phân biệt hai khái niệm:
 
-## Bảng tự điền (một căn)
+- Tiền thuê về (doanh thu gộp): toàn bộ tiền thu theo hợp đồng thuê — chưa trừ phí, thuế hay trả góp.
+- Tiền còn lại (dòng tiền ròng thực tế): số còn sau khi trừ phí quản lý, bảo trì, nghĩa vụ thuế ước tính, trả gốc và lãi vay (nếu có), cùng khoản dự phòng cho tháng không có khách.
 
-| Hạng mục | Lấy số ở đâu | Gợi ý |
-|----------|--------------|--------|
-| Giá vốn căn | Hợp đồng mua / thỏa thuận | Cộng thuế phí mua |
-| Vốn tự có | Tiết kiệm hợp pháp | Ngân hàng thường yêu cầu một phần |
-| Khoản vay | Hợp đồng tín dụng | Kỳ hạn, lãi thả nổi |
-| Tiền thuê tháng | Hợp đồng thuê | Không lấy giá «kỳ vọng» |
-| Phí quản lý / tháng | Ban quản lý | Có thể tăng theo năm |
-| Thuế ước tính | Ngưỡng doanh thu năm | Xem [bài thuế & mã 68103](/tin-tuc/kien-thuc/thue-cho-thue-nha-2026-ma-nganh-68103) |
-| Tháng trống | 0–2 tháng/năm | Kịch bản xấu |
-| Trả góp tháng | Lịch ngân hàng | Có thể dùng [/tinh-tra-gop](/tinh-tra-gop) |
+Nhiều chủ nhà chỉ nhìn số thuê niêm yết rồi kết luận «đủ sống». Số còn lại mới cho biết căn có đỡ gánh vay hay không.
 
-Cách nhớ nhanh: tiền còn lại ≈ tiền thuê − phí − thuế/12 − trả góp − dự phòng trống. Đây là khung tự kiểm, không phải tư vấn đầu tư.
+Bạn có thể bóc tách nhanh trên [công cụ dòng tiền cho thuê](/cong-cu/dong-tien-cho-thue).
 
-## Khi nào vay thêm còn hợp lý?
+## Bảng thông số tài chính và pháp lý cho một căn
 
-Vay thêm chỉ nên cân nhắc nếu tiền còn lại sau trả góp vẫn dương khi lãi tăng và có tháng trống. Nếu âm kéo dài, bạn đang phụ thuộc giá bán sau này — rủi ro quen thuộc khi thị trường chậm.
+| Hạng mục | Căn cứ từ hợp đồng / thực tế | Cơ sở pháp lý và quản trị |
+|----------|------------------------------|---------------------------|
+| Giá trị căn hộ | Hợp đồng mua / thỏa thuận | Cộng thuế phí mua; đối chiếu chứng thư định giá nếu cần |
+| Vốn tự có | Tiết kiệm hợp pháp | Ngân hàng thường yêu cầu một phần vốn tự có |
+| Khoản vay | Hợp đồng tín dụng | Lãi suất, kỳ hạn, điều kiện thế chấp |
+| Tiền thuê tháng | Hợp đồng thuê (+ phụ lục) | Nghĩa vụ kê khai thuế theo doanh thu năm — xem [bài thuế & mã ngành 68103](/tin-tuc/kien-thuc/thue-cho-thue-nha-2026-ma-nganh-68103) |
+| Phí quản lý / hạ tầng | Ban quản trị / đơn vị vận hành | Có thể tăng theo năm; thuộc chi phí vận hành chung |
+| Thuế ước tính | Ngưỡng doanh thu năm | Luật thuế GTGT và TNCN; cá nhân thường khai mẫu 01/TTS |
+| Tháng trống | Ước 1–3 tháng/năm (kịch bản xấu) | Hệ số an toàn khi dòng tiền đứt đoạn |
+| Trả góp tháng | Lịch ngân hàng | Có thể mô phỏng tại [/tinh-tra-gop](/tinh-tra-gop) |
 
-## Đọc thêm
+Cách nhớ nhanh: tiền còn lại ≈ tiền thuê − phí − thuế/12 − trả góp − dự phòng trống.
 
-- [Thuê dài hạn đến 2030](${PILLAR_HREF})
-- [Cho thuê nhà: mã ngành 68103 và cách kê khai](/tin-tuc/kien-thuc/thue-cho-thue-nha-2026-ma-nganh-68103)
-- [Chọn dự án phù hợp cho thuê](/tin-tuc/kien-thuc/du-an-can-ho-van-hanh-cho-thue-dai-han-2026)
-- Chủ đề [nhà ở cho thuê dài hạn](${HUB_HREF})
+## Khi nào đòn bẩy vay vốn còn hợp lý?
 
-${BTR_SUPPORT_CLOSING}
+Vay mua để cho thuê là con dao hai lưỡi. Chỉ nên cân nhắc khi dòng tiền ròng sau thuế, phí và dự phòng trống vẫn đủ trả gốc–lãi theo lịch ngân hàng — kể cả khi lãi tăng hoặc căn trống vài tháng.
 
-${BTR_LEGAL_DISCLAIMER}`,
+Nếu biên lợi nhuận thấp hơn chi phí lãi vay thực tế, tiền thuê không đủ bù nghĩa vụ nợ. Lúc đó bạn đang phụ thuộc giá bán sau này: thị trường chậm hoặc căn trống lâu sẽ tạo áp lực tài chính nặng.
+
+## Trước khi ký mua hoặc cho thuê, nên làm gì?
+
+1. Tính dòng tiền thực tế sau thuế, phí và trả góp — đừng chỉ nhìn giá thuê niêm yết.
+2. Lập khoản dự phòng cho tháng không có khách (thường 1–3 tháng/năm tùy khu vực và loại căn).
+3. Cập nhật nghĩa vụ thuế và mã ngành khi mở hộ kinh doanh / doanh nghiệp — xem [hướng dẫn thuế cho thuê nhà](/tin-tuc/kien-thuc/thue-cho-thue-nha-2026-ma-nganh-68103).
+
+Công cụ hỗ trợ: [tính dòng tiền cho thuê](/cong-cu/dong-tien-cho-thue). Cần người đồng hành thủ tục: [Liên hệ](/lien-he) hoặc form trên [hub cho thuê](/cho-thue).
+
+Đọc thêm: [Thuê dài hạn đến 2030](${PILLAR_HREF}) · [Chọn dự án phù hợp cho thuê](/tin-tuc/kien-thuc/du-an-can-ho-van-hanh-cho-thue-dai-han-2026) · chủ đề [nhà ở cho thuê dài hạn](${HUB_HREF}).`,
     status: "PUBLISHED",
     publishedAt: new Date("2026-07-26T16:00:00.000Z"),
     updatedAt: UPDATED,
     coverImageUrl: "/images/hero/housex-hero-slide-01-civic-center.webp",
     authorName: "Ban biên tập House X",
     seoTitle:
-      "Tính dòng tiền căn hộ cho thuê — tiền còn lại sau phí & vay | HouseX",
+      "Dòng tiền căn hộ cho thuê: tiền thuê về vs tiền còn lại | HouseX",
     seoDesc:
-      "Tách tiền thuê, phí, thuế ước tính và trả góp; tự điền số trên công cụ dòng tiền — không có yield chuẩn chung.",
+      "Tách doanh thu gộp, phí, thuế, trả góp và dự phòng tháng trống. Khi nào vay thêm còn hợp lý — kèm công cụ tự tính.",
     tags: [NOXH_TAG_BTR],
     projects: [],
   },

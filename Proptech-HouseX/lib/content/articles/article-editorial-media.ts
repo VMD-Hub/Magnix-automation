@@ -446,9 +446,9 @@ export const ARTICLE_EDITORIAL_COVERS: Record<string, EditorialCover> = {
   },
   "tinh-dong-tien-don-bay-can-ho-cho-thue-2026": {
     url: HERO.civic,
-    alt: "Không gian đô thị — minh họa tính dòng tiền khi cho thuê căn hộ",
+    alt: "Căn hộ cho thuê — tách tiền thuê thu về và tiền còn lại sau phí, thuế, vay",
     caption:
-      "Tách tiền thuê thu về và tiền còn lại sau phí, thuế, trả góp.",
+      "Doanh thu gộp khác dòng tiền ròng: trừ phí, thuế, trả góp và dự phòng tháng trống.",
   },
   "thue-cho-thue-nha-2026-ma-nganh-68103": {
     url: HERO.metroHub,

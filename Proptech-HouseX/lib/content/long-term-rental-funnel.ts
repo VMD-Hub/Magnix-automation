@@ -132,9 +132,9 @@ export const BTR_ARTICLE_PLAN: readonly BtrFunnelSlot[] = [
     order: 11,
     slug: "tinh-dong-tien-don-bay-can-ho-cho-thue-2026",
     titleVi:
-      "Tiền thuê về có đủ trả góp không? Cách tính dòng tiền căn hộ cho thuê",
+      "Bản chất dòng tiền thực tế của căn hộ cho thuê: tiền thuê về và tiền còn lại",
     objective:
-      "Tách tiền thuê / phí / thuế / vay — tự điền; CTA tool dòng tiền.",
+      "Tách doanh thu gộp vs dòng tiền ròng; bảng tài chính–pháp lý; khi nào đòn bẩy vay còn hợp lý.",
     toneGroup: "cashflow-ops",
     status: "published",
     publishedSlug: "tinh-dong-tien-don-bay-can-ho-cho-thue-2026",
