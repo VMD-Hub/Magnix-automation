@@ -446,15 +446,15 @@ export const ARTICLE_EDITORIAL_COVERS: Record<string, EditorialCover> = {
   },
   "tinh-dong-tien-don-bay-can-ho-cho-thue-2026": {
     url: HERO.civic,
-    alt: "Không gian làm việc đô thị — minh họa tính dòng tiền căn hộ cho thuê",
+    alt: "Không gian đô thị — minh họa tính dòng tiền khi cho thuê căn hộ",
     caption:
-      "Bảng khung vốn tự có, lãi vay, tiền thuê và trống căn — định tính.",
+      "Tách tiền thuê thu về và tiền còn lại sau phí, thuế, trả góp.",
   },
   "thue-cho-thue-nha-2026-ma-nganh-68103": {
     url: HERO.metroHub,
-    alt: "Trung tâm đô thị — minh họa thuế cho thuê nhà và mã ngành 68103",
+    alt: "Trung tâm đô thị — minh họa thuế khi cho thuê nhà",
     caption:
-      "Khung thuế và thủ tục — xác minh văn bản hiệu lực trước khi kê khai.",
+      "Biết hỏi gì trước khi kê khai — đối chiếu cơ quan thuế hoặc kế toán.",
   },
 };
 

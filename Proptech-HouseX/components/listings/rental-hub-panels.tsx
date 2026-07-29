@@ -64,7 +64,7 @@ export function RentalHubLandlordPanel() {
                 href={TAX_HREF}
                 className="font-semibold text-brand-700 underline decoration-brand-200 underline-offset-4 hover:text-brand-800"
               >
-                Thuế cho thuê nhà & mã ngành 68103
+                Thuế khi cho thuê nhà (mã 68103)
               </Link>
             </li>
             <li>

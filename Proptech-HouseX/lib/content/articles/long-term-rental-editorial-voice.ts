@@ -55,6 +55,9 @@ export function assertBtrEditorialBody(body: string, slug: string): void {
   }
 }
 
-export const BTR_LEGAL_DISCLAIMER = `*Thông tin mang tính tham khảo theo quy định và công bố chính sách tại thời điểm biên tập; quyết định thuê / đầu tư / nghĩa vụ thuế căn cứ văn bản có hiệu lực và hồ sơ thực tế — không thay thế tư vấn pháp lý hoặc thuế chuyên nghiệp.*`;
+export const BTR_LEGAL_DISCLAIMER = `*Bài mang tính định hướng theo quy định công bố tại thời điểm biên tập. Mức thuế / cách kê khai cụ thể phụ thuộc hồ sơ của bạn — nên đối chiếu văn bản hiệu lực hoặc hỏi Chi cục Thuế / kế toán trước khi nộp.*`;
 
-export const BTR_SUPPORT_CLOSING = `House X hỗ trợ đối chiếu phương án an cư — thuê dài hạn, mua thương mại hoặc nhà ở xã hội (nếu thuộc đối tượng) — trên cơ sở chính sách công bố và pháp lý từng dự án. Bạn có thể [để lại thông tin tại đây](/lien-he); chuyên gia phản hồi bằng khung phân tích, không ép tiến độ giao dịch.`;
+export const BTR_SUPPORT_CLOSING = `## Bạn muốn ước tính dòng tiền trước khi hỏi kế toán?
+
+Dùng [công cụ dòng tiền cho thuê](/cong-cu/dong-tien-cho-thue) để tự điền số thuê, phí và thuế ước tính. Nếu cần người hỗ trợ thủ tục, để lại liên hệ tại [trang Liên hệ](/lien-he) hoặc form trên [hub cho thuê](/cho-thue) — Minh An / House X nối bạn với đối tác khi bạn đồng ý, không ép giao dịch.`;
+

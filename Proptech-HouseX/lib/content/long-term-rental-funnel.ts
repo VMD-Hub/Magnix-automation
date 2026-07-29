@@ -132,9 +132,9 @@ export const BTR_ARTICLE_PLAN: readonly BtrFunnelSlot[] = [
     order: 11,
     slug: "tinh-dong-tien-don-bay-can-ho-cho-thue-2026",
     titleVi:
-      "Tính dòng tiền và đòn bẩy khi đầu tư căn hộ cho thuê: Khung công thức định tính",
+      "Tiền thuê về có đủ trả góp không? Cách tính dòng tiền căn hộ cho thuê",
     objective:
-      "Bảng vốn tự có / lãi vay / tiền thuê thu — định tính + /tinh-tra-gop; không bịa yield %.",
+      "Tách tiền thuê / phí / thuế / vay — tự điền; CTA tool dòng tiền.",
     toneGroup: "cashflow-ops",
     status: "published",
     publishedSlug: "tinh-dong-tien-don-bay-can-ho-cho-thue-2026",
@@ -143,9 +143,9 @@ export const BTR_ARTICLE_PLAN: readonly BtrFunnelSlot[] = [
     order: 12,
     slug: "thue-cho-thue-nha-2026-ma-nganh-68103",
     titleVi:
-      "Thuế cho thuê nhà và mã ngành 68103: Nhà đầu tư cần lưu ý gì?",
+      "Cho thuê nhà phải đóng thuế thế nào? Mã ngành 68103 và việc nên làm trước",
     objective:
-      "Khung thuế / thủ tục theo nghị định công bố — tham khảo, không thay tư vấn thuế.",
+      "Q&A người đọc: có phải đóng thuế, mã 68103, checklist trước kê khai.",
     toneGroup: "cashflow-ops",
     status: "published",
     publishedSlug: "thue-cho-thue-nha-2026-ma-nganh-68103",

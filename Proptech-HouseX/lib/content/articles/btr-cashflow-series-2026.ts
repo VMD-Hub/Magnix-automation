@@ -13,7 +13,7 @@ import {
 } from "@/lib/preview/ql13-commercial-mocks";
 import { HGX_PROJECT_SLUG } from "@/lib/preview/ho-guom-xanh-mock";
 
-const UPDATED = new Date("2026-07-27T00:00:00.000Z");
+const UPDATED = new Date("2026-07-29T08:00:00.000Z");
 const PILLAR_HREF = `/tin-tuc/kien-thuc/${BTR_PILLAR_SLUG}`;
 const HUB_HREF = "/tin-tuc/kien-thuc/chu-de/nha-o-cho-thue-dai-han";
 
@@ -52,7 +52,7 @@ Tỷ suất cho thuê gộp thường được mô tả là tiền thuê năm / 
 - So với lãi vay nếu dùng đòn bẩy.
 - Kiểm hợp đồng thuê thực tế, không lấy giá chào trên mạng.
 
-Công thức khung: [Tính dòng tiền và đòn bẩy](/tin-tuc/kien-thuc/tinh-dong-tien-don-bay-can-ho-cho-thue-2026).
+Công thức khung: [Tiền thuê về có đủ trả góp không?](/tin-tuc/kien-thuc/tinh-dong-tien-don-bay-can-ho-cho-thue-2026).
 
 ${EDITORIAL_FIGURES.metroHub}
 
@@ -65,7 +65,7 @@ ${EDITORIAL_FIGURES.thuThiem}
 ## Đọc tiếp?
 
 - [Khung chọn dự án vận hành cho thuê](/tin-tuc/kien-thuc/du-an-can-ho-van-hanh-cho-thue-dai-han-2026)
-- [Thuế cho thuê & mã 68103](/tin-tuc/kien-thuc/thue-cho-thue-nha-2026-ma-nganh-68103)
+- [Cho thuê nhà phải đóng thuế thế nào?](/tin-tuc/kien-thuc/thue-cho-thue-nha-2026-ma-nganh-68103)
 - Chủ đề: [${HUB_HREF}](${HUB_HREF})
 
 ${BTR_SUPPORT_CLOSING}
@@ -154,54 +154,46 @@ ${BTR_LEGAL_DISCLAIMER}`,
     id: "article-btr-11-cashflow",
     slug: "tinh-dong-tien-don-bay-can-ho-cho-thue-2026",
     title:
-      "Tính dòng tiền và đòn bẩy khi đầu tư căn hộ cho thuê: Khung công thức định tính",
+      "Tiền thuê về có đủ trả góp không? Cách tính dòng tiền căn hộ cho thuê",
     excerpt:
-      "Bảng khung vốn tự có, lãi vay, tiền thuê thu và chi phí vận hành — dùng để tự mô phỏng trước khi vay; liên kết /tinh-tra-gop; không bịa tỷ suất lợi nhuận.",
-    body: `## Công thức dòng tiền gộp và ròng (định tính)
+      "Tách tiền thuê thu về, phí, thuế ước tính và trả góp vay — rồi nhìn số còn lại mỗi tháng. Tự điền số của bạn; không có «yield chuẩn» chung cho mọi căn.",
+    body: `## Tiền thuê về và tiền còn lại khác nhau thế nào?
 
-Nhà đầu tư cần tách hai lớp:
+Nhiều chủ nhà nhìn số thuê niêm yết rồi kết luận «đủ sống». Thực tế nên tách hai lớp:
 
-1. Dòng tiền gộp ≈ tiền thuê thu trong kỳ.
-2. Dòng tiền ròng ≈ gộp − phí quản lý − bảo trì − thuế − (gốc + lãi vay nếu có) − dự phòng trống căn.
+1. Tiền thuê thu về trong tháng (theo hợp đồng, không theo giá miệng).
+2. Tiền còn lại sau phí quản lý, bảo trì, thuế ước tính, trả góp (nếu vay) và dự phòng tháng trống.
 
-House X không điền số tuyệt đối cho mọi dự án. Bạn thay số từ hợp đồng thuê và lịch vay thực tế.
+Số còn lại mới trả lời được câu: giữ căn có đỡ gánh vay không, hay đang trông vào bán lại sau này.
 
-Xem thêm: [Thuê dài hạn đến 2030](${PILLAR_HREF}).
+Bạn có thể tự điền nhanh trên [công cụ dòng tiền cho thuê](/cong-cu/dong-tien-cho-thue).
 
-${EDITORIAL_FIGURES.hcmSkyline}
+## Bảng tự điền (một căn)
 
-## Bảng khung tự điền
+| Hạng mục | Lấy số ở đâu | Gợi ý |
+|----------|--------------|--------|
+| Giá vốn căn | Hợp đồng mua / thỏa thuận | Cộng thuế phí mua |
+| Vốn tự có | Tiết kiệm hợp pháp | Ngân hàng thường yêu cầu một phần |
+| Khoản vay | Hợp đồng tín dụng | Kỳ hạn, lãi thả nổi |
+| Tiền thuê tháng | Hợp đồng thuê | Không lấy giá «kỳ vọng» |
+| Phí quản lý / tháng | Ban quản lý | Có thể tăng theo năm |
+| Thuế ước tính | Ngưỡng doanh thu năm | Xem [bài thuế & mã 68103](/tin-tuc/kien-thuc/thue-cho-thue-nha-2026-ma-nganh-68103) |
+| Tháng trống | 0–2 tháng/năm | Kịch bản xấu |
+| Trả góp tháng | Lịch ngân hàng | Có thể dùng [/tinh-tra-gop](/tinh-tra-gop) |
 
-| Hạng mục | Cách lấy số | Ghi chú |
-|----------|-------------|---------|
-| Giá vốn căn (A) | HĐMB / thỏa thuận | Cộng thuế phí mua |
-| Vốn tự có (B) | Tiết kiệm hợp pháp | Thường 30–50% tùy ngân hàng |
-| Khoản vay (A−B) | Hợp đồng tín dụng | Kỳ hạn, lãi thả nổi |
-| Tiền thuê tháng (R) | Hợp đồng thuê | Không lấy giá “kỳ vọng miệng” |
-| Phí quản lý / tháng (M) | Ban quản lý | Có thể tăng theo năm |
-| Thuế ước tính (T) | Theo ngưỡng doanh thu | Xem bài thuế 68103 |
-| Trống căn (V) | Giả định 0–2 tháng/năm | Kịch bản xấu |
-| Trả góp tháng (P) | Lịch ngân hàng | Dùng [/tinh-tra-gop](/tinh-tra-gop) |
+Cách nhớ nhanh: tiền còn lại ≈ tiền thuê − phí − thuế/12 − trả góp − dự phòng trống. Đây là khung tự kiểm, không phải tư vấn đầu tư.
 
-Dòng tiền ròng tháng ≈ R − M − T/12 − P − (R×V/12) — công thức minh họa, không phải tư vấn đầu tư.
+## Khi nào vay thêm còn hợp lý?
 
-${EDITORIAL_FIGURES.metroHub}
+Vay thêm chỉ nên cân nhắc nếu tiền còn lại sau trả góp vẫn dương khi lãi tăng và có tháng trống. Nếu âm kéo dài, bạn đang phụ thuộc giá bán sau này — rủi ro quen thuộc khi thị trường chậm.
 
-## Đòn bẩy — khi nào hợp lý?
+## Đọc thêm
 
-Đòn bẩy chỉ hợp lý nếu dòng tiền ròng sau trả góp vẫn dương trong kịch bản lãi tăng và trống căn. Nếu ròng âm kéo dài, bạn đang phụ thuộc tăng giá bán — rủi ro chu kỳ trước đã chỉ ra giới hạn của cách đó.
-
-${EDITORIAL_FIGURES.thuThiem}
-
-## Đọc tiếp thuế và chọn dự án?
-
-- [Thuế cho thuê nhà & mã 68103](/tin-tuc/kien-thuc/thue-cho-thue-nha-2026-ma-nganh-68103)
-- [Khung chọn dự án](/tin-tuc/kien-thuc/du-an-can-ho-van-hanh-cho-thue-dai-han-2026)
-- Chủ đề: [${HUB_HREF}](${HUB_HREF})
+- [Cho thuê nhà phải đóng thuế thế nào?](/tin-tuc/kien-thuc/thue-cho-thue-nha-2026-ma-nganh-68103)
+- [Chọn dự án phù hợp cho thuê](/tin-tuc/kien-thuc/du-an-can-ho-van-hanh-cho-thue-dai-han-2026)
+- Chủ đề [nhà ở cho thuê dài hạn](${HUB_HREF})
 
 ${BTR_SUPPORT_CLOSING}
-
-${EDITORIAL_FIGURES.bitexcoMetro}
 
 ${BTR_LEGAL_DISCLAIMER}`,
     status: "PUBLISHED",
@@ -210,9 +202,9 @@ ${BTR_LEGAL_DISCLAIMER}`,
     coverImageUrl: "/images/hero/housex-hero-slide-01-civic-center.webp",
     authorName: "Ban biên tập House X",
     seoTitle:
-      "Tính dòng tiền đòn bẩy căn hộ cho thuê — bảng khung | HouseX",
+      "Tính dòng tiền căn hộ cho thuê — tiền còn lại sau phí & vay | HouseX",
     seoDesc:
-      "Bảng vốn tự có, lãi vay, tiền thuê, phí và trống căn + /tinh-tra-gop — không bịa yield %.",
+      "Tách tiền thuê, phí, thuế ước tính và trả góp; tự điền số trên công cụ dòng tiền — không có yield chuẩn chung.",
     tags: [NOXH_TAG_BTR],
     projects: [],
   },
@@ -220,47 +212,47 @@ ${BTR_LEGAL_DISCLAIMER}`,
     id: "article-btr-12-tax",
     slug: "thue-cho-thue-nha-2026-ma-nganh-68103",
     title:
-      "Thuế cho thuê nhà và mã ngành 68103: Nhà đầu tư cần lưu ý gì?",
+      "Cho thuê nhà phải đóng thuế thế nào? Mã ngành 68103 và việc nên làm trước",
     excerpt:
-      "Khung thuế kinh doanh cho thuê nhà theo ngưỡng doanh thu và mã ngành 68103 — hướng dẫn định hướng thủ tục; xác minh nghị định / thông tư có hiệu lực tại thời điểm kê khai.",
-    body: `## Vì sao bài thuế cần giọng thận trọng?
+      "Nhiều chủ nhà chỉ nghĩ đến thuế khi đã thu tiền thuê vài tháng. Bài này giúp bạn biết hỏi gì trước khi kê khai — mức phải nộp cụ thể vẫn cần đối chiếu với cơ quan thuế hoặc kế toán.",
+    body: `## Cho thuê nhà thì có phải đóng thuế không?
 
-Nghĩa vụ thuế thay đổi theo văn bản hướng dẫn và ngưỡng doanh thu. House X nêu khung để nhà đầu tư biết hỏi đúng cơ quan / đại lý thuế — không thay thế tư vấn thuế chuyên nghiệp và không cam kết mức phải nộp cho từng hồ sơ.
+Có thể có — tùy doanh thu thuê trong năm và cách bạn đang kê khai. Không phải mọi căn cho thuê đều cùng một mức, cũng không nên lấy «con số trên mạng» áp thẳng vào căn của mình.
 
-Xem thêm: [Chính sách thuê dài hạn](${PILLAR_HREF}) · Dòng tiền: [Công thức định tính](/tin-tuc/kien-thuc/tinh-dong-tien-don-bay-can-ho-cho-thue-2026).
+Việc thực tế nhất lúc này: cộng đúng tiền thuê theo hợp đồng (kể cả phụ lục), rồi hỏi Chi cục Thuế quản lý hoặc kế toán: mình thuộc nhóm nào, nộp theo phương pháp nào.
 
-${EDITORIAL_FIGURES.hcmSkyline}
+Ước tính sơ bộ dòng tiền (gồm thuế giả định) có thể làm trên [công cụ dòng tiền cho thuê](/cong-cu/dong-tien-cho-thue).
 
-## Mã ngành 68103 liên quan gì đến cho thuê nhà?
+## Mã ngành 68103 là gì?
 
-Trong hệ thống mã ngành kinh tế, nhóm hoạt động kinh doanh bất động sản có mã chi tiết cho thuê / điều hành nhà ở (truyền thông thường nêu 68103). Khi doanh thu cho thuê đạt ngưỡng phải kê khai theo quy định hiện hành, hộ / cá nhân kinh doanh có thể cần đăng ký mã ngành phù hợp. Cách làm đúng:
+Trong danh mục ngành kinh tế, nhóm kinh doanh bất động sản có mã chi tiết gắn với cho thuê / điều hành nhà ở — truyền thông và hướng dẫn thường nhắc mã 68103. Khi doanh thu thuê đạt ngưỡng phải đăng ký / kê khai theo quy định hiện hành, hộ hoặc cá nhân kinh doanh có thể cần đăng ký mã ngành phù hợp.
 
-1. Tra cứu mã trên cổng đăng ký kinh doanh / hướng dẫn thuế mới nhất.
-2. Đối chiếu ngưỡng doanh thu phải nộp thuế khoán / kê khai.
-3. Giữ hợp đồng thuê và chứng từ thu tiền.
+Cách làm an toàn:
 
-${EDITORIAL_FIGURES.metroHub}
+1. Tra mã và hướng dẫn mới nhất trên cổng đăng ký kinh doanh / cơ quan thuế.
+2. Đối chiếu ngưỡng doanh thu phải nộp thuế theo văn bản đang hiệu lực.
+3. Giữ hợp đồng thuê và chứng từ thu tiền — khi cần giải trình sẽ đỡ thiếu giấy.
 
-## Khung câu hỏi trước khi kê khai 2026?
+## Trước khi kê khai, nên chuẩn bị gì?
 
-| Câu hỏi | Việc cần làm |
-|---------|--------------|
-| Doanh thu thuê năm nay bao nhiêu? | Cộng đúng hợp đồng, không bỏ sót phụ lục |
-| Đang nộp theo phương pháp nào? | Khoán / kê khai — theo hướng dẫn CQT |
-| Có phải đăng ký hộ kinh doanh không? | Khi vượt ngưỡng quy định |
-| Chi phí được trừ những gì? | Theo văn bản có hiệu lực — hỏi đại lý thuế |
+| Câu hỏi | Việc nên làm |
+|---------|----------------|
+| Năm nay thu bao nhiêu từ thuê? | Cộng đúng hợp đồng, không bỏ phụ lục |
+| Đang nộp theo cách nào? | Khoán hay kê khai — hỏi cơ quan thuế |
+| Có cần đăng ký hộ kinh doanh không? | Khi vượt ngưỡng quy định |
+| Chi phí nào được trừ? | Theo văn bản hiệu lực — hỏi kế toán |
 
-Nguồn tham khảo công khai thường được dẫn: thư viện pháp luật / nghị định hướng dẫn thuế (ví dụ các nghị định về quản lý thuế được truyền thông gắn năm 2025–2026). Luôn mở văn bản gốc trước khi nộp.
+Đừng nộp dựa trên bài viết hoặc tin nhắn nhóm. Mở văn bản gốc hoặc nhờ người có tư cách kê khai trước khi nộp.
 
-${EDITORIAL_FIGURES.thuThiem}
+## House X giúp gì — và không làm thay gì?
 
-## Liên hệ House X hay cơ quan thuế?
+House X giúp bạn hiểu khung: dòng tiền ròng, checklist giấy tờ, nối liên hệ nếu bạn cần kế toán / pháp lý hợp đồng thuê (khi bạn đồng ý chia sẻ thông tin).
 
-House X hỗ trợ định hướng an cư và pháp lý dự án ở mức tham khảo. Nghĩa vụ thuế: liên hệ Chi cục Thuế quản lý hoặc đơn vị tư vấn thuế có tư cách. Chủ đề: [${HUB_HREF}](${HUB_HREF}).
+House X không thay Chi cục Thuế, không cam kết mức thuế phải nộp cho từng hồ sơ, và không bán «gói quản lý căn» chỉ vì bạn hỏi thuế.
+
+Cần người hỗ trợ thủ tục: form trên [hub cho thuê](/cho-thue) hoặc [Liên hệ](/lien-he).
 
 ${BTR_SUPPORT_CLOSING}
-
-${EDITORIAL_FIGURES.bitexcoMetro}
 
 ${BTR_LEGAL_DISCLAIMER}`,
     status: "PUBLISHED",
@@ -269,9 +261,9 @@ ${BTR_LEGAL_DISCLAIMER}`,
     coverImageUrl: "/images/hero/housex-hero-slide-02-metro-hub.webp",
     authorName: "Ban biên tập House X",
     seoTitle:
-      "Thuế cho thuê nhà 2026 & mã ngành 68103 | HouseX",
+      "Cho thuê nhà phải đóng thuế thế nào? Mã ngành 68103 | HouseX",
     seoDesc:
-      "Khung thuế cho thuê nhà và mã 68103 — tham khảo thủ tục; xác minh văn bản hiệu lực trước khi kê khai.",
+      "Biết hỏi gì trước khi kê khai thuế cho thuê nhà và mã 68103 — đối chiếu cơ quan thuế/kế toán trước khi nộp.",
     tags: [NOXH_TAG_BTR],
     projects: [],
   },
