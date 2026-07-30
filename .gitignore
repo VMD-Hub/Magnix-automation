@@ -23,3 +23,7 @@ agent-tools-*
 # UID dumps (PII)
 **/uid-dumps/
 **/*-raw-uids.csv
+
+# Local ops staging (phones / Zalo UIDs) — do not commit
+Proptech-HouseX/scripts/_tmp-*
+Proptech-HouseX/tmp-*
