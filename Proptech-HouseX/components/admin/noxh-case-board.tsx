@@ -4,11 +4,16 @@ import { useCallback, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { NoxhWizardOpsSummary } from "@/components/admin/noxh-wizard-ops-summary";
+import {
+  NoxhAffiliateOpsPanel,
+  type AffiliateOpsSnapshot,
+} from "@/components/admin/noxh-affiliate-ops-panel";
 import { cn } from "@/lib/ui/cn";
 import {
   readNoxhWizardSnapshot,
   type NoxhWizardSnapshot,
 } from "@/lib/leads/noxh-wizard-snapshot";
+import { DEAL_TIER_LABEL } from "@/lib/ctv/deal-tiers";
 
 type AdminCaseRow = {
   id: string;
@@ -25,6 +30,8 @@ type AdminCaseRow = {
   ctvCode: string | null;
   projectName: string | null;
   attributionLocked: boolean;
+  dealTier: string | null;
+  exclusiveStatus: string | null;
   updatedAt: string;
 };
 
@@ -35,6 +42,7 @@ type AdminCaseDetail = {
   wizardSnapshot: NoxhWizardSnapshot | null;
   leadId: string | null;
   leadSource: string | null;
+  affiliate: AffiliateOpsSnapshot;
 };
 
 type AdminDoc = {
@@ -82,6 +90,43 @@ const OBJECT_GROUP_LABEL: Record<string, string> = {
   NONE: "Chưa xác định",
 };
 
+function readAffiliateSnapshot(row: Record<string, unknown>): AffiliateOpsSnapshot {
+  const broker = (row.broker ?? {}) as Record<string, unknown>;
+  const cares = Array.isArray(row.careActivities) ? row.careActivities : [];
+  return {
+    dealTier: (row.dealTier as string | null) ?? null,
+    exclusiveStatus: (row.exclusiveStatus as string | null) ?? null,
+    lockExpiresAt: row.lockExpiresAt ? String(row.lockExpiresAt) : null,
+    extendRequestedAt: row.extendRequestedAt
+      ? String(row.extendRequestedAt)
+      : null,
+    hdmbBaseAmount:
+      row.hdmbBaseAmount != null ? Number(row.hdmbBaseAmount) : null,
+    siteVisitBonusVerified: !!row.siteVisitBonusVerified,
+    brokerId: (broker.id as string | undefined) ?? null,
+    partnerContractStatus:
+      (broker.partnerContractStatus as string | null) ?? null,
+    partnerContractSignedAt: broker.partnerContractSignedAt
+      ? String(broker.partnerContractSignedAt)
+      : null,
+    partnerContractVersion:
+      (broker.partnerContractVersion as string | null) ?? null,
+    careActivities: cares.map((a) => {
+      const c = a as Record<string, unknown>;
+      return {
+        id: String(c.id),
+        activityType: String(c.activityType ?? ""),
+        note: String(c.note ?? ""),
+        status: String(c.status ?? ""),
+        occurredAt: String(c.occurredAt ?? ""),
+        imageUrls: Array.isArray(c.imageUrls)
+          ? (c.imageUrls as string[])
+          : [],
+      };
+    }),
+  };
+}
+
 export function NoxhCaseBoard() {
   const searchParams = useSearchParams();
   const [items, setItems] = useState<AdminCaseRow[]>([]);
@@ -117,6 +162,7 @@ export function NoxhCaseBoard() {
         wizardSnapshot: readNoxhWizardSnapshot(row.lead?.opsMeta),
         leadId: row.lead?.id ?? null,
         leadSource: row.lead?.source ?? null,
+        affiliate: readAffiliateSnapshot(row),
       });
       setDocs(row?.documents ?? []);
       setOpsNote(row?.opsNote ?? "");
@@ -203,7 +249,7 @@ export function NoxhCaseBoard() {
               <tr>
                 <th className="px-3 py-2">Mã / Khách</th>
                 <th className="px-3 py-2">Mốc</th>
-                <th className="px-3 py-2">CTV</th>
+                <th className="px-3 py-2">CTV / Tier</th>
               </tr>
             </thead>
             <tbody>
@@ -225,9 +271,19 @@ export function NoxhCaseBoard() {
                   <td className="px-3 py-2">
                     <p>{row.milestoneLabel}</p>
                     <p className="text-xs text-slate-500">{row.docPercent}% giấy tờ</p>
+                    {row.exclusiveStatus === "EXTEND_REQUESTED" ? (
+                      <p className="text-xs font-medium text-amber-700">
+                        +15 chờ duyệt
+                      </p>
+                    ) : null}
                   </td>
                   <td className="px-3 py-2 text-xs">
-                    {row.ctvCode ?? row.brokerName ?? "Sàn"}
+                    <p>{row.ctvCode ?? row.brokerName ?? "Sàn"}</p>
+                    {row.dealTier ? (
+                      <p className="text-slate-500">
+                        {DEAL_TIER_LABEL[row.dealTier] ?? row.dealTier}
+                      </p>
+                    ) : null}
                   </td>
                 </tr>
               ))}
@@ -238,7 +294,9 @@ export function NoxhCaseBoard() {
 
       <div className="rounded-xl border border-slate-200 bg-white p-4">
         {!selected ? (
-          <p className="text-sm text-slate-500">Chọn hồ sơ để cập nhật mốc & giấy tờ.</p>
+          <p className="text-sm text-slate-500">
+            Chọn hồ sơ để cập nhật mốc & giấy tờ.
+          </p>
         ) : (
           <>
             <h3 className="font-bold text-slate-900">
@@ -267,6 +325,18 @@ export function NoxhCaseBoard() {
                   </Button>
                 ) : null}
               </div>
+            ) : null}
+
+            {detail ? (
+              <NoxhAffiliateOpsPanel
+                caseId={selected.id}
+                snapshot={detail.affiliate}
+                onChanged={() => {
+                  void load();
+                  void loadDetail(selected.id);
+                }}
+                onMsg={setMsg}
+              />
             ) : null}
 
             <div className="mt-4 flex flex-wrap gap-2">
@@ -311,7 +381,9 @@ export function NoxhCaseBoard() {
 
             {detail ? (
               <div className="mt-6 rounded-lg border border-slate-200 bg-slate-50 p-3 text-sm">
-                <h4 className="font-bold text-slate-900">Tóm tắt từ wizard / lead</h4>
+                <h4 className="font-bold text-slate-900">
+                  Tóm tắt từ wizard / lead
+                </h4>
                 <p className="mt-1 text-xs text-slate-500">
                   Song ngữ · thu nhập & nợ cụ thể — chỉ Admin
                 </p>
@@ -320,7 +392,8 @@ export function NoxhCaseBoard() {
                     wizardSnapshot={detail.wizardSnapshot}
                     fallbackMessage={detail.leadMessage}
                     objectGroupLabel={
-                      OBJECT_GROUP_LABEL[detail.objectGroup] ?? detail.objectGroup
+                      OBJECT_GROUP_LABEL[detail.objectGroup] ??
+                      detail.objectGroup
                     }
                     intendToBorrowFromCase={detail.intendToBorrow}
                   />

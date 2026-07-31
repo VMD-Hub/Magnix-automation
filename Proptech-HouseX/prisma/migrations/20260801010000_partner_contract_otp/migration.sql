@@ -1,0 +1,2 @@
+-- AlterEnum
+ALTER TYPE "EmailOtpPurpose" ADD VALUE 'PARTNER_CONTRACT';

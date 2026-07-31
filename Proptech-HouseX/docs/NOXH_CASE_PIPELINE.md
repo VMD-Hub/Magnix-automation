@@ -45,7 +45,7 @@ flowchart TB
   W -->|DNA-B auto| NC
   W --> TG
   M --> INB --> NC
-  C -->|fairplay 20 ngày LV| NC
+  C -->|fairplay 60/30/+15 calendar| NC
   L --> NC
   ADM --> NC
   NC --> DOC
@@ -100,8 +100,8 @@ NOXH_WIZARD_HOT_AUTO_CASE=true
 
 | Rule | Giá trị |
 |------|---------|
-| Lock attribution | **20 ngày làm việc** từ claim (`CTV_CLAIM_LOCK_BUSINESS_DAYS`) |
-| Lead sàn “active” | Ops `CONTACTED`/`QUALIFIED` trong 20 ngày → CTV khác **không** claim được |
+| Lock attribution | **60 ngày dương lịch** trần; im **30 ngày** không CS hợp lệ → nhả; Admin có thể duyệt **+15** một lần |
+| Lead sàn “active” | Ops `CONTACTED`/`QUALIFIED` trong cửa sổ độc quyền → CTV khác **không** claim được |
 | Self-referral | CTV không claim SĐT trùng SĐT broker |
 | Đóng băng vĩnh viễn | Khi `UnitBooking` chuyển cọc (`convertedAt`) |
 | Unlock dịch vụ | LMS `NOXH_CLAIM` — đậu «Đào tạo hội nhập CTV» |
@@ -152,7 +152,7 @@ cd Proptech-HouseX && npm run go-live:print-cron
 
 | Job | Tần suất |
 |-----|----------|
-| `noxh-case-maintenance` | Mỗi giờ — release lock 20 ngày, SLA M1 |
+| `noxh-case-maintenance` | Mỗi giờ — release lock 60/30 calendar, SLA M1 |
 | `commission-payouts` | 05 & 20 hàng tháng |
 | `dispatch-events` | Mỗi phút — outbox → n8n |
 | `sheet-mirror` | 6h — tab `ops_mirror` (optional) |

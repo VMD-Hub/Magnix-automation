@@ -28,7 +28,7 @@
 | `Lead` (`assignedBrokerId = null`) | A — Ops | `status`: NEW → CONTACTED → QUALIFIED → WON/LOST |
 | `InboundUidLead` | A — Ops (Magnix) | UID thô → Ops nhập SĐT → tạo Lead / NoxhCase |
 | `NoxhCase` (`brokerId = null`) | A — Ops | Hồ sơ nền tảng (wizard HOT, inbound) |
-| `NoxhCase` (`brokerId = CTV`) | B — Affiliate | Fairplay lock 20 ngày LV |
+| `NoxhCase` (`brokerId = CTV`) | B — Affiliate | Fairplay độc quyền **60/30/+15** calendar (SoT affiliate; thay 20 LV) |
 | `AttributionLock` | B — Referral web | Cookie/ref link — 30 ngày (calendar) |
 
 ---
@@ -60,10 +60,12 @@ Thứ tự kiểm tra (`evaluateCtvClaim`):
 | R1 | SĐT = SĐT của chính CTV | **Từ chối** | `SELF_REFERRAL` |
 | R2 | CTV chưa unlock `NOXH_CLAIM` | **Từ chối** | `BROKER_NOT_CTV` |
 | R3 | `NoxhCase` ACTIVE, `brokerId` ≠ CTV này, còn lock | **Từ chối** | `ACTIVE_CASE_OTHER_CTV` |
-| R4 | `Lead` sàn Ops `CONTACTED`/`QUALIFIED`, **hoặc** `NoxhCase` platform active (`brokerId = null`), trong **20 ngày LV** | **Từ chối** | `PLATFORM_LEAD_ACTIVE` |
-| R5 | Không rơi R1–R4 | **Cho claim** + lock 20 ngày LV | — |
+| R4 | `Lead` sàn Ops `CONTACTED`/`QUALIFIED`, **hoặc** `NoxhCase` platform active (`brokerId = null`), trong **60 ngày calendar** (SoT; thay 20 LV) | **Từ chối** | `PLATFORM_LEAD_ACTIVE` |
+| R5 | Không rơi R1–R4 | **Cho claim** + độc quyền **60 ngày calendar** (im 30 → nhả; +15 xin Admin) | — |
 
 **Thông báo CTV (R4):** *"Khách đang được House X tư vấn. Thử lại sau khi hết thời gian chờ hoặc liên hệ Ops."*
+
+> **SoT affiliate (31/07/2026):** Đồng hồ **chỉ** 60/30/+15 — xem `docs/ops/AFFILIATE_NOXH_PROGRAM_OPS.md` §5. Không chạy song song 20 LV.
 
 ### 4.2 Khi Ops **nhận lead mới** (ads / form) — SĐT đã có CTV claim
 
@@ -95,8 +97,11 @@ Thứ tự kiểm tra (`evaluateCtvClaim`):
 
 | Tham số | Mặc định | Ý nghĩa |
 |---------|----------|---------|
-| `CTV_CLAIM_LOCK_BUSINESS_DAYS` | **20** (T2–T6) | CTV giữ quyền affiliate sau claim |
-| `PLATFORM_LEAD_ACTIVE_BUSINESS_DAYS` | **20** (T2–T6) | Ops `CONTACTED`/`QUALIFIED` chặn claim CTV |
+| `CTV_CLAIM_LOCK_BUSINESS_DAYS` | *(deprecated)* | Cũ 20 LV — claim mới dùng calendar 60 |
+| `AFFILIATE_EXCLUSIVE_MAX_DAYS` | **60** (calendar) | Trần độc quyền khi còn CS hợp lệ |
+| `AFFILIATE_SILENT_RELEASE_DAYS` | **30** (calendar) | Im không CS hợp lệ → nhả sớm |
+| `AFFILIATE_EXTEND_MAX_DAYS` | **15** (calendar) | Gia hạn xin Admin (một lần) |
+| `PLATFORM_LEAD_ACTIVE_BUSINESS_DAYS` | legacy | R4 platform ưu tiên cửa sổ **60 calendar** |
 | `ATTRIBUTION_LOCK_DAYS` | **30** (calendar) | Lock referral web |
 
 Cron: `noxh-case-maintenance` — release lock hết hạn, SLA M1.

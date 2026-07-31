@@ -34,6 +34,13 @@ function serializeAdminCaseListItem(
     ctvCode: c.broker?.ctvCode ?? null,
     projectName: c.project?.name ?? null,
     attributionLocked: !!c.attributionLockedAt,
+    dealTier: c.dealTier ?? null,
+    exclusiveStatus: c.exclusiveStatus ?? null,
+    hdmbBaseAmount:
+      c.hdmbBaseAmount != null ? Number(c.hdmbBaseAmount) : null,
+    siteVisitBonusVerified: !!c.siteVisitBonusVerified,
+    extendRequestedAt: c.extendRequestedAt?.toISOString() ?? null,
+    partnerContractStatus: c.broker?.partnerContractStatus ?? null,
     updatedAt: c.updatedAt.toISOString(),
   };
 }

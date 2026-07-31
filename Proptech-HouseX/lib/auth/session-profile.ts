@@ -19,6 +19,9 @@ export type SessionProfile = {
   opsTools?: { telesales: boolean };
   /** true nếu đã đặt MK dùng được trên web (không phải Zalo-only). */
   passwordReady?: boolean;
+  partnerContractStatus?: string | null;
+  partnerContractSignedAt?: string | null;
+  partnerContractVersion?: string | null;
 };
 
 export async function loadSessionProfile(
@@ -41,6 +44,9 @@ export async function loadSessionProfile(
           id: true,
           brokerType: true,
           ctvCode: true,
+          partnerContractStatus: true,
+          partnerContractSignedAt: true,
+          partnerContractVersion: true,
           ctvApplication: { select: { status: true } },
         },
       },
@@ -74,6 +80,10 @@ export async function loadSessionProfile(
     ctvApplicationStatus: account.broker?.ctvApplication?.status ?? null,
     opsTools: { telesales: telesalesGrant?.status === "ACTIVE" },
     passwordReady: Boolean(account.passwordSetAt),
+    partnerContractStatus: account.broker?.partnerContractStatus ?? null,
+    partnerContractSignedAt:
+      account.broker?.partnerContractSignedAt?.toISOString() ?? null,
+    partnerContractVersion: account.broker?.partnerContractVersion ?? null,
   };
 }
 

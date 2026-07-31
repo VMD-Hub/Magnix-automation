@@ -30,9 +30,17 @@ export default defineConfig({
      */
     cssCodeSplit: false,
     rollupOptions: {
+      input: {
+        main: path.resolve(__dirname, "index.html"),
+        mockAgent: path.resolve(__dirname, "mock-agent.html"),
+      },
       output: {
         manualChunks: undefined,
-        entryFileNames: "assets/index-[hash].js",
+        // Giữ tên index-* cho entry chính (app-config / Zalo CDN).
+        entryFileNames: (chunk) =>
+          chunk.name === "main"
+            ? "assets/index-[hash].js"
+            : "assets/[name]-[hash].js",
         chunkFileNames: "assets/[name]-[hash].js",
         assetFileNames: "assets/index-[hash].[ext]",
       },

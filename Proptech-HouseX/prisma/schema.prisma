@@ -755,6 +755,17 @@ model Broker {
   ctvCode         String?     @unique @map("ctv_code")
   tier            ListingTier @default(FREE)
   rating          Float?      @default(0)
+
+  /// E-contract khung hợp tác (SoT affiliate §1.4).
+  partnerContractStatus    PartnerContractStatus @default(NONE) @map("partner_contract_status")
+  partnerContractSignedAt  DateTime?             @map("partner_contract_signed_at")
+  partnerContractVersion   String?               @map("partner_contract_version")
+  /// Snapshot điều khoản đã ký (HTML/text) — không PII thừa.
+  partnerContractSnapshot  String?               @map("partner_contract_snapshot") @db.Text
+  /// Hash nội dung + timestamp + userId + OTP proof (chuỗi ký).
+  partnerContractSigHash   String?               @map("partner_contract_sig_hash")
+  partnerContractOtpProof  String?               @map("partner_contract_otp_proof")
+
   createdAt       DateTime    @default(now()) @map("created_at")
   updatedAt       DateTime    @updatedAt @map("updated_at")
 
@@ -863,6 +874,7 @@ enum AuthTokenType {
 enum EmailOtpPurpose {
   SET_PASSWORD
   RESET_PASSWORD
+  PARTNER_CONTRACT
 }
 
 enum OpsToolCode {
@@ -1488,6 +1500,11 @@ model Commission {
   payableAt       DateTime?        @map("payable_at")
   expectedPayDate DateTime?        @map("expected_pay_date") @db.Date
   paidAt          DateTime?        @map("paid_at")
+  /// Affiliate: % theo dealTier × base HĐMB (+ bonus thăm DA nếu có).
+  dealTier              AffiliateDealTier? @map("deal_tier")
+  hdmbBaseAmount        Decimal?           @map("hdmb_base_amount") @db.Decimal(18, 2)
+  siteVisitBonusAmount  Decimal?           @map("site_visit_bonus_amount") @db.Decimal(18, 2)
+  commissionModel       CommissionModel?   @map("commission_model")
   createdAt       DateTime         @default(now()) @map("created_at")
 
   lead     Lead      @relation(fields: [leadId], references: [id])
@@ -1815,6 +1832,51 @@ enum CtvAssistType {
   NOTE
 }
 
+/// Affiliate SoT — mức hợp tác trên từng deal (không phải bậc account cứng).
+enum AffiliateDealTier {
+  CONNECTOR
+  CONSULTANT
+  DEVELOPER_PARTNER
+  MASTER_BROKER
+}
+
+/// Trạng thái độc quyền lead (SoT 60/30/+15).
+enum ExclusiveStatus {
+  EXCLUSIVE
+  RELEASED_SILENT
+  RELEASED_EXPIRED
+  EXTEND_REQUESTED
+  EXTENDED
+}
+
+/// E-contract khung hợp tác đối tác (tự build).
+enum PartnerContractStatus {
+  NONE
+  PENDING
+  SIGNED
+}
+
+/// Hoạt động chăm sóc hợp lệ — reset đồng hồ im 30 ngày.
+enum CareActivityType {
+  CALL
+  CHAT
+  MEET
+  SITE_VISIT
+  DOCUMENT
+  OTHER
+}
+
+enum CareActivityStatus {
+  ACCEPTED
+  REJECTED
+}
+
+/// Cách tính HH: deal mới PERCENT_HDMB; deal cũ có thể FLAT.
+enum CommissionModel {
+  FLAT
+  PERCENT_HDMB
+}
+
 /// Hồ sơ NOXH — 1 khách (SĐT) trong một chu kỳ xử lý; CTV theo dõi qua portal.
 model NoxhCase {
   id                  String         @id @default(uuid())
@@ -1838,6 +1900,23 @@ model NoxhCase {
   claimedAt           DateTime       @default(now()) @map("claimed_at")
   firstContactedAt    DateTime?      @map("first_contacted_at")
   completedAt         DateTime?      @map("completed_at")
+
+  /// Affiliate SoT — cấp hợp tác trên deal này.
+  dealTier            AffiliateDealTier? @map("deal_tier")
+  exclusiveStatus     ExclusiveStatus?   @map("exclusive_status")
+  exclusiveStartedAt  DateTime?          @map("exclusive_started_at")
+  lastValidCareAt     DateTime?          @map("last_valid_care_at")
+  extendRequestedAt   DateTime?          @map("extend_requested_at")
+  /// Giá căn HĐMB (chưa VAT, không KTBT 2%) — Ops nhập sau ký.
+  hdmbBaseAmount      Decimal?           @map("hdmb_base_amount") @db.Decimal(18, 2)
+  hdmbRecordedAt      DateTime?          @map("hdmb_recorded_at")
+  hdmbRecordedBy      String?            @map("hdmb_recorded_by")
+  commissionModel     CommissionModel    @default(PERCENT_HDMB) @map("commission_model")
+  /// Thưởng thăm DA +500k — chỉ true sau Admin xác minh CĐT.
+  siteVisitBonusVerified   Boolean   @default(false) @map("site_visit_bonus_verified")
+  siteVisitBonusVerifiedAt DateTime? @map("site_visit_bonus_verified_at")
+  siteVisitBonusVerifiedBy String?   @map("site_visit_bonus_verified_by")
+
   createdAt           DateTime       @default(now()) @map("created_at")
   updatedAt           DateTime       @updatedAt @map("updated_at")
 
@@ -1847,6 +1926,7 @@ model NoxhCase {
   unitBooking          UnitBooking?          @relation(fields: [unitBookingId], references: [id])
   documents            CaseDocument[]
   assistLogs           CaseAssistLog[]
+  careActivities       CareActivity[]
   milestoneEvents      CaseMilestoneEvent[]
   attributionConflicts AttributionConflict[]
 
@@ -1854,7 +1934,31 @@ model NoxhCase {
   @@index([normalizedPhone, caseStatus])
   @@index([milestone])
   @@index([lockExpiresAt])
+  @@index([exclusiveStatus, lastValidCareAt])
   @@map("noxh_cases")
+}
+
+/// Log CS hợp lệ (enum + note + ảnh) — SoT affiliate §5.2.
+model CareActivity {
+  id             String             @id @default(uuid())
+  caseId         String             @map("case_id")
+  brokerId       String             @map("broker_id")
+  activityType   CareActivityType   @map("activity_type")
+  occurredAt     DateTime           @map("occurred_at")
+  note           String             @db.Text
+  /// URL ảnh bằng chứng (≥1 khi ACCEPTED).
+  imageUrls      String[]           @map("image_urls")
+  status         CareActivityStatus @default(ACCEPTED)
+  rejectedReason String?            @map("rejected_reason") @db.Text
+  rejectedBy     String?            @map("rejected_by")
+  rejectedAt     DateTime?          @map("rejected_at")
+  createdAt      DateTime           @default(now()) @map("created_at")
+
+  noxhCase NoxhCase @relation(fields: [caseId], references: [id], onDelete: Cascade)
+
+  @@index([caseId, status, occurredAt])
+  @@index([brokerId])
+  @@map("care_activities")
 }
 
 model CaseDocument {

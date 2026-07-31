@@ -381,6 +381,89 @@ export function IconBriefcase({ size, className }: IconProps) {
   );
 }
 
+export function IconBell({ size, className }: IconProps) {
+  return (
+    <Svg size={size} className={className}>
+      <path
+        d="M6 16.5V11a6 6 0 1 1 12 0v5.5l1.2 1.8H4.8L6 16.5Z"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M10 18.5a2 2 0 0 0 4 0"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+      />
+    </Svg>
+  );
+}
+
+export function IconCart({ size, className }: IconProps) {
+  return (
+    <Svg size={size} className={className}>
+      <path
+        d="M7 8h12l-1.2 8.5a1.5 1.5 0 0 1-1.5 1.3H9.2a1.5 1.5 0 0 1-1.5-1.2L6 5.5H4"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinejoin="round"
+      />
+      <circle cx="10" cy="20" r="1.2" fill="currentColor" />
+      <circle cx="16.5" cy="20" r="1.2" fill="currentColor" />
+    </Svg>
+  );
+}
+
+export function IconDeclare({ size, className }: IconProps) {
+  return (
+    <Svg size={size} className={className}>
+      <path
+        d="M7 4.5h7l3 3V19a1.5 1.5 0 0 1-1.5 1.5h-8.5A1.5 1.5 0 0 1 5.5 19V6A1.5 1.5 0 0 1 7 4.5Z"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M14 4.5V8h3.5M8.5 12h7M8.5 15.5h5"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+      />
+    </Svg>
+  );
+}
+
+export function IconHeadset({ size, className }: IconProps) {
+  return (
+    <Svg size={size} className={className}>
+      <path
+        d="M5 14v-2a7 7 0 0 1 14 0v2"
+        stroke="currentColor"
+        strokeWidth="1.6"
+      />
+      <rect
+        x="3.5"
+        y="13"
+        width="4"
+        height="6"
+        rx="1.2"
+        stroke="currentColor"
+        strokeWidth="1.6"
+      />
+      <rect
+        x="16.5"
+        y="13"
+        width="4"
+        height="6"
+        rx="1.2"
+        stroke="currentColor"
+        strokeWidth="1.6"
+      />
+    </Svg>
+  );
+}
+
 export function IconGrid({ size, className }: IconProps) {
   return (
     <Svg size={size} className={className}>

@@ -19,7 +19,6 @@ import {
 } from "@/lib/noxh-case/attribution-claim";
 import { queueConflictFromCtvClaim } from "@/lib/attribution/conflict";
 import {
-  computeExtendedLockExpiry,
   evaluateCtvLockCompliance,
 } from "@/lib/noxh-case/ctv-lock-compliance";
 import { accrueNoxhCommissionOnSigned } from "@/lib/noxh-case/commission-accrual";
@@ -27,9 +26,22 @@ import { notifyBrokerMilestoneChange } from "@/lib/noxh-case/case-maintenance";
 
 const caseInclude = {
   project: { select: { id: true, name: true, slug: true } },
-  broker: { select: { id: true, fullName: true, ctvCode: true } },
+  broker: {
+    select: {
+      id: true,
+      fullName: true,
+      ctvCode: true,
+      partnerContractStatus: true,
+      partnerContractSignedAt: true,
+      partnerContractVersion: true,
+    },
+  },
   documents: { orderBy: { docType: "asc" as const } },
   assistLogs: { orderBy: { createdAt: "desc" as const }, take: 20 },
+  careActivities: {
+    orderBy: { occurredAt: "desc" as const },
+    take: 40,
+  },
   lead: {
     select: {
       id: true,
@@ -281,6 +293,12 @@ export async function createCtvClaim(params: {
   customerName: string;
   phone: string;
   projectId?: string;
+  projectLabel?: string;
+  dealTier?:
+    | "CONNECTOR"
+    | "CONSULTANT"
+    | "DEVELOPER_PARTNER"
+    | "MASTER_BROKER";
   objectGroup?: NoxhObjectGroupId;
   intendToBorrow?: boolean;
   message?: string;
@@ -290,6 +308,15 @@ export async function createCtvClaim(params: {
   const brokerNormalizedPhone = normalizeVnPhone(params.brokerPhone);
   const objectGroup = params.objectGroup ?? "WORKER";
   const intendToBorrow = params.intendToBorrow ?? false;
+  const dealTier = params.dealTier ?? "CONNECTOR";
+  const messageParts = [
+    params.message?.trim(),
+    params.projectLabel?.trim()
+      ? `Dự án: ${params.projectLabel.trim()}`
+      : null,
+    `dealTier=${dealTier}`,
+  ].filter(Boolean);
+  const message = messageParts.join(" · ") || undefined;
 
   return prisma.$transaction(async (tx) => {
     const evaluation = await evaluateCtvClaim(tx, {
@@ -307,7 +334,8 @@ export async function createCtvClaim(params: {
       throw new CtvClaimError(evaluation.reason, evaluation.message);
     }
 
-    const lockExpiresAt = computeClaimLockExpiry();
+    const claimedAt = new Date();
+    const lockExpiresAt = computeClaimLockExpiry(claimedAt);
     const code = await generateNoxhCaseCodeInTx(tx);
 
     const customer = await tx.customer.upsert({
@@ -326,7 +354,7 @@ export async function createCtvClaim(params: {
         projectId: params.projectId,
         assignedBrokerId: params.brokerId,
         source: "ctv_claim",
-        message: params.message,
+        message,
         status: "NEW",
       },
     });
@@ -342,7 +370,13 @@ export async function createCtvClaim(params: {
         projectId: params.projectId,
         objectGroup,
         intendToBorrow,
+        claimedAt,
         lockExpiresAt,
+        exclusiveStartedAt: claimedAt,
+        exclusiveStatus: "EXCLUSIVE",
+        lastValidCareAt: claimedAt,
+        commissionModel: "PERCENT_HDMB",
+        dealTier,
         consultScheduledAt: params.consultScheduledAt,
         milestone: "M1_RECEIVED",
         milestoneSub: "M1_SCHEDULED",
@@ -569,12 +603,20 @@ export async function updateNoxhCaseAdmin(
       }
 
       if (patch.milestone === "M5_SIGNED") {
-        await accrueNoxhCommissionOnSigned(tx, {
-          id: caseId,
-          code: existing.code,
-          leadId: existing.leadId,
-          brokerId: existing.brokerId,
-        }, now);
+        await accrueNoxhCommissionOnSigned(
+          tx,
+          {
+            id: caseId,
+            code: existing.code,
+            leadId: existing.leadId,
+            brokerId: existing.brokerId,
+            dealTier: existing.dealTier,
+            hdmbBaseAmount: existing.hdmbBaseAmount,
+            commissionModel: existing.commissionModel,
+            siteVisitBonusVerified: existing.siteVisitBonusVerified,
+          },
+          now,
+        );
       }
     }
 
@@ -639,6 +681,9 @@ export async function createCaseAssistLog(params: {
   });
 }
 
+/**
+ * SoT: không tự +15 khi assist — chỉ đánh dấu EXTEND_REQUESTED để Admin duyệt.
+ */
 async function maybeExtendCtvLockOnProgress(
   tx: Prisma.TransactionClient,
   caseId: string,
@@ -650,6 +695,12 @@ async function maybeExtendCtvLockOnProgress(
     },
   });
   if (!caseRow?.brokerId || !caseRow.lockExpiresAt) return;
+  if (
+    caseRow.exclusiveStatus === "EXTENDED" ||
+    caseRow.exclusiveStatus === "EXTEND_REQUESTED"
+  ) {
+    return;
+  }
 
   const compliance = evaluateCtvLockCompliance({
     consultScheduledAt: caseRow.consultScheduledAt,
@@ -657,37 +708,21 @@ async function maybeExtendCtvLockOnProgress(
     attributionLockedAt: caseRow.attributionLockedAt,
     caseStatus: caseRow.caseStatus,
     assistLogs: caseRow.assistLogs,
+    exclusiveStartedAt: caseRow.exclusiveStartedAt,
+    lastValidCareAt: caseRow.lastValidCareAt,
+    exclusiveStatus: caseRow.exclusiveStatus,
+    alreadyExtended: false,
   });
 
-  if (!compliance.canExtendLock) return;
-
-  const nextExpiry = computeExtendedLockExpiry(caseRow.lockExpiresAt);
-  if (nextExpiry <= caseRow.lockExpiresAt) return;
-
-  const customer = await tx.customer.findUnique({
-    where: { normalizedPhone: caseRow.normalizedPhone },
-    select: { id: true },
-  });
+  if (!compliance.canRequestExtend) return;
 
   await tx.noxhCase.update({
     where: { id: caseId },
-    data: { lockExpiresAt: nextExpiry },
+    data: {
+      exclusiveStatus: "EXTEND_REQUESTED",
+      extendRequestedAt: new Date(),
+    },
   });
-
-  if (customer) {
-    await tx.attributionLock.updateMany({
-      where: { customerId: customer.id },
-      data: { expiresAt: nextExpiry },
-    });
-
-    await tx.attributionEvent.create({
-      data: {
-        customerId: customer.id,
-        toBroker: caseRow.brokerId,
-        reason: "lock_extended",
-      },
-    });
-  }
 }
 
 export async function updateCtvConsultSchedule(

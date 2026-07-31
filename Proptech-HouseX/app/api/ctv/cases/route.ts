@@ -14,6 +14,10 @@ import { ctvClaimSchema } from "@/lib/validation/noxh-case";
 import { isValidVnPhone, normalizeVnPhone } from "@/lib/phone";
 import { prisma } from "@/lib/prisma";
 import { isServiceActive } from "@/lib/data/agent-services";
+import {
+  assertPartnerContractSigned,
+  PartnerContractError,
+} from "@/lib/data/partner-contract";
 
 export async function OPTIONS(req: NextRequest) {
   return corsPreflight(req);
@@ -85,16 +89,31 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    try {
+      await assertPartnerContractSigned(session.brokerId);
+    } catch (err) {
+      if (err instanceof PartnerContractError) {
+        return applyApiCors(fail(403, err.code, err.message), req);
+      }
+      throw err;
+    }
+
+    const consultScheduledAt = body.consultScheduledAt
+      ? parseConsultScheduleInput(body.consultScheduledAt)
+      : new Date(Date.now() + 24 * 60 * 60 * 1000);
+
     const noxhCase = await createCtvClaim({
       brokerId: session.brokerId,
       brokerPhone: broker.phone,
       customerName: body.customerName,
       phone: body.phone,
       projectId: body.projectId,
+      projectLabel: body.projectLabel,
+      dealTier: body.dealTier,
       objectGroup: body.objectGroup,
       intendToBorrow: body.intendToBorrow,
       message: body.message,
-      consultScheduledAt: parseConsultScheduleInput(body.consultScheduledAt),
+      consultScheduledAt,
     });
 
     const { serializeCaseForCtv } = await import("@/lib/noxh-case/serialize-ctv");

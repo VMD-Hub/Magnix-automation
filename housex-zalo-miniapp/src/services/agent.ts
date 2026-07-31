@@ -7,6 +7,8 @@ export type CtvCaseListItem = {
   customerName: string;
   phoneMasked: string;
   projectName: string | null;
+  dealTier?: string | null;
+  exclusiveStatus?: string | null;
   milestone: string;
   milestoneLabel: string;
   milestoneProgress: string;
@@ -21,6 +23,8 @@ export type CtvCaseListItem = {
   lockExpiresAt: string | null;
   lockCompliance: {
     businessDaysUntilLockExpiry: number | null;
+    calendarDaysUntilLockExpiry?: number | null;
+    daysSinceValidCare?: number | null;
     hasRecentProgress: boolean;
     needsProgressWarning: boolean;
     needsScheduleWarning: boolean;
@@ -39,6 +43,15 @@ export type CtvCaseDocument = {
   ctvActionHint: string | null;
 };
 
+export type CareActivityItem = {
+  id: string;
+  activityType: string;
+  occurredAt: string;
+  note: string;
+  imageUrls: string[];
+  status: string;
+};
+
 export type CtvCaseDetail = CtvCaseListItem & {
   documents: CtvCaseDocument[];
   missingDocs: CtvCaseDocument[];
@@ -48,7 +61,22 @@ export type CtvCaseDetail = CtvCaseListItem & {
     message: string;
     createdAt: string;
   }>;
+  careActivities?: CareActivityItem[];
 };
+
+export type AffiliateDealTier =
+  | "CONNECTOR"
+  | "CONSULTANT"
+  | "DEVELOPER_PARTNER"
+  | "MASTER_BROKER";
+
+export type CareActivityType =
+  | "CALL"
+  | "CHAT"
+  | "MEET"
+  | "SITE_VISIT"
+  | "DOCUMENT"
+  | "OTHER";
 
 export type BrokerNotification = {
   id: string;
@@ -94,7 +122,10 @@ export async function claimCtvCase(input: {
   phone: string;
   message?: string;
   intendToBorrow?: boolean;
-  consultScheduledAt: string;
+  projectId?: string;
+  projectLabel?: string;
+  dealTier?: AffiliateDealTier;
+  consultScheduledAt?: string;
 }): Promise<CtvCaseDetail> {
   return apiFetch<CtvCaseDetail>("/api/ctv/cases", {
     method: "POST",
@@ -103,8 +134,40 @@ export async function claimCtvCase(input: {
       phone: input.phone,
       message: input.message,
       intendToBorrow: input.intendToBorrow ?? false,
-      consultScheduledAt: input.consultScheduledAt,
+      projectId: input.projectId,
+      projectLabel: input.projectLabel,
+      dealTier: input.dealTier ?? "CONNECTOR",
+      ...(input.consultScheduledAt
+        ? { consultScheduledAt: input.consultScheduledAt }
+        : {}),
     }),
+  });
+}
+
+export async function uploadCareImage(
+  caseId: string,
+  file: File,
+): Promise<{ url: string }> {
+  const form = new FormData();
+  form.append("file", file);
+  return apiFetch<{ url: string }>(
+    `/api/ctv/cases/${encodeURIComponent(caseId)}/care/upload`,
+    { method: "POST", body: form },
+  );
+}
+
+export async function createCareActivity(
+  caseId: string,
+  input: {
+    activityType: CareActivityType;
+    note: string;
+    imageUrls: string[];
+    occurredAt?: string;
+  },
+): Promise<{ id: string; activityType: string; occurredAt: string; status: string }> {
+  return apiFetch(`/api/ctv/cases/${encodeURIComponent(caseId)}/care`, {
+    method: "POST",
+    body: JSON.stringify(input),
   });
 }
 
@@ -254,6 +317,45 @@ export function entitlementLabel(status: string, unlocked: boolean) {
 
 export function formatCommission(amount: string | number | null | undefined) {
   return formatVnd(amount) ?? "—";
+}
+
+export type PartnerContractState = {
+  status: string;
+  signedAt: string | null;
+  version: string;
+  currentVersion: string;
+  title: string;
+  termsText: string;
+  signed: boolean;
+  gateEnabled: boolean;
+};
+
+export async function getPartnerContract(): Promise<PartnerContractState> {
+  return apiFetch<PartnerContractState>("/api/ctv/partner-contract");
+}
+
+export async function requestPartnerContractOtp(): Promise<{
+  expiresAt: string;
+  emailMasked: string;
+  status: string;
+}> {
+  return apiFetch("/api/ctv/partner-contract/request-otp", { method: "POST" });
+}
+
+export async function signPartnerContract(input: {
+  otp: string;
+  accepted: true;
+  signatureDataUrl?: string | null;
+}): Promise<{
+  status: string;
+  alreadySigned: boolean;
+  signedAt: string | null;
+  version: string | null;
+}> {
+  return apiFetch("/api/ctv/partner-contract/sign", {
+    method: "POST",
+    body: JSON.stringify(input),
+  });
 }
 
 export function statusLabelVi(status: string) {

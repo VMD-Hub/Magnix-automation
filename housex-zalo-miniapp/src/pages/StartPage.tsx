@@ -47,6 +47,26 @@ export function StartPage() {
 
   return (
     <div className="start-page">
+      {import.meta.env.DEV ? (
+        <a
+          className="start-mock-banner"
+          href="/mock-agent.html"
+          style={{
+            display: "block",
+            margin: "0 0 12px",
+            padding: "12px 14px",
+            borderRadius: 12,
+            background: "#0068ff",
+            color: "#fff",
+            fontWeight: 700,
+            fontSize: 14,
+            textAlign: "center",
+            textDecoration: "none",
+          }}
+        >
+          Xem mock UI Agent (mobile) →
+        </a>
+      ) : null}
       <RubySurfaceOrnament variant="header" />
       <header className="start-hero">
         <p className="start-kicker">HOUSE X · PROPTECH</p>

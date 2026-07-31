@@ -15,6 +15,9 @@ type Profile = {
   ctvApplicationStatus?: string | null;
   passwordReady?: boolean;
   phoneMasked?: string;
+  partnerContractStatus?: string | null;
+  partnerContractSignedAt?: string | null;
+  partnerContractVersion?: string | null;
 };
 
 export default function BrokerAccountPage() {
@@ -54,6 +57,21 @@ export default function BrokerAccountPage() {
             {user.ctvCode ? `Mã ${user.ctvCode}` : null}
           </p>
         ) : null}
+        {user.partnerContractStatus ? (
+          <p className="mt-2 text-sm text-slate-600">
+            E-contract:{" "}
+            <strong>
+              {user.partnerContractStatus === "SIGNED"
+                ? "Đã ký"
+                : user.partnerContractStatus === "PENDING"
+                  ? "Chờ ký (OTP)"
+                  : user.partnerContractStatus}
+            </strong>
+            {user.partnerContractVersion
+              ? ` · ${user.partnerContractVersion}`
+              : ""}
+          </p>
+        ) : null}
       </div>
 
       <div>
@@ -61,6 +79,18 @@ export default function BrokerAccountPage() {
           Việc cần làm
         </h2>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <Link
+            href="/moi-gioi/e-contract"
+            className="rounded-2xl border border-slate-200 bg-white p-5 hover:border-brand-300"
+          >
+            <Icon.BadgeCheck className="text-2xl text-brand-600" />
+            <p className="mt-2 font-semibold">E-contract</p>
+            <p className="text-xs text-slate-500">
+              {user.partnerContractStatus === "SIGNED"
+                ? "Đã ký — xem lại điều khoản"
+                : "Ký khung hợp tác (OTP)"}
+            </p>
+          </Link>
           <Link
             href="/moi-gioi/dang-tin"
             className="rounded-2xl border border-slate-200 bg-white p-5 hover:border-brand-300"
@@ -81,7 +111,35 @@ export default function BrokerAccountPage() {
           >
             <Icon.FileCheck className="text-2xl text-brand-600" />
             <p className="mt-2 font-semibold">Hồ sơ NOXH (CTV)</p>
-            <p className="text-xs text-slate-500">Thả lead & theo dõi pipeline</p>
+            <p className="text-xs text-slate-500">
+              Pipeline, CS hợp lệ & checklist
+            </p>
+          </Link>
+          <Link
+            href="/moi-gioi/khai-bao"
+            className="rounded-2xl border border-slate-200 bg-white p-5 hover:border-brand-300"
+          >
+            <Icon.BadgeCheck className="text-2xl text-brand-600" />
+            <p className="mt-2 font-semibold">Khai báo A+B+C</p>
+            <p className="text-xs text-slate-500">
+              Khách · dự án · mức hợp tác
+            </p>
+          </Link>
+          <Link
+            href="/moi-gioi/gio-hang"
+            className="rounded-2xl border border-slate-200 bg-white p-5 hover:border-brand-300"
+          >
+            <Icon.Building className="text-2xl text-brand-600" />
+            <p className="mt-2 font-semibold">Giỏ hàng</p>
+            <p className="text-xs text-slate-500">Chọn DA rồi khai báo deal</p>
+          </Link>
+          <Link
+            href="/moi-gioi/hoa-hong"
+            className="rounded-2xl border border-slate-200 bg-white p-5 hover:border-brand-300"
+          >
+            <Icon.FileCheck className="text-2xl text-brand-600" />
+            <p className="mt-2 font-semibold">Hoa hồng</p>
+            <p className="text-xs text-slate-500">Đối soát sau HĐMB</p>
           </Link>
           <Link
             href="/moi-gioi/telesales"

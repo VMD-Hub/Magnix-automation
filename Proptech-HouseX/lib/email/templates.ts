@@ -191,6 +191,36 @@ Nếu bạn không yêu cầu mã này, hãy bỏ qua email.
   return { to: "", subject, html, text, tags: ["auth", "password_otp"] };
 }
 
+/** OTP ký e-contract khung hợp tác đối tác. */
+export function partnerContractOtpEmail(
+  name: string,
+  code: string,
+): OutboundEmail {
+  const brand = getBrandName();
+  const subject = `Mã xác minh ký e-contract đối tác — ${brand}`;
+  const text = `Xin chào ${name},
+
+Mã xác minh để ký thỏa thuận khung hợp tác đối tác trên ${brand}:
+${code}
+
+Mã hiệu lực 10 phút. Chỉ nhập trong app/web House X chính thức (màn e-contract).
+
+Nếu bạn không yêu cầu mã này, hãy bỏ qua email.
+
+— ${brand}`;
+
+  const html = transactionalEmailLayout(
+    subject,
+    `<p>Xin chào <strong>${name}</strong>,</p>
+<p>Mã xác minh để <strong>ký e-contract khung hợp tác</strong> trên <strong>${brand}</strong>:</p>
+<p style="text-align:center;margin:28px 0;font-size:32px;letter-spacing:0.35em;font-weight:bold;color:#9B111E">${code}</p>
+<p>Mã hiệu lực <strong>10 phút</strong>. Chỉ nhập trên màn e-contract House X chính thức.</p>
+<p style="font-size:13px;color:#64748b">Nếu không phải bạn yêu cầu, bỏ qua email này.</p>`,
+  );
+
+  return { to: "", subject, html, text, tags: ["auth", "partner_contract_otp"] };
+}
+
 /** Thông báo đã được cấp tool — không gửi magic-link đặt MK. */
 export function telesalesGrantNotifyEmail(
   name: string,

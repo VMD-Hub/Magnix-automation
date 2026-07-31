@@ -25,6 +25,10 @@ import { AgentTelesalesPage } from "@/pages/AgentTelesalesPage";
 import { AgentTelesalesDetailPage } from "@/pages/AgentTelesalesDetailPage";
 import { CustomerNotificationsPage } from "@/pages/CustomerNotificationsPage";
 import { WebViewPage } from "@/pages/WebViewPage";
+import { MockAgentPreview } from "@/mock/MockAgentPreview";
+import { AgentDeclarePage } from "@/pages/AgentDeclarePage";
+import { AgentCartPage } from "@/pages/AgentCartPage";
+import { AgentEcontractPage } from "@/pages/AgentEcontractPage";
 
 /** HashRouter — ổn định trên Zalo Mini App (CDN path không phải domain thật). */
 export default function App() {
@@ -33,6 +37,8 @@ export default function App() {
       <HashRouter>
         <Routes>
           <Route path="/start" element={<StartPage />} />
+          {/* Mock UI Citics-lite — không auth, xem trước duyệt */}
+          <Route path="/mock/agent" element={<MockAgentPreview />} />
           {/* Ops telesales — độc lập CTV auth */}
           <Route path="/ops" element={<OpsLoginPage />} />
           <Route path="/ops/leads" element={<OpsLeadsPage />} />
@@ -52,6 +58,9 @@ export default function App() {
             <Route path="tai-khoan" element={<AccountPage />} />
             <Route path="thong-bao" element={<CustomerNotificationsPage />} />
             <Route path="agent" element={<AgentHomePage />} />
+            <Route path="agent/khai-bao" element={<AgentDeclarePage />} />
+            <Route path="agent/gio-hang" element={<AgentCartPage />} />
+            <Route path="agent/e-contract" element={<AgentEcontractPage />} />
             <Route path="agent/dich-vu" element={<AgentServicesPage />} />
             <Route
               path="agent/dich-vu/:code"

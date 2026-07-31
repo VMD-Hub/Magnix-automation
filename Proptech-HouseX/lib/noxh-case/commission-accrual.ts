@@ -7,6 +7,11 @@ import {
 } from "@/lib/noxh-case/commission-pay-cycle";
 import { enqueueEvent } from "@/lib/events/outbox";
 import { createBrokerNotification } from "@/lib/data/broker-notification";
+import {
+  computeAffiliateCommission,
+  parseAffiliateDealTier,
+  type AffiliateDealTierCode,
+} from "@/lib/affiliate/commission-calc";
 
 export const DEFAULT_NOXH_CTV_COMMISSION_AMOUNT = Number(
   process.env.DEFAULT_NOXH_CTV_COMMISSION_AMOUNT ?? "15000000",
@@ -20,16 +25,50 @@ type CaseForCommission = {
   leadId: string | null;
   brokerId: string | null;
   referralId?: string | null;
+  dealTier?: string | null;
+  hdmbBaseAmount?: Prisma.Decimal | number | null;
+  commissionModel?: string | null;
+  siteVisitBonusVerified?: boolean | null;
 };
 
+function resolvePercentAmount(noxhCase: CaseForCommission): {
+  amount: number;
+  rate: number;
+  dealTier: AffiliateDealTierCode;
+  hdmbBase: number;
+  siteVisitBonus: number;
+} | null {
+  if (noxhCase.commissionModel === "FLAT") return null;
+  const tier = parseAffiliateDealTier(noxhCase.dealTier);
+  const hdmb =
+    noxhCase.hdmbBaseAmount == null
+      ? null
+      : Number(noxhCase.hdmbBaseAmount);
+  if (!tier || hdmb == null || !(hdmb > 0)) return null;
+  const breakdown = computeAffiliateCommission({
+    dealTier: tier,
+    hdmbBaseAmount: hdmb,
+    siteVisitBonusVerified: !!noxhCase.siteVisitBonusVerified,
+  });
+  return {
+    amount: breakdown.totalAmount,
+    rate: breakdown.rate,
+    dealTier: tier,
+    hdmbBase: hdmb,
+    siteVisitBonus: breakdown.siteVisitBonus,
+  };
+}
+
 /**
- * Mốc M5 — ghi nhận hoa hồng ACCRUED (chờ CĐT xác nhận → PAYABLE → PAID kỳ 05/20).
+ * Mốc M5 — ghi nhận hoa hồng ACCRUED.
+ * Ưu tiên PERCENT_HDMB khi có dealTier + hdmbBaseAmount; không thì flat mặc định
+ * (deal cũ / chưa nhập giá — Ops nên nhập giá trước khi chốt HH %).
  */
 export async function accrueNoxhCommissionOnSigned(
   tx: Tx,
   noxhCase: CaseForCommission,
   signedAt: Date = new Date(),
-  amount = DEFAULT_NOXH_CTV_COMMISSION_AMOUNT,
+  amountOverride?: number,
 ): Promise<{ created: boolean; commissionId?: string }> {
   if (!noxhCase.brokerId || !noxhCase.leadId) {
     return { created: false };
@@ -42,6 +81,16 @@ export async function accrueNoxhCommissionOnSigned(
     return { created: false, commissionId: existing.id };
   }
 
+  const percent = resolvePercentAmount(noxhCase);
+  const usePercent = percent && amountOverride === undefined;
+  const amount = amountOverride ?? percent?.amount ?? DEFAULT_NOXH_CTV_COMMISSION_AMOUNT;
+  const rate = usePercent ? percent!.rate : null;
+  const model = usePercent
+    ? "PERCENT_HDMB"
+    : noxhCase.commissionModel === "FLAT" || !percent
+      ? "FLAT"
+      : "PERCENT_HDMB";
+
   const expectedPayDate = computeExpectedPayDate(signedAt, CDT_SETTLEMENT_DAYS);
 
   const commission = await tx.commission.create({
@@ -50,10 +99,19 @@ export async function accrueNoxhCommissionOnSigned(
       brokerId: noxhCase.brokerId,
       referralId: noxhCase.referralId ?? undefined,
       amount: new Prisma.Decimal(amount),
+      rate: rate ?? undefined,
       status: "ACCRUED",
       signedAt,
       accruedAt: signedAt,
       expectedPayDate,
+      dealTier: usePercent ? percent!.dealTier : undefined,
+      hdmbBaseAmount: usePercent
+        ? new Prisma.Decimal(percent!.hdmbBase)
+        : undefined,
+      siteVisitBonusAmount: usePercent
+        ? new Prisma.Decimal(percent!.siteVisitBonus)
+        : undefined,
+      commissionModel: model,
     },
   });
 
@@ -70,7 +128,8 @@ export async function accrueNoxhCommissionOnSigned(
       leadId: noxhCase.leadId,
       brokerId: noxhCase.brokerId,
       amount: amount.toString(),
-      rate: null,
+      rate,
+      model,
     },
     `commission.created:${commission.id}`,
   );

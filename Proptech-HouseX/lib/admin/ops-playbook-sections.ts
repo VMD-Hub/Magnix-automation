@@ -268,7 +268,8 @@ export const PLAYBOOK_SECTIONS: PlaybookSection[] = [
       rows: [
         ["Ads/form trùng SĐT CTV đang lock", "Không ghi đè — queue Xung đột"],
         ["Ops đã CONTACTED+, CTV claim", "Hệ thống từ chối — Ops giữ khách"],
-        ["Lock CTV hết 20 ngày LV", "Ops có thể tiếp quản (theo rule)"],
+        ["Lock CTV hết 60 ngày dương lịch (hoặc im 30 ngày không CS)", "Ops có thể tiếp quản (theo rule)"],
+        ["CTV xin +15 gần hết hạn", "Admin duyệt / từ chối trên board hồ sơ NOXH"],
         ["Đã cọc F1", "CTV giữ attribution — Ops hỗ trợ hậu kỳ"],
       ],
     },

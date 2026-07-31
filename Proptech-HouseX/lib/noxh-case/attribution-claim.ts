@@ -1,10 +1,9 @@
 import type { Prisma } from "@prisma/client";
 import {
-  addBusinessDays,
-  CTV_CLAIM_LOCK_BUSINESS_DAYS,
-  isWithinBusinessDaysWindow,
-  PLATFORM_LEAD_ACTIVE_BUSINESS_DAYS,
-} from "@/lib/noxh-case/business-days";
+  computeExclusiveExpiry,
+  EXCLUSIVE_MAX_CALENDAR_DAYS,
+  isWithinCalendarDaysWindow,
+} from "@/lib/affiliate/exclusivity";
 
 type Tx = Prisma.TransactionClient;
 
@@ -23,6 +22,7 @@ const PLATFORM_ACTIVE_STATUSES = ["CONTACTED", "QUALIFIED"] as const;
 
 /**
  * Fairplay — đánh giá CTV có được claim SĐT không (trước khi ghi DB).
+ * Độc quyền / platform block: trần 60 ngày calendar (SoT affiliate).
  */
 export async function evaluateCtvClaim(
   tx: Tx,
@@ -61,6 +61,11 @@ export async function evaluateCtvClaim(
       OR: [
         { attributionLockedAt: { not: null } },
         { lockExpiresAt: { gt: now } },
+        {
+          exclusiveStatus: {
+            in: ["EXCLUSIVE", "EXTENDED", "EXTEND_REQUESTED"],
+          },
+        },
       ],
     },
     select: { brokerId: true, code: true },
@@ -91,9 +96,9 @@ export async function evaluateCtvClaim(
 
   if (
     platformCase &&
-    isWithinBusinessDaysWindow(
+    isWithinCalendarDaysWindow(
       platformCase.createdAt,
-      PLATFORM_LEAD_ACTIVE_BUSINESS_DAYS,
+      EXCLUSIVE_MAX_CALENDAR_DAYS,
       now,
     )
   ) {
@@ -118,9 +123,9 @@ export async function evaluateCtvClaim(
 
     if (
       platformLead &&
-      isWithinBusinessDaysWindow(
+      isWithinCalendarDaysWindow(
         platformLead.updatedAt,
-        PLATFORM_LEAD_ACTIVE_BUSINESS_DAYS,
+        EXCLUSIVE_MAX_CALENDAR_DAYS,
         now,
       )
     ) {
@@ -136,6 +141,7 @@ export async function evaluateCtvClaim(
   return { ok: true };
 }
 
+/** Lock claim mới = độc quyền 60 ngày calendar (SoT). */
 export function computeClaimLockExpiry(from: Date = new Date()): Date {
-  return addBusinessDays(from, CTV_CLAIM_LOCK_BUSINESS_DAYS);
+  return computeExclusiveExpiry(from);
 }

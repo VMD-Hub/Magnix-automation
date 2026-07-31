@@ -29,6 +29,8 @@ export type CtvCaseListItem = {
   customerName: string;
   phoneMasked: string;
   projectName: string | null;
+  dealTier: string | null;
+  exclusiveStatus: string | null;
   milestone: NoxhMilestone;
   milestoneLabel: string;
   milestoneProgress: string;
@@ -43,6 +45,8 @@ export type CtvCaseListItem = {
   lockExpiresAt: string | null;
   lockCompliance: {
     businessDaysUntilLockExpiry: number | null;
+    calendarDaysUntilLockExpiry: number | null;
+    daysSinceValidCare: number | null;
     hasRecentProgress: boolean;
     needsProgressWarning: boolean;
     needsScheduleWarning: boolean;
@@ -60,6 +64,14 @@ export type CtvCaseDetail = CtvCaseListItem & {
     message: string;
     createdAt: string;
   }[];
+  careActivities: {
+    id: string;
+    activityType: string;
+    occurredAt: string;
+    note: string;
+    imageUrls: string[];
+    status: string;
+  }[];
 };
 
 type CaseWithDocs = {
@@ -74,6 +86,10 @@ type CaseWithDocs = {
   attributionLockedAt: Date | null;
   consultScheduledAt: Date | null;
   lockExpiresAt: Date | null;
+  dealTier?: string | null;
+  exclusiveStatus?: string | null;
+  exclusiveStartedAt?: Date | null;
+  lastValidCareAt?: Date | null;
   updatedAt: Date;
   project: { name: string } | null;
   documents: {
@@ -90,6 +106,14 @@ type CaseWithDocs = {
     assistType: string;
     message: string;
     createdAt: Date;
+  }[];
+  careActivities?: {
+    id: string;
+    activityType: string;
+    occurredAt: Date;
+    note: string;
+    imageUrls: string[];
+    status: string;
   }[];
 };
 
@@ -134,6 +158,10 @@ export function serializeCaseForCtv(caseRow: CaseWithDocs): CtvCaseDetail {
     attributionLockedAt: caseRow.attributionLockedAt,
     caseStatus: caseRow.caseStatus,
     assistLogs: caseRow.assistLogs ?? [],
+    exclusiveStartedAt: caseRow.exclusiveStartedAt,
+    lastValidCareAt: caseRow.lastValidCareAt,
+    exclusiveStatus: caseRow.exclusiveStatus,
+    alreadyExtended: caseRow.exclusiveStatus === "EXTENDED",
   });
 
   return {
@@ -142,6 +170,8 @@ export function serializeCaseForCtv(caseRow: CaseWithDocs): CtvCaseDetail {
     customerName: caseRow.customerName,
     phoneMasked: maskPhone(caseRow.phone),
     projectName: caseRow.project?.name ?? null,
+    dealTier: caseRow.dealTier ?? null,
+    exclusiveStatus: caseRow.exclusiveStatus ?? null,
     milestone: caseRow.milestone,
     milestoneLabel: MILESTONE_LABEL[caseRow.milestone],
     milestoneProgress: milestoneProgressLabel(caseRow.milestone),
@@ -156,6 +186,8 @@ export function serializeCaseForCtv(caseRow: CaseWithDocs): CtvCaseDetail {
     lockExpiresAt: caseRow.lockExpiresAt?.toISOString() ?? null,
     lockCompliance: {
       businessDaysUntilLockExpiry: compliance.businessDaysUntilLockExpiry,
+      calendarDaysUntilLockExpiry: compliance.calendarDaysUntilLockExpiry,
+      daysSinceValidCare: compliance.daysSinceValidCare,
       hasRecentProgress: compliance.hasRecentProgress,
       needsProgressWarning: compliance.needsProgressWarning,
       needsScheduleWarning: compliance.needsScheduleWarning,
@@ -170,6 +202,14 @@ export function serializeCaseForCtv(caseRow: CaseWithDocs): CtvCaseDetail {
       message: l.message,
       createdAt: l.createdAt.toISOString(),
     })),
+    careActivities: (caseRow.careActivities ?? []).map((a) => ({
+      id: a.id,
+      activityType: a.activityType,
+      occurredAt: a.occurredAt.toISOString(),
+      note: a.note,
+      imageUrls: a.imageUrls,
+      status: a.status,
+    })),
   };
 }
 
@@ -177,6 +217,12 @@ export function serializeCaseListItemForCtv(
   caseRow: CaseWithDocs,
 ): CtvCaseListItem {
   const detail = serializeCaseForCtv(caseRow);
-  const { documents: _d, missingDocs: _m, assistLogs: _a, ...list } = detail;
+  const {
+    documents: _d,
+    missingDocs: _m,
+    assistLogs: _a,
+    careActivities: _c,
+    ...list
+  } = detail;
   return list;
 }

@@ -5,6 +5,7 @@ import {
   buildResetUrl,
   buildTelesalesLoginUrl,
   buildVerifyUrl,
+  partnerContractOtpEmail,
   passwordOtpEmail,
   passwordResetEmail,
   telesalesGrantNotifyEmail,
@@ -40,6 +41,16 @@ export async function sendPasswordOtpEmail(
   purpose: "SET_PASSWORD" | "RESET_PASSWORD",
 ): Promise<{ sent: boolean }> {
   const tpl = passwordOtpEmail(name, code, purpose);
+  const result = await sendEmail({ ...tpl, to: email });
+  return { sent: result.ok };
+}
+
+export async function sendPartnerContractOtpEmail(
+  name: string,
+  email: string,
+  code: string,
+): Promise<{ sent: boolean }> {
+  const tpl = partnerContractOtpEmail(name, code);
   const result = await sendEmail({ ...tpl, to: email });
   return { sent: result.ok };
 }

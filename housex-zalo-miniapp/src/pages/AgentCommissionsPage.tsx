@@ -44,6 +44,11 @@ export function AgentCommissionsPage() {
       <h1 className="brand" style={{ fontSize: 22 }}>
         Hoa hồng
       </h1>
+      <p className="muted" style={{ marginTop: 4, marginBottom: 12 }}>
+        Hoa hồng nội bộ tính theo % × giá HĐMB (chưa VAT, chưa 2% bảo trì) sau khi
+        ký — Ops nhập giá. Trước HĐMB chỉ theo dõi tiến độ deal, chưa có số chi.
+        Thưởng thăm dự án +500k khi Admin xác nhận với CĐT.
+      </p>
 
       {loading ? <p className="muted">Đang tải…</p> : null}
       {err ? <p className="err">{err}</p> : null}
@@ -51,11 +56,11 @@ export function AgentCommissionsPage() {
       {data ? (
         <>
           <div className="card">
-            <h2>Tổng quan</h2>
+            <h2>Đã ghi nhận</h2>
             <p className="price" style={{ marginTop: 8 }}>
               {formatCommission(data.totalAmount)}
             </p>
-            <p className="muted">Tổng theo mọi trạng thái</p>
+            <p className="muted">Tổng theo mọi trạng thái (sau HĐMB / deal cũ)</p>
             <ul className="unit-list">
               {Object.entries(data.totalsByStatus ?? {}).map(([k, v]) =>
                 v.count > 0 ? (
@@ -72,7 +77,11 @@ export function AgentCommissionsPage() {
 
           {(data.items ?? []).length === 0 ? (
             <div className="card">
-              <p>Chưa có khoản hoa hồng.</p>
+              <p>Chưa có khoản hoa hồng sau HĐMB.</p>
+              <p className="muted" style={{ marginTop: 8 }}>
+                Khi deal còn đang chạy, theo dõi tại Hồ sơ — số tiền xuất hiện sau
+                Ops nhập giá HĐMB.
+              </p>
             </div>
           ) : (
             data.items.map((item) => (

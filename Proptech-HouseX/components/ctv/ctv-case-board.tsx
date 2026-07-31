@@ -2,9 +2,13 @@
 
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/ui/cn";
 import { CtvCaseDropForm } from "@/components/ctv/ctv-case-drop-form";
+import {
+  CtvCaseDetailPanel,
+  type CtvCaseDetailView,
+} from "@/components/ctv/ctv-case-detail-panel";
+import { DEAL_TIER_LABEL } from "@/lib/ctv/deal-tiers";
 
 type CaseItem = {
   id: string;
@@ -12,6 +16,7 @@ type CaseItem = {
   customerName: string;
   phoneMasked: string;
   projectName: string | null;
+  dealTier: string | null;
   milestoneLabel: string;
   milestoneProgress: string;
   milestoneSub: string | null;
@@ -21,18 +26,6 @@ type CaseItem = {
   opsNote: string | null;
   attributionLocked: boolean;
   updatedAt: string;
-};
-
-type CaseDetail = CaseItem & {
-  documents: {
-    id: string;
-    label: string;
-    status: string;
-    statusLabel: string;
-    rejectReason: string | null;
-    ctvActionHint: string | null;
-  }[];
-  missingDocs: { id: string; label: string; ctvActionHint: string | null }[];
 };
 
 function formatRelative(iso: string) {
@@ -46,7 +39,7 @@ function formatRelative(iso: string) {
 export function CtvCaseBoard() {
   const [items, setItems] = useState<CaseItem[]>([]);
   const [selectedId, setSelectedId] = useState<string | null>(null);
-  const [detail, setDetail] = useState<CaseDetail | null>(null);
+  const [detail, setDetail] = useState<CtvCaseDetailView | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [actionMsg, setActionMsg] = useState<string | null>(null);
@@ -86,13 +79,13 @@ export function CtvCaseBoard() {
     else setDetail(null);
   }, [selectedId, loadDetail]);
 
-  async function nudge(docType?: string) {
+  async function nudge() {
     if (!selectedId) return;
     setActionMsg(null);
     const res = await fetch(`/api/ctv/cases/${selectedId}/nudge`, {
       method: "POST",
       headers: { "content-type": "application/json" },
-      body: JSON.stringify({ docType }),
+      body: JSON.stringify({}),
     });
     const json = await res.json();
     setActionMsg(
@@ -118,7 +111,33 @@ export function CtvCaseBoard() {
   return (
     <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)]">
       <div className="space-y-6">
-        <CtvCaseDropForm onCreated={loadList} />
+        <div className="flex flex-wrap gap-2 text-sm">
+          <Link
+            href="/moi-gioi/khai-bao"
+            className="rounded-lg border border-brand-200 bg-brand-50 px-3 py-1.5 font-medium text-brand-800 hover:bg-brand-100"
+          >
+            Khai báo A+B+C
+          </Link>
+          <Link
+            href="/moi-gioi/gio-hang"
+            className="rounded-lg border border-slate-200 px-3 py-1.5 text-slate-700 hover:bg-slate-50"
+          >
+            Giỏ hàng
+          </Link>
+          <Link
+            href="/moi-gioi/hoa-hong"
+            className="rounded-lg border border-slate-200 px-3 py-1.5 text-slate-700 hover:bg-slate-50"
+          >
+            Hoa hồng
+          </Link>
+        </div>
+
+        <CtvCaseDropForm
+          onCreated={(id) => {
+            void loadList();
+            setSelectedId(id);
+          }}
+        />
 
         <div className="rounded-2xl border border-slate-200 bg-white p-5">
           <h2 className="text-lg font-bold text-slate-900">Hồ sơ của bạn</h2>
@@ -147,6 +166,9 @@ export function CtvCaseBoard() {
                         </p>
                         <p className="text-xs text-slate-500">
                           {item.phoneMasked} · {item.code}
+                          {item.dealTier
+                            ? ` · ${DEAL_TIER_LABEL[item.dealTier] ?? item.dealTier}`
+                            : ""}
                         </p>
                       </div>
                       <span className="text-xs text-slate-400">
@@ -176,97 +198,20 @@ export function CtvCaseBoard() {
       <div className="rounded-2xl border border-slate-200 bg-white p-5 lg:sticky lg:top-4 lg:self-start">
         {!detail ? (
           <p className="text-sm text-slate-500">
-            Chọn một hồ sơ để xem checklist và nhắc khách qua HouseX.
+            Chọn một hồ sơ để xem CS, checklist và nhắc khách qua HouseX.
           </p>
         ) : (
-          <>
-            <p className="text-xs font-medium uppercase tracking-wide text-slate-400">
-              {detail.code}
-            </p>
-            <h3 className="mt-1 text-xl font-bold text-slate-900">
-              {detail.customerName}
-            </h3>
-            <p className="text-sm text-slate-500">
-              Liên hệ: {detail.phoneMasked}
-              {detail.projectName ? ` · ${detail.projectName}` : ""}
-            </p>
-            {detail.attributionLocked ? (
-              <p className="mt-2 rounded-lg bg-violet-50 px-3 py-2 text-xs text-violet-800">
-                Đã cọc — quyền giới thiệu đã chốt.
-              </p>
-            ) : null}
-
-            <p className="mt-4 text-sm font-medium text-slate-800">
-              {detail.milestoneProgress} — {detail.milestoneLabel}
-            </p>
-            {detail.opsNote ? (
-              <p className="mt-2 rounded-lg bg-slate-50 px-3 py-2 text-sm text-slate-600">
-                Ops: {detail.opsNote}
-              </p>
-            ) : null}
-
-            {actionMsg ? (
-              <p className="mt-3 text-sm text-emerald-700">{actionMsg}</p>
-            ) : null}
-
-            <div className="mt-4 flex flex-wrap gap-2">
-              <Button
-                type="button"
-                size="sm"
-                variant="outline"
-                onClick={() => nudge()}
-              >
-                Nhắc qua HouseX
-              </Button>
-              <Button type="button" size="sm" variant="ghost" onClick={assistNote}>
-                Đã hỗ trợ ngoài đời
-              </Button>
-              <Link
-                href="/cong-cu/dieu-kien-noxh"
-                className="inline-flex items-center rounded-lg border border-slate-200 px-3 py-1.5 text-sm text-slate-700 hover:bg-slate-50"
-              >
-                Gửi checklist NOXH
-              </Link>
-            </div>
-
-            <h4 className="mt-6 text-sm font-bold text-slate-900">Checklist giấy tờ</h4>
-            <ul className="mt-2 space-y-2">
-              {detail.documents
-                .filter((d) => d.status !== "NOT_REQUIRED")
-                .map((d) => (
-                  <li
-                    key={d.id}
-                    className="rounded-lg border border-slate-100 px-3 py-2 text-sm"
-                  >
-                    <div className="flex items-center justify-between gap-2">
-                      <span className="font-medium text-slate-800">{d.label}</span>
-                      <span
-                        className={cn(
-                          "text-xs font-semibold",
-                          d.status === "PASSED" && "text-emerald-600",
-                          (d.status === "MISSING" || d.status === "REJECTED") &&
-                            "text-rose-600",
-                          d.status === "REVIEWING" && "text-amber-600",
-                        )}
-                      >
-                        {d.statusLabel}
-                      </span>
-                    </div>
-                    {d.rejectReason ? (
-                      <p className="mt-1 text-xs text-rose-600">{d.rejectReason}</p>
-                    ) : null}
-                    {d.ctvActionHint &&
-                    (d.status === "MISSING" || d.status === "REJECTED") ? (
-                      <p className="mt-1 text-xs text-slate-500">{d.ctvActionHint}</p>
-                    ) : null}
-                  </li>
-                ))}
-            </ul>
-
-            <p className="mt-6 text-xs text-slate-400">
-              Mọi tư vấn pháp lý do chuyên viên HouseX phụ trách.
-            </p>
-          </>
+          <CtvCaseDetailPanel
+            detail={detail}
+            actionMsg={actionMsg}
+            onNudge={() => void nudge()}
+            onAssistNote={() => void assistNote()}
+            onCareSaved={() => {
+              if (selectedId) void loadDetail(selectedId);
+              void loadList();
+            }}
+            showOpenLink
+          />
         )}
       </div>
     </div>

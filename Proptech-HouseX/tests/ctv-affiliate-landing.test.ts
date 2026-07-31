@@ -15,6 +15,7 @@ import {
   CTV_AFFILIATE_RULES,
   CTV_AFFILIATE_SEO_DESCRIPTION,
   CTV_AFFILIATE_SEO_TITLE,
+  CTV_AFFILIATE_TIERS,
 } from "@/lib/content/ctv-affiliate-landing";
 import { PARTNERSHIPS_PAGE } from "@/lib/content/partnerships-page-content";
 import { ABOUT_PARTNER_SECTION } from "@/lib/content/messaging/about-public";
@@ -33,6 +34,10 @@ function allPublicBlob(): string {
     ),
     ...CTV_AFFILIATE_RULES.steps.map((s) => `${s.title} ${s.desc}`),
     CTV_AFFILIATE_RULES.note,
+    CTV_AFFILIATE_TIERS.heading,
+    CTV_AFFILIATE_TIERS.lead,
+    CTV_AFFILIATE_TIERS.note,
+    ...CTV_AFFILIATE_TIERS.items.map((t) => `${t.name} ${t.desc}`),
     CTV_AFFILIATE_CTAS.closing,
   ].join("\n");
   const articles = CTV_AFFILIATE_ARTICLES.map(

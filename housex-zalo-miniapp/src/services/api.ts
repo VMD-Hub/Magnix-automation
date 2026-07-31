@@ -17,6 +17,9 @@ export type HouseXUser = {
   ctvApplicationStatus?: string | null;
   opsTools?: { telesales?: boolean };
   passwordReady?: boolean;
+  partnerContractStatus?: string | null;
+  partnerContractSignedAt?: string | null;
+  partnerContractVersion?: string | null;
 };
 
 type ApiOk<T> = { data: T };
@@ -72,7 +75,11 @@ export async function apiFetch<T>(
    * Production chưa rebuild sẽ chặn → "Load failed" trong Zalo.
    * Channel gắn query khi cần (xem attachMiniappChannel).
    */
-  if (fetchInit.body && !headers.has("Content-Type")) {
+  if (
+    fetchInit.body &&
+    !headers.has("Content-Type") &&
+    !(fetchInit.body instanceof FormData)
+  ) {
     headers.set("Content-Type", "application/json");
   }
   const token = getToken();

@@ -3,11 +3,30 @@ import { Link, Navigate, useParams } from "react-router-dom";
 import { useAuth } from "@/auth-context";
 import {
   addCtvCaseNote,
+  createCareActivity,
   getCtvCase,
   nudgeCtvCase,
   updateCtvCaseSchedule,
+  uploadCareImage,
+  type CareActivityType,
   type CtvCaseDetail,
 } from "@/services/agent";
+
+const CARE_TYPES: Array<{ id: CareActivityType; label: string }> = [
+  { id: "CALL", label: "Gọi" },
+  { id: "CHAT", label: "Chat" },
+  { id: "MEET", label: "Gặp" },
+  { id: "SITE_VISIT", label: "Thăm DA" },
+  { id: "DOCUMENT", label: "Giấy tờ" },
+  { id: "OTHER", label: "Khác" },
+];
+
+const TIER_LABEL: Record<string, string> = {
+  CONNECTOR: "Connector",
+  CONSULTANT: "Consultant",
+  DEVELOPER_PARTNER: "Developer Partner",
+  MASTER_BROKER: "Master Broker",
+};
 
 function toLocalInputValue(iso: string | null): string {
   if (!iso) return "";
@@ -27,6 +46,9 @@ export function AgentCaseDetailPage() {
   const [consultAt, setConsultAt] = useState("");
   const [progressNote, setProgressNote] = useState("");
   const [actionMsg, setActionMsg] = useState<string | null>(null);
+  const [careType, setCareType] = useState<CareActivityType>("CALL");
+  const [careNote, setCareNote] = useState("");
+  const [careFile, setCareFile] = useState<File | null>(null);
 
   useEffect(() => {
     if (!canAgent || !id) return;
@@ -75,9 +97,32 @@ export function AgentCaseDetailPage() {
       const d = await getCtvCase(row.id);
       setRow(d);
       setProgressNote("");
-      setActionMsg("Đã ghi tiến độ — lock có thể được gia hạn nếu đủ điều kiện.");
+      setActionMsg("Đã ghi ghi chú hỗ trợ.");
     } catch (e) {
       setActionMsg(e instanceof Error ? e.message : "Không ghi được tiến độ");
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function onSaveCare() {
+    if (!row || careNote.trim().length < 3 || !careFile) return;
+    setBusy(true);
+    setActionMsg(null);
+    try {
+      const { url } = await uploadCareImage(row.id, careFile);
+      await createCareActivity(row.id, {
+        activityType: careType,
+        note: careNote.trim(),
+        imageUrls: [url],
+      });
+      const d = await getCtvCase(row.id);
+      setRow(d);
+      setCareNote("");
+      setCareFile(null);
+      setActionMsg("Đã ghi chăm sóc hợp lệ — đồng hồ độc quyền được làm mới.");
+    } catch (e) {
+      setActionMsg(e instanceof Error ? e.message : "Không ghi được CS");
     } finally {
       setBusy(false);
     }
@@ -111,6 +156,8 @@ export function AgentCaseDetailPage() {
     );
   }
 
+  const calendarLeft = row.lockCompliance?.calendarDaysUntilLockExpiry;
+
   return (
     <div>
       <Link to="/agent/ho-so" className="muted">
@@ -118,6 +165,7 @@ export function AgentCaseDetailPage() {
       </Link>
       <p className="muted" style={{ marginTop: 8 }}>
         {row.code}
+        {row.dealTier ? ` · ${TIER_LABEL[row.dealTier] ?? row.dealTier}` : ""}
       </p>
       <h1 className="brand" style={{ fontSize: 22 }}>
         {row.customerName}
@@ -133,15 +181,15 @@ export function AgentCaseDetailPage() {
         <p className="muted" style={{ marginTop: 6 }}>
           Hồ sơ giấy tờ: {row.docPassed}/{row.docRequired} ({row.docPercent}%)
         </p>
-        {row.lockCompliance?.businessDaysUntilLockExpiry != null ? (
+        {calendarLeft != null ? (
           <p className="muted" style={{ marginTop: 6 }}>
-            Còn {row.lockCompliance.businessDaysUntilLockExpiry} ngày làm việc
-            giữ lead
+            Còn ~{calendarLeft} ngày dương lịch độc quyền (tối đa 60; im 30 ngày
+            không CS → nhả)
           </p>
         ) : null}
         {row.lockCompliance?.needsProgressWarning ? (
           <p className="err" style={{ marginTop: 8 }}>
-            Cần ghi tiến độ tư vấn trong 7 ngày LV để giữ lock.
+            Cần ghi CS hợp lệ (ghi chú + ảnh) để giữ độc quyền.
           </p>
         ) : null}
         {row.lockCompliance?.needsScheduleWarning ? (
@@ -153,6 +201,59 @@ export function AgentCaseDetailPage() {
           <p className="muted" style={{ marginTop: 8 }}>
             Ops: {row.opsNote}
           </p>
+        ) : null}
+      </div>
+
+      <div className="card">
+        <h2>Chăm sóc (CS hợp lệ)</h2>
+        <p className="muted" style={{ marginBottom: 8 }}>
+          Enum + ghi chú + ≥1 ảnh — reset đồng hồ im 30 ngày.
+        </p>
+        <div className="agent-filter-pills" style={{ marginBottom: 8 }}>
+          {CARE_TYPES.map((t) => (
+            <button
+              key={t.id}
+              type="button"
+              className={careType === t.id ? "is-on" : ""}
+              onClick={() => setCareType(t.id)}
+            >
+              {t.label}
+            </button>
+          ))}
+        </div>
+        <textarea
+          className="input textarea"
+          rows={3}
+          placeholder="Nội dung chăm sóc…"
+          value={careNote}
+          onChange={(e) => setCareNote(e.target.value)}
+        />
+        <input
+          type="file"
+          accept="image/jpeg,image/png,image/webp"
+          style={{ marginTop: 8, display: "block" }}
+          onChange={(e) => setCareFile(e.target.files?.[0] ?? null)}
+        />
+        <button
+          className="btn"
+          type="button"
+          style={{ marginTop: 8 }}
+          disabled={busy || careNote.trim().length < 3 || !careFile}
+          onClick={onSaveCare}
+        >
+          Gửi CS
+        </button>
+        {(row.careActivities?.length ?? 0) > 0 ? (
+          <ul className="unit-list" style={{ marginTop: 12 }}>
+            {row.careActivities!.slice(0, 5).map((a) => (
+              <li key={a.id}>
+                <strong>
+                  {a.activityType} · {a.status}
+                </strong>
+                <span>{a.note}</span>
+              </li>
+            ))}
+          </ul>
         ) : null}
       </div>
 
@@ -176,11 +277,11 @@ export function AgentCaseDetailPage() {
       </div>
 
       <div className="card">
-        <h2>Ghi tiến độ</h2>
+        <h2>Ghi chú hỗ trợ</h2>
         <textarea
           className="input textarea"
           rows={3}
-          placeholder="Đã gọi khách, hẹn gặp…"
+          placeholder="Ghi chú nội bộ (không thay CS hợp lệ)…"
           value={progressNote}
           onChange={(e) => setProgressNote(e.target.value)}
         />
@@ -191,7 +292,7 @@ export function AgentCaseDetailPage() {
           disabled={busy || progressNote.trim().length < 3}
           onClick={onSaveProgress}
         >
-          Lưu tiến độ
+          Lưu ghi chú
         </button>
       </div>
 

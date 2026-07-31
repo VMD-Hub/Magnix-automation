@@ -1,31 +1,33 @@
 /**
  * Landing công khai CTV / bán hàng liên kết — `/affiliate-bat-dong-san`.
- * Giọng nền tảng B2B: rõ vai trò và cách hợp tác — không khung workshop marketing.
+ * Giọng nền tảng B2B + chương trình đồng hành NOXH (SoT:
+ * docs/ops/AFFILIATE_NOXH_PROGRAM_OPS.md).
+ * Không công bố bảng % hoa hồng trên trang này — chi tiết trong tài khoản đối tác.
  */
 
 export const CTV_AFFILIATE_PATH = "/affiliate-bat-dong-san" as const;
 
 export const CTV_AFFILIATE_TITLE =
-  "Cộng tác viên bất động sản — hợp tác minh bạch với House X" as const;
+  "Cộng tác viên — đồng hành nhà ở xã hội với House X" as const;
 
 export const CTV_AFFILIATE_SEO_TITLE =
-  "Cộng tác viên BĐS minh bạch — tránh cắt máu hoa hồng | House X" as const;
+  "Cộng tác viên NOXH — chọn cấp hợp tác theo từng giao dịch | House X" as const;
 
 /** Meta description 70–160 ký tự. */
 export const CTV_AFFILIATE_SEO_DESCRIPTION =
-  "Chương trình cộng tác viên House X: giới thiệu khách, bán hàng liên kết hoặc mua cho mình — hợp tác minh bạch, không đua cắt máu hoa hồng." as const;
+  "Chương trình cộng tác House X: đồng hành nhà ở xã hội, chọn cấp hợp tác linh hoạt theo từng giao dịch — minh bạch, không công bố thỏa thuận ngoài luồng." as const;
 
 export const CTV_AFFILIATE_H1 =
-  "Chương trình cộng tác viên bất động sản House X" as const;
+  "Đồng hành cùng chương trình nhà ở quốc gia" as const;
 
 export const CTV_AFFILIATE_LEAD =
-  "House X kết nối đối tác giới thiệu, bán hàng liên kết và người mua trên cùng một khung hợp tác rõ ràng — thay cho thỏa thuận hoa hồng ngoài luồng dễ làm mất uy tín nghề và niềm tin khách hàng." as const;
+  "House X mở khung cộng tác viên để bạn giới thiệu, tư vấn hoặc đồng hành hồ sơ nhà ở xã hội — linh hoạt theo từng giao dịch. Thông điệp: An cư - Vì bạn xứng đáng. Đơn vị đồng hành: Liên Đoàn Lao Động TP. Hồ Chí Minh." as const;
 
 export const CTV_AFFILIATE_PAIN = {
-  heading: "Vì sao cần khung hợp tác minh bạch?",
+  heading: "Vì sao cần khung hợp tác rõ?",
   body: [
-    "Khi hoa hồng cá nhân bị mặc cả ngoài quy trình, biên lợi nhuận của người tư vấn mỏng đi và trách nhiệm sau giao dịch thường bị cắt theo. Khách có thể tưởng mình được ưu đãi, nhưng thiếu đồng hành pháp lý và hậu mãi.",
-    "House X xây chương trình cộng tác viên để ghi nhận giới thiệu / bán hàng liên kết một cách chính danh — cạnh tranh bằng chuyên môn và dịch vụ, không bằng cuộc đua giảm hoa hồng ngoài luồng.",
+    "Nhiều người có tệp khách hoặc người thân cần an cư nhưng ngại đóng vai môi giới, hoặc chưa biết chọn mức đồng hành nào cho từng trường hợp.",
+    "House X cho phép bạn chọn cấp độ hợp tác trên mỗi giao dịch — từ chỉ giới thiệu lead đến đồng hành sâu — trên cùng một quy trình minh bạch, không mặc cả miệng ngoài hệ thống.",
   ],
 } as const;
 
@@ -37,83 +39,115 @@ export type CtvPersonaCard = {
 
 export const CTV_AFFILIATE_PERSONAS: readonly CtvPersonaCard[] = [
   {
-    role: "Nhân viên ngân hàng, bảo hiểm, chứng khoán",
+    role: "Nhân sự, kế toán, bảo hiểm, ngân hàng, chứng khoán",
     context:
-      "Khách hàng tin tưởng bạn về tài chính và thường hỏi thêm về nhà ở xã hội hoặc dự án bất động sản.",
+      "Bạn đang nắm tệp khách hoặc đồng nghiệp có nhu cầu an cư nhưng e ngại thủ tục và tài chính.",
     partnership:
-      "Bạn giới thiệu đúng kênh; House X đảm nhiệm tư vấn sản phẩm. Bạn giữ vai trò người cố vấn đáng tin cậy.",
+      "Có thể chỉ giới thiệu lead để House X tư vấn và chốt; hoặc chọn mức đồng hành sâu hơn trên từng giao dịch.",
   },
   {
-    role: "Môi giới bất động sản độc lập",
+    role: "Sales ô tô, xe tải — môi giới tự do",
     context:
-      "Bạn muốn giữ chuẩn tư vấn và đồng hành sau giao dịch, thay vì cạnh tranh chỉ bằng giảm hoa hồng.",
+      "Khách mua xe hoặc tìm nhà thương mại thường có nhu cầu an cư chưa khép được.",
     partnership:
-      "Hợp tác trên nền tảng có quy trình rõ — tập trung chuyên môn pháp lý và lựa chọn căn phù hợp.",
+      "Cross-sale sang nhà ở xã hội trên khung hợp tác rõ — chọn cấp tư vấn hoặc đồng hành hồ sơ theo deal.",
   },
   {
-    role: "Người có mạng lưới, không muốn bán trực tiếp",
+    role: "Cán bộ công đoàn, HR, mạng lưới KCX–KCN",
     context:
-      "Người thân hoặc đồng nghiệp cần mua nhà; bạn muốn hỗ trợ giới thiệu mà không đóng vai môi giới.",
+      "Bạn gắn với người lao động cần mái ấm ổn định và thông tin chính thống.",
     partnership:
-      "Bạn thực hiện giới thiệu; House X hỗ trợ tư vấn và hoàn tất giao dịch khi cần.",
+      "Làm cầu nối nhân văn: giới thiệu đúng kênh; House X hỗ trợ tư vấn và hồ sơ khi bạn không muốn bán trực tiếp.",
+  },
+  {
+    role: "Người có quan hệ rộng, không muốn bán kiểu môi giới",
+    context:
+      "Người quen cần mua nhà; bạn ngại hoặc chậm, chỉ muốn giới thiệu.",
+    partnership:
+      "Chọn cấp giới thiệu trên giao dịch đó — House X tư vấn và hoàn tất; bạn theo dõi tiến độ trên hệ thống.",
+  },
+  {
+    role: "Môi giới chuyên nghiệp (có hoặc đang hướng tới chứng chỉ)",
+    context:
+      "Bạn muốn làm sâu hồ sơ hoặc độc lập A–Z trên từng sản phẩm.",
+    partnership:
+      "Chọn cấp đồng hành hồ sơ hoặc tổng đại lý liên kết theo giao dịch — trong khung đối soát minh bạch của House X.",
   },
   {
     role: "Người mua cho chính mình",
     context:
-      "Bạn ưu tiên giao dịch minh bạch, không dựa trên thỏa thuận hoa hồng miệng ngoài quy trình.",
+      "Bạn muốn giao dịch rõ ràng, đồng hành hồ sơ nhà ở xã hội trên nền tảng có quy trình.",
     partnership:
-      "Tham gia chương trình cộng tác viên để mua trên cùng khung hợp tác rõ ràng với House X.",
-  },
-  {
-    role: "Truyền thông, HR, công đoàn, mạng lưới khu công nghiệp",
-    context:
-      "Bạn tiếp cận nhóm quan tâm nhà ở nhưng cần kênh sản phẩm và quy trình đáng tin cậy.",
-    partnership:
-      "Giới thiệu có kiểm chứng; đồng hành nội dung hoặc dự án khi hai bên phù hợp.",
+      "Đăng ký cộng tác viên và chọn mức đồng hành phù hợp trên giao dịch của bạn.",
   },
 ] as const;
 
 export const CTV_AFFILIATE_WHO = {
   heading: "Đối tượng hợp tác",
   intro:
-    "Chương trình không giới hạn môi giới bất động sản. Dưới đây là các nhóm đối tác thường gặp và cách hợp tác với House X.",
+    "Chương trình không giới hạn môi giới bất động sản. Bạn chọn cách hợp tác theo từng giao dịch — không bị gắn một cấp cố định cho cả tài khoản.",
+} as const;
+
+/** Bốn chế độ — thông điệp public (không nêu %). */
+export const CTV_AFFILIATE_TIERS = {
+  heading: "Bốn mức hợp tác — chọn theo từng giao dịch",
+  lead: "Bạn không bị khóa một mức cố định. Với mỗi khách / dự án, hãy chọn cách đồng hành phù hợp tình huống bán của bạn.",
+  items: [
+    {
+      name: "Cộng tác viên giới thiệu (Connector)",
+      desc: "Chỉ kết nối khách quan tâm. House X tư vấn và xử lý chuyên sâu.",
+    },
+    {
+      name: "Chuyên viên tư vấn đồng hành (Consultant)",
+      desc: "Tư vấn nhu cầu ban đầu; phối hợp House X hoàn thiện hồ sơ.",
+    },
+    {
+      name: "Đối tác phát triển dự án (Developer Partner)",
+      desc: "Đồng hành hoàn tất thủ tục nhà ở xã hội — có đào tạo và hỗ trợ từ House X.",
+    },
+    {
+      name: "Tổng đại lý liên kết (Master Broker)",
+      desc: "Thực hiện quy trình độc lập hơn trên giao dịch — dành cho môi giới chuyên nghiệp đủ điều kiện.",
+    },
+  ],
+  note: "Chi tiết quyền lợi và đối soát xem trong tài khoản đối tác sau khi tham gia — không thỏa thuận miệng ngoài hệ thống.",
 } as const;
 
 export const CTV_AFFILIATE_RULES = {
   heading: "Quy trình tham gia",
   steps: [
     {
-      title: "Đăng ký chương trình",
-      desc: "Dành cho nhiều ngành nghề: tài chính, bảo hiểm, chứng khoán, môi giới độc lập, người có mạng lưới hoặc người mua.",
+      title: "Đăng ký cộng tác viên",
+      desc: "Mở tài khoản đối tác trên House X — dành cho nhiều ngành nghề và người có mạng lưới.",
     },
     {
-      title: "Định hướng hợp tác",
-      desc: "Đội ngũ House X trao đổi cách giới thiệu hoặc mua phù hợp với vai trò của bạn, kèm hỗ trợ tư vấn khi cần.",
+      title: "Kích hoạt khung hợp tác",
+      desc: "Hoàn tất bước xét duyệt / thỏa thuận theo hướng dẫn. Chính sách chung công khai; chi tiết đối soát trong tài khoản.",
     },
     {
-      title: "Bắt đầu giới thiệu, bán hoặc mua",
-      desc: "Bạn chọn mức tham gia: chỉ giới thiệu, bán hàng liên kết, hoặc mua cho mình — trên khung hợp tác minh bạch.",
+      title: "Khai báo từng giao dịch",
+      desc: "Với mỗi lead: chọn khách, dự án quan tâm, và mức hợp tác phù hợp. House X bố trí hỗ trợ và theo dõi theo lựa chọn đó.",
     },
   ],
-  note: "Điều khoản hợp tác được trao đổi trực tiếp khi bạn tham gia — phù hợp từng trường hợp, không dựa trên thỏa thuận miệng ngoài quy trình.",
+  note: "Tiến độ chăm sóc và kết quả được cập nhật trên hệ thống để bạn theo dõi. Hoa hồng tính sau khi có hợp đồng mua bán — theo cấp đã chọn trên giao dịch.",
 } as const;
 
 export const CTV_AFFILIATE_BENEFITS = {
   heading: "Giá trị khi hợp tác trên nền tảng",
   forReferrers: {
-    title: "Đối tác giới thiệu / cộng tác viên",
+    title: "Khi bạn chỉ muốn giới thiệu",
     items: [
-      "Đóng góp được ghi nhận chính danh trên khung hợp tác rõ ràng.",
-      "Có thể chỉ giới thiệu: House X hỗ trợ tư vấn và hoàn tất giao dịch.",
-      "Người mua cũng tham gia cùng một chuẩn minh bạch — không ép giảm hoa hồng ngoài luồng.",
+      "Chọn cấp giới thiệu trên giao dịch — không ép bán kiểu môi giới.",
+      "House X tư vấn và chốt; bạn theo dõi tiến độ trên hệ thống.",
+      "Ghi nhận chính danh, đối soát rõ — không thỏa thuận miệng ngoài luồng.",
     ],
   },
   forPros: {
-    title: "Chuyên gia tư vấn sâu",
+    title: "Khi bạn muốn đồng hành sâu hơn",
     items: [
-      "Giữ chuẩn tư vấn và đồng hành pháp lý — cạnh tranh bằng chuyên môn.",
-      "Mạng lưới giới thiệu được House X ghi nhận có hệ thống.",
-      "Làm việc trên cùng nền tảng dự án và nhà ở xã hội.",
+      "Chọn cấp tư vấn hoặc đồng hành hồ sơ theo từng deal.",
+      "Công cụ, đào tạo và quy trình nhà ở xã hội trên cùng nền tảng.",
+      "Linh hoạt: deal này giới thiệu, deal khác làm sâu — cùng một tài khoản.",
     ],
   },
 } as const;
@@ -121,21 +155,21 @@ export const CTV_AFFILIATE_BENEFITS = {
 export const CTV_AFFILIATE_COMPARE = {
   heading: "Hai cách hợp tác",
   oldModel: {
-    title: "Thỏa thuận hoa hồng ngoài luồng",
+    title: "Thỏa thuận ngoài luồng",
     steps: [
-      "Hoa hồng không được công bố rõ",
+      "Hoa hồng không được ghi nhận rõ trên hệ thống",
       "Áp lực giảm thù lao để chốt giao dịch",
-      "Hỗ trợ sau giao dịch dễ bị cắt giảm",
+      "Khó theo dõi tiến độ sau khi giới thiệu",
       "Uy tín nghề và niềm tin khách hàng suy giảm",
     ],
   },
   newModel: {
     title: "Cộng tác viên House X",
     steps: [
-      "Đăng ký tham gia chương trình",
-      "Hợp tác theo khung minh bạch với House X",
-      "Giới thiệu hoặc mua đúng kênh",
-      "Tư vấn và pháp lý theo năng lực từng bên",
+      "Đăng ký và kích hoạt khung hợp tác",
+      "Mỗi giao dịch: chọn khách, dự án, cấp hợp tác",
+      "Theo dõi tiến độ chăm sóc trên hệ thống",
+      "Đối soát sau hợp đồng mua bán — trong tài khoản đối tác",
     ],
   },
 } as const;
@@ -145,27 +179,32 @@ export const CTV_AFFILIATE_FAQS: readonly { question: string; answer: string }[]
     {
       question: "Ai có thể đăng ký cộng tác viên?",
       answer:
-        "Người có nhu cầu giới thiệu, bán hàng liên kết hoặc mua qua House X — nhân viên ngân hàng, bảo hiểm, chứng khoán, môi giới độc lập, người có mạng lưới, hoặc người mua cho mình.",
+        "Người muốn giới thiệu, tư vấn hoặc đồng hành hồ sơ nhà ở xã hội với House X — nhân sự tài chính, sales, công đoàn, môi giới, người có mạng lưới, hoặc người mua cho mình.",
+    },
+    {
+      question: "Tôi có bị gắn một cấp cố định không?",
+      answer:
+        "Không. Bạn chọn cấp độ hợp tác cho từng giao dịch — ví dụ chỉ giới thiệu lead để House X tư vấn và chốt, hoặc đồng hành sâu hồ sơ trên deal khác.",
     },
     {
       question: "Tôi có cần chứng chỉ môi giới không?",
       answer:
-        "Không bắt buộc ngay từ đầu. Mức đồng hành có thể khác nhau tùy bạn tự tư vấn hay nhờ House X hỗ trợ — đội ngũ sẽ trao đổi khi bạn tham gia.",
+        "Không bắt buộc để bắt đầu ở mức giới thiệu. Các mức đồng hành sâu hơn có thể yêu cầu đào tạo hoặc điều kiện nghề — đội ngũ trao đổi khi bạn tham gia.",
     },
     {
-      question: "Thưởng được thỏa thuận thế nào?",
+      question: "Thưởng và hoa hồng công bố thế nào?",
       answer:
-        "Theo thỏa thuận hợp tác rõ ràng với House X — không mặc cả miệng ngoài quy trình. Chi tiết phù hợp từng trường hợp khi bạn tham gia.",
+        "Chính sách chung (cấp hợp tác, quy trình) công khai trên chương trình. Mức chi tiết xem trong tài khoản đối tác sau khi tham gia — không mặc cả miệng ngoài hệ thống.",
     },
     {
-      question: "Khác gì với chỉ đăng tin môi giới?",
+      question: "Tôi chỉ muốn giới thiệu người quen thì sao?",
       answer:
-        "Đăng tin đưa sản phẩm lên sàn. Cộng tác viên là chương trình giới thiệu và bán hàng liên kết với House X — có thể làm cả hai nếu phù hợp.",
+        "Chọn cấp giới thiệu trên giao dịch đó: khai báo khách và dự án quan tâm; House X tư vấn và hoàn tất. Bạn theo dõi tiến độ trên hệ thống.",
     },
     {
-      question: "Tôi chỉ muốn giới thiệu người thân thì sao?",
+      question: "Liên Đoàn Lao Động TP.HCM đóng vai trò gì?",
       answer:
-        "Được. Bạn giới thiệu đúng kênh; House X hỗ trợ tư vấn và hoàn tất giao dịch nếu bạn không muốn bán trực tiếp.",
+        "Là đơn vị đồng hành của chương trình hướng tới an cư cho người lao động. House X vận hành nền tảng cộng tác và quy trình đối tác.",
     },
   ];
 
@@ -183,14 +222,14 @@ export const CTV_AFFILIATE_CTAS = {
     href: "/lien-he?goi=tu-van-cong-tac-vien#tu-van",
   },
   closing:
-    "Chọn khung hợp tác minh bạch giúp nghề và khách hàng đi đường dài. Đăng ký để tham gia mạng lưới cộng tác viên House X, hoặc yêu cầu tư vấn thêm trước khi quyết định.",
+    "Chọn cấp hợp tác linh hoạt theo từng giao dịch — minh bạch trên House X. Đăng ký cộng tác viên hoặc yêu cầu tư vấn trước khi quyết định.",
 } as const;
 
 export const CTV_AFFILIATE_CLOSING_HEADING =
-  "Sẵn sàng hợp tác với House X?" as const;
+  "Sẵn sàng đồng hành nhà ở xã hội với House X?" as const;
 
 export const CTV_AFFILIATE_ARTICLES_SECTION = {
   heading: "Tài liệu chương trình",
   intro:
-    "Đọc trước khi đăng ký: hiểu rủi ro của thỏa thuận hoa hồng ngoài luồng, cách hợp tác trên House X, và các bước bắt đầu phù hợp với vai trò của bạn.",
+    "Đọc trước khi đăng ký: hiểu khung hợp tác, cách chọn cấp theo giao dịch, và các bước bắt đầu phù hợp với vai trò của bạn.",
 } as const;

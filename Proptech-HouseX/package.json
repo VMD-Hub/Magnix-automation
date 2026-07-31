@@ -74,6 +74,8 @@
     "go-live:smoke-auth": "node --import tsx scripts/smoke-test-auth.ts",
     "go-live:smoke-listings": "node --import tsx scripts/smoke-test-listing-review.ts",
     "go-live:smoke-magnix-ingest": "node --env-file=.env --import tsx scripts/smoke-test-magnix-ingest.ts",
+    "ingest:zalo-uid-jsonl": "node --env-file=.env --import tsx scripts/ingest-zalo-uid-jsonl.ts",
+    "cohort:zalo-awc": "node --env-file=.env --import tsx scripts/cut-zalo-awc-cohort.ts",
     "go-live:check-sheet-mirror": "node --env-file=.env --import tsx scripts/check-sheet-mirror-env.ts",
     "go-live:smoke-sheet-mirror": "node --env-file=.env --import tsx scripts/smoke-test-sheet-mirror.ts",
     "go-live:smoke-email": "node --env-file=.env --import tsx scripts/smoke-test-email.ts",

@@ -1,12 +1,10 @@
-import type { Prisma } from "@prisma/client";
-import { prisma } from "@/lib/prisma";
 import { subtractBusinessDays } from "@/lib/noxh-case/business-days";
-import {
-  CTV_LOCK_WARNING_BUSINESS_DAYS,
-  evaluateCtvLockCompliance,
-} from "@/lib/noxh-case/ctv-lock-compliance";
+import { evaluateCtvLockCompliance } from "@/lib/noxh-case/ctv-lock-compliance";
+import { evaluateExclusiveClock } from "@/lib/affiliate/exclusivity";
 import { createBrokerNotification } from "@/lib/data/broker-notification";
 import { MILESTONE_LABEL } from "@/lib/noxh-case/milestone-labels";
+import type { Prisma } from "@prisma/client";
+import { prisma } from "@/lib/prisma";
 
 type Db = Prisma.TransactionClient | typeof prisma;
 
@@ -14,40 +12,86 @@ const M1_CONTACT_SLA_BUSINESS_HOURS = 48;
 
 /**
  * Cron bảo trì NOXH case:
- * - Release lock hết hạn (20 ngày LV, chưa cọc)
- * - Cảnh báo SLA M1 chưa liên hệ 48h
+ * - Release độc quyền: im ≥30 ngày calendar HOẶC quá trần 60 (+15 nếu có)
+ * - Cảnh báo SLA M1 / sắp im / sắp hết trần
  */
 export async function runNoxhCaseMaintenance(now = new Date()) {
   let released = 0;
+  let releasedSilent = 0;
+  let releasedExpired = 0;
   let slaAlerts = 0;
   let lockWarnings = 0;
 
-  const expiredLocks = await prisma.noxhCase.findMany({
+  const candidates = await prisma.noxhCase.findMany({
     where: {
       caseStatus: "ACTIVE",
       attributionLockedAt: null,
-      lockExpiresAt: { lt: now },
+      brokerId: { not: null },
+      OR: [
+        { lockExpiresAt: { not: null } },
+        {
+          exclusiveStatus: {
+            in: ["EXCLUSIVE", "EXTENDED", "EXTEND_REQUESTED"],
+          },
+        },
+      ],
     },
-    select: { id: true, brokerId: true, code: true },
+    select: {
+      id: true,
+      brokerId: true,
+      code: true,
+      claimedAt: true,
+      exclusiveStartedAt: true,
+      lastValidCareAt: true,
+      lockExpiresAt: true,
+      exclusiveStatus: true,
+    },
+    take: 200,
   });
 
-  for (const c of expiredLocks) {
+  for (const c of candidates) {
+    const started = c.exclusiveStartedAt ?? c.claimedAt;
+    const clock = evaluateExclusiveClock({
+      exclusiveStartedAt: started,
+      lockExpiresAt: c.lockExpiresAt,
+      lastValidCareAt: c.lastValidCareAt ?? started,
+      exclusiveStatus: c.exclusiveStatus ?? "EXCLUSIVE",
+      alreadyExtended: c.exclusiveStatus === "EXTENDED",
+      now,
+    });
+
+    if (!clock.shouldRelease || !clock.releaseReason) continue;
+
+    const exclusiveStatus =
+      clock.releaseReason === "silent"
+        ? "RELEASED_SILENT"
+        : "RELEASED_EXPIRED";
+
     await prisma.$transaction(async (tx) => {
       await tx.noxhCase.update({
         where: { id: c.id },
-        data: { caseStatus: "RELEASED", lockExpiresAt: now },
+        data: {
+          caseStatus: "RELEASED",
+          lockExpiresAt: now,
+          exclusiveStatus,
+        },
       });
       if (c.brokerId) {
         await createBrokerNotification(tx, {
           brokerId: c.brokerId,
           type: "case.lock_released",
-          title: "Hết thời gian giữ lead",
-          body: `Hồ sơ ${c.code} đã hết hạn lock 20 ngày làm việc — có thể được claim lại nếu khách chưa chốt.`,
+          title: "Hết độc quyền lead",
+          body:
+            clock.releaseReason === "silent"
+              ? `Hồ sơ ${c.code} nhả sớm — im ≥30 ngày không có CS hợp lệ.`
+              : `Hồ sơ ${c.code} hết trần độc quyền 60 ngày (hoặc +15 đã hết).`,
           caseId: c.id,
         });
       }
     });
     released += 1;
+    if (clock.releaseReason === "silent") releasedSilent += 1;
+    else releasedExpired += 1;
   }
 
   const staleM1 = await prisma.noxhCase.findMany({
@@ -98,6 +142,10 @@ export async function runNoxhCaseMaintenance(now = new Date()) {
       lockExpiresAt: true,
       attributionLockedAt: true,
       caseStatus: true,
+      exclusiveStartedAt: true,
+      lastValidCareAt: true,
+      exclusiveStatus: true,
+      claimedAt: true,
       assistLogs: { orderBy: { createdAt: "desc" }, take: 10 },
     },
     take: 80,
@@ -111,13 +159,20 @@ export async function runNoxhCaseMaintenance(now = new Date()) {
       attributionLockedAt: c.attributionLockedAt,
       caseStatus: c.caseStatus,
       assistLogs: c.assistLogs,
+      exclusiveStartedAt: c.exclusiveStartedAt ?? c.claimedAt,
+      lastValidCareAt: c.lastValidCareAt,
+      exclusiveStatus: c.exclusiveStatus,
+      alreadyExtended: c.exclusiveStatus === "EXTENDED",
       now,
     });
     if (
       !compliance.needsProgressWarning &&
-      !(compliance.needsScheduleWarning &&
-        compliance.businessDaysUntilLockExpiry !== null &&
-        compliance.businessDaysUntilLockExpiry <= CTV_LOCK_WARNING_BUSINESS_DAYS)
+      !compliance.needsScheduleWarning &&
+      !compliance.canRequestExtend &&
+      !(
+        compliance.calendarDaysUntilLockExpiry !== null &&
+        compliance.calendarDaysUntilLockExpiry <= 5
+      )
     ) {
       continue;
     }
@@ -132,21 +187,32 @@ export async function runNoxhCaseMaintenance(now = new Date()) {
     });
     if (exists) continue;
 
+    const daysLeft =
+      compliance.calendarDaysUntilLockExpiry ??
+      compliance.businessDaysUntilLockExpiry;
     const body = compliance.needsScheduleWarning
-      ? `Hồ sơ ${c.code}: chưa có lịch tư vấn — còn ${compliance.businessDaysUntilLockExpiry} ngày LV trước khi hết lock.`
-      : `Hồ sơ ${c.code}: cần ghi tiến độ tư vấn — còn ${compliance.businessDaysUntilLockExpiry} ngày LV.`;
+      ? `Hồ sơ ${c.code}: chưa có lịch tư vấn — còn ~${daysLeft} ngày trước khi hết độc quyền.`
+      : compliance.canRequestExtend
+        ? `Hồ sơ ${c.code}: gần hết 60 ngày — có thể xin Admin gia hạn +15 nếu còn CS hợp lệ.`
+        : `Hồ sơ ${c.code}: cần cập nhật CS (note + ảnh) — tránh nhả sớm sau 30 ngày im.`;
 
     await createBrokerNotification(prisma, {
       brokerId: c.brokerId,
       type: "case.lock_expiring",
-      title: "Sắp hết thời gian giữ lead",
+      title: "Sắp hết / rủi ro độc quyền lead",
       body,
       caseId: c.id,
     });
     lockWarnings += 1;
   }
 
-  return { released, slaAlerts, lockWarnings };
+  return {
+    released,
+    releasedSilent,
+    releasedExpired,
+    slaAlerts,
+    lockWarnings,
+  };
 }
 
 /** Tạo notification khi đổi milestone (gọi từ noxh-case update). */

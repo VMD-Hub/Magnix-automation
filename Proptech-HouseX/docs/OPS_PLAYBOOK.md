@@ -284,7 +284,8 @@ Wizard **tier HOT** tự tạo hồ sơ platform (`brokerId = null`). CTV chỉ 
 |------------|---------------|
 | Ads/form trùng SĐT CTV đang lock | **Không ghi đè** — mở queue Xung đột |
 | CTV claim trong khi Ops đã `CONTACTED`/`QUALIFIED` | Từ chối claim (hệ thống) — Ops giữ khách |
-| Lock CTV hết 20 ngày LV, không tiến độ | Ops có thể tiếp quản (theo rule) |
+| Lock CTV hết 60 ngày dương lịch (hoặc im 30 ngày không CS hợp lệ) | Ops có thể tiếp quản (theo rule) |
+| CTV xin gia hạn +15 gần hết trần | Admin duyệt/từ chối trên `/admin/noxh-cases` |
 | Đã cọc F1 (`UnitBooking`) | CTV giữ attribution — Ops hỗ trợ hậu kỳ |
 
 Chi tiết: `LEAD_ATTRIBUTION_CONFLICT_RULES.md`.

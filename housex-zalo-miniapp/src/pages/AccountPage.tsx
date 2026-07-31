@@ -330,7 +330,24 @@ export function AccountPage() {
                 Thông báo nhận tin dự án
               </Link>
             </p>
-          ) : null}
+          ) : (
+            <p style={{ marginTop: 10 }}>
+              E-contract:{" "}
+              <strong>
+                {user.partnerContractStatus === "SIGNED"
+                  ? "Đã ký"
+                  : user.partnerContractStatus === "PENDING"
+                    ? "Chờ ký"
+                    : user.partnerContractStatus ?? "Chưa ký"}
+              </strong>
+              {" · "}
+              <Link to="/agent/e-contract">
+                {user.partnerContractStatus === "SIGNED"
+                  ? "Xem"
+                  : "Ký ngay"}
+              </Link>
+            </p>
+          )}
         </div>
 
         {!canAgent ? (

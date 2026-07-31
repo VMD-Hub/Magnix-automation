@@ -18,6 +18,7 @@ import {
   CTV_AFFILIATE_RULES,
   CTV_AFFILIATE_SEO_DESCRIPTION,
   CTV_AFFILIATE_SEO_TITLE,
+  CTV_AFFILIATE_TIERS,
   CTV_AFFILIATE_TITLE,
   CTV_AFFILIATE_WHO,
 } from "@/lib/content/ctv-affiliate-landing";
@@ -145,6 +146,33 @@ export default function CtvAffiliateLandingPage() {
               {CTV_AFFILIATE_WHO.intro}
             </p>
             <CtvPersonaCards personas={CTV_AFFILIATE_PERSONAS} />
+          </section>
+
+          <section>
+            <h2 className="text-2xl font-bold text-slate-900">
+              {CTV_AFFILIATE_TIERS.heading}
+            </h2>
+            <p className="mt-4 leading-relaxed text-slate-600">
+              {CTV_AFFILIATE_TIERS.lead}
+            </p>
+            <ol className="mt-6 space-y-5">
+              {CTV_AFFILIATE_TIERS.items.map((tier, i) => (
+                <li key={tier.name} className="flex gap-4">
+                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-brand-600 text-sm font-bold text-white">
+                    {i + 1}
+                  </span>
+                  <div>
+                    <h3 className="font-semibold text-slate-900">{tier.name}</h3>
+                    <p className="mt-1 leading-relaxed text-slate-600">
+                      {tier.desc}
+                    </p>
+                  </div>
+                </li>
+              ))}
+            </ol>
+            <p className="mt-6 rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm leading-relaxed text-slate-600">
+              {CTV_AFFILIATE_TIERS.note}
+            </p>
           </section>
 
           <section>

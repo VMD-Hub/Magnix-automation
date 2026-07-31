@@ -3,16 +3,24 @@ import {
   CTV_CLAIM_LOCK_BUSINESS_DAYS,
   subtractBusinessDays,
 } from "@/lib/noxh-case/business-days";
+import {
+  computeExtendedExclusiveExpiry,
+  evaluateExclusiveClock,
+  SILENT_RELEASE_CALENDAR_DAYS,
+} from "@/lib/affiliate/exclusivity";
 
-/** CTV phải ghi tiến độ ít nhất mỗi N ngày làm việc để được gia hạn lock. */
+/** @deprecated Dùng SILENT_RELEASE_CALENDAR_DAYS — giữ alias cho test cũ. */
 export const CTV_PROGRESS_INTERVAL_BUSINESS_DAYS = Number(
   process.env.CTV_PROGRESS_INTERVAL_BUSINESS_DAYS ?? "7",
 );
 
-/** Cảnh báo trước khi hết lock (ngày làm việc). */
+/** Cảnh báo trước khi hết lock (ngày làm việc) — UI cũ; SoT dùng calendar. */
 export const CTV_LOCK_WARNING_BUSINESS_DAYS = Number(
   process.env.CTV_LOCK_WARNING_BUSINESS_DAYS ?? "3",
 );
+
+/** Fallback khi thiếu exclusiveStartedAt: ước ≈ 60 ngày trước expiry. */
+const EXCLUSIVE_FALLBACK_MS = 60 * 86_400_000;
 
 export type CtvLockCompliance = {
   hasConsultSchedule: boolean;
@@ -21,9 +29,17 @@ export type CtvLockCompliance = {
   consultScheduledAt: Date | null;
   /** Ngày làm việc còn lại đến hết lock (0 = hôm nay hoặc đã quá). */
   businessDaysUntilLockExpiry: number | null;
+  /** Calendar days còn lại (SoT 60). */
+  calendarDaysUntilLockExpiry: number | null;
+  daysSinceValidCare: number | null;
   needsProgressWarning: boolean;
   needsScheduleWarning: boolean;
+  /** Xin Admin +15 — không tự gia hạn chu kỳ 20 LV. */
+  canRequestExtend: boolean;
+  /** @deprecated Alias canRequestExtend — UI cũ. */
   canExtendLock: boolean;
+  shouldReleaseSilent: boolean;
+  shouldReleaseExpired: boolean;
 };
 
 function startOfLocalDay(d: Date): Date {
@@ -79,15 +95,39 @@ export function evaluateCtvLockCompliance(input: {
   attributionLockedAt: Date | null;
   caseStatus: string;
   assistLogs: { createdAt: Date }[];
+  exclusiveStartedAt?: Date | null;
+  lastValidCareAt?: Date | null;
+  exclusiveStatus?: string | null;
+  alreadyExtended?: boolean;
   now?: Date;
 }): CtvLockCompliance {
   const now = input.now ?? new Date();
   const hasConsultSchedule = !!input.consultScheduledAt;
-  const hasRecentProgress = hasAssistLogWithinBusinessDays(
-    input.assistLogs,
-    CTV_PROGRESS_INTERVAL_BUSINESS_DAYS,
+
+  const exclusiveStartedAt =
+    input.exclusiveStartedAt ??
+    (input.lockExpiresAt
+      ? new Date(
+          input.lockExpiresAt.getTime() -
+            EXCLUSIVE_FALLBACK_MS,
+        )
+      : now);
+
+  const lastValidCareAt =
+    input.lastValidCareAt ??
+    (input.assistLogs[0]?.createdAt ?? exclusiveStartedAt);
+
+  const clock = evaluateExclusiveClock({
+    exclusiveStartedAt,
+    lockExpiresAt: input.lockExpiresAt,
+    lastValidCareAt,
+    exclusiveStatus: input.exclusiveStatus ?? "EXCLUSIVE",
+    alreadyExtended: input.alreadyExtended ?? false,
     now,
-  );
+  });
+
+  const hasRecentProgress =
+    clock.daysSinceValidCare < SILENT_RELEASE_CALENDAR_DAYS;
 
   const lockActive =
     input.caseStatus === "ACTIVE" &&
@@ -100,15 +140,11 @@ export function evaluateCtvLockCompliance(input: {
     : null;
 
   const needsProgressWarning =
-    lockActive &&
-    businessDaysUntilLockExpiry !== null &&
-    businessDaysUntilLockExpiry <= CTV_LOCK_WARNING_BUSINESS_DAYS &&
-    !hasRecentProgress;
+    lockActive && (clock.needsSilentWarning || !hasRecentProgress);
 
   const needsScheduleWarning = lockActive && !hasConsultSchedule;
 
-  const canExtendLock =
-    lockActive && hasConsultSchedule && hasRecentProgress;
+  const canRequestExtend = lockActive && clock.canRequestExtend;
 
   return {
     hasConsultSchedule,
@@ -116,14 +152,30 @@ export function evaluateCtvLockCompliance(input: {
     lockExpiresAt: input.lockExpiresAt,
     consultScheduledAt: input.consultScheduledAt,
     businessDaysUntilLockExpiry,
+    calendarDaysUntilLockExpiry: clock.daysUntilExclusiveExpiry,
+    daysSinceValidCare: clock.daysSinceValidCare,
     needsProgressWarning,
     needsScheduleWarning,
-    canExtendLock,
+    canRequestExtend,
+    canExtendLock: canRequestExtend,
+    shouldReleaseSilent: clock.releaseReason === "silent",
+    shouldReleaseExpired: clock.releaseReason === "expired",
   };
 }
 
-/** Gia hạn lock khi CTV đủ lịch + tiến độ — tối đa thêm một chu kỳ 20 ngày LV. */
+/**
+ * Gia hạn +15 calendar khi Admin duyệt (SoT).
+ * Không còn cộng thêm chu kỳ 20 LV.
+ */
 export function computeExtendedLockExpiry(
+  currentExpiry: Date,
+  now: Date = new Date(),
+): Date {
+  return computeExtendedExclusiveExpiry(currentExpiry, now);
+}
+
+/** @deprecated Giữ export cho call site cũ — map sang +15. */
+export function computeLegacyBusinessDayExtension(
   currentExpiry: Date,
   now: Date = new Date(),
 ): Date {

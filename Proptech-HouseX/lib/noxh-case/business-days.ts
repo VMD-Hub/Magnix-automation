@@ -1,5 +1,9 @@
-/** Ngày làm việc (T2–T6) — dùng cho lock 20 ngày & dormant lead. */
+/** Ngày làm việc (T2–T6) — SLA M1 / dormant; độc quyền affiliate dùng calendar 60/30/+15. */
 
+/**
+ * @deprecated Affiliate exclusive dùng `lib/affiliate/exclusivity` (60 calendar).
+ * Giữ env để không phá deploy cũ; claim mới gọi `computeExclusiveExpiry`.
+ */
 export const CTV_CLAIM_LOCK_BUSINESS_DAYS = Number(
   process.env.CTV_CLAIM_LOCK_BUSINESS_DAYS ?? "20",
 );
