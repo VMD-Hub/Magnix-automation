@@ -1,7 +1,7 @@
 /**
  * Mock UI Agent — Citics-lite.
  * Cấu trúc đã duyệt (SoT): Proptech-HouseX/docs/ops/AGENT_MINIAPP_UI_APPROVED.md
- * Xem: /mock-agent.html — không gắn API.
+ * Xem: /dev/mock-agent.html — không gắn API.
  */
 import { useState } from "react";
 import "./mock-agent.css";
@@ -238,7 +238,7 @@ export function MockAgentPreview() {
           (tab + ô nhỏ) · Giỏ hàng giữa · FAB. SoT: A+B+C, CS, HH sau HĐMB.
         </p>
         <p className="mock-chrome-links">
-          <a href="/mock-agent.html">Làm mới mock</a>
+          <a href="/dev/mock-agent.html">Làm mới mock</a>
           {" · "}
           <a href="/#/start">Về Start</a>
         </p>

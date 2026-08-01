@@ -11,6 +11,7 @@
     "build:smoke-zmp": "node scripts/build-smoke-zmp.mjs",
     "pack:upload": "node scripts/pack-upload-zip.mjs",
     "assert:www": "node scripts/assert-www-ready.mjs",
+    "prepare:zmp-dist": "node scripts/prepare-zmp-dist.mjs",
     "deploy:testing": "bash scripts/deploy-testing.sh",
     "deploy:smoke": "bash scripts/deploy-smoke-testing.sh",
     "preview": "vite preview"

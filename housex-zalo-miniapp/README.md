@@ -49,20 +49,21 @@ Nhận biết bundle đúng (mục **Tài khoản**): có **«1. Khách mua nhà
 
 ## Deploy Testing trên VPS (khuyên dùng)
 
-**Trắng màn thường gặp:** chọn Dist = project root (có `mock-agent.html`) trong khi `app-config` trỏ `assets/…` trong `www/` → JS không load. Script deploy **cd vào `www`** rồi mới `zmp deploy` (Dist = `.`).
+**Trắng màn:** nếu log còn `mock-agent.html` = Dist đang là source root → JS `assets/` không upload đúng. Script tạo **`.zmp-dist/`** (chỉ bundle) rồi deploy từ đó.
 
 ```bash
 cd /opt/housex && git pull
 cd housex-zalo-miniapp
 
-# Chẩn đoán (nền vàng SMOKE OK):
+# Chẩn đoán (nền vàng SMOKE OK) — log KHÔNG được nhắc mock-agent.html:
 bash scripts/deploy-smoke-testing.sh
 
 # Bản thật:
 bash scripts/deploy-testing.sh
 ```
 
-Khi CLI hỏi Dist: gõ `.` (đang đứng trong `www`). Status = **Testing**.
+Khi CLI hỏi Dist: gõ **`.`** (cwd = `.zmp-dist`). Status = **Testing**.  
+Sau deploy: nếu vẫn thấy warning `mock-agent.html` → Dist sai, dừng lại báo lại.
 
 Sau deploy: **force-stop Zalo** → quét **QR Testing** trên terminal.
 

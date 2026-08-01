@@ -50,7 +50,7 @@ export function StartPage() {
       {import.meta.env.DEV ? (
         <a
           className="start-mock-banner"
-          href="/mock-agent.html"
+          href="/dev/mock-agent.html"
           style={{
             display: "block",
             margin: "0 0 12px",

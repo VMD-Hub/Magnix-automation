@@ -6,7 +6,7 @@ import "./styles.css";
 
 /**
  * Entry riêng — không qua HashRouter / HomeGate → /start.
- * Mở: http://localhost:PORT/mock-agent.html
+ * Mở: http://localhost:PORT/dev/mock-agent.html
  */
 const container = document.getElementById("app");
 if (!container) {

@@ -1,6 +1,6 @@
 # Mock Agent UI
 
-Preview: `npm run dev` → mở **http://localhost:PORT/mock-agent.html**
+Preview: `npm run dev` → mở **http://localhost:PORT/dev/mock-agent.html**
 
 **Cấu trúc UI đã duyệt (SoT):**  
 `../Proptech-HouseX/docs/ops/AGENT_MINIAPP_UI_APPROVED.md`
