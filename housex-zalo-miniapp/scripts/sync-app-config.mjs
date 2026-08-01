@@ -1,18 +1,12 @@
 /**
- * Đọc www/index.html sau build → cập nhật app-config + copy zmp-sdk UMD.
- *
- * Pattern ZIP đã chạy (18/07):
- *   listSyncJS  = [zmp-sdk.umd.js]
- *   listAsyncJS = [index-*.js]
- *
- * Thêm hậu tố .module.js (docs Zalo convert-web-app) để runtime load đúng module.
+ * Đọc www/index.html sau build → app-config + copy zmp-sdk UMD.
+ * Pattern ZIP đã chạy (18/07): sync = sdk, async = index-*.js (không .module.js).
  */
 import {
   copyFileSync,
   existsSync,
   mkdirSync,
   readFileSync,
-  renameSync,
   writeFileSync,
 } from "node:fs";
 import { dirname, resolve } from "node:path";
@@ -52,7 +46,7 @@ if (!existsSync(umdSrc)) {
 }
 copyFileSync(umdSrc, resolve(root, "www", umdRel));
 
-let appEntries = [...moduleJs, ...classicJs].filter((p) => p !== umdRel);
+const appEntries = [...moduleJs, ...classicJs].filter((p) => p !== umdRel);
 
 for (const rel of appEntries) {
   const abs = resolve(root, "www", rel);
@@ -72,20 +66,6 @@ for (const rel of appEntries) {
     process.exit(1);
   }
 }
-
-/** Đổi tên → *.module.js (docs Zalo). */
-appEntries = appEntries.map((rel) => {
-  if (rel.endsWith(".module.js")) return rel;
-  const next = rel.replace(/\.js$/i, ".module.js");
-  const from = resolve(root, "www", rel);
-  const to = resolve(root, "www", next);
-  if (existsSync(to)) {
-    /* already renamed */
-  } else {
-    renameSync(from, to);
-  }
-  return next;
-});
 
 const config = JSON.parse(readFileSync(configPath, "utf8"));
 config.listCSS = css;

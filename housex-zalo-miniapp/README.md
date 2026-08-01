@@ -49,19 +49,20 @@ Nhận biết bundle đúng (mục **Tài khoản**): có **«1. Khách mua nhà
 
 ## Deploy Testing trên VPS (khuyên dùng)
 
+**Trắng màn thường gặp:** chọn Dist = project root (có `mock-agent.html`) trong khi `app-config` trỏ `assets/…` trong `www/` → JS không load. Script deploy **cd vào `www`** rồi mới `zmp deploy` (Dist = `.`).
+
 ```bash
 cd /opt/housex && git pull
+cd housex-zalo-miniapp
 
-# API nếu có thay đổi auth/handoff
-cd Proptech-HouseX && npm run build && pm2 restart housex --update-env
+# Chẩn đoán (nền vàng SMOKE OK):
+bash scripts/deploy-smoke-testing.sh
 
-cd ../housex-zalo-miniapp
+# Bản thật:
 bash scripts/deploy-testing.sh
-# hoặc:
-#   npm run build:zmp
-#   zmp deploy --existing --testing
-# Khi hỏi Version status → Testing (không chọn Development)
 ```
+
+Khi CLI hỏi Dist: gõ `.` (đang đứng trong `www`). Status = **Testing**.
 
 Sau deploy: **force-stop Zalo** → quét **QR Testing** trên terminal.
 

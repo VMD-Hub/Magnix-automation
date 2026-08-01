@@ -9,13 +9,10 @@
     "leftButton": "none",
     "selfDefense": false
   },
-  "listCSS": [
-    "assets/index-_XI9D5Yt.css"
-  ],
+  "listCSS": [],
   "listSyncJS": [
+    "assets/hx-smoke.js",
     "assets/zmp-sdk.umd.js"
   ],
-  "listAsyncJS": [
-    "assets/index-BYbJCBYX.module.js"
-  ]
+  "listAsyncJS": []
 }
