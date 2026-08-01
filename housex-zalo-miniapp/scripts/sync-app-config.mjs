@@ -53,6 +53,30 @@ writeFileSync(
   `${JSON.stringify(config, null, 2)}\n`,
 );
 
+/** Zalo chỉ inject listAsyncJS — entry không được `import` chunk sibling. */
+for (const rel of asyncJs) {
+  const abs = resolve(root, "www", rel);
+  if (!existsSync(abs)) {
+    console.error("sync-app-config: missing", rel);
+    process.exit(1);
+  }
+  const body = readFileSync(abs, "utf8");
+  const siblingImport = body.match(
+    /\bfrom\s*["']\.\/([^"']+\.js)["']|import\s*\(\s*["']\.\/([^"']+\.js)["']\s*\)/,
+  );
+  if (siblingImport) {
+    const name = siblingImport[1] || siblingImport[2];
+    console.error(
+      "sync-app-config: FAIL — entry còn import chunk phụ (Zalo trắng màn):",
+      `./${name}`,
+    );
+    console.error(
+      "  Fix: vite chỉ 1 HTML entry + inlineDynamicImports (không build mock-agent cùng lúc).",
+    );
+    process.exit(1);
+  }
+}
+
 console.log("app-config.json synced:", {
   listCSS: css,
   listAsyncJS: asyncJs,

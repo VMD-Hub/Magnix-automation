@@ -29,18 +29,17 @@ export default defineConfig({
      * `sync-app-config.mjs` ghi đúng path mới vào app-config.json sau mỗi build.
      */
     cssCodeSplit: false,
+    /**
+     * Chỉ 1 HTML entry — multi-page (mock-agent) tạo shared chunk `styles-*.js`
+     * mà app-config không load → Zalo trắng màn (import ./styles-….js fail).
+     * Mock local: `npm run dev` → /mock-agent.html (không qua zmp deploy).
+     */
     rollupOptions: {
-      input: {
-        main: path.resolve(__dirname, "index.html"),
-        mockAgent: path.resolve(__dirname, "mock-agent.html"),
-      },
+      input: path.resolve(__dirname, "index.html"),
       output: {
         manualChunks: undefined,
-        // Giữ tên index-* cho entry chính (app-config / Zalo CDN).
-        entryFileNames: (chunk) =>
-          chunk.name === "main"
-            ? "assets/index-[hash].js"
-            : "assets/[name]-[hash].js",
+        inlineDynamicImports: true,
+        entryFileNames: "assets/index-[hash].js",
         chunkFileNames: "assets/[name]-[hash].js",
         assetFileNames: "assets/index-[hash].[ext]",
       },

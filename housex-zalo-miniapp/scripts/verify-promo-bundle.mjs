@@ -29,6 +29,13 @@ if (!files.length) {
   console.error("verify-promo-bundle: no React JS in www/assets");
   process.exit(1);
 }
+if (files.length > 1) {
+  console.error(
+    "verify-promo-bundle: FAIL — nhiều JS chunk (Zalo chỉ load listAsyncJS → dễ trắng màn)",
+    files,
+  );
+  process.exit(1);
+}
 
 const needle = "Quay là có quà";
 const wheel = "promo-wheel";

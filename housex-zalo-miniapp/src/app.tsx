@@ -25,7 +25,6 @@ import { AgentTelesalesPage } from "@/pages/AgentTelesalesPage";
 import { AgentTelesalesDetailPage } from "@/pages/AgentTelesalesDetailPage";
 import { CustomerNotificationsPage } from "@/pages/CustomerNotificationsPage";
 import { WebViewPage } from "@/pages/WebViewPage";
-import { MockAgentPreview } from "@/mock/MockAgentPreview";
 import { AgentDeclarePage } from "@/pages/AgentDeclarePage";
 import { AgentCartPage } from "@/pages/AgentCartPage";
 import { AgentEcontractPage } from "@/pages/AgentEcontractPage";
@@ -37,8 +36,6 @@ export default function App() {
       <HashRouter>
         <Routes>
           <Route path="/start" element={<StartPage />} />
-          {/* Mock UI Citics-lite — không auth, xem trước duyệt */}
-          <Route path="/mock/agent" element={<MockAgentPreview />} />
           {/* Ops telesales — độc lập CTV auth */}
           <Route path="/ops" element={<OpsLoginPage />} />
           <Route path="/ops/leads" element={<OpsLeadsPage />} />
