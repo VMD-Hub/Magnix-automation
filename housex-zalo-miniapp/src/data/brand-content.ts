@@ -9,4 +9,5 @@ export const BRAND_TAGLINE_VN =
  * Logo nhúng trong gói Mini App (`public/brand/` → `www/brand/` sau build).
  * Dùng path tương đối `./` — Zalo CDN không resolve được `/brand/...` tuyệt đối.
  */
-export const HOUSEX_LOGO_SRC = "./brand/housex-footer-logo-transparent.png";
+/** Không dùng `./` — base URL Zalo đôi khi là /assets/ → ./brand resolve sai. */
+export const HOUSEX_LOGO_SRC = "brand/housex-footer-logo-transparent.png";

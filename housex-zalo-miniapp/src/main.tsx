@@ -42,20 +42,28 @@ function ensureAppRoot(): HTMLElement {
   return el;
 }
 
-const container = ensureAppRoot();
-try {
-  createRoot(container).render(
-    <StrictMode>
-      <BootErrorBoundary>
-        <App />
-      </BootErrorBoundary>
-    </StrictMode>,
-  );
-} catch (err: unknown) {
-  const msg = err instanceof Error ? err.message : String(err);
-  container.innerHTML = `<div style="padding:24px;font-family:sans-serif">
+function mount() {
+  const container = ensureAppRoot();
+  try {
+    createRoot(container).render(
+      <StrictMode>
+        <BootErrorBoundary>
+          <App />
+        </BootErrorBoundary>
+      </StrictMode>,
+    );
+  } catch (err: unknown) {
+    const msg = err instanceof Error ? err.message : String(err);
+    container.innerHTML = `<div style="padding:24px;font-family:sans-serif">
       <h1 style="font-size:18px">House X — lỗi khởi động</h1>
       <p style="color:#9b111e;font-size:13px;word-break:break-word">${msg.replace(/</g, "&lt;")}</p>
     </div>`;
-  console.error("[HouseX MiniApp] boot", err);
+    console.error("[HouseX MiniApp] boot", err);
+  }
+}
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", mount);
+} else {
+  mount();
 }

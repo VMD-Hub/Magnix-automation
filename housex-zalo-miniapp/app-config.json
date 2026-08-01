@@ -14,8 +14,9 @@
   ],
   "listSyncJS": [
     "assets/hx-boot.js",
-    "assets/zmp-sdk.umd.js",
-    "assets/index-CvXNWjER.js"
+    "assets/zmp-sdk.umd.js"
   ],
-  "listAsyncJS": []
+  "listAsyncJS": [
+    "assets/index-Ck8uPbqw.js"
+  ]
 }
