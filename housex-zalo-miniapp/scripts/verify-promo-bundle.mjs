@@ -23,7 +23,10 @@ if (!existsSync(brandLogo)) {
 }
 
 const files = readdirSync(assetsDir).filter(
-  (f) => f.endsWith(".js") && !f.includes("zmp-sdk"),
+  (f) =>
+    f.endsWith(".js") &&
+    !f.includes("zmp-sdk") &&
+    !f.includes("hx-boot"),
 );
 if (!files.length) {
   console.error("verify-promo-bundle: no React JS in www/assets");
@@ -31,7 +34,7 @@ if (!files.length) {
 }
 if (files.length > 1) {
   console.error(
-    "verify-promo-bundle: FAIL — nhiều JS chunk (Zalo chỉ load listAsyncJS → dễ trắng màn)",
+    "verify-promo-bundle: FAIL — nhiều JS chunk (Zalo chỉ load listSyncJS entry → dễ trắng màn)",
     files,
   );
   process.exit(1);

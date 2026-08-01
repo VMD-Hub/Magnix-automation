@@ -13,9 +13,9 @@
     "assets/index-_XI9D5Yt.css"
   ],
   "listSyncJS": [
-    "assets/zmp-sdk.umd.js"
+    "assets/hx-boot.js",
+    "assets/zmp-sdk.umd.js",
+    "assets/index-CvXNWjER.js"
   ],
-  "listAsyncJS": [
-    "assets/index-x6wGPDOR.js"
-  ]
+  "listAsyncJS": []
 }
