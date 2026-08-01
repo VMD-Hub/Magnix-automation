@@ -148,6 +148,8 @@ export interface OutboxPayloads {
     brokerId: string;
     amount: string; // chuỗi để không mất chính xác Decimal
     rate: number | null;
+    /** FLAT | PERCENT_HDMB — affiliate SoR (Phase 4+) */
+    model?: string;
   };
   /**
    * Đăng ký tài khoản mới — khách hàng hoặc môi giới đăng tin.
