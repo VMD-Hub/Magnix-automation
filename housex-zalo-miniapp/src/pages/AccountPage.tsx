@@ -4,7 +4,7 @@ import { PageBrandHeader } from "@/components/PageBrandHeader";
 import { MiniAccountPasswordCard } from "@/components/MiniAccountPasswordCard";
 import { useAuth } from "@/auth-context";
 import { AUTH_DEV_BYPASS, HOUSEX_API_BASE } from "@/config";
-import { createMiniappHandoff } from "@/services/api";
+import { createMiniappHandoff, type HouseXUser } from "@/services/api";
 import { openAccountHandoffWeb } from "@/services/open-handoff-web";
 import {
   completeZaloLoginWithPhone,
@@ -89,13 +89,16 @@ export function AccountPage() {
     setPhase(next);
   }
 
-  function finishLoginSuccess() {
+  function finishLoginSuccess(nextUser?: HouseXUser) {
     setPhase("done");
     setPendingZalo(null);
     setJustLoggedIn(true);
     setErr(null);
     setBrokerErr(null);
     window.scrollTo({ top: 0, behavior: "smooth" });
+    if ((nextUser?.role ?? user?.role) === "BROKER") {
+      navigate("/agent", { replace: true });
+    }
   }
 
   async function openFullProfileWeb() {
@@ -131,7 +134,7 @@ export function AccountPage() {
         onPhase: onAuthPhase,
       });
       setUser(u);
-      finishLoginSuccess();
+      finishLoginSuccess(u);
     } catch (ex) {
       if (ex instanceof NeedPhoneError) {
         setPendingZalo(ex.prep);
@@ -175,7 +178,7 @@ export function AccountPage() {
           onAuthPhase,
         );
         setUser(u);
-        finishLoginSuccess();
+        finishLoginSuccess(u);
         return;
       }
 
@@ -187,7 +190,7 @@ export function AccountPage() {
         onPhase: onAuthPhase,
       });
       setUser(u);
-      finishLoginSuccess();
+      finishLoginSuccess(u);
     } catch (ex) {
       if (ex instanceof NeedPhoneError) {
         setPendingZalo(ex.prep);
@@ -220,7 +223,7 @@ export function AccountPage() {
         onPhase: onAuthPhase,
       });
       setUser(u);
-      finishLoginSuccess();
+      finishLoginSuccess(u);
     } catch (ex) {
       if (ex instanceof NeedPhoneError) {
         setPendingZalo({ ...ex.prep, preferredRole: "BROKER" });
@@ -261,7 +264,7 @@ export function AccountPage() {
         onPhase: onAuthPhase,
       });
       setUser(u);
-      finishLoginSuccess();
+      finishLoginSuccess(u);
     } catch (ex) {
       setPhase("idle");
       setBrokerErr(

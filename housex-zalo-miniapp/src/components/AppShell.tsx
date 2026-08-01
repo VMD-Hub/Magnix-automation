@@ -19,10 +19,8 @@ export function AppShell() {
   const { canAgent } = useAuth();
   const homePath = useHomeTabPath();
   const location = useLocation();
-  const onAgentRoutes =
-    location.pathname === "/agent" || location.pathname.startsWith("/agent/");
-  const useAgentTabbar =
-    canAgent && (onAgentRoutes || location.pathname === "/tai-khoan");
+  /** CTV: luôn shell affiliate 5 tab (SoT) — không lẫn tabbar Khách. */
+  const useAgentTabbar = canAgent;
 
   const homeActive =
     location.pathname === "/" ||

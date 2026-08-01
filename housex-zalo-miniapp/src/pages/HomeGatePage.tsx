@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { useAuth } from "@/auth-context";
 import {
   getPreferredLane,
   laneHomePath,
@@ -7,16 +8,25 @@ import {
   setPreferredLane,
 } from "@/services/lane";
 
-/** `/` — redirect theo deep link, remember lane, hoặc /start. */
+/** `/` — CTV → Agent hub; khách → lane / start. */
 export function HomeGatePage() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+  const { canAgent, loading } = useAuth();
 
   useEffect(() => {
+    if (loading) return;
+
+    /** Deep link lane vẫn ưu tiên (chiến dịch khách). */
     const fromUrl = parseLaneParam(searchParams.get("lane"));
     if (fromUrl) {
       setPreferredLane(fromUrl);
       navigate(laneHomePath(fromUrl), { replace: true });
+      return;
+    }
+
+    if (canAgent) {
+      navigate("/agent", { replace: true });
       return;
     }
 
@@ -27,7 +37,7 @@ export function HomeGatePage() {
     }
 
     navigate("/start", { replace: true });
-  }, [navigate, searchParams]);
+  }, [navigate, searchParams, canAgent, loading]);
 
   return (
     <div className="home-gate">
