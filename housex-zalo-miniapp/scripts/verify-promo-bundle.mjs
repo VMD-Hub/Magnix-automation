@@ -24,9 +24,10 @@ if (!existsSync(brandLogo)) {
 
 const files = readdirSync(assetsDir).filter(
   (f) =>
-    f.endsWith(".js") &&
+    (f.endsWith(".js") || f.endsWith(".module.js")) &&
     !f.includes("zmp-sdk") &&
-    !f.includes("hx-boot"),
+    !f.includes("hx-boot") &&
+    !f.includes("hx-smoke"),
 );
 if (!files.length) {
   console.error("verify-promo-bundle: no React JS in www/assets");
