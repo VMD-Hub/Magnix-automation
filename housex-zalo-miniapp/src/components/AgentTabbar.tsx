@@ -23,7 +23,10 @@ export function AgentTabbar() {
 
   useEffect(() => {
     void listNotifications()
-      .then((d) => setUnread(d.unreadCount))
+      .then((d) => {
+        const n = Number(d?.unreadCount);
+        setUnread(Number.isFinite(n) && n > 0 ? Math.floor(n) : 0);
+      })
       .catch(() => setUnread(0));
   }, [location.pathname]);
 
