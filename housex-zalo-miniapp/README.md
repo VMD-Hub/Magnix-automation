@@ -62,7 +62,7 @@ bash scripts/deploy-smoke-testing.sh
 bash scripts/deploy-testing.sh
 ```
 
-Khi CLI hỏi Dist: gõ **`.`** (cwd = `.zmp-dist`). Status = **Testing**.  
+Khi CLI hỏi Dist: gõ **`www`** (cwd = `.zmp-dist`). Status = **Testing**.  
 Sau deploy: nếu vẫn thấy warning `mock-agent.html` → Dist sai, dừng lại báo lại.
 
 Sau deploy: **force-stop Zalo** → quét **QR Testing** trên terminal.

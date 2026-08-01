@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
-# Deploy Testing từ .zmp-dist sạch (Dist=. không kéo mock-agent / src).
+# Deploy Testing — .zmp-dist + Dist=www (đúng path ZMP tìm app-config).
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$ROOT"
 
 echo ""
 echo "══════════════════════════════════════════════════"
-echo "  House X Mini App — DEPLOY TESTING (.zmp-dist)"
+echo "  House X Mini App — DEPLOY TESTING"
 echo "══════════════════════════════════════════════════"
 echo ""
 
@@ -14,27 +14,26 @@ npm run build:zmp
 node scripts/assert-www-ready.mjs
 node scripts/prepare-zmp-dist.mjs
 
+test -f "$ROOT/.zmp-dist/www/app-config.json"
+test ! -f "$ROOT/.zmp-dist/www/mock-agent.html"
+test ! -f "$ROOT/.zmp-dist/mock-agent.html"
+
 cd "$ROOT/.zmp-dist"
 echo ""
 echo "→ cwd=$(pwd)"
-echo "→ ls:"
-ls -la
-echo "→ assets:"
-ls -la assets/
+echo "→ www/app-config.json OK"
+ls -la www/assets/ | head -20
 echo ""
-echo "Khi CLI hỏi Dist → gõ: .     (đang ở .zmp-dist)"
-echo "Version status → Testing"
+echo "╔══════════════════════════════════════════════╗"
+echo "║  Khi hỏi Dist folder → gõ đúng:  www         ║"
+echo "║  (KHÔNG gõ . và KHÔNG gõ đường dẫn tuyệt đối)║"
+echo "║  Version status → Testing                    ║"
+echo "╚══════════════════════════════════════════════╝"
 echo ""
-
-# Không được có mock-agent
-if [[ -f mock-agent.html ]]; then
-  echo "FAIL: mock-agent.html vẫn còn trong .zmp-dist"
-  exit 1
-fi
 
 if zmp deploy --existing --testing; then
   echo ""
-  echo "OK — kiểm tra log: KHÔNG được còn dòng mock-agent.html"
+  echo "OK — log KHÔNG được còn mock-agent.html"
   echo "Force-stop Zalo → quét QR Testing."
   exit 0
 fi
