@@ -11,10 +11,11 @@ import {
 } from "../lib/content/noxh-cta-tools.ts";
 
 describe("noxh CTA tools", () => {
-  it("allowlist chỉ 2 tool NƠXH", () => {
-    assert.equal(NOXH_CTA_TOOLS.length, 2);
+  it("allowlist gồm NƠXH + legal-review", () => {
+    assert.equal(NOXH_CTA_TOOLS.length, 3);
     assert.ok(isNoxhCtaToolId("noxh-check"));
     assert.ok(isNoxhCtaToolId("noxh-loan-quick"));
+    assert.ok(isNoxhCtaToolId("legal-review"));
     assert.equal(isNoxhCtaToolId("loan"), false);
   });
 
@@ -37,7 +38,7 @@ describe("content queue L3 gate", () => {
       l3Checklist: { pain: true, ctaTool: false, ctaCopy: true },
     });
     assert.equal(r.pass, false);
-    assert.ok(r.errors.some((e) => /CTA tool/i.test(e)));
+    assert.ok(r.errors.some((e) => /CTA/i.test(e)));
   });
 
   it("pass khi đủ CTA + checklist", () => {
@@ -61,5 +62,17 @@ describe("content queue L3 gate", () => {
       l3Checklist: { pain: true, ctaTool: true, ctaCopy: true },
     });
     assert.equal(r.pass, false);
+  });
+
+  it("pass với legal-review cho bài pháp lý chung", () => {
+    const r = assertContentQueueReadyForL3({
+      title: "Sổ đỏ điện tử theo dự thảo?",
+      painPoint: "Sổ điện tử có giá trị như sổ giấy không?",
+      ctaToolId: "legal-review",
+      ctaLabel: "Đặt lịch rà soát pháp lý 15 phút miễn phí",
+      l3Checklist: { pain: true, ctaTool: true, ctaCopy: true },
+    });
+    assert.equal(r.pass, true);
+    assert.deepEqual(r.errors, []);
   });
 });

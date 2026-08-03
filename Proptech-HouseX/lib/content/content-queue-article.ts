@@ -41,6 +41,10 @@ export function buildArticleBodyFromQueue(item: QueueArticleSeed): string {
       ? `Nhiều người đang hỏi: *${item.painPoint.trim()}*\n\nDưới đây là hướng xử lý thực tế — và bạn có thể tự kiểm tra nhanh bằng công cụ miễn phí.`
       : "Bài hướng dẫn NƠXH — dùng công cụ bên dưới để tự kiểm tra trước khi nộp hồ sơ.");
 
+  const ctaNote = tool?.requiresContact
+    ? "House X hỗ trợ định hướng hồ sơ — không thay cơ quan nhà nước cấp sổ / quyết định hồ sơ."
+    : "Không cần để lại SĐT trước khi xem kết quả gợi ý.";
+
   const lines = [
     `## ${item.title.trim()}`,
     "",
@@ -54,7 +58,7 @@ export function buildArticleBodyFromQueue(item: QueueArticleSeed): string {
     "",
     `[${label}](${href})`,
     "",
-    "Không cần để lại SĐT trước khi xem kết quả gợi ý.",
+    ctaNote,
   ].filter((x): x is string => x !== null);
 
   return lines.join("\n");

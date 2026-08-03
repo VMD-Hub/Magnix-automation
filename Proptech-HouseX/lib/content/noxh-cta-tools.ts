@@ -1,15 +1,22 @@
 /**
- * CTA chuẩn NƠXH — mọi content publish phải đổ vào đúng 1 tool.
- * Super L3 không duyệt nếu thiếu cta_tool_id trong allowlist này.
+ * CTA chuẩn content queue — mọi bài publish phải đổ vào đúng 1 tool trong allowlist.
+ * Super L3 không duyệt nếu thiếu cta_tool_id.
+ *
+ * NƠXH: noxh-check | noxh-loan-quick
+ * Pháp lý chung (GENERAL_POLICY): legal-review → form rà soát 15 phút
  */
 
-export const NOXH_CTA_TOOL_IDS = ["noxh-check", "noxh-loan-quick"] as const;
+export const NOXH_CTA_TOOL_IDS = [
+  "noxh-check",
+  "noxh-loan-quick",
+  "legal-review",
+] as const;
 
 export type NoxhCtaToolId = (typeof NOXH_CTA_TOOL_IDS)[number];
 
 export type NoxhCtaTool = {
   id: NoxhCtaToolId;
-  /** Khớp ALL_TOOLS.id trong housex-tools-registry. */
+  /** Khớp ALL_TOOLS.id hoặc intent liên hệ. */
   registryId: string;
   href: string;
   title: string;
@@ -19,6 +26,8 @@ export type NoxhCtaTool = {
   defaultCtaLabel: string;
   /** Khối chốt cuối bài (copy-paste). */
   closingBlock: string;
+  /** true = CTA form liên hệ (có SĐT); false = tool self-serve. */
+  requiresContact?: boolean;
 };
 
 export const NOXH_CTA_TOOLS: readonly NoxhCtaTool[] = [
@@ -41,6 +50,17 @@ export const NOXH_CTA_TOOLS: readonly NoxhCtaTool[] = [
     defaultCtaLabel: "Kiểm tra nhanh khả năng vay NƠXH (60 giây)",
     closingBlock:
       "Bạn đang phân vân vay NƠXH được khoảng bao nhiêu?\n→ Kiểm tra nhanh (miễn phí): /cong-cu/kiem-tra-vay-noxh\nKhông cần để lại SĐT trước khi xem kết quả gợi ý.",
+  },
+  {
+    id: "legal-review",
+    registryId: "ra-soat-phap-ly-15-phut",
+    href: "/lien-he?goi=ra-soat-phap-ly-15-phut#tu-van",
+    title: "Rà soát pháp lý 15 phút",
+    when: "Bài pháp lý chung (đất đai, sổ đỏ, thu hồi, dự thảo luật) — không map NƠXH",
+    defaultCtaLabel: "Đặt lịch rà soát pháp lý 15 phút miễn phí",
+    closingBlock:
+      "Bạn đang cần đối chiếu rủi ro sổ đỏ / giấy tờ trước khi giao dịch?\n→ Đặt lịch rà soát pháp lý 15 phút (miễn phí): /lien-he?goi=ra-soat-phap-ly-15-phut#tu-van\nHouse X hỗ trợ định hướng hồ sơ — không thay cơ quan nhà nước cấp sổ.",
+    requiresContact: true,
   },
 ] as const;
 
@@ -69,8 +89,8 @@ export const EMPTY_L3_CHECKLIST: L3ContentChecklist = {
 };
 
 export const L3_CHECKLIST_LABELS: Record<keyof L3ContentChecklist, string> = {
-  pain: "Nỗi đau NƠXH nào? (1 câu)",
-  ctaTool: "Link tool nào? (điều kiện NƠXH hoặc vay NƠXH)",
+  pain: "Nỗi đau nào? (1 câu)",
+  ctaTool: "Link CTA nào? (NƠXH / vay NƠXH / rà soát pháp lý)",
   ctaCopy: "Câu CTA trên bài là gì? (1 dòng, rõ hành động)",
 };
 

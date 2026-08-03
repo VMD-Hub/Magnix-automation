@@ -1,0 +1,180 @@
+/**
+ * Seed 2 bài SEO tuyến legal-review vào content_queue (INTAKE → L2 /devil).
+ *   - 07 sổ đỏ điện tử / dự thảo Luật Đất đai
+ *   - 08 TP.HCM đề xuất trần thu nhập NƠXH 60 triệu
+ *
+ * Usage:
+ *   node --env-file=.env --import tsx scripts/seed-legal-review-queue-pack.ts
+ *   node --import tsx scripts/seed-legal-review-queue-pack.ts --dry-run
+ */
+import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
+import { PrismaClient } from "@prisma/client";
+import { getNoxhCtaTool } from "../lib/content/noxh-cta-tools";
+
+const dryRun = process.argv.includes("--dry-run");
+const prisma = dryRun ? null : new PrismaClient();
+
+type DraftFrontmatter = {
+  title?: string;
+  painPoint?: string;
+  excerpt?: string;
+  ctaLabel?: string;
+  ctaHref?: string;
+  slug?: string;
+  ctaToolId?: string;
+};
+
+type PackItem = {
+  id: string;
+  sheetKey: string;
+  draftRel: string;
+  opsExtra: string;
+};
+
+const ITEMS: PackItem[] = [
+  {
+    id: "so-do-H1",
+    sheetKey: "so-do-dien-tu:H1",
+    draftRel: "docs/content/drafts/07-so-do-dien-tu-du-thao-luat-dat-dai-2026.md",
+    opsExtra:
+      "GENERAL_POLICY — pháp lý đất đai / sổ đỏ (không phải NƠXH). L2 /devil: dự thảo ≠ luật đã ban hành.",
+  },
+  {
+    id: "tphcm-60tr-H1",
+    sheetKey: "tphcm-tran-thu-nhap-noxh-60tr:H1",
+    draftRel: "docs/content/drafts/08-tphcm-tran-thu-nhap-noxh-60-trieu.md",
+    opsExtra:
+      "GENERAL_POLICY — đề xuất TP.HCM sửa QĐ 14 (liên quan NƠXH tương lai). L2 /devil: đề xuất ≠ QĐ đã ban hành; neo NĐ 136 + QĐ 14 hiện hành.",
+  },
+];
+
+function parseDraft(raw: string): { meta: DraftFrontmatter; body: string } {
+  const match = raw.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n([\s\S]*)$/);
+  if (!match) return { meta: {}, body: raw.trim() };
+  const body = match[2].trim();
+  const meta: DraftFrontmatter = {};
+  for (const line of match[1].split(/\r?\n/)) {
+    const m = line.match(/^([A-Za-z0-9_]+):\s*(.*)$/);
+    if (!m) continue;
+    let val = m[2].trim();
+    if (
+      (val.startsWith('"') && val.endsWith('"')) ||
+      (val.startsWith("'") && val.endsWith("'"))
+    ) {
+      val = val.slice(1, -1);
+    }
+    meta[m[1] as keyof DraftFrontmatter] = val;
+  }
+  return { meta, body };
+}
+
+async function seedOne(root: string, item: PackItem) {
+  const draftAbs = resolve(root, item.draftRel);
+  const { meta, body } = parseDraft(readFileSync(draftAbs, "utf8"));
+  const title = meta.title?.trim();
+  if (!title) throw new Error(`${item.id}: thiếu title`);
+  if (!body.includes("## Kiểm tra nhanh (CTA)")) {
+    throw new Error(`${item.id}: thiếu section CTA`);
+  }
+  if (meta.ctaToolId !== "legal-review") {
+    throw new Error(`${item.id}: ctaToolId phải là legal-review`);
+  }
+
+  const cta = getNoxhCtaTool("legal-review");
+  if (!cta) throw new Error("Allowlist thiếu legal-review");
+
+  const opsNotes = [
+    item.opsExtra,
+    `slug: ${meta.slug ?? "(none)"}`,
+    `Draft: ${item.draftRel}`,
+    "requires_legal_qa: true",
+    "CTA: legal-review → /lien-he?goi=ra-soat-phap-ly-15-phut#tu-van",
+    "Pack: legal-review queue (so-do + tphcm-60tr)",
+  ].join("\n");
+
+  const shared = {
+    title,
+    painPoint: meta.painPoint?.trim() || meta.excerpt?.trim() || null,
+    bodyPreview: body,
+    segment: "general_inbound",
+    score: 88,
+    publishChannel: "WEBSITE" as const,
+    ctaToolId: cta.id,
+    ctaLabel: meta.ctaLabel?.trim() || cta.defaultCtaLabel,
+    ctaHref: meta.ctaHref?.trim() || cta.href,
+    sheetKey: item.sheetKey,
+    opsNotes,
+  };
+
+  if (dryRun) {
+    console.log(
+      `✓ ${item.id} dry-run · legal-review · ${body.split(/\s+/).length} từ · "${title.slice(0, 52)}…"`,
+    );
+    return { created: 0, updated: 0, skipped: 0 };
+  }
+
+  const key = `sheet:${item.sheetKey}`;
+  const existing = await prisma!.contentQueueItem.findUnique({
+    where: { normalizedKey: key },
+    select: { id: true, status: true },
+  });
+
+  if (existing?.status === "PUBLISHED") {
+    console.log(`↷ ${item.id} đã PUBLISHED — bỏ qua`);
+    return { created: 0, updated: 0, skipped: 1 };
+  }
+
+  if (existing) {
+    await prisma!.contentQueueItem.update({
+      where: { normalizedKey: key },
+      data: {
+        ...shared,
+        l3Checklist: { pain: true, ctaTool: true, ctaCopy: true },
+      },
+    });
+    console.log(`✎ ${item.id} cập nhật (status giữ ${existing.status}) · id=${existing.id}`);
+    return { created: 0, updated: 1, skipped: 0 };
+  }
+
+  const row = await prisma!.contentQueueItem.create({
+    data: {
+      normalizedKey: key,
+      status: "INTAKE",
+      l3Checklist: { pain: true, ctaTool: true, ctaCopy: true },
+      ...shared,
+    },
+  });
+  console.log(`✔ ${item.id} → INTAKE · id=${row.id}`);
+  return { created: 1, updated: 0, skipped: 0 };
+}
+
+async function main() {
+  const root = resolve(__dirname, "..");
+  let created = 0;
+  let updated = 0;
+  let skipped = 0;
+
+  for (const item of ITEMS) {
+    const r = await seedOne(root, item);
+    created += r.created;
+    updated += r.updated;
+    skipped += r.skipped;
+  }
+
+  console.log(
+    `\nXong: ${created} tạo mới, ${updated} cập nhật, ${skipped} bỏ qua (tổng ${ITEMS.length}).`,
+  );
+  if (!dryRun) {
+    console.log("Duyệt L2 /devil tại /admin/content-queue → rồi submit_l3.");
+  }
+}
+
+main()
+  .catch((err) => {
+    console.error(err);
+    process.exit(1);
+  })
+  .finally(async () => {
+    if (prisma) await prisma.$disconnect();
+  });

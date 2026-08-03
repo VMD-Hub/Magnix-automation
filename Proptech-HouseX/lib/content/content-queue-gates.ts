@@ -1,5 +1,5 @@
 /**
- * Gate L3 content queue — bài không CTA tool NƠXH = không approve.
+ * Gate L3 content queue — bài không CTA trong allowlist = không approve.
  */
 
 import {
@@ -39,10 +39,10 @@ export function assertContentQueueReadyForL3(
   }
   if (!isNoxhCtaToolId(input.ctaToolId)) {
     errors.push(
-      "Bắt buộc chọn CTA tool: noxh-check (/cong-cu/dieu-kien-noxh) hoặc noxh-loan-quick (/cong-cu/kiem-tra-vay-noxh).",
+      "Bắt buộc chọn CTA: noxh-check, noxh-loan-quick, hoặc legal-review (rà soát pháp lý).",
     );
   } else if (!getNoxhCtaTool(input.ctaToolId)) {
-    errors.push("ctaToolId không thuộc allowlist NƠXH.");
+    errors.push("ctaToolId không thuộc allowlist CTA content queue.");
   }
   if (!input.ctaLabel?.trim()) {
     errors.push("Thiếu câu CTA trên bài (ctaLabel).");

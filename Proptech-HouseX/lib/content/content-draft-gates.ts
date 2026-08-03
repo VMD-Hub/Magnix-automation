@@ -1,5 +1,5 @@
 /**
- * L3 gate cho content drafts — cùng CTA NƠXH + checklist 3 câu.
+ * L3 gate cho content drafts — cùng CTA allowlist + checklist 3 câu.
  */
 
 import {
@@ -37,10 +37,10 @@ export function assertContentDraftReadyForL3(
   }
   if (!isNoxhCtaToolId(input.ctaToolId)) {
     errors.push(
-      "Bắt buộc chọn CTA tool: noxh-check hoặc noxh-loan-quick trước L3.",
+      "Bắt buộc chọn CTA: noxh-check, noxh-loan-quick, hoặc legal-review trước L3.",
     );
   } else if (!getNoxhCtaTool(input.ctaToolId)) {
-    errors.push("ctaToolId không thuộc allowlist NƠXH.");
+    errors.push("ctaToolId không thuộc allowlist CTA content.");
   }
   if (!input.ctaLabel?.trim()) {
     errors.push("Thiếu câu CTA trên bài (ctaLabel).");
