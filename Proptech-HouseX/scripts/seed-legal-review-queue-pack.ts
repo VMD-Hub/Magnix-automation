@@ -47,6 +47,13 @@ const ITEMS: PackItem[] = [
     opsExtra:
       "GENERAL_POLICY — đề xuất TP.HCM sửa QĐ 14 (liên quan NƠXH tương lai). L2 /devil: đề xuất ≠ QĐ đã ban hành; neo NĐ 136 + QĐ 14 hiện hành.",
   },
+  {
+    id: "vneid-moi-gioi-H1",
+    sheetKey: "vneid-noxh-moi-gioi-housex:H1",
+    draftRel: "docs/content/drafts/09-vneid-noxh-moi-gioi-housex.md",
+    opsExtra:
+      "GENERAL_POLICY — VNeID xét duyệt NƠXH + định hướng môi giới/House X. L2 /devil: TB 152 = nghiên cứu quy trình, chưa thay xét duyệt hiện hành; không bao đậu hồ sơ.",
+  },
 ];
 
 function parseDraft(raw: string): { meta: DraftFrontmatter; body: string } {
