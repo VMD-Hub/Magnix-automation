@@ -37,6 +37,26 @@ Bài này quan sát và trình bày ở **phạm vi dự án** — không nhảy
     assert.equal(queueBodyHasCtaSection(out), true);
   });
 
+  it("normalize bỏ H2 SoR Ai đang chịu tác động", () => {
+    const raw = `Lede tin.
+
+## Ai đang chịu tác động, và ai cần theo dõi ngay?
+
+Đoạn tiếp.
+
+## Kiểm tra nhanh
+
+[Link](/lien-he)
+`;
+    const out = normalizeQueueBodyForReader(raw);
+    assert.equal(out.includes("Ai đang chịu tác động"), false);
+    assert.match(out, /Lede tin/);
+    assert.match(out, /Đoạn tiếp/);
+    assert.match(out, /^## Kiểm tra nhanh$/m);
+    assert.equal(out.includes("(CTA)"), false);
+    assert.equal(queueBodyHasCtaSection(out), true);
+  });
+
   it("body luôn có markdown link CTA tool (H2 người đọc)", () => {
     const body = buildArticleBodyFromQueue({
       title: "Thu nhập 12tr có mua NƠXH được không?",

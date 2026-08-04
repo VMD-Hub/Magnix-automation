@@ -20,6 +20,20 @@ Trước khi mở draft, seed queue, hoặc bấm duyệt: đọc hết file nà
 
 ---
 
+## 0b. Khung bài báo người đọc (body công khai)
+
+Body phải đọc được như **tin / bài phân tích báo chí** (tham chiếu nhịp CafeLand), không như biên bản SoR.
+
+1. **Lede** 1–2 câu: ai / việc gì / khi nào / quy mô — tin cứng.
+2. **H2 declarative** (“Động thái…”, “Năm hướng đề xuất…”, “Với người đang…”) — không H2 checklist SoR (“Ai đang chịu tác động…”, “Ai bị ảnh hưởng?”).
+3. **Văn xuôi kể số liệu**; tối đa **một** bảng dữ liệu thật (đơn giá, mốc thời gian, mức trần). Không mở bài bằng bảng “nhóm / việc cần chú ý”.
+4. **Ý nghĩa với người đọc** xen 1–2 đoạn trong mạch tin — không mục SOP nội bộ (“House X đọc bảng thế nào”, “CafeLand làm tốt… House X bổ sung”).
+5. **CTA** cuối: `## Kiểm tra nhanh` + 2–3 câu — không nhãn `(CTA)`.
+
+Sáu câu SoR vẫn bắt buộc — nhưng chỉ trong `editorial_note` / opsNotes.
+
+---
+
 ## Sáu câu hỏi bắt buộc trước khi viết hoặc duyệt
 
 Trả lời lần lượt. Thiếu câu (đặc biệt câu 4 với bài pháp lý) thì chưa đăng.

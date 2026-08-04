@@ -7,7 +7,7 @@ Trang công khai: `/gioi-thieu/phuong-phap-bien-tap` (`lib/content/editorial-met
 
 | Tầng | Nhiệm vụ |
 |------|----------|
-| L0 | Kiểm tra giọng biên tập: không heading meta, không markdown thô, không CTA gắt |
+| L0 | Giọng bài báo người đọc: lede tin cứng; H2 declarative; không heading meta/SoR (“Ai đang chịu tác động”, “Bài này quan sát…”); không markdown thô; không CTA gắt; không tự khen so với CafeLand trên body |
 | L1 | Đối chiếu số liệu pháp lý với `CURRENT_NOXH_RULES` (`lib/finance/noxh-rules`) |
 | L2 | Rà soát chủ đề nhạy cảm (thu nhập, vay, đối tượng) — `/devil` khi cần; **bắt buộc đọc** [`GHI_CHU_BAT_BUOC_TRUOC_KHI_BIEN_TAP.md`](./GHI_CHU_BAT_BUOC_TRUOC_KHI_BIEN_TAP.md) trước khi viết / duyệt bài giá–quy hoạch–pháp lý–đầu tư |
 | L3 | Duyệt người trước publish (bài trend, số liệu giá mới) |
@@ -37,6 +37,8 @@ Mọi bài giá / quy hoạch / pháp lý / tư vấn đầu tư: đọc hết [
 | **Ghi chú Ops** | Admin only | `/devil`, neo văn bản — **không** dán vào body bài. |
 | **Khối chốt CTA tool** | Ops | Copy-paste nội bộ — không đăng nguyên khối. |
 
-**Cấm lộ trên body / H2 công khai:** nhãn `(CTA)`, frontmatter YAML, `editorial_note`, hướng dẫn seed, path kỹ thuật.
+**Cấm lộ trên body / H2 công khai:** nhãn `(CTA)`, frontmatter YAML, `editorial_note`, hướng dẫn seed, path kỹ thuật, H2 kiểu “Ai đang chịu tác động…”, đoạn mở “Bài này quan sát và trình bày…”.
 
-Publish đi qua `normalizeQueueBodyForReader` + `ArticleBody` (bỏ `(CTA)` trên H2 nếu còn sót).
+**L0 bài báo:** tab **Như người đọc** phải cảm như tin — không cảm như checklist nội bộ.
+
+Publish đi qua `normalizeQueueBodyForReader` + `ArticleBody` (bỏ `(CTA)` / H2 SoR nếu còn sót).

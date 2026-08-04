@@ -29,6 +29,10 @@ const EDITORIAL_SCOPE_OPENER_RE =
 const EDITORIAL_NOTE_SECTION_RE =
   /^##\s*(?:Lưu ý biên tập|Ghi chú biên tập|Ops notes?)[\s\S]*?(?=\n##\s+|\n*$)/gim;
 
+/** H2 checklist SoR — không phải tiêu đề tin báo. */
+const SOR_WHO_AFFECTED_H2_RE =
+  /^##\s+Ai (?:đang chịu tác động|bị ảnh hưởng)[^\n]*\n+/gim;
+
 /** Slug ASCII từ tiêu đề tiếng Việt. */
 export function slugifyArticleTitle(title: string): string {
   const base = title
@@ -48,6 +52,7 @@ export function slugifyArticleTitle(title: string): string {
  * - đổi `## Kiểm tra nhanh (CTA)` → `## Kiểm tra nhanh`
  * - bỏ HTML comment ops
  * - bỏ đoạn mở “Bài này quan sát và trình bày…” (SoR)
+ * - bỏ H2 “Ai đang chịu tác động / Ai bị ảnh hưởng…”
  * - bỏ mục Lưu ý biên tập nếu lỡ dính
  */
 export function normalizeQueueBodyForReader(md: string): string {
@@ -58,6 +63,7 @@ export function normalizeQueueBodyForReader(md: string): string {
   s = s.replace(CTA_HEADING_OPS_RE, READER_CTA_HEADING);
   s = s.replace(/<!--[\s\S]*?-->/g, "");
   s = s.replace(EDITORIAL_SCOPE_OPENER_RE, "").trim();
+  s = s.replace(SOR_WHO_AFFECTED_H2_RE, "");
   s = s.replace(EDITORIAL_NOTE_SECTION_RE, "").trim();
   return s.replace(/\n{3,}/g, "\n\n").trim();
 }
