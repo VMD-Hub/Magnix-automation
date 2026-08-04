@@ -42,6 +42,8 @@
     "db:seed:cctm-luat-nha-o-queue:dry": "node --import tsx scripts/seed-cctm-luat-nha-o-queue.ts --dry-run",
     "db:seed:content-queue-all": "node --env-file=.env --import tsx scripts/seed-all-content-drafts-queue.ts",
     "db:seed:content-queue-all:dry": "node --import tsx scripts/seed-all-content-drafts-queue.ts --dry-run",
+    "db:seed:wiki-noxh-queue": "node --env-file=.env --import tsx scripts/seed-wiki-noxh-queue.ts",
+    "db:seed:wiki-noxh-queue:dry": "node --import tsx scripts/seed-wiki-noxh-queue.ts --dry-run",
     "db:seed:legal-review-queue": "node --env-file=.env --import tsx scripts/seed-legal-review-queue-pack.ts",
     "db:seed:legal-review-queue:dry": "node --import tsx scripts/seed-legal-review-queue-pack.ts --dry-run",
     "db:publish:first-buyer-debt-hub": "node --env-file=.env --import tsx scripts/publish-first-buyer-debt-hub-queue.ts",

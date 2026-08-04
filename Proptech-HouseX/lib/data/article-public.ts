@@ -191,17 +191,17 @@ export async function listPublishedArticles(params: {
 export async function getPublishedArticleBySlug(
   slug: string,
 ): Promise<{ article: ArticleDetail; source: "db" | "demo" } | null> {
-  const demo = getDemoArticleBySlug(slug);
-  if (demo) {
-    return { article: applyEditorialMedia(demo), source: "demo" };
-  }
-
   try {
     const row = await fetchPublishedArticleFromDb(slug);
     const article = mapToDetail(row);
     if (article) return { article, source: "db" };
   } catch {
-    // demo fallback
+    // fall through to demo
+  }
+
+  const demo = getDemoArticleBySlug(slug);
+  if (demo) {
+    return { article: applyEditorialMedia(demo), source: "demo" };
   }
 
   return null;

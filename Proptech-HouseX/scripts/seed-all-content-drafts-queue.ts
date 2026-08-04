@@ -1,9 +1,8 @@
 /**
- * Nạp TOÀN BỘ draft markdown (00–13) vào content_queue để Super Admin duyệt L2/L3.
- *
- * Gọi lần lượt:
- *   1) CCTM cluster 00–06 (pack JSON)
- *   2) Legal / policy pack 07–13
+ * Nạp TOÀN BỘ nội dung cần duyệt Super Admin vào content_queue:
+ *   1) CCTM cluster drafts 00–06
+ *   2) Legal / policy drafts 07–13
+ *   3) Wiki NƠXH handbook (~60+ bài từ catalog TS)
  *
  * Usage:
  *   npm run db:seed:content-queue-all
@@ -42,9 +41,10 @@ console.log(
 
 run("scripts/seed-cctm-luat-nha-o-queue.ts");
 run("scripts/seed-legal-review-queue-pack.ts");
+run("scripts/seed-wiki-noxh-queue.ts");
 
 console.log(
   dryRun
-    ? "\nDry-run ALL OK. Chạy npm run db:seed:content-queue-all trên VPS/Postgres để nạp admin."
-    : "\nXong ALL. Duyệt tại /admin/content-queue (Super Admin).",
+    ? "\nDry-run ALL OK. Chạy npm run db:seed:content-queue-all trên VPS/Postgres để nạp admin (drafts + wiki NƠXH)."
+    : "\nXong ALL (drafts 00–13 + wiki NƠXH). Duyệt tại /admin/content-queue (Super Admin).",
 );

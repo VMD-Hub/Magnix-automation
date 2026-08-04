@@ -336,6 +336,13 @@ Xem thêm [chuyên mục phong thủy](/phong-thuy) và [xem hướng nhà](/con
 
 const DEMO_ARTICLES: ArticleDetail[] = DEMO_ARTICLES_RAW.map(applyEditorialMedia);
 
+/** Catalog wiki NƠXH (/wiki-nha-o-xa-hoi) — dùng seed Super Admin content_queue. */
+export function listNoxhHandbookDemoArticles(): ArticleDetail[] {
+  return DEMO_ARTICLES.filter(
+    (a) => a.status === "PUBLISHED" && isNoxhHandbookArticle(a),
+  );
+}
+
 function toCard(a: ArticleDetail): ArticleCardData {
   const { body: _b, seoTitle: _st, seoDesc: _sd, status: _s, ...card } = a;
   return card;
