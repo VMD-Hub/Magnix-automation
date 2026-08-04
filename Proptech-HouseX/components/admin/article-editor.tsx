@@ -157,16 +157,79 @@ export function ArticleEditor({ articleId }: { articleId?: string }) {
       });
       const json = await res.json();
       if (!res.ok) {
-        setError(json.error?.message ?? "Lưu thất bại.");
+        setError(json.error?.message ?? "Không lưu được.");
         return;
       }
-      setMessage("Đã lưu bài viết.");
-      if (!articleId) {
-        router.push(`/admin/articles/${json.data.article.id}`);
+      setMessage("Đã lưu.");
+      if (!articleId && json.data?.article?.id) {
+        router.replace(`/admin/articles/${json.data.article.id}`);
       }
-      router.refresh();
+      if (json.data?.article?.status) {
+        setForm((prev) => ({ ...prev, status: json.data.article.status }));
+      }
     } catch {
-      setError("Lỗi mạng.");
+      setError("Lỗi mạng khi lưu.");
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  async function hideArticle() {
+    if (!articleId) return;
+    if (
+      !window.confirm(
+        "Ẩn bài khỏi site + sitemap? Catalog demo cùng slug cũng bị chặn.",
+      )
+    ) {
+      return;
+    }
+    setSaving(true);
+    setError(null);
+    try {
+      const res = await fetch(`/api/admin/articles/${articleId}`, {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ action: "archive" }),
+      });
+      const json = await res.json();
+      if (!res.ok) {
+        setError(json.error?.message ?? "Không ẩn được.");
+        return;
+      }
+      setForm((prev) => ({ ...prev, status: "ARCHIVED" }));
+      setMessage("Đã ẩn khỏi site.");
+    } catch {
+      setError("Lỗi mạng khi ẩn.");
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  async function removeArticle() {
+    if (!articleId) return;
+    if (
+      !window.confirm(
+        "Xóa nội dung bài? Slug vẫn bị chặn (ARCHIVED stub) để demo không sống lại.",
+      )
+    ) {
+      return;
+    }
+    setSaving(true);
+    setError(null);
+    try {
+      const res = await fetch(`/api/admin/articles/${articleId}`, {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ action: "delete" }),
+      });
+      const json = await res.json();
+      if (!res.ok) {
+        setError(json.error?.message ?? "Không xóa được.");
+        return;
+      }
+      router.push("/admin/articles");
+    } catch {
+      setError("Lỗi mạng khi xóa.");
     } finally {
       setSaving(false);
     }
@@ -227,7 +290,7 @@ export function ArticleEditor({ articleId }: { articleId?: string }) {
           >
             <option value="DRAFT">Nháp</option>
             <option value="PUBLISHED">Xuất bản</option>
-            <option value="ARCHIVED">Lưu trữ</option>
+            <option value="ARCHIVED">Đã ẩn (không public / sitemap)</option>
           </select>
         </label>
         <label className="block lg:col-span-2">
@@ -340,6 +403,28 @@ export function ArticleEditor({ articleId }: { articleId?: string }) {
             Xem trên site
           </ButtonLink>
         )}
+        {articleId ? (
+          <>
+            <Button
+              type="button"
+              variant="outline"
+              disabled={saving}
+              className="border-amber-300 text-amber-900 hover:bg-amber-50"
+              onClick={() => void hideArticle()}
+            >
+              Ẩn khỏi site
+            </Button>
+            <Button
+              type="button"
+              variant="outline"
+              disabled={saving}
+              className="border-red-300 text-red-800 hover:bg-red-50"
+              onClick={() => void removeArticle()}
+            >
+              Xóa (giữ chặn demo)
+            </Button>
+          </>
+        ) : null}
       </div>
     </form>
   );

@@ -54,7 +54,7 @@ export const PROJECT_STATUS_LABEL: Record<string, string> = {
 export const ARTICLE_STATUS_LABEL: Record<string, string> = {
   DRAFT: "Nháp",
   PUBLISHED: "Đã xuất bản",
-  ARCHIVED: "Lưu trữ",
+  ARCHIVED: "Đã ẩn",
 };
 
 export const PROJECT_TYPE_LABEL: Record<string, string> = {

@@ -6,7 +6,9 @@ import {
 } from "@/lib/admin/session";
 import {
   approveContentQueue,
+  deleteContentQueueItem,
   getContentQueueById,
+  hideContentQueuePublic,
   markContentQueuePublished,
   publishContentQueueToWeb,
   rejectContentQueue,
@@ -88,6 +90,14 @@ export async function POST(req: NextRequest, { params }: Ctx) {
           }),
         );
       }
+      if (body.action === "hide_public") {
+        return ok(
+          await hideContentQueuePublic(id, reviewedBy, body.reason),
+        );
+      }
+      if (body.action === "delete_item") {
+        return ok(await deleteContentQueueItem(id));
+      }
       return ok(await markContentQueuePublished(id));
     } catch (inner) {
       if (inner instanceof Error) {
@@ -102,6 +112,13 @@ export async function POST(req: NextRequest, { params }: Ctx) {
             409,
             "INVALID_STATUS",
             "Không thể chuyển trạng thái từ status hiện tại.",
+          );
+        }
+        if (inner.message === "SLUG_MISSING") {
+          return fail(
+            422,
+            "SLUG_MISSING",
+            "Không xác định được slug để ẩn (thiếu opsNotes slug: hoặc key wiki/kien-thuc).",
           );
         }
         if (inner.message === "ARTICLE_MISSING") {

@@ -380,13 +380,27 @@ export function ContentQueueBoard() {
       | "approve"
       | "reject"
       | "mark_published"
-      | "publish_web",
+      | "publish_web"
+      | "hide_public"
+      | "delete_item",
     publishNow?: boolean,
   ) {
     if (!editingId) return;
     if (action === "reject" && rejectReason.trim().length < 5) {
       setError("Lý do từ chối tối thiểu 5 ký tự.");
       return;
+    }
+    if (action === "hide_public") {
+      const okHide = window.confirm(
+        "Ẩn bài khỏi site + sitemap? Catalog demo cùng slug cũng bị chặn. Queue chuyển REJECTED để bạn sửa lại nếu cần.",
+      );
+      if (!okHide) return;
+    }
+    if (action === "delete_item") {
+      const okDel = window.confirm(
+        "Xóa item khỏi queue? Bài vẫn bị ẩn trên site (ARCHIVED) để không ảnh hưởng uy tín. Không hoàn tác.",
+      );
+      if (!okDel) return;
     }
     setActionLoading(true);
     setError(null);
@@ -434,7 +448,15 @@ export function ContentQueueBoard() {
             ? { action, rejectReason: rejectReason.trim() }
             : action === "publish_web"
               ? { action, publishNow: publishNow !== false }
-              : { action },
+              : action === "hide_public"
+                ? {
+                    action,
+                    reason:
+                      rejectReason.trim().length >= 5
+                        ? rejectReason.trim()
+                        : undefined,
+                  }
+                : { action },
         ),
       });
       const json = await res.json();
@@ -443,6 +465,13 @@ export function ContentQueueBoard() {
           ? `\n• ${json.error.details.join("\n• ")}`
           : "";
         setError((json?.error?.message ?? "Thao tác thất bại.") + details);
+        return;
+      }
+      if (action === "delete_item") {
+        setMessage("Đã xóa khỏi queue; slug vẫn ẩn trên site.");
+        setRejectReason("");
+        closeEditor();
+        await load();
         return;
       }
       setEditingStatus(json.data.status);
@@ -456,11 +485,13 @@ export function ContentQueueBoard() {
             ? "Đã gửi chờ L3."
             : action === "reject"
               ? "Đã từ chối."
-              : action === "publish_web"
-                ? publishNow === false
-                  ? "Đã tạo bài nháp trên CMS."
-                  : "Đã publish bài web + đánh dấu queue published."
-                : "Đã đánh dấu published.",
+              : action === "hide_public"
+                ? "Đã ẩn khỏi site + sitemap."
+                : action === "publish_web"
+                  ? publishNow === false
+                    ? "Đã tạo bài nháp trên CMS."
+                    : "Đã publish bài web + đánh dấu queue published."
+                  : "Đã đánh dấu published.",
       );
       setRejectReason("");
       await load();
@@ -822,6 +853,24 @@ export function ContentQueueBoard() {
               Đồng bộ lại bài web
             </Button>
           ) : null}
+          <Button
+            type="button"
+            variant="outline"
+            disabled={actionLoading}
+            className="border-amber-300 text-amber-900 hover:bg-amber-50"
+            onClick={() => void runAction("hide_public")}
+          >
+            Ẩn khỏi site
+          </Button>
+          <Button
+            type="button"
+            variant="outline"
+            disabled={actionLoading}
+            className="border-red-300 text-red-800 hover:bg-red-50"
+            onClick={() => void runAction("delete_item")}
+          >
+            Xóa khỏi queue
+          </Button>
         </div>
 
         {editingArticle ? (

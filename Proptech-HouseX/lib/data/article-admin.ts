@@ -132,7 +132,65 @@ export async function updateArticleFromAdmin(
 }
 
 export async function deleteArticleFromAdmin(id: string) {
-  return prisma.article.delete({ where: { id } });
+  const row = await prisma.article.findUnique({ where: { id } });
+  if (!row) throw new Error("NOT_FOUND");
+
+  await prisma.article.delete({ where: { id } });
+
+  // Giữ slug ARCHIVED để catalog demo không "sống lại" trên public / sitemap.
+  return prisma.article.create({
+    data: {
+      slug: row.slug,
+      title: row.title,
+      excerpt: row.excerpt,
+      body: "Bài đã gỡ khỏi site bởi Super Admin — không phục hồi từ catalog demo.",
+      status: "ARCHIVED",
+      publishedAt: null,
+      authorName: "House X",
+      seoTitle: null,
+      seoDesc: null,
+    },
+  });
+}
+
+/** Ẩn khỏi public + sitemap; chặn fallback demo cùng slug. */
+export async function archiveArticleFromAdmin(id: string) {
+  return prisma.article.update({
+    where: { id },
+    data: { status: "ARCHIVED", publishedAt: null },
+  });
+}
+
+/**
+ * Upsert bản ARCHIVED theo slug — dùng khi ẩn bài vẫn còn trên catalog demo
+ * (chưa có hàng CMS) hoặc sau khi gỡ queue.
+ */
+export async function suppressPublicArticleBySlug(
+  slug: string,
+  title: string,
+): Promise<{ id: string; slug: string; status: string }> {
+  const existing = await prisma.article.findUnique({
+    where: { slug },
+    select: { id: true, slug: true, status: true },
+  });
+  if (existing) {
+    if (existing.status === "ARCHIVED") return existing;
+    return prisma.article.update({
+      where: { id: existing.id },
+      data: { status: "ARCHIVED", publishedAt: null },
+      select: { id: true, slug: true, status: true },
+    });
+  }
+  return prisma.article.create({
+    data: {
+      slug,
+      title: title.slice(0, 240) || slug,
+      body: "Bài đã ẩn khỏi site bởi Super Admin.",
+      status: "ARCHIVED",
+      authorName: "House X",
+    },
+    select: { id: true, slug: true, status: true },
+  });
 }
 
 export async function upsertArticleTag(data: {

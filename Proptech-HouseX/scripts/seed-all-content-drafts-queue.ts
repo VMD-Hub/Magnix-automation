@@ -3,6 +3,7 @@
  *   1) CCTM cluster drafts 00–06
  *   2) Legal / policy drafts 07–13
  *   3) Wiki NƠXH handbook (~60+ bài từ catalog TS)
+ *   4) Kiến thức BĐS (~50+ bài từ catalog TS)
  *
  * Usage:
  *   npm run db:seed:content-queue-all
@@ -42,9 +43,10 @@ console.log(
 run("scripts/seed-cctm-luat-nha-o-queue.ts");
 run("scripts/seed-legal-review-queue-pack.ts");
 run("scripts/seed-wiki-noxh-queue.ts");
+run("scripts/seed-kien-thuc-queue.ts");
 
 console.log(
   dryRun
-    ? "\nDry-run ALL OK. Chạy npm run db:seed:content-queue-all trên VPS/Postgres để nạp admin (drafts + wiki NƠXH)."
-    : "\nXong ALL (drafts 00–13 + wiki NƠXH). Duyệt tại /admin/content-queue (Super Admin).",
+    ? "\nDry-run ALL OK. Chạy npm run db:seed:content-queue-all trên VPS/Postgres để nạp admin (drafts + wiki + kiến thức)."
+    : "\nXong ALL (drafts 00–13 + wiki NƠXH + kiến thức BĐS). Duyệt tại /admin/content-queue (Super Admin).",
 );

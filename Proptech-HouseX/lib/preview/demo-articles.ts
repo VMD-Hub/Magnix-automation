@@ -343,6 +343,13 @@ export function listNoxhHandbookDemoArticles(): ArticleDetail[] {
   );
 }
 
+/** Catalog Kiến thức BĐS (/tin-tuc/kien-thuc) — seed Super Admin content_queue. */
+export function listGeneralReKnowledgeDemoArticles(): ArticleDetail[] {
+  return DEMO_ARTICLES.filter(
+    (a) => a.status === "PUBLISHED" && isGeneralReKnowledgeArticle(a),
+  );
+}
+
 function toCard(a: ArticleDetail): ArticleCardData {
   const { body: _b, seoTitle: _st, seoDesc: _sd, status: _s, ...card } = a;
   return card;

@@ -77,4 +77,9 @@ export const contentQueueStatusActionSchema = z.discriminatedUnion("action", [
     /** true = tạo/đưa article PUBLISHED; false = chỉ nháp DRAFT + gắn articleId. */
     publishNow: z.boolean().optional().default(true),
   }),
+  z.object({
+    action: z.literal("hide_public"),
+    reason: z.string().min(5).max(2000).optional(),
+  }),
+  z.object({ action: z.literal("delete_item") }),
 ]);

@@ -49,16 +49,25 @@ function paginateArticleCards(
   return { items: items.slice(start, start + pageSize), total };
 }
 
-/** Catalog demo ưu tiên hơn DB cùng slug — tránh bản seed cũ ghi đè bài đã biên tập. */
+/** DB PUBLISHED ưu tiên hơn demo cùng slug; demo chỉ bổ sung slug chưa có trong DB. */
 function mergeArticleCards(
   dbItems: ArticleCardData[],
   demoItems: ArticleCardData[],
 ): ArticleCardData[] {
-  const bySlug = new Map(demoItems.map((a) => [a.slug, a]));
-  for (const a of dbItems) {
+  const bySlug = new Map(dbItems.map((a) => [a.slug, a]));
+  for (const a of demoItems) {
     if (!bySlug.has(a.slug)) bySlug.set(a.slug, a);
   }
   return sortArticleCards([...bySlug.values()]);
+}
+
+/** Slug có hàng CMS nhưng không PUBLISHED → không phục hồi từ demo. */
+async function listSuppressedArticleSlugs(): Promise<Set<string>> {
+  const rows = await prisma.article.findMany({
+    where: { status: { not: "PUBLISHED" } },
+    select: { slug: true },
+  });
+  return new Set(rows.map((r) => r.slug));
 }
 
 function mapToCard(row: {
@@ -110,6 +119,13 @@ async function fetchPublishedArticleFromDb(slug: string) {
   });
 }
 
+async function fetchAnyArticleStatusBySlug(slug: string) {
+  return prisma.article.findUnique({
+    where: { slug },
+    select: { status: true },
+  });
+}
+
 export async function listPublishedArticles(params: {
   page?: number;
   pageSize?: number;
@@ -141,7 +157,7 @@ export async function listPublishedArticles(params: {
         : {}),
     };
 
-    const [rows, demoAll] = await Promise.all([
+    const [rows, demoAll, suppressed] = await Promise.all([
       prisma.article.findMany({
         where,
         include: articleCardInclude,
@@ -156,12 +172,11 @@ export async function listPublishedArticles(params: {
           pageSize: DEMO_CATALOG_PAGE_SIZE,
         }),
       ),
+      listSuppressedArticleSlugs(),
     ]);
 
-    const merged = mergeArticleCards(
-      rows.map(mapToCard),
-      demoAll.items,
-    );
+    const demoVisible = demoAll.items.filter((a) => !suppressed.has(a.slug));
+    const merged = mergeArticleCards(rows.map(mapToCard), demoVisible);
     const scoped = knowledgeOnly
       ? merged.filter(isGeneralReKnowledgeArticle)
       : handbookOnly
@@ -195,6 +210,12 @@ export async function getPublishedArticleBySlug(
     const row = await fetchPublishedArticleFromDb(slug);
     const article = mapToDetail(row);
     if (article) return { article, source: "db" };
+
+    const any = await fetchAnyArticleStatusBySlug(slug);
+    if (any && any.status !== "PUBLISHED") {
+      // ARCHIVED / DRAFT: Super Admin đã giám sát — không fallback demo.
+      return null;
+    }
   } catch {
     // fall through to demo
   }
@@ -212,19 +233,22 @@ export async function getArticlesForProjectSlug(
   limit = 6,
 ): Promise<ArticleCardData[]> {
   try {
-    const rows = await prisma.article.findMany({
-      where: {
-        status: "PUBLISHED",
-        projects: { some: { project: { slug: projectSlug } } },
-      },
-      include: articleCardInclude,
-      orderBy: { publishedAt: "desc" },
-    });
-    const demoItems = getDemoArticlesForProject(
-      projectSlug,
-      DEMO_CATALOG_PAGE_SIZE,
-    );
-    const merged = mergeArticleCards(rows.map(mapToCard), demoItems);
+    const [rows, demoItems, suppressed] = await Promise.all([
+      prisma.article.findMany({
+        where: {
+          status: "PUBLISHED",
+          projects: { some: { project: { slug: projectSlug } } },
+        },
+        include: articleCardInclude,
+        orderBy: { publishedAt: "desc" },
+      }),
+      Promise.resolve(
+        getDemoArticlesForProject(projectSlug, DEMO_CATALOG_PAGE_SIZE),
+      ),
+      listSuppressedArticleSlugs(),
+    ]);
+    const demoVisible = demoItems.filter((a) => !suppressed.has(a.slug));
+    const merged = mergeArticleCards(rows.map(mapToCard), demoVisible);
     if (merged.length > 0) {
       return orderProjectRelatedArticles(projectSlug, merged, limit);
     }
@@ -249,7 +273,7 @@ export async function getPublishedTagBySlug(
 
 export async function listPublishedTags(): Promise<ArticleTagSummary[]> {
   try {
-    const [rows, demoAll] = await Promise.all([
+    const [rows, demoAll, suppressed] = await Promise.all([
       prisma.article.findMany({
         where: { status: "PUBLISHED" },
         include: articleCardInclude,
@@ -261,11 +285,10 @@ export async function listPublishedTags(): Promise<ArticleTagSummary[]> {
           handbookOnly: false,
         }),
       ),
+      listSuppressedArticleSlugs(),
     ]);
-    const merged = mergeArticleCards(
-      rows.map(mapToCard),
-      demoAll.items,
-    );
+    const demoVisible = demoAll.items.filter((a) => !suppressed.has(a.slug));
+    const merged = mergeArticleCards(rows.map(mapToCard), demoVisible);
     if (merged.length === 0) return listDemoTags();
 
     const demoTagMeta = new Map(listDemoTags().map((t) => [t.slug, t]));

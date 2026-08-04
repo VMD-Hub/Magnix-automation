@@ -28,6 +28,7 @@ export function ArticleListBoard() {
   const [items, setItems] = useState<ArticleRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [busyId, setBusyId] = useState<string | null>(null);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -54,6 +55,35 @@ export function ArticleListBoard() {
   useEffect(() => {
     load();
   }, [load]);
+
+  async function runArticleAction(
+    id: string,
+    action: "archive" | "delete",
+  ) {
+    const msg =
+      action === "archive"
+        ? "Ẩn bài khỏi site + sitemap?"
+        : "Xóa nội dung? Slug vẫn bị chặn để demo không sống lại.";
+    if (!window.confirm(msg)) return;
+    setBusyId(id);
+    try {
+      const res = await fetch(`/api/admin/articles/${id}`, {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ action }),
+      });
+      const json = await res.json();
+      if (!res.ok) {
+        setError(json.error?.message ?? "Thao tác thất bại.");
+        return;
+      }
+      await load();
+    } catch {
+      setError("Lỗi mạng.");
+    } finally {
+      setBusyId(null);
+    }
+  }
 
   if (loading) {
     return <p className="text-slate-600">Đang tải…</p>;
@@ -107,7 +137,7 @@ export function ArticleListBoard() {
                 <td className="px-4 py-3 text-slate-600">
                   {formatDate(a.publishedAt)}
                 </td>
-                <td className="px-4 py-3 text-right">
+                <td className="px-4 py-3 text-right whitespace-nowrap">
                   <Link
                     href={`/admin/articles/${a.id}`}
                     className="font-medium text-brand-700 hover:underline"
@@ -123,6 +153,24 @@ export function ArticleListBoard() {
                       Xem
                     </Link>
                   )}
+                  {a.status !== "ARCHIVED" ? (
+                    <button
+                      type="button"
+                      disabled={busyId === a.id}
+                      className="ml-3 text-amber-800 hover:underline disabled:opacity-50"
+                      onClick={() => void runArticleAction(a.id, "archive")}
+                    >
+                      Ẩn
+                    </button>
+                  ) : null}
+                  <button
+                    type="button"
+                    disabled={busyId === a.id}
+                    className="ml-3 text-red-700 hover:underline disabled:opacity-50"
+                    onClick={() => void runArticleAction(a.id, "delete")}
+                  >
+                    Xóa
+                  </button>
                 </td>
               </tr>
             ))}

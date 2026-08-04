@@ -16,7 +16,7 @@ import {
   type L3ContentChecklist,
   type NoxhCtaToolId,
 } from "@/lib/content/noxh-cta-tools";
-import { createArticleFromAdmin } from "@/lib/data/article-admin";
+import { createArticleFromAdmin, suppressPublicArticleBySlug, upsertArticleTag } from "@/lib/data/article-admin";
 import { randomUUID } from "node:crypto";
 
 function checklistToJson(
@@ -24,6 +24,45 @@ function checklistToJson(
 ): Prisma.InputJsonValue | Prisma.NullableJsonNullValueInput {
   if (value === null) return Prisma.JsonNull;
   return value as Prisma.InputJsonValue;
+}
+
+/** slug từ normalizedKey wiki-noxh:… / kien-thuc:… hoặc dòng opsNotes `slug:`. */
+export function parseContentQueueCanonicalSlug(row: {
+  normalizedKey: string;
+  opsNotes?: string | null;
+  article?: { slug: string } | null;
+}): string | null {
+  if (row.article?.slug) return row.article.slug;
+  const fromKey = row.normalizedKey.match(
+    /^(?:wiki-noxh|kien-thuc|re-knowledge):(.+)$/,
+  );
+  if (fromKey?.[1]) return fromKey[1].trim();
+  const m = row.opsNotes?.match(/^slug:\s*(.+)$/m);
+  return m?.[1]?.trim() || null;
+}
+
+function parseContentQueueTagSlugs(
+  row: Pick<ContentQueueItem, "opsNotes">,
+): string[] {
+  const m = row.opsNotes?.match(/^tags:\s*(.+)$/m);
+  if (!m?.[1]) return [];
+  return m[1]
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean)
+    .slice(0, 20);
+}
+
+async function ensureArticleTags(slugs: string[]) {
+  for (const slug of slugs) {
+    await upsertArticleTag({
+      slug,
+      name: slug
+        .split("-")
+        .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+        .join(" "),
+    });
+  }
 }
 
 export type ContentQueueWithArticle = ContentQueueItem & {
@@ -275,8 +314,21 @@ export async function markContentQueuePublished(
   });
 }
 
-async function allocateUniqueArticleSlug(title: string): Promise<string> {
-  const base = slugifyArticleTitle(title);
+async function allocateUniqueArticleSlug(
+  title: string,
+  preferredSlug?: string | null,
+  allowExistingId?: string | null,
+): Promise<string> {
+  if (preferredSlug) {
+    const hit = await prisma.article.findUnique({
+      where: { slug: preferredSlug },
+      select: { id: true },
+    });
+    if (!hit || (allowExistingId && hit.id === allowExistingId)) {
+      return preferredSlug;
+    }
+  }
+  const base = preferredSlug || slugifyArticleTitle(title);
   for (let i = 0; i < 20; i += 1) {
     const slug = i === 0 ? base : `${base}-${i + 1}`;
     const hit = await prisma.article.findUnique({
@@ -312,6 +364,8 @@ export async function publishContentQueueToWeb(
   const excerpt =
     row.painPoint?.trim().slice(0, 500) ||
     `Kiểm tra nhanh: ${tool.title}`;
+  const tagSlugs = parseContentQueueTagSlugs(row);
+  if (tagSlugs.length > 0) await ensureArticleTags(tagSlugs);
 
   if (row.articleId) {
     const existing = await prisma.article.findUnique({
@@ -336,6 +390,23 @@ export async function publishContentQueueToWeb(
       },
     });
 
+    if (tagSlugs.length > 0) {
+      const tagIds = await prisma.articleTag.findMany({
+        where: { slug: { in: tagSlugs } },
+        select: { id: true },
+      });
+      await prisma.$transaction([
+        prisma.articleTagLink.deleteMany({ where: { articleId: existing.id } }),
+        prisma.articleTagLink.createMany({
+          data: tagIds.map((t) => ({
+            articleId: existing.id,
+            tagId: t.id,
+          })),
+          skipDuplicates: true,
+        }),
+      ]);
+    }
+
     if (!publishNow) {
       const refreshed = await getContentQueueById(id);
       if (!refreshed) throw new Error("NOT_FOUND");
@@ -353,7 +424,62 @@ export async function publishContentQueueToWeb(
     });
   }
 
-  const slug = await allocateUniqueArticleSlug(row.title);
+  const preferred = parseContentQueueCanonicalSlug(row);
+  if (preferred && !row.articleId) {
+    const existingBySlug = await prisma.article.findUnique({
+      where: { slug: preferred },
+      select: { id: true, status: true },
+    });
+    if (existingBySlug) {
+      await prisma.article.update({
+        where: { id: existingBySlug.id },
+        data: {
+          title: row.title,
+          excerpt,
+          body,
+          status: publishNow ? "PUBLISHED" : "DRAFT",
+          publishedAt: publishNow ? new Date() : null,
+          seoTitle: row.title.slice(0, 200),
+          seoDesc: excerpt.slice(0, 320),
+        },
+      });
+      if (tagSlugs.length > 0) {
+        const tagIds = await prisma.articleTag.findMany({
+          where: { slug: { in: tagSlugs } },
+          select: { id: true },
+        });
+        await prisma.$transaction([
+          prisma.articleTagLink.deleteMany({
+            where: { articleId: existingBySlug.id },
+          }),
+          prisma.articleTagLink.createMany({
+            data: tagIds.map((t) => ({
+              articleId: existingBySlug.id,
+              tagId: t.id,
+            })),
+            skipDuplicates: true,
+          }),
+        ]);
+      }
+      return prisma.contentQueueItem.update({
+        where: { id },
+        data: {
+          articleId: existingBySlug.id,
+          publishChannel: row.publishChannel ?? "WEBSITE",
+          ...(publishNow
+            ? {
+                status: "PUBLISHED" as const,
+                publishedAt: new Date(),
+                rejectReason: null,
+              }
+            : {}),
+        },
+        include: includeArticle,
+      });
+    }
+  }
+
+  const slug = await allocateUniqueArticleSlug(row.title, preferred, null);
   const article = await createArticleFromAdmin({
     slug,
     title: row.title,
@@ -365,7 +491,7 @@ export async function publishContentQueueToWeb(
     authorName: "House X",
     seoTitle: row.title.slice(0, 200),
     seoDesc: excerpt.slice(0, 320),
-    tagSlugs: [],
+    tagSlugs,
     projectIds: [],
   });
 
@@ -383,4 +509,60 @@ export async function publishContentQueueToWeb(
     },
     include: includeArticle,
   });
+}
+
+/**
+ * Ẩn bài khỏi public + sitemap (ARCHIVED stub) — queue → REJECTED để sửa lại nếu cần.
+ */
+export async function hideContentQueuePublic(
+  id: string,
+  reviewedBy: string,
+  reason?: string,
+): Promise<ContentQueueWithArticle> {
+  const row = await getContentQueueById(id);
+  if (!row) throw new Error("NOT_FOUND");
+
+  const slug = parseContentQueueCanonicalSlug(row);
+  if (!slug) throw new Error("SLUG_MISSING");
+
+  const suppressed = await suppressPublicArticleBySlug(slug, row.title);
+
+  return prisma.contentQueueItem.update({
+    where: { id },
+    data: {
+      status: "REJECTED",
+      articleId: row.articleId ?? suppressed.id,
+      reviewedAt: new Date(),
+      reviewedBy,
+      rejectReason:
+        reason?.trim() ||
+        "Ẩn khỏi site bởi Super Admin (không đạt / bảo vệ uy tín).",
+      opsNotes: [
+        row.opsNotes?.trim() || "",
+        `hidden_at: ${new Date().toISOString()}`,
+        `hidden_slug: ${slug}`,
+      ]
+        .filter(Boolean)
+        .join("\n"),
+    },
+    include: includeArticle,
+  });
+}
+
+/**
+ * Xóa item khỏi queue + giữ ARCHIVED stub theo slug (demo không sống lại).
+ */
+export async function deleteContentQueueItem(
+  id: string,
+): Promise<{ deleted: true; suppressedSlug: string | null }> {
+  const row = await getContentQueueById(id);
+  if (!row) throw new Error("NOT_FOUND");
+
+  const slug = parseContentQueueCanonicalSlug(row);
+  if (slug) {
+    await suppressPublicArticleBySlug(slug, row.title);
+  }
+
+  await prisma.contentQueueItem.delete({ where: { id } });
+  return { deleted: true, suppressedSlug: slug };
 }
