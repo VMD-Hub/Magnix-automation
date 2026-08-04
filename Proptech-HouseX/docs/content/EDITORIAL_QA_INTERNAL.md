@@ -7,7 +7,7 @@ Trang công khai: `/gioi-thieu/phuong-phap-bien-tap` (`lib/content/editorial-met
 
 | Tầng | Nhiệm vụ |
 |------|----------|
-| L0 | Giọng bài báo người đọc: lede tin cứng; H2 declarative; không heading meta/SoR (“Ai đang chịu tác động”, “Bài này quan sát…”); không markdown thô; không CTA gắt; không tự khen so với CafeLand trên body |
+| L0 | Công thức bài giá trị ([`CONG_THUC_BAI_GIA_TRI…`](./CONG_THUC_BAI_GIA_TRI_DOC_GIA_SEO_AIO.md)): trả lời ngắn đầu bài; ≤3 hyperlink sâu; không heading SoR/meta; không `(CTA)`; không overlink |
 | L1 | Đối chiếu số liệu pháp lý với `CURRENT_NOXH_RULES` (`lib/finance/noxh-rules`) |
 | L2 | Rà soát chủ đề nhạy cảm (thu nhập, vay, đối tượng) — `/devil` khi cần; **bắt buộc đọc** [`GHI_CHU_BAT_BUOC_TRUOC_KHI_BIEN_TAP.md`](./GHI_CHU_BAT_BUOC_TRUOC_KHI_BIEN_TAP.md) trước khi viết / duyệt bài giá–quy hoạch–pháp lý–đầu tư |
 | L3 | Duyệt người trước publish (bài trend, số liệu giá mới) |

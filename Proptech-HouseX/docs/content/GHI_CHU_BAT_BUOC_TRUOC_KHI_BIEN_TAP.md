@@ -20,17 +20,19 @@ Trước khi mở draft, seed queue, hoặc bấm duyệt: đọc hết file nà
 
 ---
 
-## 0b. Khung bài báo người đọc (body công khai)
+## 0b. Công thức body công khai (ưu tiên)
 
-Body phải đọc được như **tin / bài phân tích báo chí** (tham chiếu nhịp CafeLand), không như biên bản SoR.
+**Chuẩn khóa:** [`CONG_THUC_BAI_GIA_TRI_DOC_GIA_SEO_AIO.md`](./CONG_THUC_BAI_GIA_TRI_DOC_GIA_SEO_AIO.md)
 
-1. **Lede** 1–2 câu: ai / việc gì / khi nào / quy mô — tin cứng.
-2. **H2 declarative** (“Động thái…”, “Năm hướng đề xuất…”, “Với người đang…”) — không H2 checklist SoR (“Ai đang chịu tác động…”, “Ai bị ảnh hưởng?”).
-3. **Văn xuôi kể số liệu**; tối đa **một** bảng dữ liệu thật (đơn giá, mốc thời gian, mức trần). Không mở bài bằng bảng “nhóm / việc cần chú ý”.
-4. **Ý nghĩa với người đọc** xen 1–2 đoạn trong mạch tin — không mục SOP nội bộ (“House X đọc bảng thế nào”, “CafeLand làm tốt… House X bổ sung”).
-5. **CTA** cuối: `## Kiểm tra nhanh` + 2–3 câu — không nhãn `(CTA)`.
+**Một câu hỏi → trả lời ngắn có phân nhánh → bản chất chỗ dễ nhầm → chi tiết đủ quyết → hành động + CTA mềm → (tối đa 2–3 FAQ cùng lane) → tối đa 3 hyperlink sâu.**
 
-Sáu câu SoR vẫn bắt buộc — nhưng chỉ trong `editorial_note` / opsNotes.
+- Trả lời **trực diện** ở đầu bài; không né, không disclaimer làm loãng khối trả lời ngắn.
+- Cụm cần giải thích thêm: **in đậm + link** (≤ 3 link điều hướng), không giảng dài phá mạch.
+- Không lộ `(CTA)`, SoR, hub meta, overlink.
+
+Bài tin toàn cảnh thị trường / quy hoạch dài: vẫn phải mang được một quyết định hoặc một quy tắc đọc cho người đọc; không thay công thức trên bằng bảng checklist nội bộ.
+
+Sáu câu SoR vẫn bắt buộc — chỉ trong `editorial_note` / opsNotes.
 
 ---
 
