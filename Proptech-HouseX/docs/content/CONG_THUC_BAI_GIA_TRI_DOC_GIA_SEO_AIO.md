@@ -21,11 +21,18 @@ Bài tin thị trường / quy hoạch dài (toàn cảnh tháng) có thể dùn
 
 Một chủ đề, một quyết định. Không nhồi nhiều chủ đề pháp lý vào một title.
 
+**Kỷ luật title:**
+
+- Title đã nêu sự việc (ví dụ “đề xuất 60 triệu”) thì **không** hỏi lại điều title đã khẳng định (“mức nào đang áp dụng?” / “có phải đề xuất không?”).
+- Hỏi vào **bản chất**: khác gì hiện tại? áp dụng cho đối tượng nào? đổi gì so với mức đang xét hồ sơ?
+- Hoặc **chỉ đưa tin** — không gắn câu hỏi thừa.
+
 ### 2. Trả lời ngắn gọn (ngay đầu bài)
 
-- Phân nhánh dứt khoát (ví dụ: tiền mặt vs vay; đang hiệu lực vs đề xuất).
+- Phân nhánh dứt khoát (ví dụ: tiền mặt vs vay; mức đề xuất vs mức đang xét hồ sơ).
 - Kết luận **in đậm**, trực diện.
-- **Không** né tránh, không disclaimer làm loãng ý chính ở khối này.
+- **Không** né tránh; **không** disclaimer dài nhắc lại điều title đã nói.
+- **Không** viết kiểu “tin báo chí nêu…”, “theo nguồn tổng hợp…” — House X nêu sự việc + neo văn bản (hyperlink). Lồng “tin trong tin” làm mất uy tín.
 - Đây là lớp AIO / snippet ưu tiên.
 
 ### 3. Một mục “bản chất” (giải thích vừa đủ)
