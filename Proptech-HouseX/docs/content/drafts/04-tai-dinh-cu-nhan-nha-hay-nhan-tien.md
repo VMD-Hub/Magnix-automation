@@ -109,7 +109,7 @@ Nếu bạn đang cân nhắc mua NƠXH vì lo bị “mất suất” khi tòa 
 
 Không bỏ lỡ hạn đăng ký nhận nhà / nhận tiền ghi trong thông báo — nhiều quyền lợi gắn đúng tiến độ hành chính.
 
-## Kiểm tra nhanh (CTA)
+## Kiểm tra nhanh
 
 Bạn đang phân vân mình có đủ điều kiện NƠXH không?
 → Kiểm tra nhanh (miễn phí): [/cong-cu/dieu-kien-noxh](/cong-cu/dieu-kien-noxh)

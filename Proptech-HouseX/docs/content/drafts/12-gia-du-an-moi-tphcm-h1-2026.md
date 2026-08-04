@@ -90,7 +90,7 @@ Kênh thị trường thường dừng ở “giá bao nhiêu”. Phần House X
 
 House X không thay bảng giá chủ đầu tư và không hứa lợi nhuận. Việc của chúng tôi là giúp người đọc **đặt đúng dự án trên bản đồ hạ tầng và hồ sơ pháp lý** trước khi quyết định.
 
-## Kiểm tra nhanh (CTA)
+## Kiểm tra nhanh
 
 Bạn đang so vài dự án trên bảng hoặc cần đối chiếu pháp lý – tiến độ – điều kiện vay trước khi đặt cọc?
 → [Đặt lịch rà soát pháp lý 15 phút miễn phí](/lien-he?goi=ra-soat-phap-ly-15-phut#tu-van)

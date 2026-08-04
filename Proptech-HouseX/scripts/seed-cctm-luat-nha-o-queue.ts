@@ -18,6 +18,7 @@ import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { PrismaClient } from "@prisma/client";
 import { getNoxhCtaTool } from "../lib/content/noxh-cta-tools";
+import { queueBodyHasSeedCtaMarker } from "../lib/content/content-queue-article";
 
 const dryRun = process.argv.includes("--dry-run");
 const prisma = dryRun ? null : new PrismaClient();
@@ -114,7 +115,7 @@ async function main() {
     const { meta, body } = parseDraft(readFileSync(draftAbs, "utf8"));
     const title = meta.title?.trim();
     if (!title) throw new Error(`Draft thiếu title: ${item.draft_file}`);
-    if (!body.includes("## Kiểm tra nhanh (CTA)")) {
+    if (!queueBodyHasSeedCtaMarker(body)) {
       throw new Error(`Draft thiếu section CTA: ${item.draft_file}`);
     }
     if (meta.slug && meta.slug !== item.slug) {

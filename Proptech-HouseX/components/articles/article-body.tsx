@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { FaqAccordionSection } from "@/components/content/faq-accordion-section";
@@ -23,9 +25,15 @@ const PROSE_JUSTIFY =
 
 /** Ghi chú biên tập nội bộ — không render cho người đọc bài viết. */
 const ARTICLE_EDITORIAL_NOTE_RE = /\s*\(miễn phí,\s*trên trình duyệt\)/gi;
+/** Nhãn ops trên H2 chốt bài (seed/queue) — người đọc chỉ thấy “Kiểm tra nhanh”. */
+const CTA_OPS_LABEL_RE = /\s*\(CTA\)\s*$/i;
 
 function stripArticleEditorialNotes(text: string): string {
   return text.replace(ARTICLE_EDITORIAL_NOTE_RE, "");
+}
+
+function stripOpsHeadingLabel(heading: string): string {
+  return heading.replace(CTA_OPS_LABEL_RE, "").trim();
 }
 
 function renderLinks(text: string, keyPrefix: string): ReactNode[] {
@@ -196,7 +204,7 @@ function renderParagraph(text: string, key: string) {
         key={key}
         className="mt-7 scroll-mt-24 text-lg font-semibold leading-snug text-slate-900 sm:text-xl"
       >
-        {renderInline(heading3[1], key)}
+        {renderInline(stripOpsHeadingLabel(heading3[1]), key)}
       </h3>
     );
   }
@@ -207,7 +215,7 @@ function renderParagraph(text: string, key: string) {
         key={key}
         className="mt-10 scroll-mt-24 border-t border-slate-100 pt-8 text-xl font-bold text-slate-900 first:mt-0 first:border-t-0 first:pt-0 sm:text-2xl"
       >
-        {renderInline(heading2[1], key)}
+        {renderInline(stripOpsHeadingLabel(heading2[1]), key)}
       </h2>
     );
   }

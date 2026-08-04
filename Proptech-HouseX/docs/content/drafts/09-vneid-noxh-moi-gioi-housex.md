@@ -131,7 +131,7 @@ Không. Hướng đang bàn chủ yếu là **xác thực định danh và xác 
 
 Chưa có ngày hiệu lực toàn quốc trong các nguồn công bố quanh 03/2026. Hiện có: (1) kiến nghị doanh nghiệp (“tích xanh”), (2) chỉ đạo **nghiên cứu hoàn thiện quy trình** tại Thông báo 152/TB-VPCP. Quy trình chi tiết, thí điểm địa phương và chế tài sẽ chỉ rõ khi văn bản hướng dẫn được ban hành.
 
-## Kiểm tra nhanh (CTA)
+## Kiểm tra nhanh
 
 Bạn đang phân vân điều kiện NƠXH, rủi ro hồ sơ, hoặc định vị lại công việc tư vấn trước xu hướng VNeID?
 → Đặt lịch rà soát pháp lý 15 phút (miễn phí): [/lien-he?goi=ra-soat-phap-ly-15-phut#tu-van](/lien-he?goi=ra-soat-phap-ly-15-phut#tu-van)

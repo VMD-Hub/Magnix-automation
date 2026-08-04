@@ -12,6 +12,8 @@ import {
   parseL3Checklist,
 } from "@/lib/content/noxh-cta-tools";
 import { articlePath } from "@/lib/content/article-routes";
+import { QueueArticleReaderPreview } from "@/components/admin/queue-article-reader-preview";
+import { normalizeQueueBodyForReader } from "@/lib/content/content-queue-article";
 
 type StatusFilter =
   | "PENDING_L3"
@@ -176,6 +178,7 @@ function formatDate(iso: string | null) {
 
 export function ContentQueueBoard() {
   const [filter, setFilter] = useState<StatusFilter>("PENDING_L3");
+  const [bodyTab, setBodyTab] = useState<"edit" | "reader">("reader");
   const [items, setItems] = useState<ContentQueueItem[]>([]);
   const [counts, setCounts] = useState<Counts>({
     intake: 0,
@@ -258,6 +261,7 @@ export function ContentQueueBoard() {
     setEditingStatus(item.status);
     setEditingArticle(item.article);
     setForm(itemToForm(item));
+    setBodyTab("reader");
     setMessage(null);
     setError(null);
   }
@@ -322,7 +326,9 @@ export function ContentQueueBoard() {
     const payload = {
       title: form.title.trim(),
       painPoint: form.painPoint.trim() || null,
-      bodyPreview: form.bodyPreview.trim() || null,
+      bodyPreview: form.bodyPreview.trim()
+        ? normalizeQueueBodyForReader(form.bodyPreview)
+        : null,
       publishChannel: form.publishChannel || null,
       ctaToolId: form.ctaToolId || null,
       ctaLabel: form.ctaLabel.trim() || null,
@@ -399,7 +405,9 @@ export function ContentQueueBoard() {
           body: JSON.stringify({
             title: form.title.trim(),
             painPoint: form.painPoint.trim() || null,
-            bodyPreview: form.bodyPreview.trim() || null,
+            bodyPreview: form.bodyPreview.trim()
+              ? normalizeQueueBodyForReader(form.bodyPreview)
+              : null,
             publishChannel: form.publishChannel || null,
             ctaToolId: form.ctaToolId || null,
             ctaLabel: form.ctaLabel.trim() || null,
@@ -574,19 +582,100 @@ export function ContentQueueBoard() {
 
           {selectedTool ? (
             <div className="md:col-span-2 rounded-md border border-slate-200 bg-slate-50 p-3 text-sm whitespace-pre-wrap text-slate-700">
-              <p className="mb-1 font-medium text-slate-900">Khối chốt copy-paste</p>
+              <p className="mb-1 font-medium text-slate-900">
+                Khối chốt copy-paste (nội bộ ops — không đăng nguyên khối này)
+              </p>
               {selectedTool.closingBlock}
             </div>
           ) : null}
 
+          <div className="md:col-span-2 space-y-2 rounded-md border border-sky-200 bg-sky-50 p-3 text-sm text-sky-950">
+            <p className="font-semibold">Duyệt L2/L3 = nhìn như người đọc</p>
+            <ul className="list-disc space-y-1 pl-5 text-sky-900/90">
+              <li>
+                Tab <strong>Như người đọc</strong>: markdown đã render (
+                <code className="rounded bg-sky-100 px-1">**</code> → in đậm,
+                link, bảng, ảnh) — đúng lớp{" "}
+                <code className="rounded bg-sky-100 px-1">ArticleBody</code> trên
+                web.
+              </li>
+              <li>
+                Tab <strong>Sửa markdown</strong>: nguồn thô để chỉnh; không dùng
+                tab này để “duyệt cảm nhận bài”.
+              </li>
+              <li>
+                Không để lộ nhãn hệ thống trên bài:{" "}
+                <code className="rounded bg-sky-100 px-1">(CTA)</code>, ghi chú
+                ops, frontmatter, hướng dẫn seed. Ops chỉ ở khung riêng bên dưới.
+              </li>
+            </ul>
+          </div>
+
+          <div className="md:col-span-2 space-y-2">
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <span className="text-sm font-medium">Nội dung bài</span>
+              <div className="inline-flex rounded-md border border-slate-200 bg-white p-0.5 text-xs">
+                <button
+                  type="button"
+                  onClick={() => setBodyTab("reader")}
+                  className={cn(
+                    "rounded px-3 py-1.5 font-medium transition-colors",
+                    bodyTab === "reader"
+                      ? "bg-brand-600 text-white"
+                      : "text-slate-600 hover:bg-slate-50",
+                  )}
+                >
+                  Như người đọc
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setBodyTab("edit")}
+                  className={cn(
+                    "rounded px-3 py-1.5 font-medium transition-colors",
+                    bodyTab === "edit"
+                      ? "bg-brand-600 text-white"
+                      : "text-slate-600 hover:bg-slate-50",
+                  )}
+                >
+                  Sửa markdown
+                </button>
+              </div>
+            </div>
+            {bodyTab === "reader" ? (
+              <div className="max-h-[32rem] overflow-y-auto rounded-md border border-slate-200 bg-white p-4">
+                <QueueArticleReaderPreview markdown={form.bodyPreview} />
+                {normalizeQueueBodyForReader(form.bodyPreview) !==
+                form.bodyPreview.trim() ? (
+                  <p className="mt-4 border-t border-slate-100 pt-3 text-xs text-slate-500">
+                    Preview đã ẩn/chuẩn hóa nhãn ops (vd. bỏ{" "}
+                    <code>(CTA)</code> trên H2). Bản publish cũng đi qua bước
+                    này.
+                  </p>
+                ) : null}
+              </div>
+            ) : (
+              <textarea
+                className="min-h-64 w-full rounded-md border border-slate-200 px-3 py-2 font-mono text-sm"
+                value={form.bodyPreview}
+                onChange={(e) =>
+                  setForm((f) => ({ ...f, bodyPreview: e.target.value }))
+                }
+                spellCheck={false}
+              />
+            )}
+          </div>
+
           <label className="block space-y-1 text-sm md:col-span-2">
-            <span className="font-medium">Preview / ghi chú nội dung</span>
+            <span className="font-medium">
+              Ghi chú Ops (nội bộ — không lên bài đọc giả)
+            </span>
             <textarea
-              className="min-h-28 w-full rounded-md border border-slate-200 px-3 py-2"
-              value={form.bodyPreview}
+              className="min-h-20 w-full rounded-md border border-amber-200 bg-amber-50/60 px-3 py-2 text-sm"
+              value={form.opsNotes}
               onChange={(e) =>
-                setForm((f) => ({ ...f, bodyPreview: e.target.value }))
+                setForm((f) => ({ ...f, opsNotes: e.target.value }))
               }
+              placeholder="L2 /devil, neo văn bản, cảnh báo… — chỉ admin thấy"
             />
           </label>
 

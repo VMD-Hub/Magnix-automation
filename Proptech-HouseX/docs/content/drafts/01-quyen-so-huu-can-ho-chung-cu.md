@@ -100,7 +100,7 @@ Checklist giấy tờ (in ra hoặc lưu PDF trước khi đặt cọc):
 
 Không ký khi chỉ có cam kết miệng kiểu “sổ vĩnh viễn, không lo luật mới”. Mọi điểm quan trọng cần nằm trên giấy hoặc phụ lục HĐ.
 
-## Kiểm tra nhanh (CTA)
+## Kiểm tra nhanh
 
 Bạn đang phân vân mình có đủ điều kiện NƠXH không?
 → Kiểm tra nhanh (miễn phí): [/cong-cu/dieu-kien-noxh](/cong-cu/dieu-kien-noxh)

@@ -102,7 +102,7 @@ Các tình huống cần dừng lại và đối chiếu văn bản / quy chế 
 
 Khi không chắc: xin ý kiến bằng văn bản từ Ban quản trị (về quy chế) và kê khai thuế đúng — trước khi scale mô hình cho thuê.
 
-## Kiểm tra nhanh (CTA)
+## Kiểm tra nhanh
 
 Bạn đang phân vân vay NƠXH được khoảng bao nhiêu?
 → Kiểm tra nhanh (miễn phí): [/cong-cu/kiem-tra-vay-noxh](/cong-cu/kiem-tra-vay-noxh)

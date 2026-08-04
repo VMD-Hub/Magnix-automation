@@ -110,7 +110,7 @@ Hệ quả thực tế cư dân và đơn vị quản lý nên chuẩn bị:
 | Đối tượng cư dân | Đa dạng | Có thể có tỷ lệ hộ thuộc chính sách hỗ trợ — không miễn nghĩa vụ đóng phí hợp pháp |
 | Việc người sắp mua nên làm | Đọc quy chế + biểu phí + quỹ bảo trì | Đọc quy chế + biểu phí + tự kiểm tra điều kiện NƠXH trước khi nộp hồ sơ |
 
-## Kiểm tra nhanh (CTA)
+## Kiểm tra nhanh
 
 Bạn đang phân vân mình có đủ điều kiện NƠXH không?
 → Kiểm tra nhanh (miễn phí): [/cong-cu/dieu-kien-noxh](/cong-cu/dieu-kien-noxh)

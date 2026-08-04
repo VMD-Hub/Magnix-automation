@@ -107,7 +107,7 @@ Nới trần **mở rộng cửa vào** về mặt thu nhập, nhưng không gi�
 
 Kết luận ngắn: **60 triệu là mức đang đề xuất (phương án hệ số 1,2, vợ chồng), chưa thay thế QĐ 14.** Người dân TP.HCM đang nộp / chuẩn bị hồ sơ vẫn dùng mức hiện hành; theo dõi Công báo / cổng UBND khi có quyết định sửa.
 
-## Kiểm tra nhanh (CTA)
+## Kiểm tra nhanh
 
 Bạn đang phân vân hồ sơ thu nhập / đối tượng NƠXH tại TP.HCM trước khi quyết định xuống tiền hoặc giữ suất?
 → Đặt lịch rà soát pháp lý 15 phút (miễn phí): [/lien-he?goi=ra-soat-phap-ly-15-phut#tu-van](/lien-he?goi=ra-soat-phap-ly-15-phut#tu-van)

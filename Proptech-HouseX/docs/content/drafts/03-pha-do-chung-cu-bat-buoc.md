@@ -111,7 +111,7 @@ Không tự ý vứt hóa đơn sửa chữa lớn trong căn — đôi khi ph�
 
 Nếu bạn đang tìm suất NƠXH thay cho căn thương mại cũ vì lo phá dỡ: vẫn phải kiểm tra pháp lý và tuổi thọ từng dự án; đồng thời xác nhận bạn có đủ điều kiện mua NƠXH hay không.
 
-## Kiểm tra nhanh (CTA)
+## Kiểm tra nhanh
 
 Bạn đang phân vân mình có đủ điều kiện NƠXH không?
 → Kiểm tra nhanh (miễn phí): [/cong-cu/dieu-kien-noxh](/cong-cu/dieu-kien-noxh)

@@ -122,7 +122,7 @@ Cho đến khi luật sửa đổi có hiệu lực:
 - Giao dịch và cấp sổ vẫn theo **Luật Đất đai 2024** và văn bản hướng dẫn đang áp dụng.  
 - Không từ chối / không cam kết giao dịch chỉ vì “sắp có sổ điện tử” hoặc “sắp ghi đủ tên đồng sở hữu” nếu chưa có căn cứ pháp lý mới.
 
-## Kiểm tra nhanh (CTA)
+## Kiểm tra nhanh
 
 Bạn đang cần đối chiếu rủi ro sổ đỏ / giấy tờ trước khi giao dịch?
 → Đặt lịch rà soát pháp lý 15 phút (miễn phí): [/lien-he?goi=ra-soat-phap-ly-15-phut#tu-van](/lien-he?goi=ra-soat-phap-ly-15-phut#tu-van)

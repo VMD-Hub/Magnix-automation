@@ -15,6 +15,10 @@ import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { PrismaClient } from "@prisma/client";
 import { getNoxhCtaTool } from "../lib/content/noxh-cta-tools";
+import {
+  normalizeQueueBodyForReader,
+  queueBodyHasSeedCtaMarker,
+} from "../lib/content/content-queue-article";
 
 const dryRun = process.argv.includes("--dry-run");
 const prisma = dryRun ? null : new PrismaClient();
@@ -103,11 +107,12 @@ function parseDraft(raw: string): { meta: DraftFrontmatter; body: string } {
 
 async function seedOne(root: string, item: PackItem) {
   const draftAbs = resolve(root, item.draftRel);
-  const { meta, body } = parseDraft(readFileSync(draftAbs, "utf8"));
+  const { meta, body: bodyRaw } = parseDraft(readFileSync(draftAbs, "utf8"));
+  const body = normalizeQueueBodyForReader(bodyRaw);
   const title = meta.title?.trim();
   if (!title) throw new Error(`${item.id}: thiếu title`);
-  if (!body.includes("## Kiểm tra nhanh (CTA)")) {
-    throw new Error(`${item.id}: thiếu section CTA`);
+  if (!queueBodyHasSeedCtaMarker(body)) {
+    throw new Error(`${item.id}: thiếu section CTA (## Kiểm tra nhanh)`);
   }
   if (meta.ctaToolId !== "legal-review") {
     throw new Error(`${item.id}: ctaToolId phải là legal-review`);

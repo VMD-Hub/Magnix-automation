@@ -102,7 +102,7 @@ Cùng một khung Luật Nhà ở, nhưng hai phân khúc khác nhau ở cửa v
 
 Nếu bạn đang phân vân mình có thuộc nhóm được mua NƠXH hay không, hãy tự kiểm tra điều kiện trước khi so sánh giá với căn thương mại cùng khu.
 
-## Kiểm tra nhanh (CTA)
+## Kiểm tra nhanh
 
 Bạn đang phân vân mình có đủ điều kiện NƠXH không?
 → Kiểm tra nhanh (miễn phí): [/cong-cu/dieu-kien-noxh](/cong-cu/dieu-kien-noxh)

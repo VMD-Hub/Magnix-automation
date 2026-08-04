@@ -112,7 +112,7 @@ House X đồng hành checklist hồ sơ và rà soát trước giao dịch — 
 
 **Chưa thay thế.** QĐ 1346 công bố TTHC với vai trò CĐT và Sở như trên. Hướng xác nhận đối tượng qua VNeID đang ở giai nghiên cứu / kiến nghị (Thông báo 152/TB-VPCP, đề xuất “tích xanh”). Cho đến khi có quy trình VNeID chính thức: vẫn theo mốc CĐT ↔ Sở trong bài này.
 
-## Kiểm tra nhanh (CTA)
+## Kiểm tra nhanh
 
 Bạn đang chờ danh sách đủ điều kiện, bị trả hồ sơ, hoặc cần đối chiếu mốc CĐT–Sở trước khi ký?
 → Đặt lịch rà soát pháp lý 15 phút (miễn phí): [/lien-he?goi=ra-soat-phap-ly-15-phut#tu-van](/lien-he?goi=ra-soat-phap-ly-15-phut#tu-van)

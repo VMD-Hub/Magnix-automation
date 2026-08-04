@@ -115,7 +115,7 @@ Khác biệt nằm ở cửa vào giao dịch và hạn chế chuyển nhượng
 
 Nếu bạn đang so sánh một căn thương mại đã sử dụng lâu năm với suất NƠXH cùng khu vực: hãy tách hai việc — (1) rủi ro công trình / kiểm định, và (2) bạn có đủ điều kiện mua NƠXH hay không.
 
-## Kiểm tra nhanh (CTA)
+## Kiểm tra nhanh
 
 Bạn đang phân vân mình có đủ điều kiện NƠXH không?
 → Kiểm tra nhanh (miễn phí): [/cong-cu/dieu-kien-noxh](/cong-cu/dieu-kien-noxh)

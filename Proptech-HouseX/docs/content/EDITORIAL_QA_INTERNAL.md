@@ -20,3 +20,16 @@ Trang công khai: `/gioi-thieu/phuong-phap-bien-tap` (`lib/content/editorial-met
 ## Ranh giới copy công khai
 
 Không đưa lên web: mã L0–L3, đường dẫn `lib/…`, tên biến `CURRENT_NOXH_RULES`, checklist agent.
+
+## Content queue — duyệt L2/L3 như người đọc
+
+| Tab / vùng | Ai thấy | Quy tắc |
+|------------|---------|---------|
+| **Như người đọc** | Reviewer L2/L3 | Markdown đã render (`**` → in đậm). Đây là chuẩn duyệt cảm nhận bài. |
+| **Sửa markdown** | Biên tập | Nguồn thô; không dùng để “đọc” bài. |
+| **Ghi chú Ops** | Admin only | `/devil`, neo văn bản — **không** dán vào body bài. |
+| **Khối chốt CTA tool** | Ops | Copy-paste nội bộ — không đăng nguyên khối. |
+
+**Cấm lộ trên body / H2 công khai:** nhãn `(CTA)`, frontmatter YAML, `editorial_note`, hướng dẫn seed, path kỹ thuật.
+
+Publish đi qua `normalizeQueueBodyForReader` + `ArticleBody` (bỏ `(CTA)` trên H2 nếu còn sót).
