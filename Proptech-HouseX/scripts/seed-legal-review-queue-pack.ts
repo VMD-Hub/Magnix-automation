@@ -114,20 +114,22 @@ async function seedOne(root: string, item: PackItem) {
   if (!queueBodyHasSeedCtaMarker(body)) {
     throw new Error(`${item.id}: thiếu section CTA (## Kiểm tra nhanh)`);
   }
-  if (meta.ctaToolId !== "legal-review") {
-    throw new Error(`${item.id}: ctaToolId phải là legal-review`);
-  }
 
-  const cta = getNoxhCtaTool("legal-review");
-  if (!cta) throw new Error("Allowlist thiếu legal-review");
+  const toolId = meta.ctaToolId?.trim() || "legal-review";
+  const cta = getNoxhCtaTool(toolId);
+  if (!cta) {
+    throw new Error(
+      `${item.id}: ctaToolId ngoài allowlist: ${toolId} (noxh-check | noxh-loan-quick | legal-review)`,
+    );
+  }
 
   const opsNotes = [
     item.opsExtra,
     `slug: ${meta.slug ?? "(none)"}`,
     `Draft: ${item.draftRel}`,
     "requires_legal_qa: true",
-    "CTA: legal-review → /lien-he?goi=ra-soat-phap-ly-15-phut#tu-van",
-    "Pack: legal-review queue (07–12)",
+    `CTA: ${cta.id} → ${cta.href}`,
+    "Pack: legal-review queue (07–12) — CTA theo frontmatter draft",
   ].join("\n");
 
   const shared = {
