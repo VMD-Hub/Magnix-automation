@@ -24,9 +24,20 @@ source_refs:
   - "Nghị định 100/2024/NĐ-CP (sửa đổi) + NĐ 136/2026 — điều kiện đối tượng / thu nhập đang áp dụng khi chưa có quy trình VNeID chính thức"
 ---
 
-Khi xét duyệt đối tượng mua nhà ở xã hội (NƠXH) dần gắn với **VNeID**, nhiều người hỏi: môi giới / telesale còn chỗ đứng không? House X định vị thế nào?
+Bài này quan sát và trình bày ở **phạm vi chính sách nhà ở xã hội toàn quốc** — lớp xác nhận đối tượng mua NƠXH đang nghiên cứu gắn với hệ thống định danh điện tử (VNeID), và hệ quả với nghề tư vấn / môi giới. Không nhảy từ kiến nghị doanh nghiệp xuống kết luận rằng quy trình hiện hành đã bị thay thế.
 
-Bài này tách ba lớp: (1) quy trình đang vận hành, (2) đề xuất doanh nghiệp + chỉ đạo nghiên cứu của Chính phủ, (3) hướng thích nghi cho người mua, môi giới/CTV và nền tảng tư vấn như House X. **Chưa có quy trình VNeID chính thức thay thế toàn bộ xét duyệt hiện hành** — chỉ đang nghiên cứu / kiến nghị.
+Khi xác nhận đối tượng mua nhà ở xã hội (NƠXH) dần gắn với **VNeID**, nhiều người hỏi: môi giới / telesale còn chỗ đứng không? House X định vị thế nào? **Chưa có quy trình VNeID chính thức thay thế toàn bộ xét duyệt hiện hành** — chỉ đang nghiên cứu / kiến nghị. Bài tách ba lớp: (1) quy trình đang vận hành, (2) đề xuất doanh nghiệp + chỉ đạo nghiên cứu của Chính phủ, (3) hướng thích nghi cho người mua, môi giới/CTV và nền tảng tư vấn như House X.
+
+## Ai bị ảnh hưởng? Ai cần chú ý?
+
+| Nhóm | Quy định / thực tế đang có | Thay đổi / đề xuất đang bàn |
+| --- | --- | --- |
+| Người mua / thuê mua NƠXH | Nộp hồ sơ theo mẫu đợt mở bán; đối chiếu đối tượng, thu nhập, nhà ở theo Luật Nhà ở, NĐ 100/2024 (đã sửa đổi), NĐ 136/2026 và quyết định địa phương | Hướng xác nhận đối tượng trên VNeID (“tích xanh”) — **nghiên cứu**, chưa có ngày hiệu lực toàn quốc |
+| Chủ đầu tư dự án NƠXH | Tiếp nhận hồ sơ, rà soát / bốc thăm (nếu có), ký HĐ; cơ quan quản lý hậu kiểm theo quy định địa phương | Kiến nghị thẩm định trước qua dữ liệu Nhà nước để giảm rủi ro hậu kiểm sai đối tượng |
+| Môi giới / CTV / telesale | Tư vấn hồ sơ, so sánh dự án, đồng hành vay và tiến độ theo quy trình giấy–CĐT hiện hành | Lớp “đủ điều kiện hay không” kỳ vọng thu hẹp với trung gian không minh bạch; trọng tâm nghề dịch chuyển sang cố vấn an cư |
+| House X / nền tảng tư vấn | Checklist điều kiện, rà soát pháp lý–tài chính, cập nhật tiến độ công bố | Không thay xác nhận Nhà nước trên VNeID; không bao đậu xét duyệt |
+
+**Ai cần chú ý ngay:** người mua đang chuẩn bị hồ sơ theo văn bản đang hiệu lực; CTV cần bỏ kỳ vọng kiếm tiền từ khâu “lách điều kiện”. **Ai chỉ nên theo dõi:** nhóm chờ “tích xanh” rồi mới gom giấy tờ — chưa có quy trình chính thức; phân biệt **kiến nghị / Thông báo 152 nghiên cứu** với **quyết định đã có hiệu lực**.
 
 ## Quy trình mua nhà ở xã hội hiện nay đang chạy thế nào?
 
@@ -107,7 +118,7 @@ Không còn cạnh tranh bằng “gác cổng hồ sơ”. Hướng dịch vụ
 
 Tự đối chiếu khung đang áp dụng: [kiểm tra điều kiện NƠXH](/cong-cu/dieu-kien-noxh). Trần thu nhập địa phương đang biến động: [TP.HCM đề xuất trần thu nhập NƠXH 60 triệu](/tin-tuc/tphcm-de-xuat-tran-thu-nhap-noxh-60-trieu). CTV muốn chuyển sang tư vấn đúng luật: [chương trình cộng tác viên](/affiliate-bat-dong-san) hoặc [tư vấn mô hình CTV](/lien-he?goi=tu-van-cong-tac-vien#tu-van).
 
-## Ai bị ảnh hưởng mạnh nhất nếu VNeID đảm nhận xét duyệt đối tượng?
+## Nếu VNeID đảm nhận xác nhận đối tượng, tác động mạnh nhất ở đâu?
 
 | Nhóm | Tác động |
 | --- | --- |

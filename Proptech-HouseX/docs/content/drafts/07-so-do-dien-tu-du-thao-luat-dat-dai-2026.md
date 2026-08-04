@@ -24,9 +24,21 @@ source_refs:
   - "VOV — UBTVQH điều chỉnh chương trình lập pháp 2026, bổ sung Luật Đất đai (sửa đổi) trình kỳ họp tháng 10/2026 — https://vov.gov.vn/trinh-quoc-hoi-du-an-luat-dat-dai-tai-ky-hop-cuoi-nam-2026-dtnew-1152567"
 ---
 
-Giấy chứng nhận quyền sử dụng đất, quyền sở hữu tài sản gắn liền với đất (thường gọi là sổ đỏ / sổ hồng) đang được đề xuất chỉnh trong dự thảo Luật Đất đai sửa đổi. Theo tin công bố cuối tháng 7/2026, Bộ Nông nghiệp và Môi trường chủ trì hoàn thiện dự thảo; Ủy ban Thường vụ Quốc hội đã cho ý kiến về một số nội dung — trong đó có sổ đỏ điện tử.
+Bài này quan sát và trình bày ở **phạm vi chiến lược pháp lý đất đai toàn quốc** — đối chiếu Luật Đất đai 2024 đang hiệu lực với hướng đề xuất trong dự thảo Luật Đất đai sửa đổi về cấp Giấy chứng nhận (sổ đỏ / sổ hồng), kể cả sổ đỏ điện tử. Không nhảy từ tin dự thảo xuống kết luận một thửa đất cụ thể mà bỏ qua văn bản đang áp dụng.
 
-Bài này đối chiếu **Luật Đất đai 2024 đang hiệu lực** với **hướng đang đề xuất trong dự thảo** (chưa phải luật đã thông qua). Không dùng dự thảo làm căn cứ nộp hồ sơ hay ký giao dịch thay cho văn bản đang áp dụng.
+Theo tin công bố cuối tháng 7/2026, Bộ Nông nghiệp và Môi trường chủ trì hoàn thiện dự thảo; Ủy ban Thường vụ Quốc hội đã cho ý kiến về một số nội dung — trong đó có sổ đỏ điện tử. **Dự thảo chưa phải luật đã thông qua.** Không dùng dự thảo làm căn cứ nộp hồ sơ hay ký giao dịch thay cho văn bản đang áp dụng.
+
+## Ai bị ảnh hưởng? Ai cần chú ý?
+
+| Nhóm | Quy định đang có (Luật Đất đai 2024) | Thay đổi / đề xuất trong dự thảo |
+| --- | --- | --- |
+| Người đang giữ sổ giấy, chuẩn bị giao dịch mua bán / thế chấp / công chứng | Giao dịch căn cứ Giấy chứng nhận và quy trình địa phương đang áp dụng; Điều 134 chưa đưa trực tiếp hai hình thức giấy / điện tử vào Luật | Hướng ghi nhận bản giấy và bản điện tử; bản điện tử có giá trị pháp lý như bản giấy — **chưa bắt buộc** đổi sổ giấy sang điện tử theo tổng hợp công khai |
+| Đồng sở hữu / thành viên hộ gia đình có chung quyền | Có thể cấp từng người hoặc cấp chung trao người đại diện; đất hộ có thể chỉ ghi tên đại diện nếu thành viên thống nhất | Hướng ghi **đầy đủ tên** thành viên có chung quyền trên Giấy chứng nhận |
+| Chủ sử dụng nhiều thửa nông nghiệp cùng xã/phường | Có thể yêu cầu cấp chung một sổ cho nhiều thửa (Điều 135) | Hướng cấp theo **từng thửa**; nội dung cấp chung nhiều thửa không còn được ghi nhận trong nguyên tắc tương ứng |
+| Người dùng đất có vi phạm thủ tục trước 1/8/2024, đang xin cấp lần đầu | Khung tháo gỡ theo điều khoản riêng (mốc khác, ví dụ trước 1/7/2014) | Hướng **xem xét** cấp nếu ổn định, không tranh chấp, phù hợp quy hoạch… — không đương nhiên được cấp |
+| Người có thửa trong vùng đã có thông báo / quyết định thu hồi | Không cấp khi đã có **quyết định** thu hồi (trừ quá 3 năm chưa thực hiện) | Đề xuất kéo sớm hạn chế: không cấp khi đã có **thông báo thu hồi còn hiệu lực** hoặc đã có quyết định thu hồi |
+
+**Ai cần chú ý ngay:** người sắp ký chuyển nhượng hoặc thế chấp; hộ đang xin cấp / cấp đổi sổ; người đang giữ một sổ chung nhiều thửa nông nghiệp. **Ai chỉ nên theo dõi:** nhóm chờ “sổ điện tử bắt buộc” — chưa có hiệu lực pháp luật mới. Phân biệt rõ **đề xuất / dự thảo** với văn bản đã có số hiệu và ngày hiệu lực.
 
 ## Dự thảo Luật Đất đai sửa đổi đang đề xuất những thay đổi nào về sổ đỏ?
 
@@ -74,7 +86,7 @@ Hệ quả thực tế nếu đề xuất được thông qua: mua bán, thừa 
 
 Theo hướng dự thảo: Giấy chứng nhận cấp **theo từng thửa** cho người có quyền sử dụng đất / chủ sở hữu tài sản gắn liền với đất đủ điều kiện (và cho người quản lý đất theo quy định). Nội dung cho phép cấp chung một sổ cho nhiều thửa nông nghiệp cùng xã/phường/thị trấn (Luật 2024, Điều 135 khoản 1) **không còn được ghi nhận** trong nguyên tắc tương ứng của dự thảo.
 
-Lưu ý biên tập: việc không ghi nhận lại chưa đồng nghĩa với “cấm tuyệt đối mọi hình thức cấp chung trong mọi trường hợp” — cần chờ bản luật thông qua và nghị định hướng dẫn. Người đang giữ một sổ chung nhiều thửa nên theo dõi quy định chuyển tiếp khi có hiệu lực.
+Việc dự thảo không ghi nhận lại nội dung cấp chung chưa đồng nghĩa với “cấm tuyệt đối mọi hình thức cấp chung trong mọi trường hợp”. Cần chờ bản luật thông qua và nghị định hướng dẫn. Người đang giữ một sổ chung nhiều thửa nên theo dõi quy định chuyển tiếp khi có hiệu lực.
 
 ## Đất vi phạm thủ tục trước ngày 1/8/2024 có được xem xét cấp sổ đỏ không?
 

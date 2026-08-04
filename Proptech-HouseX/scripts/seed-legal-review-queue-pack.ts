@@ -81,7 +81,7 @@ const ITEMS: PackItem[] = [
     sheetKey: "gia-du-an-moi-tphcm-h1-2026:H1",
     draftRel: "docs/content/drafts/12-gia-du-an-moi-tphcm-h1-2026.md",
     opsExtra:
-      "GENERAL_POLICY — giá phổ biến dự án mở bán H1/2026 + bản đồ hạ tầng House X. L2 /devil: khoảng giá tham chiếu ≠ giá CĐT chốt; không logo/CTA đối thủ; không hứa ROI.",
+      "GENERAL_POLICY — giá phổ biến dự án mở bán H1/2026 + bản đồ hạ tầng House X. L2: bám GHI_CHU_BAT_BUOC — hạng sản phẩm trước hạ tầng; đơn giá VND/m²; cao cấp ≠ metro; khoảng giá tham chiếu ≠ giá CĐT chốt; không hứa ROI.",
   },
 ];
 

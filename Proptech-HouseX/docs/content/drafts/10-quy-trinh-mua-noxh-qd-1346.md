@@ -23,11 +23,23 @@ source_refs:
   - "Khung liên quan: Nghị định 100/2024/NĐ-CP (sửa đổi) về phát triển và quản lý nhà ở xã hội — trình tự bán/thuê mua dự án"
 ---
 
-Ngày **03/08/2026**, Bộ Xây dựng ban hành **Quyết định 1346/QĐ-BXD** công bố thủ tục hành chính được sửa đổi, bổ sung lĩnh vực nhà ở. Theo Báo Xây dựng, các thủ tục này **có hiệu lực từ ngày 03/08/2026**.
+Bài này quan sát và trình bày ở **phạm vi thủ tục hành chính nhà ở xã hội theo dự án không vốn đầu tư công** — mốc trách nhiệm giữa chủ đầu tư và Sở Xây dựng theo Quyết định 1346/QĐ-BXD. Không nhảy từ mốc thời gian chung xuống kết luận một đợt mở bán cụ thể mà bỏ qua phụ lục mẫu hồ sơ và hướng dẫn địa phương.
 
-Với người mua / CTV House X, phần quan trọng nhất là thủ tục **bán, cho thuê mua, cho thuê nhà ở xã hội (NƠXH) theo dự án, không sử dụng vốn đầu tư công / nguồn tài chính công đoàn** — đúng loại dự án phổ biến trên thị trường. Bài này tóm mốc thời gian CĐT ↔ Sở Xây dựng và checklist theo dõi; không thay phụ lục mẫu hồ sơ đầy đủ trong quyết định.
+Ngày **03/08/2026**, Bộ Xây dựng ban hành **Quyết định 1346/QĐ-BXD** công bố thủ tục hành chính được sửa đổi, bổ sung lĩnh vực nhà ở. Theo Báo Xây dựng, các thủ tục này **có hiệu lực từ ngày 03/08/2026**. Với người mua / CTV, phần quan trọng nhất là thủ tục **bán, cho thuê mua, cho thuê NƠXH theo dự án, không sử dụng vốn đầu tư công / nguồn tài chính công đoàn** — đúng loại dự án phổ biến trên thị trường.
 
-**Không nhầm với VNeID:** quy trình dưới đây vẫn là nộp hồ sơ cho chủ đầu tư + Sở kiểm tra. Hướng xét duyệt trên VNeID đang được nghiên cứu — xem [bài VNeID và nghề môi giới](/tin-tuc/vneid-noxh-moi-gioi-bat-dong-san-thay-doi-gi).
+**Không nhầm với VNeID:** quy trình dưới đây vẫn là nộp hồ sơ cho chủ đầu tư + Sở kiểm tra. Hướng xác nhận đối tượng trên VNeID đang được nghiên cứu — xem [bài VNeID và nghề môi giới](/tin-tuc/vneid-noxh-moi-gioi-bat-dong-san-thay-doi-gi).
+
+## Ai bị ảnh hưởng? Ai cần chú ý?
+
+| Nhóm | Quy định đang áp dụng sau QĐ 1346 | Việc cần chú ý |
+| --- | --- | --- |
+| Người đăng ký mua / thuê mua / thuê NƠXH dự án **không** vốn công | Nộp **một bộ hồ sơ cho chủ đầu tư**; theo dõi mốc CĐT gửi Sở (≤10 ngày), Sở trả lời (≤10 ngày), công khai danh sách đủ điều kiện (≤30 ngày kể từ hết hạn nộp) | Ghi ngày hết hạn nộp đợt CĐT công bố; giữ biên nhận; yêu cầu lý do bằng văn bản nếu bị trả hồ sơ |
+| Chủ đầu tư dự án NƠXH không vốn công | Tổng hợp danh sách → gửi Sở; rà soát điều kiện; công khai danh sách đủ điều kiện; trả hồ sơ không đủ kèm lý do; ký HĐ khi nhà đủ điều kiện bán | Không để người mua hiểu nhầm “Sở duyệt mua thay CĐT” ở bước gửi danh sách |
+| Sở Xây dựng nơi có dự án | Kiểm tra người đăng ký **đã / chưa được hưởng** chính sách hỗ trợ nhà ở; trả lời CĐT bằng văn bản trong ≤10 ngày | Đây không đồng nghĩa Sở chấm toàn bộ thu nhập / đối tượng thay bước rà soát của CĐT |
+| Người mua NƠXH **vốn đầu tư công** hoặc nhà ở lực lượng vũ trang | Kênh nộp và bốc thăm khác (Sở / đơn vị quản lý vận hành; Bộ Quốc phòng / Bộ Công an) | Không áp bảng mốc dự án thương mại không vốn công vào nhầm kênh |
+| CTV / môi giới đồng hành hồ sơ | Checklist mốc 10 / 10 / 30 / 15 ngày; không cam kết “chắc có tên” | Phân biệt QĐ 1346 **đã hiệu lực** với hướng VNeID **đang nghiên cứu** |
+
+**Ai cần chú ý ngay:** người đã hoặc sắp hết hạn nộp hồ sơ đợt mở bán. **Ai chỉ nên đọc để định hướng:** người chưa chọn dự án — vẫn bắt đầu từ đối tượng + thu nhập + nhà ở theo khung đang áp dụng.
 
 ## Quyết định 1346/QĐ-BXD công bố những nhóm thủ tục nào?
 

@@ -24,9 +24,20 @@ source_refs:
   - "Tuổi Trẻ Online — cùng nội dung tờ trình Sở Xây dựng TP.HCM sửa QĐ 14/2026"
 ---
 
-Cuối tháng 7/2026, Sở Xây dựng TP.HCM có tờ trình đề xuất sửa đổi, bổ sung **Quyết định 14/2026/QĐ-UBND** về hệ số điều chỉnh mức thu nhập mua nhà ở xã hội (NƠXH) trên địa bàn thành phố. Tin báo chí nêu phương án cao nhất: tổng thu nhập vợ chồng không quá **60 triệu đồng/tháng**.
+Bài này quan sát và trình bày ở **phạm vi chính sách nhà ở xã hội trên địa bàn TP.HCM**, đặt trong khung trần thu nhập toàn quốc theo Nghị định 136/2026 — không nhảy từ headline “60 triệu” xuống kết luận một hồ sơ cụ thể mà bỏ qua quyết định đang hiệu lực.
 
-Đây là **đề xuất / dự thảo sửa quyết định** — chưa phải mức đang áp dụng thay thế Quyết định 14 hiện hành. Bài này tách rõ: (1) khung toàn quốc theo Nghị định 136/2026, (2) mức TP.HCM đang áp dụng theo QĐ 14, (3) các phương án Sở đang trình, (4) việc người dân nên làm trước khi có quyết định mới.
+Cuối tháng 7/2026, Sở Xây dựng TP.HCM có tờ trình đề xuất sửa đổi, bổ sung **Quyết định 14/2026/QĐ-UBND** về hệ số điều chỉnh mức thu nhập mua nhà ở xã hội (NƠXH). Tin báo chí nêu phương án cao nhất: tổng thu nhập vợ chồng không quá **60 triệu đồng/tháng**. Đây là **đề xuất / tờ trình** — chưa phải mức đang áp dụng thay thế Quyết định 14 hiện hành.
+
+## Ai bị ảnh hưởng? Ai cần chú ý?
+
+| Nhóm | Quy định đang có | Thay đổi / đề xuất |
+| --- | --- | --- |
+| Người mua NƠXH tại TP.HCM thuộc nhóm phải đối chiếu trần thu nhập (khoản 5, 6, 8 Điều 76 Luật Nhà ở) | Áp dụng **Quyết định 14/2026** (hiệu lực 01/04/2026) + **Nghị định 136/2026**: mức chung vợ chồng ≤ 50 triệu; hộ ≥3 người phụ thuộc ≤ 54 triệu | Phương án đề xuất hệ số 1,1–1,2: vợ chồng ≤ **55** hoặc **60** triệu — **chưa có hiệu lực** |
+| Người độc thân / độc thân nuôi con dưới tuổi thành niên tại TP.HCM | QĐ 14: ≤ 25 / ≤ 37,5 triệu (mức chung); hộ phụ thuộc cao hơn một bậc | Đề xuất ≤ 27,5–30 triệu (độc thân) và ≤ 38,5–42 triệu (nuôi con) theo hệ số 1,1–1,2 |
+| Nhóm đối tượng Luật Nhà ở không áp trần thu nhập dân sự kiểu bảng trên (ví dụ người có công, hộ nghèo/cận nghèo theo quy định) | Đối chiếu đúng khoản đối tượng trên hồ sơ | Không gộp vào “trần 60 triệu”; đề xuất hệ số không thay khung đối tượng đó |
+| Chủ đầu tư / CTV tiếp nhận hồ sơ đợt mở bán | Tiếp nhận theo mức QĐ 14 + NĐ 136 đang hiệu lực | Chỉ cập nhật checklist khi UBND ban hành quyết định sửa có số hiệu và ngày hiệu lực |
+
+**Ai cần chú ý ngay:** hộ đang nộp hoặc chuẩn bị hồ sơ theo trần QĐ 14 hiện hành; hộ thu nhập sát 50–54 triệu cần theo dõi Công báo nhưng **không dừng** gom giấy tờ đối tượng / nhà ở. **Ai chỉ nên theo dõi:** người vượt trần hiện hành nhưng có thể nằm trong khung 55–60 triệu nếu phương án hệ số 1,2 được duyệt — chưa cam kết giữ suất hay đặt cọc chỉ dựa trên tờ trình.
 
 ## Mức trần thu nhập mua nhà ở xã hội đang áp dụng trên cả nước là bao nhiêu?
 
@@ -70,9 +81,9 @@ Ngoài ra, tờ trình nêu hướng: hộ có từ **3 người phụ thuộc**
 
 Sở cũng nêu lý do sửa: Quyết định 14 vừa ghi hệ số vừa ghi mức tuyệt đối; sau khi có Nghị định 136, có nguy cơ hiểu lệch kiểu “nhân hệ số thêm lần nữa” lên mức trần mới của trung ương — cần chỉnh để thống nhất tiếp nhận hồ sơ.
 
-## Đề xuất đã có hiệu lực chưa? Ai được hưởng ngay?
+## Đề xuất đã có hiệu lực chưa?
 
-**Chưa.** Tờ trình của Sở Xây dựng → UBND thành phố xem xét → mới có quyết định sửa đổi (nếu được ban hành) với ngày hiệu lực riêng.
+**Chưa.** Tờ trình của Sở Xây dựng → UBND thành phố xem xét → mới có quyết định sửa đổi (nếu được ban hành) với ngày hiệu lực riêng. Không ai “được hưởng ngay” mức 60 triệu chỉ vì tin tờ trình.
 
 Cho đến lúc đó:
 
@@ -81,8 +92,6 @@ Cho đến lúc đó:
 | Theo dõi quyết định / công báo chính thức của UBND TP.HCM | Coi tin “đề xuất 60 triệu” như đã được mua NƠXH |
 | Đối chiếu thu nhập 12 tháng thực nhận theo mẫu xác nhận đang yêu cầu | Tự nhân hệ số lên mức NĐ 136 rồi nộp như đã đủ |
 | Chuẩn bị sẵn đối tượng Luật + điều kiện nhà ở + thu nhập theo **QĐ 14 hiện hành** | Chờ mức 60 triệu rồi mới bắt đầu gom hồ sơ nếu đã gần trần hiện tại |
-
-Người **đã vượt** trần QĐ 14 hiện hành nhưng **có thể nằm trong** khung 55–60 triệu nếu phương án mới được duyệt: nên theo dõi công bố chính thức; không cam kết giữ suất / đặt cọc chỉ dựa trên tờ trình.
 
 ## Người đang chuẩn bị hồ sơ NƠXH ở TP.HCM nên làm gì ngay?
 

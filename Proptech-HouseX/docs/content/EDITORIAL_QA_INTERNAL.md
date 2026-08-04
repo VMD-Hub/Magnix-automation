@@ -9,7 +9,7 @@ Trang công khai: `/gioi-thieu/phuong-phap-bien-tap` (`lib/content/editorial-met
 |------|----------|
 | L0 | Kiểm tra giọng biên tập: không heading meta, không markdown thô, không CTA gắt |
 | L1 | Đối chiếu số liệu pháp lý với `CURRENT_NOXH_RULES` (`lib/finance/noxh-rules`) |
-| L2 | Rà soát chủ đề nhạy cảm (thu nhập, vay, đối tượng) — `/devil` khi cần |
+| L2 | Rà soát chủ đề nhạy cảm (thu nhập, vay, đối tượng) — `/devil` khi cần; **bắt buộc đọc** [`GHI_CHU_BAT_BUOC_TRUOC_KHI_BIEN_TAP.md`](./GHI_CHU_BAT_BUOC_TRUOC_KHI_BIEN_TAP.md) trước khi viết / duyệt bài giá–quy hoạch–pháp lý–đầu tư |
 | L3 | Duyệt người trước publish (bài trend, số liệu giá mới) |
 
 ## Đồng bộ kỹ thuật
@@ -21,7 +21,14 @@ Trang công khai: `/gioi-thieu/phuong-phap-bien-tap` (`lib/content/editorial-met
 
 Không đưa lên web: mã L0–L3, đường dẫn `lib/…`, tên biến `CURRENT_NOXH_RULES`, checklist agent.
 
+## Ghi chú bắt buộc trước khi viết
+
+Mọi bài giá / quy hoạch / pháp lý / tư vấn đầu tư: đọc hết [`GHI_CHU_BAT_BUOC_TRUOC_KHI_BIEN_TAP.md`](./GHI_CHU_BAT_BUOC_TRUOC_KHI_BIEN_TAP.md) rồi mới soạn hoặc duyệt L2.
+
+---
+
 ## Content queue — duyệt L2/L3 như người đọc
+
 
 | Tab / vùng | Ai thấy | Quy tắc |
 |------------|---------|---------|
