@@ -1,7 +1,10 @@
 /**
- * Seed 2 bài SEO tuyến legal-review vào content_queue (INTAKE → L2 /devil).
+ * Seed bài tuyến legal-review vào content_queue (INTAKE → L2 /devil).
  *   - 07 sổ đỏ điện tử / dự thảo Luật Đất đai
  *   - 08 TP.HCM đề xuất trần thu nhập NƠXH 60 triệu
+ *   - 09 VNeID NƠXH + môi giới / House X
+ *   - 10 Quy trình mua NƠXH QĐ 1346
+ *   - 11 Quy hoạch 100 năm TP.HCM đa cực
  *
  * Usage:
  *   node --env-file=.env --import tsx scripts/seed-legal-review-queue-pack.ts
@@ -54,6 +57,20 @@ const ITEMS: PackItem[] = [
     opsExtra:
       "GENERAL_POLICY — VNeID xét duyệt NƠXH + định hướng môi giới/House X. L2 /devil: TB 152 = nghiên cứu quy trình, chưa thay xét duyệt hiện hành; không bao đậu hồ sơ.",
   },
+  {
+    id: "qd-1346-H1",
+    sheetKey: "quy-trinh-mua-noxh-qd-1346:H1",
+    draftRel: "docs/content/drafts/10-quy-trinh-mua-noxh-qd-1346.md",
+    opsExtra:
+      "GENERAL_POLICY — quy trình CĐT↔Sở theo QĐ 1346. L2 /devil: neo văn bản; không bao đậu / không thay tư vấn pháp lý cá nhân.",
+  },
+  {
+    id: "quy-hoach-100nam-H1",
+    sheetKey: "quy-hoach-100-nam-tphcm-da-cuc:H1",
+    draftRel: "docs/content/drafts/11-quy-hoach-100-nam-tphcm-da-cuc.md",
+    opsExtra:
+      "GENERAL_POLICY — tầm nhìn–hạ tầng, reader-first (đối thủ giá trị CafeLand). L2 /devil: đồ án đang hoàn thiện ≠ đã phê duyệt cuối; không định giá / không hứa ROI.",
+  },
 ];
 
 function parseDraft(raw: string): { meta: DraftFrontmatter; body: string } {
@@ -97,7 +114,7 @@ async function seedOne(root: string, item: PackItem) {
     `Draft: ${item.draftRel}`,
     "requires_legal_qa: true",
     "CTA: legal-review → /lien-he?goi=ra-soat-phap-ly-15-phut#tu-van",
-    "Pack: legal-review queue (so-do + tphcm-60tr)",
+    "Pack: legal-review queue (07–11)",
   ].join("\n");
 
   const shared = {

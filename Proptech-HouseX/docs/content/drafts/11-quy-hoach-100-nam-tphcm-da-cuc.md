@@ -106,7 +106,7 @@ House X đọc quy hoạch để:
 
 Đọc thêm trên House X: [quy trình mua NƠXH CĐT–Sở theo QĐ 1346](/tin-tuc/quy-trinh-mua-noxh-cdt-so-xd-quyet-dinh-1346) · [điều kiện nhà ở xã hội](/cong-cu/dieu-kien-noxh) · [VNeID và nghề tư vấn](/tin-tuc/vneid-noxh-moi-gioi-bat-dong-san-thay-doi-gi).
 
-## Kiểm tra nhanh
+## Kiểm tra nhanh (CTA)
 
 Bạn đang đặt chỗ sống trên lưới cực mới, hoặc cần đối chiếu pháp lý thửa / dự án với tiến độ quy hoạch?
 → [Đặt lịch rà soát pháp lý 15 phút miễn phí](/lien-he?goi=ra-soat-phap-ly-15-phut#tu-van)
