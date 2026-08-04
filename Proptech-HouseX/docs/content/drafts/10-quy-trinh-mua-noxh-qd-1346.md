@@ -23,13 +23,11 @@ source_refs:
   - "Khung liên quan: Nghị định 100/2024/NĐ-CP (sửa đổi) về phát triển và quản lý nhà ở xã hội — trình tự bán/thuê mua dự án"
 ---
 
-Bài này quan sát và trình bày ở **phạm vi thủ tục hành chính nhà ở xã hội theo dự án không vốn đầu tư công** — mốc trách nhiệm giữa chủ đầu tư và Sở Xây dựng theo Quyết định 1346/QĐ-BXD. Không nhảy từ mốc thời gian chung xuống kết luận một đợt mở bán cụ thể mà bỏ qua phụ lục mẫu hồ sơ và hướng dẫn địa phương.
-
-Ngày **03/08/2026**, Bộ Xây dựng ban hành **Quyết định 1346/QĐ-BXD** công bố thủ tục hành chính được sửa đổi, bổ sung lĩnh vực nhà ở. Theo Báo Xây dựng, các thủ tục này **có hiệu lực từ ngày 03/08/2026**. Với người mua / CTV, phần quan trọng nhất là thủ tục **bán, cho thuê mua, cho thuê NƠXH theo dự án, không sử dụng vốn đầu tư công / nguồn tài chính công đoàn** — đúng loại dự án phổ biến trên thị trường.
+Ngày **03/08/2026**, Bộ Xây dựng ban hành **Quyết định 1346/QĐ-BXD** công bố thủ tục hành chính được sửa đổi, bổ sung lĩnh vực nhà ở. Theo Báo Xây dựng, các thủ tục này **có hiệu lực từ ngày 03/08/2026**. Với người mua / CTV, phần quan trọng nhất là thủ tục **bán, cho thuê mua, cho thuê NƠXH theo dự án, không sử dụng vốn đầu tư công / nguồn tài chính công đoàn** — đúng loại dự án phổ biến trên thị trường. Chi tiết mẫu hồ sơ và hướng dẫn địa phương vẫn phải đối chiếu phụ lục / thông báo đợt mở bán.
 
 **Không nhầm với VNeID:** quy trình dưới đây vẫn là nộp hồ sơ cho chủ đầu tư + Sở kiểm tra. Hướng xác nhận đối tượng trên VNeID đang được nghiên cứu — xem [bài VNeID và nghề môi giới](/tin-tuc/vneid-noxh-moi-gioi-bat-dong-san-thay-doi-gi).
 
-## Ai bị ảnh hưởng? Ai cần chú ý?
+## Ai đang chịu tác động, và ai cần theo dõi ngay?
 
 | Nhóm | Quy định đang áp dụng sau QĐ 1346 | Việc cần chú ý |
 | --- | --- | --- |

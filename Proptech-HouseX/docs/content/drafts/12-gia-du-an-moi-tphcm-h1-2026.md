@@ -26,11 +26,9 @@ source_refs:
 heroImage: /images/content/gia-du-an-tphcm-h1-2026/ban-do-du-an.png
 ---
 
-Bài này quan sát và trình bày ở **phạm vi dự án** (từng dự án mở bán), đặt trong bối cảnh thành phố sau sáp nhập — không nhảy từ vành đai hay chiến lược quốc gia xuống kết luận một căn hộ.
-
 Đơn giá phổ biến của một số dự án mới tại TP.HCM nửa đầu năm 2026 **lệch nhau rất mạnh**. Đỉnh bảng có dự án ở Quận 1 quanh **450–700 triệu đồng/m²**. Cùng lúc, ở TP. Thủ Đức vẫn có dự án quanh **45–60 triệu đồng/m²**, và Bình Tân quanh **55–60 triệu đồng/m²**.
 
-Nguyên nhân chính không phải “cùng quận nhưng khác hướng nhà”. Nguyên nhân chính là **khác hạng đời sống và khác đối tượng người mua**: siêu sang / cao cấp không bán cùng gói giá trị hưởng thụ với trung cấp hay phổ thông. Hạ tầng vùng chỉ là bối cảnh sau khi đã nói đúng hạng.
+Nguyên nhân chính không phải “cùng quận nhưng khác hướng nhà”. Nguyên nhân chính là **khác hạng đời sống và khác đối tượng người mua**: siêu sang / cao cấp không bán cùng gói giá trị hưởng thụ với trung cấp hay phổ thông. Hạ tầng vùng chỉ là bối cảnh sau khi đã nói đúng hạng — không lấy tin vành đai hay chiến lược quốc gia để kết luận một căn hộ.
 
 ![Bản đồ một số dự án mới đáng chú ý tại TP.HCM và hạ tầng kết nối — House X, H1/2026](/images/content/gia-du-an-tphcm-h1-2026/ban-do-du-an.png)
 

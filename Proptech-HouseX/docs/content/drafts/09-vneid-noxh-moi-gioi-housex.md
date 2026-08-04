@@ -24,11 +24,9 @@ source_refs:
   - "Nghị định 100/2024/NĐ-CP (sửa đổi) + NĐ 136/2026 — điều kiện đối tượng / thu nhập đang áp dụng khi chưa có quy trình VNeID chính thức"
 ---
 
-Bài này quan sát và trình bày ở **phạm vi chính sách nhà ở xã hội toàn quốc** — lớp xác nhận đối tượng mua NƠXH đang nghiên cứu gắn với hệ thống định danh điện tử (VNeID), và hệ quả với nghề tư vấn / môi giới. Không nhảy từ kiến nghị doanh nghiệp xuống kết luận rằng quy trình hiện hành đã bị thay thế.
+Khi xác nhận đối tượng mua nhà ở xã hội (NƠXH) dần gắn với **VNeID**, nhiều người hỏi: môi giới / telesale còn chỗ đứng không? House X định vị thế nào? **Chưa có quy trình VNeID chính thức thay thế toàn bộ xét duyệt hiện hành** — chỉ đang nghiên cứu / kiến nghị. Bài dưới tách rõ quy trình đang chạy, đề xuất doanh nghiệp cùng chỉ đạo nghiên cứu của Chính phủ, rồi hướng thích nghi cho người mua, môi giới/CTV và nền tảng tư vấn như House X.
 
-Khi xác nhận đối tượng mua nhà ở xã hội (NƠXH) dần gắn với **VNeID**, nhiều người hỏi: môi giới / telesale còn chỗ đứng không? House X định vị thế nào? **Chưa có quy trình VNeID chính thức thay thế toàn bộ xét duyệt hiện hành** — chỉ đang nghiên cứu / kiến nghị. Bài tách ba lớp: (1) quy trình đang vận hành, (2) đề xuất doanh nghiệp + chỉ đạo nghiên cứu của Chính phủ, (3) hướng thích nghi cho người mua, môi giới/CTV và nền tảng tư vấn như House X.
-
-## Ai bị ảnh hưởng? Ai cần chú ý?
+## Ai đang chịu tác động, và ai cần theo dõi ngay?
 
 | Nhóm | Quy định / thực tế đang có | Thay đổi / đề xuất đang bàn |
 | --- | --- | --- |

@@ -1,6 +1,6 @@
 /**
  * Build markdown article body + slug từ content queue (P1 publish web).
- * Body đưa lên web / preview L2 phải là copy người đọc — không nhãn ops.
+ * Body đưa lên web / preview L2 phải là copy người đọc — không nhãn ops / SoR.
  */
 
 import { getNoxhCtaTool } from "@/lib/content/noxh-cta-tools";
@@ -21,6 +21,14 @@ const FRONTMATTER_RE = /^---\r?\n[\s\S]*?\r?\n---\r?\n/;
 const CTA_HEADING_LINE_RE = /^##\s+Kiểm tra nhanh(?:\s*\(CTA\))?\s*$/im;
 const CTA_HEADING_OPS_RE = /^##\s+Kiểm tra nhanh\s*\(CTA\)\s*$/gim;
 
+/** Đoạn mở khung biên tập (GHI_CHU / DNA) — không đăng lên web. */
+const EDITORIAL_SCOPE_OPENER_RE =
+  /^Bài này quan sát và trình bày[\s\S]*?(?=\n\n|\n##|$)/;
+
+/** Mục ghi chú nội bộ nếu lỡ dính vào body. */
+const EDITORIAL_NOTE_SECTION_RE =
+  /^##\s*(?:Lưu ý biên tập|Ghi chú biên tập|Ops notes?)[\s\S]*?(?=\n##\s+|\n*$)/gim;
+
 /** Slug ASCII từ tiêu đề tiếng Việt. */
 export function slugifyArticleTitle(title: string): string {
   const base = title
@@ -39,6 +47,8 @@ export function slugifyArticleTitle(title: string): string {
  * - bỏ YAML frontmatter nếu lỡ dính
  * - đổi `## Kiểm tra nhanh (CTA)` → `## Kiểm tra nhanh`
  * - bỏ HTML comment ops
+ * - bỏ đoạn mở “Bài này quan sát và trình bày…” (SoR)
+ * - bỏ mục Lưu ý biên tập nếu lỡ dính
  */
 export function normalizeQueueBodyForReader(md: string): string {
   let s = md.replace(/^\uFEFF/, "").trim();
@@ -47,6 +57,8 @@ export function normalizeQueueBodyForReader(md: string): string {
   }
   s = s.replace(CTA_HEADING_OPS_RE, READER_CTA_HEADING);
   s = s.replace(/<!--[\s\S]*?-->/g, "");
+  s = s.replace(EDITORIAL_SCOPE_OPENER_RE, "").trim();
+  s = s.replace(EDITORIAL_NOTE_SECTION_RE, "").trim();
   return s.replace(/\n{3,}/g, "\n\n").trim();
 }
 
@@ -60,7 +72,24 @@ export function queueBodyHasSeedCtaMarker(md: string): boolean {
   return queueBodyHasCtaSection(md);
 }
 
-/** Markdown body tối thiểu — luôn có CTA link tool; không lộ nhãn `(CTA)`. */
+function appendCtaIfMissing(
+  core: string,
+  label: string,
+  href: string,
+  ctaNote: string,
+): string {
+  if (queueBodyHasCtaSection(core)) return core;
+  return [core, "", READER_CTA_HEADING, "", `[${label}](${href})`, "", ctaNote]
+    .join("\n")
+    .trim();
+}
+
+/**
+ * Markdown body tối thiểu cho CMS.
+ * - Có `bodyPreview` đầy đủ (draft seed): dùng nguyên bản đã normalize.
+ *   Không nhân đôi `## title` / “Câu hỏi thường gặp” — trang web đã có title/excerpt.
+ * - Không preview: fallback ngắn + H2 title + painPoint + CTA.
+ */
 export function buildArticleBodyFromQueue(item: QueueArticleSeed): string {
   const tool = getNoxhCtaTool(item.ctaToolId);
   const href = item.ctaHref?.trim() || tool?.href || "/cong-cu/dieu-kien-noxh";
@@ -69,17 +98,25 @@ export function buildArticleBodyFromQueue(item: QueueArticleSeed): string {
     tool?.defaultCtaLabel ||
     "Kiểm tra miễn phí ngay";
 
-  const coreRaw =
-    item.bodyPreview?.trim() ||
-    (item.painPoint?.trim()
-      ? `Nhiều người đang hỏi: *${item.painPoint.trim()}*\n\nDưới đây là hướng xử lý thực tế — và bạn có thể tự kiểm tra nhanh bằng công cụ miễn phí.`
-      : "Bài hướng dẫn NƠXH — dùng công cụ bên dưới để tự kiểm tra trước khi nộp hồ sơ.");
-
-  const core = normalizeQueueBodyForReader(coreRaw);
-
   const ctaNote = tool?.requiresContact
     ? "House X hỗ trợ định hướng hồ sơ — không thay cơ quan nhà nước cấp sổ / quyết định hồ sơ."
     : "Không cần để lại SĐT trước khi xem kết quả gợi ý.";
+
+  const preview = item.bodyPreview?.trim();
+  if (preview) {
+    return appendCtaIfMissing(
+      normalizeQueueBodyForReader(preview),
+      label,
+      href,
+      ctaNote,
+    );
+  }
+
+  const coreRaw = item.painPoint?.trim()
+    ? `Nhiều người đang hỏi: *${item.painPoint.trim()}*\n\nDưới đây là hướng xử lý thực tế — và bạn có thể tự kiểm tra nhanh bằng công cụ miễn phí.`
+    : "Bài hướng dẫn NƠXH — dùng công cụ bên dưới để tự kiểm tra trước khi nộp hồ sơ.";
+
+  const core = normalizeQueueBodyForReader(coreRaw);
 
   const lines: Array<string | null> = [
     `## ${item.title.trim()}`,
@@ -91,9 +128,6 @@ export function buildArticleBodyFromQueue(item: QueueArticleSeed): string {
     core,
   ];
 
-  if (!queueBodyHasCtaSection(core)) {
-    lines.push("", READER_CTA_HEADING, "", `[${label}](${href})`, "", ctaNote);
-  }
-
-  return lines.filter((x): x is string => x !== null).join("\n");
+  const wrapped = lines.filter((x): x is string => x !== null).join("\n");
+  return appendCtaIfMissing(wrapped, label, href, ctaNote);
 }

@@ -15,12 +15,14 @@ describe("content-queue article seed", () => {
     );
   });
 
-  it("normalize bỏ nhãn (CTA) và frontmatter", () => {
+  it("normalize bỏ nhãn (CTA), frontmatter và đoạn mở SoR", () => {
     const raw = `---
 title: x
 ---
 
-Đoạn mở.
+Bài này quan sát và trình bày ở **phạm vi dự án** — không nhảy từ vành đai xuống căn hộ.
+
+Đoạn mở cho người đọc.
 
 ## Kiểm tra nhanh (CTA)
 
@@ -28,6 +30,8 @@ title: x
 `;
     const out = normalizeQueueBodyForReader(raw);
     assert.equal(out.includes("---"), false);
+    assert.equal(out.includes("Bài này quan sát và trình bày"), false);
+    assert.match(out, /Đoạn mở cho người đọc/);
     assert.match(out, /^## Kiểm tra nhanh$/m);
     assert.equal(out.includes("(CTA)"), false);
     assert.equal(queueBodyHasCtaSection(out), true);
@@ -44,6 +48,8 @@ title: x
     });
     assert.match(body, /^## Kiểm tra nhanh$/m);
     assert.equal(body.includes("(CTA)"), false);
+    assert.equal(body.includes("## Thu nhập 12tr"), false);
+    assert.equal(body.includes("Câu hỏi thường gặp"), false);
     assert.match(
       body,
       /\[Kiểm tra điều kiện miễn phí\]\(\/cong-cu\/dieu-kien-noxh\)/,
@@ -60,6 +66,7 @@ title: x
     });
     const matches = body.match(/^## Kiểm tra nhanh$/gm) ?? [];
     assert.equal(matches.length, 1);
+    assert.equal(body.includes("## Bài đã có CTA"), false);
   });
 
   it("fallback CTA khi thiếu preview", () => {

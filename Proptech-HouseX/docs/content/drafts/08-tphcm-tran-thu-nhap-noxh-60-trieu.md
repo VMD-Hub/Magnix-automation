@@ -24,11 +24,9 @@ source_refs:
   - "Tuổi Trẻ Online — cùng nội dung tờ trình Sở Xây dựng TP.HCM sửa QĐ 14/2026"
 ---
 
-Bài này quan sát và trình bày ở **phạm vi chính sách nhà ở xã hội trên địa bàn TP.HCM**, đặt trong khung trần thu nhập toàn quốc theo Nghị định 136/2026 — không nhảy từ headline “60 triệu” xuống kết luận một hồ sơ cụ thể mà bỏ qua quyết định đang hiệu lực.
+Cuối tháng 7/2026, Sở Xây dựng TP.HCM có tờ trình đề xuất sửa đổi, bổ sung **Quyết định 14/2026/QĐ-UBND** về hệ số điều chỉnh mức thu nhập mua nhà ở xã hội (NƠXH). Tin báo chí nêu phương án cao nhất: tổng thu nhập vợ chồng không quá **60 triệu đồng/tháng**. Đây là **đề xuất / tờ trình** — chưa phải mức đang áp dụng thay thế Quyết định 14 hiện hành. Khung toàn quốc vẫn neo **Nghị định 136/2026**.
 
-Cuối tháng 7/2026, Sở Xây dựng TP.HCM có tờ trình đề xuất sửa đổi, bổ sung **Quyết định 14/2026/QĐ-UBND** về hệ số điều chỉnh mức thu nhập mua nhà ở xã hội (NƠXH). Tin báo chí nêu phương án cao nhất: tổng thu nhập vợ chồng không quá **60 triệu đồng/tháng**. Đây là **đề xuất / tờ trình** — chưa phải mức đang áp dụng thay thế Quyết định 14 hiện hành.
-
-## Ai bị ảnh hưởng? Ai cần chú ý?
+## Ai đang chịu tác động, và ai cần theo dõi ngay?
 
 | Nhóm | Quy định đang có | Thay đổi / đề xuất |
 | --- | --- | --- |

@@ -12,9 +12,11 @@ Trước khi mở draft, seed queue, hoặc bấm duyệt: đọc hết file nà
 
 1. Câu phải đủ chủ–vị–ý. Không viết cụt ý, không viết tắt mang vào bài đăng.
 2. Khi nói giá so sánh theo diện tích, dùng **đơn giá (VND/m²)** — không nói “giá một mét sàn” hay cách nói bình dân kém chính xác.
-3. Không lộ nhãn hệ thống trên bài đọc giả: `(CTA)`, frontmatter, ghi chú ops, đường dẫn kỹ thuật.
-4. Duyệt L2/L3 bằng tab **Như người đọc** (markdown đã render), không duyệt cảm nhận bài trên nguồn thô.
-5. Không hứa lợi nhuận, không bao đậu hồ sơ, không biến dự thảo thành luật đã ban hành.
+3. Không lộ nhãn hệ thống trên bài đọc giả: `(CTA)`, frontmatter, ghi chú ops, đường dẫn kỹ thuật, tên file SoR.
+4. **Sáu câu hỏi SoR** (phạm vi, phân khúc, hạ tầng, pháp lý, vĩ mô, giá trị mang đi) chỉ trả lời trong `editorial_note` / opsNotes / checklist L2 — **không** đưa nguyên văn vào đoạn mở bài kiểu “Bài này quan sát và trình bày ở phạm vi…”, “cấp 4–5”, “không nhảy từ…”. Người đọc thấy tin và lợi ích; biên tập giữ kỷ luật phạm vi nội bộ.
+5. Duyệt L2/L3 bằng tab **Như người đọc** (markdown đã render), không duyệt cảm nhận bài trên nguồn thô.
+6. Không hứa lợi nhuận, không bao đậu hồ sơ, không biến dự thảo thành luật đã ban hành.
+7. Publish không nhân đôi tiêu đề / painPoint lên body nếu draft đã có nội dung đầy đủ.
 
 ---
 

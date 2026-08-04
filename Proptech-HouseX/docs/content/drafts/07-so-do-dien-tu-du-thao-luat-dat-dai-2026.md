@@ -24,11 +24,9 @@ source_refs:
   - "VOV — UBTVQH điều chỉnh chương trình lập pháp 2026, bổ sung Luật Đất đai (sửa đổi) trình kỳ họp tháng 10/2026 — https://vov.gov.vn/trinh-quoc-hoi-du-an-luat-dat-dai-tai-ky-hop-cuoi-nam-2026-dtnew-1152567"
 ---
 
-Bài này quan sát và trình bày ở **phạm vi chiến lược pháp lý đất đai toàn quốc** — đối chiếu Luật Đất đai 2024 đang hiệu lực với hướng đề xuất trong dự thảo Luật Đất đai sửa đổi về cấp Giấy chứng nhận (sổ đỏ / sổ hồng), kể cả sổ đỏ điện tử. Không nhảy từ tin dự thảo xuống kết luận một thửa đất cụ thể mà bỏ qua văn bản đang áp dụng.
+Theo tin công bố cuối tháng 7/2026, Bộ Nông nghiệp và Môi trường chủ trì hoàn thiện dự thảo Luật Đất đai sửa đổi; Ủy ban Thường vụ Quốc hội đã cho ý kiến về một số nội dung — trong đó có sổ đỏ điện tử. **Dự thảo chưa phải luật đã thông qua.** Không dùng dự thảo làm căn cứ nộp hồ sơ hay ký giao dịch thay cho Luật Đất đai 2024 và hướng dẫn đang áp dụng.
 
-Theo tin công bố cuối tháng 7/2026, Bộ Nông nghiệp và Môi trường chủ trì hoàn thiện dự thảo; Ủy ban Thường vụ Quốc hội đã cho ý kiến về một số nội dung — trong đó có sổ đỏ điện tử. **Dự thảo chưa phải luật đã thông qua.** Không dùng dự thảo làm căn cứ nộp hồ sơ hay ký giao dịch thay cho văn bản đang áp dụng.
-
-## Ai bị ảnh hưởng? Ai cần chú ý?
+## Ai đang chịu tác động, và ai cần theo dõi ngay?
 
 | Nhóm | Quy định đang có (Luật Đất đai 2024) | Thay đổi / đề xuất trong dự thảo |
 | --- | --- | --- |

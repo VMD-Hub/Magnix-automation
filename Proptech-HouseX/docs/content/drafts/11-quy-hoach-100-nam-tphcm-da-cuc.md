@@ -28,11 +28,9 @@ source_refs:
   - "Quyết định 4560/QĐ-UBND (23/07/2026) — Khu thương mại tự do Cái Mép Hạ 4.174,35 ha"
 ---
 
-Bài này quan sát và trình bày ở **phạm vi chiến lược quy hoạch siêu đô thị dài hạn và hành lang vùng** (cấp tầm nhìn 100 năm + cực hạ tầng liên tỉnh) — không nhảy từ vành đai hay FTZ xuống kết luận đơn giá một căn hộ hay một dự án mở bán tuần này.
+UBND TP.HCM đang đẩy cùng lúc nhiều mảnh ghép: hoàn thiện **Quy hoạch tổng thể tầm nhìn khoảng 100 năm**, thành lập **Khu thương mại tự do hơn 4.100 ha** ở Cái Mép Hạ, điều chỉnh siêu dự án **Trung tâm hành chính mới tại Thủ Thiêm**, và kế hoạch **chỉnh trang nhà ven kênh** khu Nam. Nhìn riêng lẻ, mỗi việc là một dòng tin. Nhìn chung, chúng đang vẽ diện mạo **siêu đô thị sau sáp nhập** — nơi thành phố không còn sống nhờ một lõi duy nhất. Bài này đọc ở tầm chiến lược và hành lang vùng — không dùng tin vành đai hay FTZ để kết luận đơn giá một căn hộ mở bán tuần này.
 
-UBND TP.HCM đang đẩy cùng lúc nhiều mảnh ghép: hoàn thiện **Quy hoạch tổng thể tầm nhìn khoảng 100 năm**, thành lập **Khu thương mại tự do hơn 4.100 ha** ở Cái Mép Hạ, điều chỉnh siêu dự án **Trung tâm hành chính mới tại Thủ Thiêm**, và kế hoạch **chỉnh trang nhà ven kênh** khu Nam. Nhìn riêng lẻ, mỗi việc là một dòng tin. Nhìn chung, chúng đang vẽ diện mạo **siêu đô thị sau sáp nhập** — nơi thành phố không còn sống nhờ một lõi duy nhất.
-
-## Ai bị ảnh hưởng khi thành phố chỉnh trang kênh và giải phóng mặt bằng?
+## Ai đang chịu tác động khi chỉnh trang kênh và giải phóng mặt bằng?
 
 Không phải mọi “điểm nóng” quy hoạch đều cùng một nhóm người đọc. Với chỉnh trang kênh / GPMB, cần tách rõ:
 
