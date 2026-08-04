@@ -50,8 +50,6 @@ Nhóm phải xét trần thu nhập dân sự kiểu bảng trên là các đố
 - Thu nhập vợ chồng đang nằm khoảng 50–54 triệu: theo dõi Công báo khi có quyết định sửa; vẫn chuẩn bị đủ giấy tờ đối tượng / nhà ở.
 - Kỳ vọng “lọt” nhờ 60 triệu trong khi vượt trần hiện hành: chưa có căn cứ pháp lý mới để giữ suất hay đặt cọc.
 
-Tự đối chiếu nhanh: [kiểm tra điều kiện NƠXH](/cong-cu/dieu-kien-noxh).
-
 ## FAQ
 
 **Tôi độc thân — có được xét theo 60 triệu không?**  
@@ -59,3 +57,9 @@ Không. 60 triệu là trần **tổng vợ chồng** ở phương án hệ số
 
 **Khi nào dùng được mức đề xuất?**  
 Khi UBND TP.HCM ban hành quyết định sửa QĐ 14 (nếu được duyệt) và ghi ngày hiệu lực. Tờ trình chưa tạo mức mới để xét hồ sơ.
+
+## Kiểm tra nhanh
+
+Bạn đang phân vân thu nhập / đối tượng NƠXH tại TP.HCM trước khi nộp hồ sơ?
+→ [Kiểm tra miễn phí bạn có đủ điều kiện NƠXH không](/cong-cu/dieu-kien-noxh)
+
