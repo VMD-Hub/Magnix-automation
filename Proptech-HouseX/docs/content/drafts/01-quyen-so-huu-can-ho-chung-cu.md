@@ -58,3 +58,9 @@ Bạn yên tâm với **khung hiện hành** và với **tin rút đề xuất t
 
 **Kiểm định không đạt thì mất nhà ngay?**  
 Không suy ra như vậy từ một câu “kiểm định”. Kết luận kiểm định là căn cứ để cơ quan có thẩm quyền quyết định tiếp tục sử dụng, sửa chữa lớn hoặc xem xét phá dỡ / tái định cư theo quy trình — từng bước có văn bản, không phải mất sổ tự động.
+
+## Kiểm tra nhanh
+
+Bạn đang cần đối chiếu sổ hồng / hợp đồng trước khi mua hoặc bán căn hộ?
+→ [Đặt lịch rà soát pháp lý 15 phút miễn phí](/lien-he?goi=ra-soat-phap-ly-15-phut#tu-van)
+

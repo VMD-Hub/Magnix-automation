@@ -48,6 +48,7 @@ type DraftFrontmatter = {
   ctaLabel?: string;
   ctaHref?: string;
   slug?: string;
+  ctaToolId?: string;
 };
 
 function parseDraft(raw: string): { meta: DraftFrontmatter; body: string } {
@@ -75,6 +76,7 @@ function parseDraft(raw: string): { meta: DraftFrontmatter; body: string } {
     else if (key === "ctaLabel") meta.ctaLabel = val;
     else if (key === "ctaHref") meta.ctaHref = val;
     else if (key === "slug") meta.slug = val;
+    else if (key === "ctaToolId") meta.ctaToolId = val;
   }
   return { meta, body };
 }
@@ -106,11 +108,6 @@ async function main() {
     const item = pack.items.find((x) => x.id === id);
     if (!item) throw new Error(`ship_order thiếu item: ${id}`);
 
-    const cta = getNoxhCtaTool(item.cta_tool_id);
-    if (!cta) {
-      throw new Error(`cta_tool_id ngoài allowlist: ${item.cta_tool_id} (${item.id})`);
-    }
-
     const draftAbs = resolve(root, item.draft_file);
     const { meta, body } = parseDraft(readFileSync(draftAbs, "utf8"));
     const title = meta.title?.trim();
@@ -120,6 +117,12 @@ async function main() {
     }
     if (meta.slug && meta.slug !== item.slug) {
       throw new Error(`Slug lệch pack vs draft: pack=${item.slug} draft=${meta.slug}`);
+    }
+
+    const toolId = meta.ctaToolId?.trim() || item.cta_tool_id;
+    const cta = getNoxhCtaTool(toolId);
+    if (!cta) {
+      throw new Error(`cta_tool_id ngoài allowlist: ${toolId} (${item.id})`);
     }
 
     if (dryRun) {

@@ -15,6 +15,13 @@ npm run db:seed:cctm-luat-nha-o-queue
 
 Sau seed: `/admin/content-queue` → L2 `/devil` → `submit_l3` → `approve` → `publish_web` theo A0→G5.
 
+**Nạp toàn bộ draft 00–13 (khuyến nghị trên VPS):**
+
+```bash
+npm run db:seed:content-queue-all:dry
+npm run db:seed:content-queue-all
+```
+
 Thứ tự đưa queue: A0 → B2 → C1 → D3 → E4 → F6 → G5.
 
 ## Item A — Pillar (P0)

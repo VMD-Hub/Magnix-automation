@@ -60,3 +60,11 @@ Không vì lý do CIC. Họ xét đối tượng và điều kiện mua theo Lu�
 
 **Đã tất toán nợ nhóm 2 rồi — bao lâu thì vay NƠXH được?**  
 Không có một mốc “đủ X tháng là chắc duyệt” cho mọi ngân hàng. Cần xem CIC đã cập nhật thế nào và chính sách từng ngân hàng / gói vay tại thời điểm nộp — nên tra CIC trước rồi mới đặt cọc gắn điều kiện vay.
+
+## Kiểm tra nhanh
+
+Bạn đang phân vân vay NƠXH khi còn vướng tín dụng, hoặc cần tư vấn nhánh mua bằng vốn tự có?
+→ [Liên hệ tư vấn House X](/lien-he?goi=tu-van-nha-o-xa-hoi#tu-van)
+
+Có thể tự sàng lọc nhanh khả năng vay: [kiểm tra vay NƠXH 60 giây](/cong-cu/kiem-tra-vay-noxh).
+

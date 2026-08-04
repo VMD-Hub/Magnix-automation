@@ -6,6 +6,7 @@
  *   - 10 Quy trình mua NƠXH QĐ 1346
  *   - 11 Quy hoạch 100 năm TP.HCM đa cực
  *   - 12 Giá dự án mới TP.HCM H1/2026
+ *   - 13 Nợ xấu có mua được NƠXH không (mẫu công thức)
  *
  * Usage:
  *   node --env-file=.env --import tsx scripts/seed-legal-review-queue-pack.ts
@@ -82,6 +83,13 @@ const ITEMS: PackItem[] = [
     draftRel: "docs/content/drafts/12-gia-du-an-moi-tphcm-h1-2026.md",
     opsExtra:
       "GENERAL_POLICY — giá phổ biến dự án mở bán H1/2026 + bản đồ hạ tầng House X. L2: hạng sản phẩm trước hạ tầng; đơn giá VND/m²; cao cấp ≠ metro; khoảng giá tham chiếu ≠ giá CĐT chốt; không hứa ROI.",
+  },
+  {
+    id: "no-xau-noxh-H1",
+    sheetKey: "no-xau-co-mua-duoc-noxh:H1",
+    draftRel: "docs/content/drafts/13-no-xau-co-mua-duoc-noxh.md",
+    opsExtra:
+      "GENERAL_POLICY — mẫu CONG_THUC: quyền mua ≠ quyền vay; nợ xấu / CIC. CTA theo draft (noxh-loan-quick / tư vấn).",
   },
 ];
 
