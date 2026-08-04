@@ -5,6 +5,7 @@
  *   - 09 VNeID NƠXH + môi giới / House X
  *   - 10 Quy trình mua NƠXH QĐ 1346
  *   - 11 Quy hoạch 100 năm TP.HCM đa cực
+ *   - 12 Giá dự án mới TP.HCM H1/2026
  *
  * Usage:
  *   node --env-file=.env --import tsx scripts/seed-legal-review-queue-pack.ts
@@ -71,6 +72,13 @@ const ITEMS: PackItem[] = [
     opsExtra:
       "GENERAL_POLICY — tầm nhìn–hạ tầng, reader-first (đối thủ giá trị CafeLand). L2 /devil: đồ án đang hoàn thiện ≠ đã phê duyệt cuối; không định giá / không hứa ROI.",
   },
+  {
+    id: "gia-du-an-tphcm-H1",
+    sheetKey: "gia-du-an-moi-tphcm-h1-2026:H1",
+    draftRel: "docs/content/drafts/12-gia-du-an-moi-tphcm-h1-2026.md",
+    opsExtra:
+      "GENERAL_POLICY — giá phổ biến dự án mở bán H1/2026 + bản đồ hạ tầng House X. L2 /devil: khoảng giá tham chiếu ≠ giá CĐT chốt; không logo/CTA đối thủ; không hứa ROI.",
+  },
 ];
 
 function parseDraft(raw: string): { meta: DraftFrontmatter; body: string } {
@@ -114,7 +122,7 @@ async function seedOne(root: string, item: PackItem) {
     `Draft: ${item.draftRel}`,
     "requires_legal_qa: true",
     "CTA: legal-review → /lien-he?goi=ra-soat-phap-ly-15-phut#tu-van",
-    "Pack: legal-review queue (07–11)",
+    "Pack: legal-review queue (07–12)",
   ].join("\n");
 
   const shared = {
