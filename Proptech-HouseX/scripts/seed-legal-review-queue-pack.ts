@@ -148,7 +148,7 @@ async function seedOne(root: string, item: PackItem) {
 
   if (dryRun) {
     console.log(
-      `✓ ${item.id} dry-run · legal-review · ${body.split(/\s+/).length} từ · "${title.slice(0, 52)}…"`,
+      `✓ ${item.id} dry-run · ${cta.id} · ${body.split(/\s+/).length} từ · "${title.slice(0, 52)}…"`,
     );
     return { created: 0, updated: 0, skipped: 0 };
   }
