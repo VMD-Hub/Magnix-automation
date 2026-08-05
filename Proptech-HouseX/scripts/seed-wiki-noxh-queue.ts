@@ -31,11 +31,10 @@ function ensureCtaSection(
   body: string,
   label: string,
   href: string,
-  note: string,
 ): string {
   const core = normalizeQueueBodyForReader(body);
   if (queueBodyHasSeedCtaMarker(core)) return core;
-  return [core, "", READER_CTA_HEADING, "", `[${label}](${href})`, "", note]
+  return [core, "", READER_CTA_HEADING, "", `[${label}](${href})`]
     .join("\n")
     .trim();
 }
@@ -53,15 +52,10 @@ async function main() {
     const cta = getNoxhCtaTool(toolId);
     if (!cta) throw new Error(`Allowlist thiếu ${toolId} (${a.slug})`);
 
-    const note = cta.requiresContact
-      ? "House X hỗ trợ định hướng hồ sơ — không thay cơ quan nhà nước quyết định."
-      : "Không cần để lại SĐT trước khi xem kết quả gợi ý.";
-
     const body = ensureCtaSection(
       a.body,
       cta.defaultCtaLabel,
       cta.href,
-      note,
     );
 
     const key = `wiki-noxh:${a.slug}`;

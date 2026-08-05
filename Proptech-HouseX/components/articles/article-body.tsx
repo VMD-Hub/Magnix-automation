@@ -27,6 +27,9 @@ const PROSE_JUSTIFY =
 const ARTICLE_EDITORIAL_NOTE_RE = /\s*\(miễn phí,\s*trên trình duyệt\)/gi;
 /** Nhãn ops trên H2 chốt bài (seed/queue) — người đọc chỉ thấy “Kiểm tra nhanh”. */
 const CTA_OPS_LABEL_RE = /\s*\(CTA\)\s*$/i;
+/** Dòng soft-CTA cũ — đã bỏ theo Super Admin; không hiện trên web. */
+const CTA_NO_PHONE_NOTE_RE =
+  /^Không cần để lại SĐT trước khi xem kết quả gợi ý\.?\s*$/gim;
 
 function stripArticleEditorialNotes(text: string): string {
   return text.replace(ARTICLE_EDITORIAL_NOTE_RE, "");
@@ -34,6 +37,14 @@ function stripArticleEditorialNotes(text: string): string {
 
 function stripOpsHeadingLabel(heading: string): string {
   return heading.replace(CTA_OPS_LABEL_RE, "").trim();
+}
+
+/** Làm sạch markdown trước khi tách khối — bỏ dòng SĐT soft-CTA. */
+export function sanitizeArticleBodyForDisplay(md: string): string {
+  return md
+    .replace(CTA_NO_PHONE_NOTE_RE, "")
+    .replace(/\n{3,}/g, "\n\n")
+    .trim();
 }
 
 function renderLinks(text: string, keyPrefix: string): ReactNode[] {
@@ -336,7 +347,9 @@ function renderTable(rows: string[], key: string) {
 }
 
 export function ArticleBody({ body }: { body: string }) {
-  const blocks = body.split(/\n\n+/).filter(Boolean);
+  const blocks = sanitizeArticleBodyForDisplay(body)
+    .split(/\n\n+/)
+    .filter(Boolean);
   const nodes: ReactNode[] = [];
   let tableBuffer: string[] = [];
   let blockIndex = 0;

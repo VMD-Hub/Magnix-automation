@@ -33,6 +33,10 @@ const EDITORIAL_NOTE_SECTION_RE =
 const SOR_WHO_AFFECTED_H2_RE =
   /^##\s+Ai (?:đang chịu tác động|bị ảnh hưởng)[^\n]*\n+/gim;
 
+/** Ghi chú CTA soft — Super Admin đã bỏ; không đăng lại lên web. */
+const CTA_NO_PHONE_NOTE_RE =
+  /^Không cần để lại SĐT trước khi xem kết quả gợi ý\.?\s*$/gim;
+
 /** Slug ASCII từ tiêu đề tiếng Việt. */
 export function slugifyArticleTitle(title: string): string {
   const base = title
@@ -54,6 +58,7 @@ export function slugifyArticleTitle(title: string): string {
  * - bỏ đoạn mở “Bài này quan sát và trình bày…” (SoR)
  * - bỏ H2 “Ai đang chịu tác động / Ai bị ảnh hưởng…”
  * - bỏ mục Lưu ý biên tập nếu lỡ dính
+ * - bỏ dòng “Không cần để lại SĐT…”
  */
 export function normalizeQueueBodyForReader(md: string): string {
   let s = md.replace(/^\uFEFF/, "").trim();
@@ -65,6 +70,7 @@ export function normalizeQueueBodyForReader(md: string): string {
   s = s.replace(EDITORIAL_SCOPE_OPENER_RE, "").trim();
   s = s.replace(SOR_WHO_AFFECTED_H2_RE, "");
   s = s.replace(EDITORIAL_NOTE_SECTION_RE, "").trim();
+  s = s.replace(CTA_NO_PHONE_NOTE_RE, "").trim();
   return s.replace(/\n{3,}/g, "\n\n").trim();
 }
 
@@ -82,10 +88,9 @@ function appendCtaIfMissing(
   core: string,
   label: string,
   href: string,
-  ctaNote: string,
 ): string {
   if (queueBodyHasCtaSection(core)) return core;
-  return [core, "", READER_CTA_HEADING, "", `[${label}](${href})`, "", ctaNote]
+  return [core, "", READER_CTA_HEADING, "", `[${label}](${href})`]
     .join("\n")
     .trim();
 }
@@ -104,17 +109,12 @@ export function buildArticleBodyFromQueue(item: QueueArticleSeed): string {
     tool?.defaultCtaLabel ||
     "Kiểm tra miễn phí ngay";
 
-  const ctaNote = tool?.requiresContact
-    ? "House X hỗ trợ định hướng hồ sơ — không thay cơ quan nhà nước cấp sổ / quyết định hồ sơ."
-    : "Không cần để lại SĐT trước khi xem kết quả gợi ý.";
-
   const preview = item.bodyPreview?.trim();
   if (preview) {
     return appendCtaIfMissing(
       normalizeQueueBodyForReader(preview),
       label,
       href,
-      ctaNote,
     );
   }
 
@@ -135,5 +135,5 @@ export function buildArticleBodyFromQueue(item: QueueArticleSeed): string {
   ];
 
   const wrapped = lines.filter((x): x is string => x !== null).join("\n");
-  return appendCtaIfMissing(wrapped, label, href, ctaNote);
+  return appendCtaIfMissing(wrapped, label, href);
 }

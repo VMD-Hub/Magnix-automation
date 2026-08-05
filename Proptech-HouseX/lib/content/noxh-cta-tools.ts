@@ -39,7 +39,7 @@ export const NOXH_CTA_TOOLS: readonly NoxhCtaTool[] = [
     when: "Bài điều kiện, hồ sơ, đối tượng, thu nhập, quy trình xét duyệt",
     defaultCtaLabel: "Kiểm tra miễn phí bạn có đủ điều kiện NƠXH không",
     closingBlock:
-      "Bạn đang phân vân mình có đủ điều kiện NƠXH không?\n→ Kiểm tra nhanh (miễn phí): /cong-cu/dieu-kien-noxh\nKhông cần để lại SĐT trước khi xem kết quả gợi ý.",
+      "Bạn đang phân vân mình có đủ điều kiện NƠXH không?\n→ Kiểm tra nhanh (miễn phí): /cong-cu/dieu-kien-noxh",
   },
   {
     id: "noxh-loan-quick",
@@ -49,7 +49,7 @@ export const NOXH_CTA_TOOLS: readonly NoxhCtaTool[] = [
     when: "Bài vay, lãi, trả góp, chứng minh thu nhập, hạn mức",
     defaultCtaLabel: "Kiểm tra nhanh khả năng vay NƠXH (60 giây)",
     closingBlock:
-      "Bạn đang phân vân vay NƠXH được khoảng bao nhiêu?\n→ Kiểm tra nhanh (miễn phí): /cong-cu/kiem-tra-vay-noxh\nKhông cần để lại SĐT trước khi xem kết quả gợi ý.",
+      "Bạn đang phân vân vay NƠXH được khoảng bao nhiêu?\n→ Kiểm tra nhanh (miễn phí): /cong-cu/kiem-tra-vay-noxh",
   },
   {
     id: "legal-review",

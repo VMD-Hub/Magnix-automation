@@ -25,11 +25,10 @@ function ensureCtaSection(
   body: string,
   label: string,
   href: string,
-  note: string,
 ): string {
   const core = normalizeQueueBodyForReader(body);
   if (queueBodyHasSeedCtaMarker(core)) return core;
-  return [core, "", READER_CTA_HEADING, "", `[${label}](${href})`, "", note]
+  return [core, "", READER_CTA_HEADING, "", `[${label}](${href})`]
     .join("\n")
     .trim();
 }
@@ -41,9 +40,6 @@ async function main() {
   const cta = getNoxhCtaTool("noxh-check");
   if (!cta) throw new Error("Allowlist thiếu noxh-check");
 
-  const note =
-    "Không cần để lại SĐT trước khi xem kết quả gợi ý.";
-
   let created = 0;
   let updated = 0;
   let skipped = 0;
@@ -53,7 +49,6 @@ async function main() {
       a.body,
       cta.defaultCtaLabel,
       cta.href,
-      note,
     );
 
     const key = `kien-thuc:${a.slug}`;

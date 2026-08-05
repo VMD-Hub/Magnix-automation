@@ -57,6 +57,20 @@ Bài này quan sát và trình bày ở **phạm vi dự án** — không nhảy
     assert.equal(queueBodyHasCtaSection(out), true);
   });
 
+  it("normalize bỏ dòng Không cần để lại SĐT", () => {
+    const raw = `Nội dung.
+
+## Kiểm tra nhanh
+
+[Link](/cong-cu/dieu-kien-noxh)
+
+Không cần để lại SĐT trước khi xem kết quả gợi ý.
+`;
+    const out = normalizeQueueBodyForReader(raw);
+    assert.equal(out.includes("Không cần để lại SĐT"), false);
+    assert.match(out, /^## Kiểm tra nhanh$/m);
+  });
+
   it("body luôn có markdown link CTA tool (H2 người đọc)", () => {
     const body = buildArticleBodyFromQueue({
       title: "Thu nhập 12tr có mua NƠXH được không?",
