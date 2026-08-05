@@ -1,30 +1,36 @@
 /**
- * Upsert pillar A0 “Cẩm nang mua nhà lần đầu…” vào content_queue + Article CMS.
- * Ghi đè cả item/bài đã PUBLISHED (owner rewrite 2026-08-05).
+ * Upsert bài editorial từ markdown draft (frontmatter) → content_queue + Article CMS.
+ * Ghi đè cả item/bài đã PUBLISHED.
+ *
+ * Frontmatter bắt buộc: title, slug, normalizedKey
+ * Tuỳ chọn: ctaToolId (mặc định noxh-check), painPoint
  *
  * Usage:
  *   npm run db:upsert:first-buyer-pillar
- *   npm run db:upsert:first-buyer-pillar:dry
+ *   npm run db:upsert:first-buyer-a1
+ *   npx tsx scripts/upsert-first-buyer-draft.ts --draft docs/content/drafts/….md --dry-run
  */
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { PrismaClient } from "@prisma/client";
 import { getNoxhCtaTool } from "../lib/content/noxh-cta-tools";
-import {
-  NOXH_TAG_CHINH_SACH,
-} from "../lib/content/articles/noxh-handbook-tags";
+import { NOXH_TAG_CHINH_SACH } from "../lib/content/articles/noxh-handbook-tags";
 import { upsertArticleTag } from "../lib/data/article-admin";
 
 const dryRun = process.argv.includes("--dry-run");
-const prisma = dryRun ? null : new PrismaClient();
+const draftFlagIdx = process.argv.indexOf("--draft");
+const draftArg =
+  draftFlagIdx >= 0 ? process.argv[draftFlagIdx + 1] : undefined;
 
-const NORMALIZED_KEY = "editorial:first-buyer-pillar:2026";
-const SLUG = "huong-dan-mua-nha-lan-dau-2026-tu-chon-nha-den-ky-hop-dong";
-const DRAFT_REL =
-  "docs/content/drafts/huong-dan-mua-nha-lan-dau-2026.md";
+const DEFAULT_DRAFT = "docs/content/drafts/huong-dan-mua-nha-lan-dau-2026.md";
+const DRAFT_REL = draftArg || DEFAULT_DRAFT;
+
+const prisma = dryRun ? null : new PrismaClient();
 
 function parseDraft(raw: string): {
   title: string;
+  slug: string;
+  normalizedKey: string;
   painPoint: string;
   body: string;
   ctaToolId: string;
@@ -37,8 +43,13 @@ function parseDraft(raw: string): {
     if (!m) continue;
     meta[m[1]!] = m[2]!.replace(/^"|"$/g, "").trim();
   }
+  if (!meta.title || !meta.slug || !meta.normalizedKey) {
+    throw new Error("Frontmatter cần title, slug, normalizedKey");
+  }
   return {
-    title: meta.title || "",
+    title: meta.title,
+    slug: meta.slug,
+    normalizedKey: meta.normalizedKey,
     painPoint: meta.painPoint || "",
     ctaToolId: meta.ctaToolId || "noxh-check",
     body: fm[2]!.trim(),
@@ -48,14 +59,15 @@ function parseDraft(raw: string): {
 async function main() {
   const draftPath = resolve(__dirname, "..", DRAFT_REL);
   const draft = parseDraft(readFileSync(draftPath, "utf8"));
-  if (!draft.title || !draft.body) throw new Error("Draft thiếu title/body");
+  if (!draft.body) throw new Error("Draft thiếu body");
 
   const cta = getNoxhCtaTool(draft.ctaToolId);
   if (!cta) throw new Error(`CTA ngoài allowlist: ${draft.ctaToolId}`);
 
-  console.log(`Pillar A0 ← ${DRAFT_REL}`);
+  console.log(`Upsert ← ${DRAFT_REL}`);
   console.log(`title: ${draft.title}`);
-  console.log(`slug: ${SLUG}`);
+  console.log(`slug: ${draft.slug}`);
+  console.log(`key: ${draft.normalizedKey}`);
   console.log(`words ≈ ${draft.body.split(/\s+/).length}`);
 
   if (dryRun) {
@@ -64,9 +76,9 @@ async function main() {
   }
 
   const opsNotes = [
-    "Source: docs/content/drafts/huong-dan-mua-nha-lan-dau-2026.md (owner rewrite).",
-    `slug: ${SLUG}`,
-    `normalized_key: ${NORMALIZED_KEY}`,
+    `Source: ${DRAFT_REL} (owner rewrite).`,
+    `slug: ${draft.slug}`,
+    `normalized_key: ${draft.normalizedKey}`,
     `tags: ${NOXH_TAG_CHINH_SACH.slug}`,
     "L2: tab Như người đọc · Lưu & đồng bộ lên web nếu sửa tiếp.",
   ].join("\n");
@@ -96,7 +108,9 @@ async function main() {
     select: { id: true },
   });
 
-  let article = await prisma!.article.findUnique({ where: { slug: SLUG } });
+  let article = await prisma!.article.findUnique({
+    where: { slug: draft.slug },
+  });
   if (article) {
     article = await prisma!.article.update({
       where: { id: article.id },
@@ -115,7 +129,7 @@ async function main() {
   } else {
     article = await prisma!.article.create({
       data: {
-        slug: SLUG,
+        slug: draft.slug,
         title: draft.title,
         excerpt: draft.painPoint.slice(0, 500) || null,
         body: draft.body,
@@ -130,14 +144,16 @@ async function main() {
   }
 
   if (tag) {
-    await prisma!.articleTagLink.deleteMany({ where: { articleId: article.id } });
+    await prisma!.articleTagLink.deleteMany({
+      where: { articleId: article.id },
+    });
     await prisma!.articleTagLink.create({
       data: { articleId: article.id, tagId: tag.id },
     });
   }
 
   const existingQ = await prisma!.contentQueueItem.findUnique({
-    where: { normalizedKey: NORMALIZED_KEY },
+    where: { normalizedKey: draft.normalizedKey },
     select: { id: true, status: true },
   });
 
@@ -156,7 +172,7 @@ async function main() {
   } else {
     await prisma!.contentQueueItem.create({
       data: {
-        normalizedKey: NORMALIZED_KEY,
+        normalizedKey: draft.normalizedKey,
         status: "PUBLISHED",
         articleId: article.id,
         publishedAt: new Date(),
@@ -166,8 +182,8 @@ async function main() {
     console.log("✔ Queue tạo mới → PUBLISHED");
   }
 
-  console.log("\nXong. Super Admin: /admin/content-queue (tab Đã đăng) · tìm slug pillar.");
-  console.log(`Public: /wiki-nha-o-xa-hoi/${SLUG}`);
+  console.log("\nXong. Super Admin: /admin/content-queue (tab Đã đăng).");
+  console.log(`Public: /wiki-nha-o-xa-hoi/${draft.slug}`);
 }
 
 main()

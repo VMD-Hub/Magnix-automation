@@ -120,17 +120,21 @@ Chức năng hub: mỗi H2 link xuống A1–A3 + cluster thẩm định vay + `
 
 **H1:** Nên chọn nhà ở xã hội hay căn hộ thương mại khi mua lần đầu?
 
-**one_line_insight:** NOXH rẻ hơn về giá niêm yết nhưng cửa đối tượng–thu nhập–thời hạn sở hữu khác hẳn CCTM — chọn sai cửa tốn thời gian hồ sơ, không chỉ tiền cọc.
+**Body đã chốt:** `docs/content/drafts/nen-chon-noxh-hay-cctm-lan-dau.md`  
+**Upsert (kể cả đã PUBLISHED):** `npm run db:upsert:first-buyer-a1`
 
-**qa_backbone:**
+**one_line_insight:** NOXH giá thấp hơn nhưng ràng buộc đối tượng, thu nhập và chuyển nhượng — chọn sai cửa mất thời gian hồ sơ, không chỉ tiền cọc.
 
-1. Nhà ở xã hội và căn hộ thương mại khác nhau ở những điểm pháp lý nào?
-2. Ai đủ điều kiện mua NOXH và trần thu nhập đang áp dụng thế nào?
-3. Khi nào căn thương mại vẫn hợp lý hơn dù giá cao hơn?
-4. Hồ sơ và thời gian chờ giữa hai lựa chọn khác nhau ra sao?
-5. Làm sao tự đối chiếu điều kiện NOXH trước khi giữ suất?
+**Cấu trúc H2 (owner rewrite):**
+
+1. Khác biệt pháp lý cốt lõi: nhà ở xã hội và căn hộ thương mại
+2. Ai thực sự đủ điều kiện mua NOXH và bài toán trần thu nhập?
+3. Khi nào nên chọn căn hộ thương mại dù giá cao hơn?
+4. Bóc tách hồ sơ và thời gian chờ: hai thế giới khác nhau
+5. Checklist trước khi giữ suất mua
 
 **CTA:** `noxh-check` → `/cong-cu/dieu-kien-noxh`  
+**Internal links (canonical):** `/cong-cu/dieu-kien-noxh` · pillar A0 wiki · `/wiki-nha-o-xa-hoi/dieu-kien-mua-nha-o-xa-hoi-2026-tom-tat` · `/vay-mua-nha`  
 **source_refs:** claims thu nhập NĐ 136 / local HCM; `noxh_loan_two_tier_001`.
 
 ---

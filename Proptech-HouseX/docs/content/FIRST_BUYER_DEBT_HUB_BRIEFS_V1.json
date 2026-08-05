@@ -104,16 +104,17 @@
       "cta_keyword": "NOXH",
       "interest_key": "noxh_vs_cctm_lan_dau",
       "tags": ["noxh", "phap-ly"],
+      "body_draft": "docs/content/drafts/nen-chon-noxh-hay-cctm-lan-dau.md",
       "internal_links": [
         "/cong-cu/dieu-kien-noxh",
         "/wiki-nha-o-xa-hoi/huong-dan-mua-nha-lan-dau-2026-tu-chon-nha-den-ky-hop-dong",
         "/vay-mua-nha",
-        "/tin-tuc/dieu-kien-mua-nha-o-xa-hoi-2026-tom-tat"
+        "/wiki-nha-o-xa-hoi/dieu-kien-mua-nha-o-xa-hoi-2026-tom-tat"
       ],
       "editorial_brief_v1": {
-        "brief_version": 1,
+        "brief_version": 2,
         "editorial_title": "NOXH vs CCTM khi mua nhà lần đầu",
-        "one_line_insight": "NOXH rẻ hơn về giá niêm yết nhưng cửa đối tượng–thu nhập–thời hạn sở hữu khác hẳn CCTM — chọn sai cửa tốn thời gian hồ sơ, không chỉ tiền cọc.",
+        "one_line_insight": "NOXH giá thấp hơn nhưng ràng buộc đối tượng, thu nhập và chuyển nhượng — chọn sai cửa mất thời gian hồ sơ, không chỉ tiền cọc.",
         "qa_backbone": [
           {
             "question": "Nhà ở xã hội và căn hộ thương mại khác nhau ở những điểm pháp lý nào?",

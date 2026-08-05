@@ -1,6 +1,7 @@
 ---
 title: "Cẩm nang mua nhà lần đầu: Giải mã pháp lý, tài chính và bẫy chi phí ẩn"
 slug: huong-dan-mua-nha-lan-dau-2026-tu-chon-nha-den-ky-hop-dong
+normalizedKey: editorial:first-buyer-pillar:2026
 ctaToolId: noxh-check
 painPoint: "Rủi ro lớn nhất khi mua nhà lần đầu không nằm ở căn đẹp hay xấu — mà ở mù mờ pháp lý và năng lực tài chính thực tế."
 ---
