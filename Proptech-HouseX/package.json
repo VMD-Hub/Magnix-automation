@@ -48,6 +48,8 @@
     "db:seed:kien-thuc-queue:dry": "node --import tsx scripts/seed-kien-thuc-queue.ts --dry-run",
     "db:scrub:system-cta-notes": "node --env-file=.env --import tsx scripts/scrub-system-cta-notes.ts",
     "db:scrub:system-cta-notes:dry": "node --import tsx scripts/scrub-system-cta-notes.ts --dry-run",
+    "db:suppress:article-slugs": "node --env-file=.env --import tsx scripts/suppress-article-slugs.ts",
+    "db:suppress:article-slugs:dry": "node --import tsx scripts/suppress-article-slugs.ts --dry-run",
     "db:seed:legal-review-queue": "node --env-file=.env --import tsx scripts/seed-legal-review-queue-pack.ts",
     "db:seed:legal-review-queue:dry": "node --import tsx scripts/seed-legal-review-queue-pack.ts --dry-run",
     "db:publish:first-buyer-debt-hub": "node --env-file=.env --import tsx scripts/publish-first-buyer-debt-hub-queue.ts",

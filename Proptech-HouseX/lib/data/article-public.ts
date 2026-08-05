@@ -63,13 +63,70 @@ function mergeArticleCards(
   return sortArticleCards([...bySlug.values()]);
 }
 
-/** Slug có hàng CMS nhưng không PUBLISHED → không phục hồi từ demo. */
-async function listSuppressedArticleSlugs(): Promise<Set<string>> {
-  const rows = await prisma.article.findMany({
-    where: { status: { not: "PUBLISHED" } },
-    select: { slug: true },
+const QUEUE_SILO_KEY_RE = /^(?:wiki-noxh|kien-thuc|re-knowledge):(.+)$/;
+
+/**
+ * Slug Super Admin đã “nhận” — không phục hồi từ catalog demo:
+ * - Article CMS không PUBLISHED (Ẩn / Xóa / nháp)
+ * - Content queue wiki/kien-thuc chưa gắn bài PUBLISHED (đang duyệt / đã xóa queue)
+ */
+async function listDemoBlockedSlugs(): Promise<Set<string>> {
+  const [nonPublished, queueRows] = await Promise.all([
+    prisma.article.findMany({
+      where: { status: { not: "PUBLISHED" } },
+      select: { slug: true },
+    }),
+    prisma.contentQueueItem.findMany({
+      where: {
+        OR: [
+          { normalizedKey: { startsWith: "wiki-noxh:" } },
+          { normalizedKey: { startsWith: "kien-thuc:" } },
+          { normalizedKey: { startsWith: "re-knowledge:" } },
+        ],
+      },
+      select: {
+        normalizedKey: true,
+        opsNotes: true,
+        article: { select: { slug: true, status: true } },
+      },
+    }),
+  ]);
+
+  const blocked = new Set(nonPublished.map((r) => r.slug));
+
+  for (const q of queueRows) {
+    if (q.article?.status === "PUBLISHED") continue;
+    const fromKey = q.normalizedKey.match(QUEUE_SILO_KEY_RE)?.[1]?.trim();
+    const fromNotes = q.opsNotes?.match(/^slug:\s*(.+)$/m)?.[1]?.trim();
+    const slug = fromKey || fromNotes || q.article?.slug;
+    if (slug) blocked.add(slug);
+  }
+
+  return blocked;
+}
+
+async function isDemoBlockedSlug(slug: string): Promise<boolean> {
+  const any = await prisma.article.findUnique({
+    where: { slug },
+    select: { status: true },
   });
-  return new Set(rows.map((r) => r.slug));
+  if (any && any.status !== "PUBLISHED") return true;
+
+  const queue = await prisma.contentQueueItem.findFirst({
+    where: {
+      OR: [
+        { normalizedKey: `wiki-noxh:${slug}` },
+        { normalizedKey: `kien-thuc:${slug}` },
+        { normalizedKey: `re-knowledge:${slug}` },
+        { opsNotes: { contains: `slug: ${slug}` } },
+      ],
+    },
+    select: {
+      article: { select: { status: true } },
+    },
+  });
+  if (!queue) return false;
+  return queue.article?.status !== "PUBLISHED";
 }
 
 function mapToCard(row: {
@@ -123,13 +180,6 @@ async function fetchPublishedArticleFromDb(slug: string) {
   });
 }
 
-async function fetchAnyArticleStatusBySlug(slug: string) {
-  return prisma.article.findUnique({
-    where: { slug },
-    select: { status: true },
-  });
-}
-
 export async function listPublishedArticles(params: {
   page?: number;
   pageSize?: number;
@@ -161,7 +211,7 @@ export async function listPublishedArticles(params: {
         : {}),
     };
 
-    const [rows, demoAll, suppressed] = await Promise.all([
+    const [rows, demoAll, blocked] = await Promise.all([
       prisma.article.findMany({
         where,
         include: articleCardInclude,
@@ -176,10 +226,10 @@ export async function listPublishedArticles(params: {
           pageSize: DEMO_CATALOG_PAGE_SIZE,
         }),
       ),
-      listSuppressedArticleSlugs(),
+      listDemoBlockedSlugs(),
     ]);
 
-    const demoVisible = demoAll.items.filter((a) => !suppressed.has(a.slug));
+    const demoVisible = demoAll.items.filter((a) => !blocked.has(a.slug));
     const merged = mergeArticleCards(rows.map(mapToCard), demoVisible);
     const scoped = knowledgeOnly
       ? merged.filter(isGeneralReKnowledgeArticle)
@@ -216,9 +266,8 @@ export async function getPublishedArticleBySlug(
     const article = mapToDetail(row);
     if (article) return { article, source: "db" };
 
-    const any = await fetchAnyArticleStatusBySlug(canonicalSlug);
-    if (any && any.status !== "PUBLISHED") {
-      // ARCHIVED / DRAFT: Super Admin đã giám sát — không fallback demo.
+    // Đã vào Super Admin / CMS nhưng chưa (hoặc không còn) PUBLISHED → không demo.
+    if (await isDemoBlockedSlug(canonicalSlug)) {
       return null;
     }
   } catch {
@@ -251,7 +300,7 @@ export async function getArticlesForProjectSlug(
   limit = 6,
 ): Promise<ArticleCardData[]> {
   try {
-    const [rows, demoItems, suppressed] = await Promise.all([
+    const [rows, demoItems, blocked] = await Promise.all([
       prisma.article.findMany({
         where: {
           status: "PUBLISHED",
@@ -263,9 +312,9 @@ export async function getArticlesForProjectSlug(
       Promise.resolve(
         getDemoArticlesForProject(projectSlug, DEMO_CATALOG_PAGE_SIZE),
       ),
-      listSuppressedArticleSlugs(),
+      listDemoBlockedSlugs(),
     ]);
-    const demoVisible = demoItems.filter((a) => !suppressed.has(a.slug));
+    const demoVisible = demoItems.filter((a) => !blocked.has(a.slug));
     const merged = mergeArticleCards(rows.map(mapToCard), demoVisible);
     if (merged.length > 0) {
       return orderProjectRelatedArticles(projectSlug, merged, limit);
@@ -291,7 +340,7 @@ export async function getPublishedTagBySlug(
 
 export async function listPublishedTags(): Promise<ArticleTagSummary[]> {
   try {
-    const [rows, demoAll, suppressed] = await Promise.all([
+    const [rows, demoAll, blocked] = await Promise.all([
       prisma.article.findMany({
         where: { status: "PUBLISHED" },
         include: articleCardInclude,
@@ -303,9 +352,9 @@ export async function listPublishedTags(): Promise<ArticleTagSummary[]> {
           handbookOnly: false,
         }),
       ),
-      listSuppressedArticleSlugs(),
+      listDemoBlockedSlugs(),
     ]);
-    const demoVisible = demoAll.items.filter((a) => !suppressed.has(a.slug));
+    const demoVisible = demoAll.items.filter((a) => !blocked.has(a.slug));
     const merged = mergeArticleCards(rows.map(mapToCard), demoVisible);
     if (merged.length === 0) return listDemoTags();
 
