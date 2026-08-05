@@ -93,19 +93,22 @@ Tag: `noxh`, `phap-ly` (A*) · `noxh`, `tham-dinh-vay` (B* + A2).
 
 ## 5. Outline từng bài
 
-### A0 — Pillar: Hướng dẫn mua nhà lần đầu 2026
+### A0 — Pillar: Cẩm nang mua nhà lần đầu
 
-**H1:** Hướng dẫn mua nhà lần đầu 2026 — từ chọn nhà đến ký hợp đồng cần làm những gì?
+**H1:** Cẩm nang mua nhà lần đầu: Giải mã pháp lý, tài chính và bẫy chi phí ẩn
 
-**one_line_insight:** Phần lớn người mua lần đầu không biết khả năng vay và DTI quyết định ngưỡng giá nhiều hơn “giá sàn” trên brochure.
+**Body đã chốt:** `docs/content/drafts/huong-dan-mua-nha-lan-dau-2026.md`  
+**Upsert (kể cả đã PUBLISHED):** `npm run db:upsert:first-buyer-pillar`
 
-**qa_backbone (H2):**
+**one_line_insight:** Rủi ro lớn nhất khi mua nhà lần đầu không nằm ở căn đẹp hay xấu — mà ở mù mờ pháp lý và năng lực tài chính thực tế.
 
-1. Mua nhà lần đầu cần đủ điều kiện và giấy tờ gì?
-2. Nên chọn nhà ở xã hội hay căn hộ thương mại khi mua lần đầu?
-3. Vay bao nhiêu là vừa và hồ sơ tài chính thế nào thì dễ bị từ chối?
-4. Chi phí ẩn và thời gian từ ký hợp đồng đến sở hữu thường kéo dài bao lâu?
-5. Trước khi đặt cọc nên tự kiểm tra những gì trên House X?
+**Cấu trúc H2 (owner rewrite):**
+
+1. Mua nhà lần đầu: Phân định rõ nhà ở thương mại và nhà ở xã hội (NOXH)
+2. Bài toán đòn bẩy: Vay bao nhiêu là đủ và vì sao hồ sơ dễ bị từ chối?
+3. Các chi phí ẩn và timeline thực tế từ khi ký hợp đồng đến nhận nhà
+4. Checklist trước khi xuống tiền đặt cọc
+5. Kiểm tra nhanh (+ liên kết hữu ích)
 
 Chức năng hub: mỗi H2 link xuống A1–A3 + cluster thẩm định vay + `/vay-mua-nha`.
 

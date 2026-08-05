@@ -37,6 +37,8 @@ type BriefItem = {
   interest_key: string;
   tags: string[];
   internal_links: string[];
+  /** Markdown draft đã chốt — ưu tiên hơn scaffold Q&A từ brief. */
+  body_draft?: string;
   editorial_brief_v1: {
     one_line_insight: string;
     qa_backbone: QaPair[];
@@ -51,7 +53,17 @@ type BriefPack = {
   items: BriefItem[];
 };
 
+function stripDraftFrontmatter(raw: string): string {
+  const fm = raw.match(/^---\r?\n[\s\S]*?\r?\n---\r?\n([\s\S]*)$/);
+  return (fm?.[1] ?? raw).trim();
+}
+
 function buildBodyPreview(item: BriefItem): string {
+  if (item.body_draft) {
+    const draftPath = resolve(__dirname, "..", item.body_draft);
+    return stripDraftFrontmatter(readFileSync(draftPath, "utf8"));
+  }
+
   const qa = item.editorial_brief_v1.qa_backbone
     .map((q) => `## ${q.question}\n- Góc trả lời: ${q.answer_angle}\n- Keyword: ${q.search_keyword}`)
     .join("\n\n");

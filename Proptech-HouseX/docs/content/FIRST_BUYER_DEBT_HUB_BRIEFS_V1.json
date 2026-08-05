@@ -10,7 +10,7 @@
       "id": "A0",
       "normalized_key": "editorial:first-buyer-pillar:2026",
       "slug": "huong-dan-mua-nha-lan-dau-2026-tu-chon-nha-den-ky-hop-dong",
-      "h1": "Hướng dẫn mua nhà lần đầu 2026 — từ chọn nhà đến ký hợp đồng cần làm những gì?",
+      "h1": "Cẩm nang mua nhà lần đầu: Giải mã pháp lý, tài chính và bẫy chi phí ẩn",
       "priority": "P0",
       "content_type": "NOXH_LEGAL",
       "segment": "noxh_income",
@@ -20,18 +20,19 @@
       "cta_keyword": "NOXH",
       "interest_key": "mua_nha_lan_dau_huong_dan",
       "tags": ["noxh", "phap-ly"],
+      "body_draft": "docs/content/drafts/huong-dan-mua-nha-lan-dau-2026.md",
       "internal_links": [
         "/vay-mua-nha",
         "/cong-cu/dieu-kien-noxh",
         "/cong-cu/kiem-tra-vay-noxh",
         "/tinh-tra-gop",
-        "/tin-tuc/tham-dinh-khoan-vay-mua-nha-o-xa-hoi",
-        "/tin-tuc/hieu-sai-mua-nha-dung-cho-du-tien"
+        "/wiki-nha-o-xa-hoi/tham-dinh-khoan-vay-mua-nha-o-xa-hoi",
+        "/wiki-nha-o-xa-hoi/hieu-sai-mua-nha-dung-cho-du-tien"
       ],
       "editorial_brief_v1": {
-        "brief_version": 1,
-        "editorial_title": "Pillar mua nhà lần đầu 2026 — chọn nhà đến ký HĐ",
-        "one_line_insight": "Phần lớn người mua lần đầu không biết khả năng vay và DTI quyết định ngưỡng giá nhiều hơn giá sàn trên brochure.",
+        "brief_version": 2,
+        "editorial_title": "Cẩm nang mua nhà lần đầu — pháp lý, tài chính, chi phí ẩn",
+        "one_line_insight": "Rủi ro lớn nhất khi mua nhà lần đầu không nằm ở căn đẹp hay xấu — mà ở mù mờ pháp lý và năng lực tài chính thực tế.",
         "qa_backbone": [
           {
             "question": "Mua nhà lần đầu cần đủ điều kiện và giấy tờ gì?",
@@ -73,7 +74,7 @@
           }
         ],
         "deconstruct_rules": [
-          "H2 phải là câu hỏi đủ",
+          "H2 theo 4 mục: NOXH vs thương mại · đòn bẩy/DTI · chi phí ẩn/timeline · checklist trước cọc",
           "Không cam kết duyệt vay hoặc lãi suất cố định mọi ngân hàng",
           "Không so sánh crypto/cổ phiếu",
           "Link chéo sang B0 đảo nợ một lần, không chuỗi tuyến tính dài"
@@ -105,7 +106,7 @@
       "tags": ["noxh", "phap-ly"],
       "internal_links": [
         "/cong-cu/dieu-kien-noxh",
-        "/tin-tuc/huong-dan-mua-nha-lan-dau-2026-tu-chon-nha-den-ky-hop-dong",
+        "/wiki-nha-o-xa-hoi/huong-dan-mua-nha-lan-dau-2026-tu-chon-nha-den-ky-hop-dong",
         "/vay-mua-nha",
         "/tin-tuc/dieu-kien-mua-nha-o-xa-hoi-2026-tom-tat"
       ],
@@ -267,7 +268,7 @@
       "internal_links": [
         "/vay-mua-nha/bao-hiem-tai-san",
         "/tin-tuc/checklist-truoc-khi-dat-coc-noxh",
-        "/tin-tuc/huong-dan-mua-nha-lan-dau-2026-tu-chon-nha-den-ky-hop-dong",
+        "/wiki-nha-o-xa-hoi/huong-dan-mua-nha-lan-dau-2026-tu-chon-nha-den-ky-hop-dong",
         "/vay-mua-nha"
       ],
       "editorial_brief_v1": {
@@ -349,7 +350,7 @@
         "/tinh-tra-gop",
         "/tin-tuc/cach-tra-cic-an-toan-truoc-khi-vay",
         "/tin-tuc/no-xau-nhom-2-vay-mua-nha-o-xa-hoi",
-        "/tin-tuc/huong-dan-mua-nha-lan-dau-2026-tu-chon-nha-den-ky-hop-dong"
+        "/wiki-nha-o-xa-hoi/huong-dan-mua-nha-lan-dau-2026-tu-chon-nha-den-ky-hop-dong"
       ],
       "editorial_brief_v1": {
         "brief_version": 1,
