@@ -40,6 +40,7 @@ export const NOXH_CTA_TOOLS: readonly NoxhCtaTool[] = [
     defaultCtaLabel: "Kiểm tra miễn phí bạn có đủ điều kiện NƠXH không",
     closingBlock:
       "Bạn đang phân vân mình có đủ điều kiện NƠXH không?\n→ Kiểm tra nhanh (miễn phí): /cong-cu/dieu-kien-noxh",
+    // CẤM: không gắn “Không cần để lại SĐT…” — đó là ghi chú hệ thống, không phải copy người đọc.
   },
   {
     id: "noxh-loan-quick",

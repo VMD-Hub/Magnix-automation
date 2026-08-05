@@ -71,6 +71,16 @@ Không cần để lại SĐT trước khi xem kết quả gợi ý.
     assert.match(out, /^## Kiểm tra nhanh$/m);
   });
 
+  it("buildArticleBodyFromQueue không tái chèn câu hệ thống SĐT", () => {
+    const body = buildArticleBodyFromQueue({
+      title: "Test",
+      bodyPreview: "Nội dung ngắn không có CTA.",
+      ctaToolId: "noxh-check",
+    });
+    assert.equal(body.includes("Không cần để lại SĐT"), false);
+    assert.match(body, /^## Kiểm tra nhanh$/m);
+  });
+
   it("body luôn có markdown link CTA tool (H2 người đọc)", () => {
     const body = buildArticleBodyFromQueue({
       title: "Thu nhập 12tr có mua NƠXH được không?",

@@ -19,6 +19,7 @@ import {
   listDemoTags,
 } from "@/lib/preview/demo-articles";
 import { applyEditorialMedia } from "@/lib/content/articles/article-editorial-media";
+import { stripSystemReaderForbiddenNotes } from "@/lib/content/content-queue-article";
 import { orderProjectRelatedArticles } from "@/lib/content/project-related-articles";
 import { prisma } from "@/lib/prisma";
 
@@ -105,9 +106,11 @@ function mapToDetail(row: Awaited<
   if (!row) return null;
   return {
     ...mapToCard(row),
-    body: row.body,
+    body: stripSystemReaderForbiddenNotes(row.body),
     seoTitle: row.seoTitle,
-    seoDesc: row.seoDesc,
+    seoDesc: row.seoDesc
+      ? stripSystemReaderForbiddenNotes(row.seoDesc)
+      : row.seoDesc,
     status: row.status,
   };
 }
@@ -222,7 +225,20 @@ export async function getPublishedArticleBySlug(
 
   const demo = getDemoArticleBySlug(slug);
   if (demo) {
-    return { article: applyEditorialMedia(demo), source: "demo" };
+    const cleaned = applyEditorialMedia(demo);
+    return {
+      article: {
+        ...cleaned,
+        body: stripSystemReaderForbiddenNotes(cleaned.body),
+        excerpt: cleaned.excerpt
+          ? stripSystemReaderForbiddenNotes(cleaned.excerpt)
+          : cleaned.excerpt,
+        seoDesc: cleaned.seoDesc
+          ? stripSystemReaderForbiddenNotes(cleaned.seoDesc)
+          : cleaned.seoDesc,
+      },
+      source: "demo",
+    };
   }
 
   return null;

@@ -5,6 +5,7 @@ import type { ReactNode } from "react";
 import { FaqAccordionSection } from "@/components/content/faq-accordion-section";
 import { rewriteLegacyArticleHref, topicPath } from "@/lib/content/article-routes";
 import { parseArticleFaqSection } from "@/lib/content/article-faq-markdown";
+import { stripSystemReaderForbiddenNotes } from "@/lib/content/content-queue-article";
 import type { ArticleCardData } from "@/lib/data/article-types";
 
 const LINK_RE = /\[([^\]]+)\]\(([^)]+)\)/g;
@@ -27,9 +28,6 @@ const PROSE_JUSTIFY =
 const ARTICLE_EDITORIAL_NOTE_RE = /\s*\(miễn phí,\s*trên trình duyệt\)/gi;
 /** Nhãn ops trên H2 chốt bài (seed/queue) — người đọc chỉ thấy “Kiểm tra nhanh”. */
 const CTA_OPS_LABEL_RE = /\s*\(CTA\)\s*$/i;
-/** Dòng soft-CTA cũ — đã bỏ theo Super Admin; không hiện trên web. */
-const CTA_NO_PHONE_NOTE_RE =
-  /^Không cần để lại SĐT trước khi xem kết quả gợi ý\.?\s*$/gim;
 
 function stripArticleEditorialNotes(text: string): string {
   return text.replace(ARTICLE_EDITORIAL_NOTE_RE, "");
@@ -39,12 +37,9 @@ function stripOpsHeadingLabel(heading: string): string {
   return heading.replace(CTA_OPS_LABEL_RE, "").trim();
 }
 
-/** Làm sạch markdown trước khi tách khối — bỏ dòng SĐT soft-CTA. */
+/** Làm sạch markdown trước khi tách khối — bỏ câu hệ thống cấm đăng. */
 export function sanitizeArticleBodyForDisplay(md: string): string {
-  return md
-    .replace(CTA_NO_PHONE_NOTE_RE, "")
-    .replace(/\n{3,}/g, "\n\n")
-    .trim();
+  return stripSystemReaderForbiddenNotes(md);
 }
 
 function renderLinks(text: string, keyPrefix: string): ReactNode[] {

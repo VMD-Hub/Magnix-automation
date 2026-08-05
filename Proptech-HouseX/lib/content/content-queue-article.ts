@@ -33,9 +33,24 @@ const EDITORIAL_NOTE_SECTION_RE =
 const SOR_WHO_AFFECTED_H2_RE =
   /^##\s+Ai (?:đang chịu tác động|bị ảnh hưởng)[^\n]*\n+/gim;
 
-/** Ghi chú CTA soft — Super Admin đã bỏ; không đăng lại lên web. */
-const CTA_NO_PHONE_NOTE_RE =
-  /^Không cần để lại SĐT trước khi xem kết quả gợi ý\.?\s*$/gim;
+/**
+ * Ghi chú hệ thống soft-CTA — CẤM đưa lên web / queue body cho người đọc.
+ * Không append lại trong seed/publish.
+ */
+export const SYSTEM_NO_PHONE_CTA_NOTE =
+  "Không cần để lại SĐT trước khi xem kết quả gợi ý";
+
+export const SYSTEM_NO_PHONE_CTA_NOTE_RE =
+  /Không cần để lại SĐT trước khi xem kết quả gợi ý\.?/gi;
+
+/** Gỡ mọi biến thể câu hệ thống SĐT khỏi markdown (web + admin normalize). */
+export function stripSystemReaderForbiddenNotes(md: string): string {
+  return md
+    .replace(SYSTEM_NO_PHONE_CTA_NOTE_RE, "")
+    .replace(/[ \t]+\n/g, "\n")
+    .replace(/\n{3,}/g, "\n\n")
+    .trim();
+}
 
 /** Slug ASCII từ tiêu đề tiếng Việt. */
 export function slugifyArticleTitle(title: string): string {
@@ -58,7 +73,7 @@ export function slugifyArticleTitle(title: string): string {
  * - bỏ đoạn mở “Bài này quan sát và trình bày…” (SoR)
  * - bỏ H2 “Ai đang chịu tác động / Ai bị ảnh hưởng…”
  * - bỏ mục Lưu ý biên tập nếu lỡ dính
- * - bỏ dòng “Không cần để lại SĐT…”
+ * - bỏ câu hệ thống “Không cần để lại SĐT…” (cấm đăng web)
  */
 export function normalizeQueueBodyForReader(md: string): string {
   let s = md.replace(/^\uFEFF/, "").trim();
@@ -70,8 +85,7 @@ export function normalizeQueueBodyForReader(md: string): string {
   s = s.replace(EDITORIAL_SCOPE_OPENER_RE, "").trim();
   s = s.replace(SOR_WHO_AFFECTED_H2_RE, "");
   s = s.replace(EDITORIAL_NOTE_SECTION_RE, "").trim();
-  s = s.replace(CTA_NO_PHONE_NOTE_RE, "").trim();
-  return s.replace(/\n{3,}/g, "\n\n").trim();
+  return stripSystemReaderForbiddenNotes(s);
 }
 
 /** Draft/seed đã có khối chốt (có hoặc không `(CTA)`). */
