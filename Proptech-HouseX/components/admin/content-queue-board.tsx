@@ -7,13 +7,18 @@ import {
   L3_CHECKLIST_LABELS,
   NOXH_CTA_TOOLS,
   EMPTY_L3_CHECKLIST,
+  getNoxhCtaTool,
   type L3ContentChecklist,
   type NoxhCtaToolId,
   parseL3Checklist,
 } from "@/lib/content/noxh-cta-tools";
 import { articlePath } from "@/lib/content/article-routes";
 import { QueueArticleReaderPreview } from "@/components/admin/queue-article-reader-preview";
-import { normalizeQueueBodyForReader } from "@/lib/content/content-queue-article";
+import {
+  normalizeQueueBodyForReader,
+  queueBodyHasCtaSection,
+  READER_CTA_HEADING,
+} from "@/lib/content/content-queue-article";
 
 type StatusFilter =
   | "PENDING_L3"
@@ -319,6 +324,35 @@ export function ContentQueueBoard() {
     }));
   }
 
+  /** Chèn khối CTA vào body để Super Admin duyệt đúng thứ người đọc thấy. */
+  function insertCtaBlockIntoBody() {
+    const tool = getNoxhCtaTool(form.ctaToolId);
+    if (!tool) {
+      setError("Chọn CTA tool trước khi chèn khối Kiểm tra nhanh.");
+      return;
+    }
+    const label = form.ctaLabel.trim() || tool.defaultCtaLabel;
+    const href = tool.href;
+    if (queueBodyHasCtaSection(form.bodyPreview)) {
+      setMessage("Body đã có ## Kiểm tra nhanh — xem tab Như người đọc.");
+      return;
+    }
+    const block = [
+      "",
+      READER_CTA_HEADING,
+      "",
+      `[${label}](${href})`,
+      "",
+    ].join("\n");
+    setForm((f) => ({
+      ...f,
+      bodyPreview: `${f.bodyPreview.trim()}${block}`.trim(),
+      l3Checklist: { ...f.l3Checklist, ctaCopy: true },
+    }));
+    setBodyTab("reader");
+    setMessage("Đã chèn khối Kiểm tra nhanh vào bài — kiểm tra tab Như người đọc.");
+  }
+
   async function save() {
     setActionLoading(true);
     setError(null);
@@ -382,7 +416,8 @@ export function ContentQueueBoard() {
       | "mark_published"
       | "publish_web"
       | "hide_public"
-      | "delete_item",
+      | "delete_item"
+      | "pull_web",
     publishNow?: boolean,
   ) {
     if (!editingId) return;
@@ -402,11 +437,17 @@ export function ContentQueueBoard() {
       );
       if (!okDel) return;
     }
+    if (action === "pull_web") {
+      const okPull = window.confirm(
+        "Kéo bản đang live trên web vào Super Admin? Nội dung queue hiện tại sẽ bị ghi đè bằng CMS.",
+      );
+      if (!okPull) return;
+    }
     setActionLoading(true);
     setError(null);
     setMessage(null);
     try {
-      // Persist form before gate actions
+      // Persist form before gate / publish actions
       if (
         action === "submit_l3" ||
         action === "approve" ||
@@ -474,6 +515,14 @@ export function ContentQueueBoard() {
         await load();
         return;
       }
+      if (action === "pull_web" && json.data) {
+        setForm(itemToForm(json.data));
+        setEditingStatus(json.data.status);
+        if (json.data.article) setEditingArticle(json.data.article);
+        setMessage("Đã kéo bản web vào Super Admin — kiểm tra tab Như người đọc rồi Lưu & đồng bộ nếu sửa tiếp.");
+        await load();
+        return;
+      }
       setEditingStatus(json.data.status);
       if (json.data.article) {
         setEditingArticle(json.data.article);
@@ -490,7 +539,7 @@ export function ContentQueueBoard() {
                 : action === "publish_web"
                   ? publishNow === false
                     ? "Đã tạo bài nháp trên CMS."
-                    : "Đã publish bài web + đánh dấu queue published."
+                    : "Đã đồng bộ lên web (PUBLISHED)."
                   : "Đã đánh dấu published.",
       );
       setRejectReason("");
@@ -675,24 +724,31 @@ export function ContentQueueBoard() {
             {bodyTab === "reader" ? (
               <div className="max-h-[32rem] overflow-y-auto rounded-md border border-slate-200 bg-white p-4">
                 <QueueArticleReaderPreview markdown={form.bodyPreview} />
-                {normalizeQueueBodyForReader(form.bodyPreview) !==
-                form.bodyPreview.trim() ? (
-                  <p className="mt-4 border-t border-slate-100 pt-3 text-xs text-slate-500">
-                    Preview đã ẩn/chuẩn hóa nhãn ops (vd. bỏ{" "}
-                    <code>(CTA)</code> trên H2). Bản publish cũng đi qua bước
-                    này.
-                  </p>
-                ) : null}
+                <p className="mt-4 border-t border-slate-100 pt-3 text-xs text-slate-500">
+                  Preview = đúng renderer trên web. Khối{" "}
+                  <code>## Kiểm tra nhanh</code> (nếu có trong markdown) phải
+                  hiện ở đây trước khi duyệt / publish.
+                </p>
               </div>
             ) : (
-              <textarea
-                className="min-h-64 w-full rounded-md border border-slate-200 px-3 py-2 font-mono text-sm"
-                value={form.bodyPreview}
-                onChange={(e) =>
-                  setForm((f) => ({ ...f, bodyPreview: e.target.value }))
-                }
-                spellCheck={false}
-              />
+              <div className="space-y-2">
+                <textarea
+                  className="min-h-64 w-full rounded-md border border-slate-200 px-3 py-2 font-mono text-sm"
+                  value={form.bodyPreview}
+                  onChange={(e) =>
+                    setForm((f) => ({ ...f, bodyPreview: e.target.value }))
+                  }
+                  spellCheck={false}
+                />
+                <Button
+                  type="button"
+                  variant="outline"
+                  disabled={actionLoading || !form.ctaToolId}
+                  onClick={insertCtaBlockIntoBody}
+                >
+                  Chèn khối Kiểm tra nhanh vào bài
+                </Button>
+              </div>
             )}
           </div>
 
@@ -843,15 +899,26 @@ export function ContentQueueBoard() {
               </Button>
             </>
           ) : null}
-          {editingStatus === "PUBLISHED" && editingArticle ? (
-            <Button
-              type="button"
-              variant="outline"
-              disabled={actionLoading}
-              onClick={() => void runAction("publish_web", true)}
-            >
-              Đồng bộ lại bài web
-            </Button>
+          {editingStatus === "PUBLISHED" ? (
+            <>
+              <Button
+                type="button"
+                disabled={actionLoading}
+                onClick={() => void runAction("publish_web", true)}
+              >
+                Lưu & đồng bộ lên web
+              </Button>
+              {editingArticle ? (
+                <Button
+                  type="button"
+                  variant="outline"
+                  disabled={actionLoading}
+                  onClick={() => void runAction("pull_web")}
+                >
+                  Kéo từ web → Admin
+                </Button>
+              ) : null}
+            </>
           ) : null}
           <Button
             type="button"
@@ -872,6 +939,14 @@ export function ContentQueueBoard() {
             Xóa khỏi queue
           </Button>
         </div>
+
+        <p className="rounded-md border border-sky-200 bg-sky-50 px-3 py-2 text-sm text-sky-950">
+          <strong>Đồng bộ 2 chiều:</strong> sửa trong Super Admin →{" "}
+          <em>Publish web</em> / <em>Lưu & đồng bộ lên web</em>. Thấy lệch trên
+          site → <em>Kéo từ web → Admin</em>, sửa, rồi đồng bộ lại. Mọi khối
+          người đọc thấy (gồm <code>## Kiểm tra nhanh</code>) phải nằm trong
+          nội dung bài — tab <strong>Như người đọc</strong> là bản sẽ lên web.
+        </p>
 
         {editingArticle ? (
           <p className="text-sm text-slate-600">

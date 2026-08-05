@@ -4,8 +4,8 @@ import { ArticleBody } from "@/components/articles/article-body";
 import { normalizeQueueBodyForReader } from "@/lib/content/content-queue-article";
 
 /**
- * Preview L2/L3 — cùng renderer với /tin-tuc (ArticleBody).
- * Body đã normalize: không frontmatter, không nhãn `(CTA)`.
+ * Preview L2/L3 — cùng renderer với trang public (ArticleBody).
+ * Super Admin phải thấy đủ khối người đọc sẽ thấy (gồm ## Kiểm tra nhanh).
  */
 export function QueueArticleReaderPreview({
   markdown,

@@ -82,4 +82,6 @@ export const contentQueueStatusActionSchema = z.discriminatedUnion("action", [
     reason: z.string().min(5).max(2000).optional(),
   }),
   z.object({ action: z.literal("delete_item") }),
+  /** Kéo title/body từ CMS đang live → queue (đồng bộ chiều web → Super Admin). */
+  z.object({ action: z.literal("pull_web") }),
 ]);

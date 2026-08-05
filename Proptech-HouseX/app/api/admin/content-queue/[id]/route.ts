@@ -11,6 +11,7 @@ import {
   hideContentQueuePublic,
   markContentQueuePublished,
   publishContentQueueToWeb,
+  pullContentQueueFromWeb,
   rejectContentQueue,
   submitContentQueueL3,
   updateContentQueueItem,
@@ -44,17 +45,14 @@ export async function PATCH(req: NextRequest, { params }: Ctx) {
     const { id } = await params;
     const existing = await getContentQueueById(id);
     if (!existing) return fail(404, "NOT_FOUND", "Không tìm thấy item.");
-    if (existing.status === "PUBLISHED") {
-      return fail(409, "LOCKED", "Item đã PUBLISHED — không sửa qua API này.");
-    }
 
     const body = contentQueueUpdateSchema.parse(await req.json());
     try {
       const item = await updateContentQueueItem(id, body);
       return ok(item);
     } catch (inner) {
-      if (inner instanceof Error && inner.message === "LOCKED") {
-        return fail(409, "LOCKED", "Item đã PUBLISHED — không sửa.");
+      if (inner instanceof Error && inner.message === "NOT_FOUND") {
+        return fail(404, "NOT_FOUND", "Không tìm thấy item.");
       }
       throw inner;
     }
@@ -97,6 +95,9 @@ export async function POST(req: NextRequest, { params }: Ctx) {
       }
       if (body.action === "delete_item") {
         return ok(await deleteContentQueueItem(id));
+      }
+      if (body.action === "pull_web") {
+        return ok(await pullContentQueueFromWeb(id));
       }
       return ok(await markContentQueuePublished(id));
     } catch (inner) {

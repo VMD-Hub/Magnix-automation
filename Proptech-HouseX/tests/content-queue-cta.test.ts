@@ -29,10 +29,18 @@ describe("noxh CTA tools", () => {
 });
 
 describe("content queue L3 gate", () => {
+  const bodyWithCta = `Nội dung bài.
+
+## Kiểm tra nhanh
+
+[Kiểm tra miễn phí bạn có đủ điều kiện NƠXH không](/cong-cu/dieu-kien-noxh)
+`;
+
   it("fail khi thiếu CTA tool", () => {
     const r = assertContentQueueReadyForL3({
       title: "Điều kiện NƠXH 2026",
       painPoint: "Không biết đủ điều kiện không",
+      bodyPreview: bodyWithCta,
       ctaToolId: null,
       ctaLabel: "Kiểm tra ngay",
       l3Checklist: { pain: true, ctaTool: false, ctaCopy: true },
@@ -41,10 +49,24 @@ describe("content queue L3 gate", () => {
     assert.ok(r.errors.some((e) => /CTA/i.test(e)));
   });
 
+  it("fail khi thiếu khối Kiểm tra nhanh trong body", () => {
+    const r = assertContentQueueReadyForL3({
+      title: "Điều kiện NƠXH 2026",
+      painPoint: "Không biết đủ điều kiện không",
+      bodyPreview: "Chỉ có đoạn văn, không có CTA trong bài.",
+      ctaToolId: "noxh-check",
+      ctaLabel: "Kiểm tra miễn phí bạn có đủ điều kiện NƠXH không",
+      l3Checklist: { pain: true, ctaTool: true, ctaCopy: true },
+    });
+    assert.equal(r.pass, false);
+    assert.ok(r.errors.some((e) => /Kiểm tra nhanh/i.test(e)));
+  });
+
   it("pass khi đủ CTA + checklist", () => {
     const r = assertContentQueueReadyForL3({
       title: "Điều kiện NƠXH 2026",
       painPoint: "Không biết đủ điều kiện không",
+      bodyPreview: bodyWithCta,
       ctaToolId: "noxh-check",
       ctaLabel: "Kiểm tra miễn phí bạn có đủ điều kiện NƠXH không",
       l3Checklist: { pain: true, ctaTool: true, ctaCopy: true },
@@ -57,6 +79,7 @@ describe("content queue L3 gate", () => {
     const r = assertContentQueueReadyForL3({
       title: "Bài phong thủy",
       painPoint: "Hướng nhà",
+      bodyPreview: bodyWithCta,
       ctaToolId: "xem-huong-nha" as "noxh-check",
       ctaLabel: "Xem hướng",
       l3Checklist: { pain: true, ctaTool: true, ctaCopy: true },
@@ -68,6 +91,12 @@ describe("content queue L3 gate", () => {
     const r = assertContentQueueReadyForL3({
       title: "Sổ đỏ điện tử theo dự thảo?",
       painPoint: "Sổ điện tử có giá trị như sổ giấy không?",
+      bodyPreview: `Nội dung.
+
+## Kiểm tra nhanh
+
+[Đặt lịch rà soát pháp lý 15 phút miễn phí](/lien-he?goi=ra-soat-phap-ly-15-phut#tu-van)
+`,
       ctaToolId: "legal-review",
       ctaLabel: "Đặt lịch rà soát pháp lý 15 phút miễn phí",
       l3Checklist: { pain: true, ctaTool: true, ctaCopy: true },

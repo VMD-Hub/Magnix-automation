@@ -5,7 +5,9 @@ import {
   type ContentQueueStatus,
 } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
-import { assertContentQueueReadyForL3 } from "@/lib/content/content-queue-gates";
+import {
+  assertContentQueueReadyForL3,
+} from "@/lib/content/content-queue-gates";
 import {
   buildArticleBodyFromQueue,
   slugifyArticleTitle,
@@ -181,7 +183,7 @@ export async function updateContentQueueItem(
 ): Promise<ContentQueueWithArticle> {
   const existing = await getContentQueueById(id);
   if (!existing) throw new Error("NOT_FOUND");
-  if (existing.status === "PUBLISHED") throw new Error("LOCKED");
+  // Super Admin được sửa cả item PUBLISHED rồi Đồng bộ lại web.
 
   const nextToolId =
     input.ctaToolId !== undefined ? input.ctaToolId : existing.ctaToolId;
@@ -565,4 +567,38 @@ export async function deleteContentQueueItem(
 
   await prisma.contentQueueItem.delete({ where: { id } });
   return { deleted: true, suppressedSlug: slug };
+}
+
+/**
+ * Đồng bộ chiều CMS → queue: kéo title/excerpt/body đang live vào Super Admin để sửa tiếp.
+ */
+export async function pullContentQueueFromWeb(
+  id: string,
+): Promise<ContentQueueWithArticle> {
+  const row = await getContentQueueById(id);
+  if (!row) throw new Error("NOT_FOUND");
+  if (!row.articleId) throw new Error("ARTICLE_MISSING");
+
+  const article = await prisma.article.findUnique({
+    where: { id: row.articleId },
+  });
+  if (!article) throw new Error("ARTICLE_MISSING");
+
+  return prisma.contentQueueItem.update({
+    where: { id },
+    data: {
+      title: article.title,
+      painPoint: article.excerpt,
+      bodyPreview: article.body,
+      opsNotes: [
+        row.opsNotes?.trim() || "",
+        `pulled_from_cms_at: ${new Date().toISOString()}`,
+        `cms_slug: ${article.slug}`,
+        `cms_status: ${article.status}`,
+      ]
+        .filter(Boolean)
+        .join("\n"),
+    },
+    include: includeArticle,
+  });
 }

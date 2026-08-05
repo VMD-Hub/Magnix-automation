@@ -1,5 +1,6 @@
 /**
  * Gate L3 content queue — bài không CTA trong allowlist = không approve.
+ * Khối CTA trên bài (## Kiểm tra nhanh) phải nằm trong body để Super Admin duyệt đúng thứ người đọc thấy.
  */
 
 import {
@@ -9,10 +10,12 @@ import {
   parseL3Checklist,
   type L3ContentChecklist,
 } from "@/lib/content/noxh-cta-tools";
+import { queueBodyHasCtaSection } from "@/lib/content/content-queue-article";
 
 export type ContentQueueGateInput = {
   title?: string | null;
   painPoint?: string | null;
+  bodyPreview?: string | null;
   ctaToolId?: string | null;
   ctaLabel?: string | null;
   l3Checklist?: unknown;
@@ -24,7 +27,7 @@ export type ContentQueueGateResult = {
   checklist: L3ContentChecklist;
 };
 
-/** Gate trước approve / submit_l3. */
+/** Gate trước approve / submit_l3 / publish. */
 export function assertContentQueueReadyForL3(
   input: ContentQueueGateInput,
 ): ContentQueueGateResult {
@@ -36,6 +39,15 @@ export function assertContentQueueReadyForL3(
   }
   if (!input.painPoint?.trim()) {
     errors.push("Thiếu nỗi đau / góc bài (painPoint) — 1 câu.");
+  }
+  if (!input.bodyPreview?.trim()) {
+    errors.push(
+      "Thiếu nội dung bài (body) — Super Admin phải duyệt đủ trước khi đăng.",
+    );
+  } else if (!queueBodyHasCtaSection(input.bodyPreview)) {
+    errors.push(
+      "Thiếu khối ## Kiểm tra nhanh trong nội dung — CTA hệ thống phải nằm trong bài để duyệt (tab Như người đọc), không chèn ngầm lúc publish.",
+    );
   }
   if (!isNoxhCtaToolId(input.ctaToolId)) {
     errors.push(
