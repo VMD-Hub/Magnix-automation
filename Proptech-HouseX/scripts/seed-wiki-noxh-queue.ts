@@ -14,6 +14,7 @@ import { getNoxhCtaTool } from "../lib/content/noxh-cta-tools";
 import {
   normalizeQueueBodyForReader,
   queueBodyHasSeedCtaMarker,
+  queueBodyLinksToCtaHref,
   READER_CTA_HEADING,
 } from "../lib/content/content-queue-article";
 import { NOXH_TAG_THAM_DINH_VAY } from "../lib/content/articles/noxh-handbook-tags";
@@ -33,7 +34,9 @@ function ensureCtaSection(
   href: string,
 ): string {
   const core = normalizeQueueBodyForReader(body);
-  if (queueBodyHasSeedCtaMarker(core)) return core;
+  if (queueBodyHasSeedCtaMarker(core) || queueBodyLinksToCtaHref(core, href)) {
+    return core;
+  }
   return [core, "", READER_CTA_HEADING, "", `[${label}](${href})`]
     .join("\n")
     .trim();

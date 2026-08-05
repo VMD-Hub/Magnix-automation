@@ -5,7 +5,10 @@ import type { ReactNode } from "react";
 import { FaqAccordionSection } from "@/components/content/faq-accordion-section";
 import { rewriteLegacyArticleHref, topicPath } from "@/lib/content/article-routes";
 import { parseArticleFaqSection } from "@/lib/content/article-faq-markdown";
-import { stripSystemReaderForbiddenNotes } from "@/lib/content/content-queue-article";
+import {
+  dedupeReaderCtaSections,
+  stripSystemReaderForbiddenNotes,
+} from "@/lib/content/content-queue-article";
 import type { ArticleCardData } from "@/lib/data/article-types";
 
 const LINK_RE = /\[([^\]]+)\]\(([^)]+)\)/g;
@@ -37,9 +40,9 @@ function stripOpsHeadingLabel(heading: string): string {
   return heading.replace(CTA_OPS_LABEL_RE, "").trim();
 }
 
-/** Làm sạch markdown trước khi tách khối — bỏ câu hệ thống cấm đăng. */
+/** Làm sạch markdown trước khi tách khối — bỏ câu hệ thống + khối CTA lặp. */
 export function sanitizeArticleBodyForDisplay(md: string): string {
-  return stripSystemReaderForbiddenNotes(md);
+  return dedupeReaderCtaSections(stripSystemReaderForbiddenNotes(md));
 }
 
 function renderLinks(text: string, keyPrefix: string): ReactNode[] {

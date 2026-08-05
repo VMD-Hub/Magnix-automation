@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import {
   buildArticleBodyFromQueue,
+  dedupeReaderCtaSections,
   normalizeQueueBodyForReader,
   queueBodyHasCtaSection,
   slugifyArticleTitle,
@@ -74,18 +75,53 @@ Không cần để lại SĐT trước khi xem kết quả gợi ý.
   it("buildArticleBodyFromQueue không tái chèn câu hệ thống SĐT", () => {
     const body = buildArticleBodyFromQueue({
       title: "Test",
-      bodyPreview: "Nội dung ngắn không có CTA.",
+      bodyPreview: "Nội dung ngắn.\n\n## Kiểm tra nhanh\n\n[Xem](/cong-cu/dieu-kien-noxh)",
       ctaToolId: "noxh-check",
     });
     assert.equal(body.includes("Không cần để lại SĐT"), false);
     assert.match(body, /^## Kiểm tra nhanh$/m);
   });
 
-  it("body luôn có markdown link CTA tool (H2 người đọc)", () => {
+  it("publish giữ đúng body admin duyệt — không tự thêm CTA", () => {
+    const body = buildArticleBodyFromQueue({
+      title: "Bài đã bỏ CTA",
+      bodyPreview: "Chỉ nội dung người đọc, admin đã xóa khối CTA.",
+      ctaToolId: "noxh-check",
+      ctaLabel: "Kiểm tra miễn phí bạn có đủ điều kiện NƠXH không",
+      ctaHref: "/cong-cu/dieu-kien-noxh",
+    });
+    assert.equal(body.includes("## Kiểm tra nhanh"), false);
+    assert.equal(
+      body.includes("Kiểm tra miễn phí bạn có đủ điều kiện NƠXH không"),
+      false,
+    );
+  });
+
+  it("dedupe gộp khối Kiểm tra nhanh bị lặp", () => {
+    const raw = `Nội dung.
+
+## Kiểm tra nhanh
+
+[Kiểm tra miễn phí bạn có đủ điều kiện NƠXH không](/cong-cu/dieu-kien-noxh)
+
+## Kiểm tra nhanh
+
+[Kiểm tra miễn phí bạn có đủ điều kiện NƠXH không](/cong-cu/dieu-kien-noxh)
+`;
+    const out = dedupeReaderCtaSections(raw);
+    assert.equal((out.match(/^## Kiểm tra nhanh$/gm) ?? []).length, 1);
+    assert.equal(
+      (out.match(/dieu-kien-noxh/g) ?? []).length,
+      1,
+    );
+  });
+
+  it("giữ nguyên khối CTA admin đã duyệt trong body", () => {
     const body = buildArticleBodyFromQueue({
       title: "Thu nhập 12tr có mua NƠXH được không?",
       painPoint: "Không biết đủ điều kiện thu nhập",
-      bodyPreview: "Giải thích ngắn về điều kiện thu nhập NƠXH 2026.",
+      bodyPreview:
+        "Giải thích ngắn về điều kiện thu nhập NƠXH 2026.\n\n## Kiểm tra nhanh\n\n[Kiểm tra điều kiện miễn phí](/cong-cu/dieu-kien-noxh)",
       ctaToolId: "noxh-check",
       ctaLabel: "Kiểm tra điều kiện miễn phí",
       ctaHref: "/cong-cu/dieu-kien-noxh",

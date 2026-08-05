@@ -85,7 +85,7 @@ export function normalizeQueueBodyForReader(md: string): string {
   s = s.replace(EDITORIAL_SCOPE_OPENER_RE, "").trim();
   s = s.replace(SOR_WHO_AFFECTED_H2_RE, "");
   s = s.replace(EDITORIAL_NOTE_SECTION_RE, "").trim();
-  return stripSystemReaderForbiddenNotes(s);
+  return dedupeReaderCtaSections(stripSystemReaderForbiddenNotes(s));
 }
 
 /** Draft/seed đã có khối chốt (có hoặc không `(CTA)`). */
@@ -98,21 +98,60 @@ export function queueBodyHasSeedCtaMarker(md: string): boolean {
   return queueBodyHasCtaSection(md);
 }
 
-function appendCtaIfMissing(
-  core: string,
-  label: string,
-  href: string,
-): string {
-  if (queueBodyHasCtaSection(core)) return core;
-  return [core, "", READER_CTA_HEADING, "", `[${label}](${href})`]
-    .join("\n")
-    .trim();
+/** Body đã trỏ sẵn tới tool này — seed không thêm khối chốt thứ hai. */
+export function queueBodyLinksToCtaHref(md: string, href: string): boolean {
+  const target = href.trim();
+  if (!target) return false;
+  return md.includes(`(${target})`) || md.includes(`: ${target}`);
+}
+
+const CTA_SECTION_HEADING_RE = /^##\s+Kiểm tra nhanh(?:\s*\(CTA\))?\s*$/i;
+
+/**
+ * Giữ đúng MỘT khối `## Kiểm tra nhanh`; bỏ các khối lặp phía sau.
+ * Trong khối còn lại, bỏ dòng link CTA trùng href.
+ */
+export function dedupeReaderCtaSections(md: string): string {
+  const lines = md.split(/\r?\n/);
+  const out: string[] = [];
+  let ctaSeen = false;
+  let skipping = false;
+  let seenHrefs = new Set<string>();
+
+  for (const line of lines) {
+    const isH2 = /^##\s+/.test(line);
+    if (isH2 && CTA_SECTION_HEADING_RE.test(line)) {
+      if (ctaSeen) {
+        skipping = true;
+        continue;
+      }
+      ctaSeen = true;
+      skipping = false;
+      seenHrefs = new Set<string>();
+      out.push(READER_CTA_HEADING);
+      continue;
+    }
+    if (isH2) skipping = false;
+    if (skipping) continue;
+
+    if (ctaSeen) {
+      const link = line.match(/^\s*(?:→\s*)?\[[^\]]+\]\(([^)]+)\)\s*$/);
+      if (link) {
+        const href = link[1]!.trim();
+        if (seenHrefs.has(href)) continue;
+        seenHrefs.add(href);
+      }
+    }
+    out.push(line);
+  }
+
+  return out.join("\n").replace(/\n{3,}/g, "\n\n").trim();
 }
 
 /**
- * Markdown body tối thiểu cho CMS.
- * - Có `bodyPreview` đầy đủ (draft seed): dùng nguyên bản đã normalize.
- *   Không nhân đôi `## title` / “Câu hỏi thường gặp” — trang web đã có title/excerpt.
+ * Markdown body cho CMS — Super Admin là nguồn duy nhất.
+ * - Có `bodyPreview`: đăng đúng bản đã duyệt (chỉ normalize + dedupe CTA).
+ *   Không tự chèn thêm khối CTA mà admin không thấy / đã xóa.
  * - Không preview: fallback ngắn + H2 title + painPoint + CTA.
  */
 export function buildArticleBodyFromQueue(item: QueueArticleSeed): string {
@@ -125,11 +164,7 @@ export function buildArticleBodyFromQueue(item: QueueArticleSeed): string {
 
   const preview = item.bodyPreview?.trim();
   if (preview) {
-    return appendCtaIfMissing(
-      normalizeQueueBodyForReader(preview),
-      label,
-      href,
-    );
+    return dedupeReaderCtaSections(normalizeQueueBodyForReader(preview));
   }
 
   const coreRaw = item.painPoint?.trim()
@@ -149,5 +184,12 @@ export function buildArticleBodyFromQueue(item: QueueArticleSeed): string {
   ];
 
   const wrapped = lines.filter((x): x is string => x !== null).join("\n");
-  return appendCtaIfMissing(wrapped, label, href);
+  if (queueBodyHasCtaSection(wrapped)) {
+    return dedupeReaderCtaSections(wrapped);
+  }
+  return dedupeReaderCtaSections(
+    [wrapped, "", READER_CTA_HEADING, "", `[${label}](${href})`]
+      .join("\n")
+      .trim(),
+  );
 }

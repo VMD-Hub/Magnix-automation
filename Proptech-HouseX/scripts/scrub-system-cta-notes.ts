@@ -1,6 +1,7 @@
 /**
- * Gỡ câu hệ thống “Không cần để lại SĐT trước khi xem kết quả gợi ý”
- * khỏi toàn bộ bài CMS + content_queue + content_drafts trong Postgres.
+ * Dọn nội dung hệ thống khỏi bài web (Postgres):
+ *   - câu “Không cần để lại SĐT trước khi xem kết quả gợi ý”
+ *   - khối `## Kiểm tra nhanh` bị lặp (CTA nhân đôi)
  *
  * Không phải copy người đọc — không được tái sử dụng trên web.
  *
@@ -10,6 +11,7 @@
  */
 import { PrismaClient } from "@prisma/client";
 import {
+  dedupeReaderCtaSections,
   stripSystemReaderForbiddenNotes,
   SYSTEM_NO_PHONE_CTA_NOTE,
 } from "../lib/content/content-queue-article";
@@ -17,8 +19,15 @@ import {
 const dryRun = process.argv.includes("--dry-run");
 const prisma = new PrismaClient();
 
+/** Body người đọc: bỏ câu hệ thống + gộp khối CTA lặp. */
+function cleanReaderMarkdown(text: string): string {
+  return dedupeReaderCtaSections(stripSystemReaderForbiddenNotes(text));
+}
+
 function needsScrub(text: string | null | undefined): boolean {
-  return Boolean(text && text.includes(SYSTEM_NO_PHONE_CTA_NOTE));
+  if (!text) return false;
+  if (text.includes(SYSTEM_NO_PHONE_CTA_NOTE)) return true;
+  return cleanReaderMarkdown(text) !== text;
 }
 
 async function main() {
@@ -30,9 +39,7 @@ async function main() {
     select: { id: true, slug: true, body: true, excerpt: true, seoDesc: true },
   });
   for (const a of articles) {
-    const body = needsScrub(a.body)
-      ? stripSystemReaderForbiddenNotes(a.body)
-      : a.body;
+    const body = needsScrub(a.body) ? cleanReaderMarkdown(a.body) : a.body;
     const excerpt =
       a.excerpt && needsScrub(a.excerpt)
         ? stripSystemReaderForbiddenNotes(a.excerpt)
@@ -60,7 +67,7 @@ async function main() {
   for (const q of queue) {
     const bodyPreview =
       q.bodyPreview && needsScrub(q.bodyPreview)
-        ? stripSystemReaderForbiddenNotes(q.bodyPreview)
+        ? cleanReaderMarkdown(q.bodyPreview)
         : q.bodyPreview;
     const painPoint =
       q.painPoint && needsScrub(q.painPoint)
@@ -90,7 +97,7 @@ async function main() {
   for (const d of drafts) {
     const artifactMarkdown =
       d.artifactMarkdown && needsScrub(d.artifactMarkdown)
-        ? stripSystemReaderForbiddenNotes(d.artifactMarkdown)
+        ? cleanReaderMarkdown(d.artifactMarkdown)
         : d.artifactMarkdown;
     const hookLine =
       d.hookLine && needsScrub(d.hookLine)
