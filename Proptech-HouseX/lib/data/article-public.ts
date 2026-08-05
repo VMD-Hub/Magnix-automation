@@ -18,6 +18,7 @@ import {
   listDemoArticleCards,
   listDemoTags,
 } from "@/lib/preview/demo-articles";
+import { resolveLegacyArticleCanonicalSlug } from "@/lib/content/legacy-article-slug-redirects";
 import { applyEditorialMedia } from "@/lib/content/articles/article-editorial-media";
 import { stripSystemReaderForbiddenNotes } from "@/lib/content/content-queue-article";
 import { orderProjectRelatedArticles } from "@/lib/content/project-related-articles";
@@ -209,12 +210,13 @@ export async function listPublishedArticles(params: {
 export async function getPublishedArticleBySlug(
   slug: string,
 ): Promise<{ article: ArticleDetail; source: "db" | "demo" } | null> {
+  const canonicalSlug = resolveLegacyArticleCanonicalSlug(slug) ?? slug;
   try {
-    const row = await fetchPublishedArticleFromDb(slug);
+    const row = await fetchPublishedArticleFromDb(canonicalSlug);
     const article = mapToDetail(row);
     if (article) return { article, source: "db" };
 
-    const any = await fetchAnyArticleStatusBySlug(slug);
+    const any = await fetchAnyArticleStatusBySlug(canonicalSlug);
     if (any && any.status !== "PUBLISHED") {
       // ARCHIVED / DRAFT: Super Admin đã giám sát — không fallback demo.
       return null;
@@ -223,7 +225,7 @@ export async function getPublishedArticleBySlug(
     // fall through to demo
   }
 
-  const demo = getDemoArticleBySlug(slug);
+  const demo = getDemoArticleBySlug(canonicalSlug);
   if (demo) {
     const cleaned = applyEditorialMedia(demo);
     return {

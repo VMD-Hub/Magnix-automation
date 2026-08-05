@@ -7,6 +7,7 @@ import {
   rewriteLegacyArticleHref,
   topicPath,
 } from "@/lib/content/article-routes";
+import { resolveLegacyArticleRedirectPath } from "@/lib/content/legacy-article-slug-redirects";
 import {
   GENERAL_RE_TAG_SLUGS,
   LEGACY_NOXH_TOPIC_REDIRECTS,
@@ -91,6 +92,20 @@ function seoPermanentRedirect(req: NextRequest): NextResponse | null {
       req,
       `/thiet-ke-thi-cong-noi-that/${path.slice("/noi-that/".length)}`,
     );
+  }
+
+  // Bài kiến thức / wiki — slug publish cũ (title dài) → canonical.
+  const wikiArticle = path.match(/^\/wiki-nha-o-xa-hoi\/([^/]+)\/?$/);
+  if (wikiArticle?.[1] && wikiArticle[1] !== "chu-de") {
+    const dest = resolveLegacyArticleRedirectPath(wikiArticle[1]);
+    if (dest) return redirectPath(req, dest);
+  }
+  const knowledgeArticle = path.match(
+    /^\/tin-tuc\/kien-thuc\/([^/]+)\/?$/,
+  );
+  if (knowledgeArticle?.[1] && knowledgeArticle[1] !== "chu-de") {
+    const dest = resolveLegacyArticleRedirectPath(knowledgeArticle[1]);
+    if (dest && dest !== path) return redirectPath(req, dest);
   }
 
   // Hub tỉnh NOXH — slug địa giới cũ → canonical (308);
