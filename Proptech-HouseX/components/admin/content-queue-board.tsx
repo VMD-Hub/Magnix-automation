@@ -674,15 +674,35 @@ export function ContentQueueBoard() {
             <p className="font-semibold">Duyệt L2/L3 = nhìn như người đọc</p>
             <ul className="list-disc space-y-1 pl-5 text-sky-900/90">
               <li>
-                Tab <strong>Như người đọc</strong>: markdown đã render (
-                <code className="rounded bg-sky-100 px-1">**</code> → in đậm,
-                link, bảng, ảnh) — đúng lớp{" "}
+                Tab <strong>Như người đọc</strong>: markdown đã render — đúng lớp{" "}
                 <code className="rounded bg-sky-100 px-1">ArticleBody</code> trên
-                web.
+                web. Tab <strong>Sửa markdown</strong>: nguồn thô; không dùng tab
+                này để “duyệt cảm nhận bài”.
               </li>
               <li>
-                Tab <strong>Sửa markdown</strong>: nguồn thô để chỉnh; không dùng
-                tab này để “duyệt cảm nhận bài”.
+                <strong>Cú pháp hỗ trợ:</strong>{" "}
+                <code className="rounded bg-sky-100 px-1">**đậm**</code>
+                {" · "}
+                <code className="rounded bg-sky-100 px-1">
+                  [nhãn](/duong-dan)
+                </code>
+                {" · "}
+                <code className="rounded bg-sky-100 px-1">## / ###</code> tiêu đề
+                {" · "}
+                <code className="rounded bg-sky-100 px-1">- mục</code> /{" "}
+                <code className="rounded bg-sky-100 px-1">1. mục</code> danh sách
+                {" · "}
+                <code className="rounded bg-sky-100 px-1">&gt; đoạn</code> khối
+                nổi (disclaimer) · dòng trống = ngắt đoạn · bảng{" "}
+                <code className="rounded bg-sky-100 px-1">| … |</code> · ảnh{" "}
+                <code className="rounded bg-sky-100 px-1">![alt](url)</code>
+              </li>
+              <li>
+                <strong>Không hỗ trợ thụt đầu dòng / thụt khối:</strong> khoảng
+                trắng hoặc Tab đầu dòng bị bỏ khi render. Muốn “nhấn” cả đoạn →
+                dùng{" "}
+                <code className="rounded bg-sky-100 px-1">&gt; …</code>, không
+                cách thụt như Word.
               </li>
               <li>
                 Không để lộ nhãn hệ thống trên bài:{" "}
