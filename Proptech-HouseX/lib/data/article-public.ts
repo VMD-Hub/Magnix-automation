@@ -66,18 +66,22 @@ function mergeArticleCards(
 const QUEUE_SILO_KEY_RE = /^(?:wiki-noxh|kien-thuc|re-knowledge):(.+)$/;
 
 /**
- * Slug Super Admin đã “nhận” — không phục hồi từ catalog demo:
- * - Article CMS không PUBLISHED (Ẩn / Xóa / nháp)
- * - Content queue wiki/kien-thuc chưa gắn bài PUBLISHED (đang duyệt / đã xóa queue)
+ * Slug không được phục hồi từ catalog demo:
+ * - Article CMS tồn tại nhưng không PUBLISHED (Ẩn / Xóa stub / nháp)
+ * - Queue wiki/kien-thuc ở REJECTED (Super Admin Ẩn / từ chối)
+ *
+ * INTAKE / PENDING_L3 / APPROVED: vẫn cho demo live tạm — Super Admin sửa rồi
+ * Publish web để thay bản catalog. Tránh seed là mất cả silo trên web.
  */
 async function listDemoBlockedSlugs(): Promise<Set<string>> {
-  const [nonPublished, queueRows] = await Promise.all([
+  const [nonPublished, rejectedQueue] = await Promise.all([
     prisma.article.findMany({
       where: { status: { not: "PUBLISHED" } },
       select: { slug: true },
     }),
     prisma.contentQueueItem.findMany({
       where: {
+        status: "REJECTED",
         OR: [
           { normalizedKey: { startsWith: "wiki-noxh:" } },
           { normalizedKey: { startsWith: "kien-thuc:" } },
@@ -87,15 +91,14 @@ async function listDemoBlockedSlugs(): Promise<Set<string>> {
       select: {
         normalizedKey: true,
         opsNotes: true,
-        article: { select: { slug: true, status: true } },
+        article: { select: { slug: true } },
       },
     }),
   ]);
 
   const blocked = new Set(nonPublished.map((r) => r.slug));
 
-  for (const q of queueRows) {
-    if (q.article?.status === "PUBLISHED") continue;
+  for (const q of rejectedQueue) {
     const fromKey = q.normalizedKey.match(QUEUE_SILO_KEY_RE)?.[1]?.trim();
     const fromNotes = q.opsNotes?.match(/^slug:\s*(.+)$/m)?.[1]?.trim();
     const slug = fromKey || fromNotes || q.article?.slug;
@@ -112,8 +115,9 @@ async function isDemoBlockedSlug(slug: string): Promise<boolean> {
   });
   if (any && any.status !== "PUBLISHED") return true;
 
-  const queue = await prisma.contentQueueItem.findFirst({
+  const rejected = await prisma.contentQueueItem.findFirst({
     where: {
+      status: "REJECTED",
       OR: [
         { normalizedKey: `wiki-noxh:${slug}` },
         { normalizedKey: `kien-thuc:${slug}` },
@@ -121,12 +125,9 @@ async function isDemoBlockedSlug(slug: string): Promise<boolean> {
         { opsNotes: { contains: `slug: ${slug}` } },
       ],
     },
-    select: {
-      article: { select: { status: true } },
-    },
+    select: { id: true },
   });
-  if (!queue) return false;
-  return queue.article?.status !== "PUBLISHED";
+  return Boolean(rejected);
 }
 
 function mapToCard(row: {

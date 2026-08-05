@@ -211,6 +211,7 @@ export function ContentQueueBoard() {
     status: string;
   } | null>(null);
   const [form, setForm] = useState<FormState>(emptyForm);
+  const [search, setSearch] = useState("");
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -978,8 +979,30 @@ export function ContentQueueBoard() {
     );
   }
 
+  const visibleItems = items.filter((item) => {
+    const q = search.trim().toLowerCase();
+    if (!q) return true;
+    return (
+      item.title.toLowerCase().includes(q) ||
+      item.normalizedKey.toLowerCase().includes(q) ||
+      (item.opsNotes ?? "").toLowerCase().includes(q) ||
+      (item.article?.slug ?? "").toLowerCase().includes(q) ||
+      (item.painPoint ?? "").toLowerCase().includes(q)
+    );
+  });
+
   return (
     <div className="space-y-4">
+      <p className="rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-950">
+        Bài đang live trên web nhưng không thấy ở đây? Thường là còn ở{" "}
+        <strong>catalog code</strong> (chưa nạp queue). Trên VPS chạy{" "}
+        <code className="rounded bg-amber-100 px-1">
+          npm run db:seed:kien-thuc-queue
+        </code>{" "}
+        / <code className="rounded bg-amber-100 px-1">db:seed:wiki-noxh-queue</code>{" "}
+        rồi lọc tab <strong>Intake</strong> hoặc <strong>Tất cả</strong>, tìm theo
+        slug/tiêu đề. Sau đó sửa → Publish web (hoặc Ẩn nếu không đạt).
+      </p>
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="flex flex-wrap gap-2">
           {TABS.map((tab) => (
@@ -1002,6 +1025,12 @@ export function ContentQueueBoard() {
           ))}
         </div>
         <div className="flex flex-wrap gap-2">
+          <input
+            className="min-w-56 rounded-md border border-slate-200 px-3 py-2 text-sm"
+            placeholder="Tìm tiêu đề / slug / kien-thuc:…"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
           <Button
             type="button"
             variant="outline"
@@ -1035,13 +1064,15 @@ export function ContentQueueBoard() {
 
       {loading ? (
         <p className="text-sm text-slate-500">Đang tải…</p>
-      ) : items.length === 0 ? (
+      ) : visibleItems.length === 0 ? (
         <p className="text-sm text-slate-500">
-          Chưa có item. Bấm «Thêm bài» — mỗi bài bắt buộc 1 CTA tool NƠXH trước L3.
+          {items.length === 0
+            ? "Tab trống. Thử «Tất cả» / «Intake», hoặc seed kien-thuc / wiki trên VPS."
+            : "Không khớp từ khóa — xóa ô tìm hoặc đổi tab."}
         </p>
       ) : (
         <ul className="divide-y divide-slate-200 rounded-lg border border-slate-200 bg-white">
-          {items.map((item) => (
+          {visibleItems.map((item) => (
             <li key={item.id}>
               <button
                 type="button"
