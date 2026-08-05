@@ -106,7 +106,6 @@ Khi không chắc: xin ý kiến bằng văn bản từ Ban quản trị (về q
 
 Bạn đang phân vân vay NƠXH được khoảng bao nhiêu?
 → Kiểm tra nhanh (miễn phí): [/cong-cu/kiem-tra-vay-noxh](/cong-cu/kiem-tra-vay-noxh)
-Không cần để lại SĐT trước khi xem kết quả gợi ý.
 
 ## Nguồn tham khảo
 

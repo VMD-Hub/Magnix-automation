@@ -114,7 +114,6 @@ Hệ quả thực tế cư dân và đơn vị quản lý nên chuẩn bị:
 
 Bạn đang phân vân mình có đủ điều kiện NƠXH không?
 → Kiểm tra nhanh (miễn phí): [/cong-cu/dieu-kien-noxh](/cong-cu/dieu-kien-noxh)
-Không cần để lại SĐT trước khi xem kết quả gợi ý.
 
 ## Nguồn tham khảo
 
