@@ -3,6 +3,7 @@
 > **URL canonical:** `/wiki-nha-o-xa-hoi/cai-bay-dti`  
 > **Redirect 308:** `/vu-nguyen/case/cai-bay-dti` → wiki  
 > **Draft CMS:** `docs/content/drafts/cai-bay-dti.md` · `npm run db:upsert:cai-bay-dti`  
+> **Tiêu đề CMS:** Cái bẫy DTI — Khi giấc mơ căn hộ 6,3 tỷ đối mặt với hiện thực thu nhập 60 triệu/tháng  
 > **Nguồn đầy đủ:** `../sale-kit/case-01-dti-lan-thanh-DRAFT.md`
 
 ---
