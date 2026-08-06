@@ -72,10 +72,10 @@ export const ARTICLE_EDITORIAL_COVERS: Record<string, EditorialCover> = {
       "Giải mã bốn đòn thao túng tâm lý quanh suất nội bộ NOXH — đọc cùng người thân trước khi xuống tiền.",
   },
   "mua-noxh-ly-thuong-kiet-co-kho-khong-canh-giac-ve-bua-thu-tuc-2026": {
-    url: PHU_THO_DMC_IMAGES.gallery[3].url,
-    alt: "Nội thất mẫu căn hộ NOXH Lý Thường Kiệt — minh họa cảnh giác vẽ bùa thủ tục",
+    url: PHU_THO_DMC_IMAGES.hero.url,
+    alt: PHU_THO_DMC_IMAGES.hero.alt,
     caption:
-      "Thủ tục NOXH khó vì cạnh tranh suất, không phải vì phí bôi trơn hồ sơ — tự làm theo mẫu công khai.",
+      "Phối cảnh Nhà ở xã hội Lý Thường Kiệt (Phú Thọ DMC) — thủ tục công khai; khó ở cạnh tranh suất, không phải phí bôi trơn hồ sơ.",
   },
   "so-sanh-gia-noxh-ly-thuong-kiet-dta-happy-home-2026": {
     url: DTA_HAPPY_HOME_IMAGES.hero.url,
