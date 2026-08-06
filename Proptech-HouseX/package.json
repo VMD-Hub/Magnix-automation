@@ -80,6 +80,8 @@
     "db:upsert:btr-tenant-rights:dry": "node --import tsx scripts/upsert-first-buyer-draft.ts --draft docs/content/drafts/quyen-loi-nguoi-thue-nha-o-cho-thue-the-he-moi-2026.md --dry-run",
     "db:upsert:btr-capital-flow": "node --env-file=.env --import tsx scripts/upsert-first-buyer-draft.ts --draft docs/content/drafts/dong-von-dau-tu-can-ho-cho-thue-dai-han-2026.md",
     "db:upsert:btr-capital-flow:dry": "node --import tsx scripts/upsert-first-buyer-draft.ts --draft docs/content/drafts/dong-von-dau-tu-can-ho-cho-thue-dai-han-2026.md --dry-run",
+    "db:sync:article-tags": "node --env-file=.env --import tsx scripts/sync-article-tag-names.ts",
+    "db:sync:article-tags:dry": "node --import tsx scripts/sync-article-tag-names.ts --dry-run",
     "db:publish:first-buyer-debt-hub": "node --env-file=.env --import tsx scripts/publish-first-buyer-debt-hub-queue.ts",
     "db:publish:first-buyer-debt-hub:dry": "node --import tsx scripts/publish-first-buyer-debt-hub-queue.ts --dry-run",
     "db:tag:first-buyer-debt-hub": "node --env-file=.env --import tsx scripts/tag-first-buyer-debt-hub-articles.ts",

@@ -7,6 +7,7 @@ import { buildNoxhHandbookHubJsonLd } from "@/lib/seo/article-json-ld";
 import {
   NEWS_HUB_PATH,
   NEWS_HUB_TITLE,
+  topicPath,
 } from "@/lib/content/article-routes";
 import {
   NOXH_HANDBOOK_INTRO,
@@ -21,6 +22,10 @@ import {
   listNoxhProvinceHubsEnabled,
   noxhProvinceHubPath,
 } from "@/lib/content/noxh-province-registry";
+import {
+  NOXH_JOURNEY_TAGS,
+  NOXH_HANDBOOK_TAG_DESCRIPTIONS,
+} from "@/lib/content/articles/noxh-handbook-tags";
 import { getSiteUrl } from "@/lib/site-config";
 import { withOpenGraph } from "@/lib/seo/open-graph";
 
@@ -47,6 +52,25 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function CamNangNoxhHubPage({ searchParams }: PageProps) {
   const sp = await searchParams;
   const page = Math.max(1, Number(sp.page) || 1);
+
+  const journeySections =
+    page === 1
+      ? await Promise.all(
+          NOXH_JOURNEY_TAGS.map(async (tag) => {
+            const { items } = await listPublishedArticles({
+              page: 1,
+              pageSize: 3,
+              handbookOnly: true,
+              tagSlug: tag.slug,
+            });
+            return {
+              tag,
+              description: NOXH_HANDBOOK_TAG_DESCRIPTIONS[tag.slug] ?? "",
+              items,
+            };
+          }),
+        )
+      : [];
 
   const { items, total } = await listPublishedArticles({
     page,
@@ -116,18 +140,57 @@ export default async function CamNangNoxhHubPage({ searchParams }: PageProps) {
         <div className="mx-auto max-w-6xl px-4 py-10 container-px">
           {page === 1 ? <NoxhHandbookClusterNav /> : null}
 
-          <h2 className="mb-6 text-lg font-semibold text-slate-900">
-            {page === 1 ? "Bài viết mới" : "Bài viết"}
-          </h2>
-
-          {items.length === 0 ? (
-            <p className="text-slate-600">Chưa có bài viết nào.</p>
-          ) : (
-            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {items.map((a) => (
-                <ArticleCard key={a.id} article={a} />
-              ))}
+          {page === 1 ? (
+            <div className="space-y-12">
+              {journeySections.map(({ tag, description, items: sectionItems }) =>
+                sectionItems.length === 0 ? null : (
+                  <section key={tag.slug} aria-labelledby={`hub-tag-${tag.slug}`}>
+                    <div className="mb-5 flex flex-wrap items-end justify-between gap-3">
+                      <div>
+                        <h2
+                          id={`hub-tag-${tag.slug}`}
+                          className="text-lg font-semibold text-slate-900"
+                        >
+                          {tag.name}
+                        </h2>
+                        {description ? (
+                          <p className="mt-1 max-w-2xl text-sm text-slate-600">
+                            {description}
+                          </p>
+                        ) : null}
+                      </div>
+                      <Link
+                        href={topicPath(tag.slug)}
+                        className="text-sm font-semibold text-brand-700 hover:text-brand-800"
+                      >
+                        Xem tất cả →
+                      </Link>
+                    </div>
+                    <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                      {sectionItems.map((a) => (
+                        <ArticleCard key={a.id} article={a} />
+                      ))}
+                    </div>
+                  </section>
+                ),
+              )}
             </div>
+          ) : (
+            <>
+              <h2 className="mb-6 text-lg font-semibold text-slate-900">
+                Bài viết
+              </h2>
+
+              {items.length === 0 ? (
+                <p className="text-slate-600">Chưa có bài viết nào.</p>
+              ) : (
+                <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                  {items.map((a) => (
+                    <ArticleCard key={a.id} article={a} />
+                  ))}
+                </div>
+              )}
+            </>
           )}
 
           {totalPages > 1 && (

@@ -5,6 +5,7 @@ import {
   NOXH_HANDBOOK_TAG_DESCRIPTIONS,
   NOXH_HANDBOOK_TAG_SLUGS,
   PHONG_THUY_ARTICLE_TAG,
+  resolveArticleTagDisplayName,
 } from "@/lib/content/articles/noxh-handbook-tags";
 import type {
   ArticleCardData,
@@ -151,7 +152,10 @@ function mapToCard(row: {
     authorName: row.authorName,
     publishedAt: row.publishedAt,
     updatedAt: row.updatedAt,
-    tags: row.tags.map((t) => ({ slug: t.tag.slug, name: t.tag.name })),
+    tags: row.tags.map((t) => ({
+      slug: t.tag.slug,
+      name: resolveArticleTagDisplayName(t.tag.slug, t.tag.name),
+    })),
     projects: row.projects.map((p) => ({
       slug: p.project.slug,
       name: p.project.name,

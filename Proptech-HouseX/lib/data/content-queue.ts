@@ -19,6 +19,10 @@ import {
   type NoxhCtaToolId,
 } from "@/lib/content/noxh-cta-tools";
 import { createArticleFromAdmin, suppressPublicArticleBySlug, upsertArticleTag } from "@/lib/data/article-admin";
+import {
+  resolveArticleTagDisplayName,
+  resolveCanonicalArticleTag,
+} from "@/lib/content/articles/noxh-handbook-tags";
 import { randomUUID } from "node:crypto";
 
 function checklistToJson(
@@ -56,14 +60,11 @@ function parseContentQueueTagSlugs(
 }
 
 async function ensureArticleTags(slugs: string[]) {
-  for (const slug of slugs) {
-    await upsertArticleTag({
-      slug,
-      name: slug
-        .split("-")
-        .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-        .join(" "),
-    });
+  for (const raw of slugs) {
+    const canonical = resolveCanonicalArticleTag(raw);
+    const slug = canonical?.slug ?? raw;
+    const name = resolveArticleTagDisplayName(raw);
+    await upsertArticleTag({ slug, name });
   }
 }
 

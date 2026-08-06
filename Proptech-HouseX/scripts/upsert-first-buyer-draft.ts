@@ -18,12 +18,17 @@ import {
   NOXH_TAG_CHINH_SACH,
   NOXH_TAG_THAM_DINH_VAY,
   NOXH_TAG_BTR,
+  NOXH_TAG_CHON_NHA,
+  NOXH_TAG_DU_AN_GIA,
+  resolveCanonicalArticleTag,
 } from "../lib/content/articles/noxh-handbook-tags";
 import { upsertArticleTag } from "../lib/data/article-admin";
 
 const TAG_BY_SLUG = {
   [NOXH_TAG_CHINH_SACH.slug]: NOXH_TAG_CHINH_SACH,
   [NOXH_TAG_THAM_DINH_VAY.slug]: NOXH_TAG_THAM_DINH_VAY,
+  [NOXH_TAG_CHON_NHA.slug]: NOXH_TAG_CHON_NHA,
+  [NOXH_TAG_DU_AN_GIA.slug]: NOXH_TAG_DU_AN_GIA,
   [NOXH_TAG_BTR.slug]: NOXH_TAG_BTR,
   "tham-dinh-vay": NOXH_TAG_THAM_DINH_VAY,
   "phap-ly": NOXH_TAG_CHINH_SACH,
@@ -82,6 +87,7 @@ async function main() {
 
   const tagDef =
     TAG_BY_SLUG[draft.tagSlug as keyof typeof TAG_BY_SLUG] ??
+    resolveCanonicalArticleTag(draft.tagSlug) ??
     NOXH_TAG_CHINH_SACH;
 
   console.log(`Upsert ← ${DRAFT_REL}`);

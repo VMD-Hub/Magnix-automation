@@ -146,6 +146,41 @@ export const PHONG_THUY_ARTICLE_TAG = {
   name: "Phong thủy nhà ở",
 } as const;
 
+/** Mọi tag có tên hiển thị chuẩn (Wiki + Kiến thức + phong thủy). */
+export const CANONICAL_ARTICLE_TAGS = [
+  ...NOXH_JOURNEY_TAGS,
+  ...GENERAL_RE_KNOWLEDGE_TAGS,
+  PHONG_THUY_ARTICLE_TAG,
+] as const;
+
+const CANONICAL_TAG_BY_SLUG = new Map(
+  CANONICAL_ARTICLE_TAGS.map((t) => [t.slug, t] as const),
+);
+
+/** Alias slug cũ / ngắn → tag chuẩn (seed queue, draft frontmatter). */
+export const ARTICLE_TAG_SLUG_ALIASES: Record<string, string> = {
+  "tham-dinh-vay": NOXH_TAG_THAM_DINH_VAY.slug,
+  "phap-ly": NOXH_TAG_CHINH_SACH.slug,
+  noxh: NOXH_TAG_CHINH_SACH.slug,
+};
+
+export function resolveCanonicalArticleTag(slug: string): {
+  slug: string;
+  name: string;
+} | null {
+  const canonicalSlug = ARTICLE_TAG_SLUG_ALIASES[slug] ?? slug;
+  const hit = CANONICAL_TAG_BY_SLUG.get(canonicalSlug);
+  return hit ? { slug: hit.slug, name: hit.name } : null;
+}
+
+/** Tên pill trên card / hub — ưu tiên SoR handbook, không Title-Case từ slug. */
+export function resolveArticleTagDisplayName(
+  slug: string,
+  fallbackName?: string | null,
+): string {
+  return resolveCanonicalArticleTag(slug)?.name ?? fallbackName?.trim() ?? slug;
+}
+
 const WIKI_PATH = "/wiki-nha-o-xa-hoi";
 const RE_KNOWLEDGE_PATH = "/tin-tuc/kien-thuc";
 
