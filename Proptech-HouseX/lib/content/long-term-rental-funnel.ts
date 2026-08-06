@@ -110,7 +110,7 @@ export const BTR_ARTICLE_PLAN: readonly BtrFunnelSlot[] = [
     order: 9,
     slug: "dong-von-dau-tu-can-ho-cho-thue-dai-han-2026",
     titleVi:
-      "Dòng vốn dài hạn vào căn hộ cho thuê: Vì sao quỹ đầu tư quan tâm phân khúc này?",
+      "Dòng vốn dài hạn vào căn hộ cho thuê: Vì sao các quỹ đầu tư quan tâm phân khúc này?",
     objective:
       "Logic dòng tiền đều cho quỹ và nhà đầu tư — không cam kết lợi nhuận.",
     toneGroup: "cashflow-ops",
