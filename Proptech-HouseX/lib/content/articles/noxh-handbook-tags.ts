@@ -153,8 +153,10 @@ export const CANONICAL_ARTICLE_TAGS = [
   PHONG_THUY_ARTICLE_TAG,
 ] as const;
 
-const CANONICAL_TAG_BY_SLUG = new Map(
-  CANONICAL_ARTICLE_TAGS.map((t) => [t.slug, t] as const),
+type CanonicalArticleTag = (typeof CANONICAL_ARTICLE_TAGS)[number];
+
+const CANONICAL_TAG_BY_SLUG: Map<string, CanonicalArticleTag> = new Map(
+  CANONICAL_ARTICLE_TAGS.map((t) => [t.slug, t]),
 );
 
 /** Alias slug cũ / ngắn → tag chuẩn (seed queue, draft frontmatter). */
