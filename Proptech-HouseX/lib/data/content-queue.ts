@@ -23,6 +23,7 @@ import {
   resolveArticleTagDisplayName,
   resolveCanonicalArticleTag,
 } from "@/lib/content/articles/noxh-handbook-tags";
+import { revalidatePublicArticleBySlug } from "@/lib/content/revalidate-public-article";
 import { randomUUID } from "node:crypto";
 
 function checklistToJson(
@@ -416,7 +417,7 @@ export async function publishContentQueueToWeb(
       return refreshed;
     }
 
-    return prisma.contentQueueItem.update({
+    const published = await prisma.contentQueueItem.update({
       where: { id },
       data: {
         status: "PUBLISHED",
@@ -425,6 +426,8 @@ export async function publishContentQueueToWeb(
       },
       include: includeArticle,
     });
+    revalidatePublicArticleBySlug(existing.slug);
+    return published;
   }
 
   const preferred = parseContentQueueCanonicalSlug(row);
@@ -464,7 +467,7 @@ export async function publishContentQueueToWeb(
           }),
         ]);
       }
-      return prisma.contentQueueItem.update({
+      const linked = await prisma.contentQueueItem.update({
         where: { id },
         data: {
           articleId: existingBySlug.id,
@@ -479,6 +482,8 @@ export async function publishContentQueueToWeb(
         },
         include: includeArticle,
       });
+      if (publishNow) revalidatePublicArticleBySlug(preferred);
+      return linked;
     }
   }
 
@@ -498,7 +503,7 @@ export async function publishContentQueueToWeb(
     projectIds: [],
   });
 
-  return prisma.contentQueueItem.update({
+  const created = await prisma.contentQueueItem.update({
     where: { id },
     data: {
       articleId: article.id,
@@ -512,6 +517,8 @@ export async function publishContentQueueToWeb(
     },
     include: includeArticle,
   });
+  if (publishNow) revalidatePublicArticleBySlug(slug);
+  return created;
 }
 
 /**
@@ -530,7 +537,7 @@ export async function hideContentQueuePublic(
 
   const suppressed = await suppressPublicArticleBySlug(slug, row.title);
 
-  return prisma.contentQueueItem.update({
+  const hidden = await prisma.contentQueueItem.update({
     where: { id },
     data: {
       status: "REJECTED",
@@ -550,6 +557,8 @@ export async function hideContentQueuePublic(
     },
     include: includeArticle,
   });
+  revalidatePublicArticleBySlug(slug);
+  return hidden;
 }
 
 /**
@@ -564,6 +573,7 @@ export async function deleteContentQueueItem(
   const slug = parseContentQueueCanonicalSlug(row);
   if (slug) {
     await suppressPublicArticleBySlug(slug, row.title);
+    revalidatePublicArticleBySlug(slug);
   }
 
   await prisma.contentQueueItem.delete({ where: { id } });

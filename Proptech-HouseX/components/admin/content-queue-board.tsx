@@ -438,13 +438,43 @@ export function ContentQueueBoard() {
         setError(json?.error?.message ?? "Không lưu được.");
         return;
       }
-      setMessage(mode === "create" ? "Đã tạo item." : "Đã cập nhật.");
       if (mode === "create") {
+        setMessage("Đã tạo item.");
         setMode("edit");
         setEditingId(json.data.id);
         setEditingStatus(json.data.status);
+        await load();
+        return;
+      }
+
+      setEditingStatus(json.data.status);
+
+      // Bài đã PUBLISHED: Lưu phải đẩy luôn lên Article CMS + xóa ISR cache.
+      if (editingStatus === "PUBLISHED" && editingId) {
+        const sync = await fetch(`/api/admin/content-queue/${editingId}`, {
+          method: "POST",
+          credentials: "include",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ action: "publish_web", publishNow: true }),
+        });
+        const syncJson = await sync.json();
+        if (!sync.ok) {
+          const details = Array.isArray(syncJson?.error?.details)
+            ? `\n• ${syncJson.error.details.join("\n• ")}`
+            : "";
+          setError(
+            (syncJson?.error?.message ??
+              "Đã lưu queue nhưng đồng bộ web thất bại.") + details,
+          );
+          await load();
+          return;
+        }
+        if (syncJson.data?.article) setEditingArticle(syncJson.data.article);
+        setMessage(
+          "Đã lưu và đồng bộ lên web. Hard refresh trang bài nếu vẫn thấy bản cũ.",
+        );
       } else {
-        setEditingStatus(json.data.status);
+        setMessage("Đã cập nhật queue (chưa lên web — dùng Publish web khi duyệt xong).");
       }
       await load();
     } catch {
@@ -918,7 +948,9 @@ export function ContentQueueBoard() {
 
         <div className="flex flex-wrap gap-2">
           <Button type="button" disabled={actionLoading} onClick={() => void save()}>
-            Lưu
+            {editingStatus === "PUBLISHED"
+              ? "Lưu & đồng bộ lên web"
+              : "Lưu"}
           </Button>
           {editingStatus === "INTAKE" || editingStatus === "REJECTED" ? (
             <Button
@@ -984,13 +1016,6 @@ export function ContentQueueBoard() {
           ) : null}
           {editingStatus === "PUBLISHED" ? (
             <>
-              <Button
-                type="button"
-                disabled={actionLoading}
-                onClick={() => void runAction("publish_web", true)}
-              >
-                Lưu & đồng bộ lên web
-              </Button>
               {editingArticle ? (
                 <Button
                   type="button"
@@ -1024,11 +1049,11 @@ export function ContentQueueBoard() {
         </div>
 
         <p className="rounded-md border border-sky-200 bg-sky-50 px-3 py-2 text-sm text-sky-950">
-          <strong>Đồng bộ 2 chiều:</strong> sửa trong Super Admin →{" "}
-          <em>Publish web</em> / <em>Lưu & đồng bộ lên web</em>. Thấy lệch trên
-          site → <em>Kéo từ web → Admin</em>, sửa, rồi đồng bộ lại. Mọi khối
-          người đọc thấy (gồm <code>## Kiểm tra nhanh</code>) phải nằm trong
-          nội dung bài — tab <strong>Như người đọc</strong> là bản sẽ lên web.
+          <strong>Đồng bộ 2 chiều:</strong> bài đã đăng — nút{" "}
+          <em>Lưu &amp; đồng bộ lên web</em> ghi CMS và xóa cache trang ngay.
+          Thấy lệch trên site → <em>Kéo từ web → Admin</em>, sửa, rồi lưu lại.
+          Tab <strong>Như người đọc</strong> là bản sẽ lên web (gồm{" "}
+          <code>## Kiểm tra nhanh</code>).
         </p>
 
         {editingArticle ? (

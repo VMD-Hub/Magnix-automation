@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import type { ArticleAdminSaveInput } from "@/lib/validation/article-admin";
 import { canonicalArticlePath } from "@/lib/content/article-routes";
+import { revalidatePublicArticleBySlug } from "@/lib/content/revalidate-public-article";
 import { notifyIndexNowUrls } from "@/lib/seo/indexnow";
 import { getSiteUrl } from "@/lib/site-config";
 
@@ -99,6 +100,9 @@ export async function createArticleFromAdmin(input: ArticleAdminSaveInput) {
     },
   });
   notifyArticleIfPublished(created.slug, created.status, input.tagSlugs);
+  if (created.status === "PUBLISHED") {
+    revalidatePublicArticleBySlug(created.slug);
+  }
   return created;
 }
 
@@ -128,6 +132,7 @@ export async function updateArticleFromAdmin(
     });
   });
   notifyArticleIfPublished(updated.slug, updated.status, input.tagSlugs);
+  revalidatePublicArticleBySlug(updated.slug);
   return updated;
 }
 
