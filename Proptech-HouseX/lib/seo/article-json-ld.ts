@@ -1,4 +1,5 @@
 import { absoluteArticleImageUrl } from "@/lib/content/articles/article-editorial-media";
+import { extractArticleFaqsFromMarkdown } from "@/lib/content/article-faq-markdown";
 import type { LegalSourceRef } from "@/lib/content/editorial-trust";
 import type { EditorialExpert } from "@/lib/content/editorial-trust";
 import type { ArticleDetail } from "@/lib/data/article-types";
@@ -13,6 +14,7 @@ import {
   NOXH_HANDBOOK_INTRO,
   NOXH_HANDBOOK_TITLE,
 } from "@/lib/content/messaging/noxh-public";
+import { buildFaqJsonLd } from "@/lib/seo/affiliate-json-ld";
 import { getBrandName, getSiteUrl } from "@/lib/site-config";
 
 const BASE = getSiteUrl();
@@ -73,6 +75,16 @@ export function buildArticleJsonLd(
     mainEntityOfPage: articleUrl,
     ...(isBasedOn ? { isBasedOn } : {}),
   };
+}
+
+/** FAQPage JSON-LD từ khối ## Câu hỏi thường gặp trong body — phục vụ SEO/AIO. */
+export function buildArticleFaqJsonLd(body: string) {
+  const faqs = extractArticleFaqsFromMarkdown(body).map((f) => ({
+    q: f.q,
+    a: f.a,
+  }));
+  if (faqs.length === 0) return null;
+  return buildFaqJsonLd(faqs);
 }
 
 /** JSON-LD trang mẹ `/tin-tuc`. */

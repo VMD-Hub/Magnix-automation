@@ -776,6 +776,11 @@ export function ContentQueueBoard() {
                 <strong>FAQ dạng dropdown:</strong> H2{" "}
                 <code className="rounded bg-sky-100 px-1">
                   ## Câu hỏi thường gặp
+                </code>
+                {" "}
+                /{" "}
+                <code className="rounded bg-sky-100 px-1">
+                  ## Các câu hỏi thường gặp
                 </code>{" "}
                 hoặc{" "}
                 <code className="rounded bg-sky-100 px-1">## FAQ</code>, mỗi câu
@@ -787,7 +792,8 @@ export function ContentQueueBoard() {
                 <code className="rounded bg-sky-100 px-1">
                   **Câu hỏi?**
                 </code>
-                ), trả lời ở đoạn ngay dưới — tab Như người đọc sẽ hiện accordion.
+                ), trả lời ở đoạn ngay dưới — tab Như người đọc sẽ hiện accordion
+                (SEO: FAQPage JSON-LD).
               </li>
               <li>
                 <strong>Không hỗ trợ thụt đầu dòng / thụt khối:</strong> khoảng

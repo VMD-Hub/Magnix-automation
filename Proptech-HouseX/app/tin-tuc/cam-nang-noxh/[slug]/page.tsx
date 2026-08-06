@@ -28,7 +28,10 @@ import {
 import {
   isGeneralReKnowledgeArticle,
 } from "@/lib/content/articles/noxh-handbook-tags";
-import { buildArticleJsonLd } from "@/lib/seo/article-json-ld";
+import {
+  buildArticleFaqJsonLd,
+  buildArticleJsonLd,
+} from "@/lib/seo/article-json-ld";
 import { buildBreadcrumbJsonLd } from "@/lib/seo/affiliate-json-ld";
 import {
   NOXH_HANDBOOK_PATH,
@@ -129,6 +132,7 @@ export default async function NoxhArticleDetailPage({ params }: PageProps) {
     { name: article.title, path },
   ]);
   const jsonLd = buildArticleJsonLd(article, { expert, sources });
+  const faqJsonLd = buildArticleFaqJsonLd(article.body);
 
   const publishedLabel = article.publishedAt
     ? formatEditorialDate(article.publishedAt)
@@ -145,6 +149,12 @@ export default async function NoxhArticleDetailPage({ params }: PageProps) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
+      {faqJsonLd ? (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+        />
+      ) : null}
       <article className="bg-white">
         <div className="mx-auto max-w-6xl px-4 pt-6 container-px">
           <nav className="text-sm text-slate-500">

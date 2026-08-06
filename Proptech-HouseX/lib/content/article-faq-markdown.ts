@@ -12,9 +12,10 @@ function isFaqHeadingBlock(block: string): string | null {
   const match = HEADING2_RE.exec(block.trim());
   if (!match) return null;
   const title = match[1]!.trim();
-  // Chấp nhận "## FAQ" (Super Admin ngắn) hoặc "## Câu hỏi thường gặp…"
-  if (/^FAQ\b/i.test(title) || title.startsWith(FAQ_HEADING_PREFIX)) {
-    return FAQ_HEADING_PREFIX;
+  // "## FAQ" | "## Câu hỏi thường gặp…" | "## Các câu hỏi thường gặp…"
+  if (/^FAQ\b/i.test(title)) return FAQ_HEADING_PREFIX;
+  if (/^(Các\s+)?câu hỏi thường gặp\b/i.test(title)) {
+    return title;
   }
   return null;
 }
@@ -112,4 +113,18 @@ export function parseArticleFaqSection(
     items,
     endIndex: i - 1,
   };
+}
+
+/** Lấy toàn bộ cặp Q&A FAQ trong body markdown (cho FAQPage JSON-LD). */
+export function extractArticleFaqsFromMarkdown(
+  md: string,
+): { q: string; a: string }[] {
+  const blocks = String(md || "")
+    .split(/\n\n+/)
+    .filter(Boolean);
+  for (let i = 0; i < blocks.length; i++) {
+    const faq = parseArticleFaqSection(blocks, i);
+    if (faq) return faq.items;
+  }
+  return [];
 }
