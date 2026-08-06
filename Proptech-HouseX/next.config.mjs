@@ -50,6 +50,21 @@ const nextConfig = {
         destination: "/wiki-nha-o-xa-hoi/cai-bay-dti",
         permanent: true,
       },
+      // A3 slug: timeline (EN) → tien-trinh-giao-dich
+      {
+        source:
+          "/wiki-nha-o-xa-hoi/chi-phi-an-khi-mua-nha-lan-dau-va-timeline-tu-ky-den-so-huu",
+        destination:
+          "/wiki-nha-o-xa-hoi/chi-phi-an-khi-mua-nha-lan-dau-va-tien-trinh-giao-dich",
+        permanent: true,
+      },
+      {
+        source:
+          "/tin-tuc/cam-nang-noxh/chi-phi-an-khi-mua-nha-lan-dau-va-timeline-tu-ky-den-so-huu",
+        destination:
+          "/wiki-nha-o-xa-hoi/chi-phi-an-khi-mua-nha-lan-dau-va-tien-trinh-giao-dich",
+        permanent: true,
+      },
       // --- Interior legacy flat → canonical mới ---
       {
         source: "/noi-that/phong-cach-hien-dai",

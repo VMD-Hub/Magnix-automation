@@ -105,6 +105,13 @@ export function rewriteLegacyArticleHref(href: string): string {
     return `${articlePath("cai-bay-dti")}${q}`;
   }
 
+  const a3Legacy =
+    "/wiki-nha-o-xa-hoi/chi-phi-an-khi-mua-nha-lan-dau-va-timeline-tu-ky-den-so-huu";
+  if (href === a3Legacy || href.startsWith(`${a3Legacy}?`)) {
+    const q = href.includes("?") ? href.slice(href.indexOf("?")) : "";
+    return `${articlePath("chi-phi-an-khi-mua-nha-lan-dau-va-tien-trinh-giao-dich")}${q}`;
+  }
+
   if (!href.startsWith("/tin-tuc")) return href;
 
   const [path, query] = href.split("?");

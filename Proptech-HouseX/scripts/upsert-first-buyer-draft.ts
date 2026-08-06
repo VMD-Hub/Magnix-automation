@@ -40,6 +40,7 @@ const prisma = dryRun ? null : new PrismaClient();
 function parseDraft(raw: string): {
   title: string;
   slug: string;
+  legacySlug: string | null;
   normalizedKey: string;
   painPoint: string;
   body: string;
@@ -60,10 +61,11 @@ function parseDraft(raw: string): {
   return {
     title: meta.title,
     slug: meta.slug,
-    normalizedKey: meta.normalizedKey,
+    legacySlug: meta.legacySlug || null,
     painPoint: meta.painPoint || "",
     ctaToolId: meta.ctaToolId || "noxh-check",
     tagSlug: meta.tagSlug || NOXH_TAG_CHINH_SACH.slug,
+    normalizedKey: meta.normalizedKey,
     body: fm[2]!.trim(),
   };
 }
@@ -83,6 +85,7 @@ async function main() {
   console.log(`Upsert ← ${DRAFT_REL}`);
   console.log(`title: ${draft.title}`);
   console.log(`slug: ${draft.slug}`);
+  if (draft.legacySlug) console.log(`legacySlug: ${draft.legacySlug}`);
   console.log(`key: ${draft.normalizedKey}`);
   console.log(`tag: ${tagDef.slug}`);
   console.log(`words ≈ ${draft.body.split(/\s+/).length}`);
@@ -95,10 +98,13 @@ async function main() {
   const opsNotes = [
     `Source: ${DRAFT_REL} (owner rewrite).`,
     `slug: ${draft.slug}`,
+    draft.legacySlug ? `legacy_slug: ${draft.legacySlug}` : "",
     `normalized_key: ${draft.normalizedKey}`,
     `tags: ${tagDef.slug}`,
     "L2: tab Như người đọc · Lưu & đồng bộ lên web nếu sửa tiếp.",
-  ].join("\n");
+  ]
+    .filter(Boolean)
+    .join("\n");
 
   const queueShared = {
     title: draft.title,
@@ -128,6 +134,18 @@ async function main() {
   let article = await prisma!.article.findUnique({
     where: { slug: draft.slug },
   });
+  if (!article && draft.legacySlug) {
+    article = await prisma!.article.findUnique({
+      where: { slug: draft.legacySlug },
+    });
+    if (article) {
+      article = await prisma!.article.update({
+        where: { id: article.id },
+        data: { slug: draft.slug },
+      });
+      console.log(`↪ Đổi slug CMS: ${draft.legacySlug} → ${draft.slug}`);
+    }
+  }
   if (article) {
     article = await prisma!.article.update({
       where: { id: article.id },

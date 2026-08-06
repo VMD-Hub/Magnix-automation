@@ -82,7 +82,7 @@ Disclaimer cuối bài (chuẩn cluster vay):
 | A0 | Pillar | `huong-dan-mua-nha-lan-dau-2026-tu-chon-nha-den-ky-hop-dong` | P0 | `noxh-check` |
 | A1 | Spoke | `nen-chon-nha-o-xa-hoi-hay-can-ho-thuong-mai-khi-mua-lan-dau` | P0 | `noxh-check` |
 | A2 | Spoke | `ho-so-tai-chinh-the-nao-thi-de-bi-ngan-hang-tu-choi-vay-mua-nha` | P0 | `noxh-loan-quick` |
-| A3 | Spoke | `chi-phi-an-khi-mua-nha-lan-dau-va-timeline-tu-ky-den-so-huu` | P1 | `noxh-check` |
+| A3 | Spoke | `chi-phi-an-khi-mua-nha-lan-dau-va-tien-trinh-giao-dich` | P1 | `noxh-check` |
 | B0 | Pillar | `dao-no-va-co-cau-no-truoc-khi-vay-mua-nha-chien-luoc-nao-phu-hop` | P0 | `noxh-loan-quick` |
 | B1 | Spoke | `no-tot-va-no-xau-khac-nhau-the-nao-khi-chuan-bi-vay-mua-nha` | P0 | `noxh-loan-quick` |
 | B2 | Spoke | `sap-xep-no-tieu-dung-truoc-khi-vay-mua-nha-mat-bao-lau` | P1 | `noxh-loan-quick` |
@@ -169,7 +169,8 @@ Chức năng hub: mỗi H2 link xuống A1–A3 + cluster thẩm định vay + `
 
 **Body đã chốt:** `docs/content/drafts/chi-phi-an-mua-nha-lan-dau.md`  
 **Upsert (kể cả đã PUBLISHED):** `npm run db:upsert:first-buyer-a3`  
-**Slug giữ nguyên** (SEO): `chi-phi-an-khi-mua-nha-lan-dau-va-timeline-tu-ky-den-so-huu`
+**Slug canonical:** `chi-phi-an-khi-mua-nha-lan-dau-va-tien-trinh-giao-dich`  
+**Redirect 308 từ slug cũ:** `…-va-timeline-tu-ky-den-so-huu`
 
 **one_line_insight:** Bỡ ngỡ lớn nhất khi mua nhà lần đầu thường không phải chọn căn — mà là hệ thống thuế, phí phát sinh trong và sau giao dịch.
 
@@ -178,7 +179,7 @@ Chức năng hub: mỗi H2 link xuống A1–A3 + cluster thẩm định vay + `
 1. Bức tranh tổng quan: Ai là người trả thuế và phí?
 2. Chi tiết thuế và phí khi mua nhà liền thổ / nhà phố
 3. Cẩm nang chi phí khi mua căn hộ chung cư (một lần + hàng tháng)
-4. Timeline từ ký đến sở hữu — vì sao không có một con số cố định?
+4. Tiến trình giao dịch từ ký đến sở hữu — vì sao không có một con số cố định?
 5. Lời khuyên trước khi xuống tiền
 
 **CTA:** `noxh-check` → `/cong-cu/dieu-kien-noxh`  

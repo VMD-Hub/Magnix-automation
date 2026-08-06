@@ -1,6 +1,7 @@
 ---
 title: "Các loại thuế, phí và khoản đóng góp người mua nhà lần đầu cần biết rõ"
-slug: chi-phi-an-khi-mua-nha-lan-dau-va-timeline-tu-ky-den-so-huu
+slug: chi-phi-an-khi-mua-nha-lan-dau-va-tien-trinh-giao-dich
+legacySlug: chi-phi-an-khi-mua-nha-lan-dau-va-timeline-tu-ky-den-so-huu
 normalizedKey: editorial:first-buyer-hidden-costs:2026
 ctaToolId: noxh-check
 tagSlug: chinh-sach-ho-so-noxh
@@ -47,7 +48,7 @@ Nếu vay ngân hàng, có thể phát sinh thêm bảo hiểm tài sản / phí
 - **Phí gửi xe:** Tùy tòa nhà và khu vực (ví dụ tham khảo: xe máy khoảng 100.000–200.000 đồng/xe/tháng; ô tô khoảng 1–2,5+ triệu đồng/xe/tháng).
 - **Điện, nước, internet:** Theo đồng hồ / gói căn hộ và biểu giá được áp dụng tại dự án.
 
-## 4. Timeline từ ký đến sở hữu — vì sao không có một con số cố định?
+## 4. Tiến trình giao dịch từ ký đến sở hữu — vì sao không có một con số cố định?
 
 Ngoài thuế phí, người mua lần đầu thường hỏi “bao lâu có sổ / nhận nhà”. Thực tế **không có khung ngày tháng áp dụng mọi trường hợp**:
 

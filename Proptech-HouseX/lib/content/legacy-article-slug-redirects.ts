@@ -31,6 +31,11 @@ export const LEGACY_ARTICLE_SLUG_REDIRECTS: Record<string, LegacyArticleRedirect
       slug: "can-ho-cho-thue-chuyen-gia-truc-ql13-vanh-dai-4-2026",
       knowledge: true,
     },
+    // A3: đổi timeline (EN) → tien-trinh-giao-dich
+    "chi-phi-an-khi-mua-nha-lan-dau-va-timeline-tu-ky-den-so-huu": {
+      slug: "chi-phi-an-khi-mua-nha-lan-dau-va-tien-trinh-giao-dich",
+      knowledge: false,
+    },
   };
 
 export function resolveLegacyArticleRedirectPath(
