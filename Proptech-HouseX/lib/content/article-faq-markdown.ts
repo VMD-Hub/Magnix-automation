@@ -12,8 +12,11 @@ function isFaqHeadingBlock(block: string): string | null {
   const match = HEADING2_RE.exec(block.trim());
   if (!match) return null;
   const title = match[1]!.trim();
-  if (!title.startsWith(FAQ_HEADING_PREFIX)) return null;
-  return title;
+  // Chấp nhận "## FAQ" (Super Admin ngắn) hoặc "## Câu hỏi thường gặp…"
+  if (/^FAQ\b/i.test(title) || title.startsWith(FAQ_HEADING_PREFIX)) {
+    return FAQ_HEADING_PREFIX;
+  }
+  return null;
 }
 
 function isTerminalHeading(block: string): boolean {

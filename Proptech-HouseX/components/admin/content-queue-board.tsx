@@ -698,6 +698,23 @@ export function ContentQueueBoard() {
                 <code className="rounded bg-sky-100 px-1">![alt](url)</code>
               </li>
               <li>
+                <strong>FAQ dạng dropdown:</strong> H2{" "}
+                <code className="rounded bg-sky-100 px-1">
+                  ## Câu hỏi thường gặp
+                </code>{" "}
+                hoặc{" "}
+                <code className="rounded bg-sky-100 px-1">## FAQ</code>, mỗi câu
+                hỏi là{" "}
+                <code className="rounded bg-sky-100 px-1">
+                  ### Câu hỏi kết thúc bằng ?
+                </code>{" "}
+                (hoặc{" "}
+                <code className="rounded bg-sky-100 px-1">
+                  **Câu hỏi?**
+                </code>
+                ), trả lời ở đoạn ngay dưới — tab Như người đọc sẽ hiện accordion.
+              </li>
+              <li>
                 <strong>Không hỗ trợ thụt đầu dòng / thụt khối:</strong> khoảng
                 trắng hoặc Tab đầu dòng bị bỏ khi render. Muốn “nhấn” cả đoạn →
                 dùng{" "}

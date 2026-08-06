@@ -1,9 +1,11 @@
 ---
 slug: no-xau-co-mua-duoc-nha-o-xa-hoi-khong
 title: "Nợ xấu có mua được nhà ở xã hội không?"
-excerpt: Mua NƠXH bằng vốn tự có vẫn được nếu đủ đối tượng; cần vay ngân hàng thì nợ xấu từ nhóm 2 trở lên thường bị từ chối. Tách rõ quyền mua và quyền vay trước khi chờ xóa nợ hay bỏ suất.
-painPoint: Đang dính nợ xấu / nợ nhóm 2 trở lên — còn mua được nhà ở xã hội không, và còn vay được không?
+normalizedKey: sheet:no-xau-co-mua-duoc-noxh:H1
 ctaToolId: noxh-loan-quick
+tagSlug: tham-dinh-vay-noxh
+painPoint: Đang dính nợ xấu / nợ nhóm 2 trở lên — còn mua được nhà ở xã hội không, và còn vay được không?
+excerpt: Mua NƠXH bằng vốn tự có vẫn được nếu đủ đối tượng; cần vay ngân hàng thì nợ xấu từ nhóm 2 trở lên thường bị từ chối. Tách rõ quyền mua và quyền vay trước khi chờ xóa nợ hay bỏ suất.
 ctaLabel: Liên hệ tư vấn House X
 ctaHref: /lien-he?goi=tu-van-nha-o-xa-hoi#tu-van
 content_type: GENERAL_POLICY
@@ -27,7 +29,7 @@ source_refs:
 **Trả lời ngắn gọn:**
 
 - **Nếu bạn mua bằng tiền mặt (vốn tự có): vẫn mua được bình thường.** Nợ xấu không làm mất quyền mua nhà ở xã hội khi đủ đối tượng theo hồ sơ.
-- **Nếu bạn cần vay vốn ngân hàng: không vay được** khi đang vướng **[nợ xấu CIC](/tin-tuc/cach-tra-cic-an-toan-truoc-khi-vay)** từ nhóm 2 trở lên — ngân hàng từ chối ngay từ vòng thẩm định.
+- **Nếu bạn cần vay vốn ngân hàng: không vay được** khi đang vướng **[nợ xấu CIC](/wiki-nha-o-xa-hoi/cach-tra-cic-an-toan-truoc-khi-vay)** từ nhóm 2 trở lên — ngân hàng từ chối ngay từ vòng thẩm định.
 
 ## 1. Quyền mua nhà khác với quyền vay vốn ngân hàng
 
@@ -50,15 +52,18 @@ Theo phân loại nợ của ngành ngân hàng:
 
 Nếu cần tư vấn thêm về nhánh mua bằng vốn tự có hay lộ trình xử lý tín dụng trước khi vay: [liên hệ House X](/lien-he?goi=tu-van-nha-o-xa-hoi#tu-van).
 
-## FAQ
+## Câu hỏi thường gặp
 
-**Tôi có nợ xấu nhưng không biết nhóm mấy — làm sao kiểm tra?**  
-Tra thông tin của chính bạn trên kênh CIC chính thống (website / ứng dụng CIC Credit Connect). Xem hướng dẫn an toàn tại [cách tra CIC trước khi vay](/tin-tuc/cach-tra-cic-an-toan-truoc-khi-vay).
+### Tôi có nợ xấu nhưng không biết nhóm mấy — làm sao kiểm tra?
 
-**Chủ đầu tư có từ chối hồ sơ mua NƠXH vì tôi có nợ nhóm 2 không?**  
+Tra thông tin của chính bạn trên kênh CIC chính thống (website / ứng dụng CIC Credit Connect). Xem hướng dẫn an toàn tại [Cách tra CIC trước khi vay](/wiki-nha-o-xa-hoi/cach-tra-cic-an-toan-truoc-khi-vay).
+
+### Chủ đầu tư có từ chối hồ sơ mua NƠXH vì tôi có nợ nhóm 2 không?
+
 Không vì lý do CIC. Họ xét đối tượng và điều kiện mua theo Luật Nhà ở / nghị định / quyết định địa phương. Khó khăn nằm ở **vay**, không phải ở quyền được xét mua.
 
-**Đã tất toán nợ nhóm 2 rồi — bao lâu thì vay NƠXH được?**  
+### Đã tất toán nợ nhóm 2 rồi — bao lâu thì vay NƠXH được?
+
 Không có một mốc “đủ X tháng là chắc duyệt” cho mọi ngân hàng. Cần xem CIC đã cập nhật thế nào và chính sách từng ngân hàng / gói vay tại thời điểm nộp — nên tra CIC trước rồi mới đặt cọc gắn điều kiện vay.
 
 ## Kiểm tra nhanh
