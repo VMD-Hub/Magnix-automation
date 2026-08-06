@@ -69,11 +69,12 @@ Thứ tự đưa queue: A0 → B2 → C1 → D3 → E4 → F6 → G5.
 
 | Field | Value |
 | --- | --- |
-| title | Tái định cư chung cư: nên nhận nhà tại chỗ hay nhận tiền bồi thường? |
+| title | Cải tạo, tái định cư chung cư cũ: Cư dân sẽ được sắp xếp và đền bù như thế nào theo pháp luật? |
 | slug | `tai-dinh-cu-chung-cu-nhan-nha-hay-nhan-tien` |
-| painPoint | Khi chung cư bị phá dỡ, nên chọn nhận nhà tái định cư hay nhận tiền bồi thường? |
+| painPoint | Khi chung cư cũ phải phá dỡ hoặc cải tạo, quyền lợi nằm ở phương án bồi thường–tái định cư bằng văn bản |
 | ctaToolId | `noxh-check` |
 | body file | `docs/content/drafts/04-tai-dinh-cu-nhan-nha-hay-nhan-tien.md` |
+| upsert | `npm run db:upsert:cctm-tai-dinh-cu` |
 
 ## Item F — Quản lý vận hành (P2)
 

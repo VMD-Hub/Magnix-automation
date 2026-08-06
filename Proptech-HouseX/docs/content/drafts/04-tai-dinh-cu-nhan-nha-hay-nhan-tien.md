@@ -1,122 +1,97 @@
 ---
+title: "Cải tạo, tái định cư chung cư cũ: Cư dân sẽ được sắp xếp và đền bù như thế nào theo pháp luật?"
 slug: tai-dinh-cu-chung-cu-nhan-nha-hay-nhan-tien
-title: "Tái định cư chung cư: nên nhận nhà tại chỗ hay nhận tiền bồi thường?"
-excerpt: Phân biệt tái định cư và bồi thường; ưu nhược điểm nhà tại chỗ vs tiền; checklist giấy tờ — không nêu mức bồi thường theo m² cố định. Bám Luật Nhà ở 2023 và hướng dự thảo sửa đổi quanh 14/07/2026.
-painPoint: Khi chung cư bị phá dỡ, nên chọn nhận nhà tái định cư hay nhận tiền bồi thường?
+normalizedKey: editorial:cctm-tai-dinh-cu:2026
 ctaToolId: noxh-check
-ctaLabel: Kiểm tra miễn phí bạn có đủ điều kiện NƠXH không
-ctaHref: /cong-cu/dieu-kien-noxh
-content_type: GENERAL_POLICY
-requires_legal_qa: true
-segment: general_inbound
-channel: blog_seo
-tags:
-  - phap-ly
-  - chung-cu
-status: DRAFT
-queue_priority: P2
-pillar_slug: luat-nha-o-2023-va-du-thao-sua-doi-2026-thay-doi-gi
-source_refs:
-  - "Luật Nhà ở số 27/2023/QH15 — https://vanban.chinhphu.vn/?docid=209627&pageid=27160"
-  - "Báo Điện tử Chính phủ, 14/07/2026 — https://baochinhphu.vn/bo-xay-dung-bo-de-xuat-so-huu-chung-cu-co-thoi-han-khoi-du-thao-luat-nha-o-sua-doi-102260714155242173.htm"
+tagSlug: chinh-sach-ho-so-noxh
+painPoint: "Khi chung cư cũ phải phá dỡ hoặc cải tạo, quyền lợi không chỉ là nhận nhà hay nhận tiền — mà là phương án bồi thường–tái định cư bằng văn bản áp dụng đúng căn hộ của bạn."
 ---
 
-Bài thuộc cụm [Luật Nhà ở 2023 và dự thảo sửa đổi 2026 thay đổi những gì?](/tin-tuc/luat-nha-o-2023-va-du-thao-sua-doi-2026-thay-doi-gi). Nên đọc trước [Chung cư bị phá dỡ bắt buộc trong những trường hợp nào?](/tin-tuc/pha-do-chung-cu-bat-buoc-can-cu-va-quy-trinh).
+> Khi chung cư cũ thuộc diện phá dỡ, cải tạo hoặc xây dựng lại, câu hỏi lớn nhất không chỉ là “nhận nhà hay nhận tiền”, mà là: **quyền lợi pháp lý nằm ở đâu? Nhà nước và chủ đầu tư sắp xếp chỗ ở ra sao? Có bị ép giá hay mất trắng diện tích hợp pháp không?** Bài viết bóc tách phương án bố trí, khung pháp lý và danh mục chứng từ cốt lõi để bạn chủ động bảo vệ quyền lợi.
 
-Khi tòa thuộc diện phá dỡ hoặc cải tạo xây dựng lại, câu hỏi thực tế của cư dân thường là: nhận nhà hay nhận tiền? Câu trả lời phụ thuộc phương án được cấp có thẩm quyền phê duyệt, quy hoạch khu đất, và khả năng tài chính của từng hộ — không có công thức “luôn chọn A”.
+Bài thuộc cụm Luật Nhà ở / chung cư. Nên đọc kèm [Chung cư bị phá dỡ bắt buộc: căn cứ và quy trình](/wiki-nha-o-xa-hoi/pha-do-chung-cu-bat-buoc-can-cu-va-quy-trinh).
 
-Bài này trình bày khung lựa chọn và checklist giấy tờ. Không nêu mức bồi thường theo m² cố định cho mọi quận / mọi dự án — con số đó chỉ có ý nghĩa trong phương án cụ thể đã duyệt.
+> **Lưu ý:** Không nêu mức bồi thường theo m² cố định cho mọi quận / mọi dự án. Con số chỉ có ý nghĩa trong **phương án cụ thể đã được cơ quan có thẩm quyền phê duyệt**.
 
-## Tái định cư khác bồi thường ở điểm nào?
+## 1. Bản chất pháp lý: Tái định cư, bồi thường và hỗ trợ tạm cư khác nhau thế nào?
 
-| Khái niệm | Bản chất | Đầu ra thường gặp |
+Khi dự án cải tạo chung cư được kích hoạt, phương án bồi thường thường phân định các quyền lợi độc lập:
+
+| Khái niệm pháp lý | Bản chất thực tế | Đầu ra quyền lợi thực tế |
 | --- | --- | --- |
-| Tái định cư | Bố trí chỗ ở thay thế (tại chỗ hoặc nơi khác) cho chủ sở hữu / người sử dụng thuộc diện di dời | Căn hộ mới, hoặc nhà ở tại địa điểm khác theo phương án |
-| Bồi thường | Chi trả bằng tiền (và/hoặc hỗ trợ khác) theo căn cứ pháp luật và phương án được duyệt | Khoản tiền theo bảng tính trong phương án |
-| Hỗ trợ / chỗ ở tạm thời | Chi phí hoặc chỗ ở trong thời gian chờ | Tiền tạm cư, nhà tạm, hỗ trợ di chuyển… |
+| **Tái định cư (bố trí chỗ ở thay thế)** | Sắp xếp chỗ ở mới (tại chỗ hoặc nơi khác) cho chủ sở hữu căn hộ thuộc diện di dời phục vụ phá dỡ. | Căn hộ mới xây lại hoặc nhà ở bố trí theo phương án tái định cư được duyệt. |
+| **Bồi thường bằng tiền** | Chi trả giá trị tài sản nhà ở và quyền sử dụng đất tương ứng theo đơn giá / quy định tại thời điểm phê duyệt. | Khoản tiền bồi thường hạch toán theo phương án đền bù từng căn. |
+| **Hỗ trợ tạm cư / chỗ ở tạm thời** | Chi phí hoặc quỹ nhà để ổn định sinh hoạt trong thời gian chờ công trình mới. | Tiền hỗ trợ thuê nhà, bố trí nhà tạm cư, hoặc hỗ trợ di chuyển đồ đạc. |
 
-Tái định cư tại chỗ: bố trí lại trên cùng khu đất sau khi xây dựng lại (nếu quy hoạch cho phép). Tái định cư nơi khác: bố trí tại địa điểm khác khi không còn quy hoạch xây chung cư tại chỗ, hoặc theo phương án được duyệt.
+- **Tái định cư tại chỗ:** Bố trí căn hộ mới trên chính khu đất cũ sau khi xây lại (khi quy hoạch vẫn cho phép xây chung cư).
+- **Tái định cư nơi khác:** Bố trí căn hộ ở địa điểm khác khi quy hoạch khu đất cũ không còn cho phép xây chung cư, hoặc theo phương án được phê duyệt.
 
-## Cư dân có quyền chọn giữa nhà tái định cư và tiền bồi thường không?
+## 2. Cư dân có quyền tự do lựa chọn giữa nhà tái định cư và tiền bồi thường không?
 
-Không phải mọi dự án đều cho “chọn tự do như menu”. Quyền chọn phụ thuộc:
+Không phải dự án nào cũng “chọn theo ý thích”. Quyền lựa chọn phụ thuộc các yếu tố pháp lý cứng:
 
-1. Mục tiêu phương án dự án đã phê duyệt (tái định cư tại chỗ, hỗn hợp nhà + tiền, hoặc chủ yếu bồi thường bằng tiền).
-2. Quy hoạch khu đất còn cho phép xây lại nhà chung cư hay không.
-3. Việc cư dân có thống nhất góp vốn xây lại hay không (theo hướng được nêu quanh dự thảo và cơ chế cải tạo).
+1. **Quy hoạch khu đất:** Còn cho phép xây lại chung cư tại chỗ thì thường ưu tiên tái định cư tại chỗ; quy hoạch đổi công năng thì thường nhận tiền hoặc tái định cư nơi khác.
+2. **Nội dung phương án phê duyệt:** Quyết định của cơ quan nhà nước xác định cơ cấu nhận nhà / nhận tiền.
+3. **Đồng thuận góp vốn cải tạo:** Nếu cư dân thống nhất góp kinh phí xây lại theo tỷ lệ diện tích, nhận căn mới sau khi hoàn thành nghĩa vụ tài chính; nếu không góp vốn hoặc không thuộc diện tham gia, phương án bồi thường theo quy định đất đai / nhà ở áp dụng.
 
-Theo hướng xử lý được Báo Điện tử Chính phủ nêu quanh dự thảo: nếu khu đất còn phù hợp quy hoạch xây lại, người dân được ưu tiên tái định cư tại chỗ; nếu thống nhất cải tạo / xây lại thì góp kinh phí theo tỷ lệ diện tích; nếu không góp vốn thì bàn giao quỹ đất và được bồi thường giá trị quyền sử dụng đất tương ứng phần diện tích sử dụng chung theo pháp luật đất đai; nếu không còn quy hoạch xây chung cư thì bồi thường hoặc tái định cư nơi khác.
+> **Việc cần làm ngay:** Không chỉ nghe truyền miệng hay họp không biên bản. Yêu cầu Ban quản trị, chủ đầu tư hoặc cơ quan chức năng cung cấp **phương án bồi thường, hỗ trợ, tái định cư bằng văn bản** có đóng dấu để đối chiếu quyền lợi đúng diện tích căn hộ của bạn.
 
-Việc cần làm: yêu cầu Ban quản trị / đơn vị triển khai cung cấp phương án bằng văn bản và giải thích từng lựa chọn áp dụng cho căn hộ của bạn — không chỉ nghe tóm tắt miệng.
+## 3. Nhận nhà tái định cư tại chỗ: Được gì và rủi ro gì cần lường trước?
 
-## Nhận nhà tại chỗ có ưu và nhược điểm gì?
-
-| Ưu | Nhược / rủi ro cần hỏi rõ |
+| Ưu điểm lớn | Rủi ro và điểm mù cần làm rõ bằng văn bản |
 | --- | --- |
-| Giữ vị trí sống quen thuộc, tiện ích khu vực | Thời gian chờ xây lại có thể kéo dài |
-| Có thể tăng chất lượng nhà mới so với tòa cũ | Diện tích, tầng, hướng căn mới có thể khác căn cũ |
-| Tránh phải tìm nhà nơi khác trong lúc thị trường biến động | Chi phí tạm cư, đi lại, học hành của con trong thời gian chờ |
-| Gắn với ưu tiên tái định cư tại chỗ khi còn quy hoạch | Nếu phải góp vốn: cần hiểu rõ tỷ lệ, lịch nộp, hậu quả nếu không góp đủ |
+| Giữ không gian sống quen thuộc, trường học, bệnh viện, mạng lưới mưu sinh. | **Thời gian chờ:** Tiến độ thực tế có thể chậm nhiều năm so với cam kết ban đầu. |
+| Nâng cấp chất lượng sống, hạ tầng tiện ích so với tòa cũ xuống cấp. | **Diện tích / vị trí:** Căn mới có thể lệch hướng, tầng, hoặc chênh diện tích — thỏa thuận rõ phần dôi dư tính tiền thế nào. |
+| Giảm áp lực tìm nhà thuê và biến động giá thuê thị trường. | **Góp vốn:** Nếu phải đóng góp kinh phí xây dựng theo tỷ lệ — nắm tiến độ nộp tiền và chế tài khi không thu xếp đủ dòng tiền. |
 
-Trước khi đồng ý phương án nhà tại chỗ, hỏi bằng văn bản: diện tích căn bố trí, vị trí tạm cư, ai trả chi phí tạm cư, lịch dự kiến bàn giao, và điều kiện ký nhận nhà mới.
+Trước khi đồng ý nhận nhà tại chỗ, yêu cầu trả lời **bằng văn bản**: diện tích thiết kế căn mới dự kiến; địa điểm / tiêu chuẩn nhà tạm cư; đơn vị chi trả chi phí tạm cư; mốc thời gian bàn giao cam kết trong phương án.
 
-## Tiền bồi thường được xác định dựa trên những căn cứ nào?
+## 4. Tiền bồi thường được xác định dựa trên những căn cứ pháp lý nào?
 
-Khung chung (chi tiết từng dự án nằm trong phương án được duyệt):
+Đừng lấy giá rao bán trên mạng hay giá thị trường tự do khu lân cận làm căn cứ đòi bồi thường mặc định. Khung giá trị nhà nước thường gồm:
 
-| Thành phần thường xuất hiện | Căn cứ khái quát |
-| --- | --- |
-| Giá trị quyền sử dụng đất tương ứng phần diện tích sử dụng chung | Pháp luật đất đai tại thời điểm bồi thường |
-| Giá trị nhà / công trình (nếu phương án tính) | Đơn giá, khấu hao, kết luận chuyên môn theo quy định áp dụng |
-| Hỗ trợ di chuyển, tạm cư, ổn định đời sống | Theo chính sách hỗ trợ trong phương án / văn bản địa phương |
+- **Giá trị quyền sử dụng đất:** Diện tích đất sử dụng chung quy đổi của căn hộ × giá đất cụ thể do UBND cấp tỉnh/thành quyết định tại thời điểm phê duyệt phương án.
+- **Giá trị phần tài sản (công trình nhà ở):** Cấp công trình, diện tích sử dụng thực tế, tỷ lệ chất lượng còn lại và đơn giá xây dựng mới do cơ quan nhà nước ban hành.
+- **Hỗ trợ ổn định đời sống / di chuyển:** Theo chính sách bồi thường, hỗ trợ, tái định cư của địa phương khi thu hồi đất để cải tạo, xây dựng lại chung cư.
 
-Không lấy “giá rao bán căn hộ cùng khu trên mạng” làm mức bồi thường mặc định. Không dùng một con số m² lan truyền trên nhóm chat làm căn cứ đàm phán nếu chưa khớp phương án chính thức.
+## 5. Chi phí tạm cư trong thời gian chờ nhà mới do ai chi trả?
 
-## Trong thời gian chờ tái định cư, chi phí tạm cư do ai chi trả?
+Khoản tạm cư hoặc bố trí chỗ ở trong thời gian phá dỡ–xây lại không mặc định là “tiền túi” cư dân tự gánh — trách nhiệm được ghi trong phương án phê duyệt dự án.
 
-Phụ thuộc phương án được duyệt và thỏa thuận / quyết định của cơ quan có thẩm quyền cho từng dự án. Không có một câu trả lời duy nhất cho mọi tòa.
+**Câu hỏi cần làm rõ bằng văn bản với chủ đầu tư / chính quyền:**
 
-Checklist câu hỏi cần có trả lời bằng văn bản:
+1. Bố trí quỹ nhà tạm cư tập trung hay hỗ trợ tự thuê ngoài?
+2. Mức hỗ trợ thuê nhà hàng tháng là bao nhiêu, tiêu chí tính thế nào?
+3. Chi trả theo tháng, quý hay gộp trước khi di dời?
+4. Đầu mối chi trả là chủ đầu tư hay ngân sách nhà nước?
+5. Điều kiện nhận tạm cư là gì (ví dụ bàn giao mặt bằng đúng hạn theo quyết định di dời)?
 
-1. Có bố trí chỗ ở tạm không, ở đâu, bao lâu?
-2. Nếu tự thuê nhà ngoài: mức hỗ trợ bao nhiêu, chi trả theo tháng hay một lần, điều kiện nhận?
-3. Ai là đầu mối chi trả (Nhà nước / chủ đầu tư cải tạo / quỹ dự án)?
-4. Hỗ trợ có gắn điều kiện di dời đúng hạn không?
+> **Thực chiến:** Giữ biên lai thuê nhà, hợp đồng thuê, hóa đơn điện nước và chi phí chuyển đồ trong suốt thời gian tạm cư để đối chiếu, thanh toán hoặc nhận hỗ trợ theo cam kết phương án.
 
-Giữ biên lai thuê nhà / chi phí chuyển đồ nếu phương án yêu cầu chứng minh để nhận hỗ trợ.
+## 6. Người mua nhà ở xã hội (NƠXH) trong chung cư cũ có quyền lợi gì khác biệt?
 
-## Cư dân nhà ở xã hội và chung cư thương mại được đối xử khác nhau thế nào?
+Nếu căn thuộc quỹ nhà ở xã hội trong tòa chuẩn bị cải tạo:
 
-| Tiêu chí | Chung cư thương mại | Nhà ở xã hội |
-| --- | --- | --- |
-| Tư cách nhận bồi thường / tái định cư | Chủ sở hữu theo giấy chứng nhận | Chủ sở hữu NƠXH — đối chiếu thêm điều kiện hưởng chính sách tại thời điểm xử lý |
-| Hạn chế chuyển nhượng trước sự kiện | Theo HĐ và luật chung | Có thể còn trong thời hạn hạn chế chuyển nhượng NƠXH |
-| Sau khi nhận nhà mới / tiền | Giao dịch theo pháp luật chung | Nhà tái định cư / suất mới có thể vẫn gắn điều kiện NƠXH nếu thuộc quỹ nhà ở xã hội |
-| Việc nên làm | Checklist phương án + giấy tờ sở hữu | Checklist phương án + giấy tờ sở hữu + tự kiểm tra còn đủ điều kiện NƠXH nếu liên quan suất mới |
+- **Tư cách pháp lý:** Vẫn là chủ sở hữu theo giấy chứng nhận. Quyền lợi tái định cư / tiền bồi thường cần đối chiếu thêm quy định quản lý NƠXH.
+- **Hạn chế chuyển nhượng:** Nếu đang trong thời hạn hạn chế theo luật NƠXH, quyền lợi tái định cư / suất nhà mới vẫn được bảo đảm theo phương án, nhưng căn mới có thể tiếp tục mang trạng thái pháp lý NƠXH đến khi đủ điều kiện luật định.
+- **Việc nên làm:** Kiểm tra hợp đồng mua bán NƠXH ban đầu, đối chiếu phương án bồi thường dự án, và tự rà điều kiện đối tượng tại [Công cụ điều kiện NƠXH](/cong-cu/dieu-kien-noxh).
 
-Nếu bạn đang cân nhắc mua NƠXH vì lo bị “mất suất” khi tòa thương mại cũ cải tạo: vẫn phải đọc phương án từng dự án; đồng thời xác nhận điều kiện đối tượng NƠXH của bản thân.
+## 7. Cẩm nang bảo vệ quyền lợi: Cần giữ những giấy tờ nào?
 
-## Cần giữ những giấy tờ nào để chứng minh quyền lợi?
+- **Giấy chứng nhận (sổ hồng/sổ đỏ):** Chứng cứ tư cách chủ sở hữu.
+- **Hợp đồng mua bán căn hộ gốc và chứng từ thanh toán:** Nguồn gốc tạo lập tài sản.
+- **Giấy tờ nhân thân, xác nhận cư trú:** Căn cứ nhân khẩu khi tính hỗ trợ tạm cư / ổn định đời sống (nếu phương án yêu cầu).
+- **Quyết định hành chính, thông báo di dời, phương án bồi thường–tái định cư:** Mốc thời gian, lộ trình, định mức quyền lợi.
+- **Biên bản bàn giao nhà tạm cư, hóa đơn / hợp đồng thuê ngoài:** Chứng từ nhận hỗ trợ tạm cư.
+- **Biên bản họp Hội nghị nhà chung cư:** Ghi nhận biểu quyết về góp vốn hoặc lựa chọn nhà đầu tư cải tạo.
 
-| Giấy tờ | Mục đích |
-| --- | --- |
-| Giấy chứng nhận quyền sở hữu / sử dụng | Tư cách chủ sở hữu |
-| HĐMB, biên lai thanh toán | Nguồn gốc giao dịch |
-| Sổ hộ khẩu / giấy tờ cư trú, nhân thân hộ | Nhân khẩu thực tế khi xét tạm cư / hỗ trợ (nếu phương án yêu cầu) |
-| Thông báo di dời, quyết định / phương án bồi thường — tái định cư | Timeline và căn cứ nhận quyền lợi |
-| Biên bản giao nhận nhà tạm, biên lai thuê ngoài | Chứng minh chi phí tạm cư |
-| Biên bản hội nghị nhà chung cư liên quan biểu quyết góp vốn / phương án | Chứng minh ý kiến cộng đồng (khi tranh chấp nội bộ) |
-
-Không bỏ lỡ hạn đăng ký nhận nhà / nhận tiền ghi trong thông báo — nhiều quyền lợi gắn đúng tiến độ hành chính.
+> **Disclaimer:** Nội dung mang tính định hướng pháp lý tham khảo theo quy định hiện hành về nhà ở và đất đai. Quyết định bồi thường, tái định cư chính thức cho từng trường hợp căn cứ trực tiếp vào quyết định phê duyệt của cơ quan nhà nước có thẩm quyền và hồ sơ pháp lý thực tế của căn hộ.
 
 ## Kiểm tra nhanh
 
-Bạn đang phân vân mình có đủ điều kiện NƠXH không?
-→ Kiểm tra nhanh (miễn phí): [/cong-cu/dieu-kien-noxh](/cong-cu/dieu-kien-noxh)
+[Kiểm tra miễn phí bạn có đủ điều kiện NƠXH không](/cong-cu/dieu-kien-noxh)
 
-## Nguồn tham khảo
+## Liên kết hữu ích
 
-- [Luật Nhà ở số 27/2023/QH15](https://vanban.chinhphu.vn/?docid=209627&pageid=27160)
-- [Báo Điện tử Chính phủ, 14/07/2026 — Bộ Xây dựng bỏ đề xuất sở hữu chung cư có thời hạn khỏi dự thảo Luật Nhà ở sửa đổi](https://baochinhphu.vn/bo-xay-dung-bo-de-xuat-so-huu-chung-cu-co-thoi-han-khoi-du-thao-luat-nha-o-sua-doi-102260714155242173.htm)
-
-Thông tin mang tính tham khảo theo quy định hiện hành và bản dự thảo tại thời điểm đăng; quyết định cụ thể căn cứ văn bản có hiệu lực và hồ sơ thực tế.
+- [Công cụ điều kiện NƠXH](/cong-cu/dieu-kien-noxh)
+- [Chung cư bị phá dỡ bắt buộc: căn cứ và quy trình](/wiki-nha-o-xa-hoi/pha-do-chung-cu-bat-buoc-can-cu-va-quy-trinh)

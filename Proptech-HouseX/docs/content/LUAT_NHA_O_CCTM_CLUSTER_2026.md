@@ -56,7 +56,7 @@ Disclaimer cuối bài: *"Thông tin mang tính tham khảo theo quy định hi�
 | 2 | Cluster | `kiem-dinh-chung-cu-bat-buoc-tuoi-toa-nha-bao-nhieu` | P0 | `noxh-check` | Checklist hồ sơ kiểm định trước khi mua | Draft ready — `docs/content/drafts/02-kiem-dinh-*.md` |
 | 1 | Cluster | `quyen-so-huu-can-ho-chung-cu-co-thoi-han-hay-khong` | P1 | `noxh-check` | Checklist đọc sổ hồng + HĐMB | Draft ready — `docs/content/drafts/01-quyen-so-huu-*.md` |
 | 3 | Cluster | `pha-do-chung-cu-bat-buoc-can-cu-va-quy-trinh` | P1 | `noxh-check` | Hướng dẫn tự tra quy hoạch + hồ sơ chứng minh sở hữu | Draft ready — `docs/content/drafts/03-pha-do-*.md` |
-| 4 | Cluster | `tai-dinh-cu-chung-cu-nhan-nha-hay-nhan-tien` | P2 | `noxh-check` | Bảng cân nhắc nhà tại chỗ vs tiền bồi thường | Draft ready — `docs/content/drafts/04-tai-dinh-cu-*.md` |
+| 4 | Cluster | `tai-dinh-cu-chung-cu-nhan-nha-hay-nhan-tien` | P2 | `noxh-check` | Phương án bố trí, bồi thường, tạm cư, checklist giấy tờ | Owner rewrite — `docs/content/drafts/04-tai-dinh-cu-*.md` · `npm run db:upsert:cctm-tai-dinh-cu` |
 | 6 | Cluster | `quan-ly-van-hanh-chung-cu-trach-nhiem-cua-ai` | P2 | `noxh-check` | Checklist hội nghị nhà chung cư | Draft ready — `docs/content/drafts/06-quan-ly-*.md` |
 | 5 | Cluster | `nha-o-cho-thue-du-thao-2026-dieu-kien-va-uu-dai` | P3 | `noxh-loan-quick` | Bảng điều kiện pháp lý nhà ở cho thuê | Draft ready — `docs/content/drafts/05-nha-o-cho-thue-*.md` |
 
@@ -116,15 +116,19 @@ Góc phá hiểu nhầm: "vừa kiểm định xong = an toàn 10 năm" là sai.
 
 ### Bài 4 — Tái định cư (P2)
 
-**H1:** Tái định cư chung cư: nên nhận nhà tại chỗ hay nhận tiền bồi thường?
+**H1:** Cải tạo, tái định cư chung cư cũ: Cư dân sẽ được sắp xếp và đền bù như thế nào theo pháp luật?
 
-- Tái định cư khác bồi thường ở điểm nào?
-- Cư dân có quyền chọn giữa nhà tái định cư và tiền bồi thường không?
-- Nhận nhà tại chỗ có ưu và nhược điểm gì?
-- Tiền bồi thường được xác định dựa trên những căn cứ nào?
-- Trong thời gian chờ tái định cư, chi phí tạm cư do ai chi trả?
-- Cư dân nhà ở xã hội và chung cư thương mại được đối xử khác nhau thế nào?
-- Cần giữ những giấy tờ nào để chứng minh quyền lợi?
+**Slug giữ nguyên:** `tai-dinh-cu-chung-cu-nhan-nha-hay-nhan-tien` · **Upsert:** `npm run db:upsert:cctm-tai-dinh-cu`
+
+- Tái định cư / bồi thường / tạm cư khác nhau thế nào?
+- Cư dân có quyền chọn nhà hay tiền không?
+- Nhận nhà tại chỗ: được gì và rủi ro gì?
+- Tiền bồi thường dựa trên căn cứ nào?
+- Chi phí tạm cư do ai chi trả?
+- NƠXH trong chung cư cũ có điểm gì khác?
+- Checklist giấy tờ bảo vệ quyền lợi
+
+**Lằn ranh:** không nêu mức bồi thường m² cố định; bám phương án phê duyệt.
 
 ### Bài 6 — Quản lý vận hành (P2)
 
