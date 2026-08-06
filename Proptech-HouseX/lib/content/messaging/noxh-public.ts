@@ -156,7 +156,7 @@ export const NOXH_TOPIC_PILLAR_LINKS = [
   },
   {
     href: articlePath("lam-sao-khong-bi-roi-khi-tim-mua-noxh"),
-    label: "Không bị rối khi tìm mua NOXH — tổng kho HouseX",
+    label: "Không bị bối rối khi mua NOXH — vùng xám pháp lý & MXH",
   },
   {
     href: "/cong-cu/tham-dinh-vay-noxh",

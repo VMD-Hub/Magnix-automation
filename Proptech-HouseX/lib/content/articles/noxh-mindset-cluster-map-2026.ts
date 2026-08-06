@@ -172,13 +172,15 @@ export const NOXH_MINDSET_CLUSTER_SATELLITES = [
   {
     order: 14,
     slug: "lam-sao-khong-bi-roi-khi-tim-mua-noxh",
-    title: "Làm sao để không bị rối khi tìm mua nhà ở xã hội?",
+    title:
+      "Làm sao để không bị bối rối khi tìm mua nhà ở xã hội? Giải mã vùng xám pháp lý và chiêu trò mạng xã hội",
     layer: "action" as const,
     psychStep: "safe-decision" as const,
     keywords: [
-      "tìm mua nhà ở xã hội",
-      "tổng kho NOXH",
-      "HouseX nhà ở xã hội",
+      "không bị bối rối mua NOXH",
+      "vùng xám pháp lý nhà ở xã hội",
+      "chiêu trò mạng xã hội NOXH",
+      "tổng kho NOXH HouseX",
     ],
     status: "published" as const,
   },
@@ -534,7 +536,7 @@ const RELATED_ARTICLE_BLURBS: Record<string, string> = {
   "checklist-chot-mua-noxh-tai-chinh-ha-tang-cic":
     "Checklist 4 điểm trước khi chốt — tài chính, hạ tầng, CIC, dự phòng",
   "lam-sao-khong-bi-roi-khi-tim-mua-noxh":
-    "Không bị rối khi tìm mua — bắt đầu tra cứu trên HouseX",
+    "Không bị bối rối khi tìm mua — vùng xám pháp lý và điểm tựa HouseX",
 };
 
 /** Blurb theo cặp bài (nguồn → đích) — mô tả vì sao đọc tiếp từ ngữ cảnh hiện tại. */

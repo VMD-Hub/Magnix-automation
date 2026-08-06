@@ -83,6 +83,8 @@
     "db:upsert:btr-capital-flow:dry": "node --import tsx scripts/upsert-first-buyer-draft.ts --draft docs/content/drafts/dong-von-dau-tu-can-ho-cho-thue-dai-han-2026.md --dry-run",
     "db:upsert:ltk-vebua": "node --env-file=.env --import tsx scripts/upsert-first-buyer-draft.ts --draft docs/content/drafts/mua-noxh-ltk-canh-giac-ve-bua-thu-tuc-2026.md",
     "db:upsert:ltk-vebua:dry": "node --import tsx scripts/upsert-first-buyer-draft.ts --draft docs/content/drafts/mua-noxh-ltk-canh-giac-ve-bua-thu-tuc-2026.md --dry-run",
+    "db:upsert:khong-bi-boi-roi": "node --env-file=.env --import tsx scripts/upsert-first-buyer-draft.ts --draft docs/content/drafts/lam-sao-khong-bi-boi-roi-tim-mua-noxh-2026.md",
+    "db:upsert:khong-bi-boi-roi:dry": "node --import tsx scripts/upsert-first-buyer-draft.ts --draft docs/content/drafts/lam-sao-khong-bi-boi-roi-tim-mua-noxh-2026.md --dry-run",
     "db:sync:article-tags": "node --env-file=.env --import tsx scripts/sync-article-tag-names.ts",
     "db:sync:article-tags:dry": "node --import tsx scripts/sync-article-tag-names.ts --dry-run",
     "db:publish:first-buyer-debt-hub": "node --env-file=.env --import tsx scripts/publish-first-buyer-debt-hub-queue.ts",
