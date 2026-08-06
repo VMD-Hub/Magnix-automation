@@ -144,7 +144,7 @@ export const NOXH_TOPIC_PILLAR_LINKS = [
   },
   {
     href: articlePath("30-phut-di-chuyen-co-phai-mat-mat-noxh"),
-    label: "30 phút di chuyển — có phải mất mát?",
+    label: "30 phút di chuyển — đánh đổi thời gian hay giải tỏa áp lực an cư?",
   },
   {
     href: articlePath("dta-happy-home-nhon-trach-noi-o-de-so-huu"),

@@ -113,7 +113,7 @@ Tạm dừng tiến trình giao dịch, tái cấu trúc tài chính cá nhân h
 
 * [Chọn NOXH đúng cách theo năng lực tài chính thực tế](/wiki-nha-o-xa-hoi/chon-noxh-dung-cach-theo-nang-luc) — Khung tư duy nền tảng trước khi áp dụng bảng kiểm định danh chi tiết
 * [DTA Happy Home Nhơn Trạch: Lựa chọn an cư dễ sở hữu, dễ sống và có dư địa phát triển](/wiki-nha-o-xa-hoi/dta-happy-home-nhon-trach-noi-o-de-so-huu) — Tham khảo ví dụ dự án vùng ven vừa sức sau khi rà soát bảng kiểm
-* [30 phút di chuyển hằng ngày có thật sự là sự đánh đổi lớn trong bất động sản?](/wiki-nha-o-xa-hoi/30-phut-di-chuyen-co-phai-mat-mat-noxh) — Phân tích chi tiết tiêu chí hạ tầng và thời gian di chuyển thực tế
+* [30 phút di chuyển mỗi ngày: đánh đổi thời gian hay giải tỏa áp lực an cư?](/wiki-nha-o-xa-hoi/30-phut-di-chuyen-co-phai-mat-mat-noxh) — Phân tích tiêu chí hạ tầng và thời gian di chuyển thực tế
 * [Làm sao để không bị rối khi tìm mua nhà ở xã hội?](/wiki-nha-o-xa-hoi/lam-sao-khong-bi-roi-khi-tim-mua-noxh) — Hướng dẫn tra cứu và đối chiếu danh mục dự án có hệ thống
 
 ## Gợi ý bước tiếp theo

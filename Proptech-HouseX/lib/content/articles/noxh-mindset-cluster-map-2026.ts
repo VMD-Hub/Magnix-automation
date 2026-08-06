@@ -205,13 +205,15 @@ export const NOXH_MINDSET_CLUSTER_SATELLITES = [
   {
     order: 16,
     slug: "30-phut-di-chuyen-co-phai-mat-mat-noxh",
-    title: "30 phút di chuyển có thật sự là mất mát?",
+    title:
+      "30 phút di chuyển mỗi ngày: Sự đánh đổi thời gian hay bài toán giải tỏa áp lực an cư của người trẻ?",
     layer: "standards" as const,
     psychStep: "new-standard" as const,
     keywords: [
       "chi phí thời gian đi làm",
       "NOXH xa trung tâm",
       "30 phút di chuyển",
+      "áp lực an cư người trẻ",
     ],
     status: "published" as const,
   },
