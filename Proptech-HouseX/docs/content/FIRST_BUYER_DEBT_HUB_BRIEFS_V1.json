@@ -501,7 +501,7 @@
       "id": "B2",
       "normalized_key": "editorial:consumer-debt-order:2026",
       "slug": "sap-xep-no-tieu-dung-truoc-khi-vay-mua-nha-mat-bao-lau",
-      "h1": "Sắp xếp nợ tiêu dùng trước khi vay mua nhà mất bao lâu?",
+      "h1": "Sắp xếp nợ tiêu dùng trước khi vay mua nhà mất bao lâu để hồ sơ đủ cửa?",
       "priority": "P1",
       "content_type": "LOAN_FINANCE",
       "segment": "noxh_income",
@@ -511,16 +511,17 @@
       "cta_keyword": "DONGTIEN",
       "interest_key": "sap_xep_no_tieu_dung",
       "tags": ["noxh", "tham-dinh-vay"],
+      "body_draft": "docs/content/drafts/sap-xep-no-tieu-dung.md",
       "internal_links": [
         "/cong-cu/tinh-han-muc-vay",
         "/tinh-tra-gop",
-        "/tin-tuc/dao-no-va-co-cau-no-truoc-khi-vay-mua-nha-chien-luoc-nao-phu-hop",
+        "/wiki-nha-o-xa-hoi/dao-no-va-co-cau-no-truoc-khi-vay-mua-nha-chien-luoc-nao-phu-hop",
         "/wiki-nha-o-xa-hoi/cai-bay-dti"
       ],
       "editorial_brief_v1": {
-        "brief_version": 1,
+        "brief_version": 2,
         "editorial_title": "Sắp xếp nợ tiêu dùng trước vay mua nhà",
-        "one_line_insight": "Hợp nhất hoặc tất toán đúng thứ tự trong vài tháng thường giúp DTI thở hơn là vay thêm để đảo lung tung.",
+        "one_line_insight": "Hợp nhất hoặc tất toán đúng thứ tự trong vài tháng thường giúp DTI dễ thở hơn là vay thêm để đảo lung tung.",
         "qa_backbone": [
           {
             "question": "Nên ưu tiên tất toán khoản nào trước khi nộp hồ sơ vay nhà?",

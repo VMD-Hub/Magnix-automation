@@ -238,20 +238,25 @@ Chức năng hub: mỗi H2 link xuống A1–A3 + cluster thẩm định vay + `
 
 ### B2 — Sắp xếp nợ tiêu dùng
 
-**H1:** Sắp xếp nợ tiêu dùng trước khi vay mua nhà mất bao lâu?
+**H1:** Sắp xếp nợ tiêu dùng trước khi vay mua nhà mất bao lâu để hồ sơ đủ cửa?
 
-**one_line_insight:** Hợp nhất hoặc tất toán đúng thứ tự trong 3–6 tháng thường giúp DTI “thở” hơn là vay thêm để đảo lung tung.
+**Body đã chốt:** `docs/content/drafts/sap-xep-no-tieu-dung.md`  
+**Upsert (kể cả đã PUBLISHED):** `npm run db:upsert:first-buyer-b2`  
+**Slug giữ nguyên:** `sap-xep-no-tieu-dung-truoc-khi-vay-mua-nha-mat-bao-lau`
 
-**qa_backbone:**
+**one_line_insight:** Hợp nhất hoặc tất toán đúng thứ tự trong vài tháng thường giúp DTI dễ thở hơn là vay thêm để đảo lung tung.
 
-1. Nên ưu tiên tất toán khoản nào trước khi nộp hồ sơ vay nhà?
-2. Hợp nhất nợ (consolidation) khác đảo nợ sang ngân hàng khác thế nào?
+**Cấu trúc H2 (owner rewrite):**
+
+1. Nên ưu tiên tất toán khoản nợ nào trước khi nộp hồ sơ vay nhà?
+2. Hợp nhất nợ khác gì với đảo nợ sang tổ chức tín dụng khác?
 3. Sau khi tất toán, thông tin trên CIC cập nhật mất bao lâu?
-4. Làm sao ước tính DTI trước và sau khi giảm nợ tiêu dùng?
-5. Khi nào nên tạm dừng kế hoạch mua nhà 6–12 tháng để phục hồi hồ sơ?
+4. Làm sao tự ước tính DTI trước và sau khi giảm nợ tiêu dùng?
+5. Khi nào nên tạm dừng kế hoạch mua nhà 6 đến 12 tháng?
 
-**CTA:** `noxh-loan-quick` + soft `/cong-cu/tinh-han-muc-vay`  
-**source_refs:** `bank_dti_income_appraisal_001`, counseling `bank-credit-appraisal-counseling.md` (rút ý, không paste dài).
+**CTA:** `noxh-loan-quick` → `/cong-cu/kiem-tra-vay-noxh`  
+**Soft tools:** `/cong-cu/tinh-han-muc-vay` · `/tinh-tra-gop` · wiki đảo nợ · cai-bay-dti  
+**source_refs:** `bank_dti_income_appraisal_001`, `bank_cic_credit_history_001`.
 
 ---
 
