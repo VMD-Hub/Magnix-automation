@@ -87,6 +87,8 @@
     "db:upsert:ltk-hoso:dry": "node --import tsx scripts/upsert-first-buyer-draft.ts --draft docs/content/drafts/ho-so-mua-noxh-ltk-11-nhom-doi-tuong-2026.md --dry-run",
     "db:upsert:khong-bi-boi-roi": "node --env-file=.env --import tsx scripts/upsert-first-buyer-draft.ts --draft docs/content/drafts/lam-sao-khong-bi-boi-roi-tim-mua-noxh-2026.md",
     "db:upsert:khong-bi-boi-roi:dry": "node --import tsx scripts/upsert-first-buyer-draft.ts --draft docs/content/drafts/lam-sao-khong-bi-boi-roi-tim-mua-noxh-2026.md --dry-run",
+    "db:upsert:checklist-chot": "node --env-file=.env --import tsx scripts/upsert-first-buyer-draft.ts --draft docs/content/drafts/checklist-chot-mua-noxh-4-tru-cot-2026.md",
+    "db:upsert:checklist-chot:dry": "node --import tsx scripts/upsert-first-buyer-draft.ts --draft docs/content/drafts/checklist-chot-mua-noxh-4-tru-cot-2026.md --dry-run",
     "db:repair:queue-cms-links": "node --env-file=.env --import tsx scripts/repair-queue-cms-links.ts",
     "db:repair:queue-cms-links:dry": "node --import tsx scripts/repair-queue-cms-links.ts --dry-run",
     "db:sync:article-tags": "node --env-file=.env --import tsx scripts/sync-article-tag-names.ts",

@@ -73,12 +73,12 @@ HouseX là tổng kho nhà ở xã hội tập trung: tra cứu danh mục dự 
 
 ### Nên bắt đầu từ đâu khi mới bắt đầu tìm hiểu mua NOXH?
 
-Bắt đầu từ [kiểm tra điều kiện mua NOXH](/cong-cu/dieu-kien-noxh), đọc [checklist tài chính — hạ tầng — CIC](/wiki-nha-o-xa-hoi/checklist-chot-mua-noxh-tai-chinh-ha-tang-cic) và tham khảo danh mục dự án trên [HouseX](/du-an/nha-o-xa-hoi).
+Bắt đầu từ [kiểm tra điều kiện mua NOXH](/cong-cu/dieu-kien-noxh), đọc [bảng kiểm 4 trụ cột trước khi ký hợp đồng](/wiki-nha-o-xa-hoi/checklist-chot-mua-noxh-tai-chinh-ha-tang-cic) và tham khảo danh mục dự án trên [HouseX](/du-an/nha-o-xa-hoi).
 
 ## Đọc tiếp các bài viết liên quan
 
 - [Chọn NOXH đúng cách theo năng lực](/wiki-nha-o-xa-hoi/chon-noxh-dung-cach-theo-nang-luc) — Khung tư duy nền trước khi lọc dự án
-- [Checklist trước khi chốt mua: Tài chính, hạ tầng, CIC và quỹ dự phòng](/wiki-nha-o-xa-hoi/checklist-chot-mua-noxh-tai-chinh-ha-tang-cic) — 4 điểm cần kiểm tra kỹ trước khi quyết định
+- [Tiêu chuẩn pháp lý và tài chính trước khi giao kết: Bảng kiểm 4 trụ cột an toàn](/wiki-nha-o-xa-hoi/checklist-chot-mua-noxh-tai-chinh-ha-tang-cic) — 4 trụ cột cần kiểm tra kỹ trước khi quyết định
 - [3 tiêu chuẩn mới người mua nhà ở xã hội nên dùng để ra quyết định](/wiki-nha-o-xa-hoi/ba-tieu-chuan-moi-chon-noxh) — Bộ tiêu chuẩn giúp lọc dự án nhanh, tránh nhiễu loạn thông tin
 - [Khi nào nên chọn dự án hợp túi tiền thay vì dự án ai cũng săn?](/wiki-nha-o-xa-hoi/khi-nao-chon-du-an-hop-tui-tien) — Kinh nghiệm thực tế chọn nhà theo khả năng tài chính thật
 

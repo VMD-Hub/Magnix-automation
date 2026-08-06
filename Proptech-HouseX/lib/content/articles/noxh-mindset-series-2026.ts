@@ -1182,7 +1182,7 @@ Sau khi xuống tiền, bạn vẫn cần một khoản dự phòng cho những 
 | --- | --- |
 | Đi lại & thời gian | [Tính hạn mức vay](${NOXH_MINDSET_ACTION_LINKS.hanMucVay}) |
 | Sinh hoạt ban đầu | [Sai lầm tài chính](${NOXH_MINDSET_ACTION_LINKS.taiChinhCaNhan}) |
-| Dự phòng sau mua | [Checklist 4 điểm chốt](/tin-tuc/checklist-chot-mua-noxh-tai-chinh-ha-tang-cic) |
+| Dự phòng sau mua | [Bảng kiểm 4 trụ cột trước khi ký](/wiki-nha-o-xa-hoi/checklist-chot-mua-noxh-tai-chinh-ha-tang-cic) |
 
 ## Vì sao chi phí ẩn dễ làm người mua chủ quan?
 
@@ -1378,109 +1378,108 @@ Dự án đã có cư dân và không gian cộng đồng giúp bạn yên tâm 
 
 - [Kiểm tra điều kiện NOXH](${NOXH_MINDSET_ACTION_LINKS.dieuKienNoxh})
 - [Khả năng vay trong 60 giây](${NOXH_MINDSET_ACTION_LINKS.check60s})
-- [Checklist 4 điểm trước khi chốt mua](/tin-tuc/checklist-chot-mua-noxh-tai-chinh-ha-tang-cic)
+- [Bảng kiểm 4 trụ cột trước khi ký hợp đồng](/wiki-nha-o-xa-hoi/checklist-chot-mua-noxh-tai-chinh-ha-tang-cic)
 
 ${noxhMindsetClusterClosing("dta-happy-home-nhon-trach-noi-o-de-so-huu", published)}`;
 }
 
 function buildChecklistChotMuaArticleBody(published: Set<string>): string {
-  return `**Tóm tắt:** Trước khi chốt NOXH, kiểm tra **4 điểm cốt lõi**: tài chính, hạ tầng, CIC và quỹ dự phòng. Thiếu một trong bốn thì quyết định **vẫn chưa thật sự an toàn** — dù dự án hot hay giá hấp dẫn.
+  return `> Trước khi giao kết hợp đồng mua nhà ở xã hội, quyết định xuống tiền chỉ thật sự an toàn khi đáp ứng đồng thời tư cách chủ thể hợp lệ, năng lực tài chính chịu tải thực tế và không gian sống ổn định dài hạn. Bảng kiểm bốn trụ cột dưới đây giúp bạn rà soát các yếu tố dễ bị bỏ quên khi chuẩn bị hồ sơ — chậm một nhịp để thẩm định kỹ thường bảo vệ tài sản tốt hơn việc vội đặt cọc rồi rơi vào tranh chấp.
 
-Trước khi chốt mua nhà ở xã hội, bạn nên kiểm tra bốn điểm cốt lõi: **tài chính, hạ tầng, CIC và quỹ dự phòng**. Nếu thiếu một trong bốn, quyết định của bạn vẫn chưa thật sự an toàn, dù dự án có hot hay giá có hấp dẫn đến đâu.
+## Vì sao cần bảng kiểm định danh pháp lý và tài chính trước khi giao kết?
 
-## Vì sao cần checklist này?
+Người mua nhà ở xã hội thường dễ rơi vào tâm lý gấp gáp trước thông tin kích cầu như “sắp hết hạn nộp hồ sơ”, “giá ưu đãi đợt đầu” hay “suất ngoại giao giới hạn”. Dưới góc độ pháp lý giao dịch bất động sản, một quyết định xuống tiền chỉ hợp pháp và an toàn khi ba điều kiện trên cùng được thỏa mãn.
 
-Nhiều người mua nhà thường bị cuốn vào cảm giác “sắp hết suất”, “giá đang tốt” hoặc “căn này rất hot”. Nhưng một quyết định mua nhà chỉ đúng khi nó vừa phù hợp hồ sơ, vừa chịu được tài chính, vừa sống được lâu dài.
+Bảng kiểm đóng vai trò rào chắn kỹ thuật: giúp bạn chủ động rà soát trước khi ký. Với phân khúc nhà ở xã hội, chậm lại để thẩm định kỹ mang lại giá trị bảo vệ tài sản cao hơn nhiều so với đặt cọc vội rồi xử lý rủi ro sau.
 
-Checklist này giúp bạn dừng lại đúng lúc để kiểm tra những thứ dễ bị bỏ qua nhất. Với nhà ở xã hội, chậm một nhịp để kiểm tra kỹ thường tốt hơn chốt nhanh rồi mới xử lý rủi ro.
-
-| 4 điểm checklist | Công cụ / bài liên quan |
+| 4 trụ cột thẩm định bắt buộc | Công cụ và tài liệu hỗ trợ |
 | --- | --- |
-| Tài chính | [Kiểm tra 60 giây](${NOXH_MINDSET_ACTION_LINKS.check60s}) |
-| Hạ tầng & thời gian sống | [Nhà xa nhưng kết nối tốt](/tin-tuc/nha-xa-ket-noi-tot-dang-mua-hon) |
-| CIC | [Tra CIC an toàn](${NOXH_MINDSET_ACTION_LINKS.cic}) |
-| Quỹ dự phòng | [Sai lầm tài chính](${NOXH_MINDSET_ACTION_LINKS.taiChinhCaNhan}) |
+| 1. Năng lực tài chính định lượng | [Kiểm tra khả năng vay vốn trong 60 giây](${NOXH_MINDSET_ACTION_LINKS.check60s}) |
+| 2. Hạ tầng và điều kiện không gian sống | [Nhà ở xa nhưng hạ tầng kết nối tốt có đáng đầu tư không?](/wiki-nha-o-xa-hoi/nha-xa-ket-noi-tot-dang-mua-hon) |
+| 3. Lịch sử tín dụng và dư nợ | [Cách tra cứu lịch sử tín dụng an toàn trước khi vay](${NOXH_MINDSET_ACTION_LINKS.cic}) |
+| 4. Quỹ dự phòng dòng tiền khẩn cấp | [Sai lầm tài chính: Tưởng đủ tiền mua nhà nhưng thiếu hụt dòng tiền](${NOXH_MINDSET_ACTION_LINKS.taiChinhCaNhan}) |
 
-## 1) Tài chính có thật sự chịu được không?
+## 1) Năng lực tài chính có thật sự chịu đựng được nghĩa vụ trả nợ dài hạn?
 
-Đây là câu hỏi **đầu tiên và quan trọng nhất**. Bạn cần biết rõ mình có thể trả trước bao nhiêu, vay bao nhiêu, trả hàng tháng bao nhiêu và còn lại bao nhiêu để sống.
+Đây là điều kiện tiên quyết. Người mua cần xác định rõ cơ cấu nguồn vốn: vốn tự có, hạn mức tín dụng được cấp tối đa, nghĩa vụ trả góp gốc và lãi hàng tháng, cùng dư địa tài chính còn lại để duy trì sinh hoạt tối thiểu.
 
-Hãy tự hỏi:
+Các nội dung pháp lý và định lượng cần xem xét:
 
-- Thu nhập hiện tại có ổn định không?
-- Khoản trả góp có làm mình bị căng không?
-- Sau khi mua, mình còn đủ tiền cho chi tiêu thiết yếu không?
-- Nếu có biến động nhỏ trong công việc, mình có chống đỡ được không?
+- Thu nhập ròng thực tế từ tiền lương, tiền công có duy trì ổn định trong suốt thời gian vay dài hạn không?
+- Tỷ lệ trả góp hàng tháng chiếm bao nhiêu phần trăm thu nhập để không vượt ngưỡng an toàn tài chính cá nhân?
+- Sau khi hoàn thành nghĩa vụ thanh toán định kỳ cho tổ chức tín dụng, nguồn lực còn lại có đủ chi phí thiết yếu cho cả hộ không?
+- Phương án dự phòng khi gián đoạn công việc hoặc sụt giảm thu nhập đột xuất đã được chuẩn bị ra sao?
 
-Nếu tài chính chưa rõ, đừng chốt vội chỉ vì sợ bỏ lỡ.
+Nếu cấu trúc tài chính chưa minh định rõ, tuyệt đối không ký thỏa thuận đặt cọc hay cam kết tài chính nào.
 
-## 2) Hạ tầng có phù hợp với đời sống không?
+## 2) Hạ tầng giao thông và điều kiện không gian sống có đáp ứng tiêu chuẩn sinh hoạt?
 
-Một căn nhà không chỉ là bốn bức tường, mà là **toàn bộ nhịp sống** xung quanh nó. Bạn cần xem dự án có thuận tiện cho đi làm, đưa đón con, mua sắm, khám bệnh và sinh hoạt thường ngày hay không.
+Một bất động sản an cư hợp pháp không chỉ tuân thủ quy chuẩn xây dựng mà còn phải bảo đảm điều kiện sinh hoạt thực tế. Cần thẩm định vị trí dự án có thuận lợi cho đi làm hằng ngày, đưa đón con học, tiếp cận y tế và dịch vụ công ích hay không.
 
-Đừng chỉ nhìn khoảng cách trên bản đồ. Hãy tính thời gian di chuyển thực tế, tình trạng kẹt xe, kết nối giao thông và mức độ thuận tiện của khu vực. Một nơi ở tốt là nơi bạn có thể sống ổn mỗi ngày, chứ không phải chỉ đẹp trên giấy.
+Tránh chỉ tính khoảng cách hình học trên bản đồ quy hoạch. Hãy khảo sát thời gian di chuyển thực tế vào giờ cao điểm, năng lực thông hành của hạ tầng kết nối và mức độ hoàn thiện tiện ích công cộng xung quanh. Dự án đạt chuẩn phải phục vụ nhịp sống ổn định lâu dài của gia đình.
 
-## 3) CIC có vấn đề gì không?
+## 3) Lịch sử tín dụng và tình trạng dư nợ có tồn tại điểm nghẽn pháp lý?
 
-CIC là phần rất nhiều người chủ quan. Nhưng khi vay mua nhà, **lịch sử tín dụng** lại là một trong những yếu tố khiến hồ sơ bị xem xét rất kỹ.
+Lịch sử tín dụng trên hệ thống thông tin tín dụng quốc gia (CIC) là thông tin bắt buộc phải thẩm định độc lập trước khi nộp hồ sơ vay. Khi tiếp cận gói tín dụng ưu đãi nhà ở xã hội, mức độ minh bạch của lịch sử tín dụng là căn cứ quyết định để tổ chức tín dụng phê duyệt hạn mức giải ngân.
 
-Bạn nên kiểm tra trước:
+Các yếu tố cần rà soát trước khi giao dịch:
 
-- Có nợ quá hạn nào không.
-- Có khoản vay cũ nào chưa xử lý dứt điểm không.
-- Có vấn đề gì trong lịch sử tín dụng khiến ngân hàng phải thận trọng không.
+- Đã từng phát sinh nhóm nợ quá hạn hoặc nợ chú ý tại tổ chức tín dụng nào chưa?
+- Các khoản dư nợ từ thẻ tín dụng, thấu chi hoặc hợp đồng vay tiêu dùng trước đó đã tất toán hoàn toàn chưa?
+- Có thông tin bất thường nào trong hệ thống thông tin tín dụng quốc gia khiến tổ chức tài chính đánh giá rủi ro và từ chối cho vay không?
 
-Nếu hồ sơ tín dụng có điểm chưa rõ, hãy xử lý trước khi nghĩ đến việc chốt mua.
+Nếu còn khoản nợ chưa xử lý dứt điểm, cần khắc phục trước khi nộp hồ sơ pháp lý chính thức.
 
-Một căn phù hợp nhưng hồ sơ không qua được vẫn là một rủi ro lớn.
+## 4) Quỹ dự phòng dòng tiền có bảo đảm mức độ an toàn tối thiểu không?
 
-## 4) Quỹ dự phòng còn đủ không?
+Sai lầm phổ biến là chỉ chuẩn bị vừa đủ tiền thanh toán đợt đầu mà bỏ qua nguồn lực duy trì cuộc sống sau khi nhận bàn giao nhà.
 
-Nhiều người chỉ nghĩ đến tiền mua nhà mà quên mất tiền để **sống sau khi mua**. Đây là sai lầm rất phổ biến.
+Quỹ dự phòng dòng tiền giúp gia đình:
 
-Quỹ dự phòng giúp bạn:
+- Tránh mất khả năng thanh khoản đột ngột khi phát sinh sự kiện bất khả kháng về sức khỏe hoặc đời sống.
+- Không phải vay thêm với lãi suất cao từ nguồn tài chính phi chính thống để bù thâm hụt.
+- Duy trì ổn định dân sự và tâm lý cho các thành viên hộ sau khi an cư.
 
-- không bị đứt dòng tiền khi có biến cố nhỏ,
-- không phải vay thêm để bù các khoản phát sinh,
-- giữ được sự ổn định cho gia đình sau khi chốt.
+Nếu đóng tiền đợt đầu làm cạn quỹ dự phòng, người mua tự đặt mình vào rủi ro cao khi không thể tiếp tục thực hiện nghĩa vụ hợp đồng.
 
-Nếu sau khi đặt cọc và chuẩn bị hồ sơ mà gần như không còn quỹ dự phòng, bạn đang tự đẩy mình vào thế rất căng.
+## Phương pháp vận hành bảng kiểm trước khi ký kết giao dịch
 
-## Cách dùng checklist này trước khi chốt
+Hãy đánh giá dự án đang quan tâm qua bốn câu hỏi thẩm định:
 
-Hãy tự chấm dự án theo **4 câu hỏi**:
-
-| # | Câu hỏi | Rõ ràng? |
+| Thứ tự | Nội dung tiêu chí thẩm định giao dịch | Trạng thái xác thực |
 | --- | --- | --- |
-| 1 | Tài chính của tôi có chịu được không? | ☐ |
-| 2 | Hạ tầng và thời gian sống có hợp không? | ☐ |
-| 3 | CIC của tôi có ổn không? | ☐ |
-| 4 | Tôi còn quỹ dự phòng đủ an toàn không? | ☐ |
+| 1 | Năng lực tài chính định lượng có chịu đựng được nghĩa vụ trả góp dài hạn không? | ☐ |
+| 2 | Hạ tầng giao thông và không gian sống thực tế có đáp ứng tiêu chuẩn sinh hoạt không? | ☐ |
+| 3 | Lịch sử tín dụng trên hệ thống dữ liệu quốc gia có hoàn toàn minh bạch không? | ☐ |
+| 4 | Quỹ dự phòng dòng tiền còn lại có bảo đảm giới hạn an toàn tối thiểu không? | ☐ |
 
-Nếu **cả bốn câu** đều trả lời được bằng sự rõ ràng, bạn mới nên nghĩ đến chuyện chốt. Nếu còn lưỡng lự ở bất kỳ câu nào, hãy dừng lại để kiểm tra thêm.
+Chỉ khi cả bốn tiêu chí được xác thực bằng văn bản hoặc số liệu rõ ràng, người mua mới nên tiến hành bước giao kết tiếp theo. Còn điểm nghi vấn nào thì tạm hoãn để xác minh bổ sung.
 
 ## Kết luận
 
-Checklist trước khi chốt mua không nhằm làm bạn sợ, mà để giúp bạn **mua đúng hơn và ít rủi ro hơn**. Với nhà ở xã hội, quyết định tốt là quyết định không chỉ giúp bạn có nhà, mà còn giúp bạn sống ổn sau khi có nhà.
+Bảng kiểm định danh trước khi giao kết hợp đồng không phải thủ tục hình thức, mà là công cụ bảo vệ quyền lợi hợp pháp của người mua trước rủi ro hệ thống. Với nhà ở xã hội, quyết định an cư chuẩn mực phải bảo đảm đồng thời tính hợp pháp của hồ sơ, sự vững chắc của dòng tiền và chất lượng sống bền vững sau khi nhận bàn giao.
 
-Khi tài chính, hạ tầng, CIC và quỹ dự phòng đều ổn, bạn mới thực sự sẵn sàng xuống tiền.
+## Các câu hỏi thường gặp
 
-## Câu hỏi thường gặp
+### Vì sao phải đặt tiêu chí năng lực tài chính lên hàng đầu trước khi ký kết hợp đồng?
 
-**Vì sao phải kiểm tra tài chính trước khi chốt?**  
-Vì tài chính quyết định bạn có thể trả được nhà mà không bị gồng quá mức hay không.
+Vì tài chính là nghĩa vụ pháp lý bằng tiền kéo dài nhiều năm; thiếu hụt dòng tiền dẫn đến vi phạm hợp đồng tín dụng và hợp đồng mua bán với chủ đầu tư.
 
-**Hạ tầng quan trọng đến mức nào?**  
-Rất quan trọng, vì nó ảnh hưởng trực tiếp đến thời gian di chuyển và chất lượng sống hàng ngày.
+### Hạ tầng khu vực dự án ảnh hưởng thế nào đến giá trị sử dụng nhà ở?
 
-**CIC có thể ảnh hưởng đến việc vay không?**  
-Có. Lịch sử tín dụng là yếu tố ngân hàng thường xem rất kỹ khi xét hồ sơ vay.
+Hạ tầng quyết định trực tiếp quyền lợi sử dụng không gian đô thị, khả năng kết nối giao thông và giá trị thực tế của bất động sản trong suốt vòng đời sở hữu.
 
-**Quỹ dự phòng nên được giữ lại bao nhiêu?**  
-Nên giữ đủ để không bị đứt dòng tiền sau khi mua; mức cụ thể còn tùy thu nhập và nghĩa vụ tài chính của từng người.
+### Lịch sử tín dụng tác động ra sao đến tiến trình phê duyệt hồ sơ mua nhà ở xã hội?
 
-**Nếu thiếu một trong bốn yếu tố thì sao?**  
-Bạn nên cân nhắc lại và kiểm tra thêm, thay vì chốt vội.
+Đây là căn cứ bắt buộc để ngân hàng chính sách hoặc thương mại đánh giá năng lực trả nợ trước khi ký hợp đồng ba bên và giải ngân gói tín dụng ưu đãi.
+
+### Cần duy trì quỹ dự phòng dòng tiền ở mức tương đương bao nhiêu tháng sinh hoạt?
+
+Mức dự phòng an toàn theo khuyến nghị chuyên gia thường đủ chi trả nghĩa vụ tài chính và sinh hoạt tối thiểu từ 3 đến 6 tháng liên tục.
+
+### Nên xử lý thế nào nếu rà soát phát hiện thiếu một trong bốn tiêu chí?
+
+Tạm dừng tiến trình giao dịch, tái cấu trúc tài chính cá nhân hoặc chọn phương án nhà ở có phân khúc giá phù hợp hơn với thực lực.
 
 ${noxhMindsetClusterClosing("checklist-chot-mua-noxh-tai-chinh-ha-tang-cic", published)}`;
 }
@@ -1552,7 +1551,7 @@ HouseX là tổng kho nhà ở xã hội tập trung: tra cứu danh mục dự 
 
 ### Nên bắt đầu từ đâu khi mới bắt đầu tìm hiểu mua NOXH?
 
-Bắt đầu từ [kiểm tra điều kiện mua NOXH](${NOXH_MINDSET_ACTION_LINKS.dieuKienNoxh}), đọc [checklist tài chính — hạ tầng — CIC](/wiki-nha-o-xa-hoi/checklist-chot-mua-noxh-tai-chinh-ha-tang-cic) và tham khảo danh mục dự án trên [HouseX](${NOXH_MINDSET_ACTION_LINKS.duAnNoxh}).
+Bắt đầu từ [kiểm tra điều kiện mua NOXH](${NOXH_MINDSET_ACTION_LINKS.dieuKienNoxh}), đọc [bảng kiểm 4 trụ cột trước khi ký hợp đồng](/wiki-nha-o-xa-hoi/checklist-chot-mua-noxh-tai-chinh-ha-tang-cic) và tham khảo danh mục dự án trên [HouseX](${NOXH_MINDSET_ACTION_LINKS.duAnNoxh}).
 
 ${noxhMindsetClusterClosing("lam-sao-khong-bi-roi-khi-tim-mua-noxh", published)}`;
 }
@@ -1835,19 +1834,19 @@ const MINDSET_ARTICLES_RAW: ArticleDetail[] = [
     id: "article-noxh-mindset-09-checklist-chot",
     slug: "checklist-chot-mua-noxh-tai-chinh-ha-tang-cic",
     title:
-      "Checklist trước khi chốt mua: Tài chính, hạ tầng, CIC và quỹ dự phòng",
+      "Tiêu chuẩn pháp lý và tài chính trước khi giao kết hợp đồng mua nhà ở xã hội: Bảng kiểm 4 trụ cột an toàn",
     excerpt:
-      "4 điểm bắt buộc trước khi chốt NOXH: tài chính, hạ tầng, CIC, quỹ dự phòng. Thiếu một là chưa an toàn — dù dự án hot. Bảng chấm 4 câu hỏi + công cụ kiểm tra.",
+      "Bảng kiểm 4 trụ cột trước khi ký hợp đồng mua NOXH: năng lực tài chính, hạ tầng sống, lịch sử tín dụng và quỹ dự phòng dòng tiền. Thiếu một là chưa an toàn.",
     body: "",
     status: "PUBLISHED",
     publishedAt: PUBLISHED,
-    updatedAt: PUBLISHED,
+    updatedAt: new Date("2026-08-06T00:00:00.000Z"),
     coverImageUrl: null,
     authorName: "Ban biên tập House X",
     seoTitle:
-      "Checklist chốt mua NOXH — tài chính, hạ tầng, CIC, dự phòng | HouseX",
+      "Bảng kiểm 4 trụ cột trước khi ký hợp đồng mua NOXH | HouseX",
     seoDesc:
-      "Checklist 4 điểm trước khi chốt NOXH: tài chính, hạ tầng, CIC, quỹ dự phòng. Bảng tự chấm và liên kết kiểm tra 60 giây, CIC, thẩm định vay.",
+      "Thẩm định năng lực tài chính, hạ tầng, lịch sử tín dụng quốc gia và quỹ dự phòng trước khi giao kết mua nhà ở xã hội — bảng tự chấm 4 câu hỏi.",
     tags: [TAG],
     projects: [],
   },

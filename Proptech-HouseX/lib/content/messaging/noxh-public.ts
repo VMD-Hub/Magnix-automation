@@ -152,7 +152,7 @@ export const NOXH_TOPIC_PILLAR_LINKS = [
   },
   {
     href: articlePath("checklist-chot-mua-noxh-tai-chinh-ha-tang-cic"),
-    label: "Checklist chốt mua — tài chính, CIC, dự phòng",
+    label: "Bảng kiểm 4 trụ cột — tài chính, hạ tầng, tín dụng, dự phòng",
   },
   {
     href: articlePath("lam-sao-khong-bi-roi-khi-tim-mua-noxh"),

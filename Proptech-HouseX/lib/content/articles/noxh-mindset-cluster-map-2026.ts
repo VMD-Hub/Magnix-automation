@@ -135,10 +135,14 @@ export const NOXH_MINDSET_CLUSTER_SATELLITES = [
     order: 9,
     slug: "checklist-chot-mua-noxh-tai-chinh-ha-tang-cic",
     title:
-      "Checklist trước khi chốt mua: Tài chính, hạ tầng, CIC và quỹ dự phòng",
+      "Tiêu chuẩn pháp lý và tài chính trước khi giao kết hợp đồng mua nhà ở xã hội: Bảng kiểm 4 trụ cột an toàn",
     layer: "action" as const,
     psychStep: "safe-decision" as const,
-    keywords: ["checklist mua NOXH", "kiểm tra trước khi mua nhà ở xã hội"],
+    keywords: [
+      "bảng kiểm mua NOXH",
+      "kiểm tra trước khi mua nhà ở xã hội",
+      "4 trụ cột trước khi ký hợp đồng NOXH",
+    ],
     status: "published" as const,
   },
   {
@@ -472,7 +476,7 @@ const CTA_BY_SLUG: Record<string, { label: string; href: string }> = {
     href: NOXH_MINDSET_ACTION_LINKS.dtaHappyHome,
   },
   "checklist-chot-mua-noxh-tai-chinh-ha-tang-cic": {
-    label: "Chạy checklist 4 điểm — bắt đầu kiểm tra 60 giây",
+    label: "Chạy bảng kiểm 4 trụ cột — bắt đầu kiểm tra vay 60 giây",
     href: NOXH_MINDSET_ACTION_LINKS.check60s,
   },
   "lam-sao-khong-bi-roi-khi-tim-mua-noxh": {
@@ -534,7 +538,7 @@ const RELATED_ARTICLE_BLURBS: Record<string, string> = {
   "dta-happy-home-nhon-trach-noi-o-de-so-huu":
     "Ví dụ DTA Happy Home — dễ sở hữu, dễ sống, có dư địa phát triển",
   "checklist-chot-mua-noxh-tai-chinh-ha-tang-cic":
-    "Checklist 4 điểm trước khi chốt — tài chính, hạ tầng, CIC, dự phòng",
+    "Bảng kiểm 4 trụ cột trước khi ký — tài chính, hạ tầng, tín dụng, dự phòng",
   "lam-sao-khong-bi-roi-khi-tim-mua-noxh":
     "Không bị bối rối khi tìm mua — vùng xám pháp lý và điểm tựa HouseX",
 };
@@ -571,7 +575,7 @@ const NOXH_MINDSET_RELATED_BLURBS: Partial<
     "dta-happy-home-nhon-trach-noi-o-de-so-huu":
       "Ví dụ thực tế NOXH vùng ven — dễ sở hữu, dễ sống",
     "checklist-chot-mua-noxh-tai-chinh-ha-tang-cic":
-      "Bước kiểm tra cuối trước khi chốt — tài chính, hạ tầng, CIC",
+      "Bước kiểm tra cuối trước khi ký — tài chính, hạ tầng, lịch sử tín dụng",
     "lam-sao-khong-bi-roi-khi-tim-mua-noxh":
       "Gom thông tin có hệ thống — không bị rối khi tìm mua",
   },
@@ -707,11 +711,11 @@ const NOXH_MINDSET_RELATED_BLURBS: Partial<
   },
   "checklist-chot-mua-noxh-tai-chinh-ha-tang-cic": {
     [NOXH_MINDSET_PILLAR.slug]:
-      "Quay lại khung tư duy trước khi áp dụng checklist chi tiết",
+      "Quay lại khung tư duy trước khi áp dụng bảng kiểm chi tiết",
     "dta-happy-home-nhon-trach-noi-o-de-so-huu":
-      "Sau checklist — xem ví dụ dự án vùng ven vừa sức",
+      "Sau bảng kiểm — xem ví dụ dự án vùng ven vừa sức",
     "30-phut-di-chuyen-co-phai-mat-mat-noxh":
-      "Mục hạ tầng checklist — đối chiếu thời gian di chuyển thực tế",
+      "Mục hạ tầng bảng kiểm — đối chiếu thời gian di chuyển thực tế",
     "lam-sao-khong-bi-roi-khi-tim-mua-noxh":
       "Bước tiếp: tra cứu và so sánh dự án có hệ thống",
   },
@@ -719,7 +723,7 @@ const NOXH_MINDSET_RELATED_BLURBS: Partial<
     [NOXH_MINDSET_PILLAR.slug]:
       "Khung tư duy nền — trước khi lọc dự án trên HouseX",
     "checklist-chot-mua-noxh-tai-chinh-ha-tang-cic":
-      "Đã chọn được hướng — checklist 4 điểm trước khi chốt",
+      "Đã chọn được hướng — bảng kiểm 4 trụ cột trước khi ký hợp đồng",
     "ba-tieu-chuan-moi-chon-noxh":
       "Ba tiêu chuẩn giúp lọc dự án nhanh, ít bị nhiễu thông tin",
     "khi-nao-chon-du-an-hop-tui-tien":
@@ -801,7 +805,7 @@ export function noxhMindsetClusterClosing(
                 ? readerToolsBullets("Tổng chi phí sở hữu", [
                     { label: "Tính hạn mức vay", href: NOXH_MINDSET_ACTION_LINKS.hanMucVay },
                     { label: "Sai lầm tài chính khi mua nhà", href: NOXH_MINDSET_ACTION_LINKS.taiChinhCaNhan },
-                    { label: "Checklist trước khi chốt mua", href: articlePath("checklist-chot-mua-noxh-tai-chinh-ha-tang-cic") },
+                    { label: "Bảng kiểm 4 trụ cột trước khi ký hợp đồng", href: articlePath("checklist-chot-mua-noxh-tai-chinh-ha-tang-cic") },
                   ])
                 : slug === "30-phut-di-chuyen-co-phai-mat-mat-noxh"
                   ? readerToolsBullets("So sánh thêm", [
@@ -816,11 +820,11 @@ export function noxhMindsetClusterClosing(
                         { label: "Kiểm tra điều kiện NOXH", href: NOXH_MINDSET_ACTION_LINKS.dieuKienNoxh },
                       ])
                     : slug === "checklist-chot-mua-noxh-tai-chinh-ha-tang-cic"
-                ? readerToolsBullets("Công cụ checklist", [
+                ? readerToolsBullets("Công cụ bảng kiểm", [
                     { label: "Kiểm tra vay trong 60 giây", href: NOXH_MINDSET_ACTION_LINKS.check60s },
-                    { label: "Tra CIC an toàn", href: NOXH_MINDSET_ACTION_LINKS.cic },
-                    { label: "Thẩm định vay NOXH", href: NOXH_MINDSET_ACTION_LINKS.loanPillar },
-                    { label: "Checklist trước khi đặt cọc", href: NOXH_MINDSET_ACTION_LINKS.datCoc },
+                    { label: "Tra lịch sử tín dụng an toàn", href: NOXH_MINDSET_ACTION_LINKS.cic },
+                    { label: "Thẩm định vay nhà ở xã hội", href: NOXH_MINDSET_ACTION_LINKS.loanPillar },
+                    { label: "Bảng kiểm trước khi đặt cọc", href: NOXH_MINDSET_ACTION_LINKS.datCoc },
                   ])
                 : slug === "lam-sao-khong-bi-roi-khi-tim-mua-noxh"
                   ? readerToolsBullets("Bắt đầu tra cứu", [
