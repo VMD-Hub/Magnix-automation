@@ -17,7 +17,7 @@ painPoint: "Đủ điều kiện mua NOXH không đồng nghĩa được ngân h
 ## 2. DTI là gì và ngân hàng thường đánh giá tỷ lệ này như thế nào?
 
 - **Định nghĩa DTI (Debt-to-Income):** Tỷ lệ tổng số tiền phải trả nợ hàng tháng (khoản vay mua nhà dự kiến cộng các khoản nợ hiện hữu) so với thu nhập thực nhận.
-- **Góc nhìn thẩm định:** Pháp luật không cố định một con số DTI bắt buộc cho mọi trường hợp. Tuy nhiên, nếu tỷ lệ trả nợ vượt ngưỡng an toàn nội bộ của ngân hàng (thường tham khảo khoảng 50%–60%, tùy chính sách từng tổ chức tín dụng), hồ sơ dễ bị từ chối để hạn chế rủi ro. Đọc thêm phân tích tại [Cái bẫy DTI](/vu-nguyen/case/cai-bay-dti).
+- **Góc nhìn thẩm định:** Pháp luật không cố định một con số DTI bắt buộc cho mọi trường hợp. Tuy nhiên, nếu tỷ lệ trả nợ vượt ngưỡng an toàn nội bộ của ngân hàng (thường tham khảo khoảng 50%–60%, tùy chính sách từng tổ chức tín dụng), hồ sơ dễ bị từ chối để hạn chế rủi ro. Đọc thêm phân tích tại [Cái bẫy DTI](/wiki-nha-o-xa-hoi/cai-bay-dti).
 
 ## 3. Những lỗi chứng minh thu nhập nào hay làm hồ sơ bị trả lại?
 
@@ -46,7 +46,7 @@ painPoint: "Đủ điều kiện mua NOXH không đồng nghĩa được ngân h
 
 ## Liên kết hữu ích
 
-- [Cái bẫy DTI](/vu-nguyen/case/cai-bay-dti)
+- [Cái bẫy DTI](/wiki-nha-o-xa-hoi/cai-bay-dti)
 - [Công cụ kiểm tra vay NOXH](/cong-cu/kiem-tra-vay-noxh)
 - [Công cụ tính hạn mức vay](/cong-cu/tinh-han-muc-vay)
 - [Tính trả góp](/tinh-tra-gop)

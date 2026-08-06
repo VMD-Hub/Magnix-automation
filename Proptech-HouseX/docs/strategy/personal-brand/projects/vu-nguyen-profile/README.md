@@ -57,8 +57,9 @@
 | `app/vu-nguyen/checklist-noxh/page.tsx` | Checklist in |
 | `app/api/vu-nguyen/vcard/route.ts` | vCard |
 | `app/api/vu-nguyen/qr/route.ts` | QR động (PNG) |
-| `app/vu-nguyen/case/[slug]/page.tsx` | Bài case Q&A |
-| `lib/personal-brand/vu-nguyen/case-studies.ts` | Nội dung case |
+| `app/vu-nguyen/case/[slug]/page.tsx` | Redirect legacy: `cai-bay-dti` → Wiki; case khác → `/vu-nguyen/ho-so` |
+| `lib/personal-brand/vu-nguyen/case-studies.ts` | Metadata case + `getVuNguyenCasePath` (DTI → wiki) |
+| `docs/content/drafts/cai-bay-dti.md` | Body CMS Case 1 DTI · `npm run db:upsert:cai-bay-dti` |
 | `components/personal-brand/vu-nguyen/profile-connect-panel.tsx` | 3 QR + 3 nút link |
 | `scripts/generate-vu-nguyen-qr.ts` | QR in thẻ (`brand:vu-nguyen-qr`) |
 | `public/brand/vu-nguyen/qr/` | PNG in NFC |

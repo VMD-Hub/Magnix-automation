@@ -186,7 +186,7 @@
       "tags": ["noxh", "tham-dinh-vay"],
       "body_draft": "docs/content/drafts/ho-so-vay-bi-tu-choi.md",
       "internal_links": [
-        "/vu-nguyen/case/cai-bay-dti",
+        "/wiki-nha-o-xa-hoi/cai-bay-dti",
         "/cong-cu/kiem-tra-vay-noxh",
         "/cong-cu/tinh-han-muc-vay",
         "/tinh-tra-gop",
@@ -346,7 +346,7 @@
       "interest_key": "dao_no_truoc_mua_nha",
       "tags": ["noxh", "tham-dinh-vay"],
       "internal_links": [
-        "/vu-nguyen/case/cai-bay-dti",
+        "/wiki-nha-o-xa-hoi/cai-bay-dti",
         "/cong-cu/kiem-tra-vay-noxh",
         "/cong-cu/tinh-han-muc-vay",
         "/tinh-tra-gop",
@@ -511,7 +511,7 @@
         "/cong-cu/tinh-han-muc-vay",
         "/tinh-tra-gop",
         "/tin-tuc/dao-no-va-co-cau-no-truoc-khi-vay-mua-nha-chien-luoc-nao-phu-hop",
-        "/vu-nguyen/case/cai-bay-dti"
+        "/wiki-nha-o-xa-hoi/cai-bay-dti"
       ],
       "editorial_brief_v1": {
         "brief_version": 1,

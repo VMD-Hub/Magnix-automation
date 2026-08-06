@@ -12,7 +12,7 @@
 - [x] Meeting prep + case book template
 - [x] Deck outline 12 slide
 - [x] CTV module #1 outline
-- [x] **Case 1 DTI** — live `/vu-nguyen/case/cai-bay-dti` + profile link
+- [x] **Case 1 DTI** — live `/wiki-nha-o-xa-hoi/cai-bay-dti` (308 từ `/vu-nguyen/case/cai-bay-dti`) + Super Admin
 - [x] **Case 2 NOXH hồ sơ** — live `/vu-nguyen/case/tu-van-ho-so-noxh-k200` + DTA Happy Home
 - [x] **Case 3 Nhà phố / 160 triệu** — live `/vu-nguyen/case/con-mo-nha-pho`
 - [ ] **Bắt đầu gọi network** (script sẵn)

@@ -24,7 +24,7 @@ House X viết từ góc **người mua lần đầu để ở** và **chuẩn b
 | `content_type` | Pillar/spoke **điều kiện–hồ sơ NOXH** → `NOXH_LEGAL`; **DTI/đảo nợ/vay** → `LOAN_FINANCE` |
 | `segment` | `noxh_income` (điều kiện) · `sme_credit` hoặc `noxh_income` khi góc vay/DTI |
 | CTA gate | Đúng 1 `cta_tool_id` ∈ `noxh-check` \| `noxh-loan-quick` |
-| Soft tools (trong body, không thay gate) | `/tinh-tra-gop` · `/cong-cu/tinh-han-muc-vay` · `/vay-mua-nha#tu-van` · `/vu-nguyen/case/cai-bay-dti` |
+| Soft tools (trong body, không thay gate) | `/tinh-tra-gop` · `/cong-cu/tinh-han-muc-vay` · `/vay-mua-nha#tu-van` · `/wiki-nha-o-xa-hoi/cai-bay-dti` |
 | QA | L0 + **L2 `/devil`** toàn cluster + **L3** trước publish |
 | Nest URL | Bài nằm dưới `/tin-tuc/[slug]` · **không** tạo hub song song cạnh `/vay-mua-nha` |
 | Hub affiliate | Link soft về `/vay-mua-nha` (canonical vay) — tránh cannibalization |
@@ -73,7 +73,7 @@ Disclaimer cuối bài (chuẩn cluster vay):
 | Pillar thẩm định vay | `tham-dinh-khoan-vay-mua-nha-o-xa-hoi` |
 | CIC / nợ nhóm 2 / hồ sơ vay / checklist cọc | cluster `noxh-loan-cluster-map-2026` |
 | Myth mua lần đầu | `hieu-sai-mua-nha-dung-cho-du-tien`, `sai-lam-tai-chinh-tuong-du-tien-mua-nha` |
-| Case DTI | `/vu-nguyen/case/cai-bay-dti` |
+| Case DTI | `/wiki-nha-o-xa-hoi/cai-bay-dti` (redirect từ `/vu-nguyen/case/cai-bay-dti`) |
 
 ### Bài mới (phase này)
 
@@ -274,7 +274,7 @@ B0 (pillar đảo nợ / DTI)
 ├── B1 (nợ tốt/xấu) → CIC article
 ├── B2 (sắp xếp nợ) → hạn mức vay tool
 ├── B3 (nợ xấu 6–12 tháng) → nợ nhóm 2 article
-└── /vu-nguyen/case/cai-bay-dti  (E-E-A-T)
+└── /wiki-nha-o-xa-hoi/cai-bay-dti  (case E-E-A-T · 308 từ /vu-nguyen/case/cai-bay-dti)
 
 Cluster thẩm định vay (đã publish) ←→ A2, B0, B3 (hai chiều)
 ```

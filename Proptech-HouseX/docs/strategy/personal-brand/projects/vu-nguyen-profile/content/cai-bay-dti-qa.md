@@ -1,6 +1,8 @@
 # Cái bẫy DTI — Bài Q&A (đã triển khai web)
 
-> **URL:** `/vu-nguyen/case/cai-bay-dti`  
+> **URL canonical:** `/wiki-nha-o-xa-hoi/cai-bay-dti`  
+> **Redirect 308:** `/vu-nguyen/case/cai-bay-dti` → wiki  
+> **Draft CMS:** `docs/content/drafts/cai-bay-dti.md` · `npm run db:upsert:cai-bay-dti`  
 > **Nguồn đầy đủ:** `../sale-kit/case-01-dti-lan-thanh-DRAFT.md`
 
 ---

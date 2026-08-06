@@ -44,6 +44,12 @@ const nextConfig = {
   },
   async redirects() {
     return [
+      // Case DTI: personal-brand URL → Wiki NOXH (Super Admin SoR)
+      {
+        source: "/vu-nguyen/case/cai-bay-dti",
+        destination: "/wiki-nha-o-xa-hoi/cai-bay-dti",
+        permanent: true,
+      },
       // --- Interior legacy flat → canonical mới ---
       {
         source: "/noi-that/phong-cach-hien-dai",

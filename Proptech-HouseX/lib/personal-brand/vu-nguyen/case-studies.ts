@@ -1,9 +1,11 @@
 /**
- * Case studies — dữ liệu cho pipeline SEO website (không render trên /vu-nguyen).
- * Draft: docs/strategy/personal-brand/.../sale-kit/
+ * Case studies — metadata deck / profile.
+ * Case 1 DTI: bài đầy đủ trên Wiki `/wiki-nha-o-xa-hoi/cai-bay-dti` (Super Admin).
+ * Draft sale-kit: docs/strategy/personal-brand/.../sale-kit/
  */
 
 import { getSiteUrl } from "@/lib/site-config";
+import { articlePath } from "@/lib/content/article-routes";
 
 export type VuNguyenCaseStudySummary = {
   slug: string;
@@ -32,8 +34,17 @@ export type VuNguyenCaseStudyArticle = VuNguyenCaseStudySummary & {
 
 export const VU_NGUYEN_CASE_PATH_PREFIX = "/vu-nguyen/case" as const;
 
+/** Canonical public path — Case 1 DTI đã migrate sang Wiki NOXH. */
+export const CASE_CAI_BAY_DTI_PUBLIC_PATH = articlePath("cai-bay-dti");
+
+/** Path nội bộ (relative) theo slug case. */
+export function getVuNguyenCasePath(slug: string): string {
+  if (slug === CASE_CAI_BAY_DTI_SLUG) return CASE_CAI_BAY_DTI_PUBLIC_PATH;
+  return `${VU_NGUYEN_CASE_PATH_PREFIX}/${slug}`;
+}
+
 export function getVuNguyenCaseUrl(slug: string): string {
-  return `${getSiteUrl()}${VU_NGUYEN_CASE_PATH_PREFIX}/${slug}`;
+  return `${getSiteUrl()}${getVuNguyenCasePath(slug)}`;
 }
 
 export const CASE_CAI_BAY_DTI_SLUG = "cai-bay-dti" as const;

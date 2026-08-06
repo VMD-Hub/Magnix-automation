@@ -100,6 +100,11 @@ export function canonicalTopicPath(tagSlug: string): string {
 
 /** Rewrite link nội bộ cũ `/tin-tuc/...` → canonical silo. */
 export function rewriteLegacyArticleHref(href: string): string {
+  if (href === "/vu-nguyen/case/cai-bay-dti" || href.startsWith("/vu-nguyen/case/cai-bay-dti?")) {
+    const q = href.includes("?") ? href.slice(href.indexOf("?")) : "";
+    return `${articlePath("cai-bay-dti")}${q}`;
+  }
+
   if (!href.startsWith("/tin-tuc")) return href;
 
   const [path, query] = href.split("?");
