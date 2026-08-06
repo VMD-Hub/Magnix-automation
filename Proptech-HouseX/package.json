@@ -74,6 +74,8 @@
     "db:upsert:cctm-tai-dinh-cu:dry": "node --import tsx scripts/upsert-first-buyer-draft.ts --draft docs/content/drafts/04-tai-dinh-cu-nhan-nha-hay-nhan-tien.md --dry-run",
     "db:upsert:no-xau-co-mua-noxh": "node --env-file=.env --import tsx scripts/upsert-first-buyer-draft.ts --draft docs/content/drafts/13-no-xau-co-mua-duoc-noxh.md",
     "db:upsert:no-xau-co-mua-noxh:dry": "node --import tsx scripts/upsert-first-buyer-draft.ts --draft docs/content/drafts/13-no-xau-co-mua-duoc-noxh.md --dry-run",
+    "db:upsert:btr-affordability": "node --env-file=.env --import tsx scripts/upsert-first-buyer-draft.ts --draft docs/content/drafts/gia-nha-vuot-kha-nang-co-nen-thue-dai-han-2026.md",
+    "db:upsert:btr-affordability:dry": "node --import tsx scripts/upsert-first-buyer-draft.ts --draft docs/content/drafts/gia-nha-vuot-kha-nang-co-nen-thue-dai-han-2026.md --dry-run",
     "db:publish:first-buyer-debt-hub": "node --env-file=.env --import tsx scripts/publish-first-buyer-debt-hub-queue.ts",
     "db:publish:first-buyer-debt-hub:dry": "node --import tsx scripts/publish-first-buyer-debt-hub-queue.ts --dry-run",
     "db:tag:first-buyer-debt-hub": "node --env-file=.env --import tsx scripts/tag-first-buyer-debt-hub-articles.ts",

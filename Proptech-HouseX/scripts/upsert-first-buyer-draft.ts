@@ -17,12 +17,14 @@ import { getNoxhCtaTool } from "../lib/content/noxh-cta-tools";
 import {
   NOXH_TAG_CHINH_SACH,
   NOXH_TAG_THAM_DINH_VAY,
+  NOXH_TAG_BTR,
 } from "../lib/content/articles/noxh-handbook-tags";
 import { upsertArticleTag } from "../lib/data/article-admin";
 
 const TAG_BY_SLUG = {
   [NOXH_TAG_CHINH_SACH.slug]: NOXH_TAG_CHINH_SACH,
   [NOXH_TAG_THAM_DINH_VAY.slug]: NOXH_TAG_THAM_DINH_VAY,
+  [NOXH_TAG_BTR.slug]: NOXH_TAG_BTR,
   "tham-dinh-vay": NOXH_TAG_THAM_DINH_VAY,
   "phap-ly": NOXH_TAG_CHINH_SACH,
 } as const;
