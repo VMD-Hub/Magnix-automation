@@ -471,7 +471,7 @@ export function ContentQueueBoard() {
         }
         if (syncJson.data?.article) setEditingArticle(syncJson.data.article);
         setMessage(
-          "Đã lưu và đồng bộ lên web. Hard refresh trang bài nếu vẫn thấy bản cũ.",
+          "Đã lưu và đồng bộ lên web (CMS). Trang bài đọc trực tiếp từ DB — hard refresh nếu trình duyệt còn cache.",
         );
       } else {
         setMessage("Đã cập nhật queue (chưa lên web — dùng Publish web khi duyệt xong).");

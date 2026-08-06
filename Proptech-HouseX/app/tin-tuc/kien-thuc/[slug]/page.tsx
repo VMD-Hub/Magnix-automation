@@ -41,7 +41,8 @@ import {
 import { withOpenGraph } from "@/lib/seo/open-graph";
 import { resolveArticleOgImageUrl } from "@/lib/content/safe-image";
 
-export const revalidate = 300;
+/** Super Admin sửa → web phải thấy ngay; không ISR 5 phút trên trang bài. */
+export const dynamic = "force-dynamic";
 
 type PageProps = { params: Promise<{ slug: string }> };
 

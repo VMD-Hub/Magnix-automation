@@ -44,9 +44,13 @@ export function assertContentQueueReadyForL3(
     errors.push(
       "Thiếu nội dung bài (body) — Super Admin phải duyệt đủ trước khi đăng.",
     );
-  } else if (!queueBodyHasCtaSection(input.bodyPreview)) {
+  } else if (
+    !queueBodyHasCtaSection(input.bodyPreview) &&
+    !isNoxhCtaToolId(input.ctaToolId)
+  ) {
+    // Có ctaToolId: publish sẽ tự chèn ## Kiểm tra nhanh từ tool (upsert draft / sửa tay).
     errors.push(
-      "Thiếu khối ## Kiểm tra nhanh trong nội dung — CTA hệ thống phải nằm trong bài để duyệt (tab Như người đọc), không chèn ngầm lúc publish.",
+      "Thiếu khối ## Kiểm tra nhanh trong nội dung — chọn CTA tool hoặc chèn khối Kiểm tra nhanh (tab Như người đọc).",
     );
   }
   if (!isNoxhCtaToolId(input.ctaToolId)) {

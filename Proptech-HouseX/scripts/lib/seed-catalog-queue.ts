@@ -132,6 +132,27 @@ export async function upsertCatalogQueueItem(
   });
 
   if (existing?.status === "PUBLISHED") {
+    // Không ghi đè body đã chỉnh trên Super Admin — chỉ vá articleId nếu thiếu.
+    let articleId = existing.articleId;
+    if (!articleId) {
+      if (opts.syncLiveCms) {
+        const cms = await ensurePublishedCatalogArticle(prisma, opts.article);
+        articleId = cms.id;
+      } else {
+        const hit = await prisma.article.findUnique({
+          where: { slug: opts.article.slug },
+          select: { id: true, status: true },
+        });
+        if (hit?.status === "PUBLISHED") articleId = hit.id;
+      }
+      if (articleId) {
+        await prisma.contentQueueItem.update({
+          where: { id: existing.id },
+          data: { articleId },
+        });
+        return "updated";
+      }
+    }
     return "skipped";
   }
 

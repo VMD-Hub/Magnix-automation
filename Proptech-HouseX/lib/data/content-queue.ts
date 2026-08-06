@@ -10,6 +10,8 @@ import {
 } from "@/lib/content/content-queue-gates";
 import {
   buildArticleBodyFromQueue,
+  queueBodyHasCtaSection,
+  READER_CTA_HEADING,
   slugifyArticleTitle,
 } from "@/lib/content/content-queue-article";
 import {
@@ -354,11 +356,36 @@ export async function publishContentQueueToWeb(
   opts: { publishNow?: boolean } = {},
 ): Promise<ContentQueueWithArticle> {
   const publishNow = opts.publishNow !== false;
-  const row = await getContentQueueById(id);
+  let row = await getContentQueueById(id);
   if (!row) throw new Error("NOT_FOUND");
   if (row.status !== "APPROVED" && row.status !== "PUBLISHED") {
     throw new Error("INVALID_STATUS");
   }
+
+  const toolEarly = getNoxhCtaTool(row.ctaToolId);
+  // Draft upsert / bài sửa tay thường thiếu ## Kiểm tra nhanh — chèn trước gate.
+  if (
+    row.bodyPreview?.trim() &&
+    toolEarly &&
+    !queueBodyHasCtaSection(row.bodyPreview)
+  ) {
+    const label =
+      row.ctaLabel?.trim() || toolEarly.defaultCtaLabel || "Kiểm tra miễn phí";
+    const href = row.ctaHref?.trim() || toolEarly.href;
+    const patched = [
+      row.bodyPreview.trim(),
+      "",
+      READER_CTA_HEADING,
+      "",
+      `[${label}](${href})`,
+    ].join("\n");
+    row = await prisma.contentQueueItem.update({
+      where: { id },
+      data: { bodyPreview: patched },
+      include: includeArticle,
+    });
+  }
+
   gateOrThrow(row);
 
   const tool = getNoxhCtaTool(row.ctaToolId);
@@ -370,6 +397,23 @@ export async function publishContentQueueToWeb(
     `Kiểm tra nhanh: ${tool.title}`;
   const tagSlugs = parseContentQueueTagSlugs(row);
   if (tagSlugs.length > 0) await ensureArticleTags(tagSlugs);
+
+  const preferredSlug = parseContentQueueCanonicalSlug(row);
+
+  // articleId hỏng / lệch → gắn lại theo slug SoR trước khi ghi CMS.
+  if ((!row.articleId || !(await prisma.article.findUnique({ where: { id: row.articleId }, select: { id: true } }))) && preferredSlug) {
+    const bySlug = await prisma.article.findUnique({
+      where: { slug: preferredSlug },
+      select: { id: true },
+    });
+    if (bySlug) {
+      row = await prisma.contentQueueItem.update({
+        where: { id },
+        data: { articleId: bySlug.id },
+        include: includeArticle,
+      });
+    }
+  }
 
   if (row.articleId) {
     const existing = await prisma.article.findUnique({
@@ -426,11 +470,11 @@ export async function publishContentQueueToWeb(
       },
       include: includeArticle,
     });
-    revalidatePublicArticleBySlug(existing.slug);
+    revalidatePublicArticleBySlug(preferredSlug || existing.slug);
     return published;
   }
 
-  const preferred = parseContentQueueCanonicalSlug(row);
+  const preferred = preferredSlug;
   if (preferred && !row.articleId) {
     const existingBySlug = await prisma.article.findUnique({
       where: { slug: preferred },

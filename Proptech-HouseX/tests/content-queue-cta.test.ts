@@ -49,7 +49,7 @@ describe("content queue L3 gate", () => {
     assert.ok(r.errors.some((e) => /CTA/i.test(e)));
   });
 
-  it("fail khi thiếu khối Kiểm tra nhanh trong body", () => {
+  it("pass khi có CTA tool dù body chưa có khối Kiểm tra nhanh (publish sẽ chèn)", () => {
     const r = assertContentQueueReadyForL3({
       title: "Điều kiện NƠXH 2026",
       painPoint: "Không biết đủ điều kiện không",
@@ -58,8 +58,20 @@ describe("content queue L3 gate", () => {
       ctaLabel: "Kiểm tra miễn phí bạn có đủ điều kiện NƠXH không",
       l3Checklist: { pain: true, ctaTool: true, ctaCopy: true },
     });
+    assert.equal(r.pass, true);
+  });
+
+  it("fail khi thiếu khối Kiểm tra nhanh và thiếu CTA tool", () => {
+    const r = assertContentQueueReadyForL3({
+      title: "Điều kiện NƠXH 2026",
+      painPoint: "Không biết đủ điều kiện không",
+      bodyPreview: "Chỉ có đoạn văn, không có CTA trong bài.",
+      ctaToolId: null,
+      ctaLabel: "Kiểm tra miễn phí",
+      l3Checklist: { pain: true, ctaTool: false, ctaCopy: true },
+    });
     assert.equal(r.pass, false);
-    assert.ok(r.errors.some((e) => /Kiểm tra nhanh/i.test(e)));
+    assert.ok(r.errors.some((e) => /Kiểm tra nhanh|CTA/i.test(e)));
   });
 
   it("pass khi đủ CTA + checklist", () => {
