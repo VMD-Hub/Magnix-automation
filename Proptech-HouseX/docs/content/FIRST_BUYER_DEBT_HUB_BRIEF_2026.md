@@ -139,22 +139,26 @@ Chức năng hub: mỗi H2 link xuống A1–A3 + cluster thẩm định vay + `
 
 ---
 
-### A2 — Hồ sơ tài chính bị từ chối vay
+### A2 — Hồ sơ vay bị từ chối
 
-**H1:** Hồ sơ tài chính thế nào thì dễ bị ngân hàng từ chối vay mua nhà?
+**H1:** Hồ sơ vay mua nhà — những lỗi nào thường bị từ chối hồ sơ?
 
-**one_line_insight:** Đủ điều kiện mua NOXH không đồng nghĩa được duyệt vay — tầng thẩm định ngân hàng nhìn DTI, CIC và chứng minh thu nhập riêng.
+**Body đã chốt:** `docs/content/drafts/ho-so-vay-bi-tu-choi.md`  
+**Upsert (kể cả đã PUBLISHED):** `npm run db:upsert:first-buyer-a2`  
+**Slug giữ nguyên** (SEO): `ho-so-tai-chinh-the-nao-thi-de-bi-ngan-hang-tu-choi-vay-mua-nha`
 
-**qa_backbone:**
+**one_line_insight:** Đủ điều kiện mua NOXH không đồng nghĩa được ngân hàng duyệt vay — tầng thẩm định tài chính vận hành theo bộ tiêu chí độc lập.
 
-1. Đủ điều kiện mua NOXH có chắc được vay không?
-2. DTI là gì và ngân hàng thường nhìn tỷ lệ này thế nào?
+**Cấu trúc H2 (owner rewrite):**
+
+1. Đủ điều kiện mua NOXH có chắc chắn được ngân hàng duyệt vay không?
+2. DTI là gì và ngân hàng thường đánh giá tỷ lệ này như thế nào?
 3. Những lỗi chứng minh thu nhập nào hay làm hồ sơ bị trả lại?
 4. Nợ thẻ tín dụng và trả góp tiêu dùng ảnh hưởng duyệt vay ra sao?
-5. Nên tự kiểm tra hạn mức và trả góp thế nào trước khi nộp hồ sơ?
+5. Nên tự kiểm tra hạn mức và khả năng trả góp thế nào trước khi nộp hồ sơ?
 
-**CTA:** `noxh-loan-quick`  
-**Link cứng:** pillar thẩm định · case `/vu-nguyen/case/cai-bay-dti` · `/tinh-tra-gop`  
+**CTA:** `noxh-loan-quick` → `/cong-cu/kiem-tra-vay-noxh`  
+**Internal links (canonical):** case DTI · kiểm tra vay · hạn mức · trả góp · wiki thẩm định · wiki đảo nợ  
 **source_refs:** `bank_dti_income_appraisal_001`, `noxh_loan_two_tier_001`, `noxh_qa_dti_income_001`.
 
 ---

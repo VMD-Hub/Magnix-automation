@@ -14,8 +14,18 @@ import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { PrismaClient } from "@prisma/client";
 import { getNoxhCtaTool } from "../lib/content/noxh-cta-tools";
-import { NOXH_TAG_CHINH_SACH } from "../lib/content/articles/noxh-handbook-tags";
+import {
+  NOXH_TAG_CHINH_SACH,
+  NOXH_TAG_THAM_DINH_VAY,
+} from "../lib/content/articles/noxh-handbook-tags";
 import { upsertArticleTag } from "../lib/data/article-admin";
+
+const TAG_BY_SLUG = {
+  [NOXH_TAG_CHINH_SACH.slug]: NOXH_TAG_CHINH_SACH,
+  [NOXH_TAG_THAM_DINH_VAY.slug]: NOXH_TAG_THAM_DINH_VAY,
+  "tham-dinh-vay": NOXH_TAG_THAM_DINH_VAY,
+  "phap-ly": NOXH_TAG_CHINH_SACH,
+} as const;
 
 const dryRun = process.argv.includes("--dry-run");
 const draftFlagIdx = process.argv.indexOf("--draft");
@@ -34,6 +44,7 @@ function parseDraft(raw: string): {
   painPoint: string;
   body: string;
   ctaToolId: string;
+  tagSlug: string;
 } {
   const fm = raw.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n([\s\S]*)$/);
   if (!fm) throw new Error("Draft thiếu YAML frontmatter");
@@ -52,6 +63,7 @@ function parseDraft(raw: string): {
     normalizedKey: meta.normalizedKey,
     painPoint: meta.painPoint || "",
     ctaToolId: meta.ctaToolId || "noxh-check",
+    tagSlug: meta.tagSlug || NOXH_TAG_CHINH_SACH.slug,
     body: fm[2]!.trim(),
   };
 }
@@ -64,10 +76,15 @@ async function main() {
   const cta = getNoxhCtaTool(draft.ctaToolId);
   if (!cta) throw new Error(`CTA ngoài allowlist: ${draft.ctaToolId}`);
 
+  const tagDef =
+    TAG_BY_SLUG[draft.tagSlug as keyof typeof TAG_BY_SLUG] ??
+    NOXH_TAG_CHINH_SACH;
+
   console.log(`Upsert ← ${DRAFT_REL}`);
   console.log(`title: ${draft.title}`);
   console.log(`slug: ${draft.slug}`);
   console.log(`key: ${draft.normalizedKey}`);
+  console.log(`tag: ${tagDef.slug}`);
   console.log(`words ≈ ${draft.body.split(/\s+/).length}`);
 
   if (dryRun) {
@@ -79,7 +96,7 @@ async function main() {
     `Source: ${DRAFT_REL} (owner rewrite).`,
     `slug: ${draft.slug}`,
     `normalized_key: ${draft.normalizedKey}`,
-    `tags: ${NOXH_TAG_CHINH_SACH.slug}`,
+    `tags: ${tagDef.slug}`,
     "L2: tab Như người đọc · Lưu & đồng bộ lên web nếu sửa tiếp.",
   ].join("\n");
 
@@ -98,13 +115,13 @@ async function main() {
   };
 
   await upsertArticleTag({
-    slug: NOXH_TAG_CHINH_SACH.slug,
-    name: NOXH_TAG_CHINH_SACH.name,
-    description: NOXH_TAG_CHINH_SACH.description ?? null,
+    slug: tagDef.slug,
+    name: tagDef.name,
+    description: null,
   });
 
   const tag = await prisma!.articleTag.findUnique({
-    where: { slug: NOXH_TAG_CHINH_SACH.slug },
+    where: { slug: tagDef.slug },
     select: { id: true },
   });
 
