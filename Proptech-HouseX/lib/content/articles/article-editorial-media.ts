@@ -51,7 +51,7 @@ export const ARTICLE_EDITORIAL_COVERS: Record<string, EditorialCover> = {
     url: PHU_THO_DMC_IMAGES.gallery[2].url,
     alt: "Thiết kế căn hộ NOXH Lý Thường Kiệt — minh họa đối tượng hồ sơ",
     caption:
-      "Hồ sơ mua NOXH Lý Thường Kiệt — đối chiếu đối tượng, nhà ở và thu nhập theo Luật Nhà ở.",
+      "11 nhóm đối tượng Điều 76 Luật Nhà ở 2023 và bộ ba nhà ở – thu nhập – chủ thể khi nộp hồ sơ NOXH Lý Thường Kiệt.",
   },
   "vi-sao-noxh-ly-thuong-kiet-sot-so-sanh-gia-quan-10-2026": {
     url: PHU_THO_DMC_IMAGES.locationMap.url,

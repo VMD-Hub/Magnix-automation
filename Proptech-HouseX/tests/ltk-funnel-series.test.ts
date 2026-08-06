@@ -56,6 +56,18 @@ describe("LTK SEO funnel series 2026", () => {
     assert.ok(a.body.includes(`/du-an/${LTK_PROJECT_SLUG}`));
   });
 
+  it("article 2 lists 11 Điều 76 groups and three legal pillars", () => {
+    const a = LTK_FUNNEL_SERIES_2026[1]!;
+    assert.ok(/Điều 76/i.test(a.body));
+    assert.ok(/11 nhóm/i.test(a.body) || a.body.includes("11 nhóm"));
+    assert.ok(/Điều 77/i.test(a.body));
+    assert.ok(a.body.includes("/lien-he"));
+    assert.ok(a.body.includes("/cong-cu/dieu-kien-noxh"));
+    assert.ok(
+      a.body.includes("canh-bao-lua-dao-suat-noi-bo-noxh-ly-thuong-kiet-2026"),
+    );
+  });
+
   it("article 4 warns on scams and CTA /lien-he", () => {
     const a = LTK_FUNNEL_SERIES_2026[3]!;
     assert.ok(/suất nội bộ|bao đậu|lừa đảo/i.test(a.body));
