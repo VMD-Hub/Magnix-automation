@@ -580,7 +580,7 @@
       "id": "B3",
       "normalized_key": "editorial:npl-recovery-6-12m:2026",
       "slug": "no-xau-cic-con-vay-mua-nha-duoc-khong-lo-trinh-6-12-thang",
-      "h1": "Nợ xấu CIC còn vay mua nhà được không — lộ trình 6 đến 12 tháng gồm những gì?",
+      "h1": "Nợ xấu CIC còn vay mua nhà được không? Lộ trình phục hồi hồ sơ từ 6 đến 12 tháng",
       "priority": "P1",
       "content_type": "LOAN_FINANCE",
       "segment": "noxh_income",
@@ -590,17 +590,18 @@
       "cta_keyword": "DONGTIEN",
       "interest_key": "no_xau_lo_trinh_phuc_hoi",
       "tags": ["noxh", "tham-dinh-vay"],
+      "body_draft": "docs/content/drafts/no-xau-cic-lo-trinh-phuc-hoi.md",
       "internal_links": [
-        "/tin-tuc/no-xau-nhom-2-vay-mua-nha-o-xa-hoi",
-        "/tin-tuc/cach-tra-cic-an-toan-truoc-khi-vay",
-        "/tin-tuc/tham-dinh-khoan-vay-mua-nha-o-xa-hoi",
-        "/tin-tuc/checklist-truoc-khi-dat-coc-noxh",
+        "/wiki-nha-o-xa-hoi/no-xau-nhom-2-vay-mua-nha-o-xa-hoi",
+        "/wiki-nha-o-xa-hoi/cach-tra-cic-an-toan-truoc-khi-vay",
+        "/wiki-nha-o-xa-hoi/tham-dinh-khoan-vay-mua-nha-o-xa-hoi",
+        "/wiki-nha-o-xa-hoi/checklist-truoc-khi-dat-coc-noxh",
         "/cong-cu/kiem-tra-vay-noxh"
       ],
       "editorial_brief_v1": {
-        "brief_version": 1,
-        "editorial_title": "Nợ xấu CIC và lộ trình 6–12 tháng trước vay nhà",
-        "one_line_insight": "Đủ đối tượng NOXH không xóa nợ xấu; thường cần tất toán, báo CIC và chấp nhận thời gian lưu thông tin theo quy định.",
+        "brief_version": 2,
+        "editorial_title": "Nợ xấu CIC và lộ trình phục hồi 6–12 tháng",
+        "one_line_insight": "Đủ đối tượng NOXH không xóa nợ xấu trên CIC — thường cần tất toán, chờ dữ liệu cập nhật và lộ trình phục hồi 6–12 tháng trước khi nộp vay nhà.",
         "qa_backbone": [
           {
             "question": "Nợ xấu nhóm nào thường làm hồ sơ vay nhà rất khó duyệt?",

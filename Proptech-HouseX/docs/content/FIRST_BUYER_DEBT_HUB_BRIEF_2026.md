@@ -262,20 +262,24 @@ Chức năng hub: mỗi H2 link xuống A1–A3 + cluster thẩm định vay + `
 
 ### B3 — Nợ xấu còn vay được không
 
-**H1:** Nợ xấu CIC còn vay mua nhà được không — lộ trình 6–12 tháng gồm những gì?
+**H1:** Nợ xấu CIC còn vay mua nhà được không? Lộ trình phục hồi hồ sơ từ 6 đến 12 tháng
 
-**one_line_insight:** Đủ đối tượng NOXH không xóa nợ xấu; thường cần tất toán, báo CIC và chấp nhận thời gian lưu thông tin theo quy định CIC/NHNN.
+**Body đã chốt:** `docs/content/drafts/no-xau-cic-lo-trinh-phuc-hoi.md`  
+**Upsert (kể cả đã PUBLISHED):** `npm run db:upsert:first-buyer-b3`  
+**Slug giữ nguyên:** `no-xau-cic-con-vay-mua-nha-duoc-khong-lo-trinh-6-12-thang`
 
-**qa_backbone:**
+**one_line_insight:** Đủ đối tượng NOXH không xóa nợ xấu trên CIC — thường cần tất toán, chờ dữ liệu cập nhật và lộ trình phục hồi 6–12 tháng trước khi nộp vay nhà.
 
-1. Nợ xấu nhóm nào thường làm hồ sơ vay nhà rất khó duyệt?
-2. Tất toán xong có vay ngay được không hay còn thời gian chờ?
-3. Lộ trình 6–12 tháng phục hồi profile tài chính gồm những bước nào?
-4. Nợ nhóm 2 khác nhóm 3–5 thế nào với người mua NOXH?
-5. Nên đọc thêm bài nào trên House X trước khi đặt cọc?
+**Cấu trúc H2 (owner rewrite):**
 
-**CTA:** `noxh-loan-quick`  
-**Link cứng:** `no-xau-nhom-2-vay-mua-nha-o-xa-hoi` · `cach-tra-cic-an-toan-truoc-khi-vay`  
+1. Nợ xấu nhóm nào thường làm hồ sơ vay mua nhà đối diện nguy cơ từ chối cao?
+2. Vừa tất toán xong nợ xấu có được ngân hàng cho vay ngay không?
+3. Lộ trình từ 6 đến 12 tháng để phục hồi hồ sơ gồm những bước nào?
+4. Nợ nhóm 2 khác gì so với nhóm 3–5 đối với người mua nhà?
+5. Trước khi quyết định đặt cọc, nên tham khảo thêm tài liệu nào?
+
+**CTA:** `noxh-loan-quick` → `/cong-cu/kiem-tra-vay-noxh`  
+**Internal links (canonical wiki):** nợ nhóm 2 · tra CIC · thẩm định vay · checklist cọc  
 **source_refs:** `bank_npl_classification_001`, `noxh_qa_cic_bad_debt_001`.
 
 ## 6. Liên kết nội bộ
