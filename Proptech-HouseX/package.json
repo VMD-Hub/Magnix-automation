@@ -62,6 +62,8 @@
     "db:upsert:first-buyer-a3:dry": "node --import tsx scripts/upsert-first-buyer-draft.ts --draft docs/content/drafts/chi-phi-an-mua-nha-lan-dau.md --dry-run",
     "db:upsert:first-buyer-b0": "node --env-file=.env --import tsx scripts/upsert-first-buyer-draft.ts --draft docs/content/drafts/dao-no-co-cau-no-truoc-vay.md",
     "db:upsert:first-buyer-b0:dry": "node --import tsx scripts/upsert-first-buyer-draft.ts --draft docs/content/drafts/dao-no-co-cau-no-truoc-vay.md --dry-run",
+    "db:upsert:first-buyer-b1": "node --env-file=.env --import tsx scripts/upsert-first-buyer-draft.ts --draft docs/content/drafts/no-tot-va-no-xau.md",
+    "db:upsert:first-buyer-b1:dry": "node --import tsx scripts/upsert-first-buyer-draft.ts --draft docs/content/drafts/no-tot-va-no-xau.md --dry-run",
     "db:upsert:cai-bay-dti": "node --env-file=.env --import tsx scripts/upsert-first-buyer-draft.ts --draft docs/content/drafts/cai-bay-dti.md",
     "db:upsert:cai-bay-dti:dry": "node --import tsx scripts/upsert-first-buyer-draft.ts --draft docs/content/drafts/cai-bay-dti.md --dry-run",
     "db:publish:first-buyer-debt-hub": "node --env-file=.env --import tsx scripts/publish-first-buyer-debt-hub-queue.ts",

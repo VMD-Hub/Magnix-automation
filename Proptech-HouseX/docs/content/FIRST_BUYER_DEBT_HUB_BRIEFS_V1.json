@@ -431,15 +431,17 @@
       "cta_keyword": "DONGTIEN",
       "interest_key": "no_tot_no_xau_vay_nha",
       "tags": ["noxh", "tham-dinh-vay"],
+      "body_draft": "docs/content/drafts/no-tot-va-no-xau.md",
       "internal_links": [
-        "/tin-tuc/cach-tra-cic-an-toan-truoc-khi-vay",
-        "/tin-tuc/dao-no-va-co-cau-no-truoc-khi-vay-mua-nha-chien-luoc-nao-phu-hop",
+        "/wiki-nha-o-xa-hoi/cach-tra-cic-an-toan-truoc-khi-vay",
+        "/wiki-nha-o-xa-hoi/dao-no-va-co-cau-no-truoc-khi-vay-mua-nha-chien-luoc-nao-phu-hop",
+        "/wiki-nha-o-xa-hoi/no-xau-nhom-2-vay-mua-nha-o-xa-hoi",
         "https://creditconnect.vn/"
       ],
       "editorial_brief_v1": {
-        "brief_version": 1,
+        "brief_version": 2,
         "editorial_title": "Nợ tốt và nợ xấu khi chuẩn bị vay mua nhà",
-        "one_line_insight": "Người Việt hay mặc định mọi khoản nợ đều xấu — trong khi ngân hàng phân nhóm trên CIC và nhìn khả năng trả nợ.",
+        "one_line_insight": "Có dư nợ trả góp là bình thường khi vay mua nhà — quan trọng là phân định nợ có kiểm soát với nợ xấu/quá hạn đang cản cửa thẩm định.",
         "qa_backbone": [
           {
             "question": "Nợ tốt và nợ xấu được hiểu thế nào trong bối cảnh vay mua nhà?",

@@ -216,17 +216,22 @@ Chức năng hub: mỗi H2 link xuống A1–A3 + cluster thẩm định vay + `
 
 **H1:** Nợ tốt và nợ xấu khác nhau thế nào khi chuẩn bị vay mua nhà?
 
-**one_line_insight:** Người Việt hay mặc định “mọi khoản nợ đều xấu” — trong khi ngân hàng phân nhóm trên CIC và nhìn khả năng trả nợ, không chỉ “có nợ hay không”.
+**Body đã chốt:** `docs/content/drafts/no-tot-va-no-xau.md`  
+**Upsert (kể cả đã PUBLISHED):** `npm run db:upsert:first-buyer-b1`  
+**Slug giữ nguyên:** `no-tot-va-no-xau-khac-nhau-the-nao-khi-chuan-bi-vay-mua-nha`
 
-**qa_backbone:**
+**one_line_insight:** Có dư nợ trả góp là bình thường khi vay mua nhà — quan trọng là phân định nợ có kiểm soát với nợ xấu/quá hạn đang cản cửa thẩm định.
 
-1. Nợ tốt và nợ xấu được hiểu thế nào trong bối cảnh vay mua nhà?
-2. Ngân hàng phân loại nợ trên CIC theo nhóm nào?
-3. Khoản trả góp nhà / ô tô đang trả đúng hạn có phải luôn là điểm trừ không?
-4. Thẻ tín dụng quay vòng ảnh hưởng DTI ra sao?
-5. Trước khi vay nhà nên tự tra CIC bằng cách nào?
+**Cấu trúc H2 (owner rewrite):**
 
-**CTA:** `noxh-loan-quick`  
+1. Nợ tốt và nợ xấu được hiểu thế nào trong bối cảnh chuẩn bị vay mua nhà?
+2. Ngân hàng phân loại nợ trên CIC theo những nhóm nào?
+3. Khoản trả góp nhà hoặc ô tô đang trả đúng hạn có phải luôn là điểm trừ không?
+4. Thẻ tín dụng quay vòng ảnh hưởng đến tỷ lệ DTI ra sao?
+5. Trước khi vay mua nhà, làm thế nào để tự kiểm tra CIC an toàn?
+
+**CTA:** `noxh-loan-quick` → `/cong-cu/kiem-tra-vay-noxh`  
+**Internal links (canonical):** tra CIC · đảo nợ B0 · nợ nhóm 2 · CreditConnect (external)  
 **source_refs:** `bank_npl_classification_001`, `bank_cic_credit_history_001`, Q&A `noxh_qa_cic_bad_debt_001`.
 
 ---
