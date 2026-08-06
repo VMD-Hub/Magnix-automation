@@ -190,20 +190,24 @@ Chức năng hub: mỗi H2 link xuống A1–A3 + cluster thẩm định vay + `
 
 ### B0 — Pillar: Đảo nợ & cơ cấu nợ trước khi vay mua nhà
 
-**H1:** Đảo nợ và cơ cấu nợ trước khi vay mua nhà — chiến lược nào phù hợp?
+**H1:** Đảo nợ và cơ cấu nợ trước khi vay mua nhà — chiến lược nào thực sự phù hợp?
 
-**one_line_insight:** Đảo nợ không phải “che giấu nợ” — đó là kỹ năng sắp xếp nghĩa vụ để DTI và CIC đủ cửa thẩm định mua nhà.
+**Body đã chốt:** `docs/content/drafts/dao-no-co-cau-no-truoc-vay.md`  
+**Upsert (kể cả đã PUBLISHED):** `npm run db:upsert:first-buyer-b0`  
+**Slug giữ nguyên:** `dao-no-va-co-cau-no-truoc-khi-vay-mua-nha-chien-luoc-nao-phu-hop`
 
-**qa_backbone:**
+**one_line_insight:** Ngân hàng không cho vay vì lãi brochure rẻ — họ cho vay theo khả năng trả nợ thực tế. Chủ động sắp xếp nợ hiện hữu là chìa khóa để hồ sơ đủ cửa duyệt vốn.
+
+**Cấu trúc H2 (owner rewrite):**
 
 1. Đảo nợ khác cơ cấu nợ ở điểm nào khi chuẩn bị vay mua nhà?
-2. Vì sao DTI quyết định khả năng được duyệt nhiều hơn lãi suất brochure?
-3. Nên xử lý nợ tiêu dùng theo thứ tự nào trước khi nộp hồ sơ vay nhà?
-4. Refinance hoặc kéo dài kỳ hạn dùng khi nào — và rủi ro gì?
-5. Trường hợp nợ xấu / quá hạn còn có lộ trình phục hồi không?
+2. Vì sao tỷ lệ DTI quyết định nhiều hơn lãi suất trên brochure?
+3. Thứ tự ưu tiên xử lý nợ tiêu dùng trước khi nộp hồ sơ vay nhà
+4. Khi nào nên refinance / kéo dài kỳ hạn — và rủi ro cần tránh?
+5. Lộ trình nào cho hồ sơ có lịch sử nợ xấu hoặc quá hạn?
 
-**CTA:** `noxh-loan-quick`  
-**Link cứng:** case DTI · `cach-tra-cic-an-toan-truoc-khi-vay` · `no-xau-nhom-2-vay-mua-nha-o-xa-hoi`  
+**CTA:** `noxh-loan-quick` → `/cong-cu/kiem-tra-vay-noxh`  
+**Internal links (canonical wiki):** cai-bay-dti · tra CIC · nợ nhóm 2 · cẩm nang A0 · tools hạn mức / trả góp  
 **source_refs:** `bank_dti_income_appraisal_001`, `bank_cic_credit_history_001`, `bank_npl_classification_001`.
 
 ---

@@ -336,7 +336,7 @@
       "id": "B0",
       "normalized_key": "editorial:debt-restructure-pillar:2026",
       "slug": "dao-no-va-co-cau-no-truoc-khi-vay-mua-nha-chien-luoc-nao-phu-hop",
-      "h1": "Đảo nợ và cơ cấu nợ trước khi vay mua nhà — chiến lược nào phù hợp?",
+      "h1": "Đảo nợ và cơ cấu nợ trước khi vay mua nhà — chiến lược nào thực sự phù hợp?",
       "priority": "P0",
       "content_type": "LOAN_FINANCE",
       "segment": "noxh_income",
@@ -346,19 +346,20 @@
       "cta_keyword": "DONGTIEN",
       "interest_key": "dao_no_truoc_mua_nha",
       "tags": ["noxh", "tham-dinh-vay"],
+      "body_draft": "docs/content/drafts/dao-no-co-cau-no-truoc-vay.md",
       "internal_links": [
         "/wiki-nha-o-xa-hoi/cai-bay-dti",
         "/cong-cu/kiem-tra-vay-noxh",
         "/cong-cu/tinh-han-muc-vay",
         "/tinh-tra-gop",
-        "/tin-tuc/cach-tra-cic-an-toan-truoc-khi-vay",
-        "/tin-tuc/no-xau-nhom-2-vay-mua-nha-o-xa-hoi",
+        "/wiki-nha-o-xa-hoi/cach-tra-cic-an-toan-truoc-khi-vay",
+        "/wiki-nha-o-xa-hoi/no-xau-nhom-2-vay-mua-nha-o-xa-hoi",
         "/wiki-nha-o-xa-hoi/huong-dan-mua-nha-lan-dau-2026-tu-chon-nha-den-ky-hop-dong"
       ],
       "editorial_brief_v1": {
-        "brief_version": 1,
+        "brief_version": 2,
         "editorial_title": "Pillar đảo nợ và cơ cấu nợ trước vay mua nhà",
-        "one_line_insight": "Đảo nợ không phải che giấu nợ — đó là kỹ năng sắp xếp nghĩa vụ để DTI và CIC đủ cửa thẩm định mua nhà.",
+        "one_line_insight": "Ngân hàng không cho vay vì lãi brochure rẻ — họ cho vay theo khả năng trả nợ thực tế. Chủ động sắp xếp nợ hiện hữu là chìa khóa để hồ sơ đủ cửa duyệt vốn.",
         "qa_backbone": [
           {
             "question": "Đảo nợ khác cơ cấu nợ ở điểm nào khi chuẩn bị vay mua nhà?",
