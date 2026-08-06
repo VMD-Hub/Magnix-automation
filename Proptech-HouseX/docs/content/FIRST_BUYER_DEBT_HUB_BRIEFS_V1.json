@@ -501,7 +501,7 @@
       "id": "B2",
       "normalized_key": "editorial:consumer-debt-order:2026",
       "slug": "sap-xep-no-tieu-dung-truoc-khi-vay-mua-nha-mat-bao-lau",
-      "h1": "Sắp xếp nợ tiêu dùng trước khi vay mua nhà mất bao lâu để hồ sơ đủ cửa?",
+      "h1": "Lộ trình sắp xếp nợ tiêu dùng trước khi vay mua nhà: Mất bao lâu để dữ liệu CIC được cập nhật?",
       "priority": "P1",
       "content_type": "LOAN_FINANCE",
       "segment": "noxh_income",
@@ -519,9 +519,9 @@
         "/wiki-nha-o-xa-hoi/cai-bay-dti"
       ],
       "editorial_brief_v1": {
-        "brief_version": 2,
-        "editorial_title": "Sắp xếp nợ tiêu dùng trước vay mua nhà",
-        "one_line_insight": "Hợp nhất hoặc tất toán đúng thứ tự trong vài tháng thường giúp DTI dễ thở hơn là vay thêm để đảo lung tung.",
+        "brief_version": 3,
+        "editorial_title": "Lộ trình sắp xếp nợ tiêu dùng — thời gian cập nhật CIC",
+        "one_line_insight": "Hợp nhất hoặc tất toán đúng thứ tự trong vài tháng thường giúp DTI dễ thở hơn là vay thêm để đảo lung tung — và cần chừa thời gian để CIC cập nhật.",
         "qa_backbone": [
           {
             "question": "Nên ưu tiên tất toán khoản nào trước khi nộp hồ sơ vay nhà?",

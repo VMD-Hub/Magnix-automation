@@ -238,20 +238,20 @@ Chức năng hub: mỗi H2 link xuống A1–A3 + cluster thẩm định vay + `
 
 ### B2 — Sắp xếp nợ tiêu dùng
 
-**H1:** Sắp xếp nợ tiêu dùng trước khi vay mua nhà mất bao lâu để hồ sơ đủ cửa?
+**H1:** Lộ trình sắp xếp nợ tiêu dùng trước khi vay mua nhà: Mất bao lâu để dữ liệu CIC được cập nhật?
 
 **Body đã chốt:** `docs/content/drafts/sap-xep-no-tieu-dung.md`  
 **Upsert (kể cả đã PUBLISHED):** `npm run db:upsert:first-buyer-b2`  
 **Slug giữ nguyên:** `sap-xep-no-tieu-dung-truoc-khi-vay-mua-nha-mat-bao-lau`
 
-**one_line_insight:** Hợp nhất hoặc tất toán đúng thứ tự trong vài tháng thường giúp DTI dễ thở hơn là vay thêm để đảo lung tung.
+**one_line_insight:** Hợp nhất hoặc tất toán đúng thứ tự trong vài tháng thường giúp DTI dễ thở hơn là vay thêm để đảo lung tung — và cần chừa thời gian để CIC cập nhật.
 
-**Cấu trúc H2 (owner rewrite):**
+**Cấu trúc H2 (owner rewrite v3):**
 
 1. Nên ưu tiên tất toán khoản nợ nào trước khi nộp hồ sơ vay nhà?
 2. Hợp nhất nợ khác gì với đảo nợ sang tổ chức tín dụng khác?
-3. Sau khi tất toán, thông tin trên CIC cập nhật mất bao lâu?
-4. Làm sao tự ước tính DTI trước và sau khi giảm nợ tiêu dùng?
+3. Sau khi tất toán xong, dữ liệu mới trên hệ thống CIC được cập nhật mất bao lâu?
+4. Làm sao tự ước tính chỉ số DTI trước và sau khi giảm nợ tiêu dùng?
 5. Khi nào nên tạm dừng kế hoạch mua nhà 6 đến 12 tháng?
 
 **CTA:** `noxh-loan-quick` → `/cong-cu/kiem-tra-vay-noxh`  
