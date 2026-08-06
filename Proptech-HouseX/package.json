@@ -46,6 +46,7 @@
     "db:seed:wiki-noxh-queue:dry": "node --import tsx scripts/seed-wiki-noxh-queue.ts --dry-run",
     "db:seed:kien-thuc-queue": "node --env-file=.env --import tsx scripts/seed-kien-thuc-queue.ts",
     "db:seed:kien-thuc-queue:dry": "node --import tsx scripts/seed-kien-thuc-queue.ts --dry-run",
+    "db:seed:content-catalog-queue": "node --env-file=.env --import tsx scripts/seed-wiki-noxh-queue.ts && node --env-file=.env --import tsx scripts/seed-kien-thuc-queue.ts",
     "db:scrub:system-cta-notes": "node --env-file=.env --import tsx scripts/scrub-system-cta-notes.ts",
     "db:scrub:system-cta-notes:dry": "node --import tsx scripts/scrub-system-cta-notes.ts --dry-run",
     "db:suppress:article-slugs": "node --env-file=.env --import tsx scripts/suppress-article-slugs.ts",

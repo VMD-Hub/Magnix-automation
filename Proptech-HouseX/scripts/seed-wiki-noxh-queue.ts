@@ -2,8 +2,11 @@
  * Nạp toàn bộ bài wiki NƠXH (handbook từ demo/TS series) vào content_queue
  * để Super Admin duyệt / sửa tại /admin/content-queue.
  *
- * Nguồn: DEMO catalog đã filter isNoxhHandbookArticle (~60+ bài).
+ * Nguồn: DEMO catalog đã filter isNoxhHandbookArticle.
  * Key: wiki-noxh:{slug} — idempotent; không ghi đè item PUBLISHED.
+ *
+ * Mặc định sync Article CMS PUBLISHED + queue Đã đăng (khớp web).
+ *   --intake-only  chỉ nạp queue INTAKE (không tạo CMS)
  *
  * Usage:
  *   npm run db:seed:wiki-noxh-queue
@@ -11,16 +14,18 @@
  */
 import { PrismaClient } from "@prisma/client";
 import { getNoxhCtaTool } from "../lib/content/noxh-cta-tools";
+import { NOXH_TAG_THAM_DINH_VAY } from "../lib/content/articles/noxh-handbook-tags";
 import {
   normalizeQueueBodyForReader,
   queueBodyHasSeedCtaMarker,
   queueBodyLinksToCtaHref,
   READER_CTA_HEADING,
 } from "../lib/content/content-queue-article";
-import { NOXH_TAG_THAM_DINH_VAY } from "../lib/content/articles/noxh-handbook-tags";
 import { listNoxhHandbookDemoArticles } from "../lib/preview/demo-articles";
+import { upsertCatalogQueueItem } from "./lib/seed-catalog-queue";
 
 const dryRun = process.argv.includes("--dry-run");
+const syncLive = !process.argv.includes("--intake-only");
 const prisma = dryRun ? null : new PrismaClient();
 
 function pickCtaToolId(tagSlugs: string[]): string {
@@ -44,7 +49,7 @@ function ensureCtaSection(
 
 async function main() {
   const articles = listNoxhHandbookDemoArticles();
-  console.log(`Wiki NƠXH handbook: ${articles.length} bài.`);
+  console.log(`Wiki NƠXH handbook: ${articles.length} bài · syncLive=${syncLive}`);
 
   let created = 0;
   let updated = 0;
@@ -83,44 +88,33 @@ async function main() {
 
     if (dryRun) {
       console.log(
-        `✓ ${a.slug} · ${cta.id} · ${body.split(/\s+/).length} từ · "${a.title.slice(0, 48)}…"`,
+        `✓ ${a.slug} · ${cta.id} · tags=${a.tags.map((t) => t.slug).join(",")}`,
       );
       continue;
     }
 
-    const existing = await prisma!.contentQueueItem.findUnique({
-      where: { normalizedKey: key },
-      select: { id: true, status: true },
+    const result = await upsertCatalogQueueItem(prisma!, {
+      key,
+      article: {
+        slug: a.slug,
+        title: a.title,
+        excerpt: a.excerpt,
+        body,
+        tags: a.tags,
+        seoTitle: a.seoTitle,
+        seoDesc: a.seoDesc,
+        authorName: a.authorName,
+        coverImageUrl: a.coverImageUrl,
+      },
+      shared,
+      syncLiveCms: syncLive,
     });
-
-    if (existing?.status === "PUBLISHED") {
-      console.log(`↷ PUBLISHED — bỏ qua ${a.slug}`);
-      skipped += 1;
-      continue;
-    }
-
-    if (existing) {
-      await prisma!.contentQueueItem.update({
-        where: { normalizedKey: key },
-        data: {
-          ...shared,
-          l3Checklist: { pain: true, ctaTool: true, ctaCopy: true },
-        },
-      });
-      updated += 1;
-      console.log(`✎ ${a.slug} (giữ ${existing.status})`);
-    } else {
-      await prisma!.contentQueueItem.create({
-        data: {
-          normalizedKey: key,
-          status: "INTAKE",
-          l3Checklist: { pain: true, ctaTool: true, ctaCopy: true },
-          ...shared,
-        },
-      });
-      created += 1;
-      console.log(`✔ ${a.slug} → INTAKE`);
-    }
+    if (result === "created") created += 1;
+    else if (result === "updated") updated += 1;
+    else skipped += 1;
+    console.log(
+      `${result === "skipped" ? "↷" : result === "created" ? "✔" : "✎"} ${a.slug} → ${result}`,
+    );
   }
 
   if (dryRun) {
@@ -131,7 +125,7 @@ async function main() {
   console.log(
     `\nXong wiki NƠXH: ${created} tạo, ${updated} cập nhật, ${skipped} bỏ qua (tổng ${articles.length}).`,
   );
-  console.log("Duyệt /admin/content-queue — lọc theo title hoặc opsNotes wiki-noxh.");
+  console.log("Super Admin: tab Đã đăng / Tất cả — tìm slug hoặc tiêu đề.");
 }
 
 main()

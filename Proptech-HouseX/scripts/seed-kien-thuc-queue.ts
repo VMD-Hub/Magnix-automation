@@ -2,8 +2,11 @@
  * Nạp toàn bộ bài Kiến thức BĐS (catalog demo/TS) vào content_queue
  * để Super Admin duyệt / sửa / ẩn tại /admin/content-queue.
  *
- * Nguồn: DEMO catalog filter isGeneralReKnowledgeArticle (~50+ bài).
+ * Nguồn: DEMO catalog filter isGeneralReKnowledgeArticle.
  * Key: kien-thuc:{slug} — idempotent; không ghi đè item PUBLISHED.
+ *
+ * Mặc định --sync-live: tạo/link Article CMS PUBLISHED + queue Đã đăng
+ * (khớp bài đang live từ catalog trên web).
  *
  * Usage:
  *   npm run db:seed:kien-thuc-queue
@@ -11,6 +14,7 @@
  */
 import { PrismaClient } from "@prisma/client";
 import { getNoxhCtaTool } from "../lib/content/noxh-cta-tools";
+import { NOXH_TAG_BTR } from "../lib/content/articles/noxh-handbook-tags";
 import {
   normalizeQueueBodyForReader,
   queueBodyHasSeedCtaMarker,
@@ -18,8 +22,10 @@ import {
   READER_CTA_HEADING,
 } from "../lib/content/content-queue-article";
 import { listGeneralReKnowledgeDemoArticles } from "../lib/preview/demo-articles";
+import { upsertCatalogQueueItem } from "./lib/seed-catalog-queue";
 
 const dryRun = process.argv.includes("--dry-run");
+const syncLive = !process.argv.includes("--intake-only");
 const prisma = dryRun ? null : new PrismaClient();
 
 function ensureCtaSection(
@@ -36,18 +42,27 @@ function ensureCtaSection(
     .trim();
 }
 
+function pickCtaToolId(tagSlugs: string[]): string {
+  // BTR / kiến thức: CTA tự phục vụ NOXH (soft) — không gắn legal-review hàng loạt
+  if (tagSlugs.includes(NOXH_TAG_BTR.slug)) return "noxh-check";
+  return "noxh-check";
+}
+
 async function main() {
   const articles = listGeneralReKnowledgeDemoArticles();
-  console.log(`Kiến thức BĐS: ${articles.length} bài.`);
-
-  const cta = getNoxhCtaTool("noxh-check");
-  if (!cta) throw new Error("Allowlist thiếu noxh-check");
+  console.log(
+    `Kiến thức BĐS: ${articles.length} bài · syncLive=${syncLive}`,
+  );
 
   let created = 0;
   let updated = 0;
   let skipped = 0;
 
   for (const a of articles) {
+    const toolId = pickCtaToolId(a.tags.map((t) => t.slug));
+    const cta = getNoxhCtaTool(toolId);
+    if (!cta) throw new Error(`Allowlist thiếu ${toolId}`);
+
     const body = ensureCtaSection(
       a.body,
       cta.defaultCtaLabel,
@@ -76,44 +91,33 @@ async function main() {
 
     if (dryRun) {
       console.log(
-        `✓ ${a.slug} · ${cta.id} · ${body.split(/\s+/).length} từ · "${a.title.slice(0, 48)}…"`,
+        `✓ ${a.slug} · ${cta.id} · tags=${a.tags.map((t) => t.slug).join(",")}`,
       );
       continue;
     }
 
-    const existing = await prisma!.contentQueueItem.findUnique({
-      where: { normalizedKey: key },
-      select: { id: true, status: true },
+    const result = await upsertCatalogQueueItem(prisma!, {
+      key,
+      article: {
+        slug: a.slug,
+        title: a.title,
+        excerpt: a.excerpt,
+        body,
+        tags: a.tags,
+        seoTitle: a.seoTitle,
+        seoDesc: a.seoDesc,
+        authorName: a.authorName,
+        coverImageUrl: a.coverImageUrl,
+      },
+      shared,
+      syncLiveCms: syncLive,
     });
-
-    if (existing?.status === "PUBLISHED") {
-      console.log(`↷ PUBLISHED — bỏ qua ${a.slug}`);
-      skipped += 1;
-      continue;
-    }
-
-    if (existing) {
-      await prisma!.contentQueueItem.update({
-        where: { normalizedKey: key },
-        data: {
-          ...shared,
-          l3Checklist: { pain: true, ctaTool: true, ctaCopy: true },
-        },
-      });
-      updated += 1;
-      console.log(`✎ ${a.slug} (giữ ${existing.status})`);
-    } else {
-      await prisma!.contentQueueItem.create({
-        data: {
-          normalizedKey: key,
-          status: "INTAKE",
-          l3Checklist: { pain: true, ctaTool: true, ctaCopy: true },
-          ...shared,
-        },
-      });
-      created += 1;
-      console.log(`✔ ${a.slug} → INTAKE`);
-    }
+    if (result === "created") created += 1;
+    else if (result === "updated") updated += 1;
+    else skipped += 1;
+    console.log(
+      `${result === "skipped" ? "↷" : result === "created" ? "✔" : "✎"} ${a.slug} → ${result}`,
+    );
   }
 
   if (dryRun) {
@@ -124,7 +128,7 @@ async function main() {
   console.log(
     `\nXong Kiến thức BĐS: ${created} tạo, ${updated} cập nhật, ${skipped} bỏ qua (tổng ${articles.length}).`,
   );
-  console.log("Duyệt /admin/content-queue — lọc opsNotes kien-thuc.");
+  console.log("Super Admin: tab Đã đăng / Tất cả — tìm slug hoặc tiêu đề.");
 }
 
 main()

@@ -12,6 +12,7 @@ import {
   type NoxhCtaToolId,
   parseL3Checklist,
 } from "@/lib/content/noxh-cta-tools";
+import { resolveArticleTagDisplayName } from "@/lib/content/articles/noxh-handbook-tags";
 import { articlePath } from "@/lib/content/article-routes";
 import { QueueArticleReaderPreview } from "@/components/admin/queue-article-reader-preview";
 import {
@@ -169,6 +170,50 @@ function statusBadge(status: string) {
       )}
     >
       {labels[status] ?? status}
+    </span>
+  );
+}
+
+/** Chủ đề từ opsNotes `tags: slug-a, slug-b` — không nhầm với CTA href. */
+function parseOpsTopicSlugs(opsNotes: string | null | undefined): string[] {
+  const m = opsNotes?.match(/^tags:\s*(.+)$/m);
+  if (!m?.[1]) return [];
+  return m[1]
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean);
+}
+
+function queueListTopicBadges(item: ContentQueueItem) {
+  const slugs = parseOpsTopicSlugs(item.opsNotes).slice(0, 2);
+  if (slugs.length === 0) return null;
+  return slugs.map((slug) => (
+    <span
+      key={slug}
+      className="rounded-full bg-emerald-50 px-2 py-0.5 text-xs font-medium text-emerald-900"
+      title={slug}
+    >
+      {resolveArticleTagDisplayName(slug)}
+    </span>
+  ));
+}
+
+function queueListCtaBadge(item: ContentQueueItem) {
+  if (!item.ctaToolId) {
+    return (
+      <span className="rounded-full bg-rose-100 px-2 py-0.5 text-xs font-semibold text-rose-800">
+        Thiếu CTA
+      </span>
+    );
+  }
+  const tool = getNoxhCtaTool(item.ctaToolId);
+  const label = item.ctaLabel?.trim() || tool?.title || item.ctaToolId;
+  return (
+    <span
+      className="rounded-full bg-sky-100 px-2 py-0.5 text-xs font-medium text-sky-800"
+      title={item.ctaHref ?? tool?.href ?? undefined}
+    >
+      CTA: {label}
     </span>
   );
 }
@@ -1031,14 +1076,19 @@ export function ContentQueueBoard() {
   return (
     <div className="space-y-4">
       <p className="rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-950">
-        Bài đang live trên web nhưng không thấy ở đây? Thường là còn ở{" "}
-        <strong>catalog code</strong> (chưa nạp queue). Trên VPS chạy{" "}
+        Bài live trên web nhưng không thấy ở đây? Chúng thường còn trong{" "}
+        <strong>catalog code</strong> (chưa nạp Super Admin). Trên VPS chạy{" "}
+        <code className="rounded bg-amber-100 px-1">
+          npm run db:seed:wiki-noxh-queue
+        </code>{" "}
+        và{" "}
         <code className="rounded bg-amber-100 px-1">
           npm run db:seed:kien-thuc-queue
         </code>{" "}
-        / <code className="rounded bg-amber-100 px-1">db:seed:wiki-noxh-queue</code>{" "}
-        rồi lọc tab <strong>Intake</strong> hoặc <strong>Tất cả</strong>, tìm theo
-        slug/tiêu đề. Sau đó sửa → Publish web (hoặc Ẩn nếu không đạt).
+        (mặc định đồng bộ CMS + tab <strong>Đã đăng</strong>). Badge xanh lá =
+        chủ đề bài; badge xanh dương = CTA tool — không phải cùng một loại nhãn.
+        Tab <strong>Intake</strong> chỉ là chờ biên tập; bài đã publish xem tab{" "}
+        <strong>Đã đăng</strong> / <strong>Tất cả</strong>.
       </p>
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="flex flex-wrap gap-2">
@@ -1119,15 +1169,8 @@ export function ContentQueueBoard() {
                 <div className="min-w-0 space-y-1">
                   <div className="flex flex-wrap items-center gap-2">
                     {statusBadge(item.status)}
-                    {!item.ctaToolId ? (
-                      <span className="rounded-full bg-rose-100 px-2 py-0.5 text-xs font-semibold text-rose-800">
-                        Thiếu CTA
-                      </span>
-                    ) : (
-                      <span className="rounded-full bg-sky-100 px-2 py-0.5 text-xs font-medium text-sky-800">
-                        {item.ctaHref ?? item.ctaToolId}
-                      </span>
-                    )}
+                    {queueListTopicBadges(item)}
+                    {queueListCtaBadge(item)}
                     {item.scheduledAt ? (
                       <span className="rounded-full bg-violet-100 px-2 py-0.5 text-xs font-medium text-violet-800">
                         Lịch {formatDate(item.scheduledAt)}
