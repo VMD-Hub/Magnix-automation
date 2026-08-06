@@ -257,7 +257,7 @@
       "id": "A3",
       "normalized_key": "editorial:first-buyer-hidden-costs:2026",
       "slug": "chi-phi-an-khi-mua-nha-lan-dau-va-timeline-tu-ky-den-so-huu",
-      "h1": "Chi phí ẩn khi mua nhà lần đầu và timeline từ ký đến sở hữu thường như thế nào?",
+      "h1": "Các loại thuế, phí và khoản đóng góp người mua nhà lần đầu cần biết rõ",
       "priority": "P1",
       "content_type": "NOXH_LEGAL",
       "segment": "noxh_income",
@@ -267,16 +267,17 @@
       "cta_keyword": "NOXH",
       "interest_key": "chi_phi_an_mua_nha",
       "tags": ["noxh", "phap-ly"],
+      "body_draft": "docs/content/drafts/chi-phi-an-mua-nha-lan-dau.md",
       "internal_links": [
         "/vay-mua-nha/bao-hiem-tai-san",
-        "/tin-tuc/checklist-truoc-khi-dat-coc-noxh",
         "/wiki-nha-o-xa-hoi/huong-dan-mua-nha-lan-dau-2026-tu-chon-nha-den-ky-hop-dong",
-        "/vay-mua-nha"
+        "/vay-mua-nha",
+        "/wiki-nha-o-xa-hoi/nen-chon-nha-o-xa-hoi-hay-can-ho-thuong-mai-khi-mua-lan-dau"
       ],
       "editorial_brief_v1": {
-        "brief_version": 1,
-        "editorial_title": "Chi phí ẩn và timeline mua nhà lần đầu",
-        "one_line_insight": "Nhiều người chỉ tính tiền cọc và trả góp — quên phí trước bạ, công chứng, bảo hiểm tài sản và khoảng chờ tùy loại hình.",
+        "brief_version": 2,
+        "editorial_title": "Thuế phí mua nhà lần đầu — liền thổ vs chung cư",
+        "one_line_insight": "Bỡ ngỡ lớn nhất khi mua nhà lần đầu thường không phải chọn căn — mà là hệ thống thuế, phí phát sinh trong và sau giao dịch.",
         "qa_backbone": [
           {
             "question": "Ngoài giá căn, người mua lần đầu thường gặp những khoản phí nào?",

@@ -163,22 +163,27 @@ Chức năng hub: mỗi H2 link xuống A1–A3 + cluster thẩm định vay + `
 
 ---
 
-### A3 — Chi phí ẩn + timeline
+### A3 — Thuế, phí & chi phí ẩn mua nhà lần đầu
 
-**H1:** Chi phí ẩn khi mua nhà lần đầu và timeline từ ký đến sở hữu thường như thế nào?
+**H1:** Các loại thuế, phí và khoản đóng góp người mua nhà lần đầu cần biết rõ
 
-**one_line_insight:** Nhiều người chỉ tính tiền cọc và trả góp — quên phí trước bạ, công chứng, bảo hiểm tài sản và khoảng chờ 50–90 ngày (tùy loại hình).
+**Body đã chốt:** `docs/content/drafts/chi-phi-an-mua-nha-lan-dau.md`  
+**Upsert (kể cả đã PUBLISHED):** `npm run db:upsert:first-buyer-a3`  
+**Slug giữ nguyên** (SEO): `chi-phi-an-khi-mua-nha-lan-dau-va-timeline-tu-ky-den-so-huu`
 
-**qa_backbone:**
+**one_line_insight:** Bỡ ngỡ lớn nhất khi mua nhà lần đầu thường không phải chọn căn — mà là hệ thống thuế, phí phát sinh trong và sau giao dịch.
 
-1. Ngoài giá căn, người mua lần đầu thường gặp những khoản phí nào?
-2. Timeline từ ký hợp đồng đến nhận nhà / sổ thường kéo dài bao lâu?
-3. Bảo hiểm tài sản và phí ngân hàng xuất hiện ở bước nào?
-4. Làm sao lập bảng tổng chi phí sở hữu trước khi đặt cọc?
-5. NOXH và căn thương mại khác nhau thế nào về phí và tiến độ?
+**Cấu trúc H2 (owner rewrite):**
 
-**CTA:** `noxh-check` (cầu điều kiện trước khi tốn phí) + soft `/vay-mua-nha/bao-hiem-tai-san`  
-**Lằn ranh:** nêu **cách liệt kê** phí; không cam kết mức phí cố định theo m² nếu chưa có nguồn.
+1. Bức tranh tổng quan: Ai là người trả thuế và phí?
+2. Chi tiết thuế và phí khi mua nhà liền thổ / nhà phố
+3. Cẩm nang chi phí khi mua căn hộ chung cư (một lần + hàng tháng)
+4. Timeline từ ký đến sở hữu — vì sao không có một con số cố định?
+5. Lời khuyên trước khi xuống tiền
+
+**CTA:** `noxh-check` → `/cong-cu/dieu-kien-noxh`  
+**Soft links:** `/vay-mua-nha/bao-hiem-tai-san` · pillar A0 · `/vay-mua-nha` · A1  
+**Lằn ranh:** tỷ lệ 0,5% / 2% / phí m² là **tham khảo**; không cam kết mức cố định mọi địa phương.
 
 ---
 
